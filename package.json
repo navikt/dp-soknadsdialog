@@ -1,0 +1,42 @@
+{
+  "name": "dp-quizshow",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@zeit/next-less": "^1.0.1",
+    "classnames": "^2.2.6",
+    "jsdom": "^16.4.0",
+    "less": "^2.7.3",
+    "lodash.throttle": "^4.1.1",
+    "nav-frontend-chevron": "^1.0.13",
+    "nav-frontend-chevron-style": "^0.3.5",
+    "nav-frontend-core": "^5.0.1",
+    "nav-frontend-ekspanderbartpanel": "^3.0.23",
+    "nav-frontend-ekspanderbartpanel-style": "^1.0.19",
+    "nav-frontend-js-utils": "^1.0.9",
+    "nav-frontend-knapper": "^2.0.9",
+    "nav-frontend-knapper-style": "^1.0.1",
+    "nav-frontend-lenkepanel": "^1.0.47",
+    "nav-frontend-lenkepanel-style": "^0.3.31",
+    "nav-frontend-lenker": "^1.0.41",
+    "nav-frontend-lenker-style": "^0.2.29",
+    "nav-frontend-paneler": "^2.0.10",
+    "nav-frontend-paneler-style": "^0.3.21",
+    "nav-frontend-stegindikator": "0.0.52",
+    "nav-frontend-stegindikator-style": "^1.0.31",
+    "nav-frontend-typografi": "^2.0.26",
+    "nav-frontend-typografi-style": "^1.0.22",
+    "next": "9.5.3",
+    "next-react-svg": "^1.1.2",
+    "next-transpile-modules": "^4.1.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-collapse": "^5.0.1",
+    "react-dom": "16.13.1"
+  }
+}
