@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest"
   },
   "dependencies": {
     "@zeit/next-less": "^1.0.1",
@@ -38,5 +39,13 @@
     "react": "^16.13.1",
     "react-collapse": "^5.0.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.10.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.4",
+    "jest": "^26.4.2",
+    "msw": "^0.21.2",
+    "node-fetch": "^2.6.1"
   }
 }

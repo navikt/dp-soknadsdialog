@@ -11,6 +11,8 @@ import {
   Undertittel,
 } from "nav-frontend-typografi";
 
+import Søknad from "../components/søknad"
+
 export default function Home(props) {
   return (
     <div className="root">
@@ -41,6 +43,7 @@ export default function Home(props) {
             <Normaltekst>Se informasjon om rettighetene dine</Normaltekst>
           </Lenkepanel>
         </div>
+
         <Stegindikator
           steg={[
             { label: "Dette steget først" },
@@ -50,6 +53,7 @@ export default function Home(props) {
           onChange={() => {}}
           visLabel
         />
+        
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">
           <Knapp>

@@ -45,7 +45,7 @@ export default function Home(props) {
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/quiz">
           <Knapp>
-            <a>Ta en quiz!</a>
+            <a>Ta en quiz veldig fort!</a>
           </Knapp>
         </Link>
       </main>
@@ -59,7 +59,7 @@ export default function Home(props) {
           width: 1000px;
           margin: 0 0.5rem 0 0.5rem;
         }
-
+        
         .boxes {
           display: flex;
           flex-direction: row;
