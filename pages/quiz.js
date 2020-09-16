@@ -3,15 +3,13 @@ import Link from "next/link";
 import HomeIkon from "../assets/svg/home.svg";
 import Lenkepanel from "nav-frontend-lenkepanel";
 import Stegindikator from "nav-frontend-stegindikator";
-import { Knapp, Flatknapp } from "nav-frontend-knapper";
+import { Knapp } from "nav-frontend-knapper";
 import {
+  Ingress,
   Normaltekst,
   Sidetittel,
-  Ingress,
   Undertittel,
 } from "nav-frontend-typografi";
-
-import Søknad from "../components/søknad"
 
 export default function Home(props) {
   return (
@@ -53,11 +51,11 @@ export default function Home(props) {
           onChange={() => {}}
           visLabel
         />
-        
+
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">
           <Knapp>
-            <a >Ta en tur hjem igjen</a>
+            <a>Ta en tur hjem igjen</a>
           </Knapp>
         </Link>
       </main>

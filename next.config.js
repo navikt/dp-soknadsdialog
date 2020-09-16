@@ -14,6 +14,7 @@ module.exports = withTranspileModules(
   withLess(
     withReactSvg({
       include: path.resolve(__dirname, "assets/svg"),
+      reactStrictMode: true,
     })
   )
 );
