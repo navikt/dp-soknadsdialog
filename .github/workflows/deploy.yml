@@ -3,9 +3,9 @@ name: Build and deploy
 on: [ push ]
 
 env:
-  IMAGE_CACHE: docker.pkg.github.com/${{ github.repository }}/build-cache
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
   BASE_PATH: /arbeid/dagpenger/quizshow
+  IMAGE_CACHE: docker.pkg.github.com/${{ github.repository }}/build-cache
 
 jobs:
   test:
@@ -58,9 +58,8 @@ jobs:
       - name: Build and push
         run: |
           docker pull ${{ env.IMAGE_CACHE }} || true
-          docker build . -t app --cache-from=${{ env.IMAGE_CACHE }}
-          docker tag app ${{ env.IMAGE }} && docker push ${{ env.IMAGE }}
-          docker tag app ${{ env.IMAGE_CACHE}} && docker push ${{ env.IMAGE_CACHE }}
+          docker build . -t ${{ env.IMAGE }} --cache-from=${{ env.IMAGE_CACHE }}
+          docker push ${{ env.IMAGE }}
 
       - name: Archive NAIS yaml
         if: github.ref == 'refs/heads/main'
@@ -68,6 +67,24 @@ jobs:
         with:
           name: nais-yaml
           path: nais
+
+  update-docker-cache:
+    name: Update Docker Cache
+    needs: [ build ]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        run: |
+          docker pull ${{ env.IMAGE }} || true
+          docker tag ${{env.IMAGE }} ${{ env.IMAGE_CACHE}} && docker push ${{ env.IMAGE_CACHE }}
 
   deploy-dev:
     name: Deploy to dev
