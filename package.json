@@ -9,6 +9,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@navikt/fnrvalidator": "^1.1.3",
     "@zeit/next-less": "^1.0.1",
     "classnames": "^2.2.6",
     "jsdom": "^16.4.0",
@@ -28,6 +29,8 @@
     "nav-frontend-lenker-style": "^0.2.29",
     "nav-frontend-paneler": "^2.0.10",
     "nav-frontend-paneler-style": "^0.3.21",
+    "nav-frontend-skjema": "^3.0.18",
+    "nav-frontend-skjema-style": "^2.0.10",
     "nav-frontend-stegindikator": "0.0.52",
     "nav-frontend-stegindikator-style": "^1.0.31",
     "nav-frontend-typografi": "^2.0.26",
@@ -41,8 +44,10 @@
     "react-dom": "16.13.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.24.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.0.4",
+    "@testing-library/user-event": "^12.1.5",
     "dotenv": "^8.2.0",
     "eslint": "^7.9.0",
     "eslint-plugin-react": "^7.20.6",

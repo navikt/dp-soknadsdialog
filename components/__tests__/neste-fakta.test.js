@@ -1,6 +1,7 @@
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { render } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import Søknad from "../søknad";
 
 const server = setupServer(
@@ -11,8 +12,23 @@ const server = setupServer(
         ctx.json([
           {
             id: "1231",
-            slug: "q1",
-            navn: "hello there kenobi",
+            navn: "Ønsket dato",
+          },
+        ])
+      );
+    }
+  ),
+  rest.put(
+    `${process.env.NEXT_PUBLIC_API_URL}/faktum/:faktumId`,
+    (req, res, ctx) => {
+      const { faktumId } = req.params;
+      const { svar } = req.body;
+      return res(
+        ctx.json([
+          {
+            id: faktumId,
+            navn: "Ønsket dato",
+            svar,
           },
         ])
       );
@@ -25,7 +41,21 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 test("Hent neste fakta", async () => {
-  const { findByText } = render(<Søknad />);
+  const { findByLabelText } = render(<Søknad />);
 
-  expect(await findByText(/finnDenne/i)).toBeInTheDocument();
+  expect(await findByLabelText("Ønsket dato")).toBeInTheDocument();
+});
+
+test("Kan svare på ønsket dato", async () => {
+  const { findByLabelText } = render(<Søknad />);
+
+  const input = await findByLabelText("Ønsket dato", { selector: "input" });
+  expect(input).toBeInTheDocument();
+
+  const ønsketDato = "2020-01-31";
+
+  userEvent.type(input, ønsketDato);
+  expect(input).toHaveValue(ønsketDato);
+
+  await waitFor(() => expect(input).toHaveClass("lagret"));
 });
