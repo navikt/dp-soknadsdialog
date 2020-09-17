@@ -1,0 +1,7 @@
+*
+!assets
+!components
+!pages
+!public
+!next.config.js
+!package*.json
