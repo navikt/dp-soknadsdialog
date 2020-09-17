@@ -41,7 +41,6 @@ jobs:
 
   build:
     name: Build and Publish Docker image
-    needs: [ test ]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -88,7 +87,7 @@ jobs:
 
   deploy-dev:
     name: Deploy to dev
-    needs: [ build ]
+    needs: [ test, build ]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
