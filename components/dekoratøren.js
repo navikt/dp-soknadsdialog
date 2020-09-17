@@ -29,16 +29,18 @@ export default async function getDekoratøren() {
   }
 
   function createReactElements(document, id) {
-    return Object.values(document.getElementById(id).children).map(
-      createReactElement
-    );
+    return Object.values(
+      document.getElementById(id).children
+    ).map((element, key) => createReactElement(element, key));
   }
 
-  function createReactElement(element) {
+  function createReactElement(element, key) {
     const tagName = element.tagName.toLowerCase();
     const attributes = Object.fromEntries(
       Object.values(element.attributes).map((a) => [a.name, a.value])
     );
+
+    attributes.key = `${tagName}-${key}`;
 
     if (tagName === "script") {
       attributes.async = true;
