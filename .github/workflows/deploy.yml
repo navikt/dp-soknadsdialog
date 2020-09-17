@@ -36,9 +36,9 @@ jobs:
           npm ci
           npm test
 
-  build-and-push:
+  build:
     name: Build and Publish Docker image
-    needs: [ build ]
+    needs: [ test ]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
