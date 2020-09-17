@@ -2,4 +2,4 @@ app: dp-quizshow
 namespace: teamdagpenger
 team: teamdagpenger
 alerts_slack_channel: "#team-dagpenger-alert"
-ingressess:
+base_path: "/arbeid/dagpenger/quizshow"
