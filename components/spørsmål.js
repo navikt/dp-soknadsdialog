@@ -6,6 +6,7 @@ export default function Spørsmål({ navn, håndterEndring }) {
   const className = validert ? "lagret" : "";
 
   async function getOnChange(event) {
+    event.persist();
     settValidert(await håndterEndring(event.target.value));
   }
 
