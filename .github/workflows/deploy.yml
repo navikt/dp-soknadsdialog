@@ -92,9 +92,10 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
         run: |
-          docker build . -t ${{ env.IMAGE_CACHE_BUILDER }} --target builder --build-arg BUILDKIT_INLINE_CACHE=1
-          docker build . -t ${{ env.IMAGE_CACHE_RUNTIME }} --target runtime --build-arg BUILDKIT_INLINE_CACHE=1
+          docker pull ${{ env.IMAGE_CACHE_BUILDER }}
+          docker build . -t ${{ env.IMAGE_CACHE_BUILDER }} --target builder --build-arg BUILDKIT_INLINE_CACHE=1 --from-cache=${{ env.IMAGE_CACHE_BUILDER }}
           docker push ${{ env.IMAGE_CACHE_BUILDER }}
+          docker build . -t ${{ env.IMAGE_CACHE_RUNTIME }} --target runtime --build-arg BUILDKIT_INLINE_CACHE=1
           docker push ${{ env.IMAGE_CACHE_RUNTIME }}
 
   deploy-dev:
