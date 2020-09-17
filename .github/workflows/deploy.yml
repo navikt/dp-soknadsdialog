@@ -2,6 +2,9 @@ name: Build and deploy
 
 on: [push]
 
+env:
+  IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
+
 jobs:
   build:
     name: Build and publish Docker image
