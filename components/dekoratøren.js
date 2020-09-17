@@ -35,10 +35,15 @@ export default async function getDekoratøren() {
   }
 
   function createReactElement(element) {
+    const tagName = element.tagName.toLowerCase();
     const attributes = Object.fromEntries(
       Object.values(element.attributes).map((a) => [a.name, a.value])
     );
 
-    return React.createElement(element.tagName.toLowerCase(), attributes);
+    if (tagName === "script") {
+      attributes.async = true;
+    }
+
+    return React.createElement(tagName, attributes);
   }
 }
