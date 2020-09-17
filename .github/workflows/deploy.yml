@@ -55,9 +55,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        env:
+          DOCKER_BUILDKIT: 1
         run: |
           docker pull ${{ env.IMAGE_CACHE }} || true
-          docker build . -t ${{ env.IMAGE }} --cache-from=${{ env.IMAGE_CACHE }}
+          docker build . -t ${{ env.IMAGE }} --cache-from=${{ env.IMAGE_CACHE }} --build-arg BUILDKIT_INLINE_CACHE=1
           docker push ${{ env.IMAGE }}
 
       - name: Archive NAIS yaml
