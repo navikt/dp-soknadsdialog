@@ -10,12 +10,12 @@ spec:
   image: {{image}}
   port: 3000
   liveness:
-    path: /api/isAlive
+    path: /arbeid/dagpenger/quizshow/api/isAlive
     timeout: 1
     periodSeconds: 5
     failureThreshold: 10
   readiness:
-    path: /api/isReady
+    path: /arbeid/dagpenger/quizshow/api/isReady
     timeout: 1
   prometheus:
     enabled: false
