@@ -4,6 +4,7 @@ on: [push]
 
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
+  BASE_PATH: /arbeid/dagpenger/quizshow
 
 jobs:
   build:
