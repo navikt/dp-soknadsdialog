@@ -83,6 +83,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        env:
+          DOCKER_BUILDKIT: 1
         run: |
           docker pull ${{ env.IMAGE }} || true
           docker tag ${{env.IMAGE }} ${{ env.IMAGE_CACHE}} && docker push ${{ env.IMAGE_CACHE }}
