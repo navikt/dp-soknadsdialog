@@ -68,7 +68,7 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: nais/alerts.yaml,nais/nais.yaml
-          VARS: nais/vars.yaml,nais/dev/vars.yaml
+          VARS: nais/dev/vars.yaml
           PRINT_PAYLOAD: true
 
   deploy-prod:
@@ -88,5 +88,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: nais/alerts.yaml,nais/nais.yaml
-          VARS: nais/vars.yaml,nais/prod/vars.yaml
+          VARS: nais/prod/vars.yaml
           PRINT_PAYLOAD: true
