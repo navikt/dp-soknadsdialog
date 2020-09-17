@@ -57,9 +57,8 @@ jobs:
         run: |
           docker pull ${{ env.IMAGE_CACHE }} || true
           docker build . -t app --cache-from=${{ env.IMAGE_CACHE }}
-          docker tag app ${{ env.IMAGE }}
-          docker push ${{ env.IMAGE }}
-          docker push ${{ env.IMAGE_CACHE }}
+          docker tag app ${{ env.IMAGE }} && docker push ${{ env.IMAGE }}
+          docker tag app ${{ env.IMAGE_CACHE}} && docker push ${{ env.IMAGE_CACHE }}
 
       - name: Archive NAIS yaml
         if: github.ref == 'refs/heads/main'
