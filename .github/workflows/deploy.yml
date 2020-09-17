@@ -34,7 +34,6 @@ jobs:
         run: |
           npm ci
           npm test
-          npm run build
 
       - name: Build and Publish Docker image
         if: github.ref == 'refs/heads/main'
