@@ -5,3 +5,4 @@
 !public
 !next.config.js
 !package*.json
+!server.js
