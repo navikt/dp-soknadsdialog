@@ -15,6 +15,7 @@ module.exports = withTranspileModules(
     withReactSvg({
       include: path.resolve(__dirname, "assets/svg"),
       reactStrictMode: true,
+      basePath: "/arbeid/dagpenger/quizshow",
     })
   )
 );
