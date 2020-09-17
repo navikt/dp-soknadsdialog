@@ -70,8 +70,8 @@ jobs:
         with:
           push: true
           tags: ${{ env.IMAGE }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          #cache-from: type=local,src=/tmp/.buildx-cache
+          #cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Archive NAIS yaml
         if: github.ref == 'refs/heads/main'
