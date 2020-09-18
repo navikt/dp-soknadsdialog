@@ -40,4 +40,4 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: dp-quiz
+        - application: dp-quiz-api
