@@ -6,4 +6,5 @@
 !next.config.js
 !package*.json
 !server.js
+!.env.production
 public/mockServiceWorker.js
