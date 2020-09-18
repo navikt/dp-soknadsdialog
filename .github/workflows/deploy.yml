@@ -5,7 +5,6 @@ on: [ push ]
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
   BASE_PATH: /arbeid/dagpenger/quizshow
-  IMAGE_CACHE: docker.pkg.github.com/${{ github.repository }}/build-cache
   IMAGE_CACHE_RUNTIME: docker.pkg.github.com/${{ github.repository }}/build-cache-runtime
   IMAGE_CACHE_BUILDER: docker.pkg.github.com/${{ github.repository }}/build-cache-builder
 
@@ -62,7 +61,10 @@ jobs:
         run: |
           docker pull ${{ env.IMAGE_CACHE_BUILDER }} || true
           docker pull ${{ env.IMAGE_CACHE_RUNTIME }} || true
-          docker build . -t ${{ env.IMAGE }} --cache-from=${{ env.IMAGE_CACHE_BUILDER }},${{ env.IMAGE_CACHE_RUNTIME }} --build-arg BUILDKIT_INLINE_CACHE=1
+          docker build . -t ${{ env.IMAGE }} \
+            --cache-from=${{ env.IMAGE_CACHE_BUILDER }},${{ env.IMAGE_CACHE_RUNTIME }} \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --build-arg BASE_PATH=${{ env.BASE_PATH }}
           docker push ${{ env.IMAGE }}
 
       - name: Archive NAIS yaml

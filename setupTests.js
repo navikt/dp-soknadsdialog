@@ -1,6 +1,8 @@
+import dotenv from "dotenv/config";
 import "@testing-library/jest-dom/extend-expect";
 import "next/dist/next-server/server/node-polyfill-fetch";
-import dotenv from "dotenv";
-import path from "path";
+import { server } from "./__mocks__/server";
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());

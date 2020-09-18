@@ -7,3 +7,4 @@
 !next.config.js
 !package*.json
 !server.js
+public/mockServiceWorker.js

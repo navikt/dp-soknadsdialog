@@ -34,9 +34,7 @@ spec:
   sessionAffinity: ClientIP # Sticky Session for ingress controller to prevent 404 on rollout
   env:
     - name: NEXT_PUBLIC_API_URL
-      value: /arbeid/dagpenger/quizshow/api
-    - name: BASE_PATH
-      value: {{base_path}}
+      value: {{base_path}}/api
   accessPolicy:
     outbound:
       rules:

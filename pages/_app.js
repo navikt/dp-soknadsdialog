@@ -1,6 +1,16 @@
 import "./_app.less";
 import "nav-frontend-typografi-style/src/index.less";
 
+if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
+  import("../__mocks__/browser").then(({ worker }) =>
+    worker().start({
+      serviceWorker: {
+        url: `/mockServiceWorker.js`,
+      },
+    })
+  );
+}
+
 export default function App({ Component, pageProps }) {
   return (
     <div className="app">
