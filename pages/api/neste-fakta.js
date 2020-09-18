@@ -1,5 +1,5 @@
 export default async (req, res) => {
-  const fakta = await fetch("http://dp-quiz/neste-fakta");
+  const fakta = await fetch("http://dp-quiz-api/neste-fakta");
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/json");
