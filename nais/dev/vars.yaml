@@ -5,4 +5,4 @@ alerts_slack_channel: "#team-dagpenger-alert-non-prod"
 base_path: "/arbeid/dagpenger/quizshow"
 ingressess: |
   ingresses:
-    - https://arbeid.dev.nav.no/{{base_path}}
+    - https://arbeid.dev.nav.no/arbeid/dagpenger/quizshow
