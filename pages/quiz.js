@@ -10,6 +10,7 @@ import {
   Sidetittel,
   Undertittel,
 } from "nav-frontend-typografi";
+import Søknad from "../components/søknad";
 
 export default function Home(props) {
   return (
@@ -51,6 +52,8 @@ export default function Home(props) {
           onChange={() => {}}
           visLabel
         />
+
+        <Søknad />
 
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">
