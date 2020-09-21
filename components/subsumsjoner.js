@@ -3,6 +3,14 @@ import Subsumsjon from "./subsumsjon";
 
 const fetcher = (...args) => fetch(...args).then(res=>res.json())
 
+function getMap(subsumsjoner) {
+    return subsumsjoner.map((subsumsjon) => (
+        <Subsumsjon key={subsumsjon.navn} {...subsumsjon}>
+            {getMap(subsumsjon.subsumsjoner||[])}
+        </Subsumsjon>
+    ));
+}
+
 export default function Subsumsjoner() {
 
     const { data, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/subsumsjoner`, fetcher);
@@ -15,9 +23,7 @@ export default function Subsumsjoner() {
     return (
         <>
             Subsumsjoner:
-            {data.root.subsumsjoner.map((subsumsjon) => (
-                <Subsumsjon key={subsumsjon.navn} {...subsumsjon} />
-            ))}
+            {getMap(data.root.subsumsjoner)}
         </>
     );
 }

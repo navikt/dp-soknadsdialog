@@ -12,6 +12,7 @@ import {
 } from "nav-frontend-typografi";
 import Søknad from "../components/søknad";
 import JsonSøknad from "../components/json-søknad";
+import Subsumsjoner from "../components/subsumsjoner";
 
 export default function Home(props) {
   return (
@@ -55,6 +56,7 @@ export default function Home(props) {
         />
 
         <JsonSøknad />
+        <Subsumsjoner />
 
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">
