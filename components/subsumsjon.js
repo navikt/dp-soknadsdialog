@@ -1,15 +1,17 @@
-export default function Subsumsjon({ navn, children = [] }) {
-  console.log(children);
-  return (
-    <div data-testid="subsumsjon">
+export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
+  if (!subsumsjoner.length) {
+    return null;
+  }
+
+  return subsumsjoner.map(({ navn, subsumsjoner }) => (
+    <div
+      key={navn}
+      data-testid="subsumsjon"
+      style={{ paddingLeft: dybde * 15 }}
+    >
       {navn}
-      {!!children.length && (
-        <ul>
-          {children.map((child) => (
-            <li key={child.name}>{child}</li>
-          ))}
-        </ul>
-      )}
+
+      <Subsumsjon subsumsjoner={subsumsjoner} dybde={dybde + 1} />
     </div>
-  );
+  ));
 }
