@@ -15,6 +15,8 @@
     "jsdom": "^16.4.0",
     "less": "^2.7.3",
     "lodash.throttle": "^4.1.1",
+    "moment": "^2.28.0",
+    "nav-datovelger": "^6.1.10",
     "nav-frontend-chevron": "^1.0.13",
     "nav-frontend-chevron-style": "^0.3.5",
     "nav-frontend-core": "^5.0.1",
@@ -41,6 +43,7 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-collapse": "^5.0.1",
+    "react-day-picker": "^7.4.8",
     "react-dom": "16.13.1",
     "swr": "^0.3.3"
   },

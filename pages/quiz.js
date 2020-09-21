@@ -11,7 +11,6 @@ import {
   Undertittel,
 } from "nav-frontend-typografi";
 import Søknad from "../components/søknad";
-import JsonSøknad from "../components/json-søknad";
 import Subsumsjoner from "../components/subsumsjoner";
 
 export default function Home(props) {
@@ -55,7 +54,7 @@ export default function Home(props) {
           visLabel
         />
 
-        <JsonSøknad />
+        <Søknad />
         <Subsumsjoner />
 
         <Normaltekst>PartyTime</Normaltekst>

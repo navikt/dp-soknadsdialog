@@ -9,10 +9,17 @@ export const handlers = [
           {
             id: 1,
             navn: "Ønsket dato",
+            type: "LocalDate",
           },
           {
             id: 2,
             navn: "Fødselsdato",
+            type: "LocalDate",
+          },
+          {
+            id: 3,
+            navn: "Ønsket antall uker",
+            type: "Int",
           },
         ])
       );

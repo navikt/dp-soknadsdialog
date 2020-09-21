@@ -4,7 +4,7 @@ const path = require("path");
 
 const navFrontendModuler = Object.keys(
   require("./package.json").dependencies
-).filter((it) => it.startsWith("nav-frontend"));
+).filter((it) => it.startsWith("nav-"));
 
 const withTranspileModules = require("next-transpile-modules")(
   navFrontendModuler

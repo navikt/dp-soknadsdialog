@@ -11,7 +11,7 @@ module.exports = {
     "^.+\\.(css|less)$": "jest-transform-stub",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(nav-frontend.+)/)",
+    "/node_modules/(?!(nav-.+)/)",
     "^.+\\.module\\.(css|sass|scss)$",
   ],
   moduleNameMapper: {
