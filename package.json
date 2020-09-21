@@ -41,7 +41,8 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-collapse": "^5.0.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "swr": "^0.3.3"
   },
   "devDependencies": {
     "@testing-library/dom": "^7.24.2",

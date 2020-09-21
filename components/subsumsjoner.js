@@ -1,16 +1,22 @@
-import {useEffect, useState} from "react";
-import Spørsmål from "./spørsmål";
 import useSWR from "swr"
+import Subsumsjon from "./subsumsjon";
+
+const fetcher = (...args) => fetch(...args).then(res=>res.json())
 
 export default function Subsumsjoner() {
 
-    const { subsumsjoner, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/subsumsjoner`);
-
+    const { data, error } = useSWR(`${process.env.NEXT_PUBLIC_API_URL}/subsumsjoner`, fetcher);
+    if(error){
+        return (<div>error!</div>)
+    }
+    if (!data){
+        return (<div>Loading!</div>)
+    }
     return (
         <>
-            Vi vil stille disse spørsmålene:
-            {subsumsjoner.map((subsumsjon) => (
-                <Subsumsjon key={subsumsjon.id} {...subsumsjon} />
+            Subsumsjoner:
+            {data.root.subsumsjoner.map((subsumsjon) => (
+                <Subsumsjon key={subsumsjon.navn} {...subsumsjon} />
             ))}
         </>
     );

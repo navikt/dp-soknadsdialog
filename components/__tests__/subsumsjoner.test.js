@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
+import Subsumsjoner from "../subsumsjoner";
 
 test("Hent subsumsjoner", async () => {
-    const { findByText } = render(<Subsumsjoner />);
+    const { findAllByTestId } = render(<Subsumsjoner />);
 
-    expect(await findByText("Subsumsjoner")).toBeInTheDocument();
+    expect(await findAllByTestId(/subsumsjon/)).toHaveLength(7);
 });
