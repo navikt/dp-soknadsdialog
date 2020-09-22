@@ -15,10 +15,24 @@ export default function Subsumsjoner() {
   if (!data) {
     return <div>Loading!</div>;
   }
+
+  const root = inlineFaktum(faktaFinner(data.fakta), data.root);
   return (
     <>
       Subsumsjoner:
-      <Subsumsjon {...data.root} />
+      <Subsumsjon {...root} />
     </>
   );
 }
+
+const inlineFaktum = (
+  finnFaktum,
+  { subsumsjoner = [], fakta = [], ...subsumsjon }
+) => ({
+  ...subsumsjon,
+  fakta: fakta.map(finnFaktum),
+  subsumsjoner: subsumsjoner.map((it) => inlineFaktum(finnFaktum, it)),
+});
+
+const faktaFinner = (alleFakta) => (faktumId) =>
+  alleFakta.find((faktum) => faktum.id === faktumId);

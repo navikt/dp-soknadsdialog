@@ -6,3 +6,9 @@ test("Hent subsumsjoner", async () => {
 
   expect(await findAllByTestId(/subsumsjon/)).toHaveLength(12);
 });
+
+test("List ut fakta i subsumsjon", async () => {
+  const { findAllByTestId } = render(<Subsumsjoner />);
+
+  expect(await findAllByTestId(/faktum/)).toHaveLength(12);
+});
