@@ -55,7 +55,7 @@ export default function Home(props) {
         />
 
         <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
-        <Subsumsjoner />
+        <Subsumsjoner søknadId="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
 
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">
