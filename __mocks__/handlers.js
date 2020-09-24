@@ -38,13 +38,13 @@ export const handlers = [
     `${process.env.NEXT_PUBLIC_API_URL}/søknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/faktum/:faktumId`,
     (req, res, ctx) => {
       const { faktumId } = req.params;
-      const { svar } = req.body;
+      const { verdi } = req.body;
       return res(
         ctx.json([
           {
             id: faktumId,
             navn: "Ønsket dato",
-            svar,
+            verdi,
           },
         ])
       );
