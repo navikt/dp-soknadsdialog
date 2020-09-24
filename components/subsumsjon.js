@@ -16,6 +16,7 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
           {fakta.map((faktum) => (
             <li key={faktum.id} data-testid="faktum">
               {faktum.navn}
+              svar: {faktum.svar}
             </li>
           ))}
         </ul>
