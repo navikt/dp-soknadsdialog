@@ -6,7 +6,7 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Subsumsjoner({ søknadId }) {
   const { data, error } = useSWR(
-    `${process.env.NEXT_PUBLIC_API_URL}/søknad/${søknadId}/subsumsjoner`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/subsumsjoner`,
     fetcher
   );
 
