@@ -22,7 +22,8 @@ async function lagreFakta(søknadId, faktumId, type, verdi) {
 
 export default function Søknad({ id }) {
   const [fakta, setFakta] = useState([]);
-  const faktalagrer = (type, verdi) => lagreFakta(id, type, verdi);
+  const faktalagrer = (faktumId, type, verdi) =>
+    lagreFakta(id, faktumId, type, verdi);
 
   useEffect(() => {
     hentNesteFakta(id, setFakta);
