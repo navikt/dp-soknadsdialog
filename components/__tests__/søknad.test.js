@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Søknad from "../søknad";
 
@@ -24,7 +24,8 @@ test("Kan svare på ønsket dato", async () => {
 
   await userEvent.type(input, `${ønsketDato}{enter}`);
   await expect(input).toHaveValue(ønsketDato);
-  expect(await findByTestId("spørsmål-2")).toHaveClass("lagret");
+  const spørsmål = await findByTestId("spørsmål-2");
+  await waitFor(() => expect(spørsmål).toHaveClass("lagret"));
 });
 
 test("Kan svare på antall uker", async () => {
