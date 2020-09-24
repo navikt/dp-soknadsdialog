@@ -35,7 +35,7 @@ export const handlers = [
     }
   ),
   rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/søknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/faktum/:faktumId`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/faktum/:faktumId`,
     (req, res, ctx) => {
       const { faktumId } = req.params;
       const { verdi } = req.body;

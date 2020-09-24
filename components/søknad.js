@@ -3,7 +3,7 @@ import Spørsmål from "./spørsmål";
 
 async function hentNesteFakta(søknadId, callback) {
   const nesteSeksjon = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/søknad/${søknadId}/neste-seksjon`
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/neste-seksjon`
   );
   const json = await nesteSeksjon.json();
   callback(json.fakta);
@@ -11,7 +11,7 @@ async function hentNesteFakta(søknadId, callback) {
 
 async function lagreFakta(søknadId, type, verdi) {
   await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/søknad/${søknadId}/faktum/123`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/123`,
     {
       method: "PUT",
       body: JSON.stringify({ type, verdi }),
