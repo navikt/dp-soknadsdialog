@@ -1,17 +1,23 @@
-import { findByTestId, render, waitFor } from "@testing-library/react";
+import { findByLabelText, findByTestId, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Søknad from "../søknad";
 
 test("Hent neste fakta", async () => {
-  const { findByLabelText } = render(<Søknad />);
+  const { findByLabelText } = render(
+    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+  );
 
-  expect(await findByLabelText("Ønsket dato")).toBeInTheDocument();
+  expect(await findByLabelText(/Ønsker/)).toBeInTheDocument();
 });
 
 test("Kan svare på ønsket dato", async () => {
-  const { findByLabelText, findByTestId } = render(<Søknad />);
+  const { findByLabelText, findByTestId } = render(
+    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+  );
 
-  const input = await findByLabelText("Ønsket dato", { selector: "input" });
+  const input = await findByLabelText(/Ønsker dagpenger fra/, {
+    selector: "input",
+  });
   expect(input).toBeInTheDocument();
 
   const ønsketDato = "10.09.2020";
@@ -19,13 +25,15 @@ test("Kan svare på ønsket dato", async () => {
   await userEvent.type(input, `${ønsketDato}{enter}`);
   await expect(input).toHaveValue(ønsketDato);
 
-  expect(await findByTestId("spørsmål-Ønsket dato")).toHaveClass("lagret");
+  expect(await findByTestId("spørsmål-2")).toHaveClass("lagret");
 });
 
 test("Kan svare på antall uker", async () => {
-  const { findByLabelText } = render(<Søknad />);
+  const { findByTestId } = render(
+    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+  );
 
-  const input = await findByLabelText("Ønsket antall uker", {
+  const input = await findByTestId("input-3", {
     selector: "input",
   });
   expect(input).toBeInTheDocument();

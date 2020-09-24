@@ -2,31 +2,40 @@ import { rest } from "msw";
 
 export const handlers = [
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/neste-fakta`,
+    `${process.env.NEXT_PUBLIC_API_URL}/søknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/neste-seksjon`,
     (req, res, ctx) => {
       return res(
-        ctx.json([
-          {
-            id: 1,
-            navn: "Ønsket dato",
-            type: "LocalDate",
-          },
-          {
-            id: 2,
-            navn: "Fødselsdato",
-            type: "LocalDate",
-          },
-          {
-            id: 3,
-            navn: "Ønsket antall uker",
-            type: "Int",
-          },
-        ])
+        ctx.json({
+          fakta: [
+            {
+              navn: "Ønsker dagpenger fra dato med id 2",
+              id: 2,
+              avhengigFakta: [],
+              clazz: "localdate",
+              roller: ["søker"],
+            },
+            {
+              navn: "Fødselsdato med id 1",
+              id: 1,
+              avhengigFakta: [],
+              clazz: "localdate",
+              roller: ["søker"],
+            },
+            {
+              navn: "Antall uker",
+              id: 3,
+              avhengigFakta: [],
+              clazz: "int",
+              roller: ["søker"],
+            },
+          ],
+          root: { rolle: "søker", fakta: [2, 1] },
+        })
       );
     }
   ),
   rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/faktum/:faktumId`,
+    `${process.env.NEXT_PUBLIC_API_URL}/søknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/faktum/:faktumId`,
     (req, res, ctx) => {
       const { faktumId } = req.params;
       const { svar } = req.body;
@@ -42,7 +51,7 @@ export const handlers = [
     }
   ),
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/subsumsjoner`,
+    `${process.env.NEXT_PUBLIC_API_URL}/søknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/subsumsjoner`,
     (req, res, ctx) => {
       return res(
         ctx.json({

@@ -2,7 +2,7 @@ import { Datovelger } from "nav-datovelger";
 import { Label } from "nav-frontend-skjema";
 import { useState } from "react";
 
-export default function DatoSpørsmål({ navn, handleChange, className }) {
+export default function DatoSpørsmål({ id, navn, handleChange, className }) {
   const [dato, setDato] = useState("");
 
   function onChange(value) {
@@ -12,7 +12,9 @@ export default function DatoSpørsmål({ navn, handleChange, className }) {
 
   return (
     <>
-      <Label htmlFor={navn}>{navn}</Label>
+      <Label data-testid={`input-${id}`} htmlFor={navn}>
+        {navn}
+      </Label>
       <Datovelger
         id={navn}
         onChange={onChange}

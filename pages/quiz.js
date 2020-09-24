@@ -54,7 +54,7 @@ export default function Home(props) {
           visLabel
         />
 
-        <Søknad />
+        <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
         <Subsumsjoner />
 
         <Normaltekst>PartyTime</Normaltekst>

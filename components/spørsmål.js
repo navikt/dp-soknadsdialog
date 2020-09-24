@@ -3,7 +3,7 @@ import { useState } from "react";
 import DatoSpørsmål from "./dato-spørsmål";
 
 const mapping = {
-  LocalDate: DatoSpørsmål,
+  localdate: DatoSpørsmål,
 };
 export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const [validert, settValidert] = useState(false);
@@ -17,7 +17,7 @@ export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const Komponent = mapping[type] || InputSpørsmål;
   return (
     <>
-      <div className={className} data-testid={`spørsmål-${rest.navn}`}>
+      <div className={className} data-testid={`spørsmål-${rest.id}`}>
         <Komponent type={type} {...rest} handleChange={getOnChange} />
       </div>
       <style jsx>{`
