@@ -2,7 +2,7 @@ import { rest } from "msw";
 
 export const handlers = [
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/neste-seksjon`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
       return res(
         ctx.json({
@@ -35,7 +35,7 @@ export const handlers = [
     }
   ),
   rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/faktum/:faktumId`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/faktum/:faktumId`,
     (req, res, ctx) => {
       const { faktumId } = req.params;
       const { verdi } = req.body;
@@ -51,7 +51,7 @@ export const handlers = [
     }
   ),
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/83f7c85f-c513-489a-846b-bd4271bb7f8e/subsumsjoner`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/subsumsjoner`,
     (req, res, ctx) => {
       return res(
         ctx.json({
