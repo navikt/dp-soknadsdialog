@@ -15,12 +15,13 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
         <ul>
           {fakta.map((faktum) => (
             <li key={faktum.id} data-testid="faktum">
-              {faktum.navn}
-              svar: {faktum.svar}
+              <b>Navn:</b> {faktum.navn}
+              <br />
+              <b>Svar:</b> {faktum.svar}
             </li>
           ))}
-        </ul>
-      )}
+      </ul>
+    )}
 
       <Subsumsjon subsumsjoner={subsumsjoner} dybde={dybde + 1} />
     </div>
