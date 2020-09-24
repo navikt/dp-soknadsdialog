@@ -4,7 +4,11 @@ export default async (req, res) => {
   } = req;
   const fakta = await fetch(
     `http://dp-quiz-api/soknad/${id}/faktum/${faktumId}`,
-    { method: "PUT", body: req.body }
+    {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: req.body,
+    }
   );
 
   res.statusCode = 200;
