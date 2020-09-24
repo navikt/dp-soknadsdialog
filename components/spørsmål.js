@@ -9,7 +9,7 @@ export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const [validert, settValidert] = useState(false);
 
   async function getOnChange(value) {
-    settValidert(await håndterEndring(type, value));
+    settValidert(await håndterEndring(rest.id, type, value));
   }
 
   const className = validert ? "lagret" : "";

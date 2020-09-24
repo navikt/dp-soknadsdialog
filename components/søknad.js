@@ -9,9 +9,9 @@ async function hentNesteFakta(søknadId, callback) {
   callback(json.fakta);
 }
 
-async function lagreFakta(søknadId, type, verdi) {
+async function lagreFakta(søknadId, faktumId, type, verdi) {
   await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/123`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/${faktumId}`,
     {
       method: "PUT",
       body: JSON.stringify({ type, verdi }),
