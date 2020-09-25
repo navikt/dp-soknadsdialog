@@ -9,20 +9,32 @@ async function hentNesteFakta(søknadId, callback) {
   callback(json.fakta);
 }
 
-async function lagreFakta(søknadId, faktumId, type, verdi) {
-  await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/${faktumId}`,
-    {
-      method: "PUT",
-      body: JSON.stringify({ type, verdi }),
-    }
-  );
-  return true;
-}
-
 export default function Søknad({ id }) {
   const [fakta, setFakta] = useState([]);
+
+  const lagreFakta = async (søknadId, faktumId, type, verdi) => {
+    await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/${faktumId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify({ type, verdi }),
+      }
+    );
+
+    setFakta(
+      fakta.map((faktum) => {
+        if (faktum.id !== faktumId) return faktum;
+        return { ...faktum, lagret: true };
+      })
+    );
+
+    return true;
+  };
+
   const faktalagrer = (...args) => lagreFakta(id, ...args);
+
+  const alleFaktaErLagret = () =>
+    fakta.length !== 0 && fakta.every((faktum) => faktum.lagret);
 
   useEffect(() => {
     hentNesteFakta(id, setFakta);
@@ -38,6 +50,9 @@ export default function Søknad({ id }) {
           håndterEndring={faktalagrer}
         />
       ))}
+      <button disabled={!alleFaktaErLagret()} data-testid="neste-knapp">
+        Neste seksjon
+      </button>
     </>
   );
 }

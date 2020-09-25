@@ -2,6 +2,25 @@ import { rest } from "msw";
 
 export const handlers = [
   rest.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
+    (req, res, ctx) => {
+      return res(
+        ctx.json({
+          fakta: [
+            {
+              navn: "Antall uker",
+              id: 1,
+              avhengigFakta: [],
+              clazz: "int",
+              roller: ["søker"],
+            },
+          ],
+          root: { rolle: "søker", fakta: [1] },
+        })
+      );
+    }
+  ),
+  rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
       return res(

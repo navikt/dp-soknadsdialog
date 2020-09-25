@@ -40,3 +40,19 @@ test("Kan svare på antall uker", async () => {
 
   expect(input).toHaveAttribute("inputMode", "numeric");
 });
+
+test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
+  const { findByTestId } = render(<Søknad id="kort-seksjon" />);
+
+  const nesteKnapp = await findByTestId("neste-knapp");
+
+  expect(nesteKnapp).toBeDisabled();
+
+  const input = await findByTestId("input-1", {
+    selector: "input",
+  });
+
+  userEvent.type(input, `10{enter}`);
+
+  await waitFor(() => expect(nesteKnapp).toBeEnabled());
+});
