@@ -34,7 +34,7 @@ export default function Søknad({ id }) {
   const faktalagrer = (...args) => lagreFakta(id, ...args);
 
   const alleFaktaErLagret = (fakta = []) =>
-    fakta.every((faktum) => faktum.lagret);
+    fakta.length > 0 && fakta.every((faktum) => faktum.lagret);
 
   useEffect(() => {
     hentNesteFakta(id, setFakta);

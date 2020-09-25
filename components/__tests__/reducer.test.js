@@ -53,3 +53,7 @@ function Test() {
     </div>
   );
 }
+
+test("tull", () => {
+  expect(1).toBe(1);
+});
