@@ -33,8 +33,8 @@ export default function Søknad({ id }) {
 
   const faktalagrer = (...args) => lagreFakta(id, ...args);
 
-  const alleFaktaErLagret = () =>
-    fakta.length !== 0 && fakta.every((faktum) => faktum.lagret);
+  const alleFaktaErLagret = (fakta = []) =>
+    fakta.every((faktum) => faktum.lagret);
 
   useEffect(() => {
     hentNesteFakta(id, setFakta);
@@ -50,7 +50,11 @@ export default function Søknad({ id }) {
           håndterEndring={faktalagrer}
         />
       ))}
-      <button disabled={!alleFaktaErLagret()} data-testid="neste-knapp">
+      <button
+        disabled={!alleFaktaErLagret(fakta)}
+        data-testid="neste-knapp"
+        onClick={() => hentNesteFakta(id, setFakta)}
+      >
         Neste seksjon
       </button>
     </>
