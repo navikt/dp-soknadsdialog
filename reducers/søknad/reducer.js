@@ -5,7 +5,8 @@ const initialValue = { fakta: [], subsumsjoner: {} };
 export default function reducer(state = initialValue, action) {
   switch (action.type) {
     case SUBSUMSJONER_HENTET: {
-      return { ...state };
+      const { subsumsjoner, fakta } = action;
+      return { ...state, subsumsjoner, fakta };
     }
   }
 }
