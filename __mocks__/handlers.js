@@ -5,21 +5,33 @@ const faktum = (
 ) => ({ navn, id, avhengigFakta: [], clazz: type, roller: ["søker"] });
 
 const søknader = new Map();
-const getFaktaFor = (søknad) => {
-  if (!søknader.has(søknad)) {
-    søknader.set(søknad, [
-      faktum({
-        navn: "Ønsker dagpenger fra dato med id 2",
-        id: 2,
-        clazz: "localdate",
-      }),
-      faktum({ navn: "Fødselsdato med id 1", id: 1, clazz: "localdate" }),
-      faktum({ navn: "Antall uker", id: 3, clazz: "int" }),
-    ]);
+let seksjon = 1;
+const getFaktaFor = (søknad, seksjon) => {
+  const key = `${søknad}-${seksjon}`;
+
+  if (!søknader.has(key)) {
+    søknader.set(key, lagSeksjon(seksjon));
   }
 
-  return søknader.get(søknad);
+  return søknader.get(key);
 };
+const lagSeksjon = (seksjon) => [
+  faktum({
+    navn: "Ønsker dagpenger fra dato med id 2",
+    id: `${seksjon}-2`,
+    clazz: "localdate",
+  }),
+  faktum({
+    navn: "Fødselsdato med id 1",
+    id: `${seksjon}-1`,
+    clazz: "localdate",
+  }),
+  faktum({
+    navn: "Antall uker",
+    id: `${seksjon}-3`,
+    clazz: "int",
+  }),
+];
 export const handlers = [
   rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
@@ -54,7 +66,7 @@ export const handlers = [
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
       const { soknadId } = req.params;
-      const fakta = getFaktaFor(soknadId);
+      const fakta = getFaktaFor(soknadId, ++seksjon);
 
       return res(
         ctx.json({
@@ -70,7 +82,7 @@ export const handlers = [
       const { soknadId } = req.params;
       const { faktumId } = req.params;
       const { verdi } = JSON.parse(req.body);
-      const fakta = getFaktaFor(soknadId);
+      const fakta = getFaktaFor(soknadId, seksjon);
 
       fakta.find((faktum) => faktum.id == faktumId).verdi = verdi;
 
