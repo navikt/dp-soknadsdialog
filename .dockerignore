@@ -1,10 +1,11 @@
 *
 !assets
 !components
-!pages
-!public
 !next.config.js
 !package*.json
+!pages
+!public
+!reducers
 !server.js
 !.env.production
 public/mockServiceWorker.js
