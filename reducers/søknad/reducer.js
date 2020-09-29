@@ -5,15 +5,16 @@ const initialValue = { seksjoner: [], tilbakeTeller: 0 };
 export default function reducer(state = initialValue, action) {
   switch (action.type) {
     case LEGG_TIL_NESTE_SEKSJON: {
-      const { subsumsjoner, fakta } = action;
+      const { subsumsjoner, fakta, id } = action;
+      const seksjoner = state.seksjoner.concat({ subsumsjoner, fakta, id });
       return {
         ...state,
-        tilbakeTeller: state.seksjoner.length,
-        seksjoner: state.seksjoner.concat({ subsumsjoner, fakta }),
+        tilbakeTeller: seksjoner.length - 1,
+        seksjoner,
       };
     }
     case GÅ_TIL_FORRIGE_SEKSJON: {
-      const tilbakeTeller = Math.max(0, state.tilbakeTeller--);
+      const tilbakeTeller = Math.max(0, state.tilbakeTeller - 1);
       return {
         ...state,
         tilbakeTeller,
