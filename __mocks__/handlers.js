@@ -56,16 +56,22 @@ export const handlers = [
   rest.put(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/faktum/:faktumId`,
     (req, res, ctx) => {
-      const { faktumId } = req.params;
-      const { verdi } = req.body;
+      const { verdi } = JSON.parse(req.body);
+
       return res(
-        ctx.json([
-          {
-            id: faktumId,
-            navn: "Ønsket dato",
-            verdi,
-          },
-        ])
+        ctx.json({
+          fakta: [
+            {
+              navn: "Antall uker",
+              id: 1,
+              avhengigFakta: [],
+              clazz: "int",
+              roller: ["søker"],
+              verdi,
+            },
+          ],
+          root: { rolle: "søker", fakta: [1] },
+        })
       );
     }
   ),

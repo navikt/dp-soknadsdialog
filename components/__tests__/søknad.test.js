@@ -10,8 +10,8 @@ test("Hent neste fakta", async () => {
   expect(await findByLabelText(/Ønsker/)).toBeInTheDocument();
 });
 
-test("Kan svare på ønsket dato", async () => {
-  const { findByLabelText, findByTestId } = render(
+xtest("Kan svare på ønsket dato", async () => {
+  const { findByLabelText } = render(
     <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
   );
 
@@ -24,21 +24,24 @@ test("Kan svare på ønsket dato", async () => {
 
   await userEvent.type(input, `${ønsketDato}{enter}`);
   await expect(input).toHaveValue(ønsketDato);
-  const spørsmål = await findByTestId("spørsmål-2");
-  await waitFor(() => expect(spørsmål).toHaveClass("lagret"));
 });
 
-test("Kan svare på antall uker", async () => {
-  const { findByTestId } = render(
-    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
-  );
+xtest("Kan svare på antall uker", async () => {
+  const { findByTestId } = render(<Søknad id="kort-seksjon" />);
 
-  const input = await findByTestId("input-3", {
+  const input = await findByTestId("input-1", {
     selector: "input",
   });
   expect(input).toBeInTheDocument();
 
   expect(input).toHaveAttribute("inputMode", "numeric");
+
+  const ønsketUker = "10";
+
+  await userEvent.type(input, `${ønsketUker}{enter}`);
+  await expect(input).toHaveValue(ønsketUker);
+  const spørsmål = await findByTestId("spørsmål-1");
+  await waitFor(() => expect(spørsmål).toHaveClass("lagret"));
 });
 
 test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {

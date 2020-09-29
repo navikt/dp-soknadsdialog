@@ -1,19 +1,27 @@
-import { useEffect, useState } from "react";
-import Spørsmål from "./spørsmål";
+import Seksjon from "./seksjon";
+import reducer from "../reducers/søknad";
+import { faktumLagret, leggTilNesteSeksjon } from "../reducers/søknad/actions";
+import { getAktivSeksjon } from "../reducers/søknad/selectors";
+import { useEffect, useReducer } from "react";
 
-async function hentNesteFakta(søknadId, callback) {
-  const nesteSeksjon = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/neste-seksjon`
-  );
-  const json = await nesteSeksjon.json();
-  callback(json.fakta);
-}
+const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Søknad({ id }) {
-  const [fakta, setFakta] = useState([]);
+  const [state, dispatch] = useReducer(reducer, {
+    seksjoner: [],
+    tilbakeTeller: 0,
+  });
+
+  const hentNesteSeksjon = async (søknadId) => {
+    const nesteSeksjon = await fetcher(
+      `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/neste-seksjon`
+    );
+
+    dispatch(leggTilNesteSeksjon(nesteSeksjon));
+  };
 
   const lagreFakta = async (søknadId, faktumId, type, verdi) => {
-    await fetch(
+    const seksjon = await fetcher(
       `${process.env.NEXT_PUBLIC_API_URL}/soknad/${søknadId}/faktum/${faktumId}`,
       {
         method: "PUT",
@@ -21,42 +29,26 @@ export default function Søknad({ id }) {
       }
     );
 
-    setFakta(
-      fakta.map((faktum) => {
-        if (faktum.id !== faktumId) return faktum;
-        return { ...faktum, lagret: true };
-      })
-    );
-
+    dispatch(faktumLagret(seksjon));
     return true;
   };
 
-  const faktalagrer = (...args) => lagreFakta(id, ...args);
-
-  const alleFaktaErLagret = (fakta = []) =>
-    fakta.length > 0 && fakta.every((faktum) => faktum.lagret);
-
   useEffect(() => {
-    hentNesteFakta(id, setFakta);
-  }, []);
+    hentNesteSeksjon(id);
+  }, [id]);
+
+  const faktumlagrer = (...args) => lagreFakta(id, ...args);
+  const seksjon = getAktivSeksjon(state);
+
+  if (typeof seksjon === "undefined") return null;
 
   return (
     <>
-      Vi vil stille disse spørsmålene:
-      {fakta.map((faktum) => (
-        <Spørsmål
-          key={faktum.id}
-          {...{ ...faktum, type: faktum.clazz }}
-          håndterEndring={faktalagrer}
-        />
-      ))}
-      <button
-        disabled={!alleFaktaErLagret(fakta)}
-        data-testid="neste-knapp"
-        onClick={() => hentNesteFakta(id, setFakta)}
-      >
-        Neste seksjon
-      </button>
+      <Seksjon
+        fakta={seksjon.fakta}
+        faktumlagrer={faktumlagrer}
+        hentNesteSeksjon={() => hentNesteSeksjon(id)}
+      />
     </>
   );
 }
