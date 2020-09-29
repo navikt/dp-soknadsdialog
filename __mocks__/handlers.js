@@ -1,60 +1,39 @@
 import { rest } from "msw";
 
+const faktum = (
+  { navn, id, type } = { navn: "Antall uker", id: 1, type: "int" }
+) => ({ navn, id, avhengigFakta: [], clazz: type, roller: ["søker"] });
+
+const søknader = new Map();
+const getFaktaFor = (søknad) => {
+  if (!søknader.has(søknad)) {
+    søknader.set(søknad, [
+      faktum({
+        navn: "Ønsker dagpenger fra dato med id 2",
+        id: 2,
+        clazz: "localdate",
+      }),
+      faktum({ navn: "Fødselsdato med id 1", id: 1, clazz: "localdate" }),
+      faktum({ navn: "Antall uker", id: 3, clazz: "int" }),
+    ]);
+  }
+
+  return søknader.get(søknad);
+};
 export const handlers = [
   rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
     (req, res, ctx) => {
       return res(
         ctx.json({
-          fakta: [
-            {
-              navn: "Antall uker",
-              id: 1,
-              avhengigFakta: [],
-              clazz: "int",
-              roller: ["søker"],
-            },
-          ],
-          root: { rolle: "søker", fakta: [1] },
-        })
-      );
-    }
-  ),
-  rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
-    (req, res, ctx) => {
-      return res(
-        ctx.json({
-          fakta: [
-            {
-              navn: "Ønsker dagpenger fra dato med id 2",
-              id: 2,
-              avhengigFakta: [],
-              clazz: "localdate",
-              roller: ["søker"],
-            },
-            {
-              navn: "Fødselsdato med id 1",
-              id: 1,
-              avhengigFakta: [],
-              clazz: "localdate",
-              roller: ["søker"],
-            },
-            {
-              navn: "Antall uker",
-              id: 3,
-              avhengigFakta: [],
-              clazz: "int",
-              roller: ["søker"],
-            },
-          ],
-          root: { rolle: "søker", fakta: [2, 1] },
+          fakta: [faktum({ id: 123 })],
+          root: { rolle: "søker", fakta: [123] },
         })
       );
     }
   ),
   rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/faktum/:faktumId`,
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
     (req, res, ctx) => {
       const { verdi } = JSON.parse(req.body);
 
@@ -62,15 +41,43 @@ export const handlers = [
         ctx.json({
           fakta: [
             {
-              navn: "Antall uker",
-              id: 1,
-              avhengigFakta: [],
-              clazz: "int",
-              roller: ["søker"],
+              ...faktum({ id: 123 }),
               verdi,
             },
           ],
-          root: { rolle: "søker", fakta: [1] },
+          root: { rolle: "søker", fakta: [123] },
+        })
+      );
+    }
+  ),
+  rest.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
+    (req, res, ctx) => {
+      const { soknadId } = req.params;
+      const fakta = getFaktaFor(soknadId);
+
+      return res(
+        ctx.json({
+          fakta,
+          root: { rolle: "søker", fakta: fakta.map((faktum) => faktum.id) },
+        })
+      );
+    }
+  ),
+  rest.put(
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/faktum/:faktumId`,
+    (req, res, ctx) => {
+      const { soknadId } = req.params;
+      const { faktumId } = req.params;
+      const { verdi } = JSON.parse(req.body);
+      const fakta = getFaktaFor(soknadId);
+
+      fakta.find((faktum) => faktum.id == faktumId).verdi = verdi;
+
+      return res(
+        ctx.json({
+          fakta,
+          root: { rolle: "søker", fakta: fakta.map((faktum) => faktum.id) },
         })
       );
     }
