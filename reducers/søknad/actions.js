@@ -1,6 +1,11 @@
-export const SUBSUMSJONER_HENTET = "subsumsjoner hentet";
-export const subsumsjonerHentet = (subsumsjoner = {}, fakta = []) => ({
-  type: SUBSUMSJONER_HENTET,
-  subsumsjoner,
+import { LEGG_TIL_NESTE_SEKSJON } from "./types";
+
+export const leggTilNesteSeksjon = ({ fakta = [], subsumsjoner = {} }) => ({
+  type: LEGG_TIL_NESTE_SEKSJON,
   fakta,
+  subsumsjoner,
+});
+
+export const gåTilForrigeSeksjon = () => ({
+  type: GÅ_TIL_FORRIGE_SEKSJON,
 });

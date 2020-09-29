@@ -1,2 +1,3 @@
-export const getSubsumsjoner = (state) => state.subsumsjoner;
-export const getFakta = (state) => state.fakta;
+export const getAktivSeksjon = (state) =>
+  getSeksjoner(state)[getSeksjoner(state).length];
+export const getSeksjoner = (state) => state.seksjoner;
