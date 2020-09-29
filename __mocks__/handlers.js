@@ -1,11 +1,11 @@
 import { rest } from "msw";
 
 const faktum = (
-  { navn, id, type } = { navn: "Antall uker", id: 1, type: "int" }
-) => ({ navn, id, avhengigFakta: [], clazz: type, roller: ["søker"] });
+  { navn, id, clazz } = { navn: "Antall uker", id: 1, clazz: "int" }
+) => ({ navn, id, avhengigFakta: [], clazz, roller: ["søker"] });
 
 const søknader = new Map();
-let seksjon = 1;
+let seksjon = 0;
 const getFaktaFor = (søknad, seksjon) => {
   const key = `${søknad}-${seksjon}`;
 

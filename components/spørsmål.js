@@ -6,26 +6,37 @@ const mapping = {
   localdate: DatoSpørsmål,
 };
 export default function Spørsmål({ type, håndterEndring, ...rest }) {
-  const [validert, settValidert] = useState(false);
+  const [tilstand, settTilstand] = useState("uendret");
 
   async function getOnChange(value) {
-    settValidert(await håndterEndring(rest.id, type, value));
+    settTilstand("pending");
+    setTimeout(async () => {
+      if (await håndterEndring(rest.id, type, value)) {
+        settTilstand("lagret");
+      } else {
+        settTilstand("feilet");
+      }
+    }, 1500);
   }
-
-  const className = validert ? "lagret" : "";
 
   const Komponent = mapping[type] || InputSpørsmål;
   return (
     <>
-      <div className={className} data-testid={`spørsmål-${rest.id}`}>
+      <div className={tilstand} data-testid={`spørsmål-${rest.id}`}>
         <Komponent type={type} {...rest} handleChange={getOnChange} />
       </div>
       <style jsx>{`
         div {
-          background-color: blue;
+          background-color: white;
+        }
+        .pending {
+          background-color: yellow;
+        }
+        .feilet {
+          background-color: red;
         }
         .lagret {
-          background-color: pink;
+          background-color: green;
         }
       `}</style>
     </>
