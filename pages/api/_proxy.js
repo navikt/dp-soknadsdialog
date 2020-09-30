@@ -7,11 +7,11 @@ export default function proxy(url = new URL(""), req, res) {
       {
         host: url.hostname,
         method: req.method,
-        headers: req.headers,
+        headers: filterHeaders(req.headers),
       },
       (resp) => {
         res.statusCode = resp.statusCode;
-        copyHeaders(resp.headers, res);
+        copyHeaders(filterHeaders(resp.headers), res);
 
         resp.pipe(res);
 
@@ -27,8 +27,15 @@ export default function proxy(url = new URL(""), req, res) {
 }
 
 const copyHeaders = (headers, res) => {
-  const bannedHeaders = ["server"];
-  Object.entries(headers)
-    .filter(([header]) => !!bannedHeaders.indexOf(header))
-    .forEach(([header, value]) => res.setHeader(header, value));
+  Object.entries(headers).forEach(([header, value]) =>
+    res.setHeader(header, value)
+  );
+};
+const filterHeaders = (headers) => {
+  const bannedHeaders = ["server", "host"];
+  return Object.fromEntries(
+    Object.entries(headers).filter(
+      ([header]) => bannedHeaders.indexOf(header) === -1
+    )
+  );
 };
