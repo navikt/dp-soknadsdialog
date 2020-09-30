@@ -9,15 +9,13 @@ const mapping = {
 export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const [tilstand, settTilstand] = useState("uendret");
 
-  const getOnChange = debounce((value) => {
+  const getOnChange = debounce(async (value) => {
     settTilstand("pending");
-    setTimeout(async () => {
-      if (await håndterEndring(rest.id, type, value)) {
-        settTilstand("lagret");
-      } else {
-        settTilstand("feilet");
-      }
-    }, 1500);
+    if (await håndterEndring(rest.id, type, value)) {
+      settTilstand("lagret");
+    } else {
+      settTilstand("feilet");
+    }
   }, 400);
 
   const Komponent = mapping[type] || InputSpørsmål;
