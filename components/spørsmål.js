@@ -1,5 +1,6 @@
-import InputSpørsmål from "./input-spørsmål";
 import { useState } from "react";
+import { debounce } from "lodash";
+import InputSpørsmål from "./input-spørsmål";
 import DatoSpørsmål from "./dato-spørsmål";
 
 const mapping = {
@@ -8,7 +9,7 @@ const mapping = {
 export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const [tilstand, settTilstand] = useState("uendret");
 
-  const getOnChange = _.debounce((value) => {
+  const getOnChange = debounce((value) => {
     settTilstand("pending");
     setTimeout(async () => {
       if (await håndterEndring(rest.id, type, value)) {
