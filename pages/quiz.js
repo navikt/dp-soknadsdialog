@@ -10,7 +10,7 @@ import {
   Sidetittel,
   Undertittel,
 } from "nav-frontend-typografi";
-import Søknad from "../components/søknad";
+import Utfylling from "../components/utfylling";
 import Subsumsjoner from "../components/subsumsjoner";
 
 export default function Home(props) {
@@ -54,7 +54,7 @@ export default function Home(props) {
           visLabel
         />
 
-        <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+        <Utfylling id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
         <Subsumsjoner søknadId="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
 
         <Normaltekst>PartyTime</Normaltekst>

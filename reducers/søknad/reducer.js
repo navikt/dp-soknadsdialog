@@ -1,13 +1,29 @@
 import {
   FAKTUM_LAGRET,
   GÅ_TIL_FORRIGE_SEKSJON,
+  GÅ_TIL_OPPSUMMERING,
   LEGG_TIL_NESTE_SEKSJON,
 } from "./types";
 
-const initialValue = { seksjoner: [], tilbakeTeller: 0 };
+export const TILSTAND = Object.freeze({
+  UTFYLLING: "utfylling",
+  OPPSUMMERING: "oppsummering",
+});
 
-export default function reducer(state = initialValue, action) {
+export const initialState = {
+  seksjoner: [],
+  tilbakeTeller: 0,
+  tilstand: TILSTAND.UTFYLLING,
+};
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case GÅ_TIL_OPPSUMMERING: {
+      return {
+        ...state,
+        tilstand: TILSTAND.OPPSUMMERING,
+      };
+    }
     case FAKTUM_LAGRET: {
       const { subsumsjoner, fakta, id } = action;
       const seksjon = { subsumsjoner, fakta, id };

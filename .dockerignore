@@ -1,6 +1,7 @@
 *
 !assets
 !components
+!containers
 !next.config.js
 !package*.json
 !pages

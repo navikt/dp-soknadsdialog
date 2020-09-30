@@ -1,18 +1,10 @@
 import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Søknad from "../søknad";
-
-test("Hent neste fakta", async () => {
-  const { findByLabelText } = render(
-    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
-  );
-
-  expect(await findByLabelText(/Ønsker/)).toBeInTheDocument();
-});
+import Utfylling from "../utfylling";
 
 xtest("Kan svare på ønsket dato", async () => {
   const { findByLabelText } = render(
-    <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+    <Utfylling id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
   );
 
   const input = await findByLabelText(/Ønsker dagpenger fra/, {
@@ -27,7 +19,7 @@ xtest("Kan svare på ønsket dato", async () => {
 });
 
 xtest("Kan svare på antall uker", async () => {
-  const { findByTestId } = render(<Søknad id="kort-seksjon" />);
+  const { findByTestId } = render(<Utfylling id="kort-seksjon" />);
 
   const input = await findByTestId("input-1", {
     selector: "input",
@@ -42,20 +34,4 @@ xtest("Kan svare på antall uker", async () => {
   await expect(input).toHaveValue(ønsketUker);
   const spørsmål = await findByTestId("spørsmål-1");
   await waitFor(() => expect(spørsmål).toHaveClass("lagret"));
-});
-
-test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
-  const { findByTestId } = render(<Søknad id="kort-seksjon" />);
-
-  const nesteKnapp = await findByTestId("neste-knapp");
-
-  expect(nesteKnapp).toBeDisabled();
-
-  const input = await findByTestId("input-123", {
-    selector: "input",
-  });
-
-  userEvent.type(input, `10{enter}`);
-
-  await waitFor(() => expect(nesteKnapp).toBeEnabled());
 });

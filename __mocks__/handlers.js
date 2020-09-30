@@ -44,6 +44,12 @@ export const handlers = [
       );
     }
   ),
+  rest.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/tom-seksjon/neste-seksjon`,
+    (req, res, ctx) => {
+      return res(ctx.status(205));
+    }
+  ),
   rest.put(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
     (req, res, ctx) => {
