@@ -8,7 +8,7 @@ const mapping = {
 export default function Spørsmål({ type, håndterEndring, ...rest }) {
   const [tilstand, settTilstand] = useState("uendret");
 
-  async function getOnChange(value) {
+  const getOnChange = _.debounce((value) => {
     settTilstand("pending");
     setTimeout(async () => {
       if (await håndterEndring(rest.id, type, value)) {
@@ -17,7 +17,7 @@ export default function Spørsmål({ type, håndterEndring, ...rest }) {
         settTilstand("feilet");
       }
     }, 1500);
-  }
+  }, 400);
 
   const Komponent = mapping[type] || InputSpørsmål;
   return (

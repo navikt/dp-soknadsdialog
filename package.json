@@ -14,7 +14,7 @@
     "classnames": "^2.2.6",
     "jsdom": "^16.4.0",
     "less": "^2.7.3",
-    "lodash.throttle": "^4.1.1",
+    "lodash": "^4.17.20",
     "moment": "^2.28.0",
     "nav-datovelger": "^6.1.10",
     "nav-frontend-chevron": "^1.0.13",
