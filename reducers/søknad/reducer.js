@@ -44,8 +44,8 @@ export default function reducer(state = initialState, action) {
     }
     case GÅ_TIL_FORRIGE_SEKSJON: {
       const tilbakeTeller = Math.max(0, state.tilbakeTeller - 1);
-      if (tilbakeTeller == 0) {
-        return state;
+      if (state.tilbakeTeller == 0) {
+        //return state;
       }
       return {
         ...state,

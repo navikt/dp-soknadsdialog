@@ -4,8 +4,12 @@ const faktum = (
   { navn, id, clazz } = { navn: "Antall uker", id: 1, clazz: "int" }
 ) => ({ navn, id, avhengigFakta: [], clazz, roller: ["søker"] });
 
-const søknader = new Map();
 let seksjon = 0;
+if (typeof beforeEach !== "undefined") {
+  beforeEach(() => (seksjon = 0));
+}
+
+const søknader = new Map();
 const getFaktaFor = (søknad, seksjon) => {
   const key = `${søknad}-${seksjon}`;
 
@@ -34,36 +38,37 @@ const lagSeksjon = (seksjon) => [
 ];
 export const handlers = [
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
-    (req, res, ctx) => {
-      return res(
-        ctx.json({
-          fakta: [faktum({ id: 123 })],
-          root: { rolle: "søker", fakta: [123] },
-        })
-      );
-    }
-  ),
-  rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/tom-seksjon/neste-seksjon`,
     (req, res, ctx) => {
       return res(ctx.status(205));
     }
   ),
+  rest.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
+    (req, res, ctx) => {
+      return res(
+        ctx.json({
+          fakta: [faktum({ id: `${seksjon++}-123` })],
+          root: { rolle: "søker", fakta: [123] },
+        })
+      );
+    }
+  ),
   rest.put(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
     (req, res, ctx) => {
+      const { faktumId } = req.params;
       const { verdi: svar } = JSON.parse(req.body);
 
       return res(
         ctx.json({
           fakta: [
             {
-              ...faktum({ id: 123 }),
+              ...faktum({ id: faktumId }),
               svar,
             },
           ],
-          root: { rolle: "søker", fakta: [123] },
+          root: { rolle: "søker", fakta: [faktumId] },
         })
       );
     }

@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Søknad from "../søknad";
 
@@ -17,7 +17,7 @@ test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
 
   expect(nesteKnapp).toBeDisabled();
 
-  const input = await findByTestId("input-123", {
+  const input = await findByTestId("input-0-123", {
     selector: "input",
   });
 
@@ -26,13 +26,24 @@ test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
   await waitFor(() => expect(nesteKnapp).toBeEnabled());
 });
 
-//TODO: faktisk lage testen
 test("Kan gå til forrige seksjon", async () => {
   const { findByTestId } = render(<Søknad id="kort-seksjon" />);
 
-  const tilbakeKnapp = await findByTestId("tilbake-knapp");
+  const input = await findByTestId("input-0-123", {
+    selector: "input",
+  });
 
-  await waitFor(() => expect(tilbakeKnapp).toBeEnabled());
+  userEvent.type(input, `10{enter}`);
+
+  await page.klikkNeste();
+
+  await waitFor(() => expect(input).not.toBeInTheDocument());
+
+  userEvent.click(await findByTestId("tilbake-knapp"));
+
+  await waitFor(async () =>
+    expect(await findByTestId("input-0-123")).toBeInTheDocument()
+  );
 });
 
 test("Går til oppsummering når det ikke er flere seksjoner å besvare", async () => {
@@ -40,3 +51,11 @@ test("Går til oppsummering når det ikke er flere seksjoner å besvare", async 
 
   expect(await findByTestId("oppsummering")).toBeInTheDocument();
 });
+
+const page = {
+  klikkNeste: async () => {
+    const nesteKnapp = await screen.findByTestId("neste-knapp");
+    await waitFor(() => expect(nesteKnapp).toBeEnabled());
+    userEvent.click(nesteKnapp);
+  },
+};
