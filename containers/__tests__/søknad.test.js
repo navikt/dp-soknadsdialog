@@ -26,6 +26,15 @@ test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
   await waitFor(() => expect(nesteKnapp).toBeEnabled());
 });
 
+//TODO: faktisk lage testen
+test("Kan gå til forrige seksjon", async () => {
+  const { findByTestId } = render(<Søknad id="kort-seksjon" />);
+
+  const tilbakeKnapp = await findByTestId("tilbake-knapp");
+
+  await waitFor(() => expect(tilbakeKnapp).toBeEnabled());
+});
+
 test("Går til oppsummering når det ikke er flere seksjoner å besvare", async () => {
   const { findByTestId } = render(<Søknad id="tom-seksjon" />);
 

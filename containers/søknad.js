@@ -2,16 +2,15 @@ import Utfylling from "../components/utfylling";
 import reducer, { initialState } from "../reducers/søknad";
 import {
   faktumLagret,
+  gåTilForrigeSeksjon,
   gåTilOppsummering,
   leggTilNesteSeksjon,
 } from "../reducers/søknad/actions";
 import {
   erUtfyllingTilstand,
   getAktivSeksjon,
-  getTilstand,
 } from "../reducers/søknad/selectors";
 import React, { useEffect, useReducer } from "react";
-import { TILSTAND } from "../reducers/søknad/reducer";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -61,6 +60,7 @@ export default function Søknad({ id }) {
       seksjon={seksjon}
       faktumlagrer={faktumlagrer}
       hentNesteSeksjon={() => hentNesteSeksjon(id)}
+      gåTilForrigeSeksjon={() => dispatch(gåTilForrigeSeksjon())}
     />
   ) : (
     <Oppsummering />

@@ -1,6 +1,6 @@
 import { Input } from "nav-frontend-skjema";
 
-export default function InputSpørsmål({ id, navn, handleChange, type }) {
+export default function InputSpørsmål({ id, navn, handleChange, type, svar }) {
   function onChange(event) {
     handleChange(event.target.value);
   }
@@ -10,6 +10,7 @@ export default function InputSpørsmål({ id, navn, handleChange, type }) {
       inputMode={getInputMode(type)}
       onChange={onChange}
       data-testid={`input-${id}`}
+      value={svar}
     />
   );
 }

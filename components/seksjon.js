@@ -1,10 +1,6 @@
 import Spørsmål from "./spørsmål";
 
-export default function Seksjon({
-  fakta = [],
-  faktumlagrer,
-  hentNesteSeksjon,
-}) {
+export default function Seksjon({ fakta = [], faktumlagrer }) {
   return (
     <>
       Vi vil stille disse spørsmålene:
@@ -15,16 +11,6 @@ export default function Seksjon({
           håndterEndring={faktumlagrer}
         />
       ))}
-      <button
-        disabled={!alleFaktaLagret(fakta)}
-        data-testid="neste-knapp"
-        onClick={hentNesteSeksjon}
-      >
-        Neste seksjon
-      </button>
     </>
   );
 }
-
-const alleFaktaLagret = (fakta) =>
-  fakta.every((faktum) => typeof faktum.svar !== "undefined");
