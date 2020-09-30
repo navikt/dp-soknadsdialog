@@ -26,4 +26,5 @@ export default function Seksjon({
   );
 }
 
-const alleFaktaLagret = (fakta) => fakta.every((faktum) => faktum.svar);
+const alleFaktaLagret = (fakta) =>
+  fakta.every((faktum) => typeof faktum.svar !== "undefined");
