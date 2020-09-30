@@ -72,6 +72,7 @@ export const handlers = [
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
       const { soknadId } = req.params;
+      if (seksjon >= 2) return res(ctx.status(205));
       const fakta = getFaktaFor(soknadId, ++seksjon);
 
       return res(

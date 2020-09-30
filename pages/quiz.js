@@ -10,10 +10,10 @@ import {
   Sidetittel,
   Undertittel,
 } from "nav-frontend-typografi";
-import Utfylling from "../components/utfylling";
 import Subsumsjoner from "../components/subsumsjoner";
+import Søknad from "../containers/søknad";
 
-export default function Home(props) {
+export default function Home() {
   return (
     <div className="root">
       <Head>
@@ -54,7 +54,7 @@ export default function Home(props) {
           visLabel
         />
 
-        <Utfylling id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+        <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
         <Subsumsjoner søknadId="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
 
         <Normaltekst>PartyTime</Normaltekst>
