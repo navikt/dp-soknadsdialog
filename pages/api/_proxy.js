@@ -5,6 +5,7 @@ export default function proxy(url = new URL(""), req, res) {
     const proxy = request(
       url,
       {
+        host: url.hostname,
         method: req.method,
         headers: req.headers,
       },
