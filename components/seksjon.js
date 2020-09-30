@@ -26,4 +26,4 @@ export default function Seksjon({
   );
 }
 
-const alleFaktaLagret = (fakta) => fakta.every((faktum) => faktum.verdi);
+const alleFaktaLagret = (fakta) => fakta.every((faktum) => faktum.svar);

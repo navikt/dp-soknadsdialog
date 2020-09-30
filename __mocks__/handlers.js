@@ -47,14 +47,14 @@ export const handlers = [
   rest.put(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
     (req, res, ctx) => {
-      const { verdi } = JSON.parse(req.body);
+      const { verdi: svar } = JSON.parse(req.body);
 
       return res(
         ctx.json({
           fakta: [
             {
               ...faktum({ id: 123 }),
-              verdi,
+              svar,
             },
           ],
           root: { rolle: "søker", fakta: [123] },
@@ -84,7 +84,7 @@ export const handlers = [
       const { verdi } = JSON.parse(req.body);
       const fakta = getFaktaFor(soknadId, seksjon);
 
-      fakta.find((faktum) => faktum.id == faktumId).verdi = verdi;
+      fakta.find((faktum) => faktum.id == faktumId).svar = verdi;
 
       return res(
         ctx.json({
