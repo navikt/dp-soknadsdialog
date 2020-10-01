@@ -12,8 +12,11 @@ import {
 } from "nav-frontend-typografi";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
+  const søknadsId = uuidv4();
+
   return (
     <div className="root">
       <Head>
@@ -54,8 +57,8 @@ export default function Home() {
           visLabel
         />
 
-        <Søknad id="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
-        <Subsumsjoner søknadId="83f7c85f-c513-489a-846b-bd4271bb7f8e" />
+        <Søknad id={søknadsId} />
+        <Subsumsjoner søknadId={søknadsId} />
 
         <Normaltekst>PartyTime</Normaltekst>
         <Link href="/">

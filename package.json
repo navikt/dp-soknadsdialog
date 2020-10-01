@@ -46,7 +46,8 @@
     "react-collapse": "^5.0.1",
     "react-day-picker": "^7.4.8",
     "react-dom": "16.13.1",
-    "swr": "^0.3.3"
+    "swr": "^0.3.3",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^7.24.2",
