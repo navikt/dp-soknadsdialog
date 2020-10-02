@@ -19,6 +19,8 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
                 <b>Navn:</b> {faktum.navn}
                 <br />
                 <b>Svar:</b> {faktum.svar}
+                {faktum.svar === true && "✅"}
+                {faktum.svar === false && "❌"}
                 <br />
                 <b>Status:</b>
                 {resultat && "✅"}
@@ -27,7 +29,6 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
             ))}
           </ul>
         )}
-
         <Subsumsjon subsumsjoner={subsumsjoner} dybde={dybde + 1} />
       </div>
     )
