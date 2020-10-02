@@ -19,7 +19,9 @@ export default function Spørsmål({ type, håndterEndring, ...rest }) {
   }, 400);
 
   const Komponent = mapping[type] || InputSpørsmål;
-
+  if (rest.fakta) {
+    return null;
+  }
   return (
     <>
       <div className={tilstand} data-testid={`spørsmål-${rest.id}`}>
