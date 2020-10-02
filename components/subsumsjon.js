@@ -11,6 +11,10 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
         style={{ paddingLeft: dybde * 15 }}
       >
         {navn}
+        <br />
+        <b>Status:</b>
+        {resultat && "✅"}
+        {!resultat && "❌"}
 
         {!!fakta.length && (
           <ul>
