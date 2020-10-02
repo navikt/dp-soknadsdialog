@@ -1,5 +1,4 @@
 import Seksjon from "./seksjon";
-import { gåTilForrigeSeksjon } from "../reducers/søknad/actions";
 
 export default function Utfylling({
   seksjon,
@@ -7,7 +6,9 @@ export default function Utfylling({
   hentNesteSeksjon,
   gåTilForrigeSeksjon,
 }) {
-  if (typeof seksjon === "undefined") return null;
+  if (typeof seksjon === "undefined") {
+    return null;
+  }
 
   return (
     <>
@@ -17,18 +18,18 @@ export default function Utfylling({
         hentNesteSeksjon={hentNesteSeksjon}
       />
       <button
-        disabled={!alleFaktaLagret(seksjon.fakta)}
-        data-testid="neste-knapp"
-        onClick={hentNesteSeksjon}
-      >
-        Neste seksjon
-      </button>
-      <button
         disabled={false}
         data-testid="tilbake-knapp"
         onClick={gåTilForrigeSeksjon}
       >
         Tilbake
+      </button>
+      <button
+        disabled={!alleFaktaLagret(seksjon.fakta)}
+        data-testid="neste-knapp"
+        onClick={hentNesteSeksjon}
+      >
+        Neste seksjon
       </button>
     </>
   );
