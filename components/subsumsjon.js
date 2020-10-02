@@ -10,25 +10,22 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
         data-testid="subsumsjon"
         style={{ paddingLeft: dybde * 15 }}
       >
-        {navn}
-        <br />
-        <b>Status:</b>
         {resultat && "✅"}
         {!resultat && "❌"}
-
+        &nbsp;&nbsp;
+        {navn}
         {!!fakta.length && (
           <ul>
             {fakta.map((faktum) => (
               <li key={faktum.id} data-testid="faktum">
-                <b>Navn:</b> {faktum.navn}
+                {resultat && "✅"}
+                {!resultat && "❌"}
+                &nbsp;&nbsp;
+                {faktum.navn}
                 <br />
                 <b>Svar:</b> {faktum.svar}
                 {faktum.svar === true && "✅"}
                 {faktum.svar === false && "❌"}
-                <br />
-                <b>Status:</b>
-                {resultat && "✅"}
-                {!resultat && "❌"}
               </li>
             ))}
           </ul>
