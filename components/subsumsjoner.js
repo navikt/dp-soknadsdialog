@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import PropTypes from "prop-types";
 import Subsumsjon from "./subsumsjon";
+import { memoize } from "lodash";
 
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
@@ -17,26 +18,16 @@ export default function Subsumsjoner({ søknadId }) {
     return <div>Loading!</div>;
   }
 
-  const root = inlineFaktum(faktaFinner(data.fakta), data.root);
+  const faktaFinner = memoize((faktumId) =>
+    data.fakta.find((faktum) => faktum.id === faktumId)
+  );
+
+  const root = data.root;
   return (
     <>
       Subsumsjoner:
-      <Subsumsjon {...root} />
-      gyldige:
-      <Subsumsjon {...root.gyldig} />
+      <Subsumsjon {...root} faktaFinner={faktaFinner} />
     </>
   );
 }
 Subsumsjoner.propTypes = { søknadId: PropTypes.string };
-
-const inlineFaktum = (
-  finnFaktum,
-  { subsumsjoner = [], fakta = [], ...subsumsjon }
-) => ({
-  ...subsumsjon,
-  fakta: fakta.map(finnFaktum),
-  subsumsjoner: subsumsjoner.map((it) => inlineFaktum(finnFaktum, it)),
-});
-
-const faktaFinner = (alleFakta) => (faktumId) =>
-  alleFakta.find((faktum) => faktum.id === faktumId);

@@ -1,24 +1,23 @@
 export default function Subsumsjon({
   navn,
   subsumsjoner = [],
-  resultat = false,
+  resultat = null,
   fakta = [],
   gyldig,
+  ugyldig,
   dybde = 0,
+  faktaFinner,
 }) {
   return (
-    <div
-      key={navn}
-      data-testid="subsumsjon"
-      style={{ paddingLeft: dybde * 15 }}
-    >
-      {resultat && "✅"}
-      {!resultat && "❌"}
+    <div data-testid="subsumsjon" style={{ paddingLeft: dybde * 15 }}>
+      {resultat === true && "✅"}
+      {resultat === false && "❌"}
+      {resultat == null && "❓"}
       &nbsp;&nbsp;
       {navn}
       {!!fakta.length && (
         <ul>
-          {fakta.map((faktum) => (
+          {fakta.map(faktaFinner).map((faktum) => (
             <li key={faktum.id} data-testid="faktum">
               {faktum.svar !== undefined ? "✅" : "❓"}
               &nbsp;&nbsp;
@@ -32,9 +31,19 @@ export default function Subsumsjon({
         </ul>
       )}
       {subsumsjoner.map((subsumsjon) => (
-        <Subsumsjon {...subsumsjon} dybde={dybde + 1} gyldig={gyldig} />
+        <Subsumsjon
+          key={subsumsjon.navn}
+          {...subsumsjon}
+          dybde={dybde + 1}
+          faktaFinner={faktaFinner}
+        />
       ))}
-      {gyldig && <Subsumsjon {...gyldig}></Subsumsjon>}
+      {resultat === true && gyldig && (
+        <Subsumsjon {...gyldig} faktaFinner={faktaFinner}></Subsumsjon>
+      )}
+      {resultat === false && ugyldig && (
+        <Subsumsjon {...ugyldig} faktaFinner={faktaFinner}></Subsumsjon>
+      )}
     </div>
   );
 }
