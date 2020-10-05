@@ -120,18 +120,21 @@ export const handlers = [
               id: 6,
               avhengigFakta: [],
               roller: ["søker"],
+              svar: true,
             },
             {
               navn: "Inntekt siste 3 år",
               id: 8,
               avhengigFakta: [],
               roller: ["søker"],
+              svar: 1000,
             },
             {
               navn: "3G",
               id: 11,
               avhengigFakta: [],
               roller: ["søker"],
+              svar: false,
             },
             {
               navn: "Inntekt siste 12 mnd",
@@ -187,18 +190,21 @@ export const handlers = [
                 kclass: "EnkelSubsumsjon",
                 regelType: "har",
                 fakta: [6],
+                resultat: null,
               },
               {
                 navn: "tapt arbeidsinntekt",
                 kclass: "AlleSubsumsjon",
                 regelType: "alle",
                 subsumsjoner: [],
+                resultat: true,
               },
               {
                 navn: "tapt arbeidstid",
                 kclass: "AlleSubsumsjon",
                 regelType: "alle",
                 subsumsjoner: [],
+                reultat: false,
               },
               {
                 navn: "minste arbeidsinntekt",
