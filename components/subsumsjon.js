@@ -38,7 +38,7 @@ export default function Subsumsjon({
           faktaFinner={faktaFinner}
         />
       ))}
-      {resultat === true && gyldig && (
+      {resultat !== false && gyldig && (
         <Subsumsjon {...gyldig} faktaFinner={faktaFinner}></Subsumsjon>
       )}
       {resultat === false && ugyldig && (
