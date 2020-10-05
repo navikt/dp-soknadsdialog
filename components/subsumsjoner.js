@@ -22,6 +22,8 @@ export default function Subsumsjoner({ søknadId }) {
     <>
       Subsumsjoner:
       <Subsumsjon {...root} />
+      gyldige:
+      <Subsumsjon {...root.gyldig} />
     </>
   );
 }
