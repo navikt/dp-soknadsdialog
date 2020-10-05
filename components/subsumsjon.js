@@ -4,7 +4,7 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
   }
 
   return subsumsjoner.map(
-    ({ navn, resultat = false, fakta = [], subsumsjoner }) => (
+    ({ navn, resultat = false, fakta = [], subsumsjoner, gyldig, ugyldig }) => (
       <div
         key={navn}
         data-testid="subsumsjon"
@@ -31,6 +31,8 @@ export default function Subsumsjon({ subsumsjoner = [], dybde = 0 }) {
           </ul>
         )}
         <Subsumsjon subsumsjoner={subsumsjoner} dybde={dybde + 1} />
+        <Subsumsjon subsumsjoner={gyldig} dybde={dybde + 2} />
+        <Subsumsjon subsumsjoner={ugyldig} dybde={dybde + 2} />
       </div>
     )
   );
