@@ -3,7 +3,7 @@ export default async (req, res) => {
     query: { id, faktumId },
   } = req;
   const fakta = await fetch(
-    `http://dp-quiz-api/soknad/${id}/faktum/${faktumId}`,
+    `${process.env.API_BASE_URL}/soknad/${id}/faktum/${faktumId}`,
     {
       method: "PUT",
       headers: { "content-type": "application/json" },

@@ -3,7 +3,7 @@ export default async (req, res) => {
     query: { id },
   } = req;
   const subsumsjoner = await fetch(
-    `http://dp-quiz-api/soknad/${id}/subsumsjoner`
+    `${process.env.API_BASE_URL}/soknad/${id}/subsumsjoner`
   );
 
   res.statusCode = 200;
