@@ -143,17 +143,17 @@ jobs:
           VARS: nais/prod/vars.yaml
           PRINT_PAYLOAD: true
 
-  reportFailure:
-    name: Report build failure to Slack
-    needs: [ test, build ]
-    if: ${{ failure() }}
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"username\": \"$USERNAME\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":neutral_face:\"}" $WEBHOOK_URL
-        env:
-          USERNAME: "Github Actions"
-          MESSAGE: "The build is broken!"
-          CHANNEL: "#team-dagpenger-quizshow"
-          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-
+#  reportFailure:
+#    name: Report build failure to Slack
+#    needs: [ test, build ]
+#    if: ${{ failure() }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - run: |
+#          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"username\": \"$USERNAME\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":neutral_face:\"}" $WEBHOOK_URL
+#        env:
+#          USERNAME: "Github Actions"
+#          MESSAGE: "The build is broken!"
+#          CHANNEL: "#team-dagpenger-quiz"
+#          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+#
