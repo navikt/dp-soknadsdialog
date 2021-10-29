@@ -1,18 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
-import HomeIkon from "../assets/svg/home.svg";
-import Lenkepanel from "nav-frontend-lenkepanel";
-import Stegindikator from "nav-frontend-stegindikator";
-import { Knapp } from "nav-frontend-knapper";
-import {
-  Ingress,
-  Normaltekst,
-  Sidetittel,
-  Undertittel,
-} from "nav-frontend-typografi";
+import { Home as HomeIcon } from "@navikt/ds-icons";
+import { LinkPanel, Stegindikator }  from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
 import { v4 as uuidv4 } from "uuid";
+
+import "@navikt/ds-css";
 
 export default function Home() {
   const søknadsId = uuidv4();
@@ -25,26 +20,30 @@ export default function Home() {
 
       <section>
         <div className="fo">
-          <HomeIkon style={{ height: "20px" }} />
-          <Sidetittel>Hola!</Sidetittel>
-          <Ingress>Nå tester vi quiz</Ingress>
+          <HomeIcon style={{ height: "20px" }} />
+          <p className="typo-sidetittel">Hola!</p>
+          <p className="type-ingress">Nå tester vi quiz</p>
         </div>
       </section>
 
       <main>
         <div className="boxes">
-          <Lenkepanel className="half" href="/" border>
-            <Undertittel>
+          <LinkPanel className="half" href="/" border>
+            <LinkPanel.Title>
               Koronavirus - hva gjelder i min situasjon?
-            </Undertittel>
-            <Normaltekst>Se informasjon om rettighetene dine</Normaltekst>
-          </Lenkepanel>
-          <Lenkepanel className="half" href="/" border>
-            <Undertittel>
+            </LinkPanel.Title>
+            <LinkPanel.Description>
+              Se informasjon om rettighetene dine
+            </LinkPanel.Description>
+          </LinkPanel>
+          <LinkPanel className="half" href="/" border>
+          <LinkPanel.Title>
               Koronavirus - hva gjelder i min situasjon?
-            </Undertittel>
-            <Normaltekst>Se informasjon om rettighetene dine</Normaltekst>
-          </Lenkepanel>
+            </LinkPanel.Title>
+            <LinkPanel.Description>
+              Se informasjon om rettighetene dine
+            </LinkPanel.Description>
+          </LinkPanel>
         </div>
 
         <Stegindikator
@@ -60,11 +59,11 @@ export default function Home() {
         <Søknad id={søknadsId} />
         <Subsumsjoner søknadId={søknadsId} />
 
-        <Normaltekst>PartyTime</Normaltekst>
+        <p className="typo-normal">PartyTime</p>
         <Link href="/">
-          <Knapp>
+          <Button>
             <a>Ta en tur hjem igjen</a>
-          </Knapp>
+          </Button>
         </Link>
       </main>
 

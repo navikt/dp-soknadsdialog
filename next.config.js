@@ -1,4 +1,3 @@
-const withLess = require("@zeit/next-less");
 const withReactSvg = require("next-react-svg");
 const path = require("path");
 
@@ -11,11 +10,9 @@ const withTranspileModules = require("next-transpile-modules")(
 );
 
 module.exports = withTranspileModules(
-  withLess(
-    withReactSvg({
-      include: path.resolve(__dirname, "assets/svg"),
-      reactStrictMode: true,
-      basePath: process.env.BASE_PATH,
-    })
-  )
+  withReactSvg({
+    include: path.resolve(__dirname, "assets/svg"),
+    reactStrictMode: true,
+    basePath: process.env.BASE_PATH,
+  })
 );

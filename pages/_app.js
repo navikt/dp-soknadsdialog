@@ -1,5 +1,5 @@
-import "./_app.less";
-import "nav-frontend-typografi-style/src/index.less";
+import "@navikt/ds-css";
+import "../styles.css";
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   import("../__mocks__/browser").then(({ worker }) =>

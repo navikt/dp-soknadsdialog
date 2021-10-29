@@ -1,15 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
-import HomeIkon from "../assets/svg/home.svg";
-import Panel from "nav-frontend-paneler";
-import Lenkepanel from "nav-frontend-lenkepanel";
-import { Knapp } from "nav-frontend-knapper";
-import {
-  Normaltekst,
-  Sidetittel,
-  Ingress,
-  Undertittel,
-} from "nav-frontend-typografi";
+import { LinkPanel, Button } from "@navikt/ds-react";
+import { Home as HomeIcon } from "@navikt/ds-icons";
 
 export default function Home(props) {
   return (
@@ -20,33 +12,37 @@ export default function Home(props) {
 
       <section>
         <div className="fo">
-          <HomeIkon style={{ height: "20px" }} />
-          <Sidetittel>Hola!</Sidetittel>
-          <Ingress>Nå tester vi quiz</Ingress>
+          <HomeIcon />
+          <p className="typo-sidetittel">Hola!</p>
+          <p className="typo-ingress">Nå tester vi quiz</p>
         </div>
       </section>
 
       <main>
         <div className="boxes">
           <Link href="/quiz">
-            <Lenkepanel className="half" href="/quiz" border>
-              <Undertittel>Ta en quiz om dagpenger</Undertittel>
-              <Normaltekst>Kul link som loader instantly</Normaltekst>
-            </Lenkepanel>
+            <LinkPanel className="half" href="/quiz" border>
+              <LinkPanel.Title>Ta en quiz om dagpenger</LinkPanel.Title>
+              <LinkPanel.Description>
+                Kul link som loader instantly
+              </LinkPanel.Description>
+            </LinkPanel>
           </Link>
 
           <Link href="/quiz">
-            <Lenkepanel className="half" href="/quiz" border>
-              <Undertittel>Finn ut hva du har krav på</Undertittel>
-              <Normaltekst>Kul link som gir mad speeds</Normaltekst>
-            </Lenkepanel>
+            <LinkPanel className="half" href="/quiz" border>
+              <LinkPanel.Title>Finn ut hva du har krav på</LinkPanel.Title>
+              <LinkPanel.Description>
+                Kul link som gir mad speeds
+              </LinkPanel.Description>
+            </LinkPanel>
           </Link>
         </div>
-        <Normaltekst>PartyTime</Normaltekst>
+        <p className="typo-normal">PartyTime</p>
         <Link href="/quiz">
-          <Knapp>
+          <Button>
             <a>Ta en quiz veldig fort!</a>
-          </Knapp>
+          </Button>
         </Link>
       </main>
 
@@ -59,7 +55,7 @@ export default function Home(props) {
           width: 1000px;
           margin: 0 0.5rem 0 0.5rem;
         }
-        
+
         .boxes {
           display: flex;
           flex-direction: row;
