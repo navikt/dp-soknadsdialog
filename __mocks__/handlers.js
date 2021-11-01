@@ -180,93 +180,82 @@ export const handlers = [
               roller: ["søker"],
             },
           ],
-          root: {
+          subsumsjoner: [{
             navn: "Inngangsvilkår",
-            kclass: "AlleSubsumsjon",
-            regelType: "alle",
+            lokalt_resultat: null,
+            type: "alle",
             subsumsjoner: [
               {
                 navn: "Sjekk at `Har opphold i Norge` er sann",
-                kclass: "EnkelSubsumsjon",
-                regelType: "har",
+                type: "har",
                 fakta: [6],
-                resultat: null,
+                lokalt_resultat: null,
               },
               {
                 navn: "tapt arbeidsinntekt",
-                kclass: "AlleSubsumsjon",
-                regelType: "alle",
+                type: "alle",
                 subsumsjoner: [],
-                resultat: true,
+                lokalt_resultat: true,
               },
               {
                 navn: "tapt arbeidstid",
-                kclass: "AlleSubsumsjon",
-                regelType: "alle",
+                type: "alle",
                 subsumsjoner: [],
-                reultat: false,
+                lokalt_resultat: false,
               },
               {
                 navn: "minste arbeidsinntekt",
-                kclass: "MinstEnAvSubsumsjon",
-                regelType: "minstEnAv",
+                type: "minstEnAv",
                 subsumsjoner: [
                   {
                     navn: "Sjekk at 'Inntekt siste 3 år' er minst '3G'",
-                    kclass: "EnkelSubsumsjon",
-                    regelType: "minst",
+                    type: "minst",
                     fakta: [8, 11],
                   },
                   {
                     navn: "Sjekk at 'Inntekt siste 12 mnd' er minst '1,5G'",
-                    kclass: "EnkelSubsumsjon",
-                    regelType: "minst",
+                    type: "minst",
                     fakta: [9, 12],
                   },
                   {
                     navn:
                       "Sjekk at 'Dimisjonsdato' er etter 'Virkningstidspunkt'",
                     kclass: "EnkelSubsumsjon",
-                    regelType: "etter",
+                    type: "etter",
                     fakta: [10, 4],
                   },
                 ],
               },
               {
                 navn: "reell arbeidssøker",
-                kclass: "AlleSubsumsjon",
-                regelType: "alle",
+                type: "alle",
                 subsumsjoner: [],
               },
               {
                 navn: "alder",
-                kclass: "AlleSubsumsjon",
-                regelType: "alle",
+                type: "alle",
                 subsumsjoner: [
                   {
                     navn:
                       "Sjekk at 'Virkningstidspunkt' er før 'Dato for bortfall på grunn av alder'",
-                    kclass: "EnkelSubsumsjon",
-                    regelType: "før",
+                    type: "før",
                     fakta: [4, 3],
                   },
                   {
                     navn:
                       "Sjekk at 'Ønsker dagpenger fra dato' er før 'Dato for bortfall på grunn av alder'",
-                    kclass: "EnkelSubsumsjon",
-                    regelType: "før",
+                    type: "før",
                     fakta: [2, 3],
                   },
                 ],
               },
               {
                 navn: "Sjekk at `Er utestengt` ikke er sann",
-                kclass: "EnkelSubsumsjon",
-                regelType: "erIkke",
+                type: "erIkke",
                 fakta: [5],
               },
             ],
-          },
+          }],
         })
       );
     }
