@@ -1,7 +1,7 @@
 export default function Subsumsjon({
   navn,
   subsumsjoner = [],
-  resultat = null,
+  lokalt_resultat = null,
   fakta = [],
   gyldig,
   ugyldig,
@@ -10,9 +10,9 @@ export default function Subsumsjon({
 }) {
   return (
     <div data-testid="subsumsjon" style={{ paddingLeft: dybde * 15 }}>
-      {resultat === true && "✅"}
-      {resultat === false && "❌"}
-      {resultat == null && "❓"}
+      {lokalt_resultat === true && "✅"}
+      {lokalt_resultat === false && "❌"}
+      {lokalt_resultat == null && "❓"}
       &nbsp;&nbsp;
       {navn}
       {!!fakta.length && (
@@ -38,10 +38,10 @@ export default function Subsumsjon({
           faktaFinner={faktaFinner}
         />
       ))}
-      {resultat !== false && gyldig && (
+      {lokalt_resultat !== false && gyldig && (
         <Subsumsjon {...gyldig} faktaFinner={faktaFinner}></Subsumsjon>
       )}
-      {resultat === false && ugyldig && (
+      {lokalt_resultat === false && ugyldig && (
         <Subsumsjon {...ugyldig} faktaFinner={faktaFinner}></Subsumsjon>
       )}
     </div>

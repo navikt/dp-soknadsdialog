@@ -22,11 +22,16 @@ export default function Subsumsjoner({ søknadId }) {
     data.fakta.find((faktum) => faktum.id === faktumId)
   );
 
-  const root = data.root;
+  const subsumsjoner = data.subsumsjoner;
+
   return (
     <>
+      <br/>
       Subsumsjoner:
-      <Subsumsjon {...root} faktaFinner={faktaFinner} />
+      {subsumsjoner.map((subsumsjon) => (
+        <Subsumsjon key={subsumsjon.navn} {...subsumsjon} faktaFinner={faktaFinner} />
+        ))}
+
     </>
   );
 }
