@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { LinkPanel, Button } from "@navikt/ds-react";
+import { LinkPanel, Button, Heading, Ingress } from "@navikt/ds-react";
 import { Home as HomeIcon } from "@navikt/ds-icons";
 
 export default function Home(props) {
@@ -12,9 +12,9 @@ export default function Home(props) {
 
       <section>
         <div className="fo">
-          <HomeIcon />
-          <p className="typo-sidetittel">Hola!</p>
-          <p className="typo-ingress">Nå tester vi quiz</p>
+          <HomeIcon style={{ height: "20px" }}/>
+          <Heading spacing="true">Hola!</Heading>
+          <Ingress spacing="true">Nå tester vi quiz</Ingress>
         </div>
       </section>
 

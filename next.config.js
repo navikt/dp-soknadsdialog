@@ -14,5 +14,8 @@ module.exports = withTranspileModules(
     include: path.resolve(__dirname, "assets/svg"),
     reactStrictMode: true,
     basePath: process.env.BASE_PATH,
+    eslint: {
+      ignoreDuringBuilds: true
+    }
   })
 );

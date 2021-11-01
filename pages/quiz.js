@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { Home as HomeIcon } from "@navikt/ds-icons";
-import { LinkPanel, Stegindikator }  from "@navikt/ds-react";
+import { LinkPanel, Heading, Ingress }  from "@navikt/ds-react";
 import { Button } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import "@navikt/ds-css";
 
-export default function Home() {
+export default function Quiz() {
   const søknadsId = uuidv4();
 
   return (
@@ -21,8 +21,8 @@ export default function Home() {
       <section>
         <div className="fo">
           <HomeIcon style={{ height: "20px" }} />
-          <p className="typo-sidetittel">Hola!</p>
-          <p className="type-ingress">Nå tester vi quiz</p>
+          <Heading spacing="true">Hola!</Heading>
+          <Ingress spacing="true">Nå tester vi quiz</Ingress>
         </div>
       </section>
 
@@ -45,16 +45,6 @@ export default function Home() {
             </LinkPanel.Description>
           </LinkPanel>
         </div>
-
-        <Stegindikator
-          steg={[
-            { label: "Dette steget først" },
-            { label: "Og så dette steget", aktiv: true },
-            { label: "Deretter må du gjøre dette" },
-          ]}
-          onChange={() => {}}
-          visLabel
-        />
 
         <Søknad id={søknadsId} />
         <Subsumsjoner søknadId={søknadsId} />
