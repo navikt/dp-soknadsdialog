@@ -17,9 +17,7 @@ test("Kan gå til neste seksjon når alle spørsmål er besvart", async () => {
 
   expect(nesteKnapp).toBeDisabled();
 
-  const input = await findByTestId("input-0-123", {
-    selector: "input",
-  });
+  const input = await findByTestId("input-0-123");
 
   userEvent.type(input, `10{enter}`);
 

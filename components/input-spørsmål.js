@@ -1,4 +1,4 @@
-import { Input } from "nav-frontend-skjema";
+import { TextField } from "@navikt/ds-react";
 import { useState } from "react";
 
 export default function InputSpørsmål({ id, navn, handleChange, type, svar }) {
@@ -11,21 +11,20 @@ export default function InputSpørsmål({ id, navn, handleChange, type, svar }) 
   };
 
   return (
-    <Input
+    <TextField
       label={navn}
-      inputMode={getInputMode(type)}
+      type={getInputMode(type)}
       onChange={onChange}
       data-testid={`input-${id}`}
-      value={value}
-    />
+    ></TextField>
   );
 }
 
 function getInputMode(type) {
   switch (type) {
     case "int":
-      return "numeric";
+      return "number";
     default:
-      return "";
+      return "text";
   }
 }

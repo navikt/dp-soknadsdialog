@@ -1,5 +1,3 @@
-import { Datovelger } from "nav-datovelger";
-import { Label } from "nav-frontend-skjema";
 import { useState } from "react";
 
 export default function DatoSpørsmål({
@@ -18,15 +16,8 @@ export default function DatoSpørsmål({
 
   return (
     <>
-      <Label data-testid={`input-${id}`} htmlFor={navn}>
-        {navn}
-      </Label>
-      <Datovelger
-        id={navn}
-        onChange={onChange}
-        className={className}
-        valgtDato={dato}
-      />
+    <label data-testid={`input-${id}`} htmlFor={navn}>{navn}</label>
+    <input id={navn} className={className} placeholder="DATOVELGER" />
     </>
   );
 }
