@@ -1,4 +1,4 @@
-import reducer from "../reducer";
+import reducer, { initialState, TILSTAND } from "../reducer";
 import {
   faktumLagret,
   gåTilForrigeSeksjon,
@@ -47,6 +47,8 @@ test("når faktum lagres oppdateres seksjonen", () => {
   const state = reducer(
     {
       seksjoner: [seksjon(1), seksjon(2), seksjon(3)],
+      tilbakeTeller: 0,
+      tilstand: TILSTAND.UTFYLLING
     },
     faktumLagret(seksjon(3))
   );

@@ -1,9 +1,4 @@
-import {
-  FAKTUM_LAGRET,
-  GÅ_TIL_FORRIGE_SEKSJON,
-  GÅ_TIL_OPPSUMMERING,
-  LEGG_TIL_NESTE_SEKSJON,
-} from "./types";
+import { ACTIONTYPES } from "./actions";
 
 export const TILSTAND = Object.freeze({
   UTFYLLING: "utfylling",
@@ -18,13 +13,13 @@ export const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GÅ_TIL_OPPSUMMERING: {
+    case ACTIONTYPES.GÅ_TIL_OPPSUMMERING: {
       return {
         ...state,
         tilstand: TILSTAND.OPPSUMMERING,
       };
     }
-    case FAKTUM_LAGRET: {
+    case ACTIONTYPES.FAKTUM_LAGRET: {
       const { subsumsjoner, fakta, id } = action;
       const seksjon = { subsumsjoner, fakta, id };
 
@@ -33,7 +28,7 @@ export default function reducer(state = initialState, action) {
         seksjoner: state.seksjoner.slice(0, -1).concat(seksjon),
       };
     }
-    case LEGG_TIL_NESTE_SEKSJON: {
+    case ACTIONTYPES.LEGG_TIL_NESTE_SEKSJON: {
       const { subsumsjoner, fakta, id } = action;
       const seksjoner = state.seksjoner.concat({ subsumsjoner, fakta, id });
       return {
@@ -42,7 +37,7 @@ export default function reducer(state = initialState, action) {
         seksjoner,
       };
     }
-    case GÅ_TIL_FORRIGE_SEKSJON: {
+    case ACTIONTYPES.GÅ_TIL_FORRIGE_SEKSJON: {
       const tilbakeTeller = Math.max(0, state.tilbakeTeller - 1);
       if (state.tilbakeTeller == 0) {
         //return state;
