@@ -5,6 +5,10 @@ WORKDIR /usr/src/app
 # ---- Dependencies ----
 FROM base AS dependencies
 
+ARG BASE_PATH
+ENV NODE_ENV=production \
+    BASE_PATH=$BASE_PATH
+
 COPY package*.json /usr/src/app/
 
 # Install dependencies
@@ -22,7 +26,10 @@ RUN npm run build
 
 # ---- Release ----
 FROM build as release
-ENV PORT=3000
+ARG BASE_PATH
+ENV PORT=3000 \
+    NODE_ENV=production \
+    BASE_PATH=$BASE_PATH
 
 EXPOSE 3000
 USER node
