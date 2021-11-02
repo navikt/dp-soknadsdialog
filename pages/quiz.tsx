@@ -1,8 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { Home as HomeIcon } from "@navikt/ds-icons";
-import { LinkPanel, Heading, Ingress }  from "@navikt/ds-react";
-import { Button } from "@navikt/ds-react";
+import { LinkPanel, Heading, Ingress, Button } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
 import { v4 as uuidv4 } from "uuid";
@@ -21,8 +20,8 @@ export default function Quiz() {
       <section>
         <div className="fo">
           <HomeIcon style={{ height: "20px" }} />
-          <Heading spacing="true">Hola!</Heading>
-          <Ingress spacing="true">Nå tester vi quiz</Ingress>
+          <Heading level="1" size="2xlarge">Hola!</Heading>
+          <Ingress spacing>Nå tester vi quiz</Ingress>
         </div>
       </section>
 

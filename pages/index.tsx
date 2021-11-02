@@ -12,9 +12,9 @@ export default function Home(props) {
 
       <section>
         <div className="fo">
-          <HomeIcon style={{ height: "20px" }}/>
-          <Heading spacing="true">Hola!</Heading>
-          <Ingress spacing="true">Nå tester vi quiz</Ingress>
+          <HomeIcon style={{ height: "20px" }} />
+          <Heading level="1" size="2xlarge">Hola!</Heading>
+          <Ingress spacing>Nå tester vi quiz</Ingress>
         </div>
       </section>
 
