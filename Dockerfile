@@ -22,6 +22,8 @@ ENV NODE_ENV=production \
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN npm run build
 
+RUN echo $BASE_PATH
+
 # ---- Runner ----
 FROM node:14-alpine AS runner
 WORKDIR /usr/src/app
