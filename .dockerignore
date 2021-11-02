@@ -9,4 +9,7 @@
 !reducers
 !server.js
 !.env.production
+!tsconfig.json
+!__mocks__
+!styles.css
 public/mockServiceWorker.js
