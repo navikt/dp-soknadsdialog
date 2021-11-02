@@ -1,4 +1,4 @@
-import reducer, { initialState, TILSTAND } from "../reducer";
+import reducer, { initialState } from "../reducer";
 import {
   faktumLagret,
   gåTilForrigeSeksjon,
@@ -46,9 +46,8 @@ test("At du kan navigere tilbake i seksjoner du har svart på", () => {
 test("når faktum lagres oppdateres seksjonen", () => {
   const state = reducer(
     {
+      ...initialState,
       seksjoner: [seksjon(1), seksjon(2), seksjon(3)],
-      tilbakeTeller: 0,
-      tilstand: TILSTAND.UTFYLLING
     },
     faktumLagret(seksjon(3))
   );

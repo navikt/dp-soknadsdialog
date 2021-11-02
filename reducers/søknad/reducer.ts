@@ -1,11 +1,18 @@
 import { ACTIONTYPES } from "./actions";
 
-export const TILSTAND = Object.freeze({
-  UTFYLLING: "utfylling",
-  OPPSUMMERING: "oppsummering",
-});
 
-export const initialState = {
+export enum TILSTAND {
+  UTFYLLING = "utfylling",
+  OPPSUMMERING = "oppsummering"
+}
+
+export interface State {
+  seksjoner: any[];
+  tilbakeTeller: number;
+  tilstand: TILSTAND
+}
+
+export const initialState: State = {
   seksjoner: [],
   tilbakeTeller: 0,
   tilstand: TILSTAND.UTFYLLING,
