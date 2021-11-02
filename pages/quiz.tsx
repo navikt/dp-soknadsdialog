@@ -4,11 +4,23 @@ import { Home as HomeIcon } from "@navikt/ds-icons";
 import { LinkPanel, Heading, Ingress, Button } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
-import { v4 as uuidv4 } from "uuid";
 
 
 export default function Quiz() {
-  const søknadsId = uuidv4();
+
+  const nySøknad = async () => {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/soknad`,   {
+          method: "POST"
+        }
+    );
+
+    if (response.status === 201) {
+      return await response.json();
+    }
+  };
+
+  const søknadsId = nySøknad()["uuid"]
 
   return (
     <div className="root">

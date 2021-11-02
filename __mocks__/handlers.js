@@ -1,4 +1,5 @@
 import { rest } from "msw";
+import { v4 as uuidv4 } from "uuid";
 
 const faktum = (
   { navn, id, clazz } = { navn: "Antall uker", id: 1, clazz: "int" }
@@ -36,7 +37,14 @@ const lagSeksjon = (seksjon) => [
     clazz: "int",
   }),
 ];
+
 export const handlers = [
+  rest.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/soknad`,
+      (req, res, ctx) => {
+        return res(ctx.status(201), ctx.json({uuid: uuidv4()}));
+      }
+  ),
   rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/tom-seksjon/neste-seksjon`,
     (req, res, ctx) => {

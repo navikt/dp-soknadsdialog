@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { LinkPanel, Heading, Ingress } from "@navikt/ds-react";
+import {LinkPanel, Heading, Ingress, Button} from "@navikt/ds-react";
 import { Home as HomeIcon } from "@navikt/ds-icons";
 
 export default function Home(props) {
@@ -22,10 +22,7 @@ export default function Home(props) {
         <div className="boxes">
           <Link href="/quiz">
             <LinkPanel className="half" href="/quiz" border>
-              <LinkPanel.Title>Ta en quiz om dagpenger</LinkPanel.Title>
-              <LinkPanel.Description>
-                Kul link som loader instantly
-              </LinkPanel.Description>
+              <LinkPanel.Title>Ny søknad</LinkPanel.Title>
             </LinkPanel>
           </Link>
 
