@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # ---- Dependencies ----
 FROM base AS dependencies
-
+WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
@@ -17,6 +17,7 @@ RUN npm install --production=false
 
 # ---- Build ----
 FROM dependencies AS build
+WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
@@ -26,6 +27,8 @@ RUN npm run build
 
 # ---- Release ----
 FROM build as release
+WORKDIR /usr/src/app
+
 ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
