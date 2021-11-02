@@ -1,9 +1,5 @@
-# ---- Base Node ----
-FROM node:14 AS base
-WORKDIR /usr/src/app
-
 # ---- Dependencies ----
-FROM base AS dependencies
+FROM node:14 AS dependencies
 WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV NODE_ENV=production \
@@ -16,17 +12,18 @@ RUN npm set progress=false && npm config set depth 0
 RUN npm install --production=false
 
 # ---- Build ----
-FROM dependencies AS build
+FROM dependencies AS builder
 WORKDIR /usr/src/app
+COPY . .
 ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
-COPY . /usr/src/app
+COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN npm run build
 
-# ---- Release ----
-FROM build as release
+# ---- Runner ----
+FROM node:14-alpine AS runner
 WORKDIR /usr/src/app
 
 ARG BASE_PATH
@@ -37,6 +34,6 @@ ENV PORT=3000 \
 EXPOSE 3000
 USER node
 
-COPY --from=build /usr/src/app/ /usr/src/app/
+COPY --from=builder /usr/src/app/ /usr/src/app/
 
 CMD ["npm", "start"]
