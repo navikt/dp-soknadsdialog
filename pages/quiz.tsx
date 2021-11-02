@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { Home as HomeIcon } from "@navikt/ds-icons";
-import { LinkPanel, Heading, Ingress, Button } from "@navikt/ds-react";
+import { LinkPanel, Heading, Ingress } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
 

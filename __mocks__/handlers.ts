@@ -1,9 +1,15 @@
 import { rest } from "msw";
 import { v4 as uuidv4 } from "uuid";
 
-const faktum = (
-  { navn, id, clazz } = { navn: "Antall uker", id: 1, clazz: "int" }
-) => ({ navn, id, avhengigFakta: [], clazz, roller: ["søker"] });
+interface Faktum {
+  navn?: any;
+  id?: any;
+  clazz?: any;
+};
+
+const baseFaktum = { navn: "Antall uker", id: "seksjon-nan", clazz: "int" }
+const faktum = ({ navn, id, clazz }: Faktum = baseFaktum) =>
+  ({ navn, id, avhengigFakta: [], clazz, roller: ["søker"] });
 
 let seksjon = 0;
 if (typeof beforeEach !== "undefined") {
@@ -40,10 +46,10 @@ const lagSeksjon = (seksjon) => [
 
 export const handlers = [
   rest.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/soknad`,
-      (req, res, ctx) => {
-        return res(ctx.status(201), ctx.json({uuid: uuidv4()}));
-      }
+    `${process.env.NEXT_PUBLIC_API_URL}/soknad`,
+    (req, res, ctx) => {
+      return res(ctx.status(201), ctx.json({ uuid: uuidv4() }));
+    }
   ),
   rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/tom-seksjon/neste-seksjon`,
@@ -66,7 +72,7 @@ export const handlers = [
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
     (req, res, ctx) => {
       const { faktumId } = req.params;
-      const { verdi: svar } = JSON.parse(req.body);
+      const { verdi: svar } = JSON.parse(req.body as string);
 
       return res(
         ctx.json({
@@ -104,7 +110,7 @@ export const handlers = [
     (req, res, ctx) => {
       const { soknadId } = req.params;
       const { faktumId } = req.params;
-      const { verdi } = JSON.parse(req.body);
+      const { verdi } = JSON.parse(req.body as string);
       const fakta = getFaktaFor(soknadId, seksjon);
 
       fakta.find((faktum) => faktum.id == faktumId).svar = verdi;
