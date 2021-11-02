@@ -7,7 +7,7 @@ ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
 COPY package*.json /usr/src/app/
-RUN npm ci
+RUN npm i
 
 COPY . /usr/src/app
 RUN npm run build
