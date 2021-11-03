@@ -1,14 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
-import { Home as HomeIcon } from "@navikt/ds-icons";
-import { Heading } from "@navikt/ds-react";
+import {Home as HomeIcon} from "@navikt/ds-icons";
+import {Heading, Ingress, LinkPanel} from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
-import useSwr from 'swr'
-const fetcher = (url) => fetch(url, { method: 'POST' }).then((res) => res.json())
+import useSWRImmutable from 'swr'
+const fetcher = (url) => fetch(url, {method: 'POST'}).then((res) => res.json())
 
 export default function Quiz() {
-  const { data, error } = useSwr(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, fetcher)
+  const { data, error } = useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, fetcher)
 
   if (!data) return <div>Laster...</div>
   if (error) return <div>Kunne ikke opprette søknad</div>
@@ -28,8 +28,8 @@ export default function Quiz() {
 
       <main>
 
-        <Søknad id={data.uuid} />
-        <Subsumsjoner søknadId={data.uuid} />
+        <Søknad id={data.søknad_uuid} />
+        <Subsumsjoner søknadId={data.søknad_uuid} />
 
         <Link href="/">Tilbake</Link>
       </main>
