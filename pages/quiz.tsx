@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
-import {Home as HomeIcon} from "@navikt/ds-icons";
-import {Heading, Ingress, LinkPanel} from "@navikt/ds-react";
+import { Home as HomeIcon } from "@navikt/ds-icons";
+import { Heading } from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
 import useSwr from 'swr'
-const fetcher = (url) => fetch(url, {method: 'POST'}).then((res) => res.json())
+const fetcher = (url) => fetch(url, { method: 'POST' }).then((res) => res.json())
 
 export default function Quiz() {
   const { data, error } = useSwr(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, fetcher)
