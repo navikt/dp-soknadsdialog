@@ -5,7 +5,7 @@ on: [ push ]
 env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
   LATEST_IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:latest
-  BASE_PATH: /arbeid/dagpenger/quizshow
+  BASE_PATH: /arbeid/dagpenger/quizshow/
   IMAGE_CACHE_RUNNER: docker.pkg.github.com/${{ github.repository }}/build-cache-runner
   IMAGE_CACHE_BUILDER: docker.pkg.github.com/${{ github.repository }}/build-cache-builder
 
