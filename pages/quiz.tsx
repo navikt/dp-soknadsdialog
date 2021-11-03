@@ -28,8 +28,8 @@ export default function Quiz() {
 
       <main>
 
-        <Søknad id={data.uuid} />
-        <Subsumsjoner søknadId={data.uuid} />
+        <Søknad id={data.søknad_uuid} />
+        <Subsumsjoner søknadId={data.søknad_uuid} />
 
         <Link href="/">Tilbake</Link>
       </main>
