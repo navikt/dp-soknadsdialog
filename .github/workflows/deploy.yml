@@ -6,7 +6,7 @@ env:
   IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
   LATEST_IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:latest
   BASE_PATH: /arbeid/dagpenger/quizshow
-  IMAGE_CACHE_RUNTIME: docker.pkg.github.com/${{ github.repository }}/build-cache-runtime
+  IMAGE_CACHE_RUNNER: docker.pkg.github.com/${{ github.repository }}/build-cache-runner
   IMAGE_CACHE_BUILDER: docker.pkg.github.com/${{ github.repository }}/build-cache-builder
 
 jobs:
@@ -61,9 +61,9 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker pull ${{ env.IMAGE_CACHE_BUILDER }} || true
-          docker pull ${{ env.IMAGE_CACHE_RUNTIME }} || true
+          docker pull ${{ env.IMAGE_CACHE_RUNNER }} || true
           docker build . -t ${{ env.IMAGE }} -t ${{ env.LATEST_IMAGE }} \
-            --cache-from=${{ env.IMAGE_CACHE_BUILDER }},${{ env.IMAGE_CACHE_RUNTIME }} \
+            --cache-from=${{ env.IMAGE_CACHE_BUILDER }},${{ env.IMAGE_CACHE_RUNNER }} \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             --build-arg BASE_PATH=${{ env.BASE_PATH }}
           docker push ${{ env.IMAGE }}
@@ -99,9 +99,9 @@ jobs:
           docker pull ${{ env.IMAGE_CACHE_BUILDER }} || true
           docker build . -t ${{ env.IMAGE_CACHE_BUILDER }} --target builder --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from=${{ env.IMAGE_CACHE_BUILDER }}
           docker push ${{ env.IMAGE_CACHE_BUILDER }}
-          docker pull ${{ env.IMAGE_CACHE_RUNTIME }} || true
-          docker build . -t ${{ env.IMAGE_CACHE_RUNTIME }} --target runtime --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from=${{ env.IMAGE_CACHE_RUNTIME }}
-          docker push ${{ env.IMAGE_CACHE_RUNTIME }}
+          docker pull ${{ env.IMAGE_CACHE_RUNNER }} || true
+          docker build . -t ${{ env.IMAGE_CACHE_RUNNER }} --target runner --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from=${{ env.IMAGE_CACHE_RUNNER }}
+          docker push ${{ env.IMAGE_CACHE_RUNNER }}
 
   deploy-dev:
     name: Deploy to dev
