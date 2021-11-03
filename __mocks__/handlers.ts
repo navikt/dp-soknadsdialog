@@ -48,7 +48,7 @@ export const handlers = [
   rest.post(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad`,
     (req, res, ctx) => {
-      return res(ctx.status(201), ctx.json({ uuid: uuidv4() }));
+      return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
     }
   ),
   rest.get(
