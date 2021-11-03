@@ -4,11 +4,11 @@ import {Home as HomeIcon} from "@navikt/ds-icons";
 import {Heading, Ingress, LinkPanel} from "@navikt/ds-react";
 import Subsumsjoner from "../components/subsumsjoner";
 import Søknad from "../containers/søknad";
-import useSwr from 'swr'
+import useSWRImmutable from 'swr'
 const fetcher = (url) => fetch(url, {method: 'POST'}).then((res) => res.json())
 
 export default function Quiz() {
-  const { data, error } = useSwr(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, fetcher)
+  const { data, error } = useSWRImmutable(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, fetcher)
 
   if (!data) return <div>Laster...</div>
   if (error) return <div>Kunne ikke opprette søknad</div>
