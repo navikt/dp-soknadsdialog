@@ -38,7 +38,7 @@ export default function Subsumsjon({
     return (
       <ul>
         {subsumsjon.fakta.map(faktaFinner).map((faktum) => (
-          <FaktumKomponent faktum={faktum}></FaktumKomponent>
+          <FaktumKomponent key={faktum.id} faktum={faktum}></FaktumKomponent>
         ))}
       </ul>
     );
