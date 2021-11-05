@@ -10,7 +10,7 @@ export default function Home() {
 
 
       <main>
-        <Heading level="1" size="xlarge"> Den spede begynnelse </Heading>
+        <Heading level="1" size="xlarge">Den spede begynnelse</Heading>
       </main>
     </div>
   );

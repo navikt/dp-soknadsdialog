@@ -2,7 +2,7 @@ import "@navikt/ds-css";
 import "../styles.css";
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-  import("../__mocks__/browser").then(({ worker }) =>
+  import("../../__mocks__/browser").then(({ worker }) =>
     worker().start({
       serviceWorker: {
         url: `/mockServiceWorker.js`,
