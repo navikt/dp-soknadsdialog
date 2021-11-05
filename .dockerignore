@@ -5,6 +5,7 @@
 !next.config.js
 !package*.json
 !pages
+!models
 !public
 !reducers
 !server.js

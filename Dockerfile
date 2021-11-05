@@ -1,5 +1,5 @@
 # ---- Dependencies ----
-FROM node:14 AS dependencies
+FROM node:16 AS dependencies
 WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV NODE_ENV=production \
@@ -23,7 +23,7 @@ COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN npm run build
 
 # ---- Runner ----
-FROM node:14-alpine AS runner
+FROM node:16-alpine AS runner
 WORKDIR /usr/src/app
 
 ARG BASE_PATH

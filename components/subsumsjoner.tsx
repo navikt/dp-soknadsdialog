@@ -4,6 +4,7 @@ import Subsumsjon from "./subsumsjon";
 import { memoize } from "lodash";
 import { Quiz } from "../models/quiz";
 
+// @ts-ignore
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 interface Response {

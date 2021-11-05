@@ -3,7 +3,7 @@ import { LawFilled, Information } from "@navikt/ds-icons";
 
 interface SubsumsjonProps {
   subsumsjon: Quiz.Subsumsjon;
-  faktaFinner: (faktumId) => Quiz.Faktum[];
+  faktaFinner: (faktumId) => Quiz.Faktum;
   dybde?: number;
 }
 
@@ -38,7 +38,7 @@ export default function Subsumsjon({
     return (
       <ul>
         {subsumsjon.fakta.map(faktaFinner).map((faktum) => (
-          <FaktumKomponent key={faktum.id} faktum={faktum}></FaktumKomponent>
+          <FaktumKomponent key={faktum.id} faktum={faktum}/>
         ))}
       </ul>
     );
