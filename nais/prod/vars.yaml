@@ -3,3 +3,6 @@ namespace: teamdagpenger
 team: teamdagpenger
 alerts_slack_channel: "#team-dagpenger-alert"
 base_path: "/arbeid/dagpenger/quizshow"
+dekorator:
+  url: https://www.nav.no/dekoratoren
+  env: prod

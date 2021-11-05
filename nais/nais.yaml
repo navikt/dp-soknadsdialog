@@ -35,6 +35,10 @@ spec:
   env:
     - name: NEXT_PUBLIC_API_URL
       value: {{base_path}}/api
+    - name: DEKORATOR_URL
+      value: {{dekorator.url}}
+    - name: DEKORATOR_ENV
+      value: {{dekorator.env}}
   accessPolicy:
     outbound:
       rules:

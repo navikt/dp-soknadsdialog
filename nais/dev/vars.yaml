@@ -6,3 +6,6 @@ base_path: "/arbeid/dagpenger/quizshow"
 ingressess: |
   ingresses:
     - https://arbeid.dev.nav.no/arbeid/dagpenger/quizshow
+dekorator:
+  url: https://dekoratoren.dev.nav.no/
+  env: dev
