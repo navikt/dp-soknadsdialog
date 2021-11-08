@@ -1,4 +1,4 @@
-export default async (req, res) => {
+const subsumsjonerHandler = async (req, res) => {
   const {
     query: { id },
   } = req;
@@ -10,3 +10,5 @@ export default async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(await subsumsjoner.text());
 };
+
+export default subsumsjonerHandler;

@@ -1,4 +1,5 @@
 import "@navikt/ds-css";
+import { AppProps } from "next/app";
 import "../styles.css";
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
@@ -11,7 +12,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   );
 }
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className="app">
       <Component {...pageProps} />

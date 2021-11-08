@@ -1,4 +1,4 @@
-export default async (req, res) => {
+const faktumIdHandler = async (req, res) => {
   const {
     query: { id, faktumId },
   } = req;
@@ -15,3 +15,5 @@ export default async (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.end(await fakta.text());
 };
+
+export default faktumIdHandler;
