@@ -53,25 +53,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@master
+
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
           registry: docker.pkg.github.com
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Prepare .npmrc
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
 
       - name: Build and push
-        env:
-          DOCKER_BUILDKIT: 1
-        run: |
-          docker pull ${{ env.IMAGE_CACHE_BUILDER }} || true
-          docker pull ${{ env.IMAGE_CACHE_RUNNER }} || true
-          docker build . -t ${{ env.IMAGE }} -t ${{ env.LATEST_IMAGE }} \
-            --cache-from=${{ env.IMAGE_CACHE_BUILDER }},${{ env.IMAGE_CACHE_RUNNER }} \
-            --build-arg BUILDKIT_INLINE_CACHE=1 \
-            --build-arg BASE_PATH=${{ env.BASE_PATH }}
-          docker push ${{ env.IMAGE }}
-          docker push ${{ env.LATEST_IMAGE }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          secrets: |
+            "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
 
       - name: Archive NAIS yaml
         if: github.ref == 'refs/heads/main'
@@ -79,33 +84,6 @@ jobs:
         with:
           name: nais-yaml
           path: nais
-
-  update-docker-cache:
-    name: Update Docker Cache
-    needs: [ build ]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          registry: docker.pkg.github.com
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push
-        env:
-          DOCKER_BUILDKIT: 1
-        run: |
-          docker pull ${{ env.IMAGE_CACHE_BUILDER }} || true
-          docker build . -t ${{ env.IMAGE_CACHE_BUILDER }} --target builder --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from=${{ env.IMAGE_CACHE_BUILDER }}
-          docker push ${{ env.IMAGE_CACHE_BUILDER }}
-          docker pull ${{ env.IMAGE_CACHE_RUNNER }} || true
-          docker build . -t ${{ env.IMAGE_CACHE_RUNNER }} --target runner --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from=${{ env.IMAGE_CACHE_RUNNER }}
-          docker push ${{ env.IMAGE_CACHE_RUNNER }}
 
   deploy-dev:
     name: Deploy to dev
