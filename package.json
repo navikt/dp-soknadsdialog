@@ -44,6 +44,6 @@
     "typescript": "^4.4.4"
   },
   "msw": {
-    "workerDirectory": "public"
+    "workerDirectory": "src/public"
   }
 }
