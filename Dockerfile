@@ -7,7 +7,7 @@ ENV NODE_ENV=production \
 
 COPY package*.json /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
 
 # Install dependencies
 RUN npm set progress=false && npm config set depth 0
