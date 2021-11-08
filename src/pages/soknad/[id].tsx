@@ -1,8 +1,10 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import {Heading} from "@navikt/ds-react";
+import React from "react";
 
-const fetcher = (...args) => {
-  return fetch(...args).then((res) => res.json());
+const fetcher = (url) => {
+  return fetch(url).then((res) => res.json());
 };
 
 function HentNesteSeksjon(id) {
@@ -24,13 +26,14 @@ export default function Søknad() {
 
   const { seksjon, isLoading, isError } = HentNesteSeksjon(id);
 
-  if (isLoading) return <div>laster...</div>;
-  if (isError) return <div>Kunne ikke hente søknad</div>;
 
   return (
     <div>
-      <h1>Søknad: {id}</h1>
-      {JSON.stringify(seksjon)}
+      <Heading level="1" size="medium">
+        Søknad id: {id}
+      </Heading>
+      { isLoading ? (<div>laster...</div>) : (<div>{JSON.stringify(seksjon)}</div>)}
+      { isError ? (<div>Kunne ikke hente søknad</div>) : (<div></div>)}
     </div>
   );
 }
