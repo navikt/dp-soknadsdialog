@@ -6,6 +6,7 @@
 !package*.json
 !pages
 !models
+!.npmrc
 !public
 !reducers
 !server.js
