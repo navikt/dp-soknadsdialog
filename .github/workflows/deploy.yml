@@ -39,6 +39,8 @@ jobs:
             ${{ runner.os }}-
       - name: Install
         run: npm install --no-save --no-audit --prefer-offline --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Test
         run: npm test
