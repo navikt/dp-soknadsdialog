@@ -5,7 +5,7 @@ ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
-COPY package*.json /usr/src/app/
+COPY package*.json .npmrc /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
 
