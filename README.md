@@ -1,10 +1,10 @@
-# dp-quizshow
+# dp-quizshow - Ny søknadsdialog for dagpenger
 
-Frontend for å vise hva vi har på gang i dp-quiz
+Frontend-klient for søknad om dapgenger
 
 # Komme i gang
 
-Appen er basert på Next.js og har masse 🔔 og 📯.
+Appen er basert på Next.js
 
 ```
 npm install

@@ -39,6 +39,10 @@ spec:
       value: {{dekorator.url}}
     - name: DEKORATOR_ENV
       value: {{dekorator.env}}
+    - name: LOGINSERVICE_URL
+      value: {{loginservice.url}}
+    - name: LOGINSERVICE_WELL_KNOWN_URL
+      value: {{loginservice.wellKnown}}
   accessPolicy:
     outbound:
       rules:

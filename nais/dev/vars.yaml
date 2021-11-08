@@ -9,3 +9,6 @@ ingressess: |
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
+loginservice:
+  url: https://loginservice.dev.nav.no/login
+  wellKnown: https://navtestb2c.b2clogin.com/navtestb2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
