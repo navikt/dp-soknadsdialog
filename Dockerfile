@@ -5,9 +5,10 @@ ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
-RUN cat .npmrc
+
 
 COPY package*.json .npmrc /usr/src/app/
+RUN cat /usr/src/app/.npmrc
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
     npm set progress=false && \
