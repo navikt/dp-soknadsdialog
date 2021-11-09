@@ -61,8 +61,6 @@ jobs:
           cache-to: type=gha,mode=max
           secrets: |
             "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - name: Archive NAIS yaml
         if: github.ref == 'refs/heads/main'
