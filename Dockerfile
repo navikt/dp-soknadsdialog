@@ -8,7 +8,7 @@ ENV NODE_ENV=production \
 COPY package*.json .npmrc /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    echo .npmrc | cut -c1-50 \
+    cat .npmrc | cut -c1-50 \
     npm set progress=false && npm config set depth 0 && \
     npm install --production=false
 
