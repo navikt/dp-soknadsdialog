@@ -50,11 +50,11 @@ const lagSeksjon = (seksjon) => [
 ];
 
 export const handlers = [
-  rest.post(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, (req, res, ctx) => {
+  rest.post(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`, (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
   }),
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
+    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
       const { soknadId } = req.params;
       if (seksjon >= 2) {
@@ -72,7 +72,7 @@ export const handlers = [
     }
   ),
   rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/faktum/:faktumId`,
+    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/:soknadId/faktum/:faktumId`,
     (req, res, ctx) => {
       const { soknadId } = req.params;
       const { faktumId } = req.params;
@@ -90,7 +90,7 @@ export const handlers = [
     }
   ),
   rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/subsumsjoner`,
+    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/:soknadId/subsumsjoner`,
     (req, res, ctx) => {
       return res(
         ctx.json({

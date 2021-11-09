@@ -8,12 +8,12 @@ export default function Home() {
   async function nySøknad(event) {
     try {
       event.preventDefault();
-      const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`, {
         method: "POST",
       }).then((data) => {
         return data.json();
       });
-      router.push(`/soknad/${data.søknad_uuid}`);
+      await router.push(`/soknad/${data.søknad_uuid}`);
     } catch (error) {
       console.log(error);
       throw new Error("Kunne ikke opprette søknad");

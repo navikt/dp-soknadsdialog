@@ -1,5 +1,12 @@
 export namespace Quiz {
 
+    export interface Seksjon {
+      readonly søknad_uuid: String,
+      readonly seksjon_navn: String,
+      readonly fakta: Faktum[],
+      readonly subsumsjoner: Subsumsjon[]
+    }
+
     export enum Rolle {
         SØKER = "søker",
         NAV = "nav",
@@ -30,4 +37,7 @@ export namespace Quiz {
         readonly subsumsjoner?: Subsumsjon[];
         fakta?: string[];
     }
+}
+
+export class Seksjon {
 }
