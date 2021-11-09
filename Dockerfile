@@ -9,7 +9,7 @@ COPY package*.json .npmrc /usr/src/app/
 RUN echo $NODE_AUTH_TOKEN | cut -c1-5
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    RUN echo $NODE_AUTH_TOKEN | cut -c1-5 \
+    echo $NODE_AUTH_TOKEN | cut -c1-5 \
     npm set progress=false && npm config set depth 0 && \
     npm install --production=false
 
