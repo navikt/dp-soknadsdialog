@@ -1,27 +1,18 @@
-# ---- Dependencies ----
-FROM node:16 AS dependencies
+FROM node:16 AS builder
+
 WORKDIR /usr/src/app
-ARG BASE_PATH
-ENV NODE_ENV=production \
-    BASE_PATH=$BASE_PATH
-
-
 
 COPY package*.json .npmrc /usr/src/app/
-RUN cat /usr/src/app/.npmrc
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    npm set progress=false && \
-    npm config set depth 0 && \
-    npm install --production=false
+    npm ci --prefer-offline --no-audit --ignore-scripts
 
-# ---- Build ----
-FROM dependencies AS builder
-WORKDIR /usr/src/app
-COPY . .
-ARG BASE_PATH
-ENV NODE_ENV=production \
-    BASE_PATH=$BASE_PATH
+COPY . /usr/src/app
+
+RUN npm run build && \
+    npm prune --production --offline
+
+
 
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
@@ -30,7 +21,8 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
 
 
 # ---- Runner ----
-FROM node:16-alpine AS runner
+FROM node:16-alpine AS runtime
+
 WORKDIR /usr/src/app
 
 ARG BASE_PATH
@@ -38,9 +30,9 @@ ENV PORT=3000 \
     NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
+COPY --from=builder /usr/src/app/ /usr/src/app/
+
 EXPOSE 3000
 USER node
-
-COPY --from=builder /usr/src/app/ /usr/src/app/
 
 CMD ["npm", "start"]
