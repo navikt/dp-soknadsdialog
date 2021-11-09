@@ -5,11 +5,16 @@ interface Faktum {
   navn?: any;
   id?: any;
   clazz?: any;
-};
+}
 
-const baseFaktum = { navn: "Antall uker", id: "seksjon-nan", clazz: "int" }
-const faktum = ({ navn, id, clazz }: Faktum = baseFaktum) =>
-  ({ navn, id, avhengigFakta: [], clazz, roller: ["søker"] });
+const baseFaktum = { navn: "Antall uker", id: "seksjon-nan", clazz: "int" };
+const faktum = ({ navn, id, clazz }: Faktum = baseFaktum) => ({
+  navn,
+  id,
+  avhengigFakta: [],
+  clazz,
+  roller: ["søker"],
+});
 
 let seksjon = 0;
 if (typeof beforeEach !== "undefined") {
@@ -45,48 +50,9 @@ const lagSeksjon = (seksjon) => [
 ];
 
 export const handlers = [
-  rest.post(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad`,
-    (req, res, ctx) => {
-      return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
-    }
-  ),
-  rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/tom-seksjon/neste-seksjon`,
-    (req, res, ctx) => {
-      return res(ctx.status(205));
-    }
-  ),
-  rest.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/neste-seksjon`,
-    (req, res, ctx) => {
-      return res(
-        ctx.json({
-          fakta: [faktum({ id: `${seksjon++}-123` })],
-          root: { rolle: "søker", fakta: [123] },
-        })
-      );
-    }
-  ),
-  rest.put(
-    `${process.env.NEXT_PUBLIC_API_URL}/soknad/kort-seksjon/faktum/:faktumId`,
-    (req, res, ctx) => {
-      const { faktumId } = req.params;
-      const { verdi: svar } = JSON.parse(req.body as string);
-
-      return res(
-        ctx.json({
-          fakta: [
-            {
-              ...faktum({ id: faktumId }),
-              svar,
-            },
-          ],
-          root: { rolle: "søker", fakta: [faktumId] },
-        })
-      );
-    }
-  ),
+  rest.post(`${process.env.NEXT_PUBLIC_API_URL}/soknad`, (req, res, ctx) => {
+    return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
+  }),
   rest.get(
     `${process.env.NEXT_PUBLIC_API_URL}/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {
@@ -194,82 +160,81 @@ export const handlers = [
               roller: ["søker"],
             },
           ],
-          subsumsjoner: [{
-            navn: "Inngangsvilkår",
-            lokalt_resultat: null,
-            type: "alle",
-            subsumsjoner: [
-              {
-                navn: "Sjekk at `Har opphold i Norge` er sann",
-                type: "har",
-                fakta: ["6"],
-                lokalt_resultat: null,
-              },
-              {
-                navn: "tapt arbeidsinntekt",
-                type: "alle",
-                subsumsjoner: [],
-                lokalt_resultat: true,
-              },
-              {
-                navn: "tapt arbeidstid",
-                type: "alle",
-                subsumsjoner: [],
-                lokalt_resultat: false,
-              },
-              {
-                navn: "minste arbeidsinntekt",
-                type: "minstEnAv",
-                subsumsjoner: [
-                  {
-                    navn: "Sjekk at 'Inntekt siste 3 år' er minst '3G'",
-                    type: "minst",
-                    fakta: ["8", "11"],
-                  },
-                  {
-                    navn: "Sjekk at 'Inntekt siste 12 mnd' er minst '1,5G'",
-                    type: "minst",
-                    fakta: ["9", "12"],
-                  },
-                  {
-                    navn:
-                      "Sjekk at 'Dimisjonsdato' er etter 'Virkningstidspunkt'",
-                    kclass: "EnkelSubsumsjon",
-                    type: "etter",
-                    fakta: ["10", "4"],
-                  },
-                ],
-              },
-              {
-                navn: "reell arbeidssøker",
-                type: "alle",
-                subsumsjoner: [],
-              },
-              {
-                navn: "alder",
-                type: "alle",
-                subsumsjoner: [
-                  {
-                    navn:
-                      "Sjekk at 'Virkningstidspunkt' er før 'Dato for bortfall på grunn av alder'",
-                    type: "før",
-                    fakta: ["4", "3"],
-                  },
-                  {
-                    navn:
-                      "Sjekk at 'Ønsker dagpenger fra dato' er før 'Dato for bortfall på grunn av alder'",
-                    type: "før",
-                    fakta: ["2", "3"],
-                  },
-                ],
-              },
-              {
-                navn: "Sjekk at `Er utestengt` ikke er sann",
-                type: "erIkke",
-                fakta: ["5"],
-              },
-            ],
-          }],
+          subsumsjoner: [
+            {
+              navn: "Inngangsvilkår",
+              lokalt_resultat: null,
+              type: "alle",
+              subsumsjoner: [
+                {
+                  navn: "Sjekk at `Har opphold i Norge` er sann",
+                  type: "har",
+                  fakta: ["6"],
+                  lokalt_resultat: null,
+                },
+                {
+                  navn: "tapt arbeidsinntekt",
+                  type: "alle",
+                  subsumsjoner: [],
+                  lokalt_resultat: true,
+                },
+                {
+                  navn: "tapt arbeidstid",
+                  type: "alle",
+                  subsumsjoner: [],
+                  lokalt_resultat: false,
+                },
+                {
+                  navn: "minste arbeidsinntekt",
+                  type: "minstEnAv",
+                  subsumsjoner: [
+                    {
+                      navn: "Sjekk at 'Inntekt siste 3 år' er minst '3G'",
+                      type: "minst",
+                      fakta: ["8", "11"],
+                    },
+                    {
+                      navn: "Sjekk at 'Inntekt siste 12 mnd' er minst '1,5G'",
+                      type: "minst",
+                      fakta: ["9", "12"],
+                    },
+                    {
+                      navn: "Sjekk at 'Dimisjonsdato' er etter 'Virkningstidspunkt'",
+                      kclass: "EnkelSubsumsjon",
+                      type: "etter",
+                      fakta: ["10", "4"],
+                    },
+                  ],
+                },
+                {
+                  navn: "reell arbeidssøker",
+                  type: "alle",
+                  subsumsjoner: [],
+                },
+                {
+                  navn: "alder",
+                  type: "alle",
+                  subsumsjoner: [
+                    {
+                      navn: "Sjekk at 'Virkningstidspunkt' er før 'Dato for bortfall på grunn av alder'",
+                      type: "før",
+                      fakta: ["4", "3"],
+                    },
+                    {
+                      navn: "Sjekk at 'Ønsker dagpenger fra dato' er før 'Dato for bortfall på grunn av alder'",
+                      type: "før",
+                      fakta: ["2", "3"],
+                    },
+                  ],
+                },
+                {
+                  navn: "Sjekk at `Er utestengt` ikke er sann",
+                  type: "erIkke",
+                  fakta: ["5"],
+                },
+              ],
+            },
+          ],
         })
       );
     }
