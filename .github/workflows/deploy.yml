@@ -3,7 +3,7 @@ name: Build and deploy
 on: [ push ]
 
 env:
-  IMAGE: docker.pkg.github.com/${{ github.repository }}/dp-quizshow:${{ github.sha }}
+  IMAGE: ghcr.io/${{ github.repository }}/dp-quizshow:${{ github.sha }}
   BASE_PATH: /arbeid/dagpenger/quizshow
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          registry: docker.pkg.github.com
+          registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
