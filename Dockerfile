@@ -15,6 +15,7 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
 # ---- Build ----
 FROM dependencies AS builder
 WORKDIR /usr/src/app
+RUN cat .npmrc
 COPY . .
 ARG BASE_PATH
 ENV NODE_ENV=production \
