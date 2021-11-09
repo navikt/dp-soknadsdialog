@@ -13,13 +13,6 @@ RUN npm run build && \
     npm prune --production --offline
 
 
-
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-        NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-        npm run build
-
-
 # ---- Runner ----
 FROM node:16-alpine AS runtime
 
