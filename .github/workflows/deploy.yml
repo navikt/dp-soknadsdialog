@@ -47,6 +47,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Sjekk npm config
+        run: cat $NPM_CONFIG_USERCONFIG
+
       - name: Prepare .npmrc
         run: |
           echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
