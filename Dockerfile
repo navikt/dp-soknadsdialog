@@ -7,15 +7,13 @@ ENV NODE_ENV=production \
 
 COPY package*.json .npmrc /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
-RUN echo $NODE_AUTH_TOKEN | cut -c1-10
-RUN npm set progress=false && npm config set depth 0 && \
-    npm install --production=false
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
+    npm ci --prefer-offline --no-audit --ignore-scripts
 
 # ---- Build ----
 FROM dependencies AS builder
+COPY . /usr/src/app
 WORKDIR /usr/src/app
-COPY . .
 ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
@@ -32,9 +30,9 @@ ENV PORT=3000 \
     NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
+COPY --from=builder /usr/src/app/ /usr/src/app/
+
 EXPOSE 3000
 USER node
-
-COPY --from=builder /usr/src/app/ /usr/src/app/
 
 CMD ["npm", "start"]
