@@ -5,6 +5,8 @@ ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
+RUN cat .npmrc
+
 COPY package*.json .npmrc /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
@@ -15,14 +17,13 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
 # ---- Build ----
 FROM dependencies AS builder
 WORKDIR /usr/src/app
-RUN cat .npmrc
 COPY . .
 ARG BASE_PATH
 ENV NODE_ENV=production \
     BASE_PATH=$BASE_PATH
 
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
-RUN RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
         NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
         npm run build
 
