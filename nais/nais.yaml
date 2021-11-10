@@ -30,9 +30,12 @@ spec:
     requests:
       cpu: 300m
       memory: 512Mi
-  {{ingressess}}
+  ingresses:
+    - {{ingress}}
   sessionAffinity: ClientIP # Sticky Session for ingress controller to prevent 404 on rollout
   env:
+    - name: SELF_URL
+      value: {{ingress}}
     - name: NEXT_PUBLIC_BASE_PATH
       value: {{base_path}}
     - name: DEKORATOR_URL

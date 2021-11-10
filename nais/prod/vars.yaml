@@ -1,7 +1,7 @@
 app: dp-quizshow
 namespace: teamdagpenger
 team: teamdagpenger
-alerts_slack_channel: "#team-dagpenger-alert"
+ingress: https://arbeid.nav.no/arbeid/dagpenger/quizshow
 base_path: "/arbeid/dagpenger/quizshow"
 dekorator:
   url: https://www.nav.no/dekoratoren
