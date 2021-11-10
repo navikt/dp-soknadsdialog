@@ -1,9 +1,15 @@
 import "@navikt/ds-css";
-import { AppProps } from "next/app";
+import {AppProps} from "next/app";
 import "../styles.css";
 
-if (process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
-  require("../lib/mocks");
+if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_API_MOCKING === "enabled") {
+  import("../lib/mocks/browser").then(({worker}) =>
+    worker().start({
+      serviceWorker: {
+        url: `/mockServiceWorker.js`,
+      },
+    })
+  );
 }
 
 export default function App({ Component, pageProps }: AppProps) {

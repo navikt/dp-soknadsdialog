@@ -6,7 +6,7 @@ module.exports = {
     "!**/*.d.ts",
     "!**/node_modules/**",
   ],
-  testPathIgnorePatterns: ["/node_modules/", "/.next/"],
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ['babel-jest', { presets: ['next/babel'] }],
   },
