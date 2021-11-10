@@ -1,11 +1,11 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: {{app}}
-  namespace: {{namespace}}
+  name: dp-quizshow
+  namespace: teamdagpenger
   labels:
-    team: {{team}}
-    app: {{app}}
+    team: teamdagpenger
+    app: dp-quizshow
 spec:
   image: {{image}}
   port: 3000

@@ -1,8 +1,5 @@
-app: dp-quizshow
-namespace: teamdagpenger
-team: teamdagpenger
-base_path: "/arbeid/dagpenger/quizshow"
 ingress: https://arbeid.dev.nav.no/arbeid/dagpenger/quizshow
+base_path: "/arbeid/dagpenger/quizshow"
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
