@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import {GetServerSideProps, NextPage} from "next";
 import {ensureAuth, SessionProps} from "../lib/ensure-auth";
-import {getSession} from "@navikt/dp-auth/dist/server";
+import {getSession} from "@navikt/dp-auth/server";
 import {useSession} from "../lib/useSession";
 
 export const getServerSideProps: GetServerSideProps = ensureAuth({
@@ -19,14 +19,14 @@ export const getServerSideProps: GetServerSideProps = ensureAuth({
 
 const Home: NextPage<SessionProps> = ({
   session: initialSession
-                                      }) =>{
+}) =>{
   const router = useRouter();
 
   const { session } = useSession({ initialSession });
 
-  if(!session) {
-    return <div>Laster.. ikke logga inn?</div>
-  }
+  // if(!session) {
+  //   return <div>Laster.. ikke logga inn?</div>
+  // }
 
 
   async function nySøknad(event) {
@@ -65,4 +65,6 @@ const Home: NextPage<SessionProps> = ({
       </main>
     </div>
   );
-}
+};
+
+export default Home;

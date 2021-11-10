@@ -1,5 +1,6 @@
 import { rest } from "msw";
 import { v4 as uuidv4 } from "uuid";
+import api from "../api";
 
 interface Faktum {
   navn?: any;
@@ -50,6 +51,9 @@ const lagSeksjon = (seksjon) => [
 ];
 
 export const handlers = [
+  rest.get(api("/auth/session"), (req, res, ctx) => {
+    return res(ctx.json({ expires_in: 123 }));
+  }),
   rest.post(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`, (req, res, ctx) => {
     return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
   }),
