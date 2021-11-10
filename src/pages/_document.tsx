@@ -19,7 +19,7 @@ const availableLanguages = availableLocales.map(
 
 const dekoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
-  simple: false,
+  simple: true,
   context: "privatperson",
   availableLanguages,
   enforceLogin: process.env.NODE_ENV === "production",
