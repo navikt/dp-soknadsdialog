@@ -23,7 +23,7 @@ app.prepare().then(() => {
       throw err;
     }
     console.log(
-      `> Ready on http://localhost:${port}/${process.env.BASE_PATH || ""}`
+      `> Ready on http://localhost:${port}/${process.env.NEXT_PUBLIC_BASE_PATH || ""}`
     );
   });
 });
