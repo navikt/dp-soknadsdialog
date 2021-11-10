@@ -43,6 +43,11 @@ spec:
       value: {{loginservice.url}}
     - name: LOGINSERVICE_WELL_KNOWN_URL
       value: {{loginservice.wellKnown}}
+  idporten:
+    enabled: true
+    sidecar:
+      enabled: true
+      level: Level4
   accessPolicy:
     outbound:
       rules:
