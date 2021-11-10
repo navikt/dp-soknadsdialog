@@ -2,9 +2,33 @@ import Head from "next/head";
 import { Button, Heading } from "@navikt/ds-react";
 import React from "react";
 import { useRouter } from "next/router";
+import {GetServerSideProps, NextPage} from "next";
+import {ensureAuth, SessionProps} from "../lib/ensure-auth";
+import {getSession} from "@navikt/dp-auth/dist/server";
+import {useSession} from "../lib/useSession";
 
-export default function Home() {
+export const getServerSideProps: GetServerSideProps = ensureAuth({
+  enforceLogin: process.env.SERVERSIDE_LOGIN === "enabled",
+})(async (context) => {
+  const { token, apiToken } = await getSession(context);
+
+  return {
+    props: { },
+  };
+});
+
+const Home: NextPage<SessionProps> = ({
+  session: initialSession
+                                      }) =>{
   const router = useRouter();
+
+  const { session } = useSession({ initialSession });
+
+  if(!session) {
+    return <div>Laster.. ikke logga inn?</div>
+  }
+
+
   async function nySøknad(event) {
     try {
       event.preventDefault();
