@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "node server.js",
     "test": "jest",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --project tsconfig.json --pretty --noEmit"
   },
   "engines": {
     "node": ">=15.0.0",

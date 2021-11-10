@@ -1,4 +1,4 @@
-import { screen, render } from "@testing-library/react";
+import {screen, render, act} from "@testing-library/react";
 import React from "react";
 import Søknad from "../../../pages/soknad/[id]";
 

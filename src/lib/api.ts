@@ -12,7 +12,7 @@ export const fetcher = (
   options: RequestInit = {}
 ): Promise<unknown> => fetch(url, options).then((r) => r.json());
 
-export function HentNesteSeksjon(id: string): {
+export function HentNesteSeksjon(id: any): {
   seksjon: Seksjon;
   isLoading: boolean;
   isError: boolean;
