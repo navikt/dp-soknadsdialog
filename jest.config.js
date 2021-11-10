@@ -1,10 +1,11 @@
 module.exports = {
+  globalSetup: "<rootDir>/jest.env.js",
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   collectCoverageFrom: [
     "**/*.{js,jsx,ts,tsx}",
     "!**/*.d.ts",
     "!**/node_modules/**",
   ],
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ['babel-jest', { presets: ['next/babel'] }],
@@ -16,6 +17,8 @@ module.exports = {
   moduleNameMapper: {
     "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
     "^.+\\.svg$": "jest-transform-stub",
+    "^jose/(.*)$": "identity-obj-proxy",
+    "^@navikt/dp-auth/(.*)$": "<rootDir>/node_modules/@navikt/dp-auth/dist/$1",
   },
   testEnvironment: "jsdom"
 };
