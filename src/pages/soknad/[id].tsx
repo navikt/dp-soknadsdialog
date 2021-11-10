@@ -7,7 +7,7 @@ export default function Søknad() {
   const router = useRouter();
   const { id } = router.query;
   const { seksjon, isLoading, isError } = HentNesteSeksjon(id);
-  if(isError) return <div>Noe gikk galt, kunne ikke hente søknad</div>
+  if (isError) return <div>Noe gikk galt, kunne ikke hente søknad</div>;
   return (
     <div>
       <Heading level="1" size="medium">

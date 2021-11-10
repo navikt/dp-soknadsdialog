@@ -1,0 +1,32 @@
+@media (min-width: 448px) {
+  #maincontent {
+    min-height: 78vh;
+  }
+}
+
+:root {
+  --navds-content-container-max-width: 640px;
+}
+
+h2 {
+  font-size: var(--navds-font-size-title-s);
+  margin-bottom: 10px;
+}
+
+.navds-alert h2 {
+  margin-top: 0;
+}
+
+.navds-alert p {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.registreringsvarsel {
+  margin-bottom: 20px;
+}
+
+.registreringsvarsel p {
+  margin-top: 0;
+}
+

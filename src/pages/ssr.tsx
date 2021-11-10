@@ -13,12 +13,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-
   const fnr = payload.pid as string;
 
   return {
     props: {
-      fnr
+      fnr,
     },
   };
 };

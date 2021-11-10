@@ -54,9 +54,12 @@ export const handlers = [
   rest.get(api("/auth/session"), (req, res, ctx) => {
     return res(ctx.json({ expires_in: 123 }));
   }),
-  rest.post(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`, (req, res, ctx) => {
-    return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
-  }),
+  rest.post(
+    `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`,
+    (req, res, ctx) => {
+      return res(ctx.status(201), ctx.json({ søknad_uuid: uuidv4() }));
+    }
+  ),
   rest.get(
     `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/:soknadId/neste-seksjon`,
     (req, res, ctx) => {

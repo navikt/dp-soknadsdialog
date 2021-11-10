@@ -1,4 +1,10 @@
-import Document, { Html, Head, Main, NextScript, DocumentContext } from "next/document";
+import Document, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from "next/document";
 import {
   Components as DecoratorComponents,
   ENV,
@@ -9,13 +15,11 @@ import { availableLocales } from "../lib/i18n/availableLocales";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<ENV, "localhost">;
 
-const availableLanguages = availableLocales.map(
-  (l) => ({
-    locale: l,
-    url: "https://www.nav.no/dagpenger/" + l,
-    handleInApp: true,
-  })
-);
+const availableLanguages = availableLocales.map((l) => ({
+  locale: l,
+  url: "https://www.nav.no/dagpenger/" + l,
+  handleInApp: true,
+}));
 
 const dekoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
@@ -33,12 +37,10 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
 
-
-
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...dekoratorProps,
       language: locale as any,
-    }).catch(err => {
+    }).catch((err) => {
       console.error(err);
       const empty = () => <></>;
       return {
@@ -47,14 +49,17 @@ export default class MyDocument extends Document<DecoratorComponents> {
         Scripts: empty,
         Styles: empty,
       };
-    })
+    });
 
-    return { ...initialProps, ...Dekorator, locale };
+    return {
+      ...initialProps,
+      ...Dekorator,
+      locale,
+    };
   }
 
-  render() {
+  render(): JSX.Element {
     const { Styles, Scripts, Header, Footer, locale } = this.props;
-
     return (
       <Html lang={locale}>
         <Head>

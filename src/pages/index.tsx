@@ -2,10 +2,11 @@ import Head from "next/head";
 import { Button, Heading } from "@navikt/ds-react";
 import React from "react";
 import { useRouter } from "next/router";
-import {GetServerSideProps, NextPage} from "next";
-import {ensureAuth, SessionProps} from "../lib/ensure-auth";
-import {getSession} from "@navikt/dp-auth/server";
-import {useSession} from "../lib/useSession";
+import { GetServerSideProps, NextPage } from "next";
+import { ensureAuth, SessionProps } from "../lib/ensure-auth";
+import { getSession } from "@navikt/dp-auth/server";
+import { useSession } from "../lib/useSession";
+import api from "../lib/api";
 
 export const getServerSideProps: GetServerSideProps = ensureAuth({
   enforceLogin: process.env.SERVERSIDE_LOGIN === "enabled",
@@ -13,13 +14,11 @@ export const getServerSideProps: GetServerSideProps = ensureAuth({
   const { token, apiToken } = await getSession(context);
 
   return {
-    props: { },
+    props: {},
   };
 });
 
-const Home: NextPage<SessionProps> = ({
-  session: initialSession
-}) =>{
+const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
   const router = useRouter();
 
   const { session } = useSession({ initialSession });
@@ -28,11 +27,10 @@ const Home: NextPage<SessionProps> = ({
   //   return <div>Laster.. ikke logga inn?</div>
   // }
 
-
   async function nySøknad(event) {
     try {
       event.preventDefault();
-      const data = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`, {
+      const data = await fetch(api("/soknad"), {
         method: "POST",
       }).then((data) => {
         return data.json();
