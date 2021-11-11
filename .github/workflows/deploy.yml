@@ -4,7 +4,7 @@ on: [ push ]
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}/dp-quizshow:${{ github.sha }}
-  BASE_PATH: /arbeid/dagpenger/quizshow
+  BASE_PATH: /arbeid/dagpenger/soknad
 
 jobs:
   test:
