@@ -6,7 +6,7 @@ if (
   typeof window !== "undefined" &&
   process.env.NEXT_PUBLIC_API_MOCKING === "enabled"
 ) {
-  import("../lib/mocks/browser").then(({ worker }) =>
+  import("../../__mocks__/browser").then(({ worker }) =>
     worker().start({
       serviceWorker: {
         url: `/mockServiceWorker.js`,
