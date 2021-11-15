@@ -2,53 +2,12 @@ import { rest } from "msw";
 import { v4 as uuidv4 } from "uuid";
 import api from "../src/lib/api";
 
-interface Faktum {
-  navn?: any;
-  id?: any;
-  clazz?: any;
-}
-
-const baseFaktum = { navn: "Antall uker", id: "seksjon-nan", clazz: "int" };
-const faktum = ({ navn, id, clazz }: Faktum = baseFaktum) => ({
-  navn,
-  id,
-  avhengigFakta: [],
-  clazz,
-  roller: ["søker"],
-});
+import { getFaktaFor } from "./seksjonMock";
 
 let seksjon = 0;
 if (typeof beforeEach !== "undefined") {
   beforeEach(() => (seksjon = 0));
 }
-
-const søknader = new Map();
-const getFaktaFor = (søknad, seksjon) => {
-  const key = `${søknad}-${seksjon}`;
-
-  if (!søknader.has(key)) {
-    søknader.set(key, lagSeksjon(seksjon));
-  }
-
-  return søknader.get(key);
-};
-const lagSeksjon = (seksjon) => [
-  faktum({
-    navn: "Ønsker dagpenger fra dato med id 2",
-    id: `${seksjon}-2`,
-    clazz: "localdate",
-  }),
-  faktum({
-    navn: "Fødselsdato med id 1",
-    id: `${seksjon}-1`,
-    clazz: "localdate",
-  }),
-  faktum({
-    navn: "Antall uker",
-    id: `${seksjon}-3`,
-    clazz: "int",
-  }),
-];
 
 export const handlers = [
   rest.get(api("/auth/session"), (req, res, ctx) => {
@@ -70,12 +29,7 @@ export const handlers = [
       }
       const fakta = getFaktaFor(soknadId, ++seksjon);
 
-      return res(
-        ctx.json({
-          fakta,
-          root: { rolle: "søker", fakta: fakta.map((faktum) => faktum.id) },
-        })
-      );
+      return res(ctx.json({ seksjon_navn: "søker", indeks: 0, fakta: fakta }));
     }
   ),
   rest.put(
@@ -88,12 +42,7 @@ export const handlers = [
 
       fakta.find((faktum) => faktum.id == faktumId).svar = verdi;
 
-      return res(
-        ctx.json({
-          fakta,
-          root: { rolle: "søker", fakta: fakta.map((faktum) => faktum.id) },
-        })
-      );
+      return res(ctx.json({ seksjon_navn: "søker", indeks: 0, fakta: fakta }));
     }
   ),
   rest.get(
