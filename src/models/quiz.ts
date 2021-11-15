@@ -26,8 +26,8 @@ export namespace Quiz {
     readonly id: string;
     readonly roller: Rolle[];
     readonly dataType?: DataType;
+    readonly clazz?: DataType; // Denne SKAL FJERNES. Erstattes av dataType.
     readonly godkjenner?: any[]; // Referanse til en annen node i regeltreet.
-    svar: any;
   }
 
   export interface Subsumsjon {
@@ -37,5 +37,3 @@ export namespace Quiz {
     fakta?: string[];
   }
 }
-
-export class Seksjon {}

@@ -1,23 +1,22 @@
 import useSWR from "swr";
-import { Seksjon } from "../models/quiz";
+import { Quiz } from "../models/quiz";
 
 export default function api(endpoint: string): string {
-  return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${
-    endpoint.startsWith("/") ? "" : "/"
-  }${endpoint}`;
+  return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${endpoint.startsWith("/") ? "" : "/"
+    }${endpoint}`;
 }
 
 export const fetcher = (
   url: RequestInfo,
   options: RequestInit = {}
-): Promise<unknown> => fetch(url, options).then((r) => r.json());
+): Promise<Quiz.Seksjon> => fetch(url, options).then((r) => r.json());
 
 export function HentNesteSeksjon(id: any): {
-  seksjon: Seksjon;
+  seksjon: Quiz.Seksjon;
   isLoading: boolean;
   isError: boolean;
 } {
-  const { data, error } = useSWR<Seksjon>(
+  const { data, error } = useSWR<Quiz.Seksjon>(
     api(`/soknad/${id}/neste-seksjon`),
     fetcher
   );
