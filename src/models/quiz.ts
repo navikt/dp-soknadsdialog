@@ -25,8 +25,9 @@ export namespace Quiz {
     readonly navn: string;
     readonly id: string;
     readonly roller: Rolle[];
-    readonly type?: DataType;
+    readonly type: DataType;
     readonly godkjenner?: any[]; // Referanse til en annen node i regeltreet.
+    svar?: any;
   }
 
   export interface Subsumsjon {

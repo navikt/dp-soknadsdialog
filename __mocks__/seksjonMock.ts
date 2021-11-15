@@ -1,25 +1,31 @@
-import { Faktum } from "../src/models/quiz";
+interface Faktum {
+  navn: string;
+  id: string;
+  roller: string[];
+  type: string;
+  godkjenner?: string[];
+  svar?: undefined;
+}
 
-const baseFaktum = { navn: "Antall uker", id: "seksjon-nan", type: "int" };
-const faktum = ({ navn, id, type }: Faktum = baseFaktum) => ({
+const faktum = ({ navn, id, type, roller, godkjenner }: Faktum) => ({
   navn,
   id,
+  roller,
   type,
-  roller: ["søker"],
+  godkjenner,
 });
 
-const erUbesvart = (faktum) => faktum.svar === undefined;
 const søknader = new Map();
 export const getFaktaFor = (søknad, seksjon) => {
   const key = `${søknad}-${seksjon}`;
 
   if (!søknader.has(key)) {
-    søknader.set(key, seksjon1(seksjon));
+    søknader.set(key, seksjon1());
   }
   return søknader.get(key);
 };
 
-const seksjon1 = (seksjon) => [
+const seksjon1 = () => [
   faktum({
     navn: "Som hovedregel må du være villig til å ta både hel- og deltidsjobb for å ha rett til dagpenger",
     id: "2",
