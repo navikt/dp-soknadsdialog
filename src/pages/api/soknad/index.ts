@@ -1,11 +1,8 @@
-const søknadHandler = async (req, res) => {
-  const nySøknad = await fetch(`${process.env.API_BASE_URL}/soknad`, {
-    method: "POST",
-  });
+import proxy from "../_proxy";
 
-  res.statusCode = 201;
-  res.setHeader("Content-Type", "application/json");
-  res.end(await nySøknad.text());
+const søknadHandler = async (req, res) => {
+  const url = new URL(`${process.env.API_BASE_URL}/soknad`);
+  await proxy(url, req, res);
 };
 
 export default søknadHandler;

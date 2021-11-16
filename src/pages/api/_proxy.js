@@ -1,29 +1,45 @@
 import { request } from "http";
+import { getSession } from "@navikt/dp-auth/dist/server";
+const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
 export default function proxy(url = new URL(""), req, res) {
-  return new Promise((resolve) => {
-    const proxy = request(
-      url,
-      {
-        host: url.hostname,
-        method: req.method,
-        headers: filterHeaders(req.headers),
-      },
-      (resp) => {
-        res.statusCode = resp.statusCode;
-        copyHeaders(filterHeaders(resp.headers), res);
-
-        resp.pipe(res);
-
-        resp.on("end", () => {
-          res.end();
-          resolve(resp);
-        });
+  getSession({ req })
+    .then((session) => {
+      if (!session.token) {
+        return Promise.reject(new Error(`Ikke innlogget`));
       }
-    );
+      return session.apiToken(audience);
+    })
+    .then(async (apiToken) => {
+      const token = await apiToken;
+      const headers = {
+        ...filterHeaders(req.headers),
+        Authorization: `Bearer ${token}`,
+      };
+      return new Promise((resolve) => {
+        const proxy = request(
+          url,
+          {
+            host: url.hostname,
+            method: req.method,
+            headers: headers,
+          },
+          (resp) => {
+            res.statusCode = resp.statusCode;
+            copyHeaders(filterHeaders(resp.headers), res);
 
-    req.pipe(proxy);
-  });
+            resp.pipe(res);
+
+            resp.on("end", () => {
+              res.end();
+              resolve(resp);
+            });
+          }
+        );
+
+        req.pipe(proxy);
+      });
+    });
 }
 
 const copyHeaders = (headers, res) => {
