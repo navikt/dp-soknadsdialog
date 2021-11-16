@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { GetServerSideProps, NextPage } from "next";
 import { ensureAuth, SessionProps } from "../lib/ensure-auth";
 import { getSession } from "@navikt/dp-auth/server";
-import { useSession } from "../lib/useSession";
+import { useSession } from "@navikt/dp-auth/client";
 import api from "../lib/api";
 
 export const getServerSideProps: GetServerSideProps = ensureAuth({
@@ -25,7 +25,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
 
   // if(!session) {
   //   return <div>Laster.. ikke logga inn?</div>
-  // }
+  // }index.test.tsx
 
   async function nySøknad(event) {
     try {

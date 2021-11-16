@@ -1,7 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsResult } from "next";
-import { Session } from "./useSession";
+
 import { getSession } from "@navikt/dp-auth/server";
 import merge from "lodash/merge";
+import { Session } from "@navikt/dp-auth/dist/server";
 
 export type SessionProps = {
   session?: Session;

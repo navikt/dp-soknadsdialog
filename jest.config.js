@@ -20,5 +20,5 @@ module.exports = {
     "^jose/(.*)$": "identity-obj-proxy",
     "^@navikt/dp-auth/(.*)$": "<rootDir>/node_modules/@navikt/dp-auth/dist/$1",
   },
-  testEnvironment: "jsdom"
+  testEnvironment: "jsdom",
 };

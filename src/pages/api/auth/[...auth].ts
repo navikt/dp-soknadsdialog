@@ -1,3 +1,5 @@
-import DpAuthHandler from "@navikt/dp-auth";
+import DpAuth from "@navikt/dp-auth";
 
-export default DpAuthHandler;
+export default DpAuth({
+  allowedDestinations: ["/", "/soknad", "/routing"],
+});
