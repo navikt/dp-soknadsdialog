@@ -22,6 +22,7 @@
     "@navikt/fnrvalidator": "^1.1.4",
     "@navikt/nav-dekoratoren-moduler": "^1.4.0",
     "cookie": "^0.4.1",
+    "date-fns": "^2.25.0",
     "jsdom": "^18.0.1",
     "next": "^12.0.2",
     "next-intl": "^2.0.5",
@@ -29,6 +30,7 @@
     "next-transpile-modules": "^9.0.0",
     "react": "^17.0.2",
     "react-collapse": "^5.1.0",
+    "react-day-picker": "^7.4.10",
     "react-dom": "17.0.2",
     "swr": "^1.0.1",
     "uuid": "^8.3.2"
