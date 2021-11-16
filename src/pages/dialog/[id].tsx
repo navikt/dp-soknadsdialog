@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Heading } from "@navikt/ds-react";
 import React from "react";
 import { HentNesteSeksjon } from "../../lib/api";
+import Seksjon from "../../components/seksjon";
 
 export default function Søknad() {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function Søknad() {
       <Heading level="1" size="medium">
         Søknad id: {id}
       </Heading>
-      {isLoading ? <div>laster...</div> : <div>{JSON.stringify(seksjon)}</div>}
+      {isLoading ? <div>laster...</div> : <Seksjon seksjon={seksjon} />}
     </div>
   );
 }

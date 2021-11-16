@@ -1,8 +1,13 @@
 import { request } from "http";
 import { getSession } from "@navikt/dp-auth/server";
+import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
-export default function proxy(url = new URL(""), req, res) {
+export default function proxy(
+  url: URL = new URL(""),
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   getSession({ req })
     .then((session) => {
       if (!session.token) {

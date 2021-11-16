@@ -29,7 +29,13 @@ export const handlers = [
       }
       const fakta = getFaktaFor(soknadId, ++seksjon);
 
-      return res(ctx.json({ seksjon_navn: "søker", indeks: 0, fakta: fakta }));
+      return res(
+        ctx.json({
+          seksjon_navn: "Reell arbeidssøker",
+          indeks: 0,
+          fakta: fakta,
+        })
+      );
     }
   ),
   rest.put(
