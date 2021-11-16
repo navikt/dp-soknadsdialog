@@ -2,8 +2,9 @@ import useSWR from "swr";
 import { Quiz } from "../models/quiz";
 
 export default function api(endpoint: string): string {
-  return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${endpoint.startsWith("/") ? "" : "/"
-    }${endpoint}`;
+  return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${
+    endpoint.startsWith("/") ? "" : "/"
+  }${endpoint}`;
 }
 
 export const fetcher = (
