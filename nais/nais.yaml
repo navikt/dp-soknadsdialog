@@ -53,6 +53,8 @@ spec:
     sidecar:
       enabled: true
       level: Level4
+  tokenx:
+    enabled: true
   accessPolicy:
     outbound:
       rules:
