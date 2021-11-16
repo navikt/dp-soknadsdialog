@@ -1,5 +1,5 @@
 import { request } from "http";
-import { getSession } from "@navikt/dp-auth/dist/server";
+import { getSession } from "@navikt/dp-auth/server";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
 export default function proxy(url = new URL(""), req, res) {
