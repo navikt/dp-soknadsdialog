@@ -1,6 +1,6 @@
 import {screen, render, act} from "@testing-library/react";
 import React from "react";
-import Søknad from "../../../pages/soknad/[id]";
+import Søknad from "../../../pages/dialog/[id]";
 
 jest.mock("next/router", () => ({
   useRouter() {

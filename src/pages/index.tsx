@@ -35,7 +35,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
       }).then((data) => {
         return data.json();
       });
-      await router.push(`/soknad/${data.søknad_uuid}`);
+      await router.push(`/dialog/${data.søknad_uuid}`);
     } catch (error) {
       console.log(error);
       throw new Error("Kunne ikke opprette søknad");
