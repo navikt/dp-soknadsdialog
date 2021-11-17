@@ -1,6 +1,6 @@
 import { Quiz } from "../models/quiz";
 import { RadioButtonInput } from "./inputs/radio-input.component";
-import { lagreFaktum } from "../lib/api";
+import { lagreFaktum } from "../services/api";
 
 function Seksjon({ id, seksjon }: { id: any; seksjon: Quiz.Seksjon }) {
   return (
