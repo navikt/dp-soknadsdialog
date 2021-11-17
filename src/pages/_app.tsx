@@ -1,6 +1,8 @@
 import "@navikt/ds-css";
 import { AppProps } from "next/app";
 import "../styles/global.css";
+import { store } from "../store";
+import { Provider } from "react-redux";
 
 if (
   typeof window !== "undefined" &&
@@ -17,10 +19,11 @@ if (
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className="app">
-      <Component {...pageProps} />
+    <Provider store={store} >
+      <div className="app">
+        <Component {...pageProps} />
 
-      <style jsx>{`
+        <style jsx>{`
         div {
           display: flex;
           flex-direction: column;
@@ -32,6 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
           padding: 0.5rem 0.5rem 7.5rem 0.5rem;
         }
       `}</style>
-    </div>
+      </div>
+    </Provider>
   );
 }
