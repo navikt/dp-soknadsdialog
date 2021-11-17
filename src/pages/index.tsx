@@ -6,7 +6,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { ensureAuth, SessionProps } from "../lib/ensure-auth";
 import { getSession } from "@navikt/dp-auth/server";
 import { useSession } from "@navikt/dp-auth/client";
-import api from "../lib/api";
+import api from "../services/api";
 
 export const getServerSideProps: GetServerSideProps = ensureAuth({
   enforceLogin: process.env.SERVERSIDE_LOGIN === "enabled",
