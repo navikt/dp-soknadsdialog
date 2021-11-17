@@ -3,11 +3,11 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
-export default function proxy(
+const proxy = (
   url: URL = new URL(""),
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) => {
   getSession({ req })
     .then((session) => {
       if (!session.token) {
@@ -45,7 +45,8 @@ export default function proxy(
         req.pipe(proxy);
       });
     });
-}
+};
+export default proxy;
 
 const copyHeaders = (headers, res) => {
   Object.entries(headers).forEach(([header, value]) =>
