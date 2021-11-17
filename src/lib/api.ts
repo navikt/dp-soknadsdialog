@@ -45,6 +45,9 @@ export async function lagreFaktum(
     api(`/soknad/${søknadId}/faktum/${faktumId}`),
     {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ type, verdi }),
     }
   );
