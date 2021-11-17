@@ -1,5 +1,7 @@
-import proxy from "../../../_proxy";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getSession } from "@navikt/dp-auth/dist/server";
+
+const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
 const faktumLagreHandler = async (
   req: NextApiRequest,
@@ -9,10 +11,24 @@ const faktumLagreHandler = async (
     query: { id, faktumId },
   } = req;
 
-  const url = new URL(
-    `${process.env.API_BASE_URL}/soknad/${id}/faktum/${faktumId}`
-  );
-  await proxy(url, req, res);
+  const { token, apiToken } = await getSession({ req });
+  if (token) {
+    const quizShowToken = await apiToken(audience);
+    const response: Response = await fetch(
+      `${process.env.API_BASE_URL}/soknad/${id}/faktum/${faktumId}`,
+      {
+        method: "Put",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${quizShowToken}`,
+        },
+        body: JSON.stringify(req.body),
+      }
+    );
+    return res.status(response.status).json(await response.json());
+  } else {
+    return res.status(401).json({ status: "ikke innlogget" });
+  }
 };
 
 export default faktumLagreHandler;
