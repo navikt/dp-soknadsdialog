@@ -1,4 +1,4 @@
-import { request } from "http";
+import {ClientRequest, request} from "http";
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
@@ -22,7 +22,7 @@ const proxy = (
         Authorization: `Bearer ${token}`,
       };
       return new Promise((resolve) => {
-        const proxy = request(
+        const proxy: ClientRequest = request(
           url,
           {
             host: url.hostname,
@@ -41,10 +41,7 @@ const proxy = (
             });
           }
         );
-        if (req.body) {
-          proxy.write(req.body);
-        }
-        req.pipe(proxy);
+        req.pipe(proxy, { end: true });
       });
     });
 };
