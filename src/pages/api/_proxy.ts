@@ -1,13 +1,13 @@
-import { request } from "http";
+import {ClientRequest, request} from "http";
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
-export default function proxy(
+const proxy = (
   url: URL = new URL(""),
   req: NextApiRequest,
   res: NextApiResponse
-) {
+) => {
   getSession({ req })
     .then((session) => {
       if (!session.token) {
@@ -22,7 +22,7 @@ export default function proxy(
         Authorization: `Bearer ${token}`,
       };
       return new Promise((resolve) => {
-        const proxy = request(
+        const proxy: ClientRequest = request(
           url,
           {
             host: url.hostname,
@@ -41,11 +41,11 @@ export default function proxy(
             });
           }
         );
-
-        req.pipe(proxy);
+        req.pipe(proxy, { end: true });
       });
     });
-}
+};
+export default proxy;
 
 const copyHeaders = (headers, res) => {
   Object.entries(headers).forEach(([header, value]) =>
