@@ -41,7 +41,6 @@ const proxy = (
             });
           }
         );
-
         req.pipe(proxy);
       });
     });
