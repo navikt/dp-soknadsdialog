@@ -6,19 +6,20 @@ function Seksjon({ id, seksjon }: { id: any; seksjon: Quiz.Seksjon }) {
   return (
     <>
       Seksjonsnavn: {seksjon.seksjon_navn}
-      {seksjon.fakta.map((faktum) => (
-        <RadioButtonInput
-          key={faktum.id}
-          legend={faktum.navn}
-          options={[
-            { text: "Ja", value: "true" },
-            { text: "Nei", value: "false" },
-          ]}
-          onSelection={(verdi) =>
-            lagreFaktum(id, faktum.id, faktum.type, verdi)
-          }
-        />
-      ))}
+      {seksjon &&
+        seksjon.fakta.map((faktum) => (
+          <RadioButtonInput
+            key={faktum.id}
+            legend={faktum.navn}
+            options={[
+              { text: "Ja", value: "true" },
+              { text: "Nei", value: "false" },
+            ]}
+            onSelection={(verdi) =>
+              lagreFaktum(id, faktum.id, faktum.type, verdi)
+            }
+          />
+        ))}
     </>
   );
 }
