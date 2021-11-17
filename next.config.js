@@ -14,7 +14,4 @@ module.exports = withReactSvg({
     defaultLocale: "nb",
     localeDetection: false,
   },
-  api: {
-    bodyParser: false,
-  },
 });
