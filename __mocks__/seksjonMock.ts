@@ -54,18 +54,4 @@ const seksjon1 = () => [
     type: "boolean",
     godkjenner: [],
   }),
-  faktum({
-    navn: "Bekreftelse fra relevant fagpersonell",
-    id: "8",
-    roller: ["søker"],
-    type: "dokument",
-    godkjenner: [],
-  }),
-  faktum({
-    navn: "Redusert helse, fysisk eller psykisk",
-    id: "7",
-    roller: ["søker"],
-    type: "boolean",
-    godkjenner: ["8"],
-  }),
 ];
