@@ -3,7 +3,7 @@ import { RadioButtonInput } from "./inputs/radio-input.component";
 import { lagreFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-function Seksjon({ seksjon }: { seksjon: Quiz.Seksjon }) {
+function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: any, seksjon: Quiz.Seksjon }) {
   return (
     <>
       Seksjonsnavn: {seksjon.seksjon_navn}
@@ -18,7 +18,7 @@ function Seksjon({ seksjon }: { seksjon: Quiz.Seksjon }) {
                 { text: "Ja", value: "true" },
                 { text: "Nei", value: "false" },
               ]}
-              onSelection={(verdi) => lagreFaktum(id, id, type, verdi)}
+              onSelection={(verdi) => lagreFaktum(søknadsUuid, id, type, verdi)}
             />
           ))}
       {seksjon &&
