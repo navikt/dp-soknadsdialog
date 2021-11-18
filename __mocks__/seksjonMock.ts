@@ -58,7 +58,7 @@ const seksjon1 = () => [
     navn: "Vedlegg...",
     id: "6",
     roller: ["søker"],
-    type: "dokuemt",
+    type: "dokument",
     godkjenner: [],
   }),
 ];
