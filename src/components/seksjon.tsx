@@ -3,7 +3,13 @@ import { RadioButtonInput } from "./inputs/radio-input.component";
 import { lagreFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: any, seksjon: Quiz.Seksjon }) {
+function Seksjon({
+  søknadsUuid,
+  seksjon,
+}: {
+  søknadsUuid: any;
+  seksjon: Quiz.Seksjon;
+}) {
   return (
     <>
       Seksjonsnavn: {seksjon.seksjon_navn}
