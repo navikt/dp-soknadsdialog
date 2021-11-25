@@ -54,4 +54,11 @@ const seksjon1 = () => [
     type: "boolean",
     godkjenner: [],
   }),
+  faktum({
+    navn: "Vedlegg...",
+    id: "6",
+    roller: ["søker"],
+    type: "dokument",
+    godkjenner: [],
+  }),
 ];

@@ -48,7 +48,7 @@ export async function lagreFaktum(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ type, verdi }),
+      body: JSON.stringify({ type: type, svar: verdi }),
     }
   );
   return true;
