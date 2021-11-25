@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from ".";
-import { Quiz } from "../models/quiz";
+import { createSlice, createAction, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "..";
+import { Quiz } from "../../models/quiz";
 
 
 interface SeksjonerState {
@@ -15,11 +15,11 @@ export const seksjonerSlice = createSlice({
   name: "seksjoner",
   initialState,
   reducers: {
-    hent: (state) => {},
-    hentFullført: (state, action: PayloadAction<Quiz.Seksjon[]>) => {
-      state.seksjoner = action.payload
+    hent: (state) => { },
+    hentFullført: (state) => {
+      state.seksjoner = [null, null]
     },
-    hentFeilet: (state) => {}
+    hentFeilet: (state) => { }
   }
 });
 

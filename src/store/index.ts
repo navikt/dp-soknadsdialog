@@ -1,10 +1,10 @@
-import { configureStore } from "@reduxjs/toolkit";
-import seksjonerReducer from "./seksjoner.slice";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import seksjonerReducer from "./seksjoner/seksjoner.slice";
+
+const reducer = combineReducers({ soknad: seksjonerReducer });
 
 export const store = configureStore({
-  reducer: {
-    soknad: seksjonerReducer
-  }
+  reducer,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
