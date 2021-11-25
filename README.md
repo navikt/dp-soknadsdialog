@@ -36,3 +36,18 @@ npm run test
 4. Login complete - apiendepunkter skal da fungere
 
 
+## Kode-konvensjoner
+
+* Bruk engelsk for alt unntatt domenespesifikke termer (eks: faktum, seksjon).
+* Filnavn:
+** Bruk PascalCase for React-komponenter.
+** Bruk kebab-case for rene ts-filer
+* Named exports --> Alle eksporter skal være navngitt (unngå default)
+* CSS:
+** Bruk css-modules - Unngå inline style.
+** Følg navnekonvensjon for tilhørende komponent.
+
+
+## Git-konvensjoner
+* Multi-line commits --> Første linje beskriver hva som er gjort (kort). Forklar hvorfor endringen er gjort på etterføllgende linjer
+* Referer til Github-issue (navikt/dagpenger#[issue-nummer])
