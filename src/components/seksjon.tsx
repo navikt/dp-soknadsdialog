@@ -7,7 +7,7 @@ function Seksjon({
   søknadsUuid,
   seksjon,
 }: {
-  søknadsUuid: any;
+  søknadsUuid: string;
   seksjon: Quiz.Seksjon;
 }) {
   return (
@@ -30,7 +30,7 @@ function Seksjon({
       {seksjon &&
         seksjon.fakta
           .filter((f) => f.type !== Quiz.DataType.BOOLEAN)
-          .map(({ id, navn, type }) => (
+          .map(({ id, navn }) => (
             <TextField
               key={id}
               label={`${navn} (ikke støttet :-( )`}

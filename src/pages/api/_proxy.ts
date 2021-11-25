@@ -1,4 +1,4 @@
-import {ClientRequest, request} from "http";
+import { ClientRequest, request } from "http";
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;

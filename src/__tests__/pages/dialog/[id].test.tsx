@@ -1,4 +1,4 @@
-import {screen, render, act} from "@testing-library/react";
+import { screen, render, waitForElementToBeRemoved } from "@testing-library/react";
 import React from "react";
 import Søknad from "../../../pages/dialog/[id]";
 
@@ -22,5 +22,6 @@ describe("Søknad", () => {
         name: /Søknad/i,
       })
     ).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.getByText(/laster/i))
   });
 });

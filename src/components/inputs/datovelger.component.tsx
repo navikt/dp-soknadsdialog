@@ -5,7 +5,7 @@ import dateFnsFormat from "date-fns/format";
 import dateFnsParse from "date-fns/parse";
 import { isValid } from "date-fns";
 
-import 'react-day-picker/lib/style.css';
+import "react-day-picker/lib/style.css";
 
 function dayPickerParser(str, format, locale) {
   const parsed = dateFnsParse(str, format, new Date(), { locale });
@@ -23,8 +23,8 @@ export const DatoVelger = ({ onChange }) => {
   const [date, setDate] = useState(null);
   const DAYPICKER_FORMAT = "dd.MM.yyyy";
   const dayPickerProps = {
-    showOutsideDays: true
-  }
+    showOutsideDays: true,
+  };
 
   const onDayChange = (value) => {
     let formatted;
@@ -33,7 +33,7 @@ export const DatoVelger = ({ onChange }) => {
       setDate(formatted);
       onChange(formatted);
     }
-  }
+  };
   return (
     <DayPickerInput
       formatDate={dayPickerFormatter}
@@ -42,6 +42,7 @@ export const DatoVelger = ({ onChange }) => {
       parseDate={dayPickerParser}
       dayPickerProps={dayPickerProps}
       onDayChange={onDayChange}
-      value={date} />
+      value={date}
+    />
   );
-}
+};

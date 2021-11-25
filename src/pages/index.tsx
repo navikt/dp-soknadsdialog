@@ -23,10 +23,6 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
 
   const { session } = useSession({ initialSession });
 
-  // if(!session) {
-  //   return <div>Laster.. ikke logga inn?</div>
-  // }index.test.tsx
-
   async function nySøknad(event) {
     try {
       event.preventDefault();
