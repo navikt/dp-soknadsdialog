@@ -27,4 +27,4 @@ export function RadioButtonInput({
       {options.map(mapToRadio)}
     </RadioGroup>
   );
-};
+}

@@ -3,6 +3,7 @@ import { AppProps } from "next/app";
 import "../styles/global.css";
 import { store } from "../store";
 import { Provider } from "react-redux";
+import styles from "./_app.module.css";
 
 if (
   typeof window !== "undefined" &&
@@ -20,21 +21,8 @@ if (
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <div className="app">
+      <div className={styles.app}>
         <Component {...pageProps} />
-
-        <style jsx>{`
-        div {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          max-width: 100%;
-          min-height: 20rem;
-          margin: auto;
-          padding: 0.5rem 0.5rem 7.5rem 0.5rem;
-        }
-      `}</style>
       </div>
     </Provider>
   );
