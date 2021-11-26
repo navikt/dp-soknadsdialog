@@ -14,11 +14,7 @@ export default function Søknad() {
       <Heading level="1" size="medium">
         Søknad id: {id}
       </Heading>
-      {isLoading ? (
-        <div>laster...</div>
-      ) : (
-        <Seksjon søknadsUuid={id} seksjon={seksjon} />
-      )}
+      {isLoading ? <div>laster...</div> : <Seksjon søknadsUuid={id} seksjon={seksjon} />}
     </div>
   );
 }

@@ -3,11 +3,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
-const proxy = (
-  url: URL = new URL(""),
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+const proxy = (url: URL = new URL(""), req: NextApiRequest, res: NextApiResponse) => {
   getSession({ req })
     .then((session) => {
       if (!session.token) {
@@ -48,15 +44,11 @@ const proxy = (
 export default proxy;
 
 const copyHeaders = (headers, res) => {
-  Object.entries(headers).forEach(([header, value]) =>
-    res.setHeader(header, value)
-  );
+  Object.entries(headers).forEach(([header, value]) => res.setHeader(header, value));
 };
 const filterHeaders = (headers) => {
   const bannedHeaders = ["server", "host"];
   return Object.fromEntries(
-    Object.entries(headers).filter(
-      ([header]) => bannedHeaders.indexOf(header) === -1
-    )
+    Object.entries(headers).filter(([header]) => bannedHeaders.indexOf(header) === -1)
   );
 };

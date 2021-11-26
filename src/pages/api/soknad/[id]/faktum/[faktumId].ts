@@ -3,10 +3,7 @@ import { getSession } from "@navikt/dp-auth/server";
 
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
-const saveFaktumHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { id, faktumId },
   } = req;

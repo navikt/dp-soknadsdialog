@@ -17,11 +17,7 @@ const mapToRadio = (opt: RadioOption, index: number) => (
   </Radio>
 );
 
-export function RadioButtonInput({
-  legend,
-  options,
-  onSelection,
-}: RadioGroupInput) {
+export function RadioButtonInput({ legend, options, onSelection }: RadioGroupInput) {
   return (
     <RadioGroup legend={legend} onChange={onSelection}>
       {options.map(mapToRadio)}

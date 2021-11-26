@@ -18,13 +18,11 @@ afterEach(() => getSession.mockClear());
 test("ensureAuth gjør ikke redirect når skrudd av og session mangler", async () => {
   getSession.mockResolvedValue({});
 
-  const getServerSideProps = ensureAuth({ enforceLogin: false })(
-    async (ctx) => {
-      expect(ctx).toEqual(context);
-      const handler = "handled";
-      return { props: { handler } };
-    }
-  );
+  const getServerSideProps = ensureAuth({ enforceLogin: false })(async (ctx) => {
+    expect(ctx).toEqual(context);
+    const handler = "handled";
+    return { props: { handler } };
+  });
 
   const serverSideProps = await getServerSideProps(context);
 

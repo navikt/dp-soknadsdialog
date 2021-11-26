@@ -3,13 +3,7 @@ import { RadioButtonInput } from "./inputs/RadioButtonInput";
 import { saveFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-export function Seksjon({
-  søknadsUuid,
-  seksjon,
-}: {
-  søknadsUuid: string;
-  seksjon: Quiz.Seksjon;
-}) {
+export function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: string; seksjon: Quiz.Seksjon }) {
   return (
     <>
       Seksjonsnavn: {seksjon.seksjon_navn}

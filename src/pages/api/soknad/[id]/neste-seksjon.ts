@@ -1,10 +1,7 @@
 import proxy from "../../_proxy";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const nextSeksjonHandler = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+const nextSeksjonHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
     query: { id },
   } = req;
