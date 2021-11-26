@@ -13,7 +13,7 @@ export const fetcher = (
   options: RequestInit = {}
 ): Promise<Quiz.Seksjon> => fetch(url, options).then((r) => r.json());
 
-export function HentNesteSeksjon(id: any): {
+export function getNextSeksjon(id: any): {
   seksjon: Quiz.Seksjon;
   isLoading: boolean;
   isError: boolean;
@@ -30,12 +30,7 @@ export function HentNesteSeksjon(id: any): {
   };
 }
 
-export type FaktumSvar = {
-  type: string;
-  verdi: any;
-};
-
-export async function lagreFaktum(
+export async function saveFaktum(
   søknadId: string,
   faktumId: string,
   type: string,

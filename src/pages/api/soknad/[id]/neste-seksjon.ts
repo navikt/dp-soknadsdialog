@@ -1,7 +1,7 @@
 import proxy from "../../_proxy";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const nesteSeksjonHandler = async (
+const nextSeksjonHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
@@ -12,4 +12,4 @@ const nesteSeksjonHandler = async (
   await proxy(url, req, res);
 };
 
-export default nesteSeksjonHandler;
+export default nextSeksjonHandler;

@@ -1,6 +1,6 @@
 import { Quiz } from "../models/quiz";
 import { RadioButtonInput } from "./inputs/RadioButtonInput";
-import { lagreFaktum } from "../services/api";
+import { saveFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
 export function Seksjon({
@@ -24,7 +24,7 @@ export function Seksjon({
                 { text: "Ja", value: "true" },
                 { text: "Nei", value: "false" },
               ]}
-              onSelection={(verdi) => lagreFaktum(søknadsUuid, id, type, verdi)}
+              onSelection={(verdi) => saveFaktum(søknadsUuid, id, type, verdi)}
             />
           ))}
       {seksjon &&

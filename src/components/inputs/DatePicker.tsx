@@ -19,7 +19,7 @@ function dayPickerFormatter(date, format, locale) {
   return dateFnsFormat(date, format, { locale });
 }
 
-export function DatoVelger({ onChange }) {
+export function DatePicker({ onChange }) {
   const [date, setDate] = useState(null);
   const DAYPICKER_FORMAT = "dd.MM.yyyy";
   const dayPickerProps = {

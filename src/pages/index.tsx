@@ -23,7 +23,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
 
   const { session } = useSession({ initialSession });
 
-  async function nySøknad(event) {
+  async function startSøknad(event) {
     try {
       event.preventDefault();
       const data = await fetch(api("/soknad"), {
@@ -53,7 +53,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
           informasjon om dine viktige ting...
         </section>
 
-        <Button key="start-søknad" onClick={nySøknad}>
+        <Button key="start-søknad" onClick={startSøknad}>
           Start søknad
         </Button>
       </main>

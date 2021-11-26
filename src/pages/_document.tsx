@@ -21,7 +21,7 @@ const availableLanguages = availableLocales.map((l) => ({
   handleInApp: true,
 }));
 
-const dekoratorProps: DecoratorProps = {
+const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
   simple: true,
   context: "privatperson",
@@ -38,7 +38,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const initialProps = await Document.getInitialProps(ctx);
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
-      ...dekoratorProps,
+      ...decoratorProps,
       language: locale as any,
     }).catch((err) => {
       console.error(err);
