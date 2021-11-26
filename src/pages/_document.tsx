@@ -11,7 +11,7 @@ import {
   fetchDecoratorReact,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { availableLocales } from "../lib/i18n/availableLocales";
+import { availableLocales } from "../lib/i18n/available-locales";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<ENV, "localhost">;
 

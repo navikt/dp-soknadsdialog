@@ -1,9 +1,9 @@
 import { Quiz } from "../models/quiz";
-import { RadioButtonInput } from "./inputs/radio-input.component";
+import { RadioButtonInput } from "./inputs/RadioButtonInput";
 import { lagreFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-function Seksjon({
+export function Seksjon({
   søknadsUuid,
   seksjon,
 }: {
@@ -41,5 +41,3 @@ function Seksjon({
     </>
   );
 }
-
-export default Seksjon;

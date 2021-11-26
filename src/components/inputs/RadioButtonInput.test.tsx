@@ -1,6 +1,6 @@
 import React from "react";
 import { screen, render } from "@testing-library/react";
-import { RadioButtonInput } from "./radio-input.component";
+import { RadioButtonInput } from "./RadioButtonInput";
 
 describe("<RadioButtonInput/>", () => {
   const options = [

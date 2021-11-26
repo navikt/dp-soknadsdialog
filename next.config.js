@@ -1,6 +1,6 @@
 const withReactSvg = require("next-react-svg");
 const path = require("path");
-const { availableLocales } = require("./src/lib/i18n/availableLocales");
+const { availableLocales } = require("./src/lib/i18n/available-locales");
 
 module.exports = withReactSvg({
   include: path.resolve(__dirname, "assets/svg"),

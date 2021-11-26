@@ -2,7 +2,7 @@ import useSWR from "swr";
 import { Quiz } from "../models/quiz";
 import { Session } from "@navikt/dp-auth/dist/server";
 
-export default function api(endpoint: string): string {
+export function api(endpoint: string): string {
   return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${
     endpoint.startsWith("/") ? "" : "/"
   }${endpoint}`;

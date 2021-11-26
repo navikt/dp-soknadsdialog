@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { Heading } from "@navikt/ds-react";
 import React from "react";
 import { HentNesteSeksjon } from "../../services/api";
-import Seksjon from "../../components/seksjon";
+import { Seksjon } from "../../components/Seksjon";
 
 export default function Søknad() {
   const router = useRouter();

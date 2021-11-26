@@ -1,6 +1,6 @@
 import { rest } from "msw";
 import { v4 as uuidv4 } from "uuid";
-import api from "../src/services/api";
+import { api } from "../src/services/api";
 
 import { getFaktaFor } from "./seksjonMock";
 
