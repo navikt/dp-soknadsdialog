@@ -3,14 +3,16 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-quizshow-api`;
 
+function checkForToken(session) {
+  if (!session.token) {
+    return Promise.reject(new Error("Ikke innlogget"));
+  }
+  return session.apiToken(audience);
+}
+
 const proxy = (url: URL = new URL(""), req: NextApiRequest, res: NextApiResponse) => {
   getSession({ req })
-    .then((session) => {
-      if (!session.token) {
-        return Promise.reject(new Error(`Ikke innlogget`));
-      }
-      return session.apiToken(audience);
-    })
+    .then(checkForToken)
     .then(async (apiToken) => {
       const token = await apiToken;
       const headers = {
@@ -18,6 +20,16 @@ const proxy = (url: URL = new URL(""), req: NextApiRequest, res: NextApiResponse
         Authorization: `Bearer ${token}`,
       };
       return new Promise((resolve) => {
+        const proxyResponseHandler = (resp) => {
+          res.statusCode = resp.statusCode;
+          copyHeaders(filterHeaders(resp.headers), res);
+          resp.pipe(res);
+          resp.on("end", () => {
+            res.end();
+            resolve(resp);
+          });
+        }
+        
         const proxy: ClientRequest = request(
           url,
           {
@@ -25,17 +37,7 @@ const proxy = (url: URL = new URL(""), req: NextApiRequest, res: NextApiResponse
             method: req.method,
             headers: headers,
           },
-          (resp) => {
-            res.statusCode = resp.statusCode;
-            copyHeaders(filterHeaders(resp.headers), res);
-
-            resp.pipe(res);
-
-            resp.on("end", () => {
-              res.end();
-              resolve(resp);
-            });
-          }
+          proxyResponseHandler
         );
         req.pipe(proxy, { end: true });
       });
