@@ -19,17 +19,13 @@ export function ensureAuth({ enforceLogin }: Options) {
   };
 }
 
-function _ensureAuth<P>(
-  getServerSideProps?: GetServerSideProps
-): GetServerSideProps {
+function _ensureAuth<P>(getServerSideProps?: GetServerSideProps): GetServerSideProps {
   return async (ctx): Promise<SessionProps & GetServerSidePropsResult<P>> => {
     const { token, payload } = await getSession(ctx);
     if (!token) {
       return {
         redirect: {
-          destination: `/api/auth/signin?destination=${encodeURIComponent(
-            ctx.resolvedUrl
-          )}`,
+          destination: `/api/auth/signin?destination=${encodeURIComponent(ctx.resolvedUrl)}`,
           permanent: false,
         },
       };

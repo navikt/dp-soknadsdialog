@@ -6,7 +6,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { ensureAuth, SessionProps } from "../lib/ensure-auth";
 import { getSession } from "@navikt/dp-auth/server";
 import { useSession } from "@navikt/dp-auth/client";
-import api from "../services/api";
+import { api } from "../services/api";
 
 export const getServerSideProps: GetServerSideProps = ensureAuth({
   enforceLogin: process.env.SERVERSIDE_LOGIN === "enabled",
@@ -23,11 +23,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
 
   const { session } = useSession({ initialSession });
 
-  // if(!session) {
-  //   return <div>Laster.. ikke logga inn?</div>
-  // }index.test.tsx
-
-  async function nySøknad(event) {
+  async function startSøknad(event) {
     try {
       event.preventDefault();
       const data = await fetch(api("/soknad"), {
@@ -57,7 +53,7 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
           informasjon om dine viktige ting...
         </section>
 
-        <Button key="start-søknad" onClick={nySøknad}>
+        <Button key="start-søknad" onClick={startSøknad}>
           Start søknad
         </Button>
       </main>

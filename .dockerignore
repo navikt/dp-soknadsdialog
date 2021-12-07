@@ -12,7 +12,5 @@
 !server.js
 !.env.production
 !tsconfig.json
-!__mocks__
 !styles.css
 !src/**
-public/mockServiceWorker.js

@@ -24,5 +24,6 @@ module.exports = {
         aspects: ["invalidHref", "preferButton"],
       },
     ],
+    "prettier/prettier": ["warn", {"printWidth": 100}]
   },
 };

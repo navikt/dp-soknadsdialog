@@ -24,6 +24,7 @@
     "@navikt/ds-react": "^0.11.10",
     "@navikt/fnrvalidator": "^1.1.4",
     "@navikt/nav-dekoratoren-moduler": "^1.4.0",
+    "@reduxjs/toolkit": "^1.6.2",
     "cookie": "^0.4.1",
     "date-fns": "^2.25.0",
     "jsdom": "^18.0.1",
@@ -36,6 +37,8 @@
     "react-collapse": "^5.1.0",
     "react-day-picker": "^7.4.10",
     "react-dom": "17.0.2",
+    "react-redux": "^7.2.6",
+    "redux-observable": "^2.0.0",
     "swr": "^1.0.1",
     "uuid": "^8.3.2"
   },
@@ -63,11 +66,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.3.1",
     "jest-transform-stub": "^2.0.0",
-    "msw": "^0.35.0",
     "prettier": "^2.4.1",
     "typescript": "^4.4.4"
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }

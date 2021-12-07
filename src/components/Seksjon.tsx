@@ -1,15 +1,9 @@
 import { Quiz } from "../models/quiz";
-import { RadioButtonInput } from "./inputs/radio-input.component";
-import { lagreFaktum } from "../services/api";
+import { RadioButtonInput } from "./inputs/RadioButtonInput";
+import { saveFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-function Seksjon({
-  søknadsUuid,
-  seksjon,
-}: {
-  søknadsUuid: any;
-  seksjon: Quiz.Seksjon;
-}) {
+export function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: string; seksjon: Quiz.Seksjon }) {
   return (
     <>
       Seksjonsnavn: {seksjon.seksjon_navn}
@@ -24,13 +18,13 @@ function Seksjon({
                 { text: "Ja", value: "true" },
                 { text: "Nei", value: "false" },
               ]}
-              onSelection={(verdi) => lagreFaktum(søknadsUuid, id, type, verdi)}
+              onSelection={(verdi) => saveFaktum(søknadsUuid, id, type, verdi)}
             />
           ))}
       {seksjon &&
         seksjon.fakta
           .filter((f) => f.type !== Quiz.DataType.BOOLEAN)
-          .map(({ id, navn, type }) => (
+          .map(({ id, navn }) => (
             <TextField
               key={id}
               label={`${navn} (ikke støttet :-( )`}
@@ -41,5 +35,3 @@ function Seksjon({
     </>
   );
 }
-
-export default Seksjon;

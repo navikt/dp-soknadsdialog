@@ -11,10 +11,16 @@ interface RadioGroupInput {
   onSelection: (value: string) => void;
 }
 
-export const RadioButtonInput = ({ legend, options, onSelection }: RadioGroupInput) => {
+const mapToRadio = (opt: RadioOption, index: number) => (
+  <Radio key={index} value={opt.value}>
+    {opt.text}
+  </Radio>
+);
+
+export function RadioButtonInput({ legend, options, onSelection }: RadioGroupInput) {
   return (
     <RadioGroup legend={legend} onChange={onSelection}>
-      {options.map((opt, index) => <Radio key={index} value={opt.value}>{opt.text}</Radio>)}
+      {options.map(mapToRadio)}
     </RadioGroup>
   );
 }

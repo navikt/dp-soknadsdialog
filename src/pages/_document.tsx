@@ -1,31 +1,17 @@
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from "next/document";
+import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
   ENV,
   fetchDecoratorReact,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { availableLocales } from "../lib/i18n/availableLocales";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<ENV, "localhost">;
 
-const availableLanguages = availableLocales.map((l) => ({
-  locale: l,
-  url: "https://www.nav.no/dagpenger/" + l,
-  handleInApp: true,
-}));
-
-const dekoratorProps: DecoratorProps = {
+const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
   simple: true,
   context: "privatperson",
-  availableLanguages,
   enforceLogin: process.env.NODE_ENV === "production",
   redirectToApp: true,
   level: "Level4",
@@ -38,7 +24,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const initialProps = await Document.getInitialProps(ctx);
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
-      ...dekoratorProps,
+      ...decoratorProps,
       language: locale as any,
     }).catch((err) => {
       console.error(err);
