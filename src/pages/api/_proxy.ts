@@ -28,8 +28,8 @@ const proxy = (url: URL = new URL(""), req: NextApiRequest, res: NextApiResponse
             res.end();
             resolve(resp);
           });
-        }
-        
+        };
+
         const proxy: ClientRequest = request(
           url,
           {
