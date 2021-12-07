@@ -5,21 +5,13 @@ import {
   fetchDecoratorReact,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { availableLocales } from "../lib/i18n/available-locales";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<ENV, "localhost">;
-
-const availableLanguages = availableLocales.map((l) => ({
-  locale: l,
-  url: "https://www.nav.no/dagpenger/" + l,
-  handleInApp: true,
-}));
 
 const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
   simple: true,
   context: "privatperson",
-  availableLanguages,
   enforceLogin: process.env.NODE_ENV === "production",
   redirectToApp: true,
   level: "Level4",
