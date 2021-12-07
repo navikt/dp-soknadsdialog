@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+}
+
+.faktum {
+}
+
+.timeline {
+  flex: 1 0 350px;
+  padding: 25px;
+}
