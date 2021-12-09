@@ -1,4 +1,4 @@
-@import "node_modules/@navikt/ds-css/dist/index.css";
+@import "~@navikt/ds-css/dist/index.css";
 
 :root {
   /* // Fiks for at design i appen skal forbli proporsjonalt mens vi migrerer til nye @navikt/ds-react fra designsystemet https://navikt.github.io/Designsystemet/?path=/story/ds-react-typography-intro--page */

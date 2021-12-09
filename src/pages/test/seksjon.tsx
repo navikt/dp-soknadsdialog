@@ -16,7 +16,7 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<ISeksjon>> 
     return { notFound: true };
   }
 
-  const sanitySeksjon = await sanityClient.fetch(fetchSeksjonById, {
+  const sanitySeksjon = await sanityClient.fetch<ISeksjon>(fetchSeksjonById, {
     id: apiSeksjon.id,
   });
 
