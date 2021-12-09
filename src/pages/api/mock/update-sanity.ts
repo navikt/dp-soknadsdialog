@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ApiAnswer, ApiFaktum, ApiSeksjon, ApiSubFaktum } from "../../../../__mocks__/mock-data";
+import { ApiAnswer, ApiFaktum, ApiSeksjon, ApiSubFaktum } from "./mock-data";
 import { sanityClient } from "../../../../sanity-client";
 import {
   Answer,

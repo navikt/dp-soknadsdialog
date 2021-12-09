@@ -1,4 +1,4 @@
-import { ApiFaktumType } from "../../__mocks__/mock-data";
+import { ApiFaktumType } from "../pages/api/mock/mock-data";
 
 export interface SanityBase {
   _id: string;

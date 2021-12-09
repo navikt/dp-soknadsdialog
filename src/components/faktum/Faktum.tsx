@@ -1,6 +1,6 @@
 import React from "react";
 import { TextKeyValuePair } from "../../sanity/types";
-import { ApiFaktumType } from "../../../__mocks__/mock-data";
+import { ApiFaktumType } from "../../pages/api/mock/mock-data";
 import styles from "./Faktum.module.css";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumMulti } from "./FaktumMulti";
