@@ -1,4 +1,4 @@
-import { createSlice, createAction, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { Quiz } from "../../models/quiz";
 
@@ -16,9 +16,7 @@ export const seksjonerSlice = createSlice({
   initialState,
   reducers: {
     hent: (state) => { },
-    hentFullført: (state) => {
-      state.seksjoner = [null, null]
-    },
+    hentFullført: (state) => {},
     hentFeilet: (state) => { }
   }
 });
