@@ -1,7 +1,20 @@
-import { ApiAnswer, ApiFaktum, ApiSeksjon, ApiSubFaktum } from "../pages/api/mock/mock-data";
-import { Answer, Faktum, SanityRef, Seksjon, SubFaktum, TextKeyValuePair } from "./types";
+import {
+  MockDataAnswer,
+  MockDataFaktum,
+  MockDataSeksjon,
+  MockDataSubFaktum,
+} from "../pages/api/mock/mock-data";
+import {
+  SanityAnswer,
+  SanityFaktum,
+  SanityRef,
+  SanitySeksjon,
+  SanitySubFaktum,
+  TextKeyValuePair,
+} from "./types";
+import { nanoid } from "nanoid";
 
-export function createSanityAnswerFromApiAnswer(answer: ApiAnswer): Answer {
+export function createSanityAnswerFromApiAnswer(answer: MockDataAnswer): SanityAnswer {
   return {
     _id: answer.id,
     _type: "answer",
@@ -11,9 +24,9 @@ export function createSanityAnswerFromApiAnswer(answer: ApiAnswer): Answer {
 }
 
 export function createSanitySubFaktumFromApiFaktum(
-  faktum: ApiSubFaktum,
-  sanityAnswer: Answer[]
-): SubFaktum {
+  faktum: MockDataSubFaktum,
+  sanityAnswer: SanityAnswer[]
+): SanitySubFaktum {
   return {
     _id: faktum.id,
     _type: "subFaktum",
@@ -27,7 +40,10 @@ export function createSanitySubFaktumFromApiFaktum(
   };
 }
 
-export function createSanityFaktumFromApiFaktum(faktum: ApiFaktum, sanityAnswer: Answer[]): Faktum {
+export function createSanityFaktumFromApiFaktum(
+  faktum: MockDataFaktum,
+  sanityAnswer: SanityAnswer[]
+): SanityFaktum {
   return {
     _id: faktum.id,
     _type: "faktum",
@@ -41,12 +57,14 @@ export function createSanityFaktumFromApiFaktum(faktum: ApiFaktum, sanityAnswer:
   };
 }
 
-export function createSanitySeksjonFromApiSeksjon(seksjon: ApiSeksjon, faktum: Faktum[]): Seksjon {
+export function createSanitySeksjonFromApiSeksjon(
+  seksjon: MockDataSeksjon,
+  faktum: SanityFaktum[]
+): SanitySeksjon {
   return {
     _id: seksjon.id,
     _type: "seksjon",
     title: createEmptyKeyValuePair(`${seksjon.id}.title`),
-    helpText: createEmptyKeyValuePair(`${seksjon.id}.helpText`),
     description: createEmptyKeyValuePair(`${seksjon.id}.description`),
     faktum: faktum.map((faktum) => createSanityRef(faktum._id)),
   };
@@ -56,6 +74,6 @@ function createEmptyKeyValuePair(key: string): TextKeyValuePair {
   return { key, value: key };
 }
 
-function createSanityRef<T>(id: string, key = id): SanityRef<T> {
-  return { _ref: id, _type: "reference", _key: key };
+function createSanityRef<T>(id: string): SanityRef<T> {
+  return { _ref: id, _type: "reference", _key: nanoid() };
 }

@@ -1,15 +1,15 @@
 import { sanityClient } from "../../../sanity-client";
 import { fetchSeksjonById } from "../../sanity/groq-queries";
 import { GetStaticPropsResult } from "next";
-import { ApiSeksjon } from "../api/mock/mock-data";
+import { MockDataSeksjon } from "../api/mock/mock-data";
 import { ISeksjon, Seksjon } from "../../components/seksjon/Seksjon";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<ISeksjon>> {
-  const apiSeksjon: ApiSeksjon = await fetch(`http://localhost:3000/api/mock/neste-seksjon`).then(
-    (data) => {
-      return data.json();
-    }
-  );
+  const apiSeksjon: MockDataSeksjon = await fetch(
+    `http://localhost:3000/api/mock/neste-seksjon`
+  ).then((data) => {
+    return data.json();
+  });
 
   if (!apiSeksjon) {
     console.error("Fikk ingen seksjon fra API");

@@ -1,4 +1,4 @@
-import { ApiFaktumType } from "../pages/api/mock/mock-data";
+import { Faktumtype } from "../pages/api/types";
 
 export interface SanityBase {
   _id: string;
@@ -13,33 +13,32 @@ export interface SanityLandingPage {
   content: string;
 }
 
-export interface Seksjon {
+export interface SanitySeksjon {
   _id: string;
   _type: "seksjon";
   title: TextKeyValuePair;
   description: TextKeyValuePair;
-  helpText: TextKeyValuePair;
-  faktum: SanityRef<Faktum>[];
+  faktum: SanityRef<SanityFaktum>[];
 }
 
-export interface Faktum {
+export interface SanityFaktum {
   _id: string;
   _type: "faktum";
-  type: ApiFaktumType;
+  type: Faktumtype;
   title: TextKeyValuePair;
   description: TextKeyValuePair;
   helpText: TextKeyValuePair;
-  alertText: TextKeyValuePair;
-  answers: SanityRef<Answer>[];
-  subFaktum: SanityRef<SubFaktum>[];
+  alertText: TextKeyValuePair | ConditionalTextKeyValuePair; // mulig denne trenger conditions. Eks vises hvis du skriver mindre enn x timer i et felt
+  answers: SanityRef<SanityAnswer>[];
+  subFaktum: SanityRef<SanitySubFaktum>[];
 }
 
-export interface SubFaktum extends Omit<Faktum, "subFaktum" | "_type"> {
+export interface SanitySubFaktum extends Omit<SanityFaktum, "subFaktum" | "_type"> {
   _type: "subFaktum";
   requiredAnswerId: string;
 }
 
-export interface Answer {
+export interface SanityAnswer {
   _id: string;
   _type: "answer";
   text: TextKeyValuePair;
@@ -49,6 +48,10 @@ export interface Answer {
 export interface TextKeyValuePair {
   key: string;
   value?: string;
+}
+
+export interface ConditionalTextKeyValuePair extends TextKeyValuePair {
+  regex: string;
 }
 
 // T only used to identify ref type when reading code

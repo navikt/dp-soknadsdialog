@@ -1,13 +1,13 @@
 import React from "react";
 import { TextKeyValuePair } from "../../sanity/types";
-import { ApiFaktumType } from "../../pages/api/mock/mock-data";
 import styles from "./Faktum.module.css";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumMulti } from "./FaktumMulti";
+import { Faktumtype } from "../../pages/api/types";
 
 export interface IFaktum {
   _id: string;
-  type: ApiFaktumType;
+  type: Faktumtype;
   title: TextKeyValuePair;
   description: TextKeyValuePair;
   help: TextKeyValuePair;
@@ -47,9 +47,9 @@ function renderFaktumType(props: IFaktum) {
   switch (props.type) {
     case "boolean":
       return <FaktumBoolean {...props} />;
-    case "multi":
+    case "flervalg":
       return <FaktumMulti {...props} />;
-    case "date":
+    case "localdate":
       return <div>MANGLER FAKTUM TYPE</div>;
   }
 }

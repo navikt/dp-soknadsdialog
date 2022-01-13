@@ -1,14 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ApiAnswer, ApiFaktum, ApiSeksjon, ApiSubFaktum } from "./mock-data";
+import { MockDataSeksjon } from "./mock-data";
 import { sanityClient } from "../../../../sanity-client";
-import {
-  Answer,
-  Faktum,
-  SanityRef,
-  Seksjon,
-  SubFaktum,
-  TextKeyValuePair,
-} from "../../../sanity/types";
 import {
   createSanityAnswerFromApiAnswer,
   createSanityFaktumFromApiFaktum,
@@ -17,11 +9,11 @@ import {
 } from "../../../sanity/utils";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
-  const quizSeksjoner: ApiSeksjon[] = await fetch(`http://localhost:3000/api/mock/seksjoner`).then(
-    (data) => {
-      return data.json();
-    }
-  );
+  const quizSeksjoner: MockDataSeksjon[] = await fetch(
+    `http://localhost:3000/api/mock/seksjoner`
+  ).then((data) => {
+    return data.json();
+  });
 
   let documents: { _id: string; _type: string }[] = [];
   const seksjoner = quizSeksjoner.map((apiSection) => {
@@ -49,6 +41,7 @@ const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const transaction = sanityClient.transaction();
   documents.forEach((doc) => transaction.createIfNotExists(doc));
+  // documents.forEach((doc) => transaction.delete(doc._id));
   const sanityResponse = await transaction.commit();
 
   return res.status(200).json(sanityResponse);
