@@ -1,26 +1,26 @@
-export type ApiFaktumType = "boolean" | "date" | "multi";
+import { Faktumtype } from "../types";
 
-export interface ApiSeksjon {
+export interface MockDataSeksjon {
   id: string;
-  faktum: ApiFaktum[];
+  faktum: MockDataFaktum[];
 }
 
-export interface ApiFaktum {
+export interface MockDataFaktum {
   id: string;
-  type: ApiFaktumType;
-  subFaktum: ApiSubFaktum[];
-  answers: ApiAnswer[];
+  type: Faktumtype;
+  subFaktum: MockDataSubFaktum[];
+  answers: MockDataAnswer[];
 }
 
-export interface ApiSubFaktum extends Omit<ApiFaktum, "subFaktum"> {
+export interface MockDataSubFaktum extends Omit<MockDataFaktum, "subFaktum"> {
   requiredAnswerId: string;
 }
 
-export interface ApiAnswer {
+export interface MockDataAnswer {
   id: string;
 }
 
-export const mockSeksjoner: ApiSeksjon[] = [
+export const mockSeksjoner: MockDataSeksjon[] = [
   {
     id: "reell-arbeidsoker",
     faktum: [
@@ -34,12 +34,16 @@ export const mockSeksjoner: ApiSeksjon[] = [
         subFaktum: [
           {
             id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak",
-            type: "multi",
+            type: "flervalg",
             requiredAnswerId: "reell-arbeidsoker.faktum.hel-deltid.nei",
             answers: [
               { id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.redusert-helse" },
-              { id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.omsorg-barn-under-1" },
-              { id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.omsorg-barn-7-klasse" },
+              {
+                id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.omsorg-barn-under-1",
+              },
+              {
+                id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.omsorg-barn-7-klasse",
+              },
               {
                 id: "reell-arbeidsoker.faktum.hel-deltid.sub-faktum.unntak.omsorg-barn-spesielle-behov",
               },
@@ -76,28 +80,34 @@ export const mockSeksjoner: ApiSeksjon[] = [
           { id: "reell-arbeidsoker.faktum.ethvert-arbeid.nei" },
         ],
       },
-    ],
-  },
-  {
-    id: "arbeidsforhold",
-    faktum: [
       {
-        id: "arbeidsforhold.faktum.dagpenger-dato",
-        type: "date",
+        id: "reell-arbeidsoker.faktum.antall-timer",
+        type: "int",
         subFaktum: [],
-        answers: [{ id: "arbeidsforhold.faktum.dagpenger-dato.dato" }],
-      },
-      {
-        id: "arbeidsforhold.faktum.fast-arbeidstid",
-        type: "multi",
-        subFaktum: [],
-        answers: [
-          { id: "arbeidsforhold.faktum.fast-arbeidstid.ja-fast" },
-          { id: "arbeidsforhold.faktum.fast-arbeidstid.nei-varierende" },
-          { id: "arbeidsforhold.faktum.fast-arbeidstid.kombinasjon" },
-          { id: "arbeidsforhold.faktum.fast-arbeidstid.ingen-passer" },
-        ],
+        answers: [{ id: "reell-arbeidsoker.faktum.antall-timer.antall" }],
       },
     ],
   },
+  // {
+  //   id: "arbeidsforhold",
+  //   faktum: [
+  //     {
+  //       id: "arbeidsforhold.faktum.dagpenger-dato",
+  //       type: "localdate",
+  //       subFaktum: [],
+  //       answers: [{ id: "arbeidsforhold.faktum.dagpenger-dato.dato" }],
+  //     },
+  //     {
+  //       id: "arbeidsforhold.faktum.fast-arbeidstid",
+  //       type: "flervalg",
+  //       subFaktum: [],
+  //       answers: [
+  //         { id: "arbeidsforhold.faktum.fast-arbeidstid.ja-fast" },
+  //         { id: "arbeidsforhold.faktum.fast-arbeidstid.nei-varierende" },
+  //         { id: "arbeidsforhold.faktum.fast-arbeidstid.kombinasjon" },
+  //         { id: "arbeidsforhold.faktum.fast-arbeidstid.ingen-passer" },
+  //       ],
+  //     },
+  //   ],
+  // },
 ];
