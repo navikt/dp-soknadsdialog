@@ -31,6 +31,7 @@ export interface SanityFaktum {
   alertText: TextKeyValuePair | ConditionalTextKeyValuePair; // mulig denne trenger conditions. Eks vises hvis du skriver mindre enn x timer i et felt
   answers: SanityRef<SanityAnswer>[];
   subFaktum: SanityRef<SanitySubFaktum>[];
+  infoText: SanityRef<TextKeyValuePair>
 }
 
 export interface SanitySubFaktum extends Omit<SanityFaktum, "subFaktum" | "_type"> {
@@ -43,6 +44,7 @@ export interface SanityAnswer {
   _type: "answer";
   text: TextKeyValuePair;
   alertText: TextKeyValuePair;
+  helpText: TextKeyValuePair;
 }
 
 export interface TextKeyValuePair {
