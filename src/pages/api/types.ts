@@ -1,6 +1,7 @@
 export type Faktumtype =
   | "boolean" // Type: radio input, Payload: true/false, Trenger vi denne? Kan ikke alle radio være valg (som under)?
-  | "valg" // Type: radio input, Payload: teksten til valget, eller id til valget?
+  | "valg" // Type: radio input, Payload: id til valget
+  | "dropdown" // Type: dropdown, Payload: id til valget
   | "int" // Type: number input, Payload: 1
   | "double" // Type: number input, Payload: 1.0
   | "localdate" // Type: datepicker, Payload: ISO8601(LocalDateTime)
