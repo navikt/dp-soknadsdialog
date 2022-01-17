@@ -1,14 +1,15 @@
 export type Faktumtype =
-  | "boolean" // Radio
-  | "int" // number input?
-  | "double" // number input?
-  | "text" // Mangler i quiz. Fritekst. Bør det skilles på kort og lang tekst-input?
-  | "inntekt" // number input? Skal denne til frontened? hentes fra skattetaten?
-  | "localdate" // datepicker
-  | "dokument" // vedlegg? Filopplaster?
-  | "generator" // ?
-  | "valg" // Radio
-  | "flervalg"; // Checkbox
+  | "boolean" // Type: radio input, Payload: true/false, Trenger vi denne? Kan ikke alle radio være valg (som under)?
+  | "valg" // Type: radio input, Payload: teksten til valget, eller id til valget?
+  | "int" // Type: number input, Payload: 1
+  | "double" // Type: number input, Payload: 1.0
+  | "localdate" // Type: datepicker, Payload: ISO8601(LocalDateTime)
+  | "dokument" // Type: filopplaster?, Payload: { "urn": "path til fil", "opplastningsTidspunkt": "ISO8601(LocalDateTime)"}
+  | "flervalg" // Type: checkbox input, Payload: [teksten til valgene, eller id til valgene?]
+  | "tekst" // Type: tekst input?, Payload: "fritekst"
+  | "periode" // Type: datepicker, Payload: {"fom": "ISO8601(LocalDateTime)", "tom": "ISO8601(LocalDateTime)"},
+  | "numberOptional" // Type: number input og checkbox under
+  | "generator"; // ?
 
 export interface QuizFaktum {
   id: string;
