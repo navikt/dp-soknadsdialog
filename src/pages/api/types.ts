@@ -5,10 +5,10 @@ export type Faktumtype =
   | "int" // Type: number input, Payload: 1
   | "double" // Type: number input, Payload: 1.0
   | "localdate" // Type: datepicker, Payload: ISO8601(LocalDateTime)
+  | "periode" // Type: datepicker, Payload: {"fom": "ISO8601(LocalDateTime)", "tom": "ISO8601(LocalDateTime)"},
   | "dokument" // Type: filopplaster?, Payload: { "urn": "path til fil", "opplastningsTidspunkt": "ISO8601(LocalDateTime)"}
   | "flervalg" // Type: checkbox input, Payload: [teksten til valgene, eller id til valgene?]
   | "tekst" // Type: tekst input?, Payload: "fritekst"
-  | "periode" // Type: datepicker, Payload: {"fom": "ISO8601(LocalDateTime)", "tom": "ISO8601(LocalDateTime)"},
   | "numberOptional" // Type: number input og checkbox under
   | "generator"; // ?
 

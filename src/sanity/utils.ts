@@ -1,5 +1,5 @@
 import {
-  MockDataAnswer,
+  MockDataAnswerOption,
   MockDataFaktum,
   MockDataSeksjon,
   MockDataSubFaktum,
@@ -14,7 +14,7 @@ import {
 } from "./types";
 import { nanoid } from "nanoid";
 
-export function createSanityAnswerFromApiAnswer(answer: MockDataAnswer): SanityAnswer {
+export function createSanityAnswerFromApiAnswer(answer: MockDataAnswerOption): SanityAnswer {
   return {
     _id: answer.id,
     _type: "answer",

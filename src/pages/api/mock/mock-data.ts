@@ -4,26 +4,41 @@ export interface MockDataSeksjon {
   id: string;
   faktum: MockDataFaktum[];
 }
-export type MockDataFaktum = MockDataGeneratorFaktum | MockDataValgFaktum;
+
+export type MockDataFaktum = MockDataBaseFaktum | MockDataGeneratorFaktum | MockDataValgFaktum;
 
 export interface MockDataBaseFaktum {
   id: string;
+  type: Faktumtype;
+}
+
+export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
+  type: "generator";
+  faktum: MockDataFaktum[];
 }
 
 export interface MockDataValgFaktum extends MockDataBaseFaktum {
-  type: "boolean" | "valg" | "flervalg";
+  type: "boolean" | "valg" | "flervalg" | "dropdown";
   subFaktum: MockDataSubFaktum[];
-  answers: MockDataAnswer[];
+  answerOptions: MockDataAnswerOption[];
 }
 
-export interface MockDataSubFaktum extends MockDataFaktum {
+export interface MockDataAnswerOption {
+  id: string;
+  documentRequiredId?: string[];
+}
+
+export type MockDataSubFaktum = MockDataFaktum & {
   requiredAnswerId: string[];
-}
+};
 
-export interface MockDataAnswer {
+export interface MockDataDokumentFaktum {
   id: string;
 }
-export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {}
+
+const documentFakta: MockDataDokumentFaktum[] = [
+  { id: "dokument-faktum.arbeidsforhold-timelister-rotasjon" },
+];
 
 export const mockSeksjoner: MockDataSeksjon[] = [
   {
@@ -32,7 +47,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
       {
         id: "faktum.oppbrukt-dagpengeperiode",
         type: "boolean",
-        answers: [
+        answerOptions: [
           { id: "faktum.oppbrukt-dagpengeperiode.svar.ja" },
           { id: "faktum.oppbrukt-dagpengeperiode.svar.nei" },
         ],
@@ -41,7 +56,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
             id: "faktum.onsker-fortsette-avsluttet-periode",
             type: "boolean",
             requiredAnswerId: ["faktum.oppbrukt-dagpengeperiode.svar.ja"],
-            answers: [
+            answerOptions: [
               { id: "faktum.onsker-fortsette-avsluttet-periode.svar.ja" },
               { id: "faktum.onsker-fortsette-avsluttet-periode.svar.nei" },
             ],
@@ -57,13 +72,13 @@ export const mockSeksjoner: MockDataSeksjon[] = [
       {
         id: "faktum.hel-deltid",
         type: "boolean",
-        answers: [{ id: "faktum.hel-deltid.svar.ja" }, { id: "faktum.hel-deltid.svar.nei" }],
+        answerOptions: [{ id: "faktum.hel-deltid.svar.ja" }, { id: "faktum.hel-deltid.svar.nei" }],
         subFaktum: [
           {
             id: "faktum.kun-deltid-aarsak",
             type: "flervalg",
             requiredAnswerId: ["faktum.hel-deltid.svar.nei"],
-            answers: [
+            answerOptions: [
               { id: "faktum.kun-deltid-aarsak.svar.redusert-helse" },
               {
                 id: "faktum.kun-deltid-aarsak.svar.omsorg-baby",
@@ -83,21 +98,19 @@ export const mockSeksjoner: MockDataSeksjon[] = [
             id: "faktum.kun-deltid-aarsak-antall-timer",
             type: "int",
             requiredAnswerId: ["faktum.hel-deltid.svar.nei"],
-            answers: [],
-            subFaktum: [],
           },
         ],
       },
       {
         id: "faktum.hele-norge",
         type: "boolean",
-        answers: [{ id: "faktum.hele-norge.svar.ja" }, { id: "faktum.hele-norge.svar.nei" }],
+        answerOptions: [{ id: "faktum.hele-norge.svar.ja" }, { id: "faktum.hele-norge.svar.nei" }],
         subFaktum: [
           {
             id: "faktum.ikke-hele-norge",
             type: "flervalg",
             requiredAnswerId: ["faktum.hele-norge.svar.nei"],
-            answers: [
+            answerOptions: [
               { id: "faktum.ikke-hele-norge.svar.redusert-helse" },
               {
                 id: "faktum.ikke-hele-norge.svar.omsorg-baby",
@@ -118,7 +131,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
       {
         id: "faktum.alle-typer-arbeid",
         type: "boolean",
-        answers: [
+        answerOptions: [
           { id: "faktum.alle-typer-arbeid.svar.ja" },
           { id: "faktum.alle-typer-arbeid.svar.nei" },
         ],
@@ -127,15 +140,13 @@ export const mockSeksjoner: MockDataSeksjon[] = [
             id: "faktum.ikke-denne-type-arbeid",
             type: "tekst",
             requiredAnswerId: ["faktum.alle-typer-arbeid.svar.nei"],
-            answers: [],
-            subFaktum: [],
           },
         ],
       },
       {
         id: "faktum.ethvert-arbeid",
         type: "boolean",
-        answers: [
+        answerOptions: [
           { id: "faktum.ethvert-arbeid.svar.ja" },
           { id: "faktum.ethvert-arbeid.svar.nei" },
         ],
@@ -149,13 +160,11 @@ export const mockSeksjoner: MockDataSeksjon[] = [
       {
         id: "faktum.dagpenger-soknadsdato",
         type: "localdate",
-        answers: [],
-        subFaktum: [],
       },
       {
         id: "faktum.fast-arbeidstid",
         type: "valg",
-        answers: [
+        answerOptions: [
           { id: "faktum.fast-arbeidstid.svar.ja-fast" },
           { id: "faktum.fast-arbeidstid.svar.nei-varierende" },
           { id: "faktum.fast-arbeidstid.svar.kombinasjon" },
@@ -166,26 +175,21 @@ export const mockSeksjoner: MockDataSeksjon[] = [
       {
         id: "faktum.arbeidsforhold",
         type: "generator",
-        subFaktum: [
+        faktum: [
           {
             id: "faktum.navn-bedrift",
             type: "tekst",
-            requiredAnswerId: [""],
-            answers: [],
-            subFaktum: [],
           },
           {
             id: "faktum.arbeidsforhold-land",
             type: "dropdown",
-            requiredAnswerId: [""],
-            answers: [], // liste over alle land? generere maskinelt? quiz?
+            answerOptions: [], // liste over alle land? generere maskinelt? quiz?
             subFaktum: [],
           },
           {
             id: "faktum.arbeidsforhold-aarsak",
             type: "valg",
-            requiredAnswerId: [""],
-            answers: [
+            answerOptions: [
               { id: "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver" },
               { id: "faktum.arbeidsforhold-aarsak.svar.permittert" },
               { id: "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt" },
@@ -207,37 +211,141 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                   "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
                   "faktum.arbeidsforhold-aarsak.svar.avskjediget",
                 ],
-                answers: [],
+              },
+              {
+                id: "faktum.arbeidsforhold-ekstra-opplysninger-laerlig",
+                type: "flervalg",
+                requiredAnswerId: [
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.permittert",
+                ],
+                answerOptions: [{ id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" }],
                 subFaktum: [],
               },
               {
-                id: "faktum.arbeidsforhold-ekstra-opplysninger",
+                id: "faktum.arbeidsforhold-ekstra-opplysninger-fiskeindustri",
                 type: "flervalg",
-                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
-                answers: [
-                  { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" },
-                  { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+                answerOptions: [
+                  { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.fiskeindustri" },
                 ],
                 subFaktum: [],
               },
               {
+                id: "faktum.arbeidsforhold-ekstra-opplysninger-flere-arbeidsforhold",
+                type: "flervalg",
+                requiredAnswerId: [
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.permittert",
+                ],
+                answerOptions: [
+                  { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
+                ],
+                subFaktum: [
+                  {
+                    id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken-alle-forhold",
+                    type: "double",
+                    requiredAnswerId: [
+                      "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold",
+                    ],
+                  },
+                ],
+              },
+              {
                 id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken",
                 type: "double",
+                requiredAnswerId: [
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.permittert",
+                ],
+              },
+              {
+                id: "faktum.aarsak-til-oppsigelse-fra-arbeidsgiver",
+                type: "tekst",
                 requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
-                answers: [],
+              },
+              {
+                id: "faktum.tilbud-annen-stilling-annet-sted",
+                type: "boolean",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
+                answerOptions: [
+                  { id: "faktum.tilbud-annen-stilling-annet-sted.svar.ja" },
+                  { id: "faktum.tilbud-annen-stilling-annet-sted.svar.nei" },
+                ],
                 subFaktum: [],
               },
               {
-                id: "faktum.arbeidsforhold-arbeidstid-vet-ikke",
-                type: "flervalg",
+                id: "faktum.arbeids-skift-turnus-rotasjon",
+                type: "valg",
                 requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
-                answers: [{ id: "faktum.arbeidsforhold-arbeidstid-vet-ikke.svar.beregn-for-meg" }],
-                subFaktum: [],
+                answerOptions: [
+                  { id: "faktum.arbeids-skift-turnus-rotasjon.svar.nei" },
+                  { id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-skift-turnus" },
+                  {
+                    id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon",
+                    documentRequiredId: ["dokument-faktum.arbeidsforhold-timelister-rotasjon"],
+                  },
+                ],
+                subFaktum: [
+                  {
+                    id: "faktum.arbeidsforhold-rotasjon-antall-arbeidsdager",
+                    type: "int",
+                    requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  },
+                  {
+                    id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
+                    type: "int",
+                    requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  },
+                  {
+                    id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
+                    type: "int",
+                    requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  },
+                ],
+              },
+              {
+                id: "faktum.midlertidig-arbeidsforhold-med-sluttdato",
+                type: "valg",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+                answerOptions: [
+                  { id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.nei-fast-arbeid" },
+                  { id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja" },
+                  {
+                    id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.vet-ikke",
+                  },
+                ],
+                subFaktum: [
+                  {
+                    id: "faktum.midlertidig-arbeidsforhold-sluttdato",
+                    type: "localdate",
+                    requiredAnswerId: ["faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja"],
+                  },
+                ],
+              },
+              {
+                id: "faktum.arbeidsforhold-permitert",
+                type: "generator",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+                faktum: [
+                  {
+                    id: "faktum.arbeidsforhold-permitteringsperiode",
+                    type: "periode",
+                  },
+                  {
+                    id: "faktum.arbeidsforhold-permitteringgrad",
+                    type: "int",
+                  },
+                ],
+              },
+              {
+                id: "faktum.arbeidsforhold-lønnsplinkt-arbeidsgiver",
+                type: "periode",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
               },
             ],
           },
         ],
-        answers: [],
       },
     ],
   },
