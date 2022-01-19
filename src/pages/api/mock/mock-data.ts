@@ -222,6 +222,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                   "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
                   "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.avskjediget",
                 ],
                 answerOptions: [{ id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" }],
                 subFaktum: [],
@@ -245,6 +246,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                   "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
                   "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.avskjediget",
                 ],
                 answerOptions: [
                   { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
@@ -269,13 +271,20 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                   "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
                   "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.avskjediget",
+                  "faktum.arbeidsforhold-aarsak.svar.ikke-endret",
                 ],
-              }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet
+              }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet ++ situasjonen ikke-endret bør ikke trigge spørsmål om arbeidstid
               {
-                id: "faktum.aarsak-til-oppsigelse-fra-arbeidsgiver",
+                id: "faktum.arbeidsforhold-aarsak-til-oppsigelse-fra-arbeidsgiver",
                 type: "tekst",
                 requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
               },
+              {
+                id: "faktum.arbeidsforhold-aarsak-til-avskjedigelse-fra-arbeidsgiver",
+                type: "tekst",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.avskjediget"],
+              }, // Duplikat spørsmål som over? Bør det være et generisk spørsmål? Er det to forskjellige fakta/spørsmål? Årsak endring i arbeidsforhold? for navsk?
               {
                 id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver",
                 type: "boolean",
@@ -393,13 +402,16 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                 requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
                 answerOptions: [
                   {
-                    id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
+                    id:
+                      "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                   },
                   {
-                    id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
+                    id:
+                      "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
                   },
                   {
-                    id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
+                    id:
+                      "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
                   },
                 ],
                 subFaktum: [
@@ -497,6 +509,11 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                     requiredAnswerId: ["faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja"],
                   },
                 ],
+              },
+              {
+                id: "faktum.arbeidsforhold-tillegsinformasjon",
+                type: "tekst",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.ikke-endret"],
               },
             ],
           },
