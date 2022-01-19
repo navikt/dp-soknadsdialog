@@ -211,13 +211,15 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                   "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
                   "faktum.arbeidsforhold-aarsak.svar.avskjediget",
                 ],
-              },
+              }, // obs, beskrivelse på dette faktumet må passe samtlige arbeidsforhold-årsaker. trenger derfor gode hjelpetekster under svar på arbeidsforhold-aarsak
               {
                 id: "faktum.arbeidsforhold-ekstra-opplysninger-laerlig",
                 type: "flervalg",
                 requiredAnswerId: [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                   "faktum.arbeidsforhold-aarsak.svar.permittert",
+                  "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                 ],
                 answerOptions: [{ id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" }],
                 subFaktum: [],
@@ -237,6 +239,8 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                 requiredAnswerId: [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                   "faktum.arbeidsforhold-aarsak.svar.permittert",
+                  "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                 ],
                 answerOptions: [
                   { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
@@ -248,7 +252,7 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                     requiredAnswerId: [
                       "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold",
                     ],
-                  },
+                  }, // denne perioden trenger et vetikke faktum, som disabler spørsmålet
                 ],
               },
               {
@@ -257,8 +261,10 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                 requiredAnswerId: [
                   "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                   "faktum.arbeidsforhold-aarsak.svar.permittert",
+                  "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
                 ],
-              },
+              }, // denne perioden trenger et vetikke faktum, som disabler spørsmålet
               {
                 id: "faktum.aarsak-til-oppsigelse-fra-arbeidsgiver",
                 type: "tekst",
@@ -267,7 +273,10 @@ export const mockSeksjoner: MockDataSeksjon[] = [
               {
                 id: "faktum.tilbud-annen-stilling-annet-sted",
                 type: "boolean",
-                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
+                requiredAnswerId: [
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                ],
                 answerOptions: [
                   { id: "faktum.tilbud-annen-stilling-annet-sted.svar.ja" },
                   { id: "faktum.tilbud-annen-stilling-annet-sted.svar.nei" },
@@ -277,7 +286,12 @@ export const mockSeksjoner: MockDataSeksjon[] = [
               {
                 id: "faktum.arbeids-skift-turnus-rotasjon",
                 type: "valg",
-                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
+                requiredAnswerId: [
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
+                  "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                  "faktum.arbeidsforhold-aarsak.svar.permittert",
+                  "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
+                ],
                 answerOptions: [
                   { id: "faktum.arbeids-skift-turnus-rotasjon.svar.nei" },
                   { id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-skift-turnus" },
@@ -342,6 +356,11 @@ export const mockSeksjoner: MockDataSeksjon[] = [
                 id: "faktum.arbeidsforhold-lønnsplinkt-arbeidsgiver",
                 type: "periode",
                 requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              }, // denne perioden trenger et vetikke faktum, som disabler spørsmålet
+              {
+                id: "faktum.aarsak-til-sagt-opp-selv",
+                type: "tekst",
+                requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv"],
               },
             ],
           },
