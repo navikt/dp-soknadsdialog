@@ -6,6 +6,9 @@ import { eosArbeidsforhold } from "./eos-arbeidsforhold";
 import { bostedsland } from "./bostedsland";
 import { egenNaering } from "./egen-naering";
 import { verneplikt } from "./verneplikt";
+import { tilleggsopplysninger } from "./tilleggsopplysninger";
+import { barnetillegg } from "./barnetillegg";
+import { andreYtelser } from "./andre-ytelser";
 
 export interface MockDataSeksjon {
   id: string;
@@ -55,4 +58,8 @@ export const mockSeksjoner: MockDataSeksjon[] = [
   bostedsland,
   egenNaering,
   verneplikt,
+  andreYtelser,
+  // personalia mangler her, men burde kanskje ikke være i en svarseksjon siden man ikke kan endre noe av informasjonen?
+  barnetillegg,
+  tilleggsopplysninger,
 ];
