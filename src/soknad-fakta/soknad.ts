@@ -4,6 +4,8 @@ import { reellArbeidssoker } from "./reell-arbeidssoker";
 import { arbeidsforhold } from "./arbeidsforhold";
 import { eosArbeidsforhold } from "./eos-arbeidsforhold";
 import { bostedsland } from "./bostedsland";
+import { egenNaering } from "./egen-naering";
+import { verneplikt } from "./verneplikt";
 
 export interface MockDataSeksjon {
   id: string;
@@ -51,4 +53,6 @@ export const mockSeksjoner: MockDataSeksjon[] = [
   arbeidsforhold,
   eosArbeidsforhold, // denne bør fjernes og bakes inn i arbeidsforhold?? OBS IKKE KODET FERDIG PGA AVVENT
   bostedsland,
+  egenNaering,
+  verneplikt,
 ];
