@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MockDataSeksjon } from "./mock-data";
 import { sanityClient } from "../../../../sanity-client";
 import {
   createSanityAnswerFromApiAnswer,

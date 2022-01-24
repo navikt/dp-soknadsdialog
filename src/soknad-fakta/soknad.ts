@@ -24,6 +24,7 @@ export interface MockDataBaseFaktum {
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
   type: "generator";
+  listType: "arbeidsforhold" | "barn" | "default";
   faktum: MockDataFaktum[];
 }
 
