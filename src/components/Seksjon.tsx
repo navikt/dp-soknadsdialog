@@ -3,17 +3,16 @@ import { RadioButtonInput } from "./inputs/RadioButtonInput";
 import { saveFaktum } from "../services/api";
 import { TextField } from "@navikt/ds-react";
 
-export function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: string; seksjon: Quiz.Seksjon }) {
+export function Seksjon({ søknadsUuid, fakta }: { søknadsUuid: string; fakta: Quiz.Fakta }) {
   return (
     <>
-      Seksjonsnavn: {seksjon.seksjon_navn}
-      {seksjon &&
-        seksjon.fakta
+      {fakta &&
+        fakta.fakta
           .filter((f) => f.type === Quiz.DataType.BOOLEAN)
-          .map(({ id, navn, type }) => (
+          .map(({ id, beskrivendeId, type }) => (
             <RadioButtonInput
               key={id}
-              legend={navn}
+              legend={beskrivendeId}
               options={[
                 { text: "Ja", value: "true" },
                 { text: "Nei", value: "false" },
@@ -21,13 +20,13 @@ export function Seksjon({ søknadsUuid, seksjon }: { søknadsUuid: string; seksj
               onSelection={(verdi) => saveFaktum(søknadsUuid, id, type, verdi)}
             />
           ))}
-      {seksjon &&
-        seksjon.fakta
+      {fakta &&
+        fakta.fakta
           .filter((f) => f.type !== Quiz.DataType.BOOLEAN)
-          .map(({ id, navn }) => (
+          .map(({ id, beskrivendeId }) => (
             <TextField
               key={id}
-              label={`${navn} (ikke støttet :-( )`}
+              label={`${beskrivendeId} (ikke støttet :-( )`}
               type={"text"}
               data-testid={`input-${id}`}
             />
