@@ -55,7 +55,7 @@ export const reellArbeidssoker: MockDataSeksjon = {
             {
               id: "faktum.ikke-hele-norge.svar.omsorg-barn-spesielle-behov",
             },
-            { id: "faktum.ikke-hele-norge.svar.utenfor-naerområdet" },
+            { id: "faktum.ikke-hele-norge.svar.utenfor-naeromraadet" },
             { id: "faktum.ikke-hele-norge.svar.annen-situasjon" },
           ],
           subFaktum: [],

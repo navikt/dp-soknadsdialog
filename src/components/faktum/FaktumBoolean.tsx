@@ -16,9 +16,9 @@ export function FaktumBoolean(props: IFaktum) {
   return (
     <div>
       <RadioGroup legend={props.title} onChange={onChange}>
-        {props.answers.map((answer) => (
+        {props.answerOptions?.map((answer) => (
           <Radio key={answer._id} value={answer._id}>
-            {answer.text}
+            {answer.text ? answer.text : answer._id}
           </Radio>
         ))}
       </RadioGroup>
@@ -26,7 +26,9 @@ export function FaktumBoolean(props: IFaktum) {
       {props.subFaktum && props.subFaktum.length > 0 && (
         <div>
           {props.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerId === answer) {
+            console.log("subFaktum:", faktum);
+            console.log("answer:", answer);
+            if (faktum.requiredAnswerIds.find((a) => a._id === answer)) {
               return <Faktum key={faktum._id} {...faktum} />;
             }
           })}

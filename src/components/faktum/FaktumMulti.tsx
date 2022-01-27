@@ -16,9 +16,9 @@ export function FaktumMulti(props: IFaktum) {
   return (
     <div>
       <CheckboxGroup legend={props.title} onChange={onChange}>
-        {props.answers.map((answer) => (
+        {props.answerOptions?.map((answer) => (
           <Checkbox key={answer._id} value={answer._id}>
-            {answer.text}
+            {answer.text ? answer.text : answer._id}
           </Checkbox>
         ))}
       </CheckboxGroup>

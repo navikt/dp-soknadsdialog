@@ -5,6 +5,7 @@ import {
   MockDataGeneratorFaktum,
   MockDataSeksjon,
   MockDataValgFaktum,
+  mockSeksjoner,
 } from "../../../soknad-fakta/soknad";
 import {
   createSanityAnswerFromApiAnswerOption,
@@ -19,7 +20,7 @@ import { isGeneratorFaktum, isValgFaktum } from "../../../types/types";
 import { SanityBaseDocument } from "../../../sanity/types";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
-  const quizSeksjoner: MockDataSeksjon[] = [dummySeksjon];
+  const quizSeksjoner: MockDataSeksjon[] = mockSeksjoner;
 
   let documents: SanityBaseDocument[] = [];
   const seksjoner = quizSeksjoner.map((apiSection) => {

@@ -11,12 +11,13 @@ export interface IFaktum {
   description: string;
   help: string;
   alert: string;
-  answers: IAnswer[];
+  answerOptions?: IAnswer[];
   subFaktum?: ISubFaktum[];
+  faktum?: IFaktum[];
 }
 
-export interface ISubFaktum extends Omit<IFaktum, "subFaktum"> {
-  requiredAnswerId: string;
+export interface ISubFaktum extends IFaktum {
+  requiredAnswerIds: { _id: string }[];
 }
 
 export interface IAnswer {
@@ -33,10 +34,10 @@ export interface FaktumAnswer {
 export function Faktum(props: IFaktum) {
   return (
     <div className={styles.container}>
-      {/*<h3>{props.title?.value}</h3>*/}
-      {props.description && <p>{props.description}</p>}
-      {props.help && <p>{props.help}</p>}
-      {props.alert && <p>{props.alert}</p>}
+      {props.title ? <h3>{props.title}</h3> : <h3>{props._id}.title</h3>}
+      {props.description ? <p>{props.description}</p> : <p>{props._id}.description</p>}
+      {props.help ? <p>{props.help}</p> : <p>{props._id}.help</p>}
+      {props.alert ? <p>{props.alert}</p> : <p>{props._id}.alert</p>}
       {renderFaktumType(props)}
     </div>
   );
@@ -46,9 +47,11 @@ function renderFaktumType(props: IFaktum) {
   switch (props.type) {
     case "boolean":
       return <FaktumBoolean {...props} />;
+    case "valg":
+      return <FaktumBoolean {...props} />;
     case "flervalg":
       return <FaktumMulti {...props} />;
-    case "localdate":
-      return <div>MANGLER FAKTUM TYPE</div>;
+    default:
+      return <div>MANGLER FAKTUM TYPE: {props.type}</div>;
   }
 }
