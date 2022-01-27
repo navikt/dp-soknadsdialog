@@ -23,7 +23,7 @@ export const dummySeksjon: MockDataSeksjon = {
         {
           id: "faktum.dummy-subfaktum-tekst",
           type: "tekst",
-          requiredAnswerId: ["faktum.dummy-valg.svar.ja"],
+          requiredAnswerIds: ["faktum.dummy-valg.svar.ja"],
         },
       ],
     },
@@ -89,7 +89,7 @@ export const dummySeksjon: MockDataSeksjon = {
             {
               id: "faktum.generator-dummy-subfaktum-tekst",
               type: "tekst",
-              requiredAnswerId: ["faktum.generator-dummy-valg.svar.ja"],
+              requiredAnswerIds: ["faktum.generator-dummy-valg.svar.ja"],
             },
           ],
         },

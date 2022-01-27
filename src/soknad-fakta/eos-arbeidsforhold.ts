@@ -15,7 +15,7 @@ export const eosArbeidsforhold: MockDataSeksjon = {
           id: "faktum.eos-arbeidsforhold",
           type: "generator",
           faktum: [],
-          requiredAnswerId: ["faktum.eos-arbeid-siste-36-mnd.svar.ja"],
+          requiredAnswerIds: ["faktum.eos-arbeid-siste-36-mnd.svar.ja"],
         },
       ],
     },

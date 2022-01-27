@@ -49,7 +49,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-varighet",
               type: "periode",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
@@ -61,7 +61,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-laerlig",
               type: "flervalg",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
@@ -76,7 +76,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-fiskeindustri",
               type: "flervalg",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
               answerOptions: [
                 { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.fiskeindustri" },
               ],
@@ -85,7 +85,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-flere-arbeidsforhold",
               type: "flervalg",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
@@ -101,7 +101,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken-alle-forhold",
                   type: "double",
-                  requiredAnswerId: [
+                  requiredAnswerIds: [
                     "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold",
                   ],
                 }, // denne perioden trenger et vetikke faktum, som disabler spørsmålet
@@ -110,7 +110,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken",
               type: "double",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
@@ -124,17 +124,17 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-aarsak-til-oppsigelse-fra-arbeidsgiver",
               type: "tekst",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
             },
             {
               id: "faktum.arbeidsforhold-aarsak-til-avskjedigelse-fra-arbeidsgiver",
               type: "tekst",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.avskjediget"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.avskjediget"],
             }, // Duplikat spørsmål som over? Bør det være et generisk spørsmål? Er det to forskjellige fakta/spørsmål? Årsak endring i arbeidsforhold? for navsk?
             {
               id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver",
               type: "boolean",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
               ],
@@ -147,7 +147,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.tilbud-forsette-samme-arbeidsgiver",
               type: "boolean",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid"],
               answerOptions: [
                 { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.ja" },
                 { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.nei" },
@@ -157,7 +157,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeids-skift-turnus-rotasjon",
               type: "valg",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
@@ -176,24 +176,24 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum.arbeidsforhold-rotasjon-antall-arbeidsdager",
                   type: "int",
-                  requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
                 },
                 {
                   id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
                   type: "int",
-                  requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
                 },
                 {
                   id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
                   type: "int",
-                  requiredAnswerId: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
+                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
                 },
               ],
             },
             {
               id: "faktum.midlertidig-arbeidsforhold-med-sluttdato",
               type: "valg",
-              requiredAnswerId: [
+              requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
                 "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
               ],
@@ -208,14 +208,14 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum.midlertidig-arbeidsforhold-sluttdato",
                   type: "localdate",
-                  requiredAnswerId: ["faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja"],
+                  requiredAnswerIds: ["faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja"],
                 },
               ],
             },
             {
               id: "faktum.arbeidsforhold-permitert",
               type: "generator",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
               faktum: [
                 {
                   id: "faktum.arbeidsforhold-permitteringsperiode",
@@ -230,41 +230,38 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-lonnsplinkt-arbeidsgiver",
               type: "periode",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
             }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet
             {
               id: "faktum.aarsak-til-sagt-opp-selv",
               type: "tekst",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv"],
             },
             {
               id: "faktum.arbeidsforhold-arbeidsgiver-konkurs-navn-bostyrer",
               type: "tekst",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
             },
             {
               id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler",
               type: "valg",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
               answerOptions: [
                 {
-                  id:
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
+                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                 },
                 {
-                  id:
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
+                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
                 },
                 {
-                  id:
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
+                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
                 },
               ],
               subFaktum: [
                 {
                   id: "faktum.arbeidsforhold-godta-nav-trekk-direkte-lonnsgaranti",
                   type: "boolean",
-                  requiredAnswerId: [
+                  requiredAnswerIds: [
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
                   ],
@@ -280,7 +277,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum.arbeidsforhold-sok-lonnsgarantimidler",
                   type: "valg",
-                  requiredAnswerId: [
+                  requiredAnswerIds: [
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
                   ],
@@ -299,7 +296,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                     {
                       id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav",
                       type: "valg",
-                      requiredAnswerId: [
+                      requiredAnswerIds: [
                         "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.ja-allerede-sendt",
                       ],
                       answerOptions: [
@@ -320,7 +317,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum.arbeidsforhold-godta-trekk-direkte-konkursbo",
                   type: "boolean",
-                  requiredAnswerId: [
+                  requiredAnswerIds: [
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
                   ],
@@ -339,7 +336,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs",
               type: "boolean",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
               answerOptions: [
                 {
                   id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja",
@@ -352,14 +349,14 @@ export const arbeidsforhold: MockDataSeksjon = {
                 {
                   id: "faktum-arbeidsforhold-konkurs-siste-dag-lonn",
                   type: "localdate",
-                  requiredAnswerId: ["faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja"],
+                  requiredAnswerIds: ["faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja"],
                 },
               ],
             },
             {
               id: "faktum.arbeidsforhold-tillegsinformasjon",
               type: "tekst",
-              requiredAnswerId: ["faktum.arbeidsforhold-aarsak.svar.ikke-endret"],
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.ikke-endret"],
             },
           ],
         },

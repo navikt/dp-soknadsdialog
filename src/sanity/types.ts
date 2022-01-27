@@ -1,11 +1,13 @@
-import { Faktumtype } from "../pages/api/types";
+import {
+  BaseFaktumType,
+  GeneratorFaktumType,
+  GeneratorListType,
+  ValgFaktumType,
+} from "../types/types";
 
-export interface SanityBase {
+export interface SanityBaseDocument {
   _id: string;
-  _rev: string;
   _type: string;
-  _createdAt: string;
-  _updatedAt: string;
 }
 
 export interface SanityLandingPage {
@@ -16,49 +18,49 @@ export interface SanityLandingPage {
 export interface SanitySeksjon {
   _id: string;
   _type: "seksjon";
-  title: TextKeyValuePair;
-  description: TextKeyValuePair;
+  key: string;
   faktum: SanityRef<SanityFaktum>[];
 }
 
-export interface SanityFaktum {
+export type SanityFaktum = SanityBaseFaktum | SanityGeneratorFaktum | SanityValgFaktum;
+
+export interface SanityBaseFaktum {
   _id: string;
-  _type: "faktum";
-  type: Faktumtype;
-  title: TextKeyValuePair;
-  description: TextKeyValuePair;
-  helpText: TextKeyValuePair;
-  alertText: TextKeyValuePair | ConditionalTextKeyValuePair; // mulig denne trenger conditions. Eks vises hvis du skriver mindre enn x timer i et felt
-  answers: SanityRef<SanityAnswer>[];
-  subFaktum: SanityRef<SanitySubFaktum>[];
-  infoText: SanityRef<TextKeyValuePair>
-}
-
-export interface SanitySubFaktum extends Omit<SanityFaktum, "subFaktum" | "_type"> {
-  _type: "subFaktum";
-  requiredAnswerId: string;
-}
-
-export interface SanityAnswer {
-  _id: string;
-  _type: "answer";
-  text: TextKeyValuePair;
-  alertText: TextKeyValuePair;
-  helpText: TextKeyValuePair;
-}
-
-export interface TextKeyValuePair {
+  _type: "baseFaktum";
   key: string;
-  value?: string;
+  type: BaseFaktumType;
+  requiredAnswerIds?: SanityRef<SanityFaktum>[];
 }
 
-export interface ConditionalTextKeyValuePair extends TextKeyValuePair {
-  regex: string;
+export interface SanityGeneratorFaktum {
+  _id: string;
+  _type: "generatorFaktum";
+  key: string;
+  type: GeneratorFaktumType;
+  listType: GeneratorListType;
+  faktum: SanityRef<SanityFaktum>[];
+  requiredAnswerIds?: SanityRef<SanityFaktum>[];
+}
+
+export interface SanityValgFaktum {
+  _id: string;
+  _type: "valgFaktum";
+  key: string;
+  type: ValgFaktumType;
+  answerOptions: SanityRef<SanityAnswerOption>[];
+  subFaktum: SanityRef<SanityFaktum>[];
+  requiredAnswerIds?: SanityRef<SanityFaktum>[];
+}
+
+export interface SanityAnswerOption {
+  _id: string;
+  _type: "answerOption";
+  key: string;
 }
 
 // T only used to identify ref type when reading code
 export interface SanityRef<T = unknown> {
   _type: "reference";
   _ref: string;
-  _key?: string;
+  _key: string;
 }

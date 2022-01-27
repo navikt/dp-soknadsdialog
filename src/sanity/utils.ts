@@ -1,77 +1,88 @@
+import { nanoid } from "nanoid";
+import { isSubFaktum } from "../types/types";
 import {
-  MockDataAnswerOption,
-  MockDataFaktum,
-  MockDataSeksjon,
-  MockDataSubFaktum,
-} from "../pages/api/mock/mock-data";
-import {
-  SanityAnswer,
-  SanityFaktum,
+  SanityAnswerOption,
+  SanityBaseFaktum,
+  SanityGeneratorFaktum,
   SanityRef,
   SanitySeksjon,
-  SanitySubFaktum,
-  TextKeyValuePair,
+  SanityValgFaktum,
 } from "./types";
-import { nanoid } from "nanoid";
+import {
+  MockDataAnswerOption,
+  MockDataBaseFaktum,
+  MockDataGeneratorFaktum,
+  MockDataSeksjon,
+  MockDataValgFaktum,
+} from "../soknad-fakta/soknad";
 
-export function createSanityAnswerFromApiAnswer(answer: MockDataAnswerOption): SanityAnswer {
+export function createSanityAnswerFromApiAnswerOption(
+  answer: MockDataAnswerOption
+): SanityAnswerOption {
   return {
     _id: answer.id,
-    _type: "answer",
-    text: createEmptyKeyValuePair(`${answer.id}.text`),
-    alertText: createEmptyKeyValuePair(`${answer.id}.alertText`),
+    _type: "answerOption",
+    key: answer.id,
   };
 }
 
-export function createSanitySubFaktumFromApiFaktum(
-  faktum: MockDataSubFaktum,
-  sanityAnswer: SanityAnswer[]
-): SanitySubFaktum {
+export function createSanityGeneratorFromApiFaktum(
+  faktum: MockDataGeneratorFaktum | SubFaktum<MockDataGeneratorFaktum>
+): SanityGeneratorFaktum {
   return {
     _id: faktum.id,
-    _type: "subFaktum",
+    _type: "generatorFaktum",
+    key: faktum.id,
     type: faktum.type,
-    requiredAnswerId: faktum.requiredAnswerId,
-    title: createEmptyKeyValuePair(`${faktum.id}.title`),
-    helpText: createEmptyKeyValuePair(`${faktum.id}.helpText`),
-    alertText: createEmptyKeyValuePair(`${faktum.id}.alertText`),
-    description: createEmptyKeyValuePair(`${faktum.id}.description`),
-    answers: sanityAnswer.map((answer) => createSanityRef(answer._id)),
+    listType: faktum.listType,
+    faktum: faktum.faktum.map((faktum) => createSanityRef(faktum.id)),
+    requiredAnswerIds: isSubFaktum(faktum)
+      ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))
+      : undefined,
   };
 }
 
-export function createSanityFaktumFromApiFaktum(
-  faktum: MockDataFaktum,
-  sanityAnswer: SanityAnswer[]
-): SanityFaktum {
+export type SubFaktum<T> = T & {
+  requiredAnswerIds: string[];
+};
+
+export function createSanityValgFaktumFromApiFaktum(
+  faktum: MockDataValgFaktum | SubFaktum<MockDataValgFaktum>
+): SanityValgFaktum {
   return {
     _id: faktum.id,
-    _type: "faktum",
+    _type: "valgFaktum",
+    key: faktum.id,
     type: faktum.type,
-    title: createEmptyKeyValuePair(`${faktum.id}.title`),
-    helpText: createEmptyKeyValuePair(`${faktum.id}.helpText`),
-    alertText: createEmptyKeyValuePair(`${faktum.id}.alertText`),
-    description: createEmptyKeyValuePair(`${faktum.id}.description`),
-    answers: sanityAnswer.map((answer) => createSanityRef(answer._id)),
-    subFaktum: faktum.subFaktum.map((subFaktum) => createSanityRef(subFaktum.id)),
+    answerOptions: faktum.answerOptions.map((answer) => createSanityRef(answer.id)),
+    subFaktum: faktum.subFaktum?.map((subFaktum) => createSanityRef(subFaktum.id)) || [],
+    requiredAnswerIds: isSubFaktum(faktum)
+      ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))
+      : undefined,
   };
 }
 
-export function createSanitySeksjonFromApiSeksjon(
-  seksjon: MockDataSeksjon,
-  faktum: SanityFaktum[]
-): SanitySeksjon {
+export function createSanityBaseFaktumFromApiFaktum(
+  faktum: MockDataBaseFaktum | SubFaktum<MockDataBaseFaktum>
+): SanityBaseFaktum {
+  return <SanityBaseFaktum>{
+    _id: faktum.id,
+    _type: "baseFaktum",
+    key: faktum.id,
+    type: faktum.type,
+    requiredAnswerIds: isSubFaktum(faktum)
+      ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))
+      : undefined,
+  };
+}
+
+export function createSanitySeksjonFromApiSeksjon(seksjon: MockDataSeksjon): SanitySeksjon {
   return {
     _id: seksjon.id,
     _type: "seksjon",
-    title: createEmptyKeyValuePair(`${seksjon.id}.title`),
-    description: createEmptyKeyValuePair(`${seksjon.id}.description`),
-    faktum: faktum.map((faktum) => createSanityRef(faktum._id)),
+    key: seksjon.id,
+    faktum: seksjon.faktum.map((faktum) => createSanityRef(faktum.id)),
   };
-}
-
-function createEmptyKeyValuePair(key: string): TextKeyValuePair {
-  return { key, value: key };
 }
 
 function createSanityRef<T>(id: string): SanityRef<T> {

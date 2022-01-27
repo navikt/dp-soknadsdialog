@@ -1,4 +1,9 @@
-import { Faktumtype } from "../pages/api/types";
+import {
+  BaseFaktumType,
+  GeneratorFaktumType,
+  GeneratorListType,
+  ValgFaktumType,
+} from "../types/types";
 import { koronaFortsattRett } from "./korona-fortsatt-rett";
 import { reellArbeidssoker } from "./reell-arbeidssoker";
 import { arbeidsforhold } from "./arbeidsforhold";
@@ -19,37 +24,28 @@ export type MockDataFaktum = MockDataBaseFaktum | MockDataGeneratorFaktum | Mock
 
 export interface MockDataBaseFaktum {
   id: string;
-  type: Faktumtype;
+  type: BaseFaktumType | GeneratorFaktumType | ValgFaktumType;
 }
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
-  type: "generator";
-  listType: "arbeidsforhold" | "barn" | "default";
+  type: GeneratorFaktumType;
+  listType: GeneratorListType;
   faktum: MockDataFaktum[];
 }
 
 export interface MockDataValgFaktum extends MockDataBaseFaktum {
-  type: "boolean" | "valg" | "flervalg" | "dropdown";
-  subFaktum: MockDataSubFaktum[];
+  type: ValgFaktumType;
+  subFaktum?: MockDataSubFaktum[];
   answerOptions: MockDataAnswerOption[];
 }
 
 export interface MockDataAnswerOption {
   id: string;
-  documentRequiredId?: string[];
 }
 
 export type MockDataSubFaktum = MockDataFaktum & {
-  requiredAnswerId: string[];
+  requiredAnswerIds: string[];
 };
-
-export interface MockDataDokumentFaktum {
-  id: string;
-}
-
-const documentFakta: MockDataDokumentFaktum[] = [
-  { id: "dokument-faktum.arbeidsforhold-timelister-rotasjon" },
-];
 
 export const mockSeksjoner: MockDataSeksjon[] = [
   koronaFortsattRett,

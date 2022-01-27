@@ -11,7 +11,7 @@ export const reellArbeidssoker: MockDataSeksjon = {
         {
           id: "faktum.kun-deltid-aarsak",
           type: "flervalg",
-          requiredAnswerId: ["faktum.hel-deltid.svar.nei"],
+          requiredAnswerIds: ["faktum.hel-deltid.svar.nei"],
           answerOptions: [
             { id: "faktum.kun-deltid-aarsak.svar.redusert-helse" },
             {
@@ -31,7 +31,7 @@ export const reellArbeidssoker: MockDataSeksjon = {
         {
           id: "faktum.kun-deltid-aarsak-antall-timer",
           type: "int",
-          requiredAnswerId: ["faktum.hel-deltid.svar.nei"],
+          requiredAnswerIds: ["faktum.hel-deltid.svar.nei"],
         },
       ],
     },
@@ -43,7 +43,7 @@ export const reellArbeidssoker: MockDataSeksjon = {
         {
           id: "faktum.ikke-hele-norge",
           type: "flervalg",
-          requiredAnswerId: ["faktum.hele-norge.svar.nei"],
+          requiredAnswerIds: ["faktum.hele-norge.svar.nei"],
           answerOptions: [
             { id: "faktum.ikke-hele-norge.svar.redusert-helse" },
             {
@@ -73,7 +73,7 @@ export const reellArbeidssoker: MockDataSeksjon = {
         {
           id: "faktum.ikke-denne-type-arbeid",
           type: "tekst",
-          requiredAnswerId: ["faktum.alle-typer-arbeid.svar.nei"],
+          requiredAnswerIds: ["faktum.alle-typer-arbeid.svar.nei"],
         },
       ],
     },

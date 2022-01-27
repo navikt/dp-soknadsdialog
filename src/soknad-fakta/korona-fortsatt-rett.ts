@@ -14,7 +14,7 @@ export const koronaFortsattRett: MockDataSeksjon = {
         {
           id: "faktum.onsker-fortsette-avsluttet-periode",
           type: "boolean",
-          requiredAnswerId: ["faktum.oppbrukt-dagpengeperiode.svar.ja"],
+          requiredAnswerIds: ["faktum.oppbrukt-dagpengeperiode.svar.ja"],
           answerOptions: [
             { id: "faktum.onsker-fortsette-avsluttet-periode.svar.ja" },
             { id: "faktum.onsker-fortsette-avsluttet-periode.svar.nei" },

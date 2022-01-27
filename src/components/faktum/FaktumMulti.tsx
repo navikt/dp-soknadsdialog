@@ -15,10 +15,10 @@ export function FaktumMulti(props: IFaktum) {
 
   return (
     <div>
-      <CheckboxGroup legend={props.title.value} onChange={onChange}>
+      <CheckboxGroup legend={props.title} onChange={onChange}>
         {props.answers.map((answer) => (
           <Checkbox key={answer._id} value={answer._id}>
-            {answer.text.value}
+            {answer.text}
           </Checkbox>
         ))}
       </CheckboxGroup>

@@ -1,17 +1,16 @@
 import React from "react";
-import { TextKeyValuePair } from "../../sanity/types";
 import styles from "./Faktum.module.css";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumMulti } from "./FaktumMulti";
-import { Faktumtype } from "../../pages/api/types";
+import { FaktumType } from "../../types/types";
 
 export interface IFaktum {
   _id: string;
-  type: Faktumtype;
-  title: TextKeyValuePair;
-  description: TextKeyValuePair;
-  help: TextKeyValuePair;
-  alert: TextKeyValuePair;
+  type: FaktumType;
+  title: string;
+  description: string;
+  help: string;
+  alert: string;
   answers: IAnswer[];
   subFaktum?: ISubFaktum[];
 }
@@ -22,8 +21,8 @@ export interface ISubFaktum extends Omit<IFaktum, "subFaktum"> {
 
 export interface IAnswer {
   _id: string;
-  text: TextKeyValuePair;
-  alertText?: TextKeyValuePair;
+  text: string;
+  alertText?: string;
 }
 
 export interface FaktumAnswer {
@@ -35,9 +34,9 @@ export function Faktum(props: IFaktum) {
   return (
     <div className={styles.container}>
       {/*<h3>{props.title?.value}</h3>*/}
-      {props.description && <p>{props.description.value}</p>}
-      {props.help && <p>{props.help.value}</p>}
-      {props.alert && <p>{props.alert.value}</p>}
+      {props.description && <p>{props.description}</p>}
+      {props.help && <p>{props.help}</p>}
+      {props.alert && <p>{props.alert}</p>}
       {renderFaktumType(props)}
     </div>
   );

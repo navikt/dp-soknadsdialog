@@ -35,7 +35,7 @@ export const barnetillegg: MockDataSeksjon = {
             {
               id: "faktum.barn-aarsinntekt-over-1g",
               type: "boolean",
-              requiredAnswerId: ["faktum.forsoerger-du-barnet.svar.ja"],
+              requiredAnswerIds: ["faktum.forsoerger-du-barnet.svar.ja"],
               answerOptions: [
                 {
                   id: "faktum.barn-aarsinntekt-over-1g.svar.nei",
@@ -48,7 +48,7 @@ export const barnetillegg: MockDataSeksjon = {
                 {
                   id: "faktum.barn-inntekt",
                   type: "int",
-                  requiredAnswerId: ["faktum.barn-aarsinntekt-over-1g.svar.ja"],
+                  requiredAnswerIds: ["faktum.barn-aarsinntekt-over-1g.svar.ja"],
                 },
               ],
             },

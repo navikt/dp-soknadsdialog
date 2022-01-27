@@ -1,7 +1,7 @@
 import { sanityClient } from "../../../sanity-client";
 import { fetchSeksjonById } from "../../sanity/groq-queries";
 import { GetStaticPropsResult } from "next";
-import { MockDataSeksjon } from "../api/mock/mock-data";
+import { MockDataSeksjon } from "../../soknad-fakta/soknad";
 import { ISeksjon, Seksjon } from "../../components/seksjon/Seksjon";
 
 export async function getStaticProps(): Promise<GetStaticPropsResult<ISeksjon>> {

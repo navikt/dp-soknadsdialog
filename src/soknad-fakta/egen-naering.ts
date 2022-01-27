@@ -14,13 +14,13 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum.egen-naering-organisasjonsnummer-liste",
           type: "generator",
-          requiredAnswerId: ["faktum.driver-du-egen-naering.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
           faktum: [{ id: "faktum.egen-naering-organisasjonsnummer", type: "int" }],
         },
         {
           id: "faktum.egen-naering-arbeidstimer",
           type: "double",
-          requiredAnswerId: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
         },
       ],
     },
@@ -35,12 +35,12 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum-eget-gaardsbruk-organisasjonsnummer",
           type: "int",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
           id: "faktum-eget-gaardsbruk-type-gaardsbruk",
           type: "flervalg",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.dyr" },
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.jord" },
@@ -51,7 +51,7 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum-eget-gaardsbruk-hvem-eier",
           type: "flervalg",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.selv" },
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.ektefelle-samboer" },
@@ -61,17 +61,17 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum-eget-gaardsbruk-arbeidstimer",
           type: "double",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
           id: "faktum-eget-gaardsbruk-arbeidstimer",
           type: "double",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
           id: "faktum-eget-gaardsbruk-arbeidsaar",
           type: "dropdown", //todo: siste fem år? en dynamisk dropdown som endrer seg hvert år altså. Hvordan løser vi dette?
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
             { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2022" },
             { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2021" },
@@ -83,7 +83,7 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum-eget-gaardsbruk-arbeidstimer-beregning",
           type: "tekst",
-          requiredAnswerId: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
       ],
     },

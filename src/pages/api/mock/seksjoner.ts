@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mockSeksjoner } from "./mock-data";
+import { dummySeksjon } from "../../../soknad-fakta/dummy-seksjon";
 
 const seksjoner = async (req: NextApiRequest, res: NextApiResponse) => {
-  return res.status(200).json(mockSeksjoner);
+  return res.status(200).json([dummySeksjon]);
 };
 
 export default seksjoner;

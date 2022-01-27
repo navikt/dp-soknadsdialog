@@ -15,10 +15,10 @@ export function FaktumBoolean(props: IFaktum) {
 
   return (
     <div>
-      <RadioGroup legend={props.title.value} onChange={onChange}>
+      <RadioGroup legend={props.title} onChange={onChange}>
         {props.answers.map((answer) => (
           <Radio key={answer._id} value={answer._id}>
-            {answer.text.value}
+            {answer.text}
           </Radio>
         ))}
       </RadioGroup>
