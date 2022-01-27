@@ -26,12 +26,12 @@ const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
   async function startSøknad(event) {
     try {
       event.preventDefault();
-      const data = await fetch(api("/soknad"), {
+      const id = await fetch(api("/soknad"), {
         method: "POST",
       }).then((data) => {
-        return data.json();
+        return data.text();
       });
-      await router.push(`/dialog/${data.søknad_uuid}`);
+      await router.push(`/dialog/${id}`);
     } catch (error) {
       console.log(error);
       throw new Error("Kunne ikke opprette søknad");

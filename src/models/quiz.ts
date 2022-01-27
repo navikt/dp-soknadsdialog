@@ -1,9 +1,8 @@
 export namespace Quiz {
-  export interface Seksjon {
+  export interface Fakta {
     readonly søknad_uuid: string;
     readonly seksjon_navn: string;
     readonly fakta: Faktum[];
-    readonly subsumsjoner: Subsumsjon[];
   }
 
   export enum Rolle {
@@ -22,18 +21,10 @@ export namespace Quiz {
   }
 
   export interface Faktum {
-    readonly navn: string;
+    readonly beskrivendeId: string;
     readonly id: string;
     readonly roller: Rolle[];
     readonly type: DataType;
-    readonly godkjenner?: any[]; // Referanse til en annen node i regeltreet.
     svar?: any;
-  }
-
-  export interface Subsumsjon {
-    readonly lokalt_resultat?: boolean;
-    readonly navn: string;
-    readonly subsumsjoner?: Subsumsjon[];
-    fakta?: string[];
   }
 }

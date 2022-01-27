@@ -4,7 +4,7 @@ import { Quiz } from "../../models/quiz";
 
 
 interface SeksjonerState {
-  seksjoner: Quiz.Seksjon[];
+  seksjoner: Quiz.Fakta[];
 }
 
 const initialState: SeksjonerState = {

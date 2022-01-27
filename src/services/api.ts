@@ -11,20 +11,20 @@ export function api(endpoint: string): string {
 export const fetcher = (
   url: RequestInfo,
   options: RequestInit = {}
-): Promise<Quiz.Seksjon> => fetch(url, options).then((r) => r.json());
+): Promise<Quiz.Fakta> => fetch(url, options).then((r) => r.json());
 
-export function getNextSeksjon(id: any): {
-  seksjon: Quiz.Seksjon;
+export function hentFakta(id: any): {
+  fakta: Quiz.Fakta;
   isLoading: boolean;
   isError: boolean;
 } {
-  const { data, error } = useSWR<Quiz.Seksjon>(
-    api(`/soknad/${id}/neste-seksjon`),
+  const { data, error } = useSWR<Quiz.Fakta>(
+    api(`/soknad/${id}/fakta`),
     fetcher
   );
 
   return {
-    seksjon: data,
+    fakta: data,
     isLoading: !error && !data,
     isError: error,
   };
