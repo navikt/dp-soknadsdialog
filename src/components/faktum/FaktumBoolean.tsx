@@ -15,7 +15,7 @@ export function FaktumBoolean(props: IFaktum) {
 
   return (
     <div>
-      <RadioGroup legend={props.title} onChange={onChange}>
+      <RadioGroup legend={""} onChange={onChange}>
         {props.answerOptions?.map((answer) => (
           <Radio key={answer._id} value={answer._id}>
             {answer.text ? answer.text : answer._id}

@@ -169,7 +169,6 @@ export const arbeidsforhold: MockDataSeksjon = {
                 { id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-skift-turnus" },
                 {
                   id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon",
-                  documentRequiredId: ["dokument-faktum.arbeidsforhold-timelister-rotasjon"],
                 },
               ],
               subFaktum: [

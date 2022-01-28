@@ -15,7 +15,6 @@ import {
   createSanityValgFaktumFromApiFaktum,
   SubFaktum,
 } from "../../../sanity/utils";
-import { dummySeksjon } from "../../../soknad-fakta/dummy-seksjon";
 import { isGeneratorFaktum, isValgFaktum } from "../../../types/types";
 import { SanityBaseDocument } from "../../../sanity/types";
 
