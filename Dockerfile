@@ -7,8 +7,8 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
     echo '//npm.pkg.github.com/:_authToken=\'$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
 
-RUN cat .npmrc | cut -c1-30
-RUN echo $NODE_AUTH_TOKEN | cut -c1-30
+RUN cat .npmrc | cut -c1-50
+RUN echo $NODE_AUTH_TOKEN | cut -c1-50
 
 RUN npm ci
 
