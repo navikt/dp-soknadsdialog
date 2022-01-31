@@ -1,64 +1,43 @@
-import Head from "next/head";
-import { Button, Heading } from "@navikt/ds-react";
-import React from "react";
-import { useRouter } from "next/router";
-import { GetServerSideProps, NextPage } from "next";
-import { ensureAuth, SessionProps } from "../lib/ensure-auth";
-import { getSession } from "@navikt/dp-auth/server";
-import { useSession } from "@navikt/dp-auth/client";
-import { api } from "../services/api";
+import { GetStaticPropsResult } from "next";
+import { sanityClient } from "../../sanity-client";
+import { fetchAllSeksjoner } from "../sanity/groq-queries";
+import { ISeksjon, Seksjon } from "../components/seksjon/Seksjon";
+import { MockDataSeksjon } from "../soknad-fakta/soknad";
 
-export const getServerSideProps: GetServerSideProps = ensureAuth({
-  enforceLogin: process.env.SERVERSIDE_LOGIN === "enabled",
-})(async (context) => {
-  const { token, apiToken } = await getSession(context);
+export interface QuizSoknad {
+  seksjoner: MockDataSeksjon[]; // Denne skal være quiz faktum med svar
+}
+export interface Soknad {
+  sections: ISeksjon[];
+}
 
-  return {
-    props: {},
-  };
-});
+export async function getStaticProps(): Promise<GetStaticPropsResult<Soknad>> {
+  // Denne skal fetche quiz faktum med svar
+  const soknad: QuizSoknad = await fetch(`http://localhost:3000/api/ny/soknad`).then((data) => {
+    return data.json();
+  });
 
-const Home: NextPage<SessionProps> = ({ session: initialSession }) => {
-  const router = useRouter();
-
-  const { session } = useSession({ initialSession });
-
-  async function startSøknad(event) {
-    try {
-      event.preventDefault();
-      const id = await fetch(api("/soknad"), {
-        method: "POST",
-      }).then((data) => {
-        return data.text();
-      });
-      await router.push(`/dialog/${id}`);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Kunne ikke opprette søknad");
-    }
+  if (!soknad) {
+    console.error("Fikk ingen soknad fra API");
+    return { notFound: true };
   }
 
-  return (
-    <div className="root">
-      <Head>
-        <title>Dagpenger!</title>
-      </Head>
-      <main>
-        <Heading level="1" size="xlarge">
-          Viktig informasjon
-        </Heading>
+  const sectionIds = soknad.seksjoner.map((section) => section.id);
+  const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner, {
+    ids: sectionIds,
+  });
 
-        <section>
-          <h3>her skal det stå viktige ting... </h3>
-          informasjon om dine viktige ting...
-        </section>
+  if (sanitySections.length <= 0) {
+    console.error("Fant ikke seksjon i sanity");
+    return { notFound: true };
+  }
 
-        <Button key="start-søknad" onClick={startSøknad}>
-          Start søknad
-        </Button>
-      </main>
-    </div>
-  );
-};
+  return {
+    props: { sections: sanitySections },
+    revalidate: 120,
+  };
+}
 
-export default Home;
+export default function Soknad(props: Soknad) {
+  return <Seksjon {...props.sections[0]} />;
+}

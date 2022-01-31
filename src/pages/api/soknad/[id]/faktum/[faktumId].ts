@@ -9,15 +9,16 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   } = req;
 
   const { token, apiToken } = await getSession({ req });
-  if (token) {
-    const quizShowToken = await apiToken(audience);
+
+  if (token && apiToken) {
+    const frontendToken = await apiToken(audience);
     const response: Response = await fetch(
       `${process.env.API_BASE_URL}/soknad/${id}/faktum/${faktumId}`,
       {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${quizShowToken}`,
+          Authorization: `Bearer ${frontendToken}`,
         },
         body: JSON.stringify(req.body),
       }

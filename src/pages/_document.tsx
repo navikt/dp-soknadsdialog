@@ -1,12 +1,13 @@
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
-  ENV,
+  Env,
   fetchDecoratorReact,
+  Locale,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 
-const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<ENV, "localhost">;
+const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
 
 const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
@@ -25,7 +26,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,
-      language: locale as any,
+      language: locale as Locale | undefined,
     }).catch((err) => {
       console.error(err);
       const empty = () => <></>;
