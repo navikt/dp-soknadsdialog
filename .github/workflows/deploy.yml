@@ -47,9 +47,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare .npmrc
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
+      #      - name: Prepare .npmrc
+      #        run: |
+      #          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
 
       - name: Build and push
         uses: docker/build-push-action@v2
