@@ -5,11 +5,10 @@ COPY package*.json .npmrc /usr/src/app/
 
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    echo '//npm.pkg.github.com/:_authToken=\'$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc \
-    cat /run/secrets/NODE_AUTH_TOKEN | cut -c1-20
+    echo '//npm.pkg.github.com/:_authToken=\'$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
 
-RUN cat .npmrc | cut -c1-20
-RUN echo $NODE_AUTH_TOKEN | cut -c1-20
+RUN cat .npmrc | cut -c1-30
+RUN echo $NODE_AUTH_TOKEN | cut -c1-30
 
 RUN npm ci
 
