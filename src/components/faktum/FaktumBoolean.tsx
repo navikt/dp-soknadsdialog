@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@navikt/ds-react";
-import { Faktum, FaktumAnswer, IFaktum } from "./Faktum";
+import { Faktum, IFaktum } from "./Faktum";
 
 export function FaktumBoolean(props: IFaktum) {
   const [answer, setAnswer] = useState("");
