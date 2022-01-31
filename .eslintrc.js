@@ -9,21 +9,12 @@ module.exports = {
   ],
   ignorePatterns: ["**/*generated.d.ts"],
   rules: {
-    "@typescript-eslint/no-var-requires": ["off"],
     "@typescript-eslint/ban-ts-comment": [
       "error",
       {
         "ts-ignore": "allow-with-description",
       },
     ],
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        components: ["Link"],
-        specialLink: ["hrefLeft", "hrefRight"],
-        aspects: ["invalidHref", "preferButton"],
-      },
-    ],
-    "prettier/prettier": ["warn", {"printWidth": 100}]
+    "prettier/prettier": ["warn"],
   },
 };

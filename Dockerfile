@@ -1,21 +1,19 @@
 FROM node:16 AS builder
-
 WORKDIR /usr/src/app
 
 COPY package*.json .npmrc /usr/src/app/
+
+RUN npm ci
+
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    npm ci --prefer-offline --no-audit --ignore-scripts \
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
 
 COPY . /usr/src/app
-
-RUN npm run build && \
-    npm prune --production --offline
+RUN npm run build
 
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
-
 WORKDIR /usr/src/app
 
 ARG BASE_PATH
