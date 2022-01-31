@@ -3,8 +3,8 @@ WORKDIR /usr/src/app
 
 COPY package*.json .npmrc /usr/src/app/
 
-#RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-#    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN)
 RUN cat .npmrc | cut -c1-50
 
 RUN npm ci
