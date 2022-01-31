@@ -1,9 +1,9 @@
 name: Build and deploy
 
-on: [ push ]
+on: [push]
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}/dp-quizshow:${{ github.sha }}
+  IMAGE: ghcr.io/${{ github.repository }}/dp-dagpengersoknad-frontend:${{ github.sha }}
   BASE_PATH: /arbeid/dagpenger/soknad
 
 jobs:
@@ -71,7 +71,7 @@ jobs:
 
   deploy-dev:
     name: Deploy to dev
-    needs: [ test, build ]
+    needs: [test, build]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -91,7 +91,7 @@ jobs:
 
   deploy-prod:
     name: Deploy to Production
-    needs: [ deploy-dev ]
+    needs: [deploy-dev]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
@@ -108,7 +108,6 @@ jobs:
           RESOURCE: nais/nais.yaml
           VARS: nais/prod.yaml
           PRINT_PAYLOAD: true
-
 #  reportFailure:
 #    name: Report build failure to Slack
 #    needs: [ test, build ]
