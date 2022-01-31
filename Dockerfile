@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 COPY package*.json .npmrc /usr/src/app/
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
-    npm ci --prefer-offline --no-audit --ignore-scripts
+    npm ci --prefer-offline --no-audit --ignore-scripts \
 
 COPY . /usr/src/app
 
