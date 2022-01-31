@@ -11,7 +11,7 @@ export interface Soknad {
   sections: ISeksjon[];
 }
 
-export async function getStaticProps(): Promise<GetStaticPropsResult<Soknad>> {
+export async function getServerSideProps(): Promise<GetStaticPropsResult<Soknad>> {
   // Denne skal fetche quiz faktum med svar
   const soknad: QuizSoknad = await fetch(`http://localhost:3000/api/ny/soknad`).then((data) => {
     return data.json();
