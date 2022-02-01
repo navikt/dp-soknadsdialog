@@ -1,4 +1,8 @@
-import { BaseFaktumType, GeneratorFaktumType, ValgFaktumType } from "./types";
+export type ValgFaktumType = "boolean" | "valg" | "dropdown" | "flervalg";
+export type PrimitivFaktumType = "int" | "double" | "localdate" | "periode" | "tekst";
+export type GeneratorFaktumType = "generator";
+export type GeneratorListType = "Arbeidsforhold" | "Barn" | "Standard";
+export type FaktumType = PrimitivFaktumType | ValgFaktumType | GeneratorFaktumType;
 
 export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
 
@@ -11,7 +15,7 @@ export interface IBaseFaktum {
 }
 
 export interface IPrimitivFaktum extends IBaseFaktum {
-  type: BaseFaktumType;
+  type: PrimitivFaktumType;
 }
 export interface IValgFaktum extends IBaseFaktum {
   type: ValgFaktumType;
