@@ -10,10 +10,10 @@ export async function getServerSideProps(): Promise<GetStaticPropsResult<ISoknad
   });
 
   return {
-    props: soknad ,
+    props: soknad,
   };
 }
 
 export default function Soknad(props: ISoknad) {
-  return <Seksjon {...props.sections[0]} />;
+  return props.sections.map((section) => <Seksjon key={section.id} {...section} />);
 }
