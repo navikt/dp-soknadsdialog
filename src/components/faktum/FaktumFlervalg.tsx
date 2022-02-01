@@ -1,8 +1,8 @@
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import React, { useEffect, useState } from "react";
-import { IFaktum } from "./Faktum";
+import { IValgFaktum } from "../../types/faktum.types";
 
-export function FaktumMulti(props: IFaktum) {
+export function FaktumFlervalg(props: IValgFaktum) {
   const [answer, setAnswer] = useState<string[]>([]);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ export function FaktumMulti(props: IFaktum) {
   return (
     <div>
       <CheckboxGroup legend={""} onChange={onChange}>
-        {props.answerOptions?.map((answer) => (
-          <Checkbox key={answer._id} value={answer._id}>
-            {answer.text ? answer.text : answer._id}
+        {props.answerOptions.map((answer) => (
+          <Checkbox key={answer.id} value={answer.id}>
+            {answer.title ? answer.title : answer.id}
           </Checkbox>
         ))}
       </CheckboxGroup>

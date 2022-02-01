@@ -1,13 +1,8 @@
 import React from "react";
 import { IFaktum } from "../../types/faktum.types";
 import styles from "./Faktum.module.css";
-import { FaktumBoolean } from "./FaktumBoolean";
-import { FaktumMulti } from "./FaktumMulti";
-
-export interface FaktumAnswer {
-  id: string;
-  value: string;
-}
+import { FaktumValg } from "./FaktumValg";
+import { FaktumFlervalg } from "./FaktumFlervalg";
 
 export function Faktum(props: IFaktum) {
   return (
@@ -24,11 +19,11 @@ export function Faktum(props: IFaktum) {
 function renderFaktumType(props: IFaktum) {
   switch (props.type) {
     case "boolean":
-      return <FaktumBoolean {...props} />;
+      return <FaktumValg {...props} />;
     case "valg":
-      return <FaktumBoolean {...props} />;
+      return <FaktumValg {...props} />;
     case "flervalg":
-      return <FaktumMulti {...props} />;
+      return <FaktumFlervalg {...props} />;
     default:
       return (
         <div>

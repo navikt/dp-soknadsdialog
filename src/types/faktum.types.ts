@@ -1,25 +1,24 @@
 import { BaseFaktumType, GeneratorFaktumType, ValgFaktumType } from "./types";
 
-export type IFaktum = IFaktumPrimitiv | IFaktumValg | IFaktumGenerator;
+export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
 
-export interface IFaktumBase {
+export interface IBaseFaktum {
   id: string;
   title: string;
   description?: string;
   helpText?: string;
   alertText?: string;
-  
 }
 
-export interface IFaktumPrimitiv extends IFaktumBase {
+export interface IPrimitivFaktum extends IBaseFaktum {
   type: BaseFaktumType;
 }
-export interface IFaktumValg extends IFaktumBase {
+export interface IValgFaktum extends IBaseFaktum {
   type: ValgFaktumType;
   answerOptions: IAnswerOption[];
   subFaktum?: ISubFaktum[];
 }
-export interface IFaktumGenerator extends IFaktumBase {
+export interface IGeneratorFaktum extends IBaseFaktum {
   type: GeneratorFaktumType;
   faktum: IFaktum[];
   // TODO: svar: Svar fra quiz ?
