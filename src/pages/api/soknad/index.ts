@@ -1,24 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { mockSeksjoner } from "../../../soknad-fakta/soknad";
+import { sanityClient } from "../../../../sanity-client";
+import { fetchAllSeksjoner } from "../../../sanity/groq-queries";
+import { ISeksjon } from "../../../types/seksjon.types";
+
+export interface ISoknad {
+  sections: ISeksjon[];
+}
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
-/*  if (!soknad) {
-    console.error("Fikk ingen soknad fra API");
-    return { notFound: true };
-  }
 
-  const sectionIds = soknad.seksjoner.map((section) => section.id);
-  const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner, {
-    ids: sectionIds,
-  });
-
+  const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner);
+  
   if (sanitySections.length <= 0) {
     console.error("Fant ikke seksjon i sanity");
-    return { notFound: true };
+    return res.status(404);
   }
-*/
 
-  return res.status(200).json({ seksjoner: mockSeksjoner });
+  return res.status(200).json({ sections: sanitySections });
 };
 
 export default soknad;

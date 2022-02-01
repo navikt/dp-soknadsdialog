@@ -2,10 +2,10 @@ import { groq } from "next-sanity";
 
 export const fetchForside = groq`*[_type == "contentPage" && slug.current == "forside"][0]`;
 
-export const fetchAllSeksjoner = groq`*[_type == "seksjon" && _id in $ids]{
-  _id, title, description, helpText,
+export const fetchAllSeksjoner = groq`*[_type == "seksjon"]{
+  'id': _id, title, description, helpText,
   faktum[]->{
-    _id,
+    'id': _id,
     type,
     title,
     type,
@@ -15,27 +15,27 @@ export const fetchAllSeksjoner = groq`*[_type == "seksjon" && _id in $ids]{
     alertText,
     helpText,
     requiredAnswerIds[]->{
-      _id
+      'id': _id
     },    
     answerOptions[]->{
-      _id,
+      'id': _id,
       title,
       alertText,
       helpText
     },
     subFaktum[]->{
-      _id,
+      'id': _id,
       type,
       title,
       description,
       alertText,
       helpText,
       requiredAnswerIds[]->{
-        _id
+        'id': _id
       }, 
     },
     faktum[]->{
-      _id,
+      'id': _id,
       type,
       title,
       type,
@@ -45,16 +45,16 @@ export const fetchAllSeksjoner = groq`*[_type == "seksjon" && _id in $ids]{
       alertText,
       helpText,
       requiredAnswerIds[]->{
-        _id
+        'id': _id
       },    
       answerOptions[]->{
-        _id,
+        'id': _id,
         title,
         alertText,
         helpText
       },
       subFaktum[]->{
-        _id,
+        'id': _id,
         requiredAnswerId,
         type,
         title,
