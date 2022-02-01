@@ -5,7 +5,6 @@ export const koronaFortsattRett: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.oppbrukt-dagpengeperiode",
-      seksjonId: "korona-fortsatt-rett",
       type: "boolean",
       answerOptions: [
         { id: "faktum.oppbrukt-dagpengeperiode.svar.ja" },
@@ -14,7 +13,6 @@ export const koronaFortsattRett: MockDataSeksjon = {
       subFaktum: [
         {
           id: "faktum.onsker-fortsette-avsluttet-periode",
-          seksjonId: "korona-fortsatt-rett",
           type: "boolean",
           requiredAnswerIds: ["faktum.oppbrukt-dagpengeperiode.svar.ja"],
           answerOptions: [

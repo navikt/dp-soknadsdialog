@@ -5,7 +5,6 @@ export const barnetillegg: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.barn-liste",
-      seksjonId: "barnetillegg",
       type: "generator",
       faktum: [
         {

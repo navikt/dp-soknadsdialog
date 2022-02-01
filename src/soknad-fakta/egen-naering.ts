@@ -5,7 +5,6 @@ export const egenNaering: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.driver-du-egen-naering",
-      seksjonId: "egen-naering",
       type: "boolean",
       answerOptions: [
         { id: "faktum.driver-du-egen-naering.svar.ja" },
@@ -27,7 +26,6 @@ export const egenNaering: MockDataSeksjon = {
     },
     {
       id: "faktum.driver-du-eget-gaardsbruk",
-      seksjonId: "egen-naering",
       type: "boolean",
       answerOptions: [
         { id: "faktum.driver-du-eget-gaardsbruk.svar.ja" }, //todo: dokumentfaktumKrav arbeidstimer

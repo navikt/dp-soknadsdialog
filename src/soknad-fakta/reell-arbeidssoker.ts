@@ -5,7 +5,6 @@ export const reellArbeidssoker: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.hel-deltid",
-      seksjonId: "reell-arbeidsoker",
       type: "boolean",
       answerOptions: [{ id: "faktum.hel-deltid.svar.ja" }, { id: "faktum.hel-deltid.svar.nei" }],
       subFaktum: [
@@ -38,7 +37,6 @@ export const reellArbeidssoker: MockDataSeksjon = {
     },
     {
       id: "faktum.hele-norge",
-      seksjonId: "reell-arbeidsoker",
       type: "boolean",
       answerOptions: [{ id: "faktum.hele-norge.svar.ja" }, { id: "faktum.hele-norge.svar.nei" }],
       subFaktum: [
@@ -66,7 +64,6 @@ export const reellArbeidssoker: MockDataSeksjon = {
     },
     {
       id: "faktum.alle-typer-arbeid",
-      seksjonId: "reell-arbeidsoker",
       type: "boolean",
       answerOptions: [
         { id: "faktum.alle-typer-arbeid.svar.ja" },
@@ -82,7 +79,6 @@ export const reellArbeidssoker: MockDataSeksjon = {
     },
     {
       id: "faktum.ethvert-arbeid",
-      seksjonId: "reell-arbeidsoker",
       type: "boolean",
       answerOptions: [
         { id: "faktum.ethvert-arbeid.svar.ja" },

@@ -5,7 +5,6 @@ export const eosArbeidsforhold: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.eos-arbeid-siste-36-mnd",
-      seksjonId: "eos-arbeidsforhold",
       type: "boolean",
       answerOptions: [
         { id: "faktum.eos-arbeid-siste-36-mnd.svar.ja" },

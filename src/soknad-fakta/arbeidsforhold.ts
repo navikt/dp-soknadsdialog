@@ -5,12 +5,10 @@ export const arbeidsforhold: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.dagpenger-soknadsdato",
-      seksjonId: "arbeidsforhold",
       type: "localdate",
     },
     {
       id: "faktum.fast-arbeidstid",
-      seksjonId: "arbeidsforhold",
       type: "valg",
       answerOptions: [
         { id: "faktum.fast-arbeidstid.svar.ja-fast" },
@@ -22,7 +20,6 @@ export const arbeidsforhold: MockDataSeksjon = {
     },
     {
       id: "faktum.arbeidsforhold",
-      seksjonId: "arbeidsforhold",
       type: "generator",
       faktum: [
         {
