@@ -5,6 +5,7 @@ export const andreYtelser: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.andre-ytelser", //todo: de fleste svarene her skal trigge dokumentkrav
+      seksjonId: "andre-ytelser",
       type: "flervalg",
       answerOptions: [
         { id: "faktum.andre-ytelser.svar.pensjon-offentlig-tjenestepensjon" },
@@ -61,6 +62,7 @@ export const andreYtelser: MockDataSeksjon = {
     },
     {
       id: "faktum.utbetaling-okonomisk-gode-tidligere-arbeidsgiver",
+      seksjonId: "andre-ytelser",
       type: "boolean",
       answerOptions: [
         {

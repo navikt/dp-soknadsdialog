@@ -24,6 +24,7 @@ export type MockDataFaktum = MockDataBaseFaktum | MockDataGeneratorFaktum | Mock
 
 export interface MockDataBaseFaktum {
   id: string;
+  seksjonId: string;
   type: BaseFaktumType | GeneratorFaktumType | ValgFaktumType;
 }
 

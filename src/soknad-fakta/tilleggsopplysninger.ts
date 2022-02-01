@@ -5,6 +5,7 @@ export const tilleggsopplysninger: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.tilleggsopplysninger",
+      seksjonId: "tilleggsopplysninger",
       type: "tekst",
     },
   ],
