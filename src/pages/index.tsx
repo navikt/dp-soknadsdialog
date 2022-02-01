@@ -3,6 +3,7 @@ import { sanityClient } from "../../sanity-client";
 import { fetchAllSeksjoner } from "../sanity/groq-queries";
 import { ISeksjon, Seksjon } from "../components/seksjon/Seksjon";
 import { MockDataSeksjon } from "../soknad-fakta/soknad";
+import { host } from "../api.utils";
 
 export interface QuizSoknad {
   seksjoner: MockDataSeksjon[]; // Denne skal være quiz faktum med svar
@@ -13,7 +14,7 @@ export interface Soknad {
 
 export async function getServerSideProps(): Promise<GetStaticPropsResult<Soknad>> {
   // Denne skal fetche quiz faktum med svar
-  const soknad: QuizSoknad = await fetch(`http://localhost:3000/api/ny/soknad`).then((data) => {
+  const soknad: QuizSoknad = await fetch(`${host}/api/ny/soknad`).then((data) => {
     return data.json();
   });
 
