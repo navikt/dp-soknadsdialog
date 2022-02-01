@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { mockSeksjoner } from "../../../soknad-fakta/soknad";
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
-
 /*  if (!soknad) {
     console.error("Fikk ingen soknad fra API");
     return { notFound: true };
