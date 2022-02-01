@@ -20,7 +20,7 @@ export function Seksjon(props: ISeksjon) {
         {props.helpText && <p>{props.helpText}</p>}
 
         {props.faktum.map((faktum) => (
-          <Faktum key={faktum._id} {...faktum} />
+          <Faktum key={faktum.id} {...faktum} />
         ))}
       </div>
       <div className={styles.timeline}>Timeline step-indikator</div>

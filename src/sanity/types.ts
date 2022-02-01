@@ -5,16 +5,6 @@ import {
   ValgFaktumType,
 } from "../types/types";
 
-export interface SanityBaseDocument {
-  _id: string;
-  _type: string;
-}
-
-export interface SanityLandingPage {
-  title: string;
-  content: string;
-}
-
 export interface SanitySeksjon {
   _id: string;
   _type: "seksjon";

@@ -29,7 +29,7 @@ export function FaktumBoolean(props: IFaktum) {
             console.log("subFaktum:", faktum);
             console.log("answer:", answer);
             if (faktum.requiredAnswerIds.find((a) => a._id === answer)) {
-              return <Faktum key={faktum._id} {...faktum} />;
+              return <Faktum key={faktum.id} {...faktum} />;
             }
           })}
         </div>
