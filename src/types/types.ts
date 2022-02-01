@@ -1,9 +1,3 @@
-import { SubFaktum } from "../sanity/utils";
-import {
-  MockDataFaktum,
-  MockDataGeneratorFaktum,
-  MockDataValgFaktum,
-} from "../soknad-fakta/soknad";
 import { ValgFaktumType, PrimitivFaktumType, GeneratorFaktumType } from "./faktum.types";
 
 export interface QuizFaktum {
