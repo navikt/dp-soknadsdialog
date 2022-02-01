@@ -1,5 +1,5 @@
-import { SubFaktum } from "../../../sanity/utils";
-import { MockDataFaktum, MockDataValgFaktum, MockDataGeneratorFaktum } from "../../../soknad-fakta/soknad";
+import { SubFaktum } from "./utils";
+import { MockDataFaktum, MockDataValgFaktum, MockDataGeneratorFaktum } from "../soknad-fakta/soknad";
 
 export function isValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
   return (faktum as MockDataValgFaktum).answerOptions !== undefined;
