@@ -34,7 +34,6 @@ export async function getServerSideProps(): Promise<GetStaticPropsResult<Soknad>
 
   return {
     props: { sections: sanitySections },
-    revalidate: 120,
   };
 }
 
