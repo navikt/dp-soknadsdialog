@@ -11,7 +11,6 @@ const modifiersStyles = {
   sundays: { color: "#C30000" },
   selected: { color: "#FFFFFF" },
 };
-console.log("lol");
 
 export const dayPickerProps: DayPickerProps = {
   showOutsideDays: true,
@@ -20,14 +19,14 @@ export const dayPickerProps: DayPickerProps = {
   modifiersStyles,
 };
 
-export function parseDate(str: string, format: string, locale: string) {
-  const parsed = dateFnsParse(str, format, new Date(), { locale });
+export function parseDate(str: string, format: string) {
+  const parsed = dateFnsParse(str, format, new Date());
   if (DateUtils.isDate(parsed)) {
     return parsed;
   }
   return undefined;
 }
 
-export function formatDate(date: Date, format: string, locale: string) {
-  return dateFnsFormat(date, format, { locale });
+export function formatDate(date: Date, format: string) {
+  return dateFnsFormat(date, format);
 }
