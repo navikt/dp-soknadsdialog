@@ -4,6 +4,7 @@ import { Faktum } from "../faktum/Faktum";
 import { ISeksjon } from "../../types/seksjon.types";
 
 export function Seksjon(props: ISeksjon) {
+  console.log("Seksjon: ", props);
   return (
     <div className={styles.container}>
       <div className={styles.faktum}>

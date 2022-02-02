@@ -6,5 +6,10 @@
 }
 
 .sub-faktum {
-  background-color: #f7f7f7;
+  background-color: #cbcbcb;
+}
+
+.generator-faktum-list {
+  border: solid 1px #3b3b3b;
+  border-radius: 5px;
 }
