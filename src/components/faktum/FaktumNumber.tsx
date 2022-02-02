@@ -5,7 +5,10 @@ import { TextField } from "@navikt/ds-react";
 export function FaktumNumber(props: IPrimitivFaktum) {
   return (
     <div>
-      <TextField label="" size="medium" type="number" />
+      {props.description && <p>{props.description}</p>}
+      {props.helpText && <p>{props.helpText}</p>}
+      {props.alertText && <p>{props.alertText}</p>}
+      <TextField label={props.title ? props.title : props.id} size="medium" type="number" />
     </div>
   );
 }

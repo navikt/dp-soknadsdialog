@@ -6,7 +6,8 @@
 }
 
 .sub-faktum {
-  background-color: #cbcbcb;
+  padding: 0;
+  margin: auto -20px;
 }
 
 .generator-faktum-list {

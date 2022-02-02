@@ -1,9 +1,12 @@
 .container {
   display: flex;
-  margin-bottom: 50px;
+  max-width: 600px;
+  margin: auto auto 50px;
 }
 
 .faktum {
+  min-width: 600px;
+  width: 100%;
 }
 
 .timeline {

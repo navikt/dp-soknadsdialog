@@ -5,7 +5,10 @@ import { Select } from "@navikt/ds-react";
 export function FaktumDropdown(props: IValgFaktum) {
   return (
     <div>
-      <Select label="" size="medium">
+      {props.description && <p>{props.description}</p>}
+      {props.helpText && <p>{props.helpText}</p>}
+      {props.alertText && <p>{props.alertText}</p>}
+      <Select label={props.title ? props.title : props.id} size="medium">
         <option value="">Velg land eller noe annen placeholder tekst</option>
         {props.answerOptions.map((answer) => (
           <option key={answer.id} value={answer.id}>

@@ -1,6 +1,5 @@
 import React from "react";
 import { IFaktum } from "../../types/faktum.types";
-import styles from "./Faktum.module.css";
 import { FaktumValg } from "./FaktumValg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import { FaktumText } from "./FaktumText";
@@ -9,17 +8,10 @@ import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDropdown } from "./FaktumDropdown";
 import { FaktumDato } from "./FaktumDato";
 import { FaktumPeriode } from "./FaktumPeriode";
+import styles from "./Faktum.module.css";
 
 export function Faktum(props: IFaktum) {
-  return (
-    <div className={styles.container}>
-      {props.title ? <h3>{props.title}</h3> : <h3>{props.id}.title</h3>}
-      {props.description && <p>{props.description}</p>}
-      {props.helpText && <p>{props.helpText}</p>}
-      {props.alertText && <p>{props.alertText}</p>}
-      {renderFaktumType(props)}
-    </div>
-  );
+  return <div className={styles.container}>{renderFaktumType(props)}</div>;
 }
 
 function renderFaktumType(props: IFaktum) {
