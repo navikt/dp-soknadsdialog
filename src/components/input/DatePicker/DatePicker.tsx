@@ -65,10 +65,8 @@ export function DatePicker(props: DatePickerProps) {
       <DayPickerInput
         style={{ lineHeight: 1 }}
         component={CustomInputFwdRef}
-        formatDate={formatDate}
         placeholder={props.placeholder ? props.placeholder : DEFAULT_PLACEHOLDER}
         format={DAYPICKER_FORMAT}
-        parseDate={parseDate}
         dayPickerProps={dayPickerProps}
         onDayChange={onDayChange}
         value={date}
