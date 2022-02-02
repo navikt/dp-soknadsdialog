@@ -1,0 +1,14 @@
+.customInput {
+  position: relative;
+  display: inline-block;
+  border: 1px solid transparent;
+  max-width: 250px;
+}
+
+.customInputIcon {
+  position: absolute;
+  right: 8px;
+  bottom: 10px;
+  color: var(--navds-semantic-color-interaction-primary);
+  font-size: 1.5em;
+}

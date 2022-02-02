@@ -7,6 +7,7 @@ import { FaktumText } from "./FaktumText";
 import { FaktumNumber } from "./FaktumNumber";
 import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDropdown } from "./FaktumDropdown";
+import { FaktumDato } from "./FaktumDato";
 
 export function Faktum(props: IFaktum) {
   return (
@@ -38,6 +39,8 @@ function renderFaktumType(props: IFaktum) {
       return <FaktumGenerator {...props} />;
     case "dropdown":
       return <FaktumDropdown {...props} />;
+    case "localdate":
+      return <FaktumDato {...props} />;
     default:
       return (
         <div>
