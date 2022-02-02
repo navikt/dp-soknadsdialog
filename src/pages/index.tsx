@@ -15,5 +15,6 @@ export async function getServerSideProps(): Promise<GetStaticPropsResult<ISoknad
 }
 
 export default function Soknad(props: ISoknad) {
+  console.log(props.sections);
   return props.sections.map((section) => <Seksjon key={section.id} {...section} />);
 }
