@@ -22,7 +22,6 @@ export const dayPickerProps: DayPickerProps = {
 };
 
 export function parseDate(str: string, format: string, locale: string) {
-  console.log("Parse:", locale);
   const parsed = dateFnsParse(str, format, new Date(), { locale });
   if (DateUtils.isDate(parsed)) {
     return parsed;
@@ -31,6 +30,5 @@ export function parseDate(str: string, format: string, locale: string) {
 }
 
 export function formatDate(date: Date, format: string, locale: string) {
-  console.log("Format:", locale);
   return dateFnsFormat(date, format, { locale });
 }
