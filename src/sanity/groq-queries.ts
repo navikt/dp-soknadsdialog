@@ -32,7 +32,13 @@ export const fetchAllSeksjoner = groq`*[_type == "seksjon"]{
       helpText,
       requiredAnswerIds[]->{
         'id': _id
-      }, 
+      },
+      answerOptions[]->{
+        'id': _id,
+        title,
+        alertText,
+        helpText
+      },
     },
     faktum[]->{
       'id': _id,
@@ -55,7 +61,15 @@ export const fetchAllSeksjoner = groq`*[_type == "seksjon"]{
       },
       subFaktum[]->{
         'id': _id,
-        requiredAnswerId,
+        requiredAnswerIds[]->{
+          'id': _id
+        },
+        answerOptions[]->{
+          'id': _id,
+          title,
+          alertText,
+          helpText
+        },
         type,
         title,
         description,

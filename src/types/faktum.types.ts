@@ -24,13 +24,14 @@ export interface IValgFaktum extends IBaseFaktum {
 }
 export interface IGeneratorFaktum extends IBaseFaktum {
   type: GeneratorFaktumType;
+  listType: GeneratorListType;
   faktum: IFaktum[];
   // TODO: svar: Svar fra quiz ?
 }
 
 export type ISubFaktum = IFaktum & {
   requiredAnswerIds: { id: string }[];
-}
+};
 
 export interface IAnswerOption {
   id: string;

@@ -3,6 +3,10 @@ import { IFaktum } from "../../types/faktum.types";
 import styles from "./Faktum.module.css";
 import { FaktumValg } from "./FaktumValg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
+import { FaktumText } from "./FaktumText";
+import { FaktumNumber } from "./FaktumNumber";
+import { FaktumGenerator } from "./FaktumGenerator";
+import { FaktumDropdown } from "./FaktumDropdown";
 
 export function Faktum(props: IFaktum) {
   return (
@@ -24,6 +28,16 @@ function renderFaktumType(props: IFaktum) {
       return <FaktumValg {...props} />;
     case "flervalg":
       return <FaktumFlervalg {...props} />;
+    case "tekst":
+      return <FaktumText {...props} />;
+    case "double":
+      return <FaktumNumber {...props} />;
+    case "int":
+      return <FaktumNumber {...props} />;
+    case "generator":
+      return <FaktumGenerator {...props} />;
+    case "dropdown":
+      return <FaktumDropdown {...props} />;
     default:
       return (
         <div>
