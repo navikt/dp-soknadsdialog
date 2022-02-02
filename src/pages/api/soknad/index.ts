@@ -8,9 +8,8 @@ export interface ISoknad {
 }
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
-
   const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner);
-  
+
   if (sanitySections.length <= 0) {
     console.error("Fant ikke seksjon i sanity");
     return res.status(404);
