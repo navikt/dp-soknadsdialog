@@ -44,11 +44,5 @@ function renderFaktumType(props: IFaktum) {
       return <FaktumDato {...props} />;
     case "periode":
       return <FaktumPeriode {...props} />;
-    default:
-      return (
-        <div>
-          <b>MANGLER FAKTUM TYPE: {props.type}</b>
-        </div>
-      );
   }
 }
