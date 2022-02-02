@@ -8,7 +8,12 @@ import { verneplikt } from "./verneplikt";
 import { tilleggsopplysninger } from "./tilleggsopplysninger";
 import { barnetillegg } from "./barnetillegg";
 import { andreYtelser } from "./andre-ytelser";
-import { GeneratorFaktumType, GeneratorListType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
+import {
+  GeneratorFaktumType,
+  GeneratorListType,
+  PrimitivFaktumType,
+  ValgFaktumType,
+} from "../types/faktum.types";
 
 export interface MockDataSeksjon {
   id: string;

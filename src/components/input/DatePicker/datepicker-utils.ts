@@ -12,6 +12,7 @@ const modifiersStyles = {
   sundays: { color: "#C30000" },
   selected: { color: "#FFFFFF" },
 };
+console.log("lol");
 
 export const dayPickerProps: DayPickerProps = {
   showOutsideDays: true,

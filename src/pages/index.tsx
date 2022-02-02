@@ -1,3 +1,4 @@
+import React from "react";
 import { GetStaticPropsResult } from "next";
 import { Seksjon } from "../components/seksjon/Seksjon";
 import { host } from "../api.utils";

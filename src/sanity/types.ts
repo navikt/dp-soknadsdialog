@@ -1,4 +1,9 @@
-import { PrimitivFaktumType, GeneratorFaktumType, GeneratorListType, ValgFaktumType } from "../types/faktum.types";
+import {
+  PrimitivFaktumType,
+  GeneratorFaktumType,
+  GeneratorListType,
+  ValgFaktumType,
+} from "../types/faktum.types";
 
 export interface SanitySeksjon {
   _id: string;
@@ -49,6 +54,7 @@ export interface SanityAnswerOption {
 }
 
 // T only used to identify ref type when reading code
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface SanityRef<T = unknown> {
   _type: "reference";
   _ref: string;

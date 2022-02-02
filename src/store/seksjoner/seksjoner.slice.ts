@@ -17,8 +17,6 @@ export const seksjonerSlice = createSlice({
   },
 });
 
-export const seksjonActions = seksjonerSlice.actions;
-
 export function selectSeksjoner(state: RootState) {
   return state.soknad.seksjoner;
 }

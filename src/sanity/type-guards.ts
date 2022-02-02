@@ -1,5 +1,9 @@
 import { SubFaktum } from "./utils";
-import { MockDataFaktum, MockDataValgFaktum, MockDataGeneratorFaktum } from "../soknad-fakta/soknad";
+import {
+  MockDataFaktum,
+  MockDataValgFaktum,
+  MockDataGeneratorFaktum,
+} from "../soknad-fakta/soknad";
 
 export function isValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
   return (faktum as MockDataValgFaktum).answerOptions !== undefined;
