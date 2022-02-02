@@ -1,43 +1,16 @@
 import React from "react";
+import { IFaktum } from "../../types/faktum.types";
 import styles from "./Faktum.module.css";
-import { FaktumBoolean } from "./FaktumBoolean";
-import { FaktumMulti } from "./FaktumMulti";
-import { FaktumType } from "../../types/types";
-
-export interface IFaktum {
-  _id: string;
-  type: FaktumType;
-  title: string;
-  description: string;
-  help: string;
-  alert: string;
-  answerOptions?: IAnswer[];
-  subFaktum?: ISubFaktum[];
-  faktum?: IFaktum[];
-}
-
-export interface ISubFaktum extends IFaktum {
-  requiredAnswerIds: { _id: string }[];
-}
-
-export interface IAnswer {
-  _id: string;
-  text: string;
-  alertText?: string;
-}
-
-export interface FaktumAnswer {
-  id: string;
-  value: string;
-}
+import { FaktumValg } from "./FaktumValg";
+import { FaktumFlervalg } from "./FaktumFlervalg";
 
 export function Faktum(props: IFaktum) {
   return (
     <div className={styles.container}>
-      {props.title ? <h3>{props.title}</h3> : <h3>{props._id}.title</h3>}
+      {props.title ? <h3>{props.title}</h3> : <h3>{props.id}.title</h3>}
       {props.description && <p>{props.description}</p>}
-      {props.help && <p>{props.help}</p>}
-      {props.alert && <p>{props.alert}</p>}
+      {props.helpText && <p>{props.helpText}</p>}
+      {props.alertText && <p>{props.alertText}</p>}
       {renderFaktumType(props)}
     </div>
   );
@@ -46,11 +19,11 @@ export function Faktum(props: IFaktum) {
 function renderFaktumType(props: IFaktum) {
   switch (props.type) {
     case "boolean":
-      return <FaktumBoolean {...props} />;
+      return <FaktumValg {...props} />;
     case "valg":
-      return <FaktumBoolean {...props} />;
+      return <FaktumValg {...props} />;
     case "flervalg":
-      return <FaktumMulti {...props} />;
+      return <FaktumFlervalg {...props} />;
     default:
       return (
         <div>

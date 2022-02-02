@@ -15,8 +15,8 @@ import {
   createSanityValgFaktumFromApiFaktum,
   SubFaktum,
 } from "../../../sanity/utils";
-import { isGeneratorFaktum, isValgFaktum } from "../../../types/types";
 import { SanityBaseDocument } from "../../../sanity/types";
+import { isValgFaktum, isGeneratorFaktum } from "../../../sanity/type-guards";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
   const quizSeksjoner: MockDataSeksjon[] = mockSeksjoner;

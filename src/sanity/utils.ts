@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid";
-import { isSubFaktum } from "../types/types";
 import {
   SanityAnswerOption,
   SanityBaseFaktum,
@@ -15,6 +14,7 @@ import {
   MockDataSeksjon,
   MockDataValgFaktum,
 } from "../soknad-fakta/soknad";
+import { isSubFaktum } from "./type-guards";
 
 export function createSanityAnswerFromApiAnswerOption(
   answer: MockDataAnswerOption

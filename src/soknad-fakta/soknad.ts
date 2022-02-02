@@ -1,9 +1,3 @@
-import {
-  BaseFaktumType,
-  GeneratorFaktumType,
-  GeneratorListType,
-  ValgFaktumType,
-} from "../types/types";
 import { koronaFortsattRett } from "./korona-fortsatt-rett";
 import { reellArbeidssoker } from "./reell-arbeidssoker";
 import { arbeidsforhold } from "./arbeidsforhold";
@@ -14,6 +8,7 @@ import { verneplikt } from "./verneplikt";
 import { tilleggsopplysninger } from "./tilleggsopplysninger";
 import { barnetillegg } from "./barnetillegg";
 import { andreYtelser } from "./andre-ytelser";
+import { GeneratorFaktumType, GeneratorListType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
 
 export interface MockDataSeksjon {
   id: string;
@@ -24,7 +19,7 @@ export type MockDataFaktum = MockDataBaseFaktum | MockDataGeneratorFaktum | Mock
 
 export interface MockDataBaseFaktum {
   id: string;
-  type: BaseFaktumType | GeneratorFaktumType | ValgFaktumType;
+  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType;
 }
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {

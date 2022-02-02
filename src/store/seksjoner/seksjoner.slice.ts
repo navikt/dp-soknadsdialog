@@ -1,28 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { Quiz } from "../../models/quiz";
-
 
 interface SeksjonerState {
-  seksjoner: Quiz.Fakta[];
+  seksjoner: never[];
 }
 
 const initialState: SeksjonerState = {
-  seksjoner: []
+  seksjoner: [],
 };
 
 export const seksjonerSlice = createSlice({
   name: "seksjoner",
   initialState,
   reducers: {
-    hent: (state) => { },
-    hentFullført: (state) => {},
-    hentFeilet: (state) => { }
-  }
+    get: () => undefined,
+  },
 });
 
 export const seksjonActions = seksjonerSlice.actions;
 
-export const selectSeksjoner = (state: RootState) => state.soknad.seksjoner;
-
-export default seksjonerSlice.reducer;
+export function selectSeksjoner(state: RootState) {
+  return state.soknad.seksjoner;
+}

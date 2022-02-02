@@ -1,19 +1,4 @@
-import {
-  BaseFaktumType,
-  GeneratorFaktumType,
-  GeneratorListType,
-  ValgFaktumType,
-} from "../types/types";
-
-export interface SanityBaseDocument {
-  _id: string;
-  _type: string;
-}
-
-export interface SanityLandingPage {
-  title: string;
-  content: string;
-}
+import { PrimitivFaktumType, GeneratorFaktumType, GeneratorListType, ValgFaktumType } from "../types/faktum.types";
 
 export interface SanitySeksjon {
   _id: string;
@@ -22,13 +7,18 @@ export interface SanitySeksjon {
   faktum: SanityRef<SanityFaktum>[];
 }
 
+export interface SanityBaseDocument {
+  _id: string;
+  _type: string;
+}
+
 export type SanityFaktum = SanityBaseFaktum | SanityGeneratorFaktum | SanityValgFaktum;
 
 export interface SanityBaseFaktum {
   _id: string;
   _type: "baseFaktum";
   key: string;
-  type: BaseFaktumType;
+  type: PrimitivFaktumType;
   requiredAnswerIds?: SanityRef<SanityFaktum>[];
 }
 

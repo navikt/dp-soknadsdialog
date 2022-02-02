@@ -1,17 +1,9 @@
 import React from "react";
 import styles from "./Seksjon.module.css";
-import { Faktum, IFaktum } from "../faktum/Faktum";
-
-export interface ISeksjon {
-  _id: string;
-  title: string;
-  description?: string;
-  helpText?: string;
-  faktum: IFaktum[];
-}
+import { Faktum } from "../faktum/Faktum";
+import { ISeksjon } from "../../types/seksjon.types";
 
 export function Seksjon(props: ISeksjon) {
-  console.log(props);
   return (
     <div className={styles.container}>
       <div className={styles.faktum}>
@@ -20,10 +12,9 @@ export function Seksjon(props: ISeksjon) {
         {props.helpText && <p>{props.helpText}</p>}
 
         {props.faktum.map((faktum) => (
-          <Faktum key={faktum._id} {...faktum} />
+          <Faktum key={faktum.id} {...faktum} />
         ))}
       </div>
-      <div className={styles.timeline}>Timeline step-indikator</div>
     </div>
   );
 }
