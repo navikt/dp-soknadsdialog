@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`/api/personalia APIet svarer med annen enn 200 ok 1`] = `
+Object {
+  "detail": "En lengre beskrivelse av hvorfor det feiler",
+  "status": 400,
+  "title": "Feil token",
+  "type": "urn:oppslag:personalia",
+}
+`;
+
+exports[`/api/personalia Uinnlogget 1`] = `
+Object {
+  "status": 401,
+  "title": "Ikke innlogget",
+  "type": "urn:oppslag:personalia",
+}
+`;
+
+exports[`/api/personalia svarer med personalia 1`] = `
+Object {
+  "etterNavn": "Trumpf",
+  "folkeregistrertAdresse": Object {
+    "adresselinje1": "Soloveien 232",
+    "adresselinje2": "C/O Plassen",
+    "adresselinje3": "Bortafor vegen",
+    "byEllerStedsnavn": "SOL",
+    "land": "Sverige",
+    "landkode": "SWE",
+    "postkode": "1121",
+  },
+  "forNavn": "Donald",
+  "fødselsDato": "1940-06-14T00:00:00.000Z",
+  "mellomNavn": "J",
+  "postAdresse": Object {
+    "adresselinje1": "Soloveien 232",
+    "adresselinje2": "C/O Plassen",
+    "adresselinje3": "Bortafor vegen",
+    "byEllerStedsnavn": "SOL",
+    "land": "Sverige",
+    "landkode": "SWE",
+    "postkode": "1121",
+  },
+}
+`;
