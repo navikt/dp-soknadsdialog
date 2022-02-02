@@ -4,11 +4,10 @@ import { Faktum } from "../faktum/Faktum";
 import { ISeksjon } from "../../types/seksjon.types";
 
 export function Seksjon(props: ISeksjon) {
-  console.log("Seksjon: ", props);
   return (
     <div className={styles.container}>
       <div className={styles.faktum}>
-        {props.title && <h1>{props.title}</h1>}
+        <h1>{props.title ? props.title : props.id}</h1>
         {props.description && <p>{props.description}</p>}
         {props.helpText && <p>{props.helpText}</p>}
 
