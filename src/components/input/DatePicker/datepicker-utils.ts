@@ -2,7 +2,6 @@ import { DayPickerProps } from "react-day-picker";
 import { DateUtils } from "react-day-picker";
 import dateFnsParse from "date-fns/parse";
 import dateFnsFormat from "date-fns/format";
-import { nb } from "date-fns/locale";
 
 const modifiers = {
   sundays: { daysOfWeek: [0] },
@@ -18,7 +17,6 @@ export const dayPickerProps: DayPickerProps = {
   firstDayOfWeek: 1,
   modifiers,
   modifiersStyles,
-  locale: nb,
 };
 
 export function parseDate(str: string, format: string, locale: string) {
