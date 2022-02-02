@@ -8,7 +8,9 @@ export function FaktumDropdown(props: IValgFaktum) {
       <Select label="" size="medium">
         <option value="">Velg land eller noe annen placeholder tekst</option>
         {props.answerOptions.map((answer) => (
-          <option value={answer.id}>{answer.title ? answer.title : answer.id}</option>
+          <option key={answer.id} value={answer.id}>
+            {answer.title ? answer.title : answer.id}
+          </option>
         ))}
       </Select>
     </div>
