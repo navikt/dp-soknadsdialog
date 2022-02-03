@@ -1,4 +1,4 @@
-# dp-soknad - Søknadsdialog for dagpenger
+# dp-soknadsdialog - Søknadsdialog for dagpenger
 
 Frontend-klient for søknad om dagpenger
 
