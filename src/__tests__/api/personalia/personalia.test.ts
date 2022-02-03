@@ -1,5 +1,5 @@
 import { createMocks } from "node-mocks-http";
-import { HttpProblem, personaliaHandler } from "../../../pages/api/personalia";
+import personaliaHandler, { HttpProblem } from "../../../pages/api/personalia";
 import { getSession as _getSession } from "@navikt/dp-auth/server";
 import { Personalia } from "../../../types/personalia.types";
 

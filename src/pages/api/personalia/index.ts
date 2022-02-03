@@ -31,7 +31,7 @@ function getPersonalia(onBehalfOfToken: string) {
   });
 }
 
-export const personaliaHandler: NextApiHandler<Personalia | HttpProblem> = async (
+const personaliaHandler: NextApiHandler<Personalia | HttpProblem> = async (
   req: NextApiRequest,
   res: NextApiResponse<Personalia | HttpProblem>
 ) => {
@@ -68,3 +68,5 @@ export const personaliaHandler: NextApiHandler<Personalia | HttpProblem> = async
     }
   }
 };
+
+export default personaliaHandler;
