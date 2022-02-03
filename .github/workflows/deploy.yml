@@ -3,7 +3,7 @@ name: Build and deploy
 on: [push]
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}/dp-dagpengersoknad-frontend:${{ github.sha }}
+  IMAGE: ghcr.io/${{ github.repository }}/dp-soknad:${{ github.sha }}
   BASE_PATH: /arbeid/dagpenger/soknad
 
 jobs:

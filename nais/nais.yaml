@@ -1,11 +1,11 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: dp-dagpengersoknad-frontend
+  name: dp-soknad
   namespace: teamdagpenger
   labels:
     team: teamdagpenger
-    app: dp-dagpengersoknad-frontend
+    app: dp-soknad
 spec:
   image: {{image}}
   port: 3000
