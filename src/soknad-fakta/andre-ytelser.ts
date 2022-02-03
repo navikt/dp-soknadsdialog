@@ -44,7 +44,8 @@ export const andreYtelser: MockDataSeksjon = {
         },
         {
           id: "faktum.dagpenger-annet-eos-land",
-          type: "dropdown", //todo: insert alle verdens land
+          type: "dropdown",
+          answerOptions: [], //todo: insert alle verdens land
           requiredAnswerIds: ["faktum.andre-ytelser.svar.dagpenger-annet-eos-land"],
         },
         {
