@@ -1,11 +1,15 @@
-.seksjon {
+.container {
   display: flex;
-  flex-direction: column;
-  max-width: 650px;
-  padding: 0 32px;
+  max-width: 600px;
   margin: auto auto 50px;
 }
 
-.seksjonHeading {
-  margin-bottom: 40px;
+.faktum {
+  min-width: 600px;
+  width: 100%;
+}
+
+.timeline {
+  flex: 1 0 350px;
+  padding: 25px;
 }

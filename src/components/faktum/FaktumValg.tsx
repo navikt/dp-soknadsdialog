@@ -31,7 +31,7 @@ export function FaktumValg(props: IValgFaktum) {
       </RadioGroup>
 
       {props.subFaktum && props.subFaktum.length > 0 && (
-        <div className={styles.subFaktum}>
+        <div className={styles["sub-faktum"]}>
           {props.subFaktum.map((faktum) => {
             if (faktum.requiredAnswerIds.find((a) => a.id === answer)) {
               return <Faktum key={faktum.id} {...faktum} />;

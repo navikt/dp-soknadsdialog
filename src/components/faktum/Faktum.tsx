@@ -11,7 +11,7 @@ import { FaktumPeriode } from "./FaktumPeriode";
 import styles from "./Faktum.module.css";
 
 export function Faktum(props: IFaktum) {
-  return <div className={styles.faktum}>{renderFaktumType(props)}</div>;
+  return <div className={styles.container}>{renderFaktumType(props)}</div>;
 }
 
 function renderFaktumType(props: IFaktum) {
