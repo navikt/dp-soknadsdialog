@@ -5,6 +5,9 @@ export interface Personalia {
   fødselsDato: Date;
   postAdresse?: Adresse;
   folkeregistrertAdresse?: Adresse;
+  kontonummer: string;
+  banknavn?: string;
+  bankLandkode?: string;
 }
 
 export interface Adresse {
@@ -15,10 +18,4 @@ export interface Adresse {
   landkode: string;
   land: string;
   postkode: string;
-}
-
-export interface Kontonummer {
-  kontonummer: string;
-  banknavn?: string;
-  landkode?: string;
 }
