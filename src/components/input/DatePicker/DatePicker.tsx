@@ -5,7 +5,7 @@ import dateFnsFormat from "date-fns/format";
 import { isValid } from "date-fns";
 import { TextField } from "@navikt/ds-react";
 import { Calender } from "@navikt/ds-icons";
-import { dayPickerProps, parseDate, formatDate } from "./datepicker-utils";
+import { dayPickerProps } from "./datepicker-utils";
 
 import styles from "./DatePicker.module.css";
 import "react-day-picker/lib/style.css";
