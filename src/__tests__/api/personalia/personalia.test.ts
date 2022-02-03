@@ -16,6 +16,9 @@ global.fetch = jest.fn(() => {
         mellomNavn: "J",
         etterNavn: "Trumpf",
         fødselsDato: new Date("1940-06-14"),
+        kontonummer: "12345677889",
+        bankLandkode: "SWE",
+        banknavn: "Eskilstuna Rekarne Sparbank",
         folkeregistrertAdresse: {
           adresselinje1: "Soloveien 232",
           adresselinje2: "C/O Plassen",

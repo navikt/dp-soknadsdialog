@@ -19,6 +19,8 @@ Object {
 
 exports[`/api/personalia svarer med personalia 1`] = `
 Object {
+  "bankLandkode": "SWE",
+  "banknavn": "Eskilstuna Rekarne Sparbank",
   "etterNavn": "Trumpf",
   "folkeregistrertAdresse": Object {
     "adresselinje1": "Soloveien 232",
@@ -31,6 +33,7 @@ Object {
   },
   "forNavn": "Donald",
   "fødselsDato": "1940-06-14T00:00:00.000Z",
+  "kontonummer": "12345677889",
   "mellomNavn": "J",
   "postAdresse": Object {
     "adresselinje1": "Soloveien 232",
