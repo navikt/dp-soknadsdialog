@@ -1,16 +1,13 @@
-.container {
+.faktum {
   margin-bottom: 30px;
-  background-color: #f7f7f7;
-  padding: 10px 20px;
-  border-radius: 15px;
 }
 
-.sub-faktum {
+.subFaktum {
   padding: 0;
   margin: auto -20px;
 }
 
-.generator-faktum-list {
-  border: solid 1px #3b3b3b;
+.generatorFaktumList {
+  border: solid 1px transparent;
   border-radius: 5px;
 }
