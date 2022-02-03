@@ -1,7 +1,7 @@
 import { createMocks } from "node-mocks-http";
-import { personaliaHenter } from "../../../pages/api/personalia";
+import { HttpProblem, personaliaHandler } from "../../../pages/api/personalia";
 import { getSession as _getSession } from "@navikt/dp-auth/server";
-import { HttpProblem, Person } from "../../../types/personalia.types";
+import { Personalia } from "../../../types/personalia.types";
 
 jest.mock("@navikt/dp-auth/server");
 const getSession = _getSession as jest.MockedFunction<typeof _getSession>;
@@ -11,7 +11,7 @@ global.fetch = jest.fn(() => {
     headers: new Headers({ "content-type": "application/json" }),
     ok: true,
     json: () =>
-      Promise.resolve<Person>({
+      Promise.resolve<Personalia>({
         forNavn: "Donald",
         mellomNavn: "J",
         etterNavn: "Trumpf",
@@ -57,7 +57,7 @@ describe("/api/personalia", () => {
     });
 
     // @ts-ignore MockRequest matcher ikke AuthedNextApiRequest
-    await personaliaHenter(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
     expect(res._getJSONData()).toMatchSnapshot();
@@ -71,7 +71,7 @@ describe("/api/personalia", () => {
     });
 
     // @ts-ignore MockRequest matcher ikke AuthedNextApiRequest
-    await personaliaHenter(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
   });
@@ -97,7 +97,7 @@ describe("/api/personalia", () => {
     });
 
     // @ts-ignore MockRequest matcher ikke AuthedNextApiRequest
-    await personaliaHenter(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(400);
     expect(res._getJSONData()).toMatchSnapshot();
@@ -111,7 +111,7 @@ describe("/api/personalia", () => {
     });
 
     // @ts-ignore MockRequest matcher ikke AuthedNextApiRequest
-    await personaliaHenter(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(401);
     expect(res._getJSONData()).toMatchSnapshot();
