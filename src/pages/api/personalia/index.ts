@@ -13,7 +13,7 @@ export interface HttpProblem {
 }
 
 const isHttpProblem = (variableToCheck: unknown): variableToCheck is HttpProblem =>
-  (variableToCheck as HttpProblem).title !== undefined;
+  (variableToCheck as HttpProblem).type !== undefined;
 
 function getPersonalia(onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/personalia`, {
