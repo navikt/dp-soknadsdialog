@@ -3,7 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import React from "react";
 import { Personalia } from "../../types/personalia.types";
-import useSWR, { Fetcher } from "swr";
+import useSWR from "swr";
 import { host } from "../../api.utils";
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
@@ -39,14 +39,10 @@ export default function Person({ session: initialSession }: Session): JSX.Elemen
   );
 }
 
-const fetcherPersonalia: Fetcher<Personalia, string> = (...args) =>
-  fetch(...args).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const Kontonummer = async () => {
-  const { data: personalia, error } = useSWR<Personalia>(
-    `${host}/api/personalia`,
-    fetcherPersonalia
-  );
+export const Kontonummer = () => {
+  const { data: personalia, error } = useSWR<Personalia>(`${host}/api/personalia`, fetcher);
 
   if (error) {
     return (
