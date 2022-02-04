@@ -1,7 +1,11 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { seksjonerSlice } from "./seksjoner/seksjoner.slice";
+import { answersSlice } from "./answers.slice";
+import { seksjonerSlice } from "./seksjoner.slice";
 
-const reducer = combineReducers({ soknad: seksjonerSlice.reducer });
+const reducer = combineReducers({
+  seksjoner: seksjonerSlice.reducer,
+  answers: answersSlice.reducer,
+});
 
 export const store = configureStore({
   reducer,

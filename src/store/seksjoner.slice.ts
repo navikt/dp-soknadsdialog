@@ -1,22 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
-
-interface SeksjonerState {
-  seksjoner: never[];
-}
-
-const initialState: SeksjonerState = {
-  seksjoner: [],
-};
+import { RootState } from ".";
 
 export const seksjonerSlice = createSlice({
   name: "seksjoner",
-  initialState,
+  initialState: [],
   reducers: {
     get: () => undefined,
   },
 });
 
 export function selectSeksjoner(state: RootState) {
-  return state.soknad.seksjoner;
+  return state.seksjoner;
 }
