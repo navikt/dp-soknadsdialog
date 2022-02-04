@@ -1,39 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Radio, RadioGroup } from "@navikt/ds-react";
-import { Faktum } from "./Faktum";
+import { Faktum, FaktumProps } from "./Faktum";
 import { IValgFaktum } from "../../types/faktum.types";
 import styles from "./Faktum.module.css";
 
-export function FaktumValg(props: IValgFaktum) {
-  const [answer, setAnswer] = useState("");
+export function FaktumValg(props: FaktumProps<IValgFaktum>) {
+  const [faktumAnswer, setFaktumAnswer] = useState("");
+  const { faktum, onChange } = props;
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log("Ny verdi: ", answer);
-  }, [answer]);
-
-  function onChange(value: string) {
-    setAnswer(value);
+  function onSelection(value: string) {
+    // TODO: Erstatte useState faktumAnswer med answer fra redux-state
+    setFaktumAnswer(value);
+    onChange(faktum.id, value);
   }
 
   return (
     <div>
-      {props.description && <p>{props.description}</p>}
-      {props.helpText && <p>{props.helpText}</p>}
-      {props.alertText && <p>{props.alertText}</p>}
+      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktum.alertText && <p>{faktum.alertText}</p>}
 
-      <RadioGroup legend={props.title ? props.title : props.id} onChange={onChange}>
-        {props.answerOptions.map((answer) => (
+      <RadioGroup legend={faktum.title ? faktum.title : faktum.id} onChange={onSelection}>
+        {faktum.answerOptions.map((answer) => (
           <Radio key={answer.id} value={answer.id}>
             {answer.title ? answer.title : answer.id}
           </Radio>
         ))}
       </RadioGroup>
 
-      {props.subFaktum && props.subFaktum.length > 0 && (
+      {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
-          {props.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => a.id === answer)) {
+          {faktum.subFaktum.map((faktum) => {
+            if (faktum.requiredAnswerIds.find((a) => a.id === faktumAnswer)) {
               return <Faktum key={faktum.id} {...faktum} />;
             }
           })}
