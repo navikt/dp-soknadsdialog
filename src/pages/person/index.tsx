@@ -1,12 +1,15 @@
 import { Session, useSession } from "@navikt/dp-auth/client";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import React from "react";
 import { Personalia } from "../../types/personalia.types";
 import useSWR from "swr";
 import { host } from "../../api.utils";
+import { ParsedUrlQuery } from "querystring";
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext<ParsedUrlQuery>
+) => {
   const { token, payload } = await getSession(ctx);
 
   if (!token) {
