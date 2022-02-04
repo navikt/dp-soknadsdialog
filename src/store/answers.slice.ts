@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export type AnswerType = string | Date | string[] | number;
+export interface AnswerPeriode {
+  fromDate: Date;
+  toDate: Date;
+}
+export type AnswerType = string | string[] | number | Date | AnswerPeriode;
 interface Answer {
   faktumId: string;
   answer: AnswerType;
