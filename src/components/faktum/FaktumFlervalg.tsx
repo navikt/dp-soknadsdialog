@@ -1,27 +1,23 @@
+import React from "react";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
-import React, { useEffect, useState } from "react";
 import { IValgFaktum } from "../../types/faktum.types";
+import { FaktumProps } from "./Faktum";
 
-export function FaktumFlervalg(props: IValgFaktum) {
-  const [answer, setAnswer] = useState<string[]>([]);
+export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
+  const { faktum, onChange } = props;
 
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log("Ny verdi: ", answer);
-  }, [answer]);
-
-  function onChange(value: string[]) {
-    setAnswer(value);
-  }
+  const onSelection = (value: string[]) => {
+    onChange(faktum.id, value);
+  };
 
   return (
     <div>
-      {props.description && <p>{props.description}</p>}
-      {props.helpText && <p>{props.helpText}</p>}
-      {props.alertText && <p>{props.alertText}</p>}
+      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktum.alertText && <p>{faktum.alertText}</p>}
 
-      <CheckboxGroup legend={props.title ? props.title : props.id} onChange={onChange}>
-        {props.answerOptions.map((answer) => (
+      <CheckboxGroup legend={faktum.title ? faktum.title : faktum.id} onChange={onSelection}>
+        {faktum.answerOptions.map((answer) => (
           <Checkbox key={answer.id} value={answer.id}>
             {answer.title ? answer.title : answer.id}
           </Checkbox>

@@ -1,14 +1,15 @@
 import React from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
-import { Faktum } from "./Faktum";
+import { Faktum, FaktumProps } from "./Faktum";
 import styles from "./Faktum.module.css";
 
-export function FaktumGenerator(props: IGeneratorFaktum) {
+export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
+  const { faktum } = props;
   return (
     <div>
-      Generator type: {props.listType ? props.listType : "type ikke satt"}
+      Generator type: {faktum.listType ? faktum.listType : "type ikke satt"}
       <div className={styles["generator-faktum-list"]}>
-        {props.faktum?.map((faktum) => (
+        {faktum.faktum?.map((faktum) => (
           <Faktum key={faktum.id} {...faktum} />
         ))}
       </div>

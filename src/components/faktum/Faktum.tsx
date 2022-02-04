@@ -9,32 +9,42 @@ import { FaktumDropdown } from "./FaktumDropdown";
 import { FaktumDato } from "./FaktumDato";
 import { FaktumPeriode } from "./FaktumPeriode";
 import styles from "./Faktum.module.css";
+import { AnswerType, setAnswer } from "../../store/answers.slice";
+import { useDispatch } from "react-redux";
 
-export function Faktum(props: IFaktum) {
-  return <div className={styles.container}>{renderFaktumType(props)}</div>;
+export interface FaktumProps<P> {
+  faktum: P;
+  onChange: (faktumId: string, value: AnswerType) => void;
 }
 
-function renderFaktumType(props: IFaktum) {
-  switch (props.type) {
-    case "boolean":
-      return <FaktumValg {...props} />;
-    case "valg":
-      return <FaktumValg {...props} />;
-    case "flervalg":
-      return <FaktumFlervalg {...props} />;
-    case "tekst":
-      return <FaktumText {...props} />;
-    case "double":
-      return <FaktumNumber {...props} />;
-    case "int":
-      return <FaktumNumber {...props} />;
-    case "generator":
-      return <FaktumGenerator {...props} />;
-    case "dropdown":
-      return <FaktumDropdown {...props} />;
-    case "localdate":
-      return <FaktumDato {...props} />;
-    case "periode":
-      return <FaktumPeriode {...props} />;
-  }
+export function Faktum(faktum: IFaktum) {
+  const dispatch = useDispatch();
+
+  const dispatchAnswer = (faktumId: string, answer: AnswerType) => {
+    dispatch(setAnswer({ faktumId, answer }));
+  };
+
+  const renderFaktumType = () => {
+    switch (faktum.type) {
+      case "boolean":
+      case "valg":
+        return <FaktumValg faktum={faktum} onChange={dispatchAnswer} />;
+      case "flervalg":
+        return <FaktumFlervalg faktum={faktum} onChange={dispatchAnswer} />;
+      case "tekst":
+        return <FaktumText faktum={faktum} onChange={dispatchAnswer} />;
+      case "double":
+      case "int":
+        return <FaktumNumber faktum={faktum} onChange={dispatchAnswer} />;
+      case "generator":
+        return <FaktumGenerator faktum={faktum} />;
+      case "dropdown":
+        return <FaktumDropdown faktum={faktum} onChange={dispatchAnswer} />;
+      case "localdate":
+        return <FaktumDato faktum={faktum} onChange={dispatchAnswer} />;
+      case "periode":
+        return <FaktumPeriode faktum={faktum} onChange={dispatchAnswer} />;
+    }
+  };
+  return <div className={styles.container}>{renderFaktumType()}</div>;
 }
