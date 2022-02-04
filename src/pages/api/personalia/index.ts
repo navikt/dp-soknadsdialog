@@ -16,6 +16,8 @@ const isHttpProblem = (variableToCheck: unknown): variableToCheck is HttpProblem
   (variableToCheck as HttpProblem).type !== undefined;
 
 function getPersonalia(onBehalfOfToken: string) {
+  // eslint-disable-next-line no-console
+  console.log(`API_BASE_URL ${process.env.API_BASE_URL}`);
   return fetch(`${process.env.API_BASE_URL}/personalia`, {
     method: "Get",
     headers: {
