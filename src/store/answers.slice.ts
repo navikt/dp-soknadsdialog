@@ -1,32 +1,27 @@
-import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from ".";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type AnswerType = string | Date | string[] | number;
 interface Answer {
   faktumId: string;
   answer: AnswerType;
 }
-interface AnswerState {
-  [faktumId: string]: AnswerType;
-}
 
 export const answersSlice = createSlice({
   name: "answers",
-  initialState: {},
+  initialState: [] as Answer[],
   reducers: {
-    setAnswer: (state: AnswerState, action: PayloadAction<Answer>) => {
-      state[action.payload.faktumId] = action.payload.answer;
+    setAnswer: (state: Answer[], action: PayloadAction<Answer>) => {
+      const existingIndex = state.findIndex(
+        (answer) => answer.faktumId === action.payload.faktumId
+      );
+      if (existingIndex === -1) {
+        state.push(action.payload);
+      } else {
+        state[existingIndex] = action.payload;
+      }
       return state;
     },
   },
 });
 
 export const { setAnswer } = answersSlice.actions;
-
-export function selectAllAnswers(state: RootState) {
-  return state.answers;
-}
-
-export function selectAnswerById(state: RootState, faktumKey: string) {
-  return createSelector(selectAllAnswers, (answers: AnswerState) => answers[faktumKey]);
-}
