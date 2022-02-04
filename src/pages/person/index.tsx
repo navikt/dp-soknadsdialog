@@ -4,7 +4,6 @@ import { getSession } from "@navikt/dp-auth/server";
 import React from "react";
 import { Personalia } from "../../types/personalia.types";
 import useSWR from "swr";
-import { host } from "../../api.utils";
 
 export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const { token, payload } = await getSession(ctx);
@@ -41,8 +40,14 @@ export default function Person({ session: initialSession }: Session): JSX.Elemen
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
+function api(endpoint: string): string {
+  return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${
+    endpoint.startsWith("/") ? "" : "/"
+  }${endpoint}`;
+}
+
 export const Kontonummer = () => {
-  const { data: personalia, error } = useSWR<Personalia>(`${host}/api/personalia`, fetcher);
+  const { data: personalia, error } = useSWR<Personalia>(api("/personalia"), fetcher);
 
   if (error) {
     return (
