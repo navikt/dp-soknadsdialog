@@ -1,23 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-
-function getFakta(soknadId: string, onBehalfOfToken: string) {
-  return fetch(`${process.env.API_BASE_URL}/soknad/${soknadId}/fakta`, {
-    method: "Get",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
-  })
-    .then((response: Response) => {
-      return response.json();
-    })
-    .catch((error) => {
-      return Promise.reject(error);
-    });
-}
+import { getFakta } from "../../../../server-side/quiz-api";
 
 const faktaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { query } = req;
