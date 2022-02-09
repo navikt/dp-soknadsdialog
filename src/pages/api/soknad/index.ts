@@ -13,12 +13,12 @@ export interface ISoknad {
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
   const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner);
   const { token, apiToken } = await getSession({ req });
-  let nySoknad;
+  let nySoknadId;
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
-    nySoknad = await postSoknad(onBehalfOfToken);
+    nySoknadId = await postSoknad(onBehalfOfToken);
     // eslint-disable-next-line no-console
-    console.log(nySoknad);
+    console.log(nySoknadId);
   }
 
   if (sanitySections.length <= 0) {
@@ -27,7 +27,7 @@ const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404);
   }
 
-  return res.status(200).json({ sections: sanitySections, nySoknad });
+  return res.status(200).json({ sections: sanitySections, nySoknadId: nySoknadId });
 };
 
 export default soknad;

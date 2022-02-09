@@ -18,7 +18,7 @@ export function postSoknad(onBehalfOfToken: string) {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   })
-    .then(mapResponseToJson)
+    .then((response) => response.text())
     .catch((error) => {
       return Promise.reject(error);
     });
