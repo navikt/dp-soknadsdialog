@@ -21,7 +21,7 @@ export const barnetillegg: MockDataSeksjon = {
         },
         {
           id: "faktum.barn-statsborgerskap",
-          type: "dropdown",
+          type: "land",
           answerOptions: [], //todo: insert landliste
         },
         {
