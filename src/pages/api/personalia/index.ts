@@ -25,11 +25,11 @@ function getPersonalia(onBehalfOfToken: string) {
       Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-  }).then(async (respons: Response) => {
-    if (!respons.ok) {
-      return Promise.reject<HttpProblem>(await respons.json());
+  }).then(async (response: Response) => {
+    if (!response.ok) {
+      return Promise.reject<HttpProblem>(await response.json());
     }
-    return respons.json();
+    return response.json();
   });
 }
 

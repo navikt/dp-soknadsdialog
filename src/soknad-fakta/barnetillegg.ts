@@ -20,7 +20,7 @@ export const barnetillegg: MockDataSeksjon = {
           type: "localdate",
         },
         {
-          id: "faktum.barn-bostedsland",
+          id: "faktum.barn-statsborgerskap",
           type: "dropdown",
           answerOptions: [], //todo: insert landliste
         },

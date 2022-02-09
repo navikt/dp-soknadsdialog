@@ -182,11 +182,6 @@ export const arbeidsforhold: MockDataSeksjon = {
                   type: "int",
                   requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
                 },
-                {
-                  id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
-                  type: "int",
-                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
-                },
               ],
             },
             {

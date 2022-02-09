@@ -64,11 +64,6 @@ export const egenNaering: MockDataSeksjon = {
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
-          id: "faktum-eget-gaardsbruk-arbeidstimer",
-          type: "double",
-          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
-        },
-        {
           id: "faktum-eget-gaardsbruk-arbeidsaar",
           type: "dropdown", //todo: siste fem år? en dynamisk dropdown som endrer seg hvert år altså. Hvordan løser vi dette?
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],

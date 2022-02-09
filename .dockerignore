@@ -11,6 +11,8 @@
 !.babelrc
 !.sentryclirc
 !.npmrc
+!.env
+!.env.production
 
 !csp.js
 !prepare.js

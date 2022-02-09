@@ -24,10 +24,10 @@ export default class MyDocument extends Document<DecoratorComponents> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
-
+    const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,
-      language: locale as Locale | undefined,
+      language: language,
     }).catch((err) => {
       // eslint-disable-next-line no-console
       console.error(err);

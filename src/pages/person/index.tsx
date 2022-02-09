@@ -34,23 +34,20 @@ export default function Person({ session: initialSession }: Session): JSX.Elemen
   }
   return (
     <section>
-      <Kontonummer />
+      <PersonInformasjon />
     </section>
   );
 }
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export const Kontonummer = () => {
+export const PersonInformasjon = () => {
   const { data: personalia, error } = useSWR<Personalia>(api("personalia"), fetcher);
 
   if (error) {
     return (
       <>
-        <div>
-          Feil:
-          {JSON.stringify(error)}
-        </div>
+        <div>Feil: {error.toString()}</div>
       </>
     );
   }
@@ -58,8 +55,10 @@ export const Kontonummer = () => {
   return (
     <>
       <div>
-        Navn: {personalia?.forNavn}, {personalia?.etterNavn}
-        {JSON.stringify(personalia)}
+        <p>
+          Navn: {personalia?.forNavn}, {personalia?.etterNavn}
+        </p>
+        <p>Kontonummer: {personalia?.kontonummer}</p>
       </div>
     </>
   );
