@@ -17,7 +17,7 @@ export interface FaktumProps<P> {
   onChange: (faktumId: string, value: AnswerType) => void;
 }
 
-export function Faktum(faktum: IFaktum) {
+export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
 
   const dispatchAnswer = (faktumId: string, answer: AnswerType) => {
@@ -25,25 +25,25 @@ export function Faktum(faktum: IFaktum) {
   };
 
   const renderFaktumType = () => {
-    switch (faktum.type) {
+    switch (props.faktum.type) {
       case "boolean":
       case "valg":
-        return <FaktumValg faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumValg faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "flervalg":
-        return <FaktumFlervalg faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumFlervalg faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "tekst":
-        return <FaktumText faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumText faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "double":
       case "int":
-        return <FaktumNumber faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumNumber faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "generator":
-        return <FaktumGenerator faktum={faktum} />;
+        return <FaktumGenerator faktum={props.faktum} />;
       case "dropdown":
-        return <FaktumDropdown faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumDropdown faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "localdate":
-        return <FaktumDato faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumDato faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
       case "periode":
-        return <FaktumPeriode faktum={faktum} onChange={dispatchAnswer} />;
+        return <FaktumPeriode faktum={props.faktum} onChange={props.onChange || dispatchAnswer} />;
     }
   };
   return <div className={styles.container}>{renderFaktumType()}</div>;

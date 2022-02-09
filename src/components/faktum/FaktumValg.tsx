@@ -3,6 +3,7 @@ import { Alert, Radio, RadioGroup } from "@navikt/ds-react";
 import { Faktum, FaktumProps } from "./Faktum";
 import { IValgFaktum } from "../../types/faktum.types";
 import styles from "./Faktum.module.css";
+import { PortableText } from "@portabletext/react";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const [faktumAnswer, setFaktumAnswer] = useState("");
@@ -16,7 +17,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
 
   return (
     <div>
-      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
@@ -36,7 +37,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
             if (faktum.requiredAnswerIds.find((a) => a.id === faktumAnswer)) {
-              return <Faktum key={faktum.id} {...faktum} />;
+              return <Faktum key={faktum.id} faktum={faktum} onChange={onChange} />;
             }
           })}
         </div>

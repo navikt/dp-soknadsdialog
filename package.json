@@ -31,6 +31,7 @@
     "@navikt/ds-react": "^0.14.0",
     "@navikt/fnrvalidator": "^1.1.4",
     "@navikt/nav-dekoratoren-moduler": "^1.6.9",
+    "@portabletext/react": "^1.0.2",
     "@reduxjs/toolkit": "^1.7.1",
     "date-fns": "^2.28.0",
     "jsdom": "^19.0.0",

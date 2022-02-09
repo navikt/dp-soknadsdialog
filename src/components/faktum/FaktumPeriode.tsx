@@ -2,6 +2,7 @@ import React from "react";
 import { IPrimitivFaktum } from "../../types/faktum.types";
 import { DatePicker } from "../input/DatePicker";
 import { FaktumProps } from "./Faktum";
+import { PortableText } from "@portabletext/react";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum } = props;
@@ -12,7 +13,7 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
 
   return (
     <div>
-      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <DatePicker label={"Fra dato"} onChange={onChange} />

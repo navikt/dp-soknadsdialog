@@ -2,6 +2,7 @@ import React from "react";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { IValgFaktum } from "../../types/faktum.types";
 import { FaktumProps } from "./Faktum";
+import { PortableText } from "@portabletext/react";
 
 export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
@@ -12,7 +13,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
 
   return (
     <div>
-      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
 

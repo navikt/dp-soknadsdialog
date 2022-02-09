@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { answersSlice } from "./answers.slice";
 import { seksjonerSlice } from "./seksjoner.slice";
+import { arbeidsforholdSlice } from "./arbeidsforhold.slice";
 
 const reducer = combineReducers({
   seksjoner: seksjonerSlice.reducer,
   answers: answersSlice.reducer,
+  arbeidsforhold: arbeidsforholdSlice.reducer,
 });
 
 export const store = configureStore({
