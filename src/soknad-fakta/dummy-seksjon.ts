@@ -66,6 +66,10 @@ export const dummySeksjon: MockDataSeksjon = {
       type: "periode",
     },
     {
+      id: "faktum.dummy-land",
+      type: "land",
+    },
+    {
       id: "faktum.dummy-generator",
       type: "generator",
       faktum: [
@@ -130,6 +134,10 @@ export const dummySeksjon: MockDataSeksjon = {
         {
           id: "faktum.generator-dummy-periode",
           type: "periode",
+        },
+        {
+          id: "faktum.generator-dummy-land",
+          type: "land",
         },
       ],
     },

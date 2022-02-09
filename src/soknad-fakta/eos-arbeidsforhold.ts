@@ -21,17 +21,17 @@ export const eosArbeidsforhold: MockDataSeksjon = {
             },
             {
               id: "faktum.eos-arbeidsforhold-land",
-              type: "dropdown",
+              type: "land",
               answerOptions: [], // liste over alle land? generere maskinelt? quiz?
               subFaktum: [], // her bør vi få inn subfaktum om PIN i det lander, hvis dropdown svaret inneholder et eos-land, logikk?
             },
             {
               id: "faktum.eos-arbeidsforhold-personnummer",
-              type: "tekst"
+              type: "tekst",
             },
             {
               id: "faktum.eos-arbeidsforhold-varighet",
-              type: "periode"
+              type: "periode",
             },
           ],
           requiredAnswerIds: ["faktum.eos-arbeid-siste-36-mnd.svar.ja"],
