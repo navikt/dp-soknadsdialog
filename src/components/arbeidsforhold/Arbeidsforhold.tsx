@@ -65,6 +65,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
             <Accordion.Header onClick={() => toggleActiveArbeidsforhold(index)}>
               {getArbeidsforholdName(arbeidsforhold)}
             </Accordion.Header>
+
             <Accordion.Content>
               <Button onClick={() => onDeleteArbeidsforhold()}>Slett arbeidsforhold</Button>
               <ArbeidsforholdFakta

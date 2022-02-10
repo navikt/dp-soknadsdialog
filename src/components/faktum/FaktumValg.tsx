@@ -12,7 +12,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   function onSelection(value: string) {
     // TODO: Erstatte useState faktumAnswer med answer fra redux-state
     setFaktumAnswer(value);
-    onChange(faktum.id, value);
+    onChange && onChange(faktum.id, value);
   }
 
   return (

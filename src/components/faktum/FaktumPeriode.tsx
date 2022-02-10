@@ -11,7 +11,7 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
 
   useEffect(() => {
     if (fromDate !== null && toDate !== null) {
-      onChange(faktum.id, { fromDate, toDate });
+      onChange && onChange(faktum.id, { fromDate, toDate });
     }
   }, [fromDate, toDate]);
 

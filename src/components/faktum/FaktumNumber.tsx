@@ -9,7 +9,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
 
   const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(faktum.id, event.target.value);
+    onChange && onChange(faktum.id, event.target.value);
   };
 
   const debouncedOnChange = useDebounce<ChangeEvent<HTMLInputElement>>(onTextChange, 500);

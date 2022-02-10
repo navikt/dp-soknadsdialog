@@ -7,7 +7,7 @@ import { PortableText } from "@portabletext/react";
 export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const onDateSelection = (value: Date) => {
-    onChange(faktum.id, value);
+    onChange && onChange(faktum.id, value);
   };
 
   return (

@@ -8,7 +8,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
 
   const onSelection = (value: string[]) => {
-    onChange(faktum.id, value);
+    onChange && onChange(faktum.id, value);
   };
 
   return (
