@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
-import { IArbeidsforhold, saveArbeidsforhold } from "../../store/arbeidsforhold.slice";
+import {
+  deleteArbeidsforhold,
+  IArbeidsforhold,
+  saveArbeidsforhold,
+} from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -26,6 +30,10 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
 
     resetArbeidsforholdForm();
   }
+  function onDeleteArbeidsforhold() {
+    dispatch(deleteArbeidsforhold(activeArbeidsforholdIndex));
+    resetArbeidsforholdForm();
+  }
 
   function onAddArbeidsforhold() {
     if (arbeidsforhold.length > 0) {
@@ -34,7 +42,9 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
     setNewArbeidsforhold(!addNewArbeidsforhold);
   }
 
-  function toggleActiveArebidsforhold(index: number) {
+  function toggleActiveArbeidsforhold(index: number) {
+    setNewArbeidsforhold(false);
+
     if (index === activeArbeidsforholdIndex) {
       setActiveArbeidsforholdIndex(undefined);
     } else {
@@ -52,10 +62,11 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
       <Accordion>
         {arbeidsforhold.map((arbeidsforhold, index) => (
           <Accordion.Item key={index} open={index === activeArbeidsforholdIndex}>
-            <Accordion.Header onClick={() => toggleActiveArebidsforhold(index)}>
+            <Accordion.Header onClick={() => toggleActiveArbeidsforhold(index)}>
               {getArbeidsforholdName(arbeidsforhold)}
             </Accordion.Header>
             <Accordion.Content>
+              <Button onClick={() => onDeleteArbeidsforhold()}>Slett arbeidsforhold</Button>
               <ArbeidsforholdFakta
                 fakta={props.faktum}
                 save={onSaveArbeidsforhold}

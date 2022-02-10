@@ -25,7 +25,14 @@ export const arbeidsforholdSlice = createSlice({
       }
       return state;
     },
+    deleteArbeidsforhold: (state: IArbeidsforhold[], action: PayloadAction<number | undefined>) => {
+      if (action.payload !== undefined) {
+        state.splice(action.payload, 1);
+      }
+      return state;
+    },
   },
 });
 
 export const { saveArbeidsforhold } = arbeidsforholdSlice.actions;
+export const { deleteArbeidsforhold } = arbeidsforholdSlice.actions;
