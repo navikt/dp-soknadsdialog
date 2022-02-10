@@ -18,7 +18,7 @@ export const arbeidsforholdSlice = createSlice({
       state: IArbeidsforhold[],
       action: PayloadAction<ArbeidsforholdPayload>
     ) => {
-      if (action.payload.index) {
+      if (action.payload.index !== undefined) {
         state[action.payload.index] = action.payload.arbeidsforhold;
       } else {
         state.push(action.payload.arbeidsforhold);

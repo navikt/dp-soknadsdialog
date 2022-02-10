@@ -9,7 +9,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
 
   const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(faktum.id, event.target.value);
+    onChange && onChange(faktum.id, event.target.value);
   };
 
   const debouncedOnChange = useDebounce<ChangeEvent<HTMLInputElement>>(onTextChange, 500);
@@ -24,6 +24,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
         size="medium"
         type="text"
         onChange={debouncedOnChange}
+        onBlur={debouncedOnChange.flush}
       />
     </div>
   );

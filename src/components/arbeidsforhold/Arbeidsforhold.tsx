@@ -1,54 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
-import { saveArbeidsforhold } from "../../store/arbeidsforhold.slice";
-import { Faktum } from "../faktum/Faktum";
-import { Answer, AnswerType } from "../../store/answers.slice";
+import { IArbeidsforhold, saveArbeidsforhold } from "../../store/arbeidsforhold.slice";
+import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { ArbeidsforholdFakta } from "./ArbeidsforholdFakta";
+import styles from "./Arbeidsforhold.module.css";
 
 export function Arbeidsforhold(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
   const arbeidsforhold = useSelector((state: RootState) => state.arbeidsforhold);
   const [addNewArbeidsforhold, setNewArbeidsforhold] = useState(false);
   const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
-  const [tmpArbeidsForholdAnswers, setTmpArbeidsForholdAnswers] = useState<Answer[]>([]);
 
-  useEffect(() => {
-    if (activeArbeidsforholdIndex) {
-      const activeArbeidsforhold = arbeidsforhold[activeArbeidsforholdIndex];
-      if (activeArbeidsforhold) {
-        setTmpArbeidsForholdAnswers(activeArbeidsforhold.answers);
-      }
-    }
-  }, [activeArbeidsforholdIndex]);
-
-  function saveFaktum(faktumId: string, answer: AnswerType) {
-    const answerIndex = tmpArbeidsForholdAnswers.findIndex(
-      (answer) => answer.faktumId === faktumId
-    );
-
-    if (answerIndex === -1) {
-      setTmpArbeidsForholdAnswers((state) => [...state, { faktumId, answer }]);
-    } else {
-      setTmpArbeidsForholdAnswers((state) => [
-        ...state,
-        (state[answerIndex] = { faktumId, answer }),
-      ]);
-    }
-  }
-
-  function onSaveArbeidsforhold() {
+  function onSaveArbeidsforhold(answers: Answer[]) {
     dispatch(
       saveArbeidsforhold({
         arbeidsforhold: {
-          answers: tmpArbeidsForholdAnswers,
+          answers,
         },
         index: activeArbeidsforholdIndex,
       })
     );
 
-    resetTmpArbeidsforhold();
+    resetArbeidsforholdForm();
   }
 
   function onAddArbeidsforhold() {
@@ -66,53 +42,50 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
     }
   }
 
-  function resetTmpArbeidsforhold() {
+  function resetArbeidsforholdForm() {
     setNewArbeidsforhold(false);
-    setTmpArbeidsForholdAnswers([]);
     setActiveArbeidsforholdIndex(undefined);
   }
 
   return (
-    <>
-      <div>
-        <Accordion>
-          {arbeidsforhold.map((forhold, index) => (
-            <Accordion.Item key={index} open={index === activeArbeidsforholdIndex}>
-              <Accordion.Header onClick={() => toggleActiveArebidsforhold(index)}>
-                {forhold.answers.find((answer) => answer.faktumId === "faktum.navn-bedrift")
-                  ?.answer ?? "Mangler navn"}
-              </Accordion.Header>
-              <Accordion.Content>
-                <>
-                  {props.faktum.map((faktum) => (
-                    <div key={faktum.id}>
-                      <Faktum faktum={faktum} onChange={saveFaktum} />
-                    </div>
-                  ))}
-
-                  <Button onClick={onSaveArbeidsforhold}>Lagre arbreidsforhold</Button>
-                </>
-              </Accordion.Content>
-            </Accordion.Item>
-          ))}
-        </Accordion>
-      </div>
+    <div>
+      <Accordion>
+        {arbeidsforhold.map((arbeidsforhold, index) => (
+          <Accordion.Item key={index} open={index === activeArbeidsforholdIndex}>
+            <Accordion.Header onClick={() => toggleActiveArebidsforhold(index)}>
+              {getArbeidsforholdName(arbeidsforhold)}
+            </Accordion.Header>
+            <Accordion.Content>
+              <ArbeidsforholdFakta
+                fakta={props.faktum}
+                save={onSaveArbeidsforhold}
+                cancel={resetArbeidsforholdForm}
+              />
+            </Accordion.Content>
+          </Accordion.Item>
+        ))}
+      </Accordion>
 
       {!addNewArbeidsforhold && (
-        <Button onClick={onAddArbeidsforhold}>Legg til arbreidsforhold</Button>
+        <Button className={styles["button-container"]} onClick={onAddArbeidsforhold}>
+          Legg til arbreidsforhold
+        </Button>
       )}
 
       {addNewArbeidsforhold && (
-        <>
-          {props.faktum.map((faktum) => (
-            <div key={faktum.id}>
-              <Faktum faktum={faktum} onChange={saveFaktum} />
-            </div>
-          ))}
-          <Button onClick={onSaveArbeidsforhold}>Lagre arbreidsforhold</Button>
-          <Button onClick={resetTmpArbeidsforhold}>Avbryt</Button>
-        </>
+        <ArbeidsforholdFakta
+          fakta={props.faktum}
+          save={onSaveArbeidsforhold}
+          cancel={resetArbeidsforholdForm}
+        />
       )}
-    </>
+    </div>
+  );
+}
+
+function getArbeidsforholdName(arbeidsforhold: IArbeidsforhold): string {
+  return (
+    (arbeidsforhold.answers.find((answer) => answer.faktumId === "faktum.navn-bedrift")
+      ?.answer as string) ?? "Fant ikke navn på arbeidsgiver"
   );
 }
