@@ -1,4 +1,5 @@
-export type ValgFaktumType = "boolean" | "valg" | "dropdown" | "flervalg" | "land";
+import { TypedObject } from "@portabletext/types";
+export type ValgFaktumType = "boolean" | "valg" | "dropdown" | "flervalg";
 export type PrimitivFaktumType = "int" | "double" | "localdate" | "periode" | "tekst";
 export type GeneratorFaktumType = "generator";
 export type GeneratorListType = "Arbeidsforhold" | "Barn" | "Standard";
@@ -9,7 +10,7 @@ export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
 export interface IBaseFaktum {
   id: string;
   title: string;
-  description?: string;
+  description?: TypedObject | TypedObject[];
   helpText?: string;
   alertText?: string;
 }

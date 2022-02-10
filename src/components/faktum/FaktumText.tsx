@@ -3,6 +3,7 @@ import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { useDebounce } from "../../hooks/useDebounce";
+import { PortableText } from "@portabletext/react";
 
 export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
@@ -15,7 +16,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
 
   return (
     <div>
-      {faktum.description && <p>{faktum.description}</p>}
+      {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
