@@ -4,7 +4,7 @@ export interface AnswerPeriode {
   toDate: Date;
 }
 export type AnswerType = string | string[] | number | Date | AnswerPeriode;
-interface Answer {
+export interface Answer {
   faktumId: string;
   answer: AnswerType;
 }

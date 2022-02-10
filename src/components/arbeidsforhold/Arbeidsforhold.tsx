@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
-import { Button } from "@navikt/ds-react";
-import { IArbeidsforhold, saveArbeidsforhold } from "../../store/arbeidsforhold.slice";
+import { Accordion, Button } from "@navikt/ds-react";
+import { saveArbeidsforhold } from "../../store/arbeidsforhold.slice";
 import { Faktum } from "../faktum/Faktum";
-import { AnswerType } from "../../store/answers.slice";
+import { Answer, AnswerType } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 
@@ -11,73 +11,96 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
   const arbeidsforhold = useSelector((state: RootState) => state.arbeidsforhold);
   const [addNewArbeidsforhold, setNewArbeidsforhold] = useState(false);
-  const [tmpArbeidsForhold, setTmpArbeidsForhold] = useState<IArbeidsforhold>({
-    id: props.id,
-    name: "",
-    fromDate: "",
-    fakta: [],
-  });
+  const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
+  const [tmpArbeidsForholdAnswers, setTmpArbeidsForholdAnswers] = useState<Answer[]>([]);
+
+  useEffect(() => {
+    if (activeArbeidsforholdIndex) {
+      const activeArbeidsforhold = arbeidsforhold[activeArbeidsforholdIndex];
+      if (activeArbeidsforhold) {
+        setTmpArbeidsForholdAnswers(activeArbeidsforhold.answers);
+      }
+    }
+  }, [activeArbeidsforholdIndex]);
 
   function saveFaktum(faktumId: string, answer: AnswerType) {
-    // console.log("faktumId: ", faktumId);
-    // console.log("value: ", answer);
-    if (faktumId === "faktum.navn-bedrift") {
-      const name = answer as string;
-      setTmpArbeidsForhold((state) => ({ ...state, name }));
-    }
-
-    if (faktumId === "faktum.arbeidsforhold-varighet") {
-      // console.log("Trekk ut datoen og noe greier her");
-    }
-
-    const faktumIndex = tmpArbeidsForhold.fakta.findIndex(
-      (forhold) => forhold.faktumId === faktumId
+    const answerIndex = tmpArbeidsForholdAnswers.findIndex(
+      (answer) => answer.faktumId === faktumId
     );
 
-    if (faktumIndex === -1) {
-      setTmpArbeidsForhold((state) => ({
-        ...state,
-        fakta: [...tmpArbeidsForhold.fakta, { faktumId, answer }],
-      }));
+    if (answerIndex === -1) {
+      setTmpArbeidsForholdAnswers((state) => [...state, { faktumId, answer }]);
     } else {
-      const fakta = [...tmpArbeidsForhold.fakta];
-      fakta[faktumIndex] = { faktumId, answer };
-
-      setTmpArbeidsForhold((state) => ({
+      setTmpArbeidsForholdAnswers((state) => [
         ...state,
-        fakta,
-      }));
+        (state[answerIndex] = { faktumId, answer }),
+      ]);
     }
   }
 
   function onSaveArbeidsforhold() {
-    dispatch(saveArbeidsforhold(tmpArbeidsForhold));
-    setNewArbeidsforhold(false);
-    setTmpArbeidsForhold({
-      id: props.id,
-      name: "",
-      fromDate: "",
-      fakta: [],
-    });
+    dispatch(
+      saveArbeidsforhold({
+        arbeidsforhold: {
+          answers: tmpArbeidsForholdAnswers,
+        },
+        index: activeArbeidsforholdIndex,
+      })
+    );
 
-    // Set focus top of arbeidsforhold section
+    resetTmpArbeidsforhold();
+  }
+
+  function onAddArbeidsforhold() {
+    if (arbeidsforhold.length > 0) {
+      setActiveArbeidsforholdIndex(() => arbeidsforhold.length);
+    }
+    setNewArbeidsforhold(!addNewArbeidsforhold);
+  }
+
+  function toggleActiveArebidsforhold(index: number) {
+    if (index === activeArbeidsforholdIndex) {
+      setActiveArbeidsforholdIndex(undefined);
+    } else {
+      setActiveArbeidsforholdIndex(index);
+    }
+  }
+
+  function resetTmpArbeidsforhold() {
+    setNewArbeidsforhold(false);
+    setTmpArbeidsForholdAnswers([]);
+    setActiveArbeidsforholdIndex(undefined);
   }
 
   return (
     <>
       <div>
-        {arbeidsforhold.map((forhold) => (
-          <>
-            <div> {forhold.name}</div>
-            <div> {forhold.fromDate}</div>
-            <div> {forhold.toDate}</div>
-          </>
-        ))}
+        <Accordion>
+          {arbeidsforhold.map((forhold, index) => (
+            <Accordion.Item key={index} open={index === activeArbeidsforholdIndex}>
+              <Accordion.Header onClick={() => toggleActiveArebidsforhold(index)}>
+                {forhold.answers.find((answer) => answer.faktumId === "faktum.navn-bedrift")
+                  ?.answer ?? "Mangler navn"}
+              </Accordion.Header>
+              <Accordion.Content>
+                <>
+                  {props.faktum.map((faktum) => (
+                    <div key={faktum.id}>
+                      <Faktum faktum={faktum} onChange={saveFaktum} />
+                    </div>
+                  ))}
+
+                  <Button onClick={onSaveArbeidsforhold}>Lagre arbreidsforhold</Button>
+                </>
+              </Accordion.Content>
+            </Accordion.Item>
+          ))}
+        </Accordion>
       </div>
 
-      <Button onClick={() => setNewArbeidsforhold(!addNewArbeidsforhold)}>
-        Legg til arbreidsforhold
-      </Button>
+      {!addNewArbeidsforhold && (
+        <Button onClick={onAddArbeidsforhold}>Legg til arbreidsforhold</Button>
+      )}
 
       {addNewArbeidsforhold && (
         <>
@@ -87,6 +110,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
             </div>
           ))}
           <Button onClick={onSaveArbeidsforhold}>Lagre arbreidsforhold</Button>
+          <Button onClick={resetTmpArbeidsforhold}>Avbryt</Button>
         </>
       )}
     </>

@@ -1,20 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Answer } from "./answers.slice";
 
+interface ArbeidsforholdPayload {
+  arbeidsforhold: IArbeidsforhold;
+  index?: number;
+}
+
 export interface IArbeidsforhold {
-  id: string; //generator faktumid
-  name: string; // navn på arbeidshold -> Kan være preutfylt fra quiz
-  fromDate: string;
-  toDate?: string;
-  fakta: Answer[];
+  answers: Answer[];
 }
 
 export const arbeidsforholdSlice = createSlice({
   name: "arbeidsforhold",
   initialState: [] as IArbeidsforhold[],
   reducers: {
-    saveArbeidsforhold: (state: IArbeidsforhold[], action: PayloadAction<IArbeidsforhold>) => {
-      state.push(action.payload);
+    saveArbeidsforhold: (
+      state: IArbeidsforhold[],
+      action: PayloadAction<ArbeidsforholdPayload>
+    ) => {
+      if (action.payload.index) {
+        state[action.payload.index] = action.payload.arbeidsforhold;
+      } else {
+        state.push(action.payload.arbeidsforhold);
+      }
       return state;
     },
   },
