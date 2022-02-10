@@ -14,7 +14,7 @@ import { useDispatch } from "react-redux";
 
 export interface FaktumProps<P> {
   faktum: P;
-  onChange: (faktumId: string, value: AnswerType) => void;
+  onChange?: (faktumId: string, value: AnswerType) => void;
 }
 
 export function Faktum(props: FaktumProps<IFaktum>) {
