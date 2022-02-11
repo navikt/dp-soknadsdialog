@@ -8,17 +8,18 @@ import { ISeksjon } from "../../../types/seksjon.types";
 
 export interface ISoknad {
   sections: ISeksjon[];
+  soknadId: string;
 }
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
   const sanitySections = await sanityClient.fetch<ISeksjon[]>(fetchAllSeksjoner);
   const { token, apiToken } = await getSession({ req });
-  let nySoknadId;
+  let soknadId;
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
-    nySoknadId = await postSoknad(onBehalfOfToken);
+    soknadId = await postSoknad(onBehalfOfToken);
     // eslint-disable-next-line no-console
-    console.log(nySoknadId);
+    console.log(soknadId);
   }
 
   if (sanitySections.length <= 0) {
@@ -27,7 +28,7 @@ const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(404);
   }
 
-  return res.status(200).json({ sections: sanitySections, nySoknadId: nySoknadId });
+  return res.status(200).json({ sections: sanitySections, soknadId });
 };
 
 export default soknad;
