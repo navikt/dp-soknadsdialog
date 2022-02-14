@@ -9,6 +9,7 @@ export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
 
 export interface IBaseFaktum {
   id: string;
+  beskrivendeId: string;
   title: string;
   description?: TypedObject | TypedObject[];
   helpText?: string;
@@ -31,11 +32,11 @@ export interface IGeneratorFaktum extends IBaseFaktum {
 }
 
 export type ISubFaktum = IFaktum & {
-  requiredAnswerIds: { id: string }[];
+  requiredAnswerIds: { beskrivendeId: string }[];
 };
 
 export interface IAnswerOption {
-  id: string;
+  beskrivendeId: string;
   title: string;
   helpText?: string;
   alertText?: string;

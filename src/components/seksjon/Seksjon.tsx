@@ -12,7 +12,7 @@ export function Seksjon(props: ISeksjon) {
         {props.description && <PortableText value={props.description} />}
         {props.helpText && <p>{props.helpText}</p>}
         {props.faktum.map((faktum) => (
-          <Faktum key={faktum?.id} faktum={faktum} />
+          <Faktum key={faktum?.beskrivendeId} faktum={faktum} />
         ))}
       </div>
     </div>

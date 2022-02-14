@@ -8,7 +8,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
 
   const onSelection = (value: string[]) => {
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   };
 
   return (
@@ -17,10 +17,13 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
-      <CheckboxGroup legend={faktum.title ? faktum.title : faktum.id} onChange={onSelection}>
+      <CheckboxGroup
+        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
+        onChange={onSelection}
+      >
         {faktum.answerOptions.map((answer) => (
-          <Checkbox key={answer.id} value={answer.id}>
-            {answer.title ? answer.title : answer.id}
+          <Checkbox key={answer.beskrivendeId} value={answer.beskrivendeId}>
+            {answer.title ? answer.title : answer.beskrivendeId}
           </Checkbox>
         ))}
       </CheckboxGroup>

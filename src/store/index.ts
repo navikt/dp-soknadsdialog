@@ -11,6 +11,9 @@ const reducer = combineReducers({
 
 export const store = configureStore({
   reducer,
+  devTools: {
+    name: "Ny dagpengesøknad",
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
