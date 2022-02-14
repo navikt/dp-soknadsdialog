@@ -3,6 +3,7 @@ export const mockFakta = [
     id: "1",
     type: "boolean",
     beskrivendeId: "faktum.hel-deltid",
+    svar: true,
     roller: ["søker"],
   },
   {
@@ -84,6 +85,7 @@ export const mockFakta = [
     id: "3004",
     type: "double",
     beskrivendeId: "faktum.egen-naering-arbeidstimer",
+    svar: "3.0",
     roller: ["søker"],
   },
   {
@@ -244,6 +246,7 @@ export const mockFakta = [
     id: "8001",
     type: "localdate",
     beskrivendeId: "faktum.dagpenger-soknadsdato",
+    svar: "2022-01-14T13:39Z",
     roller: ["søker"],
   },
   {
