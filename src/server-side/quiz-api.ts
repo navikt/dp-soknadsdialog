@@ -6,10 +6,6 @@ export interface QuizApi {
   putFaktumSvar: (soknadId: string, faktumId: string, faktumSvar: never) => void;
 }
 
-function mapResponseToJson(response: Response) {
-  return response.json();
-}
-
 export function postSoknad(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
   return fetch(url, {
@@ -34,7 +30,7 @@ export function getFakta(soknadId: string, onBehalfOfToken: string): Promise<IFa
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   })
-    .then(mapResponseToJson)
+    .then((response: Response) => response.json())
     .catch((error) => {
       return Promise.reject(error);
     });

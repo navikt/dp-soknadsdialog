@@ -1,0 +1,17 @@
+.sectionNav {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 80px 0;
+}
+
+.sectionNavBack,
+.sectionNavNext {
+  min-width: 130px;
+}
+
+.sectionNavBack {
+  margin-right: 12px;
+}
+.sectionNavNext {
+  margin-left: 12px;
+}

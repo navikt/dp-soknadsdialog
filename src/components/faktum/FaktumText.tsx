@@ -10,10 +10,10 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as string) ?? "";
+    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
-    if (onChange) onChange(faktum.id, event.currentTarget.value);
+    if (onChange) onChange(faktum.beskrivendeId, event.currentTarget.value);
   }
 
   return (
@@ -22,7 +22,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
-        label={faktum.title ? faktum.title : faktum.id}
+        label={faktum.title ? faktum.title : faktum.beskrivendeId}
         size="medium"
         type="text"
         onChange={onTextChange}

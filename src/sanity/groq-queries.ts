@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 
 const faktumGroq = `
-  'id': _id,
+  'beskrivendeId': _id,
   type,
   title,
   type,
@@ -11,17 +11,17 @@ const faktumGroq = `
   alertText,
   helpText,
   requiredAnswerIds[]->{
-    'id': _id
+    'beskrivendeId': _id
   },
   answerOptions[]->{
-    'id': _id,
+    'beskrivendeId': _id,
     title,
     alertText,
     helpText
   }
 `;
 
-export const fetchAllSeksjoner = groq`*[_type == "seksjon"]{
+export const fetchAllSeksjoner = groq`*[_type == "seksjon" && !(_id in path("drafts.**"))]{
   'id': _id, title, description, helpText,
   faktum[]->{
     ${faktumGroq},

@@ -28,7 +28,7 @@ function TempFallback(faktum: IGeneratorFaktum) {
       <div className={styles["generator-faktum-list"]}>
         {/*TODO: Noen generator har ikke faktum array?*/}
         {faktum.faktum?.map((faktum) => (
-          <Faktum key={faktum.id} faktum={faktum} />
+          <Faktum key={faktum.beskrivendeId} faktum={faktum} />
         ))}
       </div>
     </>

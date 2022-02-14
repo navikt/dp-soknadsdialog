@@ -1,20 +1,34 @@
-import React from "react";
-import { GetStaticPropsResult } from "next";
-import { Seksjon } from "../components/seksjon/Seksjon";
-import api, { host } from "../api.utils";
+import React, { useState } from "react";
 import { ISoknad } from "./api/soknad";
+import { useDispatch } from "react-redux";
+import { setSeksjoner } from "../store/seksjoner.slice";
+import { useRouter } from "next/router";
+import { Button, Heading } from "@navikt/ds-react";
 
-export async function getServerSideProps(): Promise<GetStaticPropsResult<ISoknad>> {
-  // Denne skal fetche quiz faktum med svar
-  const soknad: ISoknad = await fetch(new URL(`${api("soknad")}`, host).href).then((data) => {
-    return data.json();
-  });
+export default function Soknad() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
 
-  return {
-    props: soknad,
+  const startSoknad = async () => {
+    setIsCreatingSoknadUUID(true);
+    await fetch("/api/soknad")
+      .then((response: Response) => response.json())
+      .then((data: ISoknad) => {
+        dispatch(setSeksjoner(data.sections));
+        router.push(`/${data.soknadId}/seksjon/0`);
+      });
+    setIsCreatingSoknadUUID(false);
   };
-}
 
-export default function Soknad(props: ISoknad) {
-  return props.sections.map((section) => <Seksjon key={section.id} {...section} />);
+  return (
+    <div>
+      <Heading spacing size="xlarge" level="1">
+        Søknad om dagpenger
+      </Heading>
+      <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
+        Start søknad
+      </Button>
+    </div>
+  );
 }

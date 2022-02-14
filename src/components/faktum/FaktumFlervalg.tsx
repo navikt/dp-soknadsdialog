@@ -11,10 +11,10 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerIds =
-    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as string[]) ?? [];
+    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string[]) ?? [];
 
   const onSelection = (value: string[]) => {
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   };
 
   return (
@@ -24,13 +24,13 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <CheckboxGroup
-        legend={faktum.title ? faktum.title : faktum.id}
+        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
         onChange={onSelection}
         value={currentAnswerIds}
       >
         {faktum.answerOptions.map((answer) => (
-          <Checkbox key={answer.id} value={answer.id}>
-            {answer.title ? answer.title : answer.id}
+          <Checkbox key={answer.beskrivendeId} value={answer.beskrivendeId}>
+            {answer.title ? answer.title : answer.beskrivendeId}
           </Checkbox>
         ))}
       </CheckboxGroup>
@@ -38,10 +38,10 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds.includes(a.id))) {
+            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds.includes(a.beskrivendeId))) {
               return (
                 <Faktum
-                  key={faktum.id}
+                  key={faktum.beskrivendeId}
                   faktum={faktum}
                   onChange={onChange}
                   answers={props.answers}

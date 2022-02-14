@@ -10,11 +10,11 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as string) ??
+    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ??
     new Date().toISOString();
 
   const onDateSelection = (value: string) => {
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   };
 
   return (
@@ -23,7 +23,7 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <DatePicker
-        label={faktum.title ? faktum.title : faktum.id}
+        label={faktum.title ? faktum.title : faktum.beskrivendeId}
         onChange={onDateSelection}
         value={currentAnswer}
       />

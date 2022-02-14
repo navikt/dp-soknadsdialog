@@ -1,0 +1,8 @@
+.soknadHeader {
+  border-bottom: 6px solid var(--navds-global-color-blue-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 66px;
+  background-color: var(--navds-global-color-blue-50);
+}

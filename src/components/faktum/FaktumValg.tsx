@@ -11,10 +11,10 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerId =
-    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as string) ?? "";
+    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
 
   function onSelection(value: string) {
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   }
 
   return (
@@ -24,15 +24,17 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <RadioGroup
-        legend={faktum.title ? faktum.title : faktum.id}
+        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
         onChange={onSelection}
         value={currentAnswerId}
       >
         {faktum.answerOptions.map((answer) => (
-          <div key={answer.id}>
-            <Radio value={answer.id}>{answer.title ? answer.title : answer.id}</Radio>
+          <div key={answer.beskrivendeId}>
+            <Radio value={answer.beskrivendeId}>
+              {answer.title ? answer.title : answer.beskrivendeId}
+            </Radio>
             {answer.helpText ? <Alert variant={"info"}>{answer.helpText}</Alert> : undefined}
-            {answer.alertText && currentAnswerId === answer.id ? (
+            {answer.alertText && currentAnswerId === answer.beskrivendeId ? (
               <Alert variant={"warning"}>{answer.alertText}</Alert>
             ) : undefined}
           </div>
@@ -42,10 +44,10 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => a.id === currentAnswerId)) {
+            if (faktum.requiredAnswerIds.find((a) => a.beskrivendeId === currentAnswerId)) {
               return (
                 <Faktum
-                  key={faktum.id}
+                  key={faktum.beskrivendeId}
                   faktum={faktum}
                   onChange={onChange}
                   answers={props.answers}

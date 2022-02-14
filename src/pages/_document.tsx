@@ -14,7 +14,7 @@ const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
   simple: true,
   context: "privatperson",
-  enforceLogin: process.env.NODE_ENV === "production",
+  enforceLogin: dekoratorEnv === "prod",
   redirectToApp: true,
   level: "Level4",
   utloggingsvarsel: true,
@@ -43,7 +43,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     return {
       ...initialProps,
       ...Dekorator,
-      locale,
+      locale: language,
     };
   }
 

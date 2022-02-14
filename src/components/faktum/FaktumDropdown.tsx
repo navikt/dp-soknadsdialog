@@ -10,10 +10,10 @@ export function FaktumDropdown(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as string) ?? "";
+    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
 
   const onSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    onChange && onChange(faktum.id, event.target.value);
+    onChange && onChange(faktum.beskrivendeId, event.target.value);
   };
 
   return (
@@ -22,15 +22,15 @@ export function FaktumDropdown(props: FaktumProps<IValgFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <Select
-        label={faktum.title ? faktum.title : faktum.id}
+        label={faktum.title ? faktum.title : faktum.beskrivendeId}
         size="medium"
         onChange={onSelect}
         value={currentAnswer}
       >
         <option value="">Velg land eller noe annen placeholder tekst</option>
         {faktum.answerOptions.map((answer) => (
-          <option key={answer.id} value={answer.id}>
-            {answer.title ? answer.title : answer.id}
+          <option key={answer.beskrivendeId} value={answer.beskrivendeId}>
+            {answer.title ? answer.title : answer.beskrivendeId}
           </option>
         ))}
       </Select>
