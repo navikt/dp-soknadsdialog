@@ -2,17 +2,19 @@ import React, { ChangeEvent } from "react";
 import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
-import { useDebounce } from "../../hooks/useDebounce";
 import { PortableText } from "@portabletext/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
+  const answers = useSelector((state: RootState) => props.answers || state.answers);
+  const currentAnswer =
+    (answers.find((answer) => answer.faktumId === faktum.id)?.answer as number) ?? 0;
 
-  const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+  function onTextChange(event: ChangeEvent<HTMLInputElement>) {
     onChange && onChange(faktum.id, event.target.value);
-  };
-
-  const debouncedOnChange = useDebounce<ChangeEvent<HTMLInputElement>>(onTextChange, 500);
+  }
 
   return (
     <div>
@@ -23,7 +25,8 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
         label={faktum.title ? faktum.title : faktum.id}
         size="medium"
         type="number"
-        onChange={debouncedOnChange}
+        onChange={onTextChange}
+        value={currentAnswer}
       />
     </div>
   );

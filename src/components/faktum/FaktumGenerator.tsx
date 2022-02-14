@@ -26,7 +26,8 @@ function TempFallback(faktum: IGeneratorFaktum) {
     <>
       Generator type: {faktum.listType ? faktum.listType : "type ikke satt"}
       <div className={styles["generator-faktum-list"]}>
-        {faktum.faktum.map((faktum) => (
+        {/*TODO: Noen generator har ikke faktum array?*/}
+        {faktum.faktum?.map((faktum) => (
           <Faktum key={faktum.id} faktum={faktum} />
         ))}
       </div>

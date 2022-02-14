@@ -69,6 +69,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
             <Accordion.Content>
               <Button onClick={() => onDeleteArbeidsforhold()}>Slett arbeidsforhold</Button>
               <ArbeidsforholdFakta
+                answers={arbeidsforhold.answers}
                 fakta={props.faktum}
                 save={onSaveArbeidsforhold}
                 cancel={resetArbeidsforholdForm}

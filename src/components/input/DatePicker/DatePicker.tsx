@@ -13,11 +13,12 @@ import "react-day-picker/lib/style.css";
 interface DatePickerProps {
   label: string;
   placeholder?: string;
-  onChange: (value: Date) => void;
+  onChange: (value: string) => void;
+  value?: string;
 }
 
 export function DatePicker(props: DatePickerProps) {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(props.value);
   const DAYPICKER_FORMAT = "dd.MM.yyyy";
   const DEFAULT_PLACEHOLDER = "dd.mm.yyyy";
 
@@ -26,7 +27,7 @@ export function DatePicker(props: DatePickerProps) {
     if (isValid(value)) {
       formatted = dateFnsFormat(value, DAYPICKER_FORMAT);
       setDate(formatted);
-      props.onChange(value);
+      props.onChange(value.toISOString());
     }
   };
 
