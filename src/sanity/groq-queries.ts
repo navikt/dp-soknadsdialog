@@ -21,7 +21,7 @@ const faktumGroq = `
   }
 `;
 
-export const fetchAllSeksjoner = groq`*[_type == "seksjon"]{
+export const fetchAllSeksjoner = groq`*[_type == "seksjon" && !(_id in path("drafts.**"))]{
   'id': _id, title, description, helpText,
   faktum[]->{
     ${faktumGroq},
