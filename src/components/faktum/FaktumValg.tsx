@@ -12,7 +12,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   function onSelection(value: string) {
     // TODO: Erstatte useState faktumAnswer med answer fra redux-state
     setFaktumAnswer(value);
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   }
 
   return (
@@ -21,12 +21,17 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
-      <RadioGroup legend={faktum.title ? faktum.title : faktum.id} onChange={onSelection}>
+      <RadioGroup
+        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
+        onChange={onSelection}
+      >
         {faktum.answerOptions.map((answer) => (
-          <div key={answer.id}>
-            <Radio value={answer.id}>{answer.title ? answer.title : answer.id}</Radio>
+          <div key={answer.beskrivendeId}>
+            <Radio value={answer.beskrivendeId}>
+              {answer.title ? answer.title : answer.beskrivendeId}
+            </Radio>
             {answer.helpText ? <Alert variant={"info"}>{answer.helpText}</Alert> : undefined}
-            {answer.alertText && faktumAnswer === answer.id ? (
+            {answer.alertText && faktumAnswer === answer.beskrivendeId ? (
               <Alert variant={"warning"}>{answer.alertText}</Alert>
             ) : undefined}
           </div>
@@ -36,8 +41,8 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => a.id === faktumAnswer)) {
-              return <Faktum key={faktum.id} faktum={faktum} onChange={onChange} />;
+            if (faktum.requiredAnswerIds.find((a) => a.beskrivendeId === faktumAnswer)) {
+              return <Faktum key={faktum.beskrivendeId} faktum={faktum} onChange={onChange} />;
             }
           })}
         </div>

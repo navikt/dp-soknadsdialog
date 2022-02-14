@@ -7,7 +7,7 @@ import { PortableText } from "@portabletext/react";
 export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const onDateSelection = (value: Date) => {
-    onChange && onChange(faktum.id, value);
+    onChange && onChange(faktum.beskrivendeId, value);
   };
 
   return (
@@ -15,7 +15,10 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
-      <DatePicker label={faktum.title ? faktum.title : faktum.id} onChange={onDateSelection} />
+      <DatePicker
+        label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        onChange={onDateSelection}
+      />
     </div>
   );
 }

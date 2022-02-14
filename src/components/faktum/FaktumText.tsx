@@ -9,7 +9,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
 
   const onTextChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange(faktum.id, event.target.value);
+    onChange && onChange(faktum.beskrivendeId, event.target.value);
   };
 
   const debouncedOnChange = useDebounce<ChangeEvent<HTMLInputElement>>(onTextChange, 500);
@@ -20,7 +20,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
-        label={faktum.title ? faktum.title : faktum.id}
+        label={faktum.title ? faktum.title : faktum.beskrivendeId}
         size="medium"
         type="text"
         onChange={debouncedOnChange}
