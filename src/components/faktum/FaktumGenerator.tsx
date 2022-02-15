@@ -1,8 +1,9 @@
 import React from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Faktum, FaktumProps } from "./Faktum";
-import styles from "./Faktum.module.css";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
+import { Barnetillegg } from "../barnetillegg/Barnetillegg";
+import styles from "./Faktum.module.css";
 
 export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
   return <div>{renderListType(props.faktum)}</div>;
@@ -13,7 +14,7 @@ function renderListType(faktum: IGeneratorFaktum) {
     case "Arbeidsforhold":
       return <Arbeidsforhold {...faktum} />;
     case "Barn":
-      return <TempFallback {...faktum} />;
+      return <Barnetillegg {...faktum} />;
     case "Standard":
       return <TempFallback {...faktum} />;
     default:

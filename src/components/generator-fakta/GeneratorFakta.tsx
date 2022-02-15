@@ -3,38 +3,38 @@ import { Answer, AnswerType } from "../../store/answers.slice";
 import React, { useEffect, useState } from "react";
 import { Faktum } from "../faktum/Faktum";
 import { Button } from "@navikt/ds-react";
-import styles from "./Arbeidsforhold.module.css";
+import styles from "../arbeidsforhold/Arbeidsforhold.module.css";
 
 interface Props {
   fakta: IFaktum[];
   answers?: Answer[];
-  save: (arbeidsforhold: Answer[]) => void;
+  save: (answers: Answer[]) => void;
   cancel: () => void;
 }
 
-export function ArbeidsforholdFakta(props: Props) {
-  const [arbeidsforholdAnswers, setArbeidsforholdAnswers] = useState<Answer[]>([]);
+export function GeneratorFakta(props: Props) {
+  const [generatorAnswers, setGeneratorAnswers] = useState<Answer[]>([]);
 
   useEffect(() => {
     if (props.answers) {
-      setArbeidsforholdAnswers(props.answers);
+      setGeneratorAnswers(props.answers);
     }
   }, []);
 
   function saveFaktum(faktumId: string, answer: AnswerType) {
-    const answerIndex = arbeidsforholdAnswers.findIndex((answer) => answer.faktumId === faktumId);
+    const answerIndex = generatorAnswers.findIndex((answer) => answer.faktumId === faktumId);
 
     if (answerIndex === -1) {
-      setArbeidsforholdAnswers((state) => [...state, { faktumId, answer }]);
+      setGeneratorAnswers((state) => [...state, { faktumId, answer }]);
     } else {
-      const newState = [...arbeidsforholdAnswers];
+      const newState = [...generatorAnswers];
       newState[answerIndex] = { faktumId, answer };
-      setArbeidsforholdAnswers(newState);
+      setGeneratorAnswers(newState);
     }
   }
 
   function cancel() {
-    setArbeidsforholdAnswers([]);
+    setGeneratorAnswers([]);
     props.cancel();
   }
 
@@ -42,11 +42,11 @@ export function ArbeidsforholdFakta(props: Props) {
     <>
       {props.fakta.map((faktum) => (
         <div key={faktum.id}>
-          <Faktum faktum={faktum} onChange={saveFaktum} answers={arbeidsforholdAnswers} />
+          <Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />
         </div>
       ))}
       <div className={styles["button-container"]}>
-        <Button onClick={() => props.save(arbeidsforholdAnswers)}>Lagre arbreidsforhold</Button>
+        <Button onClick={() => props.save(generatorAnswers)}>Lagre arbreidsforhold</Button>
         <Button onClick={cancel}>Avbryt</Button>
       </div>
     </>
