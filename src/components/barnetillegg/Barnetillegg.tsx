@@ -94,10 +94,10 @@ export function Barnetillegg(props: IGeneratorFaktum) {
 
 function getChildName(barnetillegg: IGeneratorAnswers): string {
   const firstName = barnetillegg.answers.find(
-    (answer) => answer.faktumId === "faktum.barn-fornavn-mellomnavn"
+    (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.answer as string;
   const lastName = barnetillegg.answers.find(
-    (answer) => answer.faktumId === "faktum.barn-etternavn"
+    (answer) => answer.beskrivendeId === "faktum.barn-etternavn"
   )?.answer as string;
 
   return `${firstName} ${lastName}`;

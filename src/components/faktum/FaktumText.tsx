@@ -10,10 +10,11 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
+    "";
 
   function onTextChange(event: ChangeEvent<HTMLInputElement>) {
-    if (onChange) onChange(faktum.beskrivendeId, event.currentTarget.value);
+    if (onChange) onChange(faktum, event.currentTarget.value);
   }
 
   return (

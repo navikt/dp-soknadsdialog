@@ -14,15 +14,17 @@ import { useDispatch } from "react-redux";
 
 export interface FaktumProps<P> {
   faktum: P;
-  onChange?: (faktumId: string, value: AnswerType) => void;
+  onChange?: (faktum: IFaktum, value: AnswerType) => void;
   answers?: Answer[];
 }
 
 export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
 
-  const dispatchAnswer = (beskrivendeId: string, answer: AnswerType) => {
-    dispatch(setAnswer({ beskrivendeId, answer, type: props.faktum.type, id: props.faktum.id }));
+  const dispatchAnswer = (faktum: IFaktum, answer: AnswerType) => {
+    dispatch(
+      setAnswer({ beskrivendeId: faktum.beskrivendeId, answer, type: faktum.type, id: faktum.id })
+    );
   };
 
   const renderFaktumType = () => {
