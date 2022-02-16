@@ -9,8 +9,6 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
 RUN --mount=type=secret,id=SANITY_ACCESS_TOKEN \
     echo 'SANITY_ACCESS_TOKEN='$(cat /run/secrets/SANITY_ACCESS_TOKEN) >> .env.local
 
-RUN --mount=type=secret,id=SANITY_ACCESS_TOKEN \
-    echo 'DEKORATOR_ENV='$DEKORATOR_ENV >> .env.local
 RUN npm ci
 
 COPY . /usr/src/app
