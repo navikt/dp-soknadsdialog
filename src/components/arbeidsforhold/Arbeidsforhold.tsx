@@ -3,7 +3,7 @@ import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import {
   deleteArbeidsforhold,
-  IGeneratorAnswers,
+  IGeneratorAnswer,
   saveArbeidsforhold,
 } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
@@ -14,7 +14,7 @@ import styles from "./Arbeidsforhold.module.css";
 
 export function Arbeidsforhold(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
-  const arbeidsforhold = useSelector((state: RootState) => state.arbeidsforhold);
+  const arbeidsforhold = useSelector((state: RootState) => state.arbeidsforhold.answers);
   const [addNewArbeidsforhold, setNewArbeidsforhold] = useState(false);
   const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
 
@@ -96,7 +96,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
   );
 }
 
-function getArbeidsforholdName(arbeidsforhold: IGeneratorAnswers): string {
+function getArbeidsforholdName(arbeidsforhold: IGeneratorAnswer): string {
   return (
     (arbeidsforhold.answers.find((answer) => answer.beskrivendeId === "faktum.navn-bedrift")
       ?.answer as string) ?? "Fant ikke navn på arbeidsgiver"
