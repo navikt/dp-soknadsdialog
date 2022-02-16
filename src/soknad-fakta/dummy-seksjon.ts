@@ -12,18 +12,18 @@ export const dummySeksjon: MockDataSeksjon = {
       ],
     },
     {
-      id: "faktum.dummy-valg",
-      type: "valg",
+      id: "faktum.dummy-envalg",
+      type: "envalg",
       answerOptions: [
-        { id: "faktum.dummy-valg.svar.ja" },
-        { id: "faktum.dummy-valg.svar.nei" },
-        { id: "faktum.dummy-valg.svar.vetikke" },
+        { id: "faktum.dummy-envalg.svar.ja" },
+        { id: "faktum.dummy-envalg.svar.nei" },
+        { id: "faktum.dummy-envalg.svar.vetikke" },
       ],
       subFaktum: [
         {
           id: "faktum.dummy-subfaktum-tekst",
           type: "tekst",
-          requiredAnswerIds: ["faktum.dummy-valg.svar.ja"],
+          requiredAnswerIds: ["faktum.dummy-envalg.svar.ja"],
         },
       ],
     },
@@ -82,18 +82,18 @@ export const dummySeksjon: MockDataSeksjon = {
           ],
         },
         {
-          id: "faktum.generator-dummy-valg",
-          type: "valg",
+          id: "faktum.generator-dummy-envalg",
+          type: "envalg",
           answerOptions: [
-            { id: "faktum.generator-dummy-valg.svar.ja" },
-            { id: "faktum.generator-dummy-valg.svar.nei" },
-            { id: "faktum.generator-dummy-valg.svar.vetikke" },
+            { id: "faktum.generator-dummy-envalg.svar.ja" },
+            { id: "faktum.generator-dummy-envalg.svar.nei" },
+            { id: "faktum.generator-dummy-envalg.svar.vetikke" },
           ],
           subFaktum: [
             {
               id: "faktum.generator-dummy-subfaktum-tekst",
               type: "tekst",
-              requiredAnswerIds: ["faktum.generator-dummy-valg.svar.ja"],
+              requiredAnswerIds: ["faktum.generator-dummy-envalg.svar.ja"],
             },
           ],
         },
