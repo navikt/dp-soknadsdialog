@@ -1,4 +1,6 @@
 import React from "react";
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
@@ -13,7 +15,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
-    const dekoratorEnv = process.env.NEXT_PUBLIC_DEKORATOR_ENV as Exclude<Env, "localhost">;
+    const dekoratorEnv = publicRuntimeConfig.DEKORATOR_ENV as Exclude<Env, "localhost">;
     const decoratorProps: DecoratorProps = {
       env: dekoratorEnv || "prod",
       chatbot: false,
