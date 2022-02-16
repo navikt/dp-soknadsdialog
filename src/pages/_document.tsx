@@ -6,7 +6,6 @@ import {
   fetchDecoratorReact,
   Locale,
   Props as DecoratorProps,
-  Env,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 export default class MyDocument extends Document<DecoratorComponents> {
@@ -15,7 +14,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
-    const dekoratorEnv = publicRuntimeConfig.DEKORATOR_ENV as Exclude<Env, "localhost">;
+    const dekoratorEnv = publicRuntimeConfig.DEKORATOR_ENV;
     const decoratorProps: DecoratorProps = {
       env: dekoratorEnv || "prod",
       chatbot: false,
