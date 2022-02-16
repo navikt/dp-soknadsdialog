@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { setSeksjoner } from "../store/seksjoner.slice";
 import { useRouter } from "next/router";
 import { Button, Heading } from "@navikt/ds-react";
+import api from "../api.utils";
 
 export default function Soknad() {
   const dispatch = useDispatch();
@@ -12,7 +13,7 @@ export default function Soknad() {
 
   const startSoknad = async () => {
     setIsCreatingSoknadUUID(true);
-    await fetch("/api/soknad")
+    await fetch(api("soknad"))
       .then((response: Response) => response.json())
       .then((data: ISoknad) => {
         dispatch(setSeksjoner(data.sections));
