@@ -1,5 +1,4 @@
 import React from "react";
-import getConfig from "next/config";
 
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
@@ -7,24 +6,27 @@ import {
   fetchDecoratorReact,
   Locale,
   Props as DecoratorProps,
+  Env,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-const { publicRuntimeConfig } = getConfig();
+
+const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
+
+const decoratorProps: DecoratorProps = {
+  env: dekoratorEnv ?? "prod",
+  chatbot: false,
+  simple: true,
+  context: "privatperson",
+  enforceLogin: dekoratorEnv === "prod",
+  redirectToApp: true,
+  level: "Level4",
+  utloggingsvarsel: true,
+};
+
 export default class MyDocument extends Document<DecoratorComponents> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
-    const dekoratorEnv = publicRuntimeConfig.DEKORATOR_ENV;
-    const decoratorProps: DecoratorProps = {
-      env: dekoratorEnv || "prod",
-      chatbot: false,
-      simple: true,
-      context: "privatperson",
-      enforceLogin: dekoratorEnv === "prod",
-      redirectToApp: true,
-      level: "Level4",
-      utloggingsvarsel: true,
-    };
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,
