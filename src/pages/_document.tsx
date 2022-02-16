@@ -1,5 +1,6 @@
 import React from "react";
 import getConfig from "next/config";
+
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
@@ -7,10 +8,9 @@ import {
   Locale,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
-
+const { publicRuntimeConfig } = getConfig();
 export default class MyDocument extends Document<DecoratorComponents> {
   static async getInitialProps(ctx: DocumentContext) {
-    const { publicRuntimeConfig } = getConfig();
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
