@@ -7,10 +7,8 @@ RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
     echo '//npm.pkg.github.com/:_authToken='$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
 
 RUN --mount=type=secret,id=SANITY_ACCESS_TOKEN \
-    echo 'SANITY_ACCESS_TOKEN='$(cat /run/secrets/SANITY_ACCESS_TOKEN) >> .env.local
+    echo 'SANITY_ACCESS_TOKEN='$(cat /run/secrets/SANITY_ACCESS_TOKEN) >> .env.local \
 
-RUN --mount=type=secret,id=SANITY_ACCESS_TOKEN \
-    echo 'DEKORATOR_ENV='$DEKORATOR_ENV >> .env.local
 RUN npm ci
 
 COPY . /usr/src/app
