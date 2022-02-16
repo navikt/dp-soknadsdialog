@@ -12,7 +12,8 @@ const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
 
 const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
-  simple: true,
+  chatbot: false,
+  simple: false,
   context: "privatperson",
   enforceLogin: dekoratorEnv === "prod",
   redirectToApp: true,
