@@ -10,7 +10,7 @@ import { deleteBarnetillegg, saveBarnetillegg } from "../../store/barnetillegg.s
 
 export function Barnetillegg(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
-  const barnetillegg = useSelector((state: RootState) => state.barnetillegg);
+  const barnetillegg = useSelector((state: RootState) => state.barnetillegg.answers);
   const [addNewBarnetillegg, setNewBarnetillegg] = useState(false);
   const [activeBarnetilleggIndex, setActiveBarnetilleggIndex] = useState<number | undefined>(0);
 

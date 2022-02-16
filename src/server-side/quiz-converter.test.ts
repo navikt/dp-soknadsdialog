@@ -1,5 +1,4 @@
 import { QuizFaktum } from "../soknad-fakta/mock-fakta-response";
-import { Answer } from "../store/answers.slice";
 import { mapQuizFaktaToReduxState } from "./quiz-converter";
 
 const booleanInput: QuizFaktum = {
@@ -9,6 +8,7 @@ const booleanInput: QuizFaktum = {
   svar: true,
   roller: ["søker"],
 };
+
 const intInput: QuizFaktum = {
   id: "2",
   type: "int",
@@ -16,6 +16,7 @@ const intInput: QuizFaktum = {
   svar: 40,
   roller: ["søker"],
 };
+
 const doubleInput: QuizFaktum = {
   id: "3",
   type: "double",
@@ -23,6 +24,7 @@ const doubleInput: QuizFaktum = {
   svar: 40.0,
   roller: ["søker"],
 };
+
 const envalgInput: QuizFaktum = {
   id: "4",
   type: "envalg",
@@ -30,6 +32,7 @@ const envalgInput: QuizFaktum = {
   svar: "faktum.dummy-envalg.svar",
   roller: ["søker"],
 };
+
 const flervalgInput: QuizFaktum = {
   id: "5",
   type: "flervalg",
@@ -51,18 +54,21 @@ const intExpected = {
   type: "int",
   answer: 40,
 };
+
 const doubleExpected = {
   id: "3",
   beskrivendeId: "faktum.dummy-double",
   type: "double",
   answer: 40.0,
 };
+
 const envalgExpected = {
   id: "4",
   beskrivendeId: "faktum.dummy-envalg",
   type: "envalg",
   answer: "faktum.dummy-envalg.svar",
 };
+
 const flervalgExpected = {
   id: "5",
   beskrivendeId: "faktum.dummy-flervalg",
@@ -125,12 +131,10 @@ describe("mapFaktaToAnswers", () => {
         beskrivendeId: "arbeidsforhold",
         type: "generator",
         roller: [],
-        svar: [
-          [booleanInput, intInput, doubleInput, envalgInput, flervalgInput],
-          [booleanInput, intInput, doubleInput, envalgInput, flervalgInput],
-        ],
+        svar: [[booleanInput, intInput, doubleInput, envalgInput, flervalgInput]],
       },
     ];
+
     const expected = {
       id: "7",
       beskrivendeId: "arbeidsforhold",

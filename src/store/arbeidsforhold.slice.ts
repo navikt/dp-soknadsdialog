@@ -23,6 +23,7 @@ const initialState: GeneratorState = {
   type: "generator",
   answers: [],
 };
+
 export const arbeidsforholdSlice = createSlice({
   name: "arbeidsforhold",
   initialState,

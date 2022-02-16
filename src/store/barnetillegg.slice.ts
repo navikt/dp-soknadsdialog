@@ -1,26 +1,33 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGeneratorAnswer } from "./arbeidsforhold.slice";
+import { GeneratorState, IGeneratorAnswer } from "./arbeidsforhold.slice";
 
 interface BarnetilleggPayload {
   barnetillegg: IGeneratorAnswer;
   index?: number;
 }
 
+const initialState: GeneratorState = {
+  id: "",
+  beskrivendeId: "faktum.barn",
+  type: "generator",
+  answers: [],
+};
+
 export const barnetilleggSlice = createSlice({
   name: "barnetillegg",
-  initialState: [] as IGeneratorAnswer[],
+  initialState: initialState,
   reducers: {
-    saveBarnetillegg: (state: IGeneratorAnswer[], action: PayloadAction<BarnetilleggPayload>) => {
+    saveBarnetillegg: (state: GeneratorState, action: PayloadAction<BarnetilleggPayload>) => {
       if (action.payload.index !== undefined) {
-        state[action.payload.index] = action.payload.barnetillegg;
+        state.answers[action.payload.index] = action.payload.barnetillegg;
       } else {
-        state.push(action.payload.barnetillegg);
+        state.answers.push(action.payload.barnetillegg);
       }
       return state;
     },
-    deleteBarnetillegg: (state: IGeneratorAnswer[], action: PayloadAction<number | undefined>) => {
+    deleteBarnetillegg: (state: GeneratorState, action: PayloadAction<number | undefined>) => {
       if (action.payload !== undefined) {
-        state.splice(action.payload, 1);
+        state.answers.splice(action.payload, 1);
       }
       return state;
     },
