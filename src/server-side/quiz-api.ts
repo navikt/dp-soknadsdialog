@@ -3,7 +3,7 @@ import { IFaktum } from "../types/faktum.types";
 export interface QuizApi {
   postSoknad: () => void;
   getFakta: (soknadId: string) => void;
-  putFaktumSvar: (soknadId: string, faktumId: string, faktumSvar: never) => void;
+  putFaktumSvar: (soknadId: string, beskrivendeId: string, faktumSvar: never) => void;
 }
 
 export function postSoknad(onBehalfOfToken: string) {

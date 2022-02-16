@@ -10,7 +10,7 @@ import { AnswerPeriode } from "../../store/answers.slice";
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)
+  const currentAnswer = (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)
     ?.answer as AnswerPeriode) ?? { fromDate: "" };
 
   const [fromDate, setFromDate] = useState<string>(currentAnswer.fromDate);
@@ -18,7 +18,7 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
 
   useEffect(() => {
     if (fromDate) {
-      onChange && onChange(faktum.beskrivendeId, { fromDate, toDate });
+      onChange && onChange(faktum, { fromDate, toDate });
     }
   }, [fromDate, toDate]);
 

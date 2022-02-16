@@ -11,10 +11,11 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerIds =
-    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string[]) ?? [];
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string[]) ??
+    [];
 
   const onSelection = (value: string[]) => {
-    onChange && onChange(faktum.beskrivendeId, value);
+    onChange && onChange(faktum, value);
   };
 
   return (

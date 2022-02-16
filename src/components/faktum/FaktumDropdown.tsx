@@ -10,10 +10,11 @@ export function FaktumDropdown(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
+    "";
 
   const onSelect = (event: ChangeEvent<HTMLSelectElement>) => {
-    onChange && onChange(faktum.beskrivendeId, event.target.value);
+    onChange && onChange(faktum, event.target.value);
   };
 
   return (

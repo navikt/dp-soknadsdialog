@@ -29,3 +29,6 @@ node_modules/
 
 # Next.js build output
 .next
+
+# Typescript build output
+tsconfig.tsbuildinfo

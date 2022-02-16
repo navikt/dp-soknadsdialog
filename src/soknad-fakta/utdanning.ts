@@ -5,7 +5,7 @@ export const utdanning: MockDataSeksjon = {
   faktum: [
     {
       id: "faktum.utdanning",
-      type: "valg",
+      type: "envalg",
       answerOptions: [
         { id: "faktum.utdanning.svar.nei" },
         { id: "faktum.utdanning.svar.nei-men-siste-6-mnd" }, //todo: trigge dokumentasjonskrav

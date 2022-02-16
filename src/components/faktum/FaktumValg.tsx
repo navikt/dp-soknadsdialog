@@ -15,7 +15,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
     "";
 
   function onSelection(value: string) {
-    onChange && onChange(faktum.beskrivendeId, value);
+    onChange && onChange(faktum, value);
   }
 
   return (

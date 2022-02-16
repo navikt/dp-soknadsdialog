@@ -10,11 +10,11 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ??
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
     new Date().toISOString();
 
   const onDateSelection = (value: string) => {
-    onChange && onChange(faktum.beskrivendeId, value);
+    onChange && onChange(faktum, value);
   };
 
   return (

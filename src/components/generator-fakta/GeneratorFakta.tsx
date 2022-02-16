@@ -21,14 +21,23 @@ export function GeneratorFakta(props: Props) {
     }
   }, []);
 
-  function saveFaktum(faktumId: string, answer: AnswerType) {
-    const answerIndex = generatorAnswers.findIndex((answer) => answer.beskrivendeId === faktumId);
+  function saveFaktum(faktum: IFaktum, answer: AnswerType) {
+    const answerIndex = generatorAnswers.findIndex(
+      (answer) => answer.beskrivendeId === faktum.beskrivendeId
+    );
+
+    const newAnswer = {
+      id: faktum.id,
+      beskrivendeId: faktum.beskrivendeId,
+      type: faktum.type,
+      answer,
+    };
 
     if (answerIndex === -1) {
-      setGeneratorAnswers((state) => [...state, { beskrivendeId: faktumId, answer }]);
+      setGeneratorAnswers((state) => [...state, newAnswer]);
     } else {
       const newState = [...generatorAnswers];
-      newState[answerIndex] = { beskrivendeId: faktumId, answer };
+      newState[answerIndex] = newAnswer;
       setGeneratorAnswers(newState);
     }
   }
