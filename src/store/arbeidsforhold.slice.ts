@@ -2,20 +2,20 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Answer } from "./answers.slice";
 
 interface ArbeidsforholdPayload {
-  arbeidsforhold: IArbeidsforhold;
+  arbeidsforhold: IGeneratorAnswers;
   index?: number;
 }
 
-export interface IArbeidsforhold {
+export interface IGeneratorAnswers {
   answers: Answer[];
 }
 
 export const arbeidsforholdSlice = createSlice({
   name: "arbeidsforhold",
-  initialState: [] as IArbeidsforhold[],
+  initialState: [] as IGeneratorAnswers[],
   reducers: {
     saveArbeidsforhold: (
-      state: IArbeidsforhold[],
+      state: IGeneratorAnswers[],
       action: PayloadAction<ArbeidsforholdPayload>
     ) => {
       if (action.payload.index !== undefined) {
@@ -25,7 +25,10 @@ export const arbeidsforholdSlice = createSlice({
       }
       return state;
     },
-    deleteArbeidsforhold: (state: IArbeidsforhold[], action: PayloadAction<number | undefined>) => {
+    deleteArbeidsforhold: (
+      state: IGeneratorAnswers[],
+      action: PayloadAction<number | undefined>
+    ) => {
       if (action.payload !== undefined) {
         state.splice(action.payload, 1);
       }

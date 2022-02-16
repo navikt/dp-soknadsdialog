@@ -3,13 +3,13 @@ import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import {
   deleteArbeidsforhold,
-  IArbeidsforhold,
+  IGeneratorAnswers,
   saveArbeidsforhold,
 } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { ArbeidsforholdFakta } from "./ArbeidsforholdFakta";
+import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import styles from "./Arbeidsforhold.module.css";
 
 export function Arbeidsforhold(props: IGeneratorFaktum) {
@@ -68,7 +68,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
 
             <Accordion.Content>
               <Button onClick={() => onDeleteArbeidsforhold()}>Slett arbeidsforhold</Button>
-              <ArbeidsforholdFakta
+              <GeneratorFakta
                 answers={arbeidsforhold.answers}
                 fakta={props.faktum}
                 save={onSaveArbeidsforhold}
@@ -86,7 +86,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
       )}
 
       {addNewArbeidsforhold && (
-        <ArbeidsforholdFakta
+        <GeneratorFakta
           fakta={props.faktum}
           save={onSaveArbeidsforhold}
           cancel={resetArbeidsforholdForm}
@@ -96,7 +96,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
   );
 }
 
-function getArbeidsforholdName(arbeidsforhold: IArbeidsforhold): string {
+function getArbeidsforholdName(arbeidsforhold: IGeneratorAnswers): string {
   return (
     (arbeidsforhold.answers.find((answer) => answer.faktumId === "faktum.navn-bedrift")
       ?.answer as string) ?? "Fant ikke navn på arbeidsgiver"
