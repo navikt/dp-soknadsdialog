@@ -9,7 +9,7 @@ export const arbeidsforhold: MockDataSeksjon = {
     },
     {
       id: "faktum.fast-arbeidstid",
-      type: "valg",
+      type: "envalg",
       answerOptions: [
         { id: "faktum.fast-arbeidstid.svar.ja-fast" },
         { id: "faktum.fast-arbeidstid.svar.nei-varierende" },
@@ -34,7 +34,7 @@ export const arbeidsforhold: MockDataSeksjon = {
         },
         {
           id: "faktum.arbeidsforhold-aarsak",
-          type: "valg",
+          type: "envalg",
           answerOptions: [
             { id: "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver" },
             { id: "faktum.arbeidsforhold-aarsak.svar.permittert" },
@@ -156,7 +156,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             }, // Tenger vi denne? Spørsmål stilt i #dagpenger-soknad kanelen. Nesten identisk spørsmål over
             {
               id: "faktum.arbeids-skift-turnus-rotasjon",
-              type: "valg",
+              type: "envalg",
               requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
@@ -186,7 +186,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             },
             {
               id: "faktum.midlertidig-arbeidsforhold-med-sluttdato",
-              type: "valg",
+              type: "envalg",
               requiredAnswerIds: [
                 "faktum.arbeidsforhold-aarsak.svar.permittert",
                 "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
@@ -238,7 +238,7 @@ export const arbeidsforhold: MockDataSeksjon = {
             },
             {
               id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler",
-              type: "valg",
+              type: "envalg",
               requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
               answerOptions: [
                 {
@@ -270,7 +270,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                 },
                 {
                   id: "faktum.arbeidsforhold-sok-lonnsgarantimidler",
-                  type: "valg",
+                  type: "envalg",
                   requiredAnswerIds: [
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
                     "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
@@ -289,7 +289,7 @@ export const arbeidsforhold: MockDataSeksjon = {
                   subFaktum: [
                     {
                       id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav",
-                      type: "valg",
+                      type: "envalg",
                       requiredAnswerIds: [
                         "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.ja-allerede-sendt",
                       ],

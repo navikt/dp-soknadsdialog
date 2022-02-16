@@ -28,7 +28,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
   const renderFaktumType = () => {
     switch (props.faktum.type) {
       case "boolean":
-      case "valg":
+      case "envalg":
         return (
           <FaktumValg
             faktum={props.faktum}
