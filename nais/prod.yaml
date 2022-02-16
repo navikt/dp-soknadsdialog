@@ -2,7 +2,10 @@ ingress: https://www.nav.no/arbeid/dagpenger/soknad
 base_path: "/arbeid/dagpenger/soknad"
 dekorator:
   url: https://www.nav.no/dekoratoren
-  env: prod
+  env: "prod"
 loginservice:
   url: https://loginservice.nav.no/login
   wellKnown: https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
+externalAccessPolicy: |
+  external:
+    - host: dekoratoren.nav.no

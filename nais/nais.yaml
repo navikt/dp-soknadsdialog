@@ -57,5 +57,6 @@ spec:
     enabled: true
   accessPolicy:
     outbound:
+      {{externalAccessPolicy}}
       rules:
         - application: dp-quizshow-api
