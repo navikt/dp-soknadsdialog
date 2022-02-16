@@ -98,7 +98,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
 
 function getArbeidsforholdName(arbeidsforhold: IGeneratorAnswers): string {
   return (
-    (arbeidsforhold.answers.find((answer) => answer.faktumId === "faktum.navn-bedrift")
+    (arbeidsforhold.answers.find((answer) => answer.beskrivendeId === "faktum.navn-bedrift")
       ?.answer as string) ?? "Fant ikke navn på arbeidsgiver"
   );
 }

@@ -22,13 +22,13 @@ export function GeneratorFakta(props: Props) {
   }, []);
 
   function saveFaktum(faktumId: string, answer: AnswerType) {
-    const answerIndex = generatorAnswers.findIndex((answer) => answer.faktumId === faktumId);
+    const answerIndex = generatorAnswers.findIndex((answer) => answer.beskrivendeId === faktumId);
 
     if (answerIndex === -1) {
-      setGeneratorAnswers((state) => [...state, { faktumId, answer }]);
+      setGeneratorAnswers((state) => [...state, { beskrivendeId: faktumId, answer }]);
     } else {
       const newState = [...generatorAnswers];
-      newState[answerIndex] = { faktumId, answer };
+      newState[answerIndex] = { beskrivendeId: faktumId, answer };
       setGeneratorAnswers(newState);
     }
   }

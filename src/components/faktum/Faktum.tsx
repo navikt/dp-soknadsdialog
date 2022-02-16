@@ -21,8 +21,8 @@ export interface FaktumProps<P> {
 export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
 
-  const dispatchAnswer = (faktumId: string, answer: AnswerType) => {
-    dispatch(setAnswer({ faktumId, answer }));
+  const dispatchAnswer = (beskrivendeId: string, answer: AnswerType) => {
+    dispatch(setAnswer({ beskrivendeId, answer, type: props.faktum.type, id: props.faktum.id }));
   };
 
   const renderFaktumType = () => {

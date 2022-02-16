@@ -11,7 +11,8 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerId =
-    (answers.find((answer) => answer.faktumId === faktum.beskrivendeId)?.answer as string) ?? "";
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
+    "";
 
   function onSelection(value: string) {
     onChange && onChange(faktum.beskrivendeId, value);
