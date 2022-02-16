@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
-import { IGeneratorAnswers } from "../../store/arbeidsforhold.slice";
+import { IGeneratorAnswer } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -92,7 +92,7 @@ export function Barnetillegg(props: IGeneratorFaktum) {
   );
 }
 
-function getChildName(barnetillegg: IGeneratorAnswers): string {
+function getChildName(barnetillegg: IGeneratorAnswer): string {
   const firstName = barnetillegg.answers.find(
     (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.answer as string;

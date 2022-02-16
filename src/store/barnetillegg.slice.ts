@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGeneratorAnswers } from "./arbeidsforhold.slice";
+import { IGeneratorAnswer } from "./arbeidsforhold.slice";
 
 interface BarnetilleggPayload {
-  barnetillegg: IGeneratorAnswers;
+  barnetillegg: IGeneratorAnswer;
   index?: number;
 }
 
 export const barnetilleggSlice = createSlice({
   name: "barnetillegg",
-  initialState: [] as IGeneratorAnswers[],
+  initialState: [] as IGeneratorAnswer[],
   reducers: {
-    saveBarnetillegg: (state: IGeneratorAnswers[], action: PayloadAction<BarnetilleggPayload>) => {
+    saveBarnetillegg: (state: IGeneratorAnswer[], action: PayloadAction<BarnetilleggPayload>) => {
       if (action.payload.index !== undefined) {
         state[action.payload.index] = action.payload.barnetillegg;
       } else {
@@ -18,7 +18,7 @@ export const barnetilleggSlice = createSlice({
       }
       return state;
     },
-    deleteBarnetillegg: (state: IGeneratorAnswers[], action: PayloadAction<number | undefined>) => {
+    deleteBarnetillegg: (state: IGeneratorAnswer[], action: PayloadAction<number | undefined>) => {
       if (action.payload !== undefined) {
         state.splice(action.payload, 1);
       }
