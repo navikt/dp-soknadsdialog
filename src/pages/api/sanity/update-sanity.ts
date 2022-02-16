@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { sanityClient } from "../../../../sanity-client";
 import {
   MockDataFaktum,
   MockDataGeneratorFaktum,
@@ -16,7 +15,7 @@ import {
   SubFaktum,
 } from "../../../sanity/utils";
 import { SanityBaseDocument } from "../../../sanity/types";
-import { isValgFaktum, isGeneratorFaktum } from "../../../sanity/type-guards";
+import { isGeneratorFaktum, isValgFaktum } from "../../../sanity/type-guards";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
   const quizSeksjoner: MockDataSeksjon[] = mockSeksjoner;
@@ -33,12 +32,18 @@ const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
 
   documents = [...documents, ...seksjoner];
 
-  const transaction = sanityClient.transaction();
-  documents.forEach((doc) => transaction.createIfNotExists(doc));
-  // documents.forEach((doc) => transaction.delete(doc._id));
-  const sanityResponse = await transaction.commit();
+  // const patches = await sanityClient
+  //   .patch({ query: '*[_type == "valgFaktum" && type=="valg"]' })
+  //   .set({ type: "envalg" })
+  //   .commit();
 
-  return res.status(200).json(sanityResponse);
+  // const transaction = sanityClient.transaction();
+  // documents.forEach((doc) => transaction.createIfNotExists(doc));
+  // documents.forEach((doc) => transaction.delete(doc._id));
+  // const sanityResponse = await transaction.commit();
+
+  // return res.status(200).json(sanityResponse);
+  return res.status(200).json({});
 };
 
 function createValgFaktum(
