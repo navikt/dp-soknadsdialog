@@ -8,6 +8,8 @@ const faktaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const soknadsUUID = query.id as string;
 
   const { token, apiToken } = await getSession({ req });
+  const fakta = await getFakta(soknadsUUID, "asdad");
+  return res.status(200).json(fakta);
 
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);

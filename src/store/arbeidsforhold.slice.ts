@@ -10,14 +10,14 @@ export interface IGeneratorAnswer {
   answers: Answer[];
 }
 
-interface ArbeidsforholdState {
+export interface GeneratorState {
   id: string;
   beskrivendeId: string;
   type: "generator";
   answers: IGeneratorAnswer[];
 }
 
-const initialState: ArbeidsforholdState = {
+const initialState: GeneratorState = {
   id: "",
   beskrivendeId: "faktum.arbeidsforhold",
   type: "generator",
@@ -27,10 +27,7 @@ export const arbeidsforholdSlice = createSlice({
   name: "arbeidsforhold",
   initialState,
   reducers: {
-    saveArbeidsforhold: (
-      state: ArbeidsforholdState,
-      action: PayloadAction<ArbeidsforholdPayload>
-    ) => {
+    saveArbeidsforhold: (state: GeneratorState, action: PayloadAction<ArbeidsforholdPayload>) => {
       if (action.payload.index !== undefined) {
         state.answers[action.payload.index] = action.payload.arbeidsforhold;
       } else {
@@ -38,10 +35,7 @@ export const arbeidsforholdSlice = createSlice({
       }
       return state;
     },
-    deleteArbeidsforhold: (
-      state: ArbeidsforholdState,
-      action: PayloadAction<number | undefined>
-    ) => {
+    deleteArbeidsforhold: (state: GeneratorState, action: PayloadAction<number | undefined>) => {
       if (action.payload !== undefined) {
         state.answers.splice(action.payload, 1);
       }

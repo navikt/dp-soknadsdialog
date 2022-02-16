@@ -1,4 +1,25 @@
-export const mockFakta = [
+import { FaktumType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
+
+export type QuizFaktumSvar = string | string[] | boolean | number;
+
+export interface QuizFaktum {
+  id: string;
+  type: FaktumType;
+  beskrivendeId: string;
+  svar?: QuizFaktumSvar | QuizFaktum[][];
+  roller?: string[];
+  gyldigeValg?: string[];
+  templates?: GeneratorTemplate[];
+}
+
+interface GeneratorTemplate {
+  id: string;
+  type: PrimitivFaktumType | ValgFaktumType;
+  beskrivendeId: string;
+  roller: string[];
+}
+
+export const mockFakta: QuizFaktum[] = [
   {
     id: "1",
     type: "boolean",
@@ -341,6 +362,24 @@ export const mockFakta = [
         beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
         roller: ["søker"],
       },
+    ],
+    svar: [
+      [
+        {
+          id: "3003",
+          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
+          type: "int",
+          svar: 123456,
+        },
+      ],
+      [
+        {
+          id: "3003",
+          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
+          type: "int",
+          svar: 98765,
+        },
+      ],
     ],
   },
   {

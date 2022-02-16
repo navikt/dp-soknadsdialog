@@ -3,12 +3,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { audience } from "../../../api.utils";
 import { fetchAllSeksjoner } from "../../../sanity/groq-queries";
-import { postSoknad } from "../../../server-side/quiz-api";
+import { getFakta, postSoknad } from "../../../server-side/quiz-api";
+import { QuizFaktum } from "../../../soknad-fakta/mock-fakta-response";
 import { ISeksjon } from "../../../types/seksjon.types";
 
 export interface ISoknad {
   sections: ISeksjon[];
   soknadId: string;
+}
+function mapFaktaToState(fakta: QuizFaktum[], sanityTexts: ISeksjon[]) {
+
 }
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -22,13 +26,16 @@ const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(soknadId);
   }
 
+  const fakta = await getFakta("test", "asdasd");
+  console.log(fakta);
+
   if (sanitySections.length <= 0) {
     // eslint-disable-next-line no-console
     console.error("Fant ikke seksjon i sanity");
     return res.status(404);
   }
 
-  return res.status(200).json({ sections: sanitySections, soknadId });
+  return res.status(200).json({ sections: sanitySections, soknadId, fakta });
 };
 
 export default soknad;
