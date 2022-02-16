@@ -13,11 +13,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
-    // eslint-disable-next-line no-console
-    console.log(process.env.DEKORATOR_ENV);
-    const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
-    // eslint-disable-next-line no-console
-    console.log(dekoratorEnv);
+    const dekoratorEnv = process.env.NEXT_PUBLIC_DEKORATOR_ENV as Exclude<Env, "localhost">;
     const decoratorProps: DecoratorProps = {
       env: dekoratorEnv || "prod",
       chatbot: false,
