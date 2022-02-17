@@ -11,7 +11,7 @@ export default function Soknad() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  const { session } = useSession();
+  const { session } = useSession({});
   const startSoknad = async () => {
     setIsCreatingSoknadUUID(true);
     await fetch(api("soknad"))

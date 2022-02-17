@@ -8,10 +8,10 @@ export interface Session extends Record<string, unknown> {
 }
 
 export const useSession = ({
-  enforceLogin = false,
+  enforceLogin = true,
   redirectTo = "/api/auth/signin",
   initialSession = undefined,
-} = {}): { session: Session | undefined } => {
+}): { session: Session | undefined } => {
   const router = useRouter();
   const { data: session, error } = useSWR<Session>(api(`/auth/session`), {
     fallbackData: initialSession,
@@ -37,8 +37,11 @@ export const useSession = ({
     // No active session, and should not redirect
     (!enforceLogin && !session?.expires_in)
   ) {
+    // eslint-disable-next-line no-console
+    console.log("no active session!");
+    // eslint-disable-next-line no-console
+    console.log(enforceLogin, redirectTo, session);
     return { session: undefined };
   }
-
   return { session };
 };
