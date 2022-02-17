@@ -10,12 +10,9 @@ export interface Session extends Record<string, unknown> {
 export const useSession = ({
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
-  initialSession = undefined,
 }): { session: Session | undefined } => {
   const router = useRouter();
-  const { data: session, error } = useSWR<Session>(api(`/auth/session`), {
-    fallbackData: initialSession,
-  });
+  const { data: session, error } = useSWR<Session>(api(`/auth/session`));
 
   useEffect(() => {
     const isLoading = !session && !error;
