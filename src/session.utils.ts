@@ -27,6 +27,8 @@ export const useSession = ({
     if (enforceLogin && redirectTo && !session?.expires_in) {
       router.push(redirectTo);
     }
+    // eslint-disable-next-line no-console
+    console.log("useeffect triggered! " + session);
   }, [session, error, enforceLogin, redirectTo, router]);
 
   if (
