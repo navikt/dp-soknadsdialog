@@ -11,7 +11,7 @@ export default function Soknad() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  const session = useSession();
+  const { session } = useSession();
   const startSoknad = async () => {
     setIsCreatingSoknadUUID(true);
     await fetch(api("soknad"))
@@ -22,11 +22,13 @@ export default function Soknad() {
       });
     setIsCreatingSoknadUUID(false);
   };
+  // eslint-disable-next-line no-console
+  console.log(session);
 
   const login = () => {
     // eslint-disable-next-line no-console
     console.log(session);
-    if (session.session === undefined) {
+    if (session === undefined) {
       router.push("/api/auth/signin");
     }
   };
@@ -36,7 +38,7 @@ export default function Soknad() {
       <Heading spacing size="xlarge" level="1">
         Søknad om dagpenger
       </Heading>
-      {session.session === undefined && (
+      {session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
           logg inn først!
         </Button>
