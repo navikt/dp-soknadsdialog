@@ -5,6 +5,7 @@ import { setSeksjoner } from "../store/seksjoner.slice";
 import { useRouter } from "next/router";
 import { Button, Heading } from "@navikt/ds-react";
 import api from "../api.utils";
+import { ensureAuth } from "../auth.utils";
 
 export default function Soknad() {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ export default function Soknad() {
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
 
   const startSoknad = async () => {
+    ensureAuth({ enforceLogin: true });
     setIsCreatingSoknadUUID(true);
     await fetch(api("soknad"))
       .then((response: Response) => response.json())
