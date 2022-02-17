@@ -24,7 +24,11 @@ export default function Soknad() {
   };
 
   const login = () => {
-    router.push("/api/auth/signin");
+    // eslint-disable-next-line no-console
+    console.log(session);
+    if (session.session === undefined) {
+      router.push("/api/auth/signin");
+    }
   };
 
   return (
@@ -32,7 +36,7 @@ export default function Soknad() {
       <Heading spacing size="xlarge" level="1">
         Søknad om dagpenger
       </Heading>
-      {!session.session && (
+      {session.session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
           logg inn først!
         </Button>
