@@ -8,7 +8,7 @@ export interface Session extends Record<string, unknown> {
 }
 
 export const useSession = ({
-  enforceLogin = true,
+  enforceLogin = false,
   redirectTo = "/api/auth/signin",
   initialSession = undefined,
 } = {}): { session: Session | undefined } => {
