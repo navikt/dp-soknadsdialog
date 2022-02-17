@@ -61,7 +61,7 @@ jobs:
 
 
       - name: Archive NAIS yaml
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/feature/autentisering'
         uses: actions/upload-artifact@v1
         with:
           name: nais-yaml
