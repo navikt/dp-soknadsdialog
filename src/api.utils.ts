@@ -6,3 +6,6 @@ export default function api(endpoint: string): string {
     endpoint.startsWith("/") ? "" : "/"
   }${endpoint}`;
 }
+
+export const fetcher = (url: RequestInfo, options: RequestInit = {}): Promise<unknown> =>
+  fetch(url, options).then((r: { json: () => unknown }) => r.json());

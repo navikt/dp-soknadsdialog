@@ -2,29 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Seksjon } from "../../../components/seksjon/Seksjon";
 import { RootState } from "../../../store";
-import { setSeksjoner } from "../../../store/seksjoner.slice";
+import { setSections } from "../../../store/sections.slice";
 import { ISoknad } from "../../api/soknad";
-import { ISeksjon } from "../../../types/seksjon.types";
+import { ISection } from "../../../types/section.types";
 import { Button } from "@navikt/ds-react";
 
 import styles from "./seksjonpage.module.css";
+import api from "../../../api.utils";
+import { useRouter } from "next/router";
 
 export default function SeksjonPage() {
-  const sections: ISeksjon[] = useSelector((state: RootState) => state.seksjoner);
+  const sections: ISection[] = useSelector((state: RootState) => state.sections);
   const dispatch = useDispatch();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const router = useRouter();
+  const soknadUUID = router.query.soknadId as string;
 
   useEffect(() => {
     if (!sections.length) {
-      fetch("/api/soknad")
+      fetch(api(`soknad/${soknadUUID}/fakta`))
         .then((response: Response) => response.json())
         .then((data: ISoknad) => {
-          dispatch(setSeksjoner(data.sections));
+          dispatch(setSections(data.sections));
         });
     }
   }, [sections]);
 
-  const renderSection = (section: ISeksjon) => <Seksjon key={section.id} {...section} />;
+  const renderSection = (section: ISection) => <Seksjon key={section.id} {...section} />;
 
   const isNextSection = () => {
     return sections.length > currentSectionIndex + 1;

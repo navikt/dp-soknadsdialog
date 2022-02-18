@@ -1,7 +1,7 @@
 import { IFaktum } from "./faktum.types";
 import { TypedObject } from "@portabletext/types";
 
-export interface ISeksjon {
+export interface ISection {
   id: string;
   title: string;
   description?: TypedObject | TypedObject[];

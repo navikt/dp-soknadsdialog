@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./Seksjon.module.css";
 import { Faktum } from "../faktum/Faktum";
-import { ISeksjon } from "../../types/seksjon.types";
+import { ISection } from "../../types/section.types";
 import { PortableText } from "@portabletext/react";
 
-export function Seksjon(props: ISeksjon) {
+export function Seksjon(props: ISection) {
   return (
     <div className={styles.container}>
       <div className={styles.faktum}>
