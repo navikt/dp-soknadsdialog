@@ -16,7 +16,7 @@ const decoratorProps: DecoratorProps = {
   chatbot: false,
   simple: true,
   context: "privatperson",
-  enforceLogin: dekoratorEnv === "prod",
+  enforceLogin: false,
   redirectToApp: true,
   level: "Level4",
   utloggingsvarsel: true,

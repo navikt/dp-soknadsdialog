@@ -6,6 +6,8 @@ import styles from "./_app.module.css";
 import "../index.css";
 import SoknadHeader from "../components/SoknadHeader";
 import { useRouter } from "next/router";
+import { fetcher } from "../api.utils";
+import { SWRConfig } from "swr";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -16,12 +18,14 @@ export default function App({ Component, pageProps }: AppProps) {
   };
 
   return (
-    <Provider store={store}>
-      <div className={styles.app}>
-        {renderHeader()}
-        <Component {...pageProps} />
-      </div>
-    </Provider>
+    <SWRConfig value={{ fetcher }}>
+      <Provider store={store}>
+        <div className={styles.app}>
+          {renderHeader()}
+          <Component {...pageProps} />
+        </div>
+      </Provider>
+    </SWRConfig>
   );
 }
 
