@@ -7,6 +7,5 @@ export default function api(endpoint: string): string {
   }${endpoint}`;
 }
 
-// @ts-ignore
 export const fetcher = (url: RequestInfo, options: RequestInit = {}): Promise<unknown> =>
   fetch(url, options).then((r: { json: () => unknown }) => r.json());
