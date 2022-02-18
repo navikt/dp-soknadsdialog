@@ -4,15 +4,11 @@ import { sanityClient } from "../../../../sanity-client";
 import { audience } from "../../../api.utils";
 import { fetchAllSeksjoner } from "../../../sanity/groq-queries";
 import { getFakta, postSoknad } from "../../../server-side/quiz-api";
-import { QuizFaktum } from "../../../soknad-fakta/mock-fakta-response";
 import { ISeksjon } from "../../../types/seksjon.types";
 
 export interface ISoknad {
   sections: ISeksjon[];
   soknadId: string;
-}
-function mapFaktaToState(fakta: QuizFaktum[], sanityTexts: ISeksjon[]) {
-
 }
 
 const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -27,7 +23,6 @@ const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const fakta = await getFakta("test", "asdasd");
-  console.log(fakta);
 
   if (sanitySections.length <= 0) {
     // eslint-disable-next-line no-console

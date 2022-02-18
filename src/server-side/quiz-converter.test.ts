@@ -1,4 +1,4 @@
-import { QuizFaktum } from "../soknad-fakta/mock-fakta-response";
+import { QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
 import { mapQuizFaktaToReduxState } from "./quiz-converter";
 
 const booleanInput: QuizFaktum = {
@@ -6,7 +6,6 @@ const booleanInput: QuizFaktum = {
   type: "boolean",
   beskrivendeId: "faktum.dummy-boolean",
   svar: true,
-  roller: ["søker"],
 };
 
 const intInput: QuizFaktum = {
@@ -14,7 +13,6 @@ const intInput: QuizFaktum = {
   type: "int",
   beskrivendeId: "faktum.dummy-int",
   svar: 40,
-  roller: ["søker"],
 };
 
 const doubleInput: QuizFaktum = {
@@ -22,7 +20,6 @@ const doubleInput: QuizFaktum = {
   type: "double",
   beskrivendeId: "faktum.dummy-double",
   svar: 40.0,
-  roller: ["søker"],
 };
 
 const envalgInput: QuizFaktum = {
@@ -30,7 +27,6 @@ const envalgInput: QuizFaktum = {
   type: "envalg",
   beskrivendeId: "faktum.dummy-envalg",
   svar: "faktum.dummy-envalg.svar",
-  roller: ["søker"],
 };
 
 const flervalgInput: QuizFaktum = {
@@ -38,7 +34,6 @@ const flervalgInput: QuizFaktum = {
   type: "flervalg",
   beskrivendeId: "faktum.dummy-flervalg",
   svar: ["faktum.dummy-flervalg.svar.en", "faktum.dummy-flervalg.svar.to"],
-  roller: ["søker"],
 };
 
 const booleanExpected = {
@@ -118,19 +113,17 @@ describe("mapFaktaToAnswers", () => {
         id: "6",
         type: "flervalg",
         beskrivendeId: "faktum.dummy-flervalg",
-        roller: ["søker"],
       },
     ];
     expect(mapQuizFaktaToReduxState(input)).toEqual({ answers: [] });
   });
 
   test("map arbeidsforhold generator faktum to answer", () => {
-    const generatorInput: QuizFaktum[] = [
+    const generatorInput: QuizGeneratorFaktum[] = [
       {
         id: "7",
         beskrivendeId: "arbeidsforhold",
         type: "generator",
-        roller: [],
         svar: [[booleanInput, intInput, doubleInput, envalgInput, flervalgInput]],
       },
     ];
