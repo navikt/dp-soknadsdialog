@@ -8,15 +8,19 @@ import { ISeksjon } from "../../../types/seksjon.types";
 import { Button } from "@navikt/ds-react";
 
 import styles from "./seksjonpage.module.css";
+import api from "../../../api.utils";
+import { useRouter } from "next/router";
 
 export default function SeksjonPage() {
   const sections: ISeksjon[] = useSelector((state: RootState) => state.seksjoner);
   const dispatch = useDispatch();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const router = useRouter();
+  const soknadUUID = router.query.soknadId as string;
 
   useEffect(() => {
     if (!sections.length) {
-      fetch("/api/soknad")
+      fetch(api(`soknad/${soknadUUID}`))
         .then((response: Response) => response.json())
         .then((data: ISoknad) => {
           dispatch(setSeksjoner(data.sections));
