@@ -20,7 +20,7 @@ export default function SeksjonPage() {
 
   useEffect(() => {
     if (!sections.length) {
-      fetch(api(`soknad/${soknadUUID}`))
+      fetch(api(`soknad/${soknadUUID}/fakta`))
         .then((response: Response) => response.json())
         .then((data: ISoknad) => {
           dispatch(setSeksjoner(data.sections));
