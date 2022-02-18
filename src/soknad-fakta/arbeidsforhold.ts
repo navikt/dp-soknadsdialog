@@ -207,19 +207,14 @@ export const arbeidsforhold: MockDataSeksjon = {
               ],
             },
             {
-              id: "faktum.arbeidsforhold-permitert",
-              type: "generator",
+              id: "faktum.arbeidsforhold-permitteringsperiode",
+              type: "periode",
               requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
-              faktum: [
-                {
-                  id: "faktum.arbeidsforhold-permitteringsperiode",
-                  type: "periode",
-                },
-                {
-                  id: "faktum.arbeidsforhold-permitteringgrad",
-                  type: "int",
-                },
-              ],
+            },
+            {
+              id: "faktum.arbeidsforhold-permitteringgrad",
+              type: "int",
+              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
             },
             {
               id: "faktum.arbeidsforhold-lonnsplinkt-arbeidsgiver",
