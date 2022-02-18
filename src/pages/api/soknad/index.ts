@@ -18,8 +18,6 @@ const soknad = async (req: NextApiRequest, res: NextApiResponse) => {
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     soknadId = await postSoknad(onBehalfOfToken);
-    // eslint-disable-next-line no-console
-    console.log(soknadId);
   }
 
   if (sanitySections.length <= 0) {

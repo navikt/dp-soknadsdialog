@@ -22,12 +22,8 @@ export default function Soknad() {
       });
     setIsCreatingSoknadUUID(false);
   };
-  // eslint-disable-next-line no-console
-  console.log(session);
 
   const login = () => {
-    // eslint-disable-next-line no-console
-    console.log(session);
     if (session === undefined) {
       router.push("/api/auth/signin");
     }

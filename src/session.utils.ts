@@ -22,8 +22,6 @@ export const useSession = ({
 
     // Waiting for data
     if (isLoading) {
-      // eslint-disable-next-line no-console
-      console.log("waiting");
       return;
     }
 
@@ -31,8 +29,6 @@ export const useSession = ({
     if (enforceLogin && redirectTo && !session?.expires_in) {
       router.push(redirectTo);
     }
-    // eslint-disable-next-line no-console
-    console.log("useeffect triggered! " + session);
   }, [session, error, enforceLogin, redirectTo, router]);
 
   if (
@@ -41,10 +37,6 @@ export const useSession = ({
     // No active session, and should not redirect
     (!enforceLogin && !session?.expires_in)
   ) {
-    // eslint-disable-next-line no-console
-    console.log("no active session!");
-    // eslint-disable-next-line no-console
-    console.log(enforceLogin, redirectTo, session);
     return { session: undefined };
   }
   return { session };
