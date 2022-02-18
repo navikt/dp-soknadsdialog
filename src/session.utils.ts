@@ -10,15 +10,22 @@ export interface Session extends Record<string, unknown> {
 export const useSession = ({
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
+  initialSession = undefined,
 }): { session: Session | undefined } => {
   const router = useRouter();
-  const { data: session, error } = useSWR<Session>(api(`/auth/session`));
+  const { data: session, error } = useSWR<Session>(api(`/auth/session`), {
+    fallbackData: initialSession,
+  });
 
   useEffect(() => {
     const isLoading = !session && !error;
 
     // Waiting for data
-    if (!enforceLogin || isLoading) return;
+    if (isLoading) {
+      // eslint-disable-next-line no-console
+      console.log("waiting");
+      return;
+    }
 
     // Got data and should redirect if no session
     if (enforceLogin && redirectTo && !session?.expires_in) {
