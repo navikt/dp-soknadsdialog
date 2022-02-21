@@ -11,7 +11,7 @@ async function startSoknadHandler(req: NextApiRequest, res: NextApiResponse) {
     soknadId = await postSoknad(onBehalfOfToken);
     return res.status(200).json(soknadId);
   } else {
-    return res.status(401);
+    return res.status(401).send({});
   }
 }
 
