@@ -69,11 +69,11 @@ export function mapQuizFaktaToReduxState(
       case "generator":
         generatorState = mapGeneratorFaktumToGeneratorState(faktum);
         switch (generatorState.beskrivendeId) {
-          case "arbeidsforhold":
+          case "faktum.arbeidsforhold":
             arbeidsforhold = generatorState;
             break;
 
-          case "barnetillegg":
+          case "faktum.barn-liste":
             barnetillegg = generatorState;
             break;
         }

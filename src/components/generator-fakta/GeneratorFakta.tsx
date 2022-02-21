@@ -50,7 +50,7 @@ export function GeneratorFakta(props: Props) {
   return (
     <>
       {props.fakta.map((faktum) => (
-        <div key={faktum.id}>
+        <div key={faktum.beskrivendeId}>
           <Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />
         </div>
       ))}

@@ -4,6 +4,10 @@ import { audience } from "../../../api.utils";
 import { postSoknad } from "../../../server-side/quiz-api";
 
 async function startSoknadHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).send("localhost-uuid");
+  }
+
   const { token, apiToken } = await getSession({ req });
   let soknadId;
   if (token && apiToken) {

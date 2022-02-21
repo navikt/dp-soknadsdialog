@@ -30,7 +30,6 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
     id: "1",
     type: "boolean",
     beskrivendeId: "faktum.hel-deltid",
-    svar: true,
   },
   {
     id: "2",
@@ -102,7 +101,6 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
     id: "3004",
     type: "double",
     beskrivendeId: "faktum.egen-naering-arbeidstimer",
-    svar: "3.0",
   },
   {
     id: "3005",
@@ -168,8 +166,8 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
     beskrivendeId: "faktum.andre-ytelser",
     gyldigeValg: [
       "faktum.andre-ytelser.svar.pensjon-offentlig-tjenestepensjon",
-      "faktum.andre-ytelser.svar.arbeidsloshet-garantikassen -for-fiskere",
-      "faktum.andre-ytelser.svar.garantilott-garantikassen -for-fiskere",
+      "faktum.andre-ytelser.svar.arbeidsloshet-garantikassen-for-fiskere",
+      "faktum.andre-ytelser.svar.garantilott-garantikassen-for-fiskere",
       "faktum.andre-ytelser.svar.etterlonn-arbeidsgiver",
       "faktum.andre-ytelser.svar.vartpenger",
       "faktum.andre-ytelser.svar.dagpenger-annet-eos-land",
@@ -185,12 +183,12 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
   {
     id: "5003",
     type: "tekst",
-    beskrivendeId: "faktum.arbeidsloshet-garantikassen -for-fiskere-periode",
+    beskrivendeId: "faktum.arbeidsloshet-garantikassen-for-fiskere-periode",
   },
   {
     id: "5004",
     type: "tekst",
-    beskrivendeId: "faktum.garantilott-garantikassen -for-fiskere-periode",
+    beskrivendeId: "faktum.garantilott-garantikassen-for-fiskere-periode",
   },
   {
     id: "5005",
@@ -241,7 +239,6 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
     id: "8001",
     type: "localdate",
     beskrivendeId: "faktum.dagpenger-soknadsdato",
-    svar: "2022-01-14T13:39Z",
   },
   {
     id: "8002",
@@ -273,6 +270,60 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
     id: "1001",
     type: "generator",
     beskrivendeId: "faktum.barn-liste",
+    svar: [
+      [
+        {
+          id: "1002.1",
+          type: "tekst",
+          beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+          svar: "VAKKER",
+        },
+        {
+          id: "1003.1",
+          type: "tekst",
+          beskrivendeId: "faktum.barn-etternavn",
+          svar: "VEGGPRYD",
+        },
+        {
+          id: "1004.1",
+          type: "localdate",
+          beskrivendeId: "faktum.barn-foedselsdato",
+          svar: "2013-08-16",
+        },
+        {
+          id: "1005.1",
+          type: "land",
+          beskrivendeId: "faktum.barn-statsborgerskap",
+          svar: "NOR",
+        },
+      ],
+      [
+        {
+          id: "1002.2",
+          type: "tekst",
+          beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+          svar: "STERK",
+        },
+        {
+          id: "1003.2",
+          type: "tekst",
+          beskrivendeId: "faktum.barn-etternavn",
+          svar: "BAMSE",
+        },
+        {
+          id: "1004.2",
+          type: "localdate",
+          beskrivendeId: "faktum.barn-foedselsdato",
+          svar: "2007-04-21",
+        },
+        {
+          id: "1005.2",
+          type: "land",
+          beskrivendeId: "faktum.barn-statsborgerskap",
+          svar: "NOR",
+        },
+      ],
+    ],
     templates: [
       {
         id: "1002",
@@ -310,24 +361,6 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
         beskrivendeId: "faktum.barn-inntekt",
       },
     ],
-    svar: [
-      [
-        {
-          id: "3003",
-          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
-          type: "int",
-          svar: 123456,
-        },
-      ],
-      [
-        {
-          id: "3003",
-          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
-          type: "int",
-          svar: 98765,
-        },
-      ],
-    ],
   },
   {
     id: "3002",
@@ -339,24 +372,6 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
         type: "int",
         beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
       },
-    ],
-    svar: [
-      [
-        {
-          id: "3003",
-          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
-          type: "int",
-          svar: 123456,
-        },
-      ],
-      [
-        {
-          id: "3003",
-          beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
-          type: "int",
-          svar: 98765,
-        },
-      ],
     ],
   },
   {
@@ -456,61 +471,66 @@ export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
       },
       {
         id: "8022",
-        type: "int",
-        beskrivendeId: "faktum.arbeidsforhold-permitert",
+        type: "periode",
+        beskrivendeId: "faktum.arbeidsforhold-permitteringsperiode",
       },
       {
         id: "8023",
+        type: "int",
+        beskrivendeId: "faktum.arbeidsforhold-permitteringgrad",
+      },
+      {
+        id: "8024",
         type: "periode",
         beskrivendeId: "faktum.arbeidsforhold-lonnsplinkt-arbeidsgiver",
       },
       {
-        id: "8024",
+        id: "8025",
         type: "tekst",
         beskrivendeId: "faktum.aarsak-til-sagt-opp-selv",
       },
       {
-        id: "8025",
+        id: "8026",
         type: "tekst",
         beskrivendeId: "faktum.arbeidsforhold-arbeidsgiver-konkurs-navn-bostyrer",
       },
       {
-        id: "8026",
+        id: "8027",
         type: "envalg",
         beskrivendeId: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler",
       },
       {
-        id: "8027",
+        id: "8028",
         type: "boolean",
         beskrivendeId: "faktum.arbeidsforhold-godta-nav-trekk-direkte-lonnsgaranti",
       },
       {
-        id: "8028",
+        id: "8029",
         type: "envalg",
         beskrivendeId: "faktum.arbeidsforhold-sok-lonnsgarantimidler",
       },
       {
-        id: "8029",
+        id: "8030",
         type: "envalg",
         beskrivendeId: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav",
       },
       {
-        id: "8030",
+        id: "8031",
         type: "boolean",
         beskrivendeId: "faktum.arbeidsforhold-godta-trekk-direkte-konkursbo",
       },
       {
-        id: "8031",
+        id: "8032",
         type: "boolean",
         beskrivendeId: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs",
       },
       {
-        id: "8032",
+        id: "8033",
         type: "localdate",
         beskrivendeId: "faktum-arbeidsforhold-konkurs-siste-dag-lonn",
       },
       {
-        id: "8033",
+        id: "8034",
         type: "tekst",
         beskrivendeId: "faktum.arbeidsforhold-tillegsinformasjon",
       },

@@ -1,4 +1,4 @@
-import { QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
+import { mockFakta, QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
 
 export interface QuizApi {
   postSoknad: () => void;
@@ -24,6 +24,10 @@ export function getFakta(
   soknadId: string,
   onBehalfOfToken: string
 ): Promise<(QuizFaktum | QuizGeneratorFaktum)[]> {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return Promise.resolve(mockFakta);
+  }
+
   const url = `${process.env.API_BASE_URL}/soknad/${soknadId}/fakta`;
   return fetch(url, {
     method: "Get",

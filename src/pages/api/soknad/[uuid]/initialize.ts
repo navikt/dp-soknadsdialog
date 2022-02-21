@@ -4,9 +4,9 @@ import { sanityClient } from "../../../../../sanity-client";
 import { audience } from "../../../../api.utils";
 import { fetchAllSeksjoner } from "../../../../sanity/groq-queries";
 import { getFakta } from "../../../../server-side/quiz-api";
-import { mapQuizFaktaToReduxState } from "../../../../server-side/quiz-converter";
 import { RootState } from "../../../../store";
 import { ISection } from "../../../../types/section.types";
+import { mapQuizFaktaToReduxState } from "../../../../server-side/quiz-to-redux-mapper";
 
 async function initializeHandler(req: NextApiRequest, res: NextApiResponse<RootState>) {
   const sanitySections = await sanityClient.fetch<ISection[]>(fetchAllSeksjoner);
@@ -19,6 +19,12 @@ async function initializeHandler(req: NextApiRequest, res: NextApiResponse<RootS
     barnetillegg: { id: "", beskrivendeId: "faktum.barn", type: "generator", answers: [] },
     arbeidsforhold: { id: "", beskrivendeId: "faktum.barn", type: "generator", answers: [] },
   };
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    const fakta = await getFakta(uuid, "");
+    initialState = { ...initialState, ...mapQuizFaktaToReduxState(fakta) };
+  }
+
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     const fakta = await getFakta(uuid, onBehalfOfToken);

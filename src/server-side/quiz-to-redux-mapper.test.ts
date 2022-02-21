@@ -1,5 +1,5 @@
 import { QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
-import { mapQuizFaktaToReduxState } from "./quiz-converter";
+import { mapQuizFaktaToReduxState } from "./quiz-to-redux-mapper";
 
 const booleanInput: QuizFaktum = {
   id: "1",
