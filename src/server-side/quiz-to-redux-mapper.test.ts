@@ -122,7 +122,7 @@ describe("mapFaktaToAnswers", () => {
     const generatorInput: QuizGeneratorFaktum[] = [
       {
         id: "7",
-        beskrivendeId: "arbeidsforhold",
+        beskrivendeId: "faktum.arbeidsforhold",
         type: "generator",
         svar: [[booleanInput, intInput, doubleInput, envalgInput, flervalgInput]],
       },
@@ -130,7 +130,7 @@ describe("mapFaktaToAnswers", () => {
 
     const expected = {
       id: "7",
-      beskrivendeId: "arbeidsforhold",
+      beskrivendeId: "faktum.arbeidsforhold",
       type: "generator",
       answers: [
         {
