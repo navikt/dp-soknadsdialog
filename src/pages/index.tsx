@@ -1,5 +1,5 @@
 import React from "react";
-import { StartSoknad } from "../components/view/StartSoknad";
+import { StartSoknad } from "../views/StartSoknad";
 
 export default function Soknad() {
   return <StartSoknad />;

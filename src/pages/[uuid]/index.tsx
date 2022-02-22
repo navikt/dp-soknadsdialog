@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { initialiseStore, RootState } from "../../store";
-import { Soknad } from "../../components/view/Soknad";
+import { Soknad } from "../../views/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { fetchAllSeksjoner } from "../../sanity/groq-queries";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useSession } from "../../session.utils";
+import { useSession } from "../session.utils";
 
 export function StartSoknad() {
   const router = useRouter();
