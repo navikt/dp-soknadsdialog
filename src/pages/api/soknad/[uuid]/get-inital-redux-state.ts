@@ -8,7 +8,7 @@ import { RootState } from "../../../../store";
 import { ISection } from "../../../../types/section.types";
 import { mapQuizFaktaToReduxState } from "../../../../server-side/quiz-to-redux-mapper";
 
-async function initializeHandler(req: NextApiRequest, res: NextApiResponse<RootState>) {
+async function getInitialReduxStateHandler(req: NextApiRequest, res: NextApiResponse<RootState>) {
   const sanitySections = await sanityClient.fetch<ISection[]>(fetchAllSeksjoner);
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
@@ -44,4 +44,4 @@ async function initializeHandler(req: NextApiRequest, res: NextApiResponse<RootS
 
   return res.status(200).json(initialState);
 }
-export default initializeHandler;
+export default getInitialReduxStateHandler;

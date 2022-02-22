@@ -9,7 +9,9 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<RootState>> {
   const { query } = context;
   const uuid = query.uuid;
-  const response: Response = await fetch(`${process.env.SELF_URL}/api/soknad/${uuid}/initialize`);
+  const response: Response = await fetch(
+    `${process.env.SELF_URL}/api/soknad/${uuid}/get-initial-redux-state`
+  );
   const initialReduxState: RootState = await response.json();
 
   return {

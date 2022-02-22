@@ -10,7 +10,7 @@ export function StartSoknad() {
 
   async function startSoknad() {
     setIsCreatingSoknadUUID(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/start`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/get-uuid`);
     const uuid = await response.text();
 
     router.push(`/${uuid}`);
