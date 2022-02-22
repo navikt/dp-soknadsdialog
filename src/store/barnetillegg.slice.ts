@@ -8,7 +8,7 @@ interface BarnetilleggPayload {
 
 const initialState: GeneratorState = {
   id: "",
-  beskrivendeId: "faktum.barn",
+  beskrivendeId: "faktum.barn-liste",
   type: "generator",
   answers: [],
 };

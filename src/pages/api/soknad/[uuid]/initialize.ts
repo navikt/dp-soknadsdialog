@@ -16,8 +16,13 @@ async function initializeHandler(req: NextApiRequest, res: NextApiResponse<RootS
     soknadId: uuid,
     sections: sanitySections,
     answers: [],
-    barnetillegg: { id: "", beskrivendeId: "faktum.barn", type: "generator", answers: [] },
-    arbeidsforhold: { id: "", beskrivendeId: "faktum.barn", type: "generator", answers: [] },
+    barnetillegg: { id: "", beskrivendeId: "faktum.barn-liste", type: "generator", answers: [] },
+    arbeidsforhold: {
+      id: "",
+      beskrivendeId: "faktum.arbeidsforhold",
+      type: "generator",
+      answers: [],
+    },
   };
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
