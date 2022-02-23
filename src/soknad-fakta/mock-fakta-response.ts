@@ -1,31 +1,6 @@
-import { GeneratorFaktumType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
+import { QuizFaktum } from "../types/quiz.types";
 
-export type QuizFaktumSvar = string | string[] | boolean | number;
-
-export interface QuizBaseFaktum {
-  id: string;
-  beskrivendeId: string;
-  gyldigeValg?: string[];
-}
-
-export interface QuizFaktum extends QuizBaseFaktum {
-  type: PrimitivFaktumType | ValgFaktumType;
-  svar?: QuizFaktumSvar;
-}
-
-export interface QuizGeneratorFaktum extends QuizBaseFaktum {
-  type: GeneratorFaktumType;
-  svar?: QuizFaktum[][];
-  templates?: GeneratorTemplate[];
-}
-
-interface GeneratorTemplate {
-  id: string;
-  type: PrimitivFaktumType | ValgFaktumType;
-  beskrivendeId: string;
-}
-
-export const mockFakta: (QuizFaktum | QuizGeneratorFaktum)[] = [
+export const mockFakta: QuizFaktum[] = [
   { id: "1", type: "boolean", beskrivendeId: "faktum.hel-deltid" },
   {
     id: "2",

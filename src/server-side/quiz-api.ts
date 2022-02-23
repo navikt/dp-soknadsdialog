@@ -1,4 +1,5 @@
-import { mockFakta, QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
+import { mockFakta } from "../soknad-fakta/mock-fakta-response";
+import { QuizFaktum } from "../types/quiz.types";
 
 export interface QuizApi {
   postSoknad: () => void;
@@ -20,10 +21,7 @@ export function postSoknad(onBehalfOfToken: string) {
     });
 }
 
-export function getFakta(
-  soknadId: string,
-  onBehalfOfToken: string
-): Promise<(QuizFaktum | QuizGeneratorFaktum)[]> {
+export function getFakta(soknadId: string, onBehalfOfToken: string): Promise<QuizFaktum[]> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return Promise.resolve(mockFakta);
   }

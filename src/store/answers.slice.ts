@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from ".";
+import api from "../api.utils";
 import { FaktumType } from "../types/faktum.types";
 
 export type AnswerType = string | string[] | number | AnswerPeriode;
@@ -14,11 +16,35 @@ export interface Answer {
   answer: AnswerType;
 }
 
+export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootState }>(
+  "answers/setAnswer",
+  async (answer: Answer, thunkApi) => {
+    const { soknadId, quizFakta } = thunkApi.getState();
+    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === answer.beskrivendeId);
+
+    if (!quizFaktum) {
+      return Promise.reject("Ney");
+    }
+
+    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum?.id}`), {
+      method: "PUT",
+      body: JSON.stringify(answer),
+    });
+
+    if (response.ok) {
+      return Promise.resolve(answer);
+    }
+
+    return Promise.reject();
+  }
+);
+
 export const answersSlice = createSlice({
   name: "answers",
   initialState: [] as Answer[],
-  reducers: {
-    setAnswer: (state: Answer[], action: PayloadAction<Answer>) => {
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(saveAnswerToQuiz.fulfilled, (state, action) => {
       const existingIndex = state.findIndex(
         (answer) => answer.beskrivendeId === action.payload.beskrivendeId
       );
@@ -27,9 +53,6 @@ export const answersSlice = createSlice({
       } else {
         state[existingIndex] = action.payload;
       }
-      return state;
-    },
+    });
   },
 });
-
-export const { setAnswer } = answersSlice.actions;

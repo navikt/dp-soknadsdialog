@@ -37,17 +37,18 @@ export async function getServerSideProps(
       type: "generator",
       answers: [],
     },
+    quizFakta: [],
   };
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    const fakta = await getFakta(uuid, "");
-    initialState = { ...initialState, ...mapQuizFaktaToReduxState(fakta) };
+    const quizFakta = await getFakta(uuid, "");
+    initialState = { ...initialState, ...mapQuizFaktaToReduxState(quizFakta), quizFakta };
   }
 
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
-    const fakta = await getFakta(uuid, onBehalfOfToken);
-    initialState = { ...initialState, ...mapQuizFaktaToReduxState(fakta) };
+    const quizFakta = await getFakta(uuid, onBehalfOfToken);
+    initialState = { ...initialState, ...mapQuizFaktaToReduxState(quizFakta), quizFakta };
   }
 
   return {

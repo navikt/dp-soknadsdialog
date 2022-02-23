@@ -9,7 +9,7 @@ import { FaktumDropdown } from "./FaktumDropdown";
 import { FaktumDato } from "./FaktumDato";
 import { FaktumPeriode } from "./FaktumPeriode";
 import styles from "./Faktum.module.css";
-import { Answer, AnswerType, setAnswer } from "../../store/answers.slice";
+import { Answer, AnswerType, saveAnswerToQuiz } from "../../store/answers.slice";
 import { useDispatch } from "react-redux";
 
 export interface FaktumProps<P> {
@@ -23,7 +23,12 @@ export function Faktum(props: FaktumProps<IFaktum>) {
 
   const dispatchAnswer = (faktum: IFaktum, answer: AnswerType) => {
     dispatch(
-      setAnswer({ beskrivendeId: faktum.beskrivendeId, answer, type: faktum.type, id: faktum.id })
+      saveAnswerToQuiz({
+        beskrivendeId: faktum.beskrivendeId,
+        answer,
+        type: faktum.type,
+        id: faktum.id,
+      })
     );
   };
 

@@ -1,7 +1,7 @@
-import { QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
 import { RootState } from "../store";
 import { Answer, AnswerType } from "../store/answers.slice";
 import { GeneratorState, IGeneratorAnswer } from "../store/arbeidsforhold.slice";
+import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 
 function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   if (faktum.svar === undefined) return null;

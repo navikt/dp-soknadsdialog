@@ -1,35 +1,35 @@
-import { QuizFaktum, QuizGeneratorFaktum } from "../soknad-fakta/mock-fakta-response";
+import { QuizPrimitiveFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 import { mapQuizFaktaToReduxState } from "./quiz-to-redux-mapper";
 
-const booleanInput: QuizFaktum = {
+const booleanInput: QuizPrimitiveFaktum = {
   id: "1",
   type: "boolean",
   beskrivendeId: "faktum.dummy-boolean",
   svar: true,
 };
 
-const intInput: QuizFaktum = {
+const intInput: QuizPrimitiveFaktum = {
   id: "2",
   type: "int",
   beskrivendeId: "faktum.dummy-int",
   svar: 40,
 };
 
-const doubleInput: QuizFaktum = {
+const doubleInput: QuizPrimitiveFaktum = {
   id: "3",
   type: "double",
   beskrivendeId: "faktum.dummy-double",
   svar: 40.0,
 };
 
-const envalgInput: QuizFaktum = {
+const envalgInput: QuizPrimitiveFaktum = {
   id: "4",
   type: "envalg",
   beskrivendeId: "faktum.dummy-envalg",
   svar: "faktum.dummy-envalg.svar",
 };
 
-const flervalgInput: QuizFaktum = {
+const flervalgInput: QuizPrimitiveFaktum = {
   id: "5",
   type: "flervalg",
   beskrivendeId: "faktum.dummy-flervalg",
@@ -108,7 +108,7 @@ describe("mapFaktaToAnswers", () => {
   });
 
   test("ignores faktum without answer", () => {
-    const input: QuizFaktum[] = [
+    const input: QuizPrimitiveFaktum[] = [
       {
         id: "6",
         type: "flervalg",
