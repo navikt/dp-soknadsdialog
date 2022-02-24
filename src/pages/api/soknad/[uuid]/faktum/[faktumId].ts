@@ -4,7 +4,7 @@ import { audience } from "../../../../../api.utils";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
-    query: { id, faktumId },
+    query: { uuid, faktumId },
     body,
   } = req;
 
@@ -13,14 +13,14 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     const response: Response = await fetch(
-      `${process.env.API_BASE_URL}/soknad/${id}/faktum/${faktumId}`,
+      `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktumId}`,
       {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${onBehalfOfToken}`,
         },
-        body: JSON.stringify(body),
+        body,
       }
     );
     return res.status(response.status).json(await response.json());

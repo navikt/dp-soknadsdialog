@@ -26,14 +26,16 @@ export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootSt
       return Promise.reject("Ney");
     }
 
+    const quizAnswer = {
+      id: quizFaktum.id,
+      beskrivendeId: answer.beskrivendeId,
+      type: answer.type,
+      svar: answer.answer,
+    };
+
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum?.id}`), {
       method: "PUT",
-      body: JSON.stringify({
-        id: quizFaktum.id,
-        beskrivendeId: answer.beskrivendeId,
-        type: answer.type,
-        svar: answer.answer,
-      }),
+      body: JSON.stringify(quizAnswer),
     });
 
     if (response.ok) {
