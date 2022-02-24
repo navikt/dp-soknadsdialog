@@ -28,7 +28,12 @@ export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootSt
 
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum?.id}`), {
       method: "PUT",
-      body: JSON.stringify(answer),
+      body: JSON.stringify({
+        id: quizFaktum.id,
+        beskrivendeId: answer.beskrivendeId,
+        type: answer.type,
+        svar: answer.answer,
+      }),
     });
 
     if (response.ok) {
