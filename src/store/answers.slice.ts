@@ -58,15 +58,24 @@ export const answersSlice = createSlice({
         (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
       );
 
+      let answer = action.meta.arg.answer;
+
+      // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
+      if (action.meta.arg.type === "boolean") {
+        answer = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.answer ? "ja" : "nei"}`;
+      }
+
       if (existingIndex === -1) {
         state.push({
           ...action.meta.arg,
+          answer,
           // loading: true,
           // errorMessages: []
         });
       } else {
         state[existingIndex] = {
           ...action.meta.arg,
+          answer,
           // loading: true,
           // errorMessages: []
         };
