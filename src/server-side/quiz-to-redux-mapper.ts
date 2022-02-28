@@ -14,7 +14,9 @@ function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   };
 }
 
-function mapBooleanFaktumToAnswer(faktum: QuizFaktum): Answer {
+function mapBooleanFaktumToAnswer(faktum: QuizFaktum): Answer | null {
+  if (faktum.svar === undefined) return null;
+
   return {
     id: faktum.id,
     beskrivendeId: faktum.beskrivendeId,
