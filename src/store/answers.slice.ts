@@ -3,7 +3,7 @@ import { RootState } from ".";
 import api from "../api.utils";
 import { FaktumType } from "../types/faktum.types";
 
-export type AnswerType = string | string[] | number | AnswerPeriode | undefined;
+export type AnswerType = string | string[] | number | boolean | AnswerPeriode | undefined;
 export interface AnswerPeriode {
   fromDate: string;
   toDate: string;

@@ -3,19 +3,40 @@ import { Alert, Radio, RadioGroup } from "@navikt/ds-react";
 import { Faktum, FaktumProps } from "./Faktum";
 import { IValgFaktum } from "../../types/faktum.types";
 import { PortableText } from "@portabletext/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { saveAnswerToQuiz } from "../../store/answers.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
+  const dispatch = useDispatch();
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerId =
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
     "";
 
   function onSelection(value: string) {
-    onChange && onChange(faktum, value);
+    onChange ? onChange(faktum, value) : saveFaktum(value);
+  }
+
+  function saveFaktum(value: string) {
+    const mappedAnswer = faktum.type === "boolean" ? mapStringToBoolean(value) : value;
+
+    if (mappedAnswer === undefined) {
+      //TODO sentry
+      // eslint-disable-next-line no-console
+      console.error("ERROR");
+    }
+
+    dispatch(
+      saveAnswerToQuiz({
+        beskrivendeId: faktum.beskrivendeId,
+        answer: mappedAnswer,
+        type: faktum.type,
+        id: faktum.id,
+      })
+    );
   }
 
   return (
@@ -60,4 +81,16 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       )}
     </div>
   );
+}
+
+function mapStringToBoolean(value: string): boolean | undefined {
+  if (value.match(".*.svar.ja")) {
+    return true;
+  }
+
+  if (value.match(".*.svar.nei")) {
+    return false;
+  }
+
+  return undefined;
 }

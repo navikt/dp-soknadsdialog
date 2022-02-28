@@ -37,11 +37,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
       case "boolean":
       case "envalg":
         return (
-          <FaktumValg
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumValg faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
       case "flervalg":
         return (
