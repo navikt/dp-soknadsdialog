@@ -10,6 +10,7 @@ import styles from "./Faktum.module.css";
 export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
+  // const currentAnswer = answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId);
   const currentAnswerIds =
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string[]) ??
     [];
@@ -29,12 +30,17 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
         onChange={onSelection}
         value={currentAnswerIds}
       >
+        {/*{currentAnswer?.loading && <Loader variant="neutral" size="small" title="venter..." />}*/}
         {faktum.answerOptions.map((answer) => (
           <Checkbox key={answer.beskrivendeId} value={answer.beskrivendeId}>
             {answer.title ? answer.title : answer.beskrivendeId}
           </Checkbox>
         ))}
       </CheckboxGroup>
+
+      {/*{currentAnswer?.errorMessages.map((errorMessage, index) => (*/}
+      {/*  <div key={index}> Error: {errorMessage} </div>*/}
+      {/*))}*/}
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>

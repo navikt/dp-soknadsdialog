@@ -3,7 +3,7 @@ import { RootState } from ".";
 import api from "../api.utils";
 import { FaktumType } from "../types/faktum.types";
 
-export type AnswerType = string | string[] | number | AnswerPeriode;
+export type AnswerType = string | string[] | number | AnswerPeriode | undefined;
 export interface AnswerPeriode {
   fromDate: string;
   toDate: string;
@@ -14,6 +14,8 @@ export interface Answer {
   beskrivendeId: string;
   type: FaktumType;
   answer: AnswerType;
+  // loading: boolean;
+  // errorMessages: string[];
 }
 
 export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootState }>(
@@ -51,14 +53,62 @@ export const answersSlice = createSlice({
   initialState: [] as Answer[],
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(saveAnswerToQuiz.pending, (state, action) => {
+      const existingIndex = state.findIndex(
+        (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
+      );
+
+      if (existingIndex === -1) {
+        state.push({
+          ...action.meta.arg,
+          // loading: true,
+          // errorMessages: []
+        });
+      } else {
+        state[existingIndex] = {
+          ...action.meta.arg,
+          // loading: true,
+          // errorMessages: []
+        };
+      }
+    });
+
     builder.addCase(saveAnswerToQuiz.fulfilled, (state, action) => {
       const existingIndex = state.findIndex(
         (answer) => answer.beskrivendeId === action.payload.beskrivendeId
       );
       if (existingIndex === -1) {
-        state.push(action.payload);
+        state.push({
+          ...action.payload,
+          // loading: false,
+          // errorMessages: []
+        });
       } else {
-        state[existingIndex] = action.payload;
+        state[existingIndex] = {
+          ...action.payload,
+          // loading: false,
+          // errorMessages: []
+        };
+      }
+    });
+
+    builder.addCase(saveAnswerToQuiz.rejected, (state, action) => {
+      const existingIndex = state.findIndex(
+        (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
+      );
+      if (existingIndex === -1) {
+        state.push({
+          ...action.meta.arg,
+          // loading: false,
+          // errorMessages: ["Feil i quiz"]
+        });
+      } else {
+        state[existingIndex] = {
+          ...action.meta.arg,
+          answer: undefined,
+          // loading: false,
+          // errorMessages: ["Feil i quiz"],
+        };
       }
     });
   },
