@@ -5,6 +5,7 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { formatISO } from "date-fns";
 
 export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
@@ -13,8 +14,9 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
     new Date().toISOString();
 
-  const onDateSelection = (value: string) => {
-    onChange && onChange(faktum, value);
+  const onDateSelection = (value: Date) => {
+    const date = formatISO(value, { representation: "date" });
+    onChange && onChange(faktum, date);
   };
 
   return (

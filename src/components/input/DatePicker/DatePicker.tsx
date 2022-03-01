@@ -13,21 +13,22 @@ import "react-day-picker/lib/style.css";
 interface DatePickerProps {
   label: string;
   placeholder?: string;
-  onChange: (value: string) => void;
+  onChange: (value: Date) => void;
+  disabled?: boolean;
   value?: string;
 }
 
 export function DatePicker(props: DatePickerProps) {
   const [date, setDate] = useState(props.value);
-  const DAYPICKER_FORMAT = "dd.MM.yyyy";
-  const DEFAULT_PLACEHOLDER = "dd.mm.yyyy";
+  const DAYPICKER_FORMAT = "yyyy-MM-dd";
+  const DEFAULT_PLACEHOLDER = "yyyy-MM-dd";
 
   const onDayChange = (value: Date) => {
     let formatted;
     if (isValid(value)) {
       formatted = dateFnsFormat(value, DAYPICKER_FORMAT);
       setDate(formatted);
-      props.onChange(value.toISOString());
+      props.onChange(value);
     }
   };
 
@@ -43,6 +44,7 @@ export function DatePicker(props: DatePickerProps) {
     return (
       <div className={styles.customInput}>
         <TextField
+          disabled={props.disabled}
           ref={ref}
           label={props.label}
           onBlur={onBlur}

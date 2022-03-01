@@ -6,6 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { AnswerPeriode } from "../../store/answers.slice";
+import { formatISO } from "date-fns";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
@@ -13,22 +14,43 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const currentAnswer = (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)
     ?.answer as AnswerPeriode) ?? { fromDate: "" };
 
-  const [fromDate, setFromDate] = useState<string>(currentAnswer.fromDate);
-  const [toDate, setToDate] = useState<string>(currentAnswer.toDate);
+  const [fromDate, setFromDate] = useState<Date | undefined>(
+    currentAnswer.fromDate ? new Date(currentAnswer.fromDate) : undefined
+  );
+  const [toDate, setToDate] = useState<Date | undefined>(
+    currentAnswer.toDate ? new Date(currentAnswer.toDate) : undefined
+  );
 
   useEffect(() => {
     if (fromDate) {
-      onChange && onChange(faktum, { fromDate, toDate });
+      const parsedFromDate = formatISO(fromDate, { representation: "date" });
+      onChange && onChange(faktum, { ...currentAnswer, fromDate: parsedFromDate });
     }
-  }, [fromDate, toDate]);
+  }, [fromDate]);
+
+  useEffect(() => {
+    if (toDate) {
+      const parsedToDate = formatISO(toDate, { representation: "date" });
+      onChange && onChange(faktum, { ...currentAnswer, toDate: parsedToDate });
+    }
+  }, [toDate]);
 
   return (
     <div>
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
-      <DatePicker label={"Fra dato"} onChange={setFromDate} value={fromDate} />
-      <DatePicker label={"Til dato"} onChange={setToDate} value={toDate} />
+      <DatePicker
+        label={"Fra dato"}
+        onChange={setFromDate}
+        value={fromDate ? fromDate.toISOString() : ""}
+      />
+      <DatePicker
+        label={"Til dato"}
+        disabled={!fromDate}
+        onChange={setToDate}
+        value={toDate ? toDate.toISOString() : ""}
+      />
     </div>
   );
 }
