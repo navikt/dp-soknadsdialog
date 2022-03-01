@@ -1,10 +1,11 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 
 export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
@@ -13,8 +14,32 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as number) ??
     0;
 
-  function onTextChange(event: ChangeEvent<HTMLInputElement>) {
-    onChange && onChange(faktum, event.target.value);
+  const [value, setValue] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setValue, 500);
+
+  useEffect(() => {
+    onChange && onChange(faktum, value);
+  }, [value]);
+
+  // Tmp conversion to int/float for saving to quiz
+  //TODO Add som validation for different int vs float
+  function onValueChange(event: ChangeEvent<HTMLInputElement>) {
+    let number;
+    switch (faktum.type) {
+      case "int":
+        number = parseInt(event.target.value);
+        debouncedChange(number);
+        break;
+      case "double":
+        number = parseFloat(event.target.value);
+        debouncedChange(number);
+        break;
+      default:
+        //TODO sentry
+        // eslint-disable-next-line no-console
+        console.error("Wrong component for number. Could not parse text to int or float");
+        break;
+    }
   }
 
   return (
@@ -23,11 +48,11 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
+        defaultValue={currentAnswer}
         label={faktum.title ? faktum.title : faktum.beskrivendeId}
         size="medium"
         type="number"
-        onChange={onTextChange}
-        value={currentAnswer}
+        onChange={onValueChange}
       />
     </div>
   );

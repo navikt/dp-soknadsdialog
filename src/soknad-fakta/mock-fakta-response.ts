@@ -107,6 +107,7 @@ export const mockFakta: QuizFaktum[] = [
     id: "5003",
     type: "tekst",
     beskrivendeId: "faktum.arbeidsloshet-garantikassen-for-fiskere-periode",
+    svar: "Frans er tøff",
   },
   {
     id: "5004",

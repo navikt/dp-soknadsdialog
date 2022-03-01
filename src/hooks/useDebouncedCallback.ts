@@ -6,7 +6,7 @@ interface IDebounce {
   flush: () => void;
 }
 
-export function useDebounce<T>(
+export function useDebouncedCallback<T>(
   setter: (value: T) => void,
   delayMs: number,
   maxWaitMs?: number

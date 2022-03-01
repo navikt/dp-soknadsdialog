@@ -8,6 +8,10 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     body,
   } = req;
 
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).json({ status: "ok" });
+  }
+
   const { token, apiToken } = await getSession({ req });
 
   if (token && apiToken) {
