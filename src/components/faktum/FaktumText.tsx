@@ -14,12 +14,14 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
     "";
 
-  const [text, setText] = useState(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setText, 500);
+  const [debouncedText, setDebouncedText] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    onChange && onChange(faktum, text);
-  }, [text]);
+    if (debouncedText && debouncedText !== currentAnswer) {
+      onChange && onChange(faktum, debouncedText);
+    }
+  }, [debouncedText]);
 
   return (
     <div>

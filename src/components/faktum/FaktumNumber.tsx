@@ -14,12 +14,14 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
     (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as number) ??
     0;
 
-  const [value, setValue] = useState(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setValue, 500);
+  const [debouncedValue, setDebouncedValue] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
 
   useEffect(() => {
-    onChange && onChange(faktum, value);
-  }, [value]);
+    if (debouncedValue && debouncedValue !== currentAnswer) {
+      onChange && onChange(faktum, debouncedValue);
+    }
+  }, [debouncedValue]);
 
   // Tmp conversion to int/float for saving to quiz
   //TODO Add som validation for different int vs float
