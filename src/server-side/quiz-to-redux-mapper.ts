@@ -1,7 +1,7 @@
 import { RootState } from "../store";
 import { Answer, AnswerType } from "../store/answers.slice";
-import { GeneratorState, IGeneratorAnswer } from "../store/arbeidsforhold.slice";
 import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
+import { GeneratorState, IGeneratorAnswer } from "../store/generator-utils";
 
 function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   if (faktum.svar === undefined) return null;

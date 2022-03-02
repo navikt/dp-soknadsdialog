@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
-import { IGeneratorAnswer } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import { deleteBarnetillegg, saveBarnetillegg } from "../../store/barnetillegg.slice";
+import { deleteBarnetilleggFromQuiz, saveBarnetileggToQuiz } from "../../store/barnetillegg.slice";
+import { IGeneratorAnswer } from "../../store/generator-utils";
 
 export function Barnetillegg(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
@@ -15,19 +15,25 @@ export function Barnetillegg(props: IGeneratorFaktum) {
   const [activeBarnetilleggIndex, setActiveBarnetilleggIndex] = useState<number | undefined>(0);
 
   function onSaveBarnetillegg(answers: Answer[]) {
-    dispatch(
-      saveBarnetillegg({
-        barnetillegg: {
-          answers,
-        },
-        index: activeBarnetilleggIndex,
-      })
-    );
+    if (activeBarnetilleggIndex === undefined) {
+      // TODO sentry
+      // eslint-disable-next-line no-console
+      console.error("prøver å lagre barnetilegg uten av active index er satt");
+      return;
+    }
+
+    dispatch(saveBarnetileggToQuiz({ index: activeBarnetilleggIndex, answers }));
 
     resetBarnetilleggForm();
   }
   function onDeleteBarnetillegg() {
-    dispatch(deleteBarnetillegg(activeBarnetilleggIndex));
+    if (activeBarnetilleggIndex === undefined) {
+      // TODO sentry
+      // eslint-disable-next-line no-console
+      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
+      return;
+    }
+    dispatch(deleteBarnetilleggFromQuiz(activeBarnetilleggIndex));
     resetBarnetilleggForm();
   }
 
@@ -96,6 +102,7 @@ function getChildName(barnetillegg: IGeneratorAnswer): string {
   const firstName = barnetillegg.answers.find(
     (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.answer as string;
+
   const lastName = barnetillegg.answers.find(
     (answer) => answer.beskrivendeId === "faktum.barn-etternavn"
   )?.answer as string;

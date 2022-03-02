@@ -1,23 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Answer, AnswerType } from "./answers.slice";
 import { RootState } from "./index";
 import api from "../api.utils";
-
-interface ArbeidsforholdPayload {
-  answers: Answer[];
-  index: number;
-}
-
-export interface IGeneratorAnswer {
-  answers: Answer[];
-}
-
-export interface GeneratorState {
-  id: string;
-  beskrivendeId: string;
-  type: "generator";
-  answers: IGeneratorAnswer[];
-}
+import {
+  GeneratorFaktumPayload,
+  GeneratorState,
+  mapReduxAnswerToQuizAnswer,
+  QuizAnswer,
+  saveGeneratorFaktumReducer,
+} from "./generator-utils";
 
 const initialState: GeneratorState = {
   id: "",
@@ -27,12 +17,12 @@ const initialState: GeneratorState = {
 };
 
 export const saveArbeidsforholdToQuiz = createAsyncThunk<
-  ArbeidsforholdPayload,
-  ArbeidsforholdPayload,
+  GeneratorFaktumPayload,
+  GeneratorFaktumPayload,
   { state: RootState }
 >(
-  "arbeidsforhold/saveArbeidsforhold",
-  async (arbeidsforholdPayload: ArbeidsforholdPayload, thunkApi) => {
+  "arbeidsforhold/saveArbeidsforholdToQuiz",
+  async (arbeidsforholdPayload: GeneratorFaktumPayload, thunkApi) => {
     const { soknadId, quizFakta, arbeidsforhold } = thunkApi.getState();
     const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold");
 
@@ -48,16 +38,14 @@ export const saveArbeidsforholdToQuiz = createAsyncThunk<
       mapReduxAnswerToQuizAnswer
     );
 
-    const quizAnswer = {
-      id: quizFaktum.id,
-      beskrivendeId: "faktum.arbeidsforhold",
-      type: "generator",
-      svar: answersInQuizFormat,
-    };
-
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
       method: "PUT",
-      body: JSON.stringify(quizAnswer),
+      body: JSON.stringify({
+        id: quizFaktum.id,
+        beskrivendeId: "faktum.arbeidsforhold",
+        type: "generator",
+        svar: answersInQuizFormat,
+      }),
     });
 
     if (response.ok) {
@@ -80,21 +68,19 @@ export const deleteArbeidsforholdFromQuiz = createAsyncThunk<number, number, { s
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat = arbeidsforhold.answers.map((answers) =>
+    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answers) =>
       answers.answers.map(mapReduxAnswerToQuizAnswer)
     );
     answersInQuizFormat.splice(index, 1);
 
-    const quizAnswer = {
-      id: quizFaktum.id,
-      beskrivendeId: "faktum.arbeidsforhold",
-      type: "generator",
-      svar: answersInQuizFormat,
-    };
-
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
       method: "PUT",
-      body: JSON.stringify(quizAnswer),
+      body: JSON.stringify({
+        id: quizFaktum.id,
+        beskrivendeId: "faktum.arbeidsforhold",
+        type: "generator",
+        svar: answersInQuizFormat,
+      }),
     });
 
     if (response.ok) {
@@ -112,12 +98,7 @@ export const arbeidsforholdSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(saveArbeidsforholdToQuiz.fulfilled, (state, action) => {
-      if (state.answers[action.payload.index]?.answers) {
-        state.answers[action.payload.index].answers = action.payload.answers;
-      } else {
-        state.answers.push({ answers: action.payload.answers });
-      }
-      return state;
+      return saveGeneratorFaktumReducer(state, action);
     });
 
     builder.addCase(deleteArbeidsforholdFromQuiz.fulfilled, (state, action) => {
@@ -125,19 +106,3 @@ export const arbeidsforholdSlice = createSlice({
     });
   },
 });
-
-interface QuizAnswer {
-  id: string;
-  beskrivendeId: string;
-  type: string;
-  svar: AnswerType;
-}
-
-function mapReduxAnswerToQuizAnswer(answer: Answer): QuizAnswer {
-  return {
-    id: answer.id,
-    beskrivendeId: answer.beskrivendeId,
-    type: answer.type,
-    svar: answer.answer,
-  };
-}

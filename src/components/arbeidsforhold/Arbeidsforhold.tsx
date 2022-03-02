@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import {
-  deleteArbeidsforholdFromQuiz,
-  IGeneratorAnswer,
   saveArbeidsforholdToQuiz,
+  deleteArbeidsforholdFromQuiz,
 } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
+import { IGeneratorAnswer } from "../../store/generator-utils";
 import styles from "./Arbeidsforhold.module.css";
 
 export function Arbeidsforhold(props: IGeneratorFaktum) {
