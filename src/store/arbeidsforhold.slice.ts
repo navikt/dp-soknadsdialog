@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Answer } from "./answers.slice";
+import { Answer, AnswerType } from "./answers.slice";
 import { RootState } from "./index";
 import api from "../api.utils";
 
@@ -41,8 +41,12 @@ export const saveArbeidsforholdToQuiz = createAsyncThunk<
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat = arbeidsforhold.answers.map((answers) => answers.answers);
-    answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers;
+    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answers) =>
+      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    );
+    answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers.map(
+      mapReduxAnswerToQuizAnswer
+    );
 
     const quizAnswer = {
       id: quizFaktum.id,
@@ -76,7 +80,9 @@ export const deleteArbeidsforholdFromQuiz = createAsyncThunk<number, number, { s
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat = arbeidsforhold.answers.map((answers) => answers.answers);
+    const answersInQuizFormat = arbeidsforhold.answers.map((answers) =>
+      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    );
     answersInQuizFormat.splice(index, 1);
 
     const quizAnswer = {
@@ -119,3 +125,19 @@ export const arbeidsforholdSlice = createSlice({
     });
   },
 });
+
+interface QuizAnswer {
+  id: string;
+  beskrivendeId: string;
+  type: string;
+  svar: AnswerType;
+}
+
+function mapReduxAnswerToQuizAnswer(answer: Answer): QuizAnswer {
+  return {
+    id: answer.id,
+    beskrivendeId: answer.beskrivendeId,
+    type: answer.type,
+    svar: answer.answer,
+  };
+}
