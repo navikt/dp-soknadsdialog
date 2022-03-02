@@ -45,6 +45,7 @@ export const saveArbeidsforholdToQuiz = createAsyncThunk<
     answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers;
 
     const quizAnswer = {
+      id: quizFaktum.id,
       beskrivendeId: "faktum.arbeidsforhold",
       type: "generator",
       svar: answersInQuizFormat,
