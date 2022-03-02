@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import {
-  deleteArbeidsforhold,
+  deleteArbeidsforholdFromQuiz,
   IGeneratorAnswer,
-  saveArbeidsforhold,
+  saveArbeidsforholdToQuiz,
 } from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,19 +19,25 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
   const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
 
   function onSaveArbeidsforhold(answers: Answer[]) {
-    dispatch(
-      saveArbeidsforhold({
-        arbeidsforhold: {
-          answers,
-        },
-        index: activeArbeidsforholdIndex,
-      })
-    );
+    if (activeArbeidsforholdIndex === undefined) {
+      // TODO sentry
+      // eslint-disable-next-line no-console
+      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
+      return;
+    }
 
+    dispatch(saveArbeidsforholdToQuiz({ index: activeArbeidsforholdIndex, answers }));
     resetArbeidsforholdForm();
   }
+
   function onDeleteArbeidsforhold() {
-    dispatch(deleteArbeidsforhold(activeArbeidsforholdIndex));
+    if (activeArbeidsforholdIndex === undefined) {
+      // TODO sentry
+      // eslint-disable-next-line no-console
+      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
+      return;
+    }
+    dispatch(deleteArbeidsforholdFromQuiz(activeArbeidsforholdIndex));
     resetArbeidsforholdForm();
   }
 

@@ -11,6 +11,7 @@ import { FaktumPeriode } from "./FaktumPeriode";
 import styles from "./Faktum.module.css";
 import { Answer, AnswerType, saveAnswerToQuiz } from "../../store/answers.slice";
 import { useDispatch } from "react-redux";
+import { FaktumLand } from "./FaktumLand";
 
 export interface FaktumProps<P> {
   faktum: P;
@@ -69,6 +70,14 @@ export function Faktum(props: FaktumProps<IFaktum>) {
       case "dropdown":
         return (
           <FaktumDropdown
+            faktum={props.faktum}
+            answers={props.answers}
+            onChange={props.onChange || dispatchAnswer}
+          />
+        );
+      case "land":
+        return (
+          <FaktumLand
             faktum={props.faktum}
             answers={props.answers}
             onChange={props.onChange || dispatchAnswer}

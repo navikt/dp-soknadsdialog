@@ -24,7 +24,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
     const mappedAnswer = faktum.type === "boolean" ? mapStringToBoolean(value) : value;
 
     if (mappedAnswer === undefined) {
-      //TODO sentry
+      // TODO sentry
       // eslint-disable-next-line no-console
       console.error("ERROR");
     }

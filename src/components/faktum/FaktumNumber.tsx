@@ -37,7 +37,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
         debouncedChange(number);
         break;
       default:
-        //TODO sentry
+        // TODO sentry
         // eslint-disable-next-line no-console
         console.error("Wrong component for number. Could not parse text to int or float");
         break;
