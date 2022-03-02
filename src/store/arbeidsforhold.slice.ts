@@ -79,6 +79,7 @@ export const deleteArbeidsforholdFromQuiz = createAsyncThunk<number, number, { s
     answersInQuizFormat.splice(index, 1);
 
     const quizAnswer = {
+      id: quizFaktum.id,
       beskrivendeId: "faktum.arbeidsforhold",
       type: "generator",
       svar: answersInQuizFormat,
