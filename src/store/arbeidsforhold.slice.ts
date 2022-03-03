@@ -8,6 +8,7 @@ import {
   QuizAnswer,
   saveGeneratorFaktumReducer,
 } from "./generator-utils";
+import { QuizGeneratorFaktum } from "../types/quiz.types";
 
 const initialState: GeneratorState = {
   id: "",
@@ -24,18 +25,21 @@ export const saveArbeidsforholdToQuiz = createAsyncThunk<
   "arbeidsforhold/saveArbeidsforholdToQuiz",
   async (arbeidsforholdPayload: GeneratorFaktumPayload, thunkApi) => {
     const { soknadId, quizFakta, arbeidsforhold } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold");
+    const quizFaktum = quizFakta.find(
+      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold"
+    ) as QuizGeneratorFaktum | undefined;
 
     if (!quizFaktum) {
       // TODO Sentry
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answers) =>
-      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answer) =>
+      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
-    answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers.map(
-      mapReduxAnswerToQuizAnswer
+
+    answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers.map((answer) =>
+      mapReduxAnswerToQuizAnswer(answer, quizFaktum)
     );
 
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
@@ -61,15 +65,17 @@ export const deleteArbeidsforholdFromQuiz = createAsyncThunk<number, number, { s
   "arbeidsforhold/deleteArbeidsforhold",
   async (index: number, thunkApi) => {
     const { soknadId, quizFakta, arbeidsforhold } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold");
+    const quizFaktum = quizFakta.find(
+      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold"
+    ) as QuizGeneratorFaktum | undefined;
 
     if (!quizFaktum) {
       // TODO Sentry
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answers) =>
-      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answer) =>
+      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
     answersInQuizFormat.splice(index, 1);
 

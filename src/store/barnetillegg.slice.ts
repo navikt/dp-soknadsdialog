@@ -8,6 +8,7 @@ import {
   saveGeneratorFaktumReducer,
 } from "./generator-utils";
 import api from "../api.utils";
+import { QuizGeneratorFaktum } from "../types/quiz.types";
 
 const initialState: GeneratorState = {
   id: "",
@@ -21,21 +22,24 @@ export const saveBarnetileggToQuiz = createAsyncThunk<
   GeneratorFaktumPayload,
   { state: RootState }
 >(
-  "arbeidsforhold/saveBarnetileggToQuiz",
+  "barnetillegg/saveBarnetileggToQuiz",
   async (barnetileggPayload: GeneratorFaktumPayload, thunkApi) => {
     const { soknadId, quizFakta, barnetillegg } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.barn-liste");
+    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.barn-liste") as
+      | QuizGeneratorFaktum
+      | undefined;
 
     if (!quizFaktum) {
       // TODO Sentry
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answers) =>
-      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answer) =>
+      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
-    answersInQuizFormat[barnetileggPayload.index] = barnetileggPayload.answers.map(
-      mapReduxAnswerToQuizAnswer
+
+    answersInQuizFormat[barnetileggPayload.index] = barnetileggPayload.answers.map((answer) =>
+      mapReduxAnswerToQuizAnswer(answer, quizFaktum)
     );
 
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
@@ -58,18 +62,20 @@ export const saveBarnetileggToQuiz = createAsyncThunk<
 );
 
 export const deleteBarnetilleggFromQuiz = createAsyncThunk<number, number, { state: RootState }>(
-  "arbeidsforhold/deleteBarnetilegg",
+  "barnetillegg/deleteBarnetillegg",
   async (index: number, thunkApi) => {
     const { soknadId, quizFakta, barnetillegg } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold");
+    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.barn-liste") as
+      | QuizGeneratorFaktum
+      | undefined;
 
     if (!quizFaktum) {
       // TODO Sentry
       return Promise.reject("Ney");
     }
 
-    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answers) =>
-      answers.answers.map(mapReduxAnswerToQuizAnswer)
+    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answer) =>
+      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
     answersInQuizFormat.splice(index, 1);
 

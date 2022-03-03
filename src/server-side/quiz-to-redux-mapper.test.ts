@@ -125,6 +125,7 @@ describe("mapFaktaToAnswers", () => {
         beskrivendeId: "faktum.arbeidsforhold",
         type: "generator",
         svar: [[booleanInput, intInput, doubleInput, envalgInput, flervalgInput]],
+        templates: [],
       },
     ];
 

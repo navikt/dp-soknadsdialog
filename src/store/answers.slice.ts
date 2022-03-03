@@ -35,13 +35,13 @@ export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootSt
       svar: answer.answer,
     };
 
-    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum?.id}`), {
+    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
       method: "PUT",
       body: JSON.stringify(quizAnswer),
     });
 
     if (response.ok) {
-      return Promise.resolve(answer);
+      return Promise.resolve({ ...answer, id: quizFaktum.id });
     }
 
     return Promise.reject();

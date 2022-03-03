@@ -17,7 +17,7 @@ export interface QuizPrimitiveFaktum extends QuizBaseFaktum {
 export interface QuizGeneratorFaktum extends QuizBaseFaktum {
   type: GeneratorFaktumType;
   svar?: QuizPrimitiveFaktum[][];
-  templates?: GeneratorTemplate[];
+  templates: GeneratorTemplate[];
 }
 
 interface GeneratorTemplate {
