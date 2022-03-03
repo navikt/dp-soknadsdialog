@@ -1,5 +1,5 @@
 import { TypedObject } from "@portabletext/types";
-export type ValgFaktumType = "boolean" | "envalg" | "dropdown" | "flervalg" | "land";
+export type ValgFaktumType = "boolean" | "envalg" | "flervalg" | "land";
 export type PrimitivFaktumType = "int" | "double" | "localdate" | "periode" | "tekst";
 export type GeneratorFaktumType = "generator";
 export type GeneratorListType = "Arbeidsforhold" | "Barn" | "Standard";

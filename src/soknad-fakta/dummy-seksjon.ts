@@ -37,15 +37,6 @@ export const dummySeksjon: MockDataSeksjon = {
       ],
     },
     {
-      id: "faktum.dummy-dropdown",
-      type: "dropdown",
-      answerOptions: [
-        { id: "faktum.dummy-dropdown.svar.1" },
-        { id: "faktum.dummy-dropdown.svar.2" },
-        { id: "faktum.dummy-dropdown.svar.3" },
-      ],
-    },
-    {
       id: "faktum.dummy-int",
       type: "int",
     },
@@ -104,15 +95,6 @@ export const dummySeksjon: MockDataSeksjon = {
             { id: "faktum.generator-dummy-flervalg.svar.1" },
             { id: "faktum.generator-dummy-flervalg.svar.2" },
             { id: "faktum.generator-dummy-flervalg.svar.3" },
-          ],
-        },
-        {
-          id: "faktum.generator-dummy-dropdown",
-          type: "dropdown",
-          answerOptions: [
-            { id: "faktum.generator-dummy-dropdown.svar.1" },
-            { id: "faktum.generator-dummy-dropdown.svar.2" },
-            { id: "faktum.generator-dummy-dropdown.svar.3" },
           ],
         },
         {

@@ -71,15 +71,8 @@ export const mockFakta: QuizFaktum[] = [
   { id: "3009", type: "double", beskrivendeId: "faktum-eget-gaardsbruk-arbeidstimer" },
   {
     id: "3010",
-    type: "envalg",
+    type: "int",
     beskrivendeId: "faktum-eget-gaardsbruk-arbeidsaar",
-    gyldigeValg: [
-      "faktum-eget-gaardsbruk-arbeidsaar.svar.2022",
-      "faktum-eget-gaardsbruk-arbeidsaar.svar.2021",
-      "faktum-eget-gaardsbruk-arbeidsaar.svar.2020",
-      "faktum-eget-gaardsbruk-arbeidsaar.svar.2019",
-      "faktum-eget-gaardsbruk-arbeidsaar.svar.2018",
-    ],
   },
   { id: "3011", type: "tekst", beskrivendeId: "faktum-eget-gaardsbruk-arbeidstimer-beregning" },
   { id: "4001", type: "tekst", beskrivendeId: "faktum.tilleggsopplysninger" },

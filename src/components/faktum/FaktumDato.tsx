@@ -1,6 +1,6 @@
 import React from "react";
 import { IPrimitivFaktum } from "../../types/faktum.types";
-import { DatePicker } from "../input/DatePicker";
+import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";

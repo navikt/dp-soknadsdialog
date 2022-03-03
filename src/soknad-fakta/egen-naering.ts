@@ -65,15 +65,8 @@ export const egenNaering: MockDataSeksjon = {
         },
         {
           id: "faktum-eget-gaardsbruk-arbeidsaar",
-          type: "dropdown", //todo: siste fem år? en dynamisk dropdown som endrer seg hvert år altså. Hvordan løser vi dette?
+          type: "int",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
-          answerOptions: [
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2022" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2021" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2020" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2019" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2018" },
-          ],
         },
         {
           id: "faktum-eget-gaardsbruk-arbeidstimer-beregning",

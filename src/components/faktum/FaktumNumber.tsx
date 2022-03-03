@@ -52,6 +52,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
       <TextField
         defaultValue={currentAnswer}
         label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        step={faktum.type === "double" ? "0.1" : "1"}
         size="medium"
         type="number"
         onChange={onValueChange}
