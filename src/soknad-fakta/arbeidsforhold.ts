@@ -336,7 +336,7 @@ export const arbeidsforhold: MockDataSeksjon = {
               ],
               subFaktum: [
                 {
-                  id: "faktum-arbeidsforhold-konkurs-siste-dag-lonn",
+                  id: "faktum.arbeidsforhold-konkurs-siste-dag-lonn",
                   type: "localdate",
                   requiredAnswerIds: ["faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja"],
                 },
