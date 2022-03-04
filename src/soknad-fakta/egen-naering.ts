@@ -33,12 +33,12 @@ export const egenNaering: MockDataSeksjon = {
       ],
       subFaktum: [
         {
-          id: "faktum-eget-gaardsbruk-organisasjonsnummer",
+          id: "faktum.eget-gaardsbruk-organisasjonsnummer",
           type: "int",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
-          id: "faktum-eget-gaardsbruk-type-gaardsbruk",
+          id: "faktum.eget-gaardsbruk-type-gaardsbruk",
           type: "flervalg",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
@@ -49,7 +49,7 @@ export const egenNaering: MockDataSeksjon = {
           ],
         },
         {
-          id: "faktum-eget-gaardsbruk-hvem-eier",
+          id: "faktum.eget-gaardsbruk-hvem-eier",
           type: "flervalg",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
@@ -59,24 +59,17 @@ export const egenNaering: MockDataSeksjon = {
           ],
         },
         {
-          id: "faktum-eget-gaardsbruk-arbeidstimer",
+          id: "faktum.eget-gaardsbruk-arbeidstimer",
           type: "double",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
-          id: "faktum-eget-gaardsbruk-arbeidsaar",
-          type: "dropdown", //todo: siste fem år? en dynamisk dropdown som endrer seg hvert år altså. Hvordan løser vi dette?
+          id: "faktum.eget-gaardsbruk-arbeidsaar",
+          type: "int", //todo: siste fem år? en dynamisk dropdown som endrer seg hvert år altså. Hvordan løser vi dette?
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
-          answerOptions: [
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2022" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2021" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2020" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2019" },
-            { id: "faktum-eget-gaardsbruk-arbeidsaar.svar.2018" },
-          ],
         },
         {
-          id: "faktum-eget-gaardsbruk-arbeidstimer-beregning",
+          id: "faktum.eget-gaardsbruk-arbeidstimer-beregning",
           type: "tekst",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
