@@ -76,6 +76,7 @@ describe("mapFaktaToAnswers", () => {
   test("maps boolean faktum", () => {
     const expected = {
       answers: [booleanExpected],
+      generators: [],
     };
     expect(mapQuizFaktaToReduxState([booleanInput])).toEqual(expected);
   });
@@ -83,6 +84,7 @@ describe("mapFaktaToAnswers", () => {
   test("maps int faktum", () => {
     const expected = {
       answers: [intExpected],
+      generators: [],
     };
     expect(mapQuizFaktaToReduxState([intInput])).toEqual(expected);
   });
@@ -90,6 +92,7 @@ describe("mapFaktaToAnswers", () => {
   test("maps double faktum", () => {
     const expected = {
       answers: [doubleExpected],
+      generators: [],
     };
     expect(mapQuizFaktaToReduxState([doubleInput])).toEqual(expected);
   });
@@ -97,6 +100,7 @@ describe("mapFaktaToAnswers", () => {
   test("maps envalg faktum", () => {
     const expected = {
       answers: [envalgExpected],
+      generators: [],
     };
     expect(mapQuizFaktaToReduxState([envalgInput])).toEqual(expected);
   });
@@ -104,6 +108,7 @@ describe("mapFaktaToAnswers", () => {
   test("maps flervalg faktum", () => {
     const expected = {
       answers: [flervalgExpected],
+      generators: [],
     };
     expect(mapQuizFaktaToReduxState([flervalgInput])).toEqual(expected);
   });
@@ -116,7 +121,7 @@ describe("mapFaktaToAnswers", () => {
         beskrivendeId: "faktum.dummy-flervalg",
       },
     ];
-    expect(mapQuizFaktaToReduxState(input)).toEqual({ answers: [] });
+    expect(mapQuizFaktaToReduxState(input)).toEqual({ answers: [], generators: [] });
   });
 
   test("map arbeidsforhold generator faktum to answer", () => {
@@ -143,7 +148,7 @@ describe("mapFaktaToAnswers", () => {
 
     expect(mapQuizFaktaToReduxState(generatorInput)).toEqual({
       answers: [],
-      arbeidsforhold: expected,
+      generators: [expected],
     });
   });
 });

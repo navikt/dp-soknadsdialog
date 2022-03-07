@@ -2,7 +2,6 @@ import { RootState } from "../store";
 import { Answer, AnswerType } from "../store/answers.slice";
 import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 import { GeneratorState, IGeneratorAnswer } from "../store/generator-utils";
-import { FAKTUM_ARBEIDSFORHOLD, FAKTUM_BARNETILLEGG } from "../constants";
 
 function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   if (faktum.svar === undefined) return null;
@@ -62,25 +61,13 @@ export function mapQuizFaktaToReduxState(
   fakta: (QuizFaktum | QuizGeneratorFaktum)[]
 ): Partial<RootState> {
   const answers: Answer[] = [];
-  let generatorState;
-  let arbeidsforhold;
-  let barnetillegg;
+  const generators: GeneratorState[] = [];
 
   fakta.map((faktum) => {
     let answer;
     switch (faktum.type) {
       case "generator":
-        generatorState = mapGeneratorFaktumToGeneratorState(faktum);
-        switch (generatorState.beskrivendeId) {
-          case FAKTUM_ARBEIDSFORHOLD:
-            arbeidsforhold = generatorState;
-            break;
-
-          case FAKTUM_BARNETILLEGG:
-            barnetillegg = generatorState;
-            break;
-        }
-
+        generators.push(mapGeneratorFaktumToGeneratorState(faktum));
         break;
 
       default:
@@ -94,7 +81,6 @@ export function mapQuizFaktaToReduxState(
 
   return {
     answers,
-    ...(arbeidsforhold ? { arbeidsforhold } : {}),
-    ...(barnetillegg ? { barnetillegg } : {}),
+    generators,
   };
 }

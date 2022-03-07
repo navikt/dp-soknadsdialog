@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import { deleteBarnetilleggFromQuiz, saveBarnetileggToQuiz } from "../../store/barnetillegg.slice";
 import { IGeneratorAnswer } from "../../store/generator-utils";
+import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../../store/generators.slice";
+import { FAKTUM_BARNETILLEGG } from "../../constants";
+import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 
 export function Barnetillegg(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
-  const barnetillegg = useSelector((state: RootState) => state.barnetillegg.answers);
+  const barnetillegg = useGeneratorStateAnswers(FAKTUM_BARNETILLEGG);
   const [addNewBarnetillegg, setNewBarnetillegg] = useState(false);
   const [activeBarnetilleggIndex, setActiveBarnetilleggIndex] = useState<number | undefined>(0);
 
@@ -22,7 +23,13 @@ export function Barnetillegg(props: IGeneratorFaktum) {
       return;
     }
 
-    dispatch(saveBarnetileggToQuiz({ index: activeBarnetilleggIndex, answers }));
+    dispatch(
+      saveGeneratorStateToQuiz({
+        index: activeBarnetilleggIndex,
+        beskrivendeId: FAKTUM_BARNETILLEGG,
+        answers,
+      })
+    );
 
     resetBarnetilleggForm();
   }
@@ -33,7 +40,12 @@ export function Barnetillegg(props: IGeneratorFaktum) {
       console.error("prøver å lagre arbeidsforhold uten av active index er satt");
       return;
     }
-    dispatch(deleteBarnetilleggFromQuiz(activeBarnetilleggIndex));
+    dispatch(
+      deleteGeneratorFromQuiz({
+        index: activeBarnetilleggIndex,
+        beskrivendeId: FAKTUM_BARNETILLEGG,
+      })
+    );
     resetBarnetilleggForm();
   }
 

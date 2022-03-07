@@ -1,20 +1,18 @@
 import React, { useState } from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
-import {
-  saveArbeidsforholdToQuiz,
-  deleteArbeidsforholdFromQuiz,
-} from "../../store/arbeidsforhold.slice";
 import { Answer } from "../../store/answers.slice";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
+import { useDispatch } from "react-redux";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { IGeneratorAnswer } from "../../store/generator-utils";
 import styles from "./Arbeidsforhold.module.css";
+import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../../store/generators.slice";
+import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";
+import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 
 export function Arbeidsforhold(props: IGeneratorFaktum) {
   const dispatch = useDispatch();
-  const arbeidsforhold = useSelector((state: RootState) => state.arbeidsforhold.answers);
+  const arbeidsforhold = useGeneratorStateAnswers(FAKTUM_ARBEIDSFORHOLD);
   const [addNewArbeidsforhold, setNewArbeidsforhold] = useState(false);
   const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
 
@@ -26,7 +24,13 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
       return;
     }
 
-    dispatch(saveArbeidsforholdToQuiz({ index: activeArbeidsforholdIndex, answers }));
+    dispatch(
+      saveGeneratorStateToQuiz({
+        index: activeArbeidsforholdIndex,
+        beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
+        answers,
+      })
+    );
     resetArbeidsforholdForm();
   }
 
@@ -37,7 +41,12 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
       console.error("prøver å lagre arbeidsforhold uten av active index er satt");
       return;
     }
-    dispatch(deleteArbeidsforholdFromQuiz(activeArbeidsforholdIndex));
+    dispatch(
+      deleteGeneratorFromQuiz({
+        index: activeArbeidsforholdIndex,
+        beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
+      })
+    );
     resetArbeidsforholdForm();
   }
 

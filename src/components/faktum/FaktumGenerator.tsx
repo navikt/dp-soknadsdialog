@@ -16,7 +16,7 @@ function renderListType(faktum: IGeneratorFaktum) {
     case "Barn":
       return <Barnetillegg {...faktum} />;
     case "Standard":
-      return <TempFallback {...faktum} />;
+      return <StandardGeneratorFaktum {...faktum} />;
     default:
       return <TempFallback {...faktum} />;
   }
@@ -34,4 +34,8 @@ function TempFallback(faktum: IGeneratorFaktum) {
       </div>
     </>
   );
+}
+
+function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
+  return <div>StandardGeneratorFaktum {faktum}</div>;
 }
