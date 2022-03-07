@@ -7,7 +7,6 @@ import { soknadIdSlice } from "./soknadId.slice";
 import { ISection } from "../types/section.types";
 import { QuizFaktum } from "../types/quiz.types";
 import { quizFaktaSlice } from "./quizfakta.slice";
-import { faktaStateSlice } from "./faktaState.slice";
 import { GeneratorState } from "./generator-utils";
 
 const reducer = combineReducers({
@@ -17,7 +16,6 @@ const reducer = combineReducers({
   arbeidsforhold: arbeidsforholdSlice.reducer,
   barnetillegg: barnetilleggSlice.reducer,
   quizFakta: quizFaktaSlice.reducer,
-  faktaState: faktaStateSlice.reducer,
 });
 
 let store: EnhancedStore;
