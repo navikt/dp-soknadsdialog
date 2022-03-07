@@ -10,6 +10,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../api.utils";
 import { getFakta } from "../../server-side/quiz-api";
 import { mapQuizFaktaToReduxState } from "../../server-side/quiz-to-redux-mapper";
+import { FAKTUM_ARBEIDSFORHOLD, FAKTUM_BARNETILLEGG } from "../../constants";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -30,10 +31,10 @@ export async function getServerSideProps(
     soknadId: uuid,
     sections: sanitySections,
     answers: [],
-    barnetillegg: { id: "", beskrivendeId: "faktum.barn-liste", type: "generator", answers: [] },
+    barnetillegg: { id: "", beskrivendeId: FAKTUM_BARNETILLEGG, type: "generator", answers: [] },
     arbeidsforhold: {
       id: "",
-      beskrivendeId: "faktum.arbeidsforhold",
+      beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
       type: "generator",
       answers: [],
     },

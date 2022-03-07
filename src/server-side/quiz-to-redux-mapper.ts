@@ -2,6 +2,7 @@ import { RootState } from "../store";
 import { Answer, AnswerType } from "../store/answers.slice";
 import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 import { GeneratorState, IGeneratorAnswer } from "../store/generator-utils";
+import { FAKTUM_ARBEIDSFORHOLD, FAKTUM_BARNETILLEGG } from "../constants";
 
 function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   if (faktum.svar === undefined) return null;
@@ -71,11 +72,11 @@ export function mapQuizFaktaToReduxState(
       case "generator":
         generatorState = mapGeneratorFaktumToGeneratorState(faktum);
         switch (generatorState.beskrivendeId) {
-          case "faktum.arbeidsforhold":
+          case FAKTUM_ARBEIDSFORHOLD:
             arbeidsforhold = generatorState;
             break;
 
-          case "faktum.barn-liste":
+          case FAKTUM_BARNETILLEGG:
             barnetillegg = generatorState;
             break;
         }

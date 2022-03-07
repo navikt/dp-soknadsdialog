@@ -1,5 +1,6 @@
 import { QuizPrimitiveFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 import { mapQuizFaktaToReduxState } from "./quiz-to-redux-mapper";
+import { FAKTUM_ARBEIDSFORHOLD } from "../constants";
 
 const booleanInput: QuizPrimitiveFaktum = {
   id: "1",
@@ -122,7 +123,7 @@ describe("mapFaktaToAnswers", () => {
     const generatorInput: QuizGeneratorFaktum[] = [
       {
         id: "7",
-        beskrivendeId: "faktum.arbeidsforhold",
+        beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
         type: "generator",
         svar: [[booleanInput, intInput, doubleInput, envalgInput, flervalgInput]],
         templates: [],
@@ -131,7 +132,7 @@ describe("mapFaktaToAnswers", () => {
 
     const expected = {
       id: "7",
-      beskrivendeId: "faktum.arbeidsforhold",
+      beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
       type: "generator",
       answers: [
         {

@@ -1,18 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import {
+  deleteGeneratorStateFromQuiz,
   GeneratorFaktumPayload,
   GeneratorState,
-  mapReduxAnswerToQuizAnswer,
-  QuizAnswer,
   saveGeneratorFaktumReducer,
+  saveGeneratorStateToQuiz,
 } from "./generator-utils";
-import api from "../api.utils";
-import { QuizGeneratorFaktum } from "../types/quiz.types";
+import { FAKTUM_BARNETILLEGG } from "../constants";
 
 const initialState: GeneratorState = {
   id: "",
-  beskrivendeId: "faktum.barn-liste",
+  beskrivendeId: FAKTUM_BARNETILLEGG,
   type: "generator",
   answers: [],
 };
@@ -25,76 +24,27 @@ export const saveBarnetileggToQuiz = createAsyncThunk<
   "barnetillegg/saveBarnetileggToQuiz",
   async (barnetileggPayload: GeneratorFaktumPayload, thunkApi) => {
     const { soknadId, quizFakta, barnetillegg } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.barn-liste") as
-      | QuizGeneratorFaktum
-      | undefined;
-
-    if (!quizFaktum) {
-      // TODO Sentry
-      return Promise.reject("Ney");
-    }
-
-    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+    return await saveGeneratorStateToQuiz(
+      soknadId,
+      quizFakta,
+      barnetillegg,
+      FAKTUM_BARNETILLEGG,
+      barnetileggPayload
     );
-
-    answersInQuizFormat[barnetileggPayload.index] = barnetileggPayload.answers.map((answer) =>
-      mapReduxAnswerToQuizAnswer(answer, quizFaktum)
-    );
-
-    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
-      method: "PUT",
-      body: JSON.stringify({
-        id: quizFaktum.id,
-        beskrivendeId: "faktum.barn-liste",
-        type: "generator",
-        svar: answersInQuizFormat,
-      }),
-    });
-
-    if (response.ok) {
-      return Promise.resolve(barnetileggPayload);
-    }
-
-    // TODO Sentry
-    return Promise.reject();
   }
 );
 
 export const deleteBarnetilleggFromQuiz = createAsyncThunk<number, number, { state: RootState }>(
   "barnetillegg/deleteBarnetillegg",
-  async (index: number, thunkApi) => {
+  async (deleteIndex: number, thunkApi) => {
     const { soknadId, quizFakta, barnetillegg } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === "faktum.barn-liste") as
-      | QuizGeneratorFaktum
-      | undefined;
-
-    if (!quizFaktum) {
-      // TODO Sentry
-      return Promise.reject("Ney");
-    }
-
-    const answersInQuizFormat: QuizAnswer[][] = barnetillegg.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+    return await deleteGeneratorStateFromQuiz(
+      soknadId,
+      quizFakta,
+      barnetillegg,
+      FAKTUM_BARNETILLEGG,
+      deleteIndex
     );
-    answersInQuizFormat.splice(index, 1);
-
-    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
-      method: "PUT",
-      body: JSON.stringify({
-        id: quizFaktum.id,
-        beskrivendeId: "faktum.barn-liste",
-        type: "generator",
-        svar: answersInQuizFormat,
-      }),
-    });
-
-    if (response.ok) {
-      return Promise.resolve(index);
-    }
-
-    // TODO Sentry
-    return Promise.reject();
   }
 );
 

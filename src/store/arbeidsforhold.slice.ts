@@ -1,18 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import api from "../api.utils";
 import {
+  deleteGeneratorStateFromQuiz,
   GeneratorFaktumPayload,
   GeneratorState,
-  mapReduxAnswerToQuizAnswer,
-  QuizAnswer,
   saveGeneratorFaktumReducer,
+  saveGeneratorStateToQuiz,
 } from "./generator-utils";
-import { QuizGeneratorFaktum } from "../types/quiz.types";
+import { FAKTUM_ARBEIDSFORHOLD } from "../constants";
 
 const initialState: GeneratorState = {
   id: "",
-  beskrivendeId: "faktum.arbeidsforhold",
+  beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
   type: "generator",
   answers: [],
 };
@@ -25,76 +24,27 @@ export const saveArbeidsforholdToQuiz = createAsyncThunk<
   "arbeidsforhold/saveArbeidsforholdToQuiz",
   async (arbeidsforholdPayload: GeneratorFaktumPayload, thunkApi) => {
     const { soknadId, quizFakta, arbeidsforhold } = thunkApi.getState();
-    const quizFaktum = quizFakta.find(
-      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold"
-    ) as QuizGeneratorFaktum | undefined;
-
-    if (!quizFaktum) {
-      // TODO Sentry
-      return Promise.reject("Ney");
-    }
-
-    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+    return await saveGeneratorStateToQuiz(
+      soknadId,
+      quizFakta,
+      arbeidsforhold,
+      FAKTUM_ARBEIDSFORHOLD,
+      arbeidsforholdPayload
     );
-
-    answersInQuizFormat[arbeidsforholdPayload.index] = arbeidsforholdPayload.answers.map((answer) =>
-      mapReduxAnswerToQuizAnswer(answer, quizFaktum)
-    );
-
-    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
-      method: "PUT",
-      body: JSON.stringify({
-        id: quizFaktum.id,
-        beskrivendeId: "faktum.arbeidsforhold",
-        type: "generator",
-        svar: answersInQuizFormat,
-      }),
-    });
-
-    if (response.ok) {
-      return Promise.resolve(arbeidsforholdPayload);
-    }
-
-    // TODO Sentry
-    return Promise.reject();
   }
 );
 
 export const deleteArbeidsforholdFromQuiz = createAsyncThunk<number, number, { state: RootState }>(
   "arbeidsforhold/deleteArbeidsforhold",
-  async (index: number, thunkApi) => {
+  async (deleteIndex: number, thunkApi) => {
     const { soknadId, quizFakta, arbeidsforhold } = thunkApi.getState();
-    const quizFaktum = quizFakta.find(
-      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold"
-    ) as QuizGeneratorFaktum | undefined;
-
-    if (!quizFaktum) {
-      // TODO Sentry
-      return Promise.reject("Ney");
-    }
-
-    const answersInQuizFormat: QuizAnswer[][] = arbeidsforhold.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+    return await deleteGeneratorStateFromQuiz(
+      soknadId,
+      quizFakta,
+      arbeidsforhold,
+      FAKTUM_ARBEIDSFORHOLD,
+      deleteIndex
     );
-    answersInQuizFormat.splice(index, 1);
-
-    const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
-      method: "PUT",
-      body: JSON.stringify({
-        id: quizFaktum.id,
-        beskrivendeId: "faktum.arbeidsforhold",
-        type: "generator",
-        svar: answersInQuizFormat,
-      }),
-    });
-
-    if (response.ok) {
-      return Promise.resolve(index);
-    }
-
-    // TODO Sentry
-    return Promise.reject();
   }
 );
 
