@@ -11,7 +11,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.textId === faktum.textId)?.value as number) ?? 0;
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as number) || undefined;
 
   const [debouncedValue, setDebouncedValue] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
