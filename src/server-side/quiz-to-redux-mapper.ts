@@ -1,5 +1,5 @@
 import { RootState } from "../store";
-import { Answer, AnswerType } from "../store/answers.slice";
+import { Answer, AnswerValue } from "../store/answers.slice";
 import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
 import { GeneratorState } from "../store/generator-utils";
 
@@ -10,7 +10,7 @@ function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
     id: faktum.id,
     beskrivendeId: faktum.beskrivendeId,
     type: faktum.type,
-    answer: faktum.svar as AnswerType,
+    value: faktum.svar as AnswerValue,
   };
 }
 
@@ -21,7 +21,7 @@ function mapBooleanFaktumToAnswer(faktum: QuizFaktum): Answer | null {
     id: faktum.id,
     beskrivendeId: faktum.beskrivendeId,
     type: faktum.type,
-    answer: `${faktum.beskrivendeId}.svar.${faktum.svar ? "ja" : "nei"}`,
+    value: `${faktum.beskrivendeId}.svar.${faktum.svar ? "ja" : "nei"}`,
   };
 }
 

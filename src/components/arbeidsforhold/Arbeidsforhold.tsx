@@ -113,6 +113,6 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
 function getArbeidsforholdName(arbeidsforhold: Answer[]): string {
   return (
     (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.navn-bedrift")
-      ?.answer as string) ?? "Fant ikke navn på arbeidsgiver"
+      ?.value as string) ?? "Fant ikke navn på arbeidsgiver"
   );
 }

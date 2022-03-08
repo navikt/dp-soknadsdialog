@@ -1,5 +1,5 @@
 import { IFaktum } from "../../types/faktum.types";
-import { Answer, AnswerType } from "../../store/answers.slice";
+import { Answer, AnswerValue } from "../../store/answers.slice";
 import React, { useEffect, useState } from "react";
 import { Faktum } from "../faktum/Faktum";
 import { Button } from "@navikt/ds-react";
@@ -21,7 +21,7 @@ export function GeneratorFakta(props: Props) {
     }
   }, []);
 
-  function saveFaktum(faktum: IFaktum, answer: AnswerType) {
+  function saveFaktum(faktum: IFaktum, value: AnswerValue) {
     const answerIndex = generatorAnswers.findIndex(
       (answer) => answer.beskrivendeId === faktum.beskrivendeId
     );
@@ -30,7 +30,7 @@ export function GeneratorFakta(props: Props) {
       id: faktum.id,
       beskrivendeId: faktum.beskrivendeId,
       type: faktum.type,
-      answer,
+      value,
     };
 
     if (answerIndex === -1) {

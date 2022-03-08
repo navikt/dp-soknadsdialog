@@ -17,7 +17,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
     (answers.find((answer) => answer.beskrivendeId === props.faktum.beskrivendeId)
-      ?.answer as number) ?? 0;
+      ?.value as number) ?? 0;
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);

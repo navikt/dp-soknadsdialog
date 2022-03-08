@@ -97,7 +97,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
           return (
             <Accordion.Item key={index} open={index === activeAnswerIndex}>
               <Accordion.Header onClick={() => toggleActiveList(index)}>
-                {answers[0]?.answer}
+                {answers[0]?.value}
               </Accordion.Header>
 
               <Accordion.Content>

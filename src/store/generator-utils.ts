@@ -1,4 +1,4 @@
-import { Answer, AnswerType } from "./answers.slice";
+import { Answer, AnswerValue } from "./answers.slice";
 import { QuizGeneratorFaktum } from "../types/quiz.types";
 
 export interface SaveGeneratorPayload {
@@ -23,7 +23,7 @@ export interface QuizAnswer {
   id: string;
   beskrivendeId: string;
   type: string;
-  svar: AnswerType;
+  svar: AnswerValue;
 }
 
 export function mapReduxAnswerToQuizAnswer(
@@ -46,6 +46,6 @@ export function mapReduxAnswerToQuizAnswer(
     id: quizId || answer.id,
     beskrivendeId: answer.beskrivendeId,
     type: answer.type,
-    svar: answer.answer,
+    svar: answer.value,
   };
 }

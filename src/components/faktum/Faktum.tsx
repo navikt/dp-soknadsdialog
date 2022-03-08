@@ -8,14 +8,14 @@ import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDato } from "./FaktumDato";
 import { FaktumPeriode } from "./FaktumPeriode";
 import styles from "./Faktum.module.css";
-import { Answer, AnswerType, saveAnswerToQuiz } from "../../store/answers.slice";
+import { Answer, AnswerValue, saveAnswerToQuiz } from "../../store/answers.slice";
 import { useDispatch } from "react-redux";
 import { FaktumLand } from "./FaktumLand";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
 
 export interface FaktumProps<P> {
   faktum: P;
-  onChange?: (faktum: IFaktum, value: AnswerType) => void;
+  onChange?: (faktum: IFaktum, value: AnswerValue) => void;
   answers?: Answer[];
 }
 
@@ -24,11 +24,11 @@ const specialCaseFaktum = ["faktum-eget-gaardsbruk-arbeidsaar"];
 export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
 
-  function dispatchAnswer(faktum: IFaktum, answer: AnswerType) {
+  function dispatchAnswer(faktum: IFaktum, answer: AnswerValue) {
     dispatch(
       saveAnswerToQuiz({
         beskrivendeId: faktum.beskrivendeId,
-        answer,
+        value: answer,
         type: faktum.type,
         id: faktum.id,
       })

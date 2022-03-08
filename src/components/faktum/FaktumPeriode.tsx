@@ -12,7 +12,7 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer = (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)
-    ?.answer as AnswerPeriode) ?? { fromDate: "" };
+    ?.value as AnswerPeriode) ?? { fromDate: "" };
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
     currentAnswer.fromDate ? new Date(currentAnswer.fromDate) : undefined

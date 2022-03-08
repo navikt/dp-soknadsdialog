@@ -3,7 +3,7 @@ import { RootState } from ".";
 import api from "../api.utils";
 import { FaktumType } from "../types/faktum.types";
 
-export type AnswerType = string | string[] | number | boolean | AnswerPeriode | undefined;
+export type AnswerValue = string | string[] | number | boolean | AnswerPeriode | undefined;
 export interface AnswerPeriode {
   fromDate: string;
   toDate: string;
@@ -13,7 +13,7 @@ export interface Answer {
   id: string;
   beskrivendeId: string;
   type: FaktumType;
-  answer: AnswerType;
+  value: AnswerValue;
   // loading: boolean;
   // errorMessages: string[];
 }
@@ -32,7 +32,7 @@ export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootSt
       id: quizFaktum.id,
       beskrivendeId: answer.beskrivendeId,
       type: answer.type,
-      svar: answer.answer,
+      svar: answer.value,
     };
 
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
@@ -58,24 +58,24 @@ export const answersSlice = createSlice({
         (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
       );
 
-      let answer = action.meta.arg.answer;
+      let value = action.meta.arg.value;
 
       // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
       if (action.meta.arg.type === "boolean") {
-        answer = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.answer ? "ja" : "nei"}`;
+        value = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
       }
 
       if (existingIndex === -1) {
         state.push({
           ...action.meta.arg,
-          answer,
+          value,
           // loading: true,
           // errorMessages: []
         });
       } else {
         state[existingIndex] = {
           ...action.meta.arg,
-          answer,
+          value,
           // loading: true,
           // errorMessages: []
         };
@@ -87,24 +87,24 @@ export const answersSlice = createSlice({
         (answer) => answer.beskrivendeId === action.payload.beskrivendeId
       );
 
-      let answer = action.meta.arg.answer;
+      let value = action.meta.arg.value;
 
       // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
       if (action.meta.arg.type === "boolean") {
-        answer = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.answer ? "ja" : "nei"}`;
+        value = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
       }
 
       if (existingIndex === -1) {
         state.push({
           ...action.payload,
-          answer,
+          value,
           // loading: false,
           // errorMessages: []
         });
       } else {
         state[existingIndex] = {
           ...action.payload,
-          answer,
+          value,
           // loading: false,
           // errorMessages: []
         };
@@ -118,14 +118,14 @@ export const answersSlice = createSlice({
       if (existingIndex === -1) {
         state.push({
           ...action.meta.arg,
-          answer: undefined,
+          value: undefined,
           // loading: false,
           // errorMessages: ["Feil i quiz"]
         });
       } else {
         state[existingIndex] = {
           ...action.meta.arg,
-          answer: undefined,
+          value: undefined,
           // loading: false,
           // errorMessages: ["Feil i quiz"],
         };

@@ -12,7 +12,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   // const currentAnswer = answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId);
   const currentAnswerIds =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string[]) ??
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string[]) ??
     [];
 
   const onSelection = (value: string[]) => {

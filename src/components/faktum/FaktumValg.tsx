@@ -13,7 +13,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerId =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.answer as string) ??
+    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string) ??
     "";
 
   function onSelection(value: string) {
@@ -32,7 +32,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
     dispatch(
       saveAnswerToQuiz({
         beskrivendeId: faktum.beskrivendeId,
-        answer: mappedAnswer,
+        value: mappedAnswer,
         type: faktum.type,
         id: faktum.id,
       })
