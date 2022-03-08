@@ -39,37 +39,37 @@ const flervalgInput: QuizPrimitiveFaktum = {
 
 const booleanExpected = {
   id: "1",
-  beskrivendeId: "faktum.dummy-boolean",
+  textId: "faktum.dummy-boolean",
   type: "boolean",
-  answer: "faktum.dummy-boolean.svar.ja",
+  value: "faktum.dummy-boolean.svar.ja",
 };
 
 const intExpected = {
   id: "2",
-  beskrivendeId: "faktum.dummy-int",
+  textId: "faktum.dummy-int",
   type: "int",
-  answer: 40,
+  value: 40,
 };
 
 const doubleExpected = {
   id: "3",
-  beskrivendeId: "faktum.dummy-double",
+  textId: "faktum.dummy-double",
   type: "double",
-  answer: 40.0,
+  value: 40.0,
 };
 
 const envalgExpected = {
   id: "4",
-  beskrivendeId: "faktum.dummy-envalg",
+  textId: "faktum.dummy-envalg",
   type: "envalg",
-  answer: "faktum.dummy-envalg.svar",
+  value: "faktum.dummy-envalg.svar",
 };
 
 const flervalgExpected = {
   id: "5",
-  beskrivendeId: "faktum.dummy-flervalg",
+  textId: "faktum.dummy-flervalg",
   type: "flervalg",
-  answer: ["faktum.dummy-flervalg.svar.en", "faktum.dummy-flervalg.svar.to"],
+  value: ["faktum.dummy-flervalg.svar.en", "faktum.dummy-flervalg.svar.to"],
 };
 
 describe("mapFaktaToAnswers", () => {
@@ -137,7 +137,7 @@ describe("mapFaktaToAnswers", () => {
 
     const expected = {
       id: "7",
-      beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
+      textId: FAKTUM_ARBEIDSFORHOLD,
       type: "generator",
       answers: [[booleanExpected, intExpected, doubleExpected, envalgExpected, flervalgExpected]],
     };
