@@ -1,8 +1,8 @@
-import { IGeneratorAnswer } from "../store/generator-utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import { Answer } from "../store/answers.slice";
 
-export function useGeneratorStateAnswers(id: string): IGeneratorAnswer[] {
+export function useGeneratorStateAnswers(id: string): Answer[][] {
   return useSelector(
     (state: RootState) =>
       state.generators.find((generator) => generator.beskrivendeId === id)?.answers || []

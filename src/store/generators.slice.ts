@@ -35,7 +35,7 @@ export const saveGeneratorStateToQuiz = createAsyncThunk<
 
   if (generator) {
     answersInQuizFormat = generator.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+      answer.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
   }
 
@@ -84,7 +84,7 @@ export const deleteGeneratorFromQuiz = createAsyncThunk<
 
   if (generator) {
     answersInQuizFormat = generator.answers.map((answer) =>
-      answer.answers.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
+      answer.map((answer) => mapReduxAnswerToQuizAnswer(answer, quizFaktum))
     );
   }
 
@@ -124,13 +124,13 @@ export const generatorsSlice = createSlice({
           id: "string",
           beskrivendeId: action.payload.beskrivendeId,
           type: "generator",
-          answers: [{ answers: action.payload.answers }],
+          answers: [action.payload.answers],
         });
       } else {
-        if (state[existingGeneratorIndex].answers[action.payload.index]?.answers) {
-          state[existingGeneratorIndex].answers[action.payload.index].answers = newAnswers;
+        if (state[existingGeneratorIndex].answers[action.payload.index]) {
+          state[existingGeneratorIndex].answers[action.payload.index] = newAnswers;
         } else {
-          state[existingGeneratorIndex].answers.push({ answers: newAnswers });
+          state[existingGeneratorIndex].answers.push(newAnswers);
         }
       }
     });

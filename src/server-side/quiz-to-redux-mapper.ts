@@ -1,7 +1,7 @@
 import { RootState } from "../store";
 import { Answer, AnswerType } from "../store/answers.slice";
 import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
-import { GeneratorState, IGeneratorAnswer } from "../store/generator-utils";
+import { GeneratorState } from "../store/generator-utils";
 
 function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
   if (faktum.svar === undefined) return null;
@@ -26,7 +26,7 @@ function mapBooleanFaktumToAnswer(faktum: QuizFaktum): Answer | null {
 }
 
 function mapGeneratorFaktumToGeneratorState(faktum: QuizGeneratorFaktum): GeneratorState {
-  let generatorAnswers: IGeneratorAnswer[] = [];
+  let generatorAnswers: Answer[][] = [];
   if (faktum.svar) {
     const quizSvar = faktum.svar;
     generatorAnswers = quizSvar.map((fakta: QuizFaktum[]) => {
@@ -35,7 +35,7 @@ function mapGeneratorFaktumToGeneratorState(faktum: QuizGeneratorFaktum): Genera
         const answer = mapToAnswer(faktum);
         if (answer) answers.push(answer);
       });
-      return { answers };
+      return answers;
     });
   }
 

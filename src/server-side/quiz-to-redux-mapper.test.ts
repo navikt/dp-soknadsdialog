@@ -139,11 +139,7 @@ describe("mapFaktaToAnswers", () => {
       id: "7",
       beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
       type: "generator",
-      answers: [
-        {
-          answers: [booleanExpected, intExpected, doubleExpected, envalgExpected, flervalgExpected],
-        },
-      ],
+      answers: [[booleanExpected, intExpected, doubleExpected, envalgExpected, flervalgExpected]],
     };
 
     expect(mapQuizFaktaToReduxState(generatorInput)).toEqual({

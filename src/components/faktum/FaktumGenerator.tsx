@@ -93,17 +93,17 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
   return (
     <div>
       <Accordion>
-        {generatorAnswers.map((answer, index) => {
+        {generatorAnswers.map((answers, index) => {
           return (
             <Accordion.Item key={index} open={index === activeAnswerIndex}>
               <Accordion.Header onClick={() => toggleActiveList(index)}>
-                {answer.answers[0]?.answer}
+                {answers[0]?.answer}
               </Accordion.Header>
 
               <Accordion.Content>
                 <Button onClick={() => handleDeleteList()}>Slett svar</Button>
                 <GeneratorFakta
-                  answers={answer.answers}
+                  answers={answers}
                   fakta={faktum.faktum}
                   save={handleSaveList}
                   cancel={resetList}

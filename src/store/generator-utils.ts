@@ -12,15 +12,11 @@ export interface DeleteGeneratorPayload {
   beskrivendeId: string;
 }
 
-export interface IGeneratorAnswer {
-  answers: Answer[];
-}
-
 export interface GeneratorState {
   id: string;
   beskrivendeId: string;
   type: "generator";
-  answers: IGeneratorAnswer[];
+  answers: Answer[][];
 }
 
 export interface QuizAnswer {

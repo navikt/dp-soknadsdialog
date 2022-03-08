@@ -4,7 +4,6 @@ import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
 import { useDispatch } from "react-redux";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import { IGeneratorAnswer } from "../../store/generator-utils";
 import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../../store/generators.slice";
 import { FAKTUM_BARNETILLEGG } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
@@ -74,16 +73,16 @@ export function Barnetillegg(props: IGeneratorFaktum) {
   return (
     <div>
       <Accordion>
-        {barnetillegg.map((barnetilegg, index) => (
+        {barnetillegg.map((answers, index) => (
           <Accordion.Item key={index} open={index === activeBarnetilleggIndex}>
             <Accordion.Header onClick={() => toggleActiveBarnetillegg(index)}>
-              {getChildName(barnetilegg)}
+              {getChildName(answers)}
             </Accordion.Header>
 
             <Accordion.Content>
               <Button onClick={() => onDeleteBarnetillegg()}>Slett barn</Button>
               <GeneratorFakta
-                answers={barnetilegg.answers}
+                answers={answers}
                 fakta={props.faktum}
                 save={onSaveBarnetillegg}
                 cancel={resetBarnetilleggForm}
@@ -110,14 +109,13 @@ export function Barnetillegg(props: IGeneratorFaktum) {
   );
 }
 
-function getChildName(barnetillegg: IGeneratorAnswer): string {
-  const firstName = barnetillegg.answers.find(
+function getChildName(barnetillegg: Answer[]): string {
+  const firstName = barnetillegg.find(
     (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.answer as string;
 
-  const lastName = barnetillegg.answers.find(
-    (answer) => answer.beskrivendeId === "faktum.barn-etternavn"
-  )?.answer as string;
+  const lastName = barnetillegg.find((answer) => answer.beskrivendeId === "faktum.barn-etternavn")
+    ?.answer as string;
 
   return `${firstName} ${lastName}`;
 }
