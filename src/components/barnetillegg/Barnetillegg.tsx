@@ -1,109 +1,49 @@
-import React, { useState } from "react";
+import React from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
-import { useDispatch } from "react-redux";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../../store/generators.slice";
 import { FAKTUM_BARNETILLEGG } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
+import { useGeneratorState } from "../../hooks/useGeneratorState";
 
-export function Barnetillegg(props: IGeneratorFaktum) {
-  const dispatch = useDispatch();
+export function Barnetillegg(faktum: IGeneratorFaktum) {
   const barnetillegg = useGeneratorStateAnswers(FAKTUM_BARNETILLEGG);
-  const [addNewBarnetillegg, setNewBarnetillegg] = useState(false);
-  const [activeBarnetilleggIndex, setActiveBarnetilleggIndex] = useState<number | undefined>(0);
+  const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
+    useGeneratorState();
 
-  function onSaveBarnetillegg(answers: Answer[]) {
-    if (activeBarnetilleggIndex === undefined) {
-      // TODO sentry
-      // eslint-disable-next-line no-console
-      console.error("prøver å lagre barnetilegg uten av active index er satt");
-      return;
-    }
-
-    dispatch(
-      saveGeneratorStateToQuiz({
-        index: activeBarnetilleggIndex,
-        textId: FAKTUM_BARNETILLEGG,
-        answers,
-      })
-    );
-
-    resetBarnetilleggForm();
-  }
-  function onDeleteBarnetillegg() {
-    if (activeBarnetilleggIndex === undefined) {
-      // TODO sentry
-      // eslint-disable-next-line no-console
-      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
-      return;
-    }
-    dispatch(
-      deleteGeneratorFromQuiz({
-        index: activeBarnetilleggIndex,
-        textId: FAKTUM_BARNETILLEGG,
-      })
-    );
-    resetBarnetilleggForm();
-  }
-
-  function onAddBarnetilegg() {
-    if (barnetillegg.length > 0) {
-      setActiveBarnetilleggIndex(() => barnetillegg.length);
-    }
-    setNewBarnetillegg(!addNewBarnetillegg);
-  }
-
-  function toggleActiveBarnetillegg(index: number) {
-    setNewBarnetillegg(false);
-
-    if (index === activeBarnetilleggIndex) {
-      setActiveBarnetilleggIndex(undefined);
-    } else {
-      setActiveBarnetilleggIndex(index);
-    }
-  }
-
-  function resetBarnetilleggForm() {
-    setNewBarnetillegg(false);
-    setActiveBarnetilleggIndex(undefined);
+  function handleSaveBarnetillegg(answers: Answer[]) {
+    saveList(answers, faktum.textId);
   }
 
   return (
     <div>
       <Accordion>
         {barnetillegg.map((answers, index) => (
-          <Accordion.Item key={index} open={index === activeBarnetilleggIndex}>
-            <Accordion.Header onClick={() => toggleActiveBarnetillegg(index)}>
+          <Accordion.Item key={index} open={index === activeIndex}>
+            <Accordion.Header onClick={() => toggleActiveList(index)}>
               {getChildName(answers)}
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => onDeleteBarnetillegg()}>Slett barn</Button>
+              <Button onClick={() => deleteList(faktum.textId)}>Slett barn</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={props.faktum}
-                save={onSaveBarnetillegg}
-                cancel={resetBarnetilleggForm}
+                fakta={faktum.faktum}
+                save={handleSaveBarnetillegg}
+                cancel={resetState}
               />
             </Accordion.Content>
           </Accordion.Item>
         ))}
       </Accordion>
 
-      {!addNewBarnetillegg && (
-        <Button className={"lol"} onClick={onAddBarnetilegg}>
-          Legg til barnetillegg
-        </Button>
+      {!isNewList && (
+        <Button onClick={() => addNewList(barnetillegg.length)}>Legg til barnetillegg</Button>
       )}
 
-      {addNewBarnetillegg && (
-        <GeneratorFakta
-          fakta={props.faktum}
-          save={onSaveBarnetillegg}
-          cancel={resetBarnetilleggForm}
-        />
+      {isNewList && (
+        <GeneratorFakta fakta={faktum.faktum} save={handleSaveBarnetillegg} cancel={resetState} />
       )}
     </div>
   );

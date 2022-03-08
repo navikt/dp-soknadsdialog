@@ -53,7 +53,7 @@ export function GeneratorFakta(props: Props) {
         </div>
       ))}
       <div className={styles["button-container"]}>
-        <Button onClick={() => props.save(generatorAnswers)}>Lagre arbreidsforhold</Button>
+        <Button onClick={() => props.save(generatorAnswers)}>Lagre svar</Button>
         <Button onClick={cancel}>Avbryt</Button>
       </div>
     </>

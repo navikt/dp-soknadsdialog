@@ -1,110 +1,55 @@
-import React, { useState } from "react";
+import React from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
-import { useDispatch } from "react-redux";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import styles from "./Arbeidsforhold.module.css";
-import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../../store/generators.slice";
 import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
+import { useGeneratorState } from "../../hooks/useGeneratorState";
 
-export function Arbeidsforhold(props: IGeneratorFaktum) {
-  const dispatch = useDispatch();
+export function Arbeidsforhold(faktum: IGeneratorFaktum) {
   const arbeidsforhold = useGeneratorStateAnswers(FAKTUM_ARBEIDSFORHOLD);
-  const [addNewArbeidsforhold, setNewArbeidsforhold] = useState(false);
-  const [activeArbeidsforholdIndex, setActiveArbeidsforholdIndex] = useState<number | undefined>(0);
+  const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
+    useGeneratorState();
 
-  function onSaveArbeidsforhold(answers: Answer[]) {
-    if (activeArbeidsforholdIndex === undefined) {
-      // TODO sentry
-      // eslint-disable-next-line no-console
-      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
-      return;
-    }
-
-    dispatch(
-      saveGeneratorStateToQuiz({
-        index: activeArbeidsforholdIndex,
-        textId: FAKTUM_ARBEIDSFORHOLD,
-        answers,
-      })
-    );
-    resetArbeidsforholdForm();
-  }
-
-  function onDeleteArbeidsforhold() {
-    if (activeArbeidsforholdIndex === undefined) {
-      // TODO sentry
-      // eslint-disable-next-line no-console
-      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
-      return;
-    }
-    dispatch(
-      deleteGeneratorFromQuiz({
-        index: activeArbeidsforholdIndex,
-        textId: FAKTUM_ARBEIDSFORHOLD,
-      })
-    );
-    resetArbeidsforholdForm();
-  }
-
-  function onAddArbeidsforhold() {
-    if (arbeidsforhold.length > 0) {
-      setActiveArbeidsforholdIndex(() => arbeidsforhold.length);
-    }
-    setNewArbeidsforhold(!addNewArbeidsforhold);
-  }
-
-  function toggleActiveArbeidsforhold(index: number) {
-    setNewArbeidsforhold(false);
-
-    if (index === activeArbeidsforholdIndex) {
-      setActiveArbeidsforholdIndex(undefined);
-    } else {
-      setActiveArbeidsforholdIndex(index);
-    }
-  }
-
-  function resetArbeidsforholdForm() {
-    setNewArbeidsforhold(false);
-    setActiveArbeidsforholdIndex(undefined);
+  function handleSaveArbeidsforhold(answers: Answer[]) {
+    saveList(answers, faktum.textId);
   }
 
   return (
     <div>
       <Accordion>
         {arbeidsforhold.map((answers, index) => (
-          <Accordion.Item key={index} open={index === activeArbeidsforholdIndex}>
-            <Accordion.Header onClick={() => toggleActiveArbeidsforhold(index)}>
+          <Accordion.Item key={index} open={index === activeIndex}>
+            <Accordion.Header onClick={() => toggleActiveList(index)}>
               {getArbeidsforholdName(answers)}
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => onDeleteArbeidsforhold()}>Slett arbeidsforhold</Button>
+              <Button onClick={() => deleteList(faktum.textId)}>Slett arbeidsforhold</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={props.faktum}
-                save={onSaveArbeidsforhold}
-                cancel={resetArbeidsforholdForm}
+                fakta={faktum.faktum}
+                save={handleSaveArbeidsforhold}
+                cancel={resetState}
               />
             </Accordion.Content>
           </Accordion.Item>
         ))}
       </Accordion>
 
-      {!addNewArbeidsforhold && (
-        <Button className={styles["button-container"]} onClick={onAddArbeidsforhold}>
+      {!isNewList && (
+        <Button
+          className={styles["button-container"]}
+          onClick={() => addNewList(arbeidsforhold.length)}
+        >
           Legg til arbreidsforhold
         </Button>
       )}
 
-      {addNewArbeidsforhold && (
-        <GeneratorFakta
-          fakta={props.faktum}
-          save={onSaveArbeidsforhold}
-          cancel={resetArbeidsforholdForm}
-        />
+      {isNewList && (
+        <GeneratorFakta fakta={faktum.faktum} save={handleSaveArbeidsforhold} cancel={resetState} />
       )}
     </div>
   );

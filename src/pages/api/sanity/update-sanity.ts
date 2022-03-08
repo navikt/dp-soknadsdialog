@@ -16,6 +16,7 @@ import {
 } from "../../../sanity/utils";
 import { SanityBaseDocument } from "../../../sanity/types";
 import { isGeneratorFaktum, isValgFaktum } from "../../../sanity/type-guards";
+import { sanityClient } from "../../../../sanity-client";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
   const quizSeksjoner: MockDataSeksjon[] = mockSeksjoner;
@@ -37,13 +38,13 @@ const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
   //   .set({ type: "envalg" })
   //   .commit();
 
-  // const transaction = sanityClient.transaction();
-  // documents.forEach((doc) => transaction.createIfNotExists(doc));
+  const transaction = sanityClient.transaction();
+  documents.forEach((doc) => transaction.createIfNotExists(doc));
   // documents.forEach((doc) => transaction.delete(doc._id));
-  // const sanityResponse = await transaction.commit();
+  const sanityResponse = await transaction.commit();
 
   // return res.status(200).json(sanityResponse);
-  return res.status(200).json({});
+  return res.status(200).json(sanityResponse);
 };
 
 function createValgFaktum(

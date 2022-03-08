@@ -22,8 +22,6 @@ export const eosArbeidsforhold: MockDataSeksjon = {
             {
               id: "faktum.eos-arbeidsforhold-land",
               type: "land",
-              answerOptions: [], // liste over alle land? generere maskinelt? quiz?
-              subFaktum: [], // her bør vi få inn subfaktum om PIN i det lander, hvis dropdown svaret inneholder et eos-land, logikk?
             },
             {
               id: "faktum.eos-arbeidsforhold-personnummer",
