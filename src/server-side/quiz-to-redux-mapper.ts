@@ -8,7 +8,7 @@ function mapPrimitiveFaktumToAnswers(faktum: QuizFaktum): Answer | null {
 
   return {
     id: faktum.id,
-    beskrivendeId: faktum.beskrivendeId,
+    textId: faktum.beskrivendeId,
     type: faktum.type,
     value: faktum.svar as AnswerValue,
   };
@@ -19,7 +19,7 @@ function mapBooleanFaktumToAnswer(faktum: QuizFaktum): Answer | null {
 
   return {
     id: faktum.id,
-    beskrivendeId: faktum.beskrivendeId,
+    textId: faktum.beskrivendeId,
     type: faktum.type,
     value: `${faktum.beskrivendeId}.svar.${faktum.svar ? "ja" : "nei"}`,
   };
@@ -41,7 +41,7 @@ function mapGeneratorFaktumToGeneratorState(faktum: QuizGeneratorFaktum): Genera
 
   return {
     id: faktum.id,
-    beskrivendeId: faktum.beskrivendeId,
+    textId: faktum.beskrivendeId,
     type: "generator",
     answers: generatorAnswers,
   };

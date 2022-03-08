@@ -11,7 +11,7 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string) ??
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ??
     new Date().toISOString();
 
   const onDateSelection = (value: Date) => {
@@ -25,7 +25,7 @@ export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.helpText && <p>{faktum.helpText}</p>}
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <DatePicker
-        label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        label={faktum.title ? faktum.title : faktum.textId}
         onChange={onDateSelection}
         value={currentAnswer}
       />

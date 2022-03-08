@@ -20,8 +20,7 @@ export function FaktumLand(props: FaktumProps<IValgFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string) ??
-    "";
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ?? "";
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
     onChange && onChange(faktum, event.target.value);
@@ -34,7 +33,7 @@ export function FaktumLand(props: FaktumProps<IValgFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <Dropdown
-        label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        label={faktum.title ? faktum.title : faktum.textId}
         onChange={onSelect}
         options={options}
         currentValue={currentAnswer}

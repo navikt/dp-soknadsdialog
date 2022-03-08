@@ -2,16 +2,18 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import api from "../api.utils";
 import { FaktumType } from "../types/faktum.types";
+import { QuizAnswer } from "../types/quiz.types";
+import { isPeriodAnswer } from "../sanity/type-guards";
 
-export type AnswerValue = string | string[] | number | boolean | AnswerPeriode | undefined;
-export interface AnswerPeriode {
+export type AnswerValue = string | string[] | number | boolean | AnswerPeriod | undefined;
+export interface AnswerPeriod {
   fromDate: string;
   toDate: string;
 }
 
 export interface Answer {
   id: string;
-  beskrivendeId: string;
+  textId: string;
   type: FaktumType;
   value: AnswerValue;
   // loading: boolean;
@@ -22,19 +24,13 @@ export const saveAnswerToQuiz = createAsyncThunk<Answer, Answer, { state: RootSt
   "answers/setAnswer",
   async (answer: Answer, thunkApi) => {
     const { soknadId, quizFakta } = thunkApi.getState();
-    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === answer.beskrivendeId);
+    const quizFaktum = quizFakta.find((faktum) => faktum.beskrivendeId === answer.textId);
 
     if (!quizFaktum) {
       return Promise.reject("Ney");
     }
 
-    const quizAnswer = {
-      id: quizFaktum.id,
-      beskrivendeId: answer.beskrivendeId,
-      type: answer.type,
-      svar: answer.value,
-    };
-
+    const quizAnswer = mapReduxAnswerToQuizAnswer(answer, quizFaktum.id);
     const response: Response = await fetch(api(`/soknad/${soknadId}/faktum/${quizFaktum.id}`), {
       method: "PUT",
       body: JSON.stringify(quizAnswer),
@@ -54,15 +50,13 @@ export const answersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(saveAnswerToQuiz.pending, (state, action) => {
-      const existingIndex = state.findIndex(
-        (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
-      );
+      const existingIndex = state.findIndex((answer) => answer.textId === action.meta.arg.textId);
 
       let value = action.meta.arg.value;
 
       // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
       if (action.meta.arg.type === "boolean") {
-        value = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
+        value = `${action.meta.arg.textId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
       }
 
       if (existingIndex === -1) {
@@ -83,15 +77,13 @@ export const answersSlice = createSlice({
     });
 
     builder.addCase(saveAnswerToQuiz.fulfilled, (state, action) => {
-      const existingIndex = state.findIndex(
-        (answer) => answer.beskrivendeId === action.payload.beskrivendeId
-      );
+      const existingIndex = state.findIndex((answer) => answer.textId === action.payload.textId);
 
       let value = action.meta.arg.value;
 
       // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
       if (action.meta.arg.type === "boolean") {
-        value = `${action.meta.arg.beskrivendeId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
+        value = `${action.meta.arg.textId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
       }
 
       if (existingIndex === -1) {
@@ -112,9 +104,7 @@ export const answersSlice = createSlice({
     });
 
     builder.addCase(saveAnswerToQuiz.rejected, (state, action) => {
-      const existingIndex = state.findIndex(
-        (answer) => answer.beskrivendeId === action.meta.arg.beskrivendeId
-      );
+      const existingIndex = state.findIndex((answer) => answer.textId === action.meta.arg.textId);
       if (existingIndex === -1) {
         state.push({
           ...action.meta.arg,
@@ -133,3 +123,24 @@ export const answersSlice = createSlice({
     });
   },
 });
+
+export function mapReduxAnswerToQuizAnswer(answer: Answer, quizId: string): QuizAnswer {
+  let answerValue;
+
+  // Quiz requires answers in norwegian. We have to map from english to norwegian.
+  if (isPeriodAnswer(answer.value)) {
+    answerValue = {
+      fom: answer.value.fromDate,
+      tom: answer.value.toDate,
+    };
+  } else {
+    answerValue = answer.value;
+  }
+
+  return {
+    id: quizId,
+    beskrivendeId: answer.textId,
+    type: answer.type,
+    svar: answerValue,
+  };
+}

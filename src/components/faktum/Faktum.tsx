@@ -27,7 +27,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
   function dispatchAnswer(faktum: IFaktum, answer: AnswerValue) {
     dispatch(
       saveAnswerToQuiz({
-        beskrivendeId: faktum.beskrivendeId,
+        textId: faktum.textId,
         value: answer,
         type: faktum.type,
         id: faktum.id,
@@ -36,7 +36,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
   }
 
   function renderFaktumType() {
-    if (specialCaseFaktum.includes(props.faktum.beskrivendeId)) {
+    if (specialCaseFaktum.includes(props.faktum.textId)) {
       return renderSpecialFaktumType(props);
     }
 
@@ -107,7 +107,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
     }
 
     function renderSpecialFaktumType(props: FaktumProps<IFaktum>) {
-      switch (props.faktum.beskrivendeId) {
+      switch (props.faktum.textId) {
         case "faktum-eget-gaardsbruk-arbeidsaar":
           return (
             <FaktumEgetGaardsbrukArbeidsaar

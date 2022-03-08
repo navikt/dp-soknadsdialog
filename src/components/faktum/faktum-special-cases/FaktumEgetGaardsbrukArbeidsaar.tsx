@@ -16,8 +16,7 @@ for (let i = 0; i <= 5; i++) {
 export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.beskrivendeId === props.faktum.beskrivendeId)
-      ?.value as number) ?? 0;
+    (answers.find((answer) => answer.textId === props.faktum.textId)?.value as number) ?? 0;
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
@@ -26,7 +25,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
 
   return (
     <Dropdown
-      label={props.faktum.title ? props.faktum.title : props.faktum.beskrivendeId}
+      label={props.faktum.title ? props.faktum.title : props.faktum.textId}
       onChange={handleOnSelect}
       options={years}
       currentValue={currentAnswer.toString()}

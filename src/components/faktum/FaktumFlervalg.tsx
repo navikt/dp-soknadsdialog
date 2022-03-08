@@ -12,8 +12,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   // const currentAnswer = answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId);
   const currentAnswerIds =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string[]) ??
-    [];
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as string[]) ?? [];
 
   const onSelection = (value: string[]) => {
     onChange && onChange(faktum, value);
@@ -26,14 +25,14 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <CheckboxGroup
-        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
+        legend={faktum.title ? faktum.title : faktum.textId}
         onChange={onSelection}
         value={currentAnswerIds}
       >
         {/*{currentAnswer?.loading && <Loader variant="neutral" size="small" title="venter..." />}*/}
         {faktum.answerOptions.map((answer) => (
-          <Checkbox key={answer.beskrivendeId} value={answer.beskrivendeId}>
-            {answer.title ? answer.title : answer.beskrivendeId}
+          <Checkbox key={answer.textId} value={answer.textId}>
+            {answer.title ? answer.title : answer.textId}
           </Checkbox>
         ))}
       </CheckboxGroup>
@@ -45,10 +44,10 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds.includes(a.beskrivendeId))) {
+            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds.includes(a.textId))) {
               return (
                 <Faktum
-                  key={faktum.beskrivendeId}
+                  key={faktum.textId}
                   faktum={faktum}
                   onChange={onChange}
                   answers={props.answers}

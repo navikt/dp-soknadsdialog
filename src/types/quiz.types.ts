@@ -17,11 +17,25 @@ export interface QuizPrimitiveFaktum extends QuizBaseFaktum {
 export interface QuizGeneratorFaktum extends QuizBaseFaktum {
   type: GeneratorFaktumType;
   svar?: QuizPrimitiveFaktum[][];
-  templates: GeneratorTemplate[];
+  templates: QuizGeneratorTemplate[];
 }
 
-interface GeneratorTemplate {
+interface QuizGeneratorTemplate {
   id: string;
   type: PrimitivFaktumType | ValgFaktumType;
   beskrivendeId: string;
+}
+
+export interface QuizAnswer {
+  id: string;
+  beskrivendeId: string;
+  type: string;
+  svar: QuizAnswerValue;
+}
+
+export type QuizAnswerValue = string | string[] | number | boolean | QuizAnswerPeriod | undefined;
+
+export interface QuizAnswerPeriod {
+  fom: string;
+  tom: string;
 }

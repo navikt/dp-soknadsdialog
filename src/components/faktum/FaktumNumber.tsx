@@ -11,7 +11,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as number) ?? 0;
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as number) ?? 0;
 
   const [debouncedValue, setDebouncedValue] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
@@ -50,7 +50,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
         defaultValue={currentAnswer}
-        label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        label={faktum.title ? faktum.title : faktum.textId}
         step={faktum.type === "double" ? "0.1" : "1"}
         size="medium"
         type="number"

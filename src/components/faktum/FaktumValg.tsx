@@ -13,8 +13,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswerId =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string) ??
-    "";
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ?? "";
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -31,7 +30,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
 
     dispatch(
       saveAnswerToQuiz({
-        beskrivendeId: faktum.beskrivendeId,
+        textId: faktum.textId,
         value: mappedAnswer,
         type: faktum.type,
         id: faktum.id,
@@ -46,17 +45,15 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <RadioGroup
-        legend={faktum.title ? faktum.title : faktum.beskrivendeId}
+        legend={faktum.title ? faktum.title : faktum.textId}
         onChange={onSelection}
         value={currentAnswerId}
       >
         {faktum.answerOptions.map((answer) => (
-          <div key={answer.beskrivendeId}>
-            <Radio value={answer.beskrivendeId}>
-              {answer.title ? answer.title : answer.beskrivendeId}
-            </Radio>
+          <div key={answer.textId}>
+            <Radio value={answer.textId}>{answer.title ? answer.title : answer.textId}</Radio>
             {answer.helpText ? <Alert variant={"info"}>{answer.helpText}</Alert> : undefined}
-            {answer.alertText && currentAnswerId === answer.beskrivendeId ? (
+            {answer.alertText && currentAnswerId === answer.textId ? (
               <Alert variant={"warning"}>{answer.alertText}</Alert>
             ) : undefined}
           </div>
@@ -66,10 +63,10 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => a.beskrivendeId === currentAnswerId)) {
+            if (faktum.requiredAnswerIds.find((a) => a.textId === currentAnswerId)) {
               return (
                 <Faktum
-                  key={faktum.beskrivendeId}
+                  key={faktum.textId}
                   faktum={faktum}
                   onChange={onChange}
                   answers={props.answers}

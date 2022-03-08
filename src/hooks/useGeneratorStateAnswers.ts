@@ -5,6 +5,6 @@ import { Answer } from "../store/answers.slice";
 export function useGeneratorStateAnswers(id: string): Answer[][] {
   return useSelector(
     (state: RootState) =>
-      state.generators.find((generator) => generator.beskrivendeId === id)?.answers || []
+      state.generators.find((generator) => generator.textId === id)?.answers || []
   );
 }

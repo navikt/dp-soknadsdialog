@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 
 const faktumGroq = `
-  'beskrivendeId': _id,
+  'textId': _id,
   type,
   title,
   type,
@@ -11,10 +11,10 @@ const faktumGroq = `
   alertText,
   helpText,
   requiredAnswerIds[]->{
-    'beskrivendeId': _id
+    'textId': _id
   },
   answerOptions[]->{
-    'beskrivendeId': _id,
+    'textId': _id,
     title,
     alertText,
     helpText

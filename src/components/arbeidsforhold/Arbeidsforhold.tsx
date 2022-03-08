@@ -26,7 +26,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
     dispatch(
       saveGeneratorStateToQuiz({
         index: activeArbeidsforholdIndex,
-        beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
+        textId: FAKTUM_ARBEIDSFORHOLD,
         answers,
       })
     );
@@ -43,7 +43,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
     dispatch(
       deleteGeneratorFromQuiz({
         index: activeArbeidsforholdIndex,
-        beskrivendeId: FAKTUM_ARBEIDSFORHOLD,
+        textId: FAKTUM_ARBEIDSFORHOLD,
       })
     );
     resetArbeidsforholdForm();
@@ -112,7 +112,7 @@ export function Arbeidsforhold(props: IGeneratorFaktum) {
 
 function getArbeidsforholdName(arbeidsforhold: Answer[]): string {
   return (
-    (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.navn-bedrift")
-      ?.value as string) ?? "Fant ikke navn på arbeidsgiver"
+    (arbeidsforhold.find((answer) => answer.textId === "faktum.navn-bedrift")?.value as string) ??
+    "Fant ikke navn på arbeidsgiver"
   );
 }

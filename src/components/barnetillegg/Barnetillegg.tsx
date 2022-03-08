@@ -25,7 +25,7 @@ export function Barnetillegg(props: IGeneratorFaktum) {
     dispatch(
       saveGeneratorStateToQuiz({
         index: activeBarnetilleggIndex,
-        beskrivendeId: FAKTUM_BARNETILLEGG,
+        textId: FAKTUM_BARNETILLEGG,
         answers,
       })
     );
@@ -42,7 +42,7 @@ export function Barnetillegg(props: IGeneratorFaktum) {
     dispatch(
       deleteGeneratorFromQuiz({
         index: activeBarnetilleggIndex,
-        beskrivendeId: FAKTUM_BARNETILLEGG,
+        textId: FAKTUM_BARNETILLEGG,
       })
     );
     resetBarnetilleggForm();
@@ -111,10 +111,10 @@ export function Barnetillegg(props: IGeneratorFaktum) {
 
 function getChildName(barnetillegg: Answer[]): string {
   const firstName = barnetillegg.find(
-    (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
+    (answer) => answer.textId === "faktum.barn-fornavn-mellomnavn"
   )?.value as string;
 
-  const lastName = barnetillegg.find((answer) => answer.beskrivendeId === "faktum.barn-etternavn")
+  const lastName = barnetillegg.find((answer) => answer.textId === "faktum.barn-etternavn")
     ?.value as string;
 
   return `${firstName} ${lastName}`;

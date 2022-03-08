@@ -22,13 +22,11 @@ export function GeneratorFakta(props: Props) {
   }, []);
 
   function saveFaktum(faktum: IFaktum, value: AnswerValue) {
-    const answerIndex = generatorAnswers.findIndex(
-      (answer) => answer.beskrivendeId === faktum.beskrivendeId
-    );
+    const answerIndex = generatorAnswers.findIndex((answer) => answer.textId === faktum.textId);
 
     const newAnswer = {
       id: faktum.id,
-      beskrivendeId: faktum.beskrivendeId,
+      textId: faktum.textId,
       type: faktum.type,
       value,
     };
@@ -50,7 +48,7 @@ export function GeneratorFakta(props: Props) {
   return (
     <>
       {props.fakta.map((faktum) => (
-        <div key={faktum.beskrivendeId}>
+        <div key={faktum.textId}>
           <Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />
         </div>
       ))}

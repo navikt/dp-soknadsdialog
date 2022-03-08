@@ -30,7 +30,7 @@ function renderListType(faktum: IGeneratorFaktum) {
 
 function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
   const dispatch = useDispatch();
-  const generatorAnswers = useGeneratorStateAnswers(faktum.beskrivendeId);
+  const generatorAnswers = useGeneratorStateAnswers(faktum.textId);
   const [addNewList, setAddNewList] = useState(false);
   const [activeAnswerIndex, setActiveAnswerIndex] = useState<number | undefined>(0);
 
@@ -45,7 +45,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
     dispatch(
       saveGeneratorStateToQuiz({
         index: activeAnswerIndex,
-        beskrivendeId: faktum.beskrivendeId,
+        textId: faktum.textId,
         answers,
       })
     );
@@ -62,7 +62,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
     dispatch(
       deleteGeneratorFromQuiz({
         index: activeAnswerIndex,
-        beskrivendeId: faktum.beskrivendeId,
+        textId: faktum.textId,
       })
     );
     resetList();

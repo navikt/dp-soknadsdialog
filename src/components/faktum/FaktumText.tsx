@@ -11,8 +11,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const currentAnswer =
-    (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)?.value as string) ??
-    "";
+    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ?? "";
 
   const [debouncedText, setDebouncedText] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
@@ -30,7 +29,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
       {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
         defaultValue={currentAnswer}
-        label={faktum.title ? faktum.title : faktum.beskrivendeId}
+        label={faktum.title ? faktum.title : faktum.textId}
         size="medium"
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}

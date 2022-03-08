@@ -1,51 +1,37 @@
-import { Answer, AnswerValue } from "./answers.slice";
-import { QuizGeneratorFaktum } from "../types/quiz.types";
+import { Answer, mapReduxAnswerToQuizAnswer } from "./answers.slice";
+import { QuizAnswer, QuizGeneratorFaktum } from "../types/quiz.types";
 
 export interface SaveGeneratorPayload {
   index: number;
   answers: Answer[];
-  beskrivendeId: string;
+  textId: string;
 }
 
 export interface DeleteGeneratorPayload {
   index: number;
-  beskrivendeId: string;
+  textId: string;
 }
 
 export interface GeneratorState {
   id: string;
-  beskrivendeId: string;
+  textId: string;
   type: "generator";
   answers: Answer[][];
 }
 
-export interface QuizAnswer {
-  id: string;
-  beskrivendeId: string;
-  type: string;
-  svar: AnswerValue;
-}
-
-export function mapReduxAnswerToQuizAnswer(
+export function mapGeneratorReduxAnswerToQuizAnswer(
   answer: Answer,
   quizFaktum: QuizGeneratorFaktum
 ): QuizAnswer {
   const quizId = quizFaktum.templates.find((template) => {
-    return template.beskrivendeId === answer.beskrivendeId;
+    return template.beskrivendeId === answer.textId;
   })?.id;
 
   if (!quizId) {
     // TODO sentry
     // eslint-disable-next-line no-console
-    console.error(
-      `Fant ikke quiz ID for ${answer.beskrivendeId}, kan ikke lagre faktum i generator`
-    );
+    console.error(`Fant ikke quiz ID for ${answer.textId}, kan ikke lagre faktum i generator`);
   }
 
-  return {
-    id: quizId || answer.id,
-    beskrivendeId: answer.beskrivendeId,
-    type: answer.type,
-    svar: answer.value,
-  };
+  return mapReduxAnswerToQuizAnswer(answer, quizId || answer.id);
 }

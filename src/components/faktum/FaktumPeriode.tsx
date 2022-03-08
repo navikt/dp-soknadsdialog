@@ -5,14 +5,14 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { AnswerPeriode } from "../../store/answers.slice";
+import { AnswerPeriod } from "../../store/answers.slice";
 import { formatISO } from "date-fns";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = (answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId)
-    ?.value as AnswerPeriode) ?? { fromDate: "" };
+  const currentAnswer = (answers.find((answer) => answer.textId === faktum.textId)
+    ?.value as AnswerPeriod) ?? { fromDate: "" };
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
     currentAnswer.fromDate ? new Date(currentAnswer.fromDate) : undefined
