@@ -28,7 +28,6 @@ export interface IGeneratorFaktum extends IBaseFaktum {
   type: GeneratorFaktumType;
   listType: GeneratorListType;
   faktum: IFaktum[];
-  // TODO: svar: Svar fra quiz ?
 }
 
 export type ISubFaktum = IFaktum & {

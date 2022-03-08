@@ -56,6 +56,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
         size="medium"
         type="number"
         onChange={onValueChange}
+        onBlur={debouncedChange.flush}
       />
     </div>
   );

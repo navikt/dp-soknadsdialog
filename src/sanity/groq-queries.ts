@@ -26,12 +26,18 @@ export const fetchAllSeksjoner = groq`*[_type == "seksjon" && !(_id in path("dra
   faktum[]->{
     ${faktumGroq},
     subFaktum[]->{
-      ${faktumGroq}
+      ${faktumGroq},
+      faktum[]->{
+        ${faktumGroq}
+      },
     },
     faktum[]->{
       ${faktumGroq},
       subFaktum[]->{
-        ${faktumGroq}
+        ${faktumGroq},
+        faktum[]->{
+          ${faktumGroq}
+        }
       },
     }
   }
