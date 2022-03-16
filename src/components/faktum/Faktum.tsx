@@ -108,7 +108,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
 
     function renderSpecialFaktumType(props: FaktumProps<IFaktum>) {
       switch (props.faktum.textId) {
-        case "faktum-eget-gaardsbruk-arbeidsaar":
+        case "faktum.eget-gaardsbruk-arbeidsaar":
           return (
             <FaktumEgetGaardsbrukArbeidsaar
               faktum={props.faktum}
