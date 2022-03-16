@@ -20,6 +20,7 @@ export const navigationSlice = createSlice({
     },
     addVisibleFaktumId: (state: NavigationState, action: PayloadAction<string>) => {
       state.visibleFaktumIds.push(action.payload);
+      return state;
     },
     removeVisibleFaktumId: (state: NavigationState, action: PayloadAction<string>) => {
       const currentIndex = state.visibleFaktumIds.findIndex(

@@ -7,13 +7,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Button } from "@navikt/ds-react";
 
-let checkerLeOriginale = (arr, target) => target.every((v) => arr.includes(v));
-
 export function Seksjon(props: ISection) {
   const answerIds = useSelector((state: RootState) => state.answers).map((answer) => answer.textId);
   const { visibleFaktumIds } = useSelector((state: RootState) => state.navigation);
 
-  const showNextSectionBtn = checkerLeOriginale(answerIds, visibleFaktumIds);
+  const sectionIsComplete = visibleFaktumIds.every((id) => answerIds.includes(id));
 
   return (
     <div className={styles.container}>
@@ -26,7 +24,7 @@ export function Seksjon(props: ISection) {
           <Faktum key={faktum?.textId} faktum={faktum} />
         ))}
       </div>
-      <div>{showNextSectionBtn && <Button>Neste seksjon</Button>}</div>
+      <div>{sectionIsComplete && <Button>Neste seksjon</Button>}</div>
     </div>
   );
 }
