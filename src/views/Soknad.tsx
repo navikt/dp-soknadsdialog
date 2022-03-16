@@ -1,16 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { ISection } from "../types/section.types";
 import { Seksjon } from "../components/seksjon/Seksjon";
+import { setCurrentSectionId } from "../store/navigation.slice";
 
 export function Soknad() {
   const sections = useSelector((state: RootState) => state.sections);
-  return (
-    <div>
-      {sections.map((section: ISection) => (
-        <Seksjon key={section.id} {...section} />
-      ))}
-    </div>
+  const navigationState = useSelector((state: RootState) => state.navigation);
+  const dispatch = useDispatch();
+  const currentSection = sections.find(
+    (section) => section.id === navigationState.currentSectionId
   );
+
+  useEffect(() => {
+    dispatch(setCurrentSectionId(sections[0].id));
+  }, []);
+
+  return <div>{currentSection && <Seksjon {...currentSection} />}</div>;
 }

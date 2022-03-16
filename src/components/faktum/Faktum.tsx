@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IFaktum } from "../../types/faktum.types";
 import { FaktumValg } from "./FaktumValg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
@@ -12,6 +12,7 @@ import { Answer, AnswerValue, saveAnswerToQuiz } from "../../store/answers.slice
 import { useDispatch } from "react-redux";
 import { FaktumLand } from "./FaktumLand";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
+import { addVisibleFaktumId, removeVisibleFaktumId } from "../../store/navigation.slice";
 
 export interface FaktumProps<P> {
   faktum: P;
@@ -23,6 +24,13 @@ const specialCaseFaktum = ["faktum-eget-gaardsbruk-arbeidsaar"];
 
 export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(addVisibleFaktumId(props.faktum.textId));
+    return () => {
+      dispatch(removeVisibleFaktumId(props.faktum.textId));
+    };
+  }, []);
 
   function dispatchAnswer(faktum: IFaktum, answer: AnswerValue) {
     dispatch(

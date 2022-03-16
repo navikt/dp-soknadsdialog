@@ -32,6 +32,10 @@ export async function getServerSideProps(
     answers: [],
     generators: [],
     quizFakta: [],
+    navigation: {
+      currentSectionId: "",
+      visibleFaktumIds: [],
+    },
   };
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {

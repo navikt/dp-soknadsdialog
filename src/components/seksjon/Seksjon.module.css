@@ -1,5 +1,4 @@
 .container {
-  display: flex;
   max-width: 600px;
   margin: auto auto 50px;
 }
@@ -7,9 +6,4 @@
 .faktum {
   min-width: 600px;
   width: 100%;
-}
-
-.timeline {
-  flex: 1 0 350px;
-  padding: 25px;
 }
