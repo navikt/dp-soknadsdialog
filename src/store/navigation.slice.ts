@@ -1,38 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface NavigationState {
-  currentSectionId: string;
-  visibleFaktumIds: string[];
+  currentSectionIndex: number;
+  sectionFaktumIndex: number;
 }
 
 const initialState: NavigationState = {
-  currentSectionId: "",
-  visibleFaktumIds: [],
+  currentSectionIndex: 0,
+  sectionFaktumIndex: 0,
 };
 
 export const navigationSlice = createSlice({
   name: "navigation",
   initialState,
   reducers: {
-    setCurrentSectionId: (state: NavigationState, action: PayloadAction<string>) => {
-      state.currentSectionId = action.payload;
+    setCurrentSectionIndex: (state: NavigationState, action: PayloadAction<number>) => {
+      state.currentSectionIndex = action.payload;
       return state;
     },
-    addVisibleFaktumId: (state: NavigationState, action: PayloadAction<string>) => {
-      state.visibleFaktumIds.push(action.payload);
-      return state;
-    },
-    removeVisibleFaktumId: (state: NavigationState, action: PayloadAction<string>) => {
-      const currentIndex = state.visibleFaktumIds.findIndex(
-        (faktumId: string) => faktumId === action.payload
-      );
-      if (currentIndex !== -1) {
-        state.visibleFaktumIds.splice(currentIndex, 1);
-      }
+    setSectionFaktumIndex: (state: NavigationState, action: PayloadAction<number>) => {
+      state.sectionFaktumIndex = action.payload;
       return state;
     },
   },
 });
 
-export const { setCurrentSectionId, addVisibleFaktumId, removeVisibleFaktumId } =
-  navigationSlice.actions;
+export const { setCurrentSectionIndex, setSectionFaktumIndex } = navigationSlice.actions;

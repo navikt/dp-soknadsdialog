@@ -3,13 +3,19 @@ import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
+import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { setSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
+  const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
+  const currentSectionFaktumIndex = useSelector(
+    (state: RootState) => state.navigation.sectionFaktumIndex
+  );
   const currentAnswer =
     (answers.find((answer) => answer.textId === faktum.textId)?.value as number) || undefined;
 
@@ -18,7 +24,7 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
 
   useEffect(() => {
     if (debouncedValue && debouncedValue !== currentAnswer) {
-      onChange && onChange(faktum, debouncedValue);
+      onChange ? onChange(faktum, debouncedValue) : saveFaktum(debouncedValue);
     }
   }, [debouncedValue]);
 
@@ -41,6 +47,19 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
         console.error("Wrong component for number. Could not parse text to int or float");
         break;
     }
+  }
+
+  function saveFaktum(value: number) {
+    dispatch(
+      saveAnswerToQuiz({
+        textId: faktum.textId,
+        value: value,
+        type: faktum.type,
+        id: faktum.id,
+      })
+    );
+
+    dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
   }
 
   return (

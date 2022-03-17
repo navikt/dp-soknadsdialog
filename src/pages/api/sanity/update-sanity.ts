@@ -15,7 +15,7 @@ import {
   SubFaktum,
 } from "../../../sanity/utils";
 import { SanityBaseDocument } from "../../../sanity/types";
-import { isGeneratorFaktum, isValgFaktum } from "../../../sanity/type-guards";
+import { isGeneratorFaktum, isMockDataValgFaktum } from "../../../sanity/type-guards";
 import { sanityClient } from "../../../../sanity-client";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -72,7 +72,7 @@ function createGeneratorFaktum(faktum: MockDataGeneratorFaktum): SanityBaseDocum
 
 function createSanityFaktum(faktum: MockDataFaktum): SanityBaseDocument[] {
   let documents: SanityBaseDocument[] = [];
-  if (isValgFaktum(faktum)) {
+  if (isMockDataValgFaktum(faktum)) {
     documents = [...documents, ...createValgFaktum(faktum)];
   } else if (isGeneratorFaktum(faktum)) {
     documents = [...documents, ...createGeneratorFaktum(faktum)];

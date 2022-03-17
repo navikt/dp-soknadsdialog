@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IFaktum } from "../../types/faktum.types";
 import { FaktumValg } from "./FaktumValg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
@@ -12,7 +12,6 @@ import { Answer, AnswerValue, saveAnswerToQuiz } from "../../store/answers.slice
 import { useDispatch } from "react-redux";
 import { FaktumLand } from "./FaktumLand";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
-import { addVisibleFaktumId, removeVisibleFaktumId } from "../../store/navigation.slice";
 
 export interface FaktumProps<P> {
   faktum: P;
@@ -24,13 +23,6 @@ const specialCaseFaktum = ["faktum-eget-gaardsbruk-arbeidsaar"];
 
 export function Faktum(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(addVisibleFaktumId(props.faktum.textId));
-    return () => {
-      dispatch(removeVisibleFaktumId(props.faktum.textId));
-    };
-  }, []);
 
   function dispatchAnswer(faktum: IFaktum, answer: AnswerValue) {
     dispatch(
@@ -57,30 +49,18 @@ export function Faktum(props: FaktumProps<IFaktum>) {
 
       case "flervalg":
         return (
-          <FaktumFlervalg
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumFlervalg faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
 
       case "tekst":
         return (
-          <FaktumText
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumText faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
 
       case "double":
       case "int":
         return (
-          <FaktumNumber
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumNumber faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
 
       case "generator":
@@ -88,29 +68,17 @@ export function Faktum(props: FaktumProps<IFaktum>) {
 
       case "land":
         return (
-          <FaktumLand
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumLand faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
 
       case "localdate":
         return (
-          <FaktumDato
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumDato faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
 
       case "periode":
         return (
-          <FaktumPeriode
-            faktum={props.faktum}
-            answers={props.answers}
-            onChange={props.onChange || dispatchAnswer}
-          />
+          <FaktumPeriode faktum={props.faktum} answers={props.answers} onChange={props.onChange} />
         );
     }
 

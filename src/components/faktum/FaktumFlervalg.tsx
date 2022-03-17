@@ -3,20 +3,45 @@ import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { IValgFaktum } from "../../types/faktum.types";
 import { Faktum, FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { setSectionFaktumIndex } from "../../store/navigation.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
+  const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  // const currentAnswer = answers.find((answer) => answer.beskrivendeId === faktum.beskrivendeId);
+  const currentSectionFaktumIndex = useSelector(
+    (state: RootState) => state.navigation.sectionFaktumIndex
+  );
   const currentAnswerIds =
     (answers.find((answer) => answer.textId === faktum.textId)?.value as string[]) ?? [];
 
   const onSelection = (value: string[]) => {
-    onChange && onChange(faktum, value);
+    onChange ? onChange(faktum, value) : saveFaktum(value);
   };
+
+  function saveFaktum(value: string[]) {
+    dispatch(
+      saveAnswerToQuiz({
+        textId: faktum.textId,
+        value: value,
+        type: faktum.type,
+        id: faktum.id,
+      })
+    );
+
+    let isLeafNode = true;
+    faktum?.subFaktum?.forEach((faktum) => {
+      isLeafNode = faktum.requiredAnswerIds.find((a) => value.includes(a.textId))
+        ? false
+        : isLeafNode;
+    });
+
+    isLeafNode && dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+  }
 
   return (
     <div>
@@ -29,17 +54,12 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
         onChange={onSelection}
         value={currentAnswerIds}
       >
-        {/*{currentAnswer?.loading && <Loader variant="neutral" size="small" title="venter..." />}*/}
         {faktum.answerOptions.map((answer) => (
           <Checkbox key={answer.textId} value={answer.textId}>
             {answer.title ? answer.title : answer.textId}
           </Checkbox>
         ))}
       </CheckboxGroup>
-
-      {/*{currentAnswer?.errorMessages.map((errorMessage, index) => (*/}
-      {/*  <div key={index}> Error: {errorMessage} </div>*/}
-      {/*))}*/}
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>

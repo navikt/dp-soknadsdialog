@@ -3,14 +3,19 @@ import { IPrimitivFaktum } from "../../types/faktum.types";
 import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { AnswerPeriod } from "../../store/answers.slice";
+import { AnswerPeriod, saveAnswerToQuiz } from "../../store/answers.slice";
 import { formatISO } from "date-fns";
+import { setSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
+  const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
+  const currentSectionFaktumIndex = useSelector(
+    (state: RootState) => state.navigation.sectionFaktumIndex
+  );
   const currentAnswer = (answers.find((answer) => answer.textId === faktum.textId)
     ?.value as AnswerPeriod) ?? { fromDate: "" };
 
@@ -24,16 +29,31 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   useEffect(() => {
     if (fromDate) {
       const parsedFromDate = formatISO(fromDate, { representation: "date" });
-      onChange && onChange(faktum, { ...currentAnswer, fromDate: parsedFromDate });
+      const period = { ...currentAnswer, fromDate: parsedFromDate };
+      onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [fromDate]);
 
   useEffect(() => {
     if (toDate) {
       const parsedToDate = formatISO(toDate, { representation: "date" });
-      onChange && onChange(faktum, { ...currentAnswer, toDate: parsedToDate });
+      const period = { ...currentAnswer, toDate: parsedToDate };
+      onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [toDate]);
+
+  function saveFaktum(value: AnswerPeriod) {
+    dispatch(
+      saveAnswerToQuiz({
+        textId: faktum.textId,
+        value: value,
+        type: faktum.type,
+        id: faktum.id,
+      })
+    );
+
+    dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+  }
 
   return (
     <div>

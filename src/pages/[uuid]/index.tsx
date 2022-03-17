@@ -33,8 +33,8 @@ export async function getServerSideProps(
     generators: [],
     quizFakta: [],
     navigation: {
-      currentSectionId: "",
-      visibleFaktumIds: [],
+      currentSectionIndex: 0,
+      sectionFaktumIndex: 0,
     },
   };
 

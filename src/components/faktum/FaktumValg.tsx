@@ -6,12 +6,16 @@ import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { setSectionFaktumIndex } from "../../store/navigation.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
-  const { faktum, onChange } = props;
   const dispatch = useDispatch();
+  const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
+  const currentSectionFaktumIndex = useSelector(
+    (state: RootState) => state.navigation.sectionFaktumIndex
+  );
   const currentAnswerId =
     (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ?? "";
 
@@ -36,6 +40,13 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
         id: faktum.id,
       })
     );
+
+    let isLeafNode = true;
+    faktum?.subFaktum?.forEach((faktum) => {
+      isLeafNode = faktum.requiredAnswerIds.find((a) => value === a.textId) ? false : isLeafNode;
+    });
+
+    isLeafNode && dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
   }
 
   return (

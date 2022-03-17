@@ -1,20 +1,36 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import { Seksjon } from "../components/seksjon/Seksjon";
-import { setCurrentSectionId } from "../store/navigation.slice";
+import { setCurrentSectionIndex, setSectionFaktumIndex } from "../store/navigation.slice";
 
 export function Soknad() {
-  const sections = useSelector((state: RootState) => state.sections);
-  const navigationState = useSelector((state: RootState) => state.navigation);
   const dispatch = useDispatch();
-  const currentSection = sections.find(
-    (section) => section.id === navigationState.currentSectionId
+  const sections = useSelector((state: RootState) => state.sections);
+  const currentSectionIndex = useSelector(
+    (state: RootState) => state.navigation.currentSectionIndex
   );
+  const currentSection = useSelector((state: RootState) => state.sections[currentSectionIndex]);
 
-  useEffect(() => {
-    dispatch(setCurrentSectionId(sections[0].id));
-  }, []);
+  function handleNavigateNext() {
+    dispatch(setCurrentSectionIndex(currentSectionIndex + 1));
+    dispatch(setSectionFaktumIndex(0));
+  }
 
-  return <div>{currentSection && <Seksjon {...currentSection} />}</div>;
+  function handleNavigatePrevious() {
+    dispatch(setCurrentSectionIndex(currentSectionIndex - 1));
+    dispatch(setSectionFaktumIndex(sections[currentSectionIndex - 1].faktum.length));
+  }
+
+  return (
+    <div>
+      {currentSection && (
+        <Seksjon
+          section={currentSection}
+          navigateNextSection={handleNavigateNext}
+          navigatePreviousSection={handleNavigatePrevious}
+        />
+      )}
+    </div>
+  );
 }

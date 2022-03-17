@@ -1,12 +1,12 @@
 import { SubFaktum } from "./utils";
 import {
   MockDataFaktum,
-  MockDataValgFaktum,
   MockDataGeneratorFaktum,
+  MockDataValgFaktum,
 } from "../soknad-fakta/soknad";
 import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
 
-export function isValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
+export function isMockDataValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
   return (faktum as MockDataValgFaktum).answerOptions !== undefined;
 }
 
