@@ -6,18 +6,16 @@ import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentSectionFaktumIndex = useSelector(
-    (state: RootState) => state.navigation.sectionFaktumIndex
-  );
-  const currentAnswerIds =
-    (answers.find((answer) => answer.textId === faktum.textId)?.value as string[]) ?? [];
+  const currentAnswerIds = answers.find((answer) => answer.textId === faktum.textId)?.value as
+    | string[]
+    | undefined;
 
   const onSelection = (value: string[]) => {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -40,7 +38,9 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
         : isLeafNode;
     });
 
-    isLeafNode && dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+    if (isLeafNode && !currentAnswerIds) {
+      dispatch(incrementSectionFaktumIndex());
+    }
   }
 
   return (
@@ -52,7 +52,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       <CheckboxGroup
         legend={faktum.title ? faktum.title : faktum.textId}
         onChange={onSelection}
-        value={currentAnswerIds}
+        value={currentAnswerIds || []}
       >
         {faktum.answerOptions.map((answer) => (
           <Checkbox key={answer.textId} value={answer.textId}>
@@ -64,7 +64,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds.includes(a.textId))) {
+            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds?.includes(a.textId))) {
               return (
                 <Faktum
                   key={faktum.textId}

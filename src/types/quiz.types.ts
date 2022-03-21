@@ -37,5 +37,5 @@ export type QuizAnswerValue = string | string[] | number | boolean | QuizAnswerP
 
 export interface QuizAnswerPeriod {
   fom: string;
-  tom: string;
+  tom?: string;
 }

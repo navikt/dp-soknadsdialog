@@ -7,15 +7,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentSectionFaktumIndex = useSelector(
-    (state: RootState) => state.navigation.sectionFaktumIndex
-  );
   const currentAnswer =
     (answers.find((answer) => answer.textId === faktum.textId)?.value as string) || undefined;
 
@@ -38,7 +35,7 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
       })
     );
 
-    dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (

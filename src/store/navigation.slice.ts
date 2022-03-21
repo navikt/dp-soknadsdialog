@@ -22,7 +22,12 @@ export const navigationSlice = createSlice({
       state.sectionFaktumIndex = action.payload;
       return state;
     },
+    incrementSectionFaktumIndex: (state: NavigationState) => {
+      state.sectionFaktumIndex = state.sectionFaktumIndex + 1;
+      return state;
+    },
   },
 });
 
-export const { setCurrentSectionIndex, setSectionFaktumIndex } = navigationSlice.actions;
+export const { setCurrentSectionIndex, setSectionFaktumIndex, incrementSectionFaktumIndex } =
+  navigationSlice.actions;

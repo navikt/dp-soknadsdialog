@@ -7,23 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { AnswerPeriod, saveAnswerToQuiz } from "../../store/answers.slice";
 import { formatISO } from "date-fns";
-import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentSectionFaktumIndex = useSelector(
-    (state: RootState) => state.navigation.sectionFaktumIndex
-  );
-  const currentAnswer = (answers.find((answer) => answer.textId === faktum.textId)
-    ?.value as AnswerPeriod) ?? { fromDate: "" };
+  const currentAnswer = answers.find((answer) => answer.textId === faktum.textId)?.value as
+    | AnswerPeriod
+    | undefined;
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
-    currentAnswer.fromDate ? new Date(currentAnswer.fromDate) : undefined
+    currentAnswer?.fromDate ? new Date(currentAnswer.fromDate) : undefined
   );
   const [toDate, setToDate] = useState<Date | undefined>(
-    currentAnswer.toDate ? new Date(currentAnswer.toDate) : undefined
+    currentAnswer?.toDate ? new Date(currentAnswer.toDate) : undefined
   );
 
   useEffect(() => {
@@ -37,7 +35,8 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   useEffect(() => {
     if (toDate) {
       const parsedToDate = formatISO(toDate, { representation: "date" });
-      const period = { ...currentAnswer, toDate: parsedToDate };
+      // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as AnswerPeriod
+      const period = { ...currentAnswer, toDate: parsedToDate } as AnswerPeriod;
       onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [toDate]);
@@ -52,7 +51,7 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
       })
     );
 
-    dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (
@@ -63,13 +62,13 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
       <DatePicker
         label={"Fra dato"}
         onChange={setFromDate}
-        value={fromDate ? fromDate.toISOString() : ""}
+        value={fromDate ? fromDate.toISOString() : undefined}
       />
       <DatePicker
         label={"Til dato"}
         disabled={!fromDate}
         onChange={setToDate}
-        value={toDate ? toDate.toISOString() : ""}
+        value={toDate ? toDate.toISOString() : undefined}
       />
     </div>
   );

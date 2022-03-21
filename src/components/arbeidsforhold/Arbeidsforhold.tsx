@@ -7,13 +7,17 @@ import styles from "./Arbeidsforhold.module.css";
 import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
+import { useDispatch } from "react-redux";
 
 export function Arbeidsforhold(faktum: IGeneratorFaktum) {
+  const dispatch = useDispatch();
   const arbeidsforhold = useGeneratorStateAnswers(FAKTUM_ARBEIDSFORHOLD);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveArbeidsforhold(answers: Answer[]) {
+    dispatch(incrementSectionFaktumIndex());
     saveList(answers, faktum.textId);
   }
 

@@ -8,7 +8,7 @@ import { isPeriodAnswer } from "../sanity/type-guards";
 export type AnswerValue = string | string[] | number | boolean | AnswerPeriod | undefined;
 export interface AnswerPeriod {
   fromDate: string;
-  toDate: string;
+  toDate?: string;
 }
 
 export interface Answer {

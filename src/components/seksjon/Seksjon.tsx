@@ -18,8 +18,10 @@ export function Seksjon(props: Props) {
   const [showNextSectionBtn, setShowNextSectionBtn] = useState(false);
 
   useEffect(() => {
-    if (sectionFaktumIndex === props.section.faktum.length) {
+    if (sectionFaktumIndex >= props.section.faktum.length) {
       setShowNextSectionBtn(true);
+    } else {
+      setShowNextSectionBtn(false);
     }
   }, [sectionFaktumIndex]);
 

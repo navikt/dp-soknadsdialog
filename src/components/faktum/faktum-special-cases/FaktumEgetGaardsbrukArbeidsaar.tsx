@@ -5,7 +5,7 @@ import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { saveAnswerToQuiz } from "../../../store/answers.slice";
-import { setSectionFaktumIndex } from "../../../store/navigation.slice";
+import { incrementSectionFaktumIndex } from "../../../store/navigation.slice";
 
 const years: DropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -18,12 +18,9 @@ for (let i = 0; i <= 5; i++) {
 export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
   const dispatch = useDispatch();
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentSectionFaktumIndex = useSelector(
-    (state: RootState) => state.navigation.sectionFaktumIndex
-  );
-
-  const currentAnswer =
-    (answers.find((answer) => answer.textId === props.faktum.textId)?.value as number) ?? 0;
+  const currentAnswer = answers.find((answer) => answer.textId === props.faktum.textId)?.value as
+    | number
+    | undefined;
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
@@ -40,7 +37,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
       })
     );
 
-    dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (
@@ -48,7 +45,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
       label={props.faktum.title ? props.faktum.title : props.faktum.textId}
       onChange={handleOnSelect}
       options={years}
-      currentValue={currentAnswer.toString()}
+      currentValue={currentAnswer?.toString() || ""}
       placeHolderText={"Velg et år"}
     />
   );

@@ -9,6 +9,8 @@ import { Answer } from "../../store/answers.slice";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
+import { useDispatch } from "react-redux";
 
 export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
   return <div>{renderListType(props.faktum)}</div>;
@@ -28,11 +30,13 @@ function renderListType(faktum: IGeneratorFaktum) {
 }
 
 function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
+  const dispatch = useDispatch();
   const generatorAnswers = useGeneratorStateAnswers(faktum.textId);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveList(answers: Answer[]) {
+    dispatch(incrementSectionFaktumIndex());
     saveList(answers, faktum.textId);
   }
 

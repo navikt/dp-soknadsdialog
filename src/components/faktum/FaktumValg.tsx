@@ -6,18 +6,16 @@ import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentSectionFaktumIndex = useSelector(
-    (state: RootState) => state.navigation.sectionFaktumIndex
-  );
-  const currentAnswerId =
-    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) ?? "";
+  const currentAnswerId = answers.find((answer) => answer.textId === faktum.textId)?.value as
+    | string
+    | undefined;
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -46,7 +44,9 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       isLeafNode = faktum.requiredAnswerIds.find((a) => value === a.textId) ? false : isLeafNode;
     });
 
-    isLeafNode && dispatch(setSectionFaktumIndex(currentSectionFaktumIndex + 1));
+    if (isLeafNode && !currentAnswerId) {
+      dispatch(incrementSectionFaktumIndex());
+    }
   }
 
   return (
@@ -58,7 +58,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       <RadioGroup
         legend={faktum.title ? faktum.title : faktum.textId}
         onChange={onSelection}
-        value={currentAnswerId}
+        value={currentAnswerId || ""}
       >
         {faktum.answerOptions.map((answer) => (
           <div key={answer.textId}>
