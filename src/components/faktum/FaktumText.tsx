@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
   const dispatch = useDispatch();
@@ -34,8 +33,6 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
         id: faktum.id,
       })
     );
-
-    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (

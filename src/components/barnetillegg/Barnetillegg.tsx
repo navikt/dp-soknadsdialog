@@ -6,17 +6,13 @@ import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { FAKTUM_BARNETILLEGG } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { useDispatch } from "react-redux";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function Barnetillegg(faktum: IGeneratorFaktum) {
-  const dispatch = useDispatch();
   const barnetillegg = useGeneratorStateAnswers(FAKTUM_BARNETILLEGG);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveBarnetillegg(answers: Answer[]) {
-    dispatch(incrementSectionFaktumIndex());
     saveList(answers, faktum.textId);
   }
 

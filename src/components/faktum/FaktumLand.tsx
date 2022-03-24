@@ -6,7 +6,6 @@ import { IValgFaktum } from "../../types/faktum.types";
 import { FaktumProps } from "./Faktum";
 import { Dropdown, DropdownOption } from "../input/dropdown/Dropdown";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 import countries, { getName } from "i18n-iso-countries";
 import norwegianLocale from "i18n-iso-countries/langs/nb.json";
 
@@ -46,8 +45,6 @@ export function FaktumLand(props: FaktumProps<IValgFaktum>) {
         id: faktum.id,
       })
     );
-
-    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (

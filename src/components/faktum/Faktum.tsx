@@ -14,8 +14,8 @@ import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEge
 
 export interface FaktumProps<P> {
   faktum: P;
-  onChange?: (faktum: IFaktum, value: AnswerValue) => void;
   answers?: Answer[];
+  onChange?: (faktum: IFaktum, value: AnswerValue) => void;
 }
 
 const specialCaseFaktum = ["faktum-eget-gaardsbruk-arbeidsaar"];
@@ -82,5 +82,9 @@ export function Faktum(props: FaktumProps<IFaktum>) {
     }
   }
 
-  return <div className={styles.container}>{renderFaktumType()}</div>;
+  return (
+    <div className={styles.container} id={props.faktum.textId}>
+      {renderFaktumType()}
+    </div>
+  );
 }

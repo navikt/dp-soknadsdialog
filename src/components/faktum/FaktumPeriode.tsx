@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { AnswerPeriod, saveAnswerToQuiz } from "../../store/answers.slice";
 import { formatISO } from "date-fns";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 
 export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
   const dispatch = useDispatch();
@@ -50,8 +49,6 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
         id: faktum.id,
       })
     );
-
-    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (

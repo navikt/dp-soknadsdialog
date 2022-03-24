@@ -77,9 +77,8 @@ export const answersSlice = createSlice({
     });
 
     builder.addCase(saveAnswerToQuiz.fulfilled, (state, action) => {
-      const existingIndex = state.findIndex((answer) => answer.textId === action.payload.textId);
-
       let value = action.meta.arg.value;
+      const existingIndex = state.findIndex((answer) => answer.textId === action.payload.textId);
 
       // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
       if (action.meta.arg.type === "boolean") {

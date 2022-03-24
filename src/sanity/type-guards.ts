@@ -5,9 +5,14 @@ import {
   MockDataValgFaktum,
 } from "../soknad-fakta/soknad";
 import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
+import { IFaktum, IValgFaktum } from "../types/faktum.types";
 
 export function isMockDataValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
   return (faktum as MockDataValgFaktum).answerOptions !== undefined;
+}
+
+export function isValgFaktum(faktum: IFaktum): faktum is IValgFaktum {
+  return ["flervalg", "valg", "boolean"].includes(faktum.type) ?? (faktum as IValgFaktum);
 }
 
 export function isSubFaktum<T>(faktum: T): faktum is SubFaktum<T> {

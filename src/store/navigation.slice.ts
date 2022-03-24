@@ -26,8 +26,16 @@ export const navigationSlice = createSlice({
       state.sectionFaktumIndex = state.sectionFaktumIndex + 1;
       return state;
     },
+    decrementSectionFaktumIndex: (state: NavigationState) => {
+      state.sectionFaktumIndex = state.sectionFaktumIndex - 1;
+      return state;
+    },
   },
 });
 
-export const { setCurrentSectionIndex, setSectionFaktumIndex, incrementSectionFaktumIndex } =
-  navigationSlice.actions;
+export const {
+  setCurrentSectionIndex,
+  setSectionFaktumIndex,
+  incrementSectionFaktumIndex,
+  decrementSectionFaktumIndex,
+} = navigationSlice.actions;

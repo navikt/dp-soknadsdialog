@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Seksjon.module.css";
-import { Faktum } from "../faktum/Faktum";
 import { ISection } from "../../types/section.types";
 import { PortableText } from "@portabletext/react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Button } from "@navikt/ds-react";
+import { SectionFaktum } from "../faktum/SectionFaktum";
 
 interface Props {
   section: ISection;
@@ -34,7 +34,7 @@ export function Seksjon(props: Props) {
 
         {props.section.faktum.map((faktum, index) => {
           if (index <= sectionFaktumIndex) {
-            return <Faktum key={faktum?.textId} faktum={faktum} />;
+            return <SectionFaktum key={faktum?.textId} faktum={faktum} />;
           }
         })}
       </div>

@@ -6,7 +6,6 @@ import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 import styles from "./Faktum.module.css";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
@@ -38,15 +37,6 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
         id: faktum.id,
       })
     );
-
-    let isLeafNode = true;
-    faktum?.subFaktum?.forEach((faktum) => {
-      isLeafNode = faktum.requiredAnswerIds.find((a) => value === a.textId) ? false : isLeafNode;
-    });
-
-    if (isLeafNode && !currentAnswerId) {
-      dispatch(incrementSectionFaktumIndex());
-    }
   }
 
   return (
