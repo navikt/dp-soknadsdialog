@@ -32,3 +32,6 @@ node_modules/
 
 # Typescript build output
 tsconfig.tsbuildinfo
+
+# Jest
+coverage/

@@ -9,7 +9,7 @@ import { GeneratorState } from "./generator-utils";
 import { generatorsSlice } from "./generators.slice";
 import { navigationSlice, NavigationState } from "./navigation.slice";
 
-const reducer = combineReducers({
+export const combinedRootReducer = combineReducers({
   soknadId: soknadIdSlice.reducer,
   sections: sectionsSlice.reducer,
   answers: answersSlice.reducer,
@@ -34,7 +34,7 @@ export const initialiseStore = (preloadedState: RootState) => {
 
 function createStore(initialState: RootState, name: string) {
   return configureStore({
-    reducer,
+    reducer: combinedRootReducer,
     devTools: {
       name,
     },
