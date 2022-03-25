@@ -64,7 +64,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => a.textId === currentAnswerId)) {
+            if (faktum.requiredAnswerIds.find((id) => id === currentAnswerId)) {
               return (
                 <Faktum
                   key={faktum.textId}

@@ -20,29 +20,32 @@ export function SectionFaktum(props: FaktumProps<IFaktum>) {
   const prevAnswers = usePrevious(answers);
 
   useEffect(() => {
-    // @ts-ignore
-    if (isValgFaktum(props.faktum) && answers.length !== prevAnswers?.length) {
+    const answerIds = answers.map((a) => a.textId);
+
+    if (answerIds.includes(props.faktum.textId)) {
       // @ts-ignore
-      const types = ["flervalg", "envalg", "boolean"];
-      const answerIds = answers.map((a) => a.textId);
-      const valgFaktumAnswerIds = answers
-        .flatMap((answer) => {
-          if (types.includes(answer.type)) {
-            return answer.value;
-          }
-        })
-        .filter(Boolean);
+      if (isValgFaktum(props.faktum) && answers.length !== prevAnswers?.length) {
+        const types = ["flervalg", "envalg", "boolean"];
+        const valgFaktumAnswerValues = answers
+          .flatMap((answer) => {
+            if (types.includes(answer.type)) {
+              return answer.value;
+            }
+          })
+          .filter(Boolean);
 
-      const triggeredSubfaktumIds = props.faktum.subFaktum
-        ?.filter((subFaktum) => {
-          const subFaktumRequiredAnswerIds = subFaktum.requiredAnswerIds.map((id) => id.textId);
-          return subFaktumRequiredAnswerIds.some((id) => valgFaktumAnswerIds.includes(id));
-        })
-        .map((sub) => sub.textId);
+        const triggeredSubfaktumIds = props.faktum.subFaktum
+          ?.filter((subFaktum) =>
+            subFaktum.requiredAnswerIds.some((id) => valgFaktumAnswerValues.includes(id))
+          )
+          .map((subFaktum) => subFaktum.textId);
 
-      const allSubFaktaAnswered = triggeredSubfaktumIds?.every((id) => answerIds.includes(id));
+        const allSubFaktaAnswered = triggeredSubfaktumIds?.every((id) => answerIds.includes(id));
 
-      if (answerIds.includes(props.faktum.textId) && allSubFaktaAnswered) {
+        if (allSubFaktaAnswered) {
+          dispatch(incrementSectionFaktumIndex());
+        }
+      } else {
         dispatch(incrementSectionFaktumIndex());
       }
     }

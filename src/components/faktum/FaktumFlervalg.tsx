@@ -52,7 +52,7 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
           {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((a) => currentAnswerIds?.includes(a.textId))) {
+            if (faktum.requiredAnswerIds.find((id) => currentAnswerIds?.includes(id))) {
               return (
                 <Faktum
                   key={faktum.textId}

@@ -31,7 +31,7 @@ export interface IGeneratorFaktum extends IBaseFaktum {
 }
 
 export type ISubFaktum = IFaktum & {
-  requiredAnswerIds: { textId: string }[];
+  requiredAnswerIds: string[];
 };
 
 export interface IAnswerOption {

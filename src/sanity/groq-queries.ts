@@ -10,9 +10,7 @@ const faktumGroq = `
   description,
   alertText,
   helpText,
-  requiredAnswerIds[]->{
-    'textId': _id
-  },
+  'requiredAnswerIds': requiredAnswerIds[]-> _id,
   answerOptions[]->{
     'textId': _id,
     title,
