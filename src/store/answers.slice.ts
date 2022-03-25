@@ -49,33 +49,6 @@ export const answersSlice = createSlice({
   initialState: [] as Answer[],
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(saveAnswerToQuiz.pending, (state, action) => {
-      const existingIndex = state.findIndex((answer) => answer.textId === action.meta.arg.textId);
-
-      let value = action.meta.arg.value;
-
-      // Because quiz returns boolean faktum answers as booleans we need to map back to descriptive answer ids (facepalm)
-      if (action.meta.arg.type === "boolean") {
-        value = `${action.meta.arg.textId}.svar.${action.meta.arg.value ? "ja" : "nei"}`;
-      }
-
-      if (existingIndex === -1) {
-        state.push({
-          ...action.meta.arg,
-          value,
-          // loading: true,
-          // errorMessages: []
-        });
-      } else {
-        state[existingIndex] = {
-          ...action.meta.arg,
-          value,
-          // loading: true,
-          // errorMessages: []
-        };
-      }
-    });
-
     builder.addCase(saveAnswerToQuiz.fulfilled, (state, action) => {
       let value = action.meta.arg.value;
       const existingIndex = state.findIndex((answer) => answer.textId === action.payload.textId);

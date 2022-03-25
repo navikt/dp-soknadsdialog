@@ -5,7 +5,7 @@ import {
   MockDataValgFaktum,
 } from "../soknad-fakta/soknad";
 import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
-import { IFaktum, IValgFaktum } from "../types/faktum.types";
+import { IFaktum, IGeneratorFaktum, IValgFaktum } from "../types/faktum.types";
 
 export function isMockDataValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
   return (faktum as MockDataValgFaktum).answerOptions !== undefined;
@@ -19,8 +19,13 @@ export function isSubFaktum<T>(faktum: T): faktum is SubFaktum<T> {
   return (faktum as SubFaktum<T>).requiredAnswerIds !== undefined;
 }
 
-export function isGeneratorFaktum(faktum: MockDataFaktum): faktum is MockDataGeneratorFaktum {
+export function isMockDataGeneratorFaktum(
+  faktum: MockDataFaktum
+): faktum is MockDataGeneratorFaktum {
   return (faktum as MockDataGeneratorFaktum).faktum !== undefined;
+}
+export function isGeneratorFaktum(faktum: IFaktum): faktum is IGeneratorFaktum {
+  return (faktum as IGeneratorFaktum).faktum !== null;
 }
 
 export function isPeriodAnswer(value: AnswerValue): value is AnswerPeriod {

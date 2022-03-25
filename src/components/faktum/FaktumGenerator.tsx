@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { IGeneratorFaktum } from "../../types/faktum.types";
 import { FaktumProps } from "./Faktum";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
@@ -9,16 +9,8 @@ import { Answer } from "../../store/answers.slice";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
-import { useDispatch } from "react-redux";
 
 export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(incrementSectionFaktumIndex());
-  }, []);
-
   return <div>{renderListType(props.faktum)}</div>;
 }
 

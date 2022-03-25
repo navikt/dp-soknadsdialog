@@ -5,7 +5,6 @@ import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import { saveAnswerToQuiz } from "../../../store/answers.slice";
-import { incrementSectionFaktumIndex } from "../../../store/navigation.slice";
 
 const years: DropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -36,8 +35,6 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
         id: props.faktum.id,
       })
     );
-
-    !currentAnswer && dispatch(incrementSectionFaktumIndex());
   }
 
   return (
