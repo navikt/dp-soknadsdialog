@@ -1,12 +1,8 @@
 module.exports = {
   globalSetup: "<rootDir>/jest.env.js",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
-  collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!**/*.d.ts",
-    "!**/node_modules/**",
-    "!**/*.types.ts",
-  ],
+  collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}"],
+  coveragePathIgnorePatterns: ["src/soknad-fakta/", "src/sanity/", "src/types/"],
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/.next/"],
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", { presets: ["next/babel"] }],
