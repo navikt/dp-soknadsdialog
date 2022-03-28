@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import styles from "./Section.module.css";
 import { ISection } from "../../types/section.types";
 import { PortableText } from "@portabletext/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { Button } from "@navikt/ds-react";
-import {
-  isArrayEqual,
-  isFaktumAnswered,
-  isGeneratorFaktumAnswered,
-  SectionFaktum,
-} from "../faktum/SectionFaktum";
 import { usePrevious } from "../../hooks/usePrevious";
 import { isGeneratorFaktum } from "../../sanity/type-guards";
+import {
+  decrementSectionFaktumIndex,
+  incrementSectionFaktumIndex,
+} from "../../store/navigation.slice";
+import { Faktum } from "../faktum/Faktum";
+import { isArrayEqual, isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
 
 interface Props {
   section: ISection;
@@ -21,6 +21,7 @@ interface Props {
 }
 
 export function Section(props: Props) {
+  const dispatch = useDispatch();
   const sectionFaktumIndex = useSelector((state: RootState) => state.navigation.sectionFaktumIndex);
   const [showNextSectionBtn, setShowNextSectionBtn] = useState(false);
   const answers = useSelector((state: RootState) => state.answers);
@@ -30,6 +31,7 @@ export function Section(props: Props) {
   const currentSectionIndex = useSelector(
     (state: RootState) => state.navigation.currentSectionIndex
   );
+  const [nextFaktumVisible, setNextFaktumVisible] = useState(false);
 
   useEffect(() => {
     checkAllFaktaAnswered();
@@ -42,11 +44,33 @@ export function Section(props: Props) {
   }, [answers, generators]);
 
   function checkAllFaktaAnswered() {
-    const allFaktaAnswered = props.section.faktum.every((faktum) => {
+    const allFaktaAnswered = props.section.faktum.every((faktum, index) => {
+      let faktumAnswered;
+      const isNotLastFaktumInSection = index < props.section.faktum.length - 1;
+      const isNotFirstFaktumInSection = index !== 0;
+
       if (isGeneratorFaktum(faktum)) {
-        return isGeneratorFaktumAnswered(faktum, generators);
+        faktumAnswered = isGeneratorFaktumAnswered(faktum, generators);
+      } else {
+        faktumAnswered = isFaktumAnswered(faktum, answers, generators);
       }
-      return isFaktumAnswered(faktum, answers, generators);
+
+      if (faktumAnswered && !nextFaktumVisible && isNotLastFaktumInSection) {
+        dispatch(incrementSectionFaktumIndex());
+        setNextFaktumVisible(true);
+      }
+
+      if (
+        !faktumAnswered &&
+        nextFaktumVisible &&
+        isNotLastFaktumInSection &&
+        isNotFirstFaktumInSection
+      ) {
+        dispatch(decrementSectionFaktumIndex());
+        setNextFaktumVisible(false);
+      }
+
+      return faktumAnswered;
     });
 
     if (allFaktaAnswered) {
@@ -58,6 +82,7 @@ export function Section(props: Props) {
 
   function navigateForward() {
     props.navigateNextSection();
+    setNextFaktumVisible(false);
     setShowNextSectionBtn(false);
   }
 
@@ -70,7 +95,7 @@ export function Section(props: Props) {
 
         {props.section.faktum.map((faktum, index) => {
           if (index <= sectionFaktumIndex) {
-            return <SectionFaktum key={faktum?.textId} faktum={faktum} />;
+            return <Faktum key={faktum?.textId} faktum={faktum} />;
           }
         })}
       </div>

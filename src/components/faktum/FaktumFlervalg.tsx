@@ -7,18 +7,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
 import styles from "./Faktum.module.css";
+import { isFaktumAnswered } from "../../faktum.utils";
 
 export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
+  const generators = useSelector((state: RootState) => state.generators);
   const currentAnswerIds = answers.find((answer) => answer.textId === faktum.textId)?.value as
     | string[]
     | undefined;
 
-  const onSelection = (value: string[]) => {
+  const triggeredSubFakta = faktum.subFaktum?.filter((faktum) =>
+    faktum.requiredAnswerIds.find((id) => currentAnswerIds?.includes(id))
+  );
+
+  const fistUnansweredSubFaktumIndex =
+    triggeredSubFakta?.findIndex((faktum) => !isFaktumAnswered(faktum, answers, generators)) ?? -1;
+
+  function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
-  };
+  }
 
   function saveFaktum(value: string[]) {
     dispatch(
@@ -51,8 +60,13 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
-          {faktum.subFaktum.map((faktum) => {
-            if (faktum.requiredAnswerIds.find((id) => currentAnswerIds?.includes(id))) {
+          {triggeredSubFakta?.map((faktum, index) => {
+            const lastFaktumIndexToShow =
+              fistUnansweredSubFaktumIndex !== -1
+                ? fistUnansweredSubFaktumIndex
+                : triggeredSubFakta.length;
+
+            if (index <= lastFaktumIndexToShow) {
               return (
                 <Faktum
                   key={faktum.textId}
