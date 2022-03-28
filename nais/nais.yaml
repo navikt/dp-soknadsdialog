@@ -60,4 +60,4 @@ spec:
       external:
         - host: dev.dekoratoren.nav.no
       rules:
-        - application: dp-quizshow-api
+        - application: dp-soknad
