@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { Seksjon } from "../components/seksjon/Seksjon";
+import { Section } from "../components/section/Section";
 import { setCurrentSectionIndex, setSectionFaktumIndex } from "../store/navigation.slice";
 
 export function Soknad() {
@@ -25,7 +25,7 @@ export function Soknad() {
   return (
     <div>
       {currentSection && (
-        <Seksjon
+        <Section
           section={currentSection}
           navigateNextSection={handleNavigateNext}
           navigatePreviousSection={handleNavigatePrevious}
