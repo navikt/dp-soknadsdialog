@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { incrementSectionFaktumIndex } from "../../store/navigation.slice";
 import { Faktum } from "./Faktum";
 import { Answer, AnswerValue } from "../../store/answers.slice";
-import { IFaktum, IGeneratorFaktum } from "../../types/faktum.types";
+import { FaktumType, IFaktum, IGeneratorFaktum } from "../../types/faktum.types";
 import { RootState } from "../../store";
 import { isGeneratorFaktum, isValgFaktum } from "../../sanity/type-guards";
 import { isEmpty, isEqual, xorWith } from "lodash";
 import { usePrevious } from "../../hooks/usePrevious";
 import { GeneratorState } from "../../store/generator-utils";
+import { getAnswerValuesByFaktumType } from "../../faktum.utils";
 
 export interface FaktumProps<P> {
   faktum: P;
@@ -47,14 +48,8 @@ export function isFaktumAnswered(
 
   if (answerIds.includes(faktum.textId)) {
     if (isValgFaktum(faktum)) {
-      const types = ["flervalg", "envalg", "boolean"];
-      const valgFaktumAnswerValues = answers
-        .flatMap((answer) => {
-          if (types.includes(answer.type)) {
-            return answer.value;
-          }
-        })
-        .filter(Boolean);
+      const faktumTypes: FaktumType[] = ["flervalg", "envalg", "boolean"];
+      const valgFaktumAnswerValues = getAnswerValuesByFaktumType(answers, faktumTypes);
 
       const triggeredSubFakta = faktum.subFaktum?.filter((subFaktum) =>
         subFaktum.requiredAnswerIds.some((id) => valgFaktumAnswerValues.includes(id))
