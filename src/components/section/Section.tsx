@@ -22,20 +22,20 @@ interface Props {
 
 export function Section(props: Props) {
   const dispatch = useDispatch();
-  const sectionFaktumIndex = useSelector((state: RootState) => state.navigation.sectionFaktumIndex);
+  const [nextFaktumVisible, setNextFaktumVisible] = useState(false);
   const [showNextSectionBtn, setShowNextSectionBtn] = useState(false);
+
   const answers = useSelector((state: RootState) => state.answers);
   const prevAnswers = usePrevious(answers) ?? answers;
+
   const generators = useSelector((state: RootState) => state.generators);
   const prevGenerators = usePrevious(generators) ?? generators;
-  const currentSectionIndex = useSelector(
-    (state: RootState) => state.navigation.currentSectionIndex
-  );
-  const [nextFaktumVisible, setNextFaktumVisible] = useState(false);
+
+  const navigationState = useSelector((state: RootState) => state.navigation);
 
   useEffect(() => {
     checkAllFaktaAnswered();
-  }, [currentSectionIndex]);
+  }, [navigationState.currentSectionIndex]);
 
   useEffect(() => {
     if (!isArrayEqual(answers, prevAnswers) || !isArrayEqual(generators, prevGenerators)) {
@@ -63,8 +63,7 @@ export function Section(props: Props) {
       if (
         !faktumAnswered &&
         nextFaktumVisible &&
-        isNotLastFaktumInSection &&
-        isNotFirstFaktumInSection
+        (isNotFirstFaktumInSection || isNotLastFaktumInSection)
       ) {
         dispatch(decrementSectionFaktumIndex());
         setNextFaktumVisible(false);
@@ -94,7 +93,7 @@ export function Section(props: Props) {
         {props.section.helpText && <p>{props.section.helpText}</p>}
 
         {props.section.faktum.map((faktum, index) => {
-          if (index <= sectionFaktumIndex) {
+          if (index <= navigationState.sectionFaktumIndex) {
             return <Faktum key={faktum?.textId} faktum={faktum} />;
           }
         })}
