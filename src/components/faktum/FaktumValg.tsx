@@ -1,29 +1,21 @@
 import React from "react";
 import { Alert, Radio, RadioGroup } from "@navikt/ds-react";
-import { Faktum, FaktumProps } from "./Faktum";
+import { FaktumProps } from "./Faktum";
 import { IValgFaktum } from "../../types/faktum.types";
 import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { SubFaktum } from "./SubFaktum";
 import styles from "./Faktum.module.css";
-import { isFaktumAnswered } from "../../faktum.utils";
 
 export function FaktumValg(props: FaktumProps<IValgFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const generators = useSelector((state: RootState) => state.generators);
   const currentAnswerId = answers.find((answer) => answer.textId === faktum.textId)?.value as
     | string
     | undefined;
-
-  const triggeredSubFakta = faktum.subFaktum?.filter((faktum) =>
-    faktum.requiredAnswerIds.find((id) => id === currentAnswerId)
-  );
-
-  const fistUnansweredSubFaktumIndex =
-    triggeredSubFakta?.findIndex((faktum) => !isFaktumAnswered(faktum, answers, generators)) ?? -1;
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -72,23 +64,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
-          {triggeredSubFakta?.map((faktum, index) => {
-            const lastFaktumIndexToShow =
-              fistUnansweredSubFaktumIndex !== -1
-                ? fistUnansweredSubFaktumIndex
-                : triggeredSubFakta.length;
-
-            if (index <= lastFaktumIndexToShow) {
-              return (
-                <Faktum
-                  key={faktum.textId}
-                  faktum={faktum}
-                  onChange={onChange}
-                  answers={props.answers}
-                />
-              );
-            }
-          })}
+          <SubFaktum faktum={faktum} answers={answers} onChange={onChange} flervalg={false} />
         </div>
       )}
     </div>
