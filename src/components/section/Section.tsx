@@ -7,10 +7,7 @@ import { RootState } from "../../store";
 import { Button } from "@navikt/ds-react";
 import { usePrevious } from "../../hooks/usePrevious";
 import { isGeneratorFaktum } from "../../sanity/type-guards";
-import {
-  decrementSectionFaktumIndex,
-  incrementSectionFaktumIndex,
-} from "../../store/navigation.slice";
+import { setSectionFaktumIndex } from "../../store/navigation.slice";
 import { Faktum } from "../faktum/Faktum";
 import { isArrayEqual, isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
 
@@ -22,7 +19,6 @@ interface Props {
 
 export function Section(props: Props) {
   const dispatch = useDispatch();
-  const [nextFaktumVisible, setNextFaktumVisible] = useState(false);
   const [showNextSectionBtn, setShowNextSectionBtn] = useState(false);
 
   const answers = useSelector((state: RootState) => state.answers);
@@ -46,8 +42,6 @@ export function Section(props: Props) {
   function checkAllFaktaAnswered() {
     const allFaktaAnswered = props.section.faktum.every((faktum, index) => {
       let faktumAnswered;
-      const isNotLastFaktumInSection = index < props.section.faktum.length - 1;
-      const isNotFirstFaktumInSection = index !== 0;
 
       if (isGeneratorFaktum(faktum)) {
         faktumAnswered = isGeneratorFaktumAnswered(faktum, generators);
@@ -55,18 +49,10 @@ export function Section(props: Props) {
         faktumAnswered = isFaktumAnswered(faktum, answers, generators);
       }
 
-      if (faktumAnswered && !nextFaktumVisible && isNotLastFaktumInSection) {
-        dispatch(incrementSectionFaktumIndex());
-        setNextFaktumVisible(true);
-      }
-
-      if (
-        !faktumAnswered &&
-        nextFaktumVisible &&
-        (isNotFirstFaktumInSection || isNotLastFaktumInSection)
-      ) {
-        dispatch(decrementSectionFaktumIndex());
-        setNextFaktumVisible(false);
+      if (faktumAnswered) {
+        dispatch(setSectionFaktumIndex(index + 1));
+      } else {
+        dispatch(setSectionFaktumIndex(index));
       }
 
       return faktumAnswered;
@@ -81,7 +67,6 @@ export function Section(props: Props) {
 
   function navigateForward() {
     props.navigateNextSection();
-    setNextFaktumVisible(false);
     setShowNextSectionBtn(false);
   }
 
