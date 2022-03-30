@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import styles from "./Section.module.css";
-import { ISection } from "../../types/section.types";
-import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { Button } from "@navikt/ds-react";
-import { usePrevious } from "../../hooks/usePrevious";
+import { PortableText } from "@portabletext/react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
 import { isGeneratorFaktum } from "../../sanity/type-guards";
+import { RootState } from "../../store";
 import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { ISection } from "../../types/section.types";
 import { Faktum } from "../faktum/Faktum";
-import { isArrayEqual, isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
+import styles from "./Section.module.css";
 
 interface Props {
   section: ISection;
@@ -19,27 +18,23 @@ interface Props {
 
 export function Section(props: Props) {
   const dispatch = useDispatch();
-  const [showNextSectionBtn, setShowNextSectionBtn] = useState(false);
+  const [showNavigationButtons, setShowNavigationButtons] = useState(false);
 
   const answers = useSelector((state: RootState) => state.answers);
-  const prevAnswers = usePrevious(answers) ?? answers;
-
   const generators = useSelector((state: RootState) => state.generators);
-  const prevGenerators = usePrevious(generators) ?? generators;
 
   const navigationState = useSelector((state: RootState) => state.navigation);
 
+  // Checking to handle sections where answers are optional
   useEffect(() => {
-    checkAllFaktaAnswered();
+    showNextUnansweredFaktumOrNavigationButtons();
   }, [navigationState.currentSectionIndex]);
 
   useEffect(() => {
-    if (!isArrayEqual(answers, prevAnswers) || !isArrayEqual(generators, prevGenerators)) {
-      checkAllFaktaAnswered();
-    }
+    showNextUnansweredFaktumOrNavigationButtons();
   }, [answers, generators]);
 
-  function checkAllFaktaAnswered() {
+  function showNextUnansweredFaktumOrNavigationButtons() {
     const allFaktaAnswered = props.section.faktum.every((faktum, index) => {
       let faktumAnswered;
 
@@ -59,15 +54,10 @@ export function Section(props: Props) {
     });
 
     if (allFaktaAnswered) {
-      setShowNextSectionBtn(true);
+      setShowNavigationButtons(true);
     } else {
-      setShowNextSectionBtn(false);
+      setShowNavigationButtons(false);
     }
-  }
-
-  function navigateForward() {
-    props.navigateNextSection();
-    setShowNextSectionBtn(false);
   }
 
   return (
@@ -83,9 +73,13 @@ export function Section(props: Props) {
           }
         })}
       </div>
-      <div>{showNextSectionBtn && <Button onClick={navigateForward}>Neste seksjon</Button>}</div>
       <div>
-        {showNextSectionBtn && (
+        {showNavigationButtons && (
+          <Button onClick={() => props.navigateNextSection()}>Neste seksjon</Button>
+        )}
+      </div>
+      <div>
+        {showNavigationButtons && (
           <Button onClick={() => props.navigatePreviousSection()}>Forrige seksjon</Button>
         )}
       </div>
