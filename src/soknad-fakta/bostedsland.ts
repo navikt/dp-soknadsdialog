@@ -27,11 +27,21 @@ export const bostedsland: MockDataSeksjon = {
             },
             {
               id: "faktum.reist-tilbake-en-gang-eller-mer",
-              type: "envalg",
+              type: "boolean",
               answerOptions: [
                 { id: "faktum.reist-tilbake-en-gang-eller-mer.svar.ja" },
                 { id: "faktum.reist-tilbake-en-gang-eller-mer.svar.nei" },
-                { id: "faktum.reist-tilbake-en-gang-eller-mer.svar.nei-men-rotasjon" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.reist-i-takt-med-rotasjon",
+                  type: "boolean",
+                  answerOptions: [
+                    { id: "faktum.reist-i-takt-med-rotasjon.svar.ja" },
+                    { id: "faktum.reist-i-takt-med-rotasjon.svar.nei" },
+                  ],
+                  requiredAnswerIds: ["faktum.reist-tilbake-en-gang-eller-mer.svar.nei"],
+                },
               ],
               requiredAnswerIds: [
                 "faktum.reist-tilbake-etter-arbeidsledig.svar.ja",
