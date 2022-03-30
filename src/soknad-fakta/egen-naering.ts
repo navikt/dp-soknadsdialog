@@ -14,11 +14,16 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum.egen-naering-organisasjonsnummer-liste",
           type: "generator",
-          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
           faktum: [{ id: "faktum.egen-naering-organisasjonsnummer", type: "int" }],
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
         },
         {
-          id: "faktum.egen-naering-arbeidstimer",
+          id: "faktum.egen-naering-arbeidstimer-for",
+          type: "double",
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
+        },
+        {
+          id: "faktum.egen-naering-arbeidstimer-naa",
           type: "double",
           requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
         },
@@ -40,31 +45,48 @@ export const egenNaering: MockDataSeksjon = {
         {
           id: "faktum.eget-gaardsbruk-type-gaardsbruk",
           type: "flervalg",
-          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.dyr" },
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.jord" },
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.skog" },
             { id: "faktum.eget-gaardsbruk-type-gaardsbruk.svar.annet" },
           ],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
           id: "faktum.eget-gaardsbruk-hvem-eier",
           type: "flervalg",
-          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
           answerOptions: [
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.selv" },
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.ektefelle-samboer" },
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.andre" },
           ],
+          requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
+          subFaktum: [
+            {
+              id: "faktum.eget-gaardsbruk-jeg-andel-inntekt",
+              type: "double",
+              requiredAnswerIds: ["faktum.eget-gaardsbruk-hvem-eier.svar.selv"],
+            },
+            {
+              id: "faktum.eget-gaardsbruk-ektefelle-samboer-andel-inntekt",
+              type: "double",
+              requiredAnswerIds: ["faktum.eget-gaardsbruk-hvem-eier.svar.ektefelle-samboer"],
+            },
+            {
+              id: "faktum.eget-gaardsbruk-andre-andel-inntekt",
+              type: "double",
+              requiredAnswerIds: ["faktum.eget-gaardsbruk-hvem-eier.svar.andre"],
+            },
+          ],
         },
         {
-          id: "faktum.eget-gaardsbruk-arbeidstimer",
+          id: "faktum.eget-gaardsbruk-arbeidstimer-aar",
           type: "double",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },
         {
-          id: "faktum.eget-gaardsbruk-arbeidsaar",
+          id: "faktum.eget-gaardsbruk-arbeidsaar-for-timer",
           type: "int",
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
         },

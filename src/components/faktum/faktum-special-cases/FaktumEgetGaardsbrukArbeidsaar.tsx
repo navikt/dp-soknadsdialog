@@ -9,7 +9,7 @@ import { saveAnswerToQuiz } from "../../../store/answers.slice";
 const years: DropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
 
-for (let i = 0; i <= 5; i++) {
+for (let i = 0; i <= 4; i++) {
   const year = `${currentYear - i}`;
   years.push({ value: year, label: year });
 }

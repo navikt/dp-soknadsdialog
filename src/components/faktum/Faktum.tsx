@@ -18,7 +18,7 @@ export interface FaktumProps<P> {
   onChange?: (faktum: IFaktum, value: AnswerValue) => void;
 }
 
-const specialCaseFaktum = ["faktum-eget-gaardsbruk-arbeidsaar"];
+const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
 
 export function Faktum(props: FaktumProps<IFaktum>) {
   function renderFaktumType() {

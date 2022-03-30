@@ -14,6 +14,7 @@ import {
   PrimitivFaktumType,
   ValgFaktumType,
 } from "../types/faktum.types";
+import { utdanning } from "./utdanning";
 
 export interface MockDataSeksjon {
   id: string;
@@ -58,5 +59,6 @@ export const mockSeksjoner: MockDataSeksjon[] = [
   andreYtelser,
   // personalia mangler her, men burde kanskje ikke være i en svarseksjon siden man ikke kan endre noe av informasjonen?
   barnetillegg,
+  utdanning,
   tilleggsopplysninger,
 ];
