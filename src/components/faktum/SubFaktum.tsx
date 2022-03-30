@@ -4,22 +4,19 @@ import { Faktum, FaktumProps } from "./Faktum";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { isFaktumAnswered } from "../../faktum.utils";
+import { CountryGroup, getListOfCountryCodes } from "../../country.utils";
 
-export function SubFaktum(props: FaktumProps<IValgFaktum> & { flervalg: boolean }) {
+export function SubFaktum(props: FaktumProps<IValgFaktum> & { currentAnswerIds: string[] }) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const generators = useSelector((state: RootState) => state.generators);
-  const currentAnswerIds = props.flervalg
-    ? (answers.find((answer) => answer.textId === props.faktum.textId)?.value as
-        | string[]
-        | undefined)
-    : (answers.find((answer) => answer.textId === props.faktum.textId)?.value as
-        | string
-        | undefined);
 
   const triggeredSubFakta = props.faktum.subFaktum?.filter((faktum) =>
-    props.flervalg
-      ? faktum.requiredAnswerIds.find((id) => currentAnswerIds?.includes(id))
-      : faktum.requiredAnswerIds.find((id) => id === currentAnswerIds)
+    faktum.requiredAnswerIds.find((id) => {
+      if (id in CountryGroup) {
+        return getListOfCountryCodes(id).includes(props.currentAnswerIds[0]);
+      }
+      return props.currentAnswerIds?.includes(id);
+    })
   );
 
   const fistUnansweredSubFaktumIndex =

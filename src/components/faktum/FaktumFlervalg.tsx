@@ -52,7 +52,12 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
-          <SubFaktum faktum={faktum} answers={answers} onChange={onChange} flervalg={true} />
+          <SubFaktum
+            faktum={faktum}
+            answers={answers}
+            onChange={onChange}
+            currentAnswerIds={currentAnswerIds ?? []}
+          />
         </div>
       )}
     </div>

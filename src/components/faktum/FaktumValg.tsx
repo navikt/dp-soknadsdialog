@@ -64,7 +64,12 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
 
       {faktum.subFaktum && faktum.subFaktum.length > 0 && (
         <div className={styles["sub-faktum"]}>
-          <SubFaktum faktum={faktum} answers={answers} onChange={onChange} flervalg={false} />
+          <SubFaktum
+            faktum={faktum}
+            answers={answers}
+            onChange={onChange}
+            currentAnswerIds={currentAnswerId ? [currentAnswerId] : []}
+          />
         </div>
       )}
     </div>
