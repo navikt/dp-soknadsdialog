@@ -66,14 +66,17 @@ export function isGeneratorFaktumAnswered(
   faktum: IGeneratorFaktum,
   generators: GeneratorState[]
 ): boolean {
-  const state = generators.find((generator) => generator.textId === faktum.textId);
-  if (!state) {
+  const generatorStateForFaktum = generators.find(
+    (generator) => generator.textId === faktum.textId
+  );
+  if (!generatorStateForFaktum) {
+    // Todo: Sentry-log: Why is generator-state missing on state?
     return false;
   }
 
-  const isAnswered = state.answers.length > 0;
+  const isAnswered = generatorStateForFaktum.answers.length > 0;
 
-  switch (state.textId) {
+  switch (generatorStateForFaktum.textId) {
     case BARN_LISTE_FAKTUM_ID:
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return true;
