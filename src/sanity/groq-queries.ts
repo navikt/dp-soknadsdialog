@@ -6,7 +6,6 @@ const faktumGroq = `
   title,
   type,
   unit,
-  listType,
   description,
   alertText,
   helpText,

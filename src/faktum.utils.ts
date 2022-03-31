@@ -4,6 +4,9 @@ import { isEmpty, isEqual, xorWith } from "lodash";
 import { GeneratorState } from "./store/generator-utils";
 import { isGeneratorFaktum, isValgFaktum } from "./sanity/type-guards";
 
+export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";
+export const BARN_LISTE_FAKTUM_ID = "faktum.barn-liste";
+
 export function getAnswerValuesByFaktumType(
   answers: Answer[],
   faktumTypes: FaktumType[]
@@ -71,8 +74,8 @@ export function isGeneratorFaktumAnswered(
   const isAnswered = state.answers.length > 0;
 
   switch (state.textId) {
-    case "faktum.barn-liste":
-    case "faktum.arbeidsforhold":
+    case BARN_LISTE_FAKTUM_ID:
+    case ARBEIDSFORHOLD_FAKTUM_ID:
       return true;
     default:
       return isAnswered || false;

@@ -1,9 +1,4 @@
-import {
-  PrimitivFaktumType,
-  GeneratorFaktumType,
-  GeneratorListType,
-  ValgFaktumType,
-} from "../types/faktum.types";
+import { PrimitivFaktumType, GeneratorFaktumType, ValgFaktumType } from "../types/faktum.types";
 
 export interface SanitySeksjon {
   _id: string;
@@ -32,7 +27,6 @@ export interface SanityGeneratorFaktum {
   _type: "generatorFaktum";
   key: string;
   type: GeneratorFaktumType;
-  listType: GeneratorListType;
   faktum: SanityRef<SanityFaktum>[];
   requiredAnswerIds?: SanityRef<SanityFaktum>[];
 }

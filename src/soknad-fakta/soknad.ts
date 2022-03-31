@@ -8,12 +8,7 @@ import { verneplikt } from "./verneplikt";
 import { tilleggsopplysninger } from "./tilleggsopplysninger";
 import { barnetillegg } from "./barnetillegg";
 import { andreYtelser } from "./andre-ytelser";
-import {
-  GeneratorFaktumType,
-  GeneratorListType,
-  PrimitivFaktumType,
-  ValgFaktumType,
-} from "../types/faktum.types";
+import { GeneratorFaktumType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
 import { utdanning } from "./utdanning";
 
 export interface MockDataSeksjon {
@@ -30,7 +25,6 @@ export interface MockDataBaseFaktum {
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
   type: GeneratorFaktumType;
-  listType: GeneratorListType;
   faktum: MockDataFaktum[];
 }
 

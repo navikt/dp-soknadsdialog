@@ -34,7 +34,6 @@ export function createSanityGeneratorFromApiFaktum(
     _type: "generatorFaktum",
     key: faktum.id,
     type: faktum.type,
-    listType: faktum.listType,
     faktum: faktum.faktum.map((faktum) => createSanityRef(faktum.id)),
     requiredAnswerIds: isSubFaktum(faktum)
       ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))

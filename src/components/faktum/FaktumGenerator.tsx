@@ -9,19 +9,18 @@ import { Answer } from "../../store/answers.slice";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
+import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../faktum.utils";
 
 export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
-  return <div>{renderListType(props.faktum)}</div>;
+  return <div>{renderGeneratorType(props.faktum)}</div>;
 }
 
-function renderListType(faktum: IGeneratorFaktum) {
-  switch (faktum.listType) {
-    case "Arbeidsforhold":
+function renderGeneratorType(faktum: IGeneratorFaktum) {
+  switch (faktum.textId) {
+    case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...faktum} />;
-    case "Barn":
+    case BARN_LISTE_FAKTUM_ID:
       return <Barnetillegg {...faktum} />;
-    case "Standard":
-      return <StandardGeneratorFaktum {...faktum} />;
     default:
       return <StandardGeneratorFaktum {...faktum} />;
   }
