@@ -18,23 +18,23 @@ interface Props {
 
 export function Section(props: Props) {
   const dispatch = useDispatch();
-  const [showNavigationButtons, setShowNavigationButtons] = useState(false);
+  const [showNextSectionButton, setShowNextSectionButton] = useState(false);
 
   const answers = useSelector((state: RootState) => state.answers);
   const generators = useSelector((state: RootState) => state.generators);
-
   const navigationState = useSelector((state: RootState) => state.navigation);
 
   // Checking to handle sections where answers are optional
   useEffect(() => {
-    showNextUnansweredFaktumOrNavigationButtons();
+    showNextUnansweredFaktumOrNextSectionButton();
   }, [navigationState.currentSectionIndex]);
 
+  // Listening to generators because answers for generator-faktum are stored there
   useEffect(() => {
-    showNextUnansweredFaktumOrNavigationButtons();
+    showNextUnansweredFaktumOrNextSectionButton();
   }, [answers, generators]);
 
-  function showNextUnansweredFaktumOrNavigationButtons() {
+  function showNextUnansweredFaktumOrNextSectionButton() {
     const allFaktaAnswered = props.section.faktum.every((faktum, index) => {
       let faktumAnswered;
 
@@ -54,9 +54,9 @@ export function Section(props: Props) {
     });
 
     if (allFaktaAnswered) {
-      setShowNavigationButtons(true);
+      setShowNextSectionButton(true);
     } else {
-      setShowNavigationButtons(false);
+      setShowNextSectionButton(false);
     }
   }
 
@@ -74,14 +74,12 @@ export function Section(props: Props) {
         })}
       </div>
       <div>
-        {showNavigationButtons && (
+        {showNextSectionButton && (
           <Button onClick={() => props.navigateNextSection()}>Neste seksjon</Button>
         )}
       </div>
       <div>
-        {showNavigationButtons && (
-          <Button onClick={() => props.navigatePreviousSection()}>Forrige seksjon</Button>
-        )}
+        <Button onClick={() => props.navigatePreviousSection()}>Forrige seksjon</Button>
       </div>
     </div>
   );

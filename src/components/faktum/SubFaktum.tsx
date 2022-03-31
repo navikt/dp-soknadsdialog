@@ -19,15 +19,15 @@ export function SubFaktum(props: FaktumProps<IValgFaktum> & { currentAnswerIds: 
     })
   );
 
-  const fistUnansweredSubFaktumIndex =
+  const firstUnansweredSubFaktumIndex =
     triggeredSubFakta?.findIndex((faktum) => !isFaktumAnswered(faktum, answers, generators)) ?? -1;
 
   return (
     <>
       {triggeredSubFakta?.map((faktum, index) => {
         const lastFaktumIndexToShow =
-          fistUnansweredSubFaktumIndex !== -1
-            ? fistUnansweredSubFaktumIndex
+          firstUnansweredSubFaktumIndex !== -1
+            ? firstUnansweredSubFaktumIndex
             : triggeredSubFakta.length;
 
         if (index <= lastFaktumIndexToShow) {

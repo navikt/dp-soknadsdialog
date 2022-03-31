@@ -68,10 +68,13 @@ export function isGeneratorFaktumAnswered(
     return false;
   }
 
-  if (state.textId === "faktum.barn-liste") {
-    return true;
-  }
-
   const isAnswered = state.answers.length > 0;
-  return isAnswered || false;
+
+  switch (state.textId) {
+    case "faktum.barn-liste":
+    case "faktum.arbeidsforhold":
+      return true;
+    default:
+      return isAnswered || false;
+  }
 }
