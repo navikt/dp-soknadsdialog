@@ -8,7 +8,12 @@ import { verneplikt } from "./verneplikt";
 import { tilleggsopplysninger } from "./tilleggsopplysninger";
 import { barnetillegg } from "./barnetillegg";
 import { andreYtelser } from "./andre-ytelser";
-import { GeneratorFaktumType, PrimitivFaktumType, ValgFaktumType } from "../types/faktum.types";
+import {
+  GeneratorFaktumType,
+  LandFaktumType,
+  PrimitivFaktumType,
+  ValgFaktumType,
+} from "../types/faktum.types";
 import { utdanning } from "./utdanning";
 
 export interface MockDataSeksjon {
@@ -16,11 +21,14 @@ export interface MockDataSeksjon {
   faktum: MockDataFaktum[];
 }
 
-export type MockDataFaktum = MockDataBaseFaktum | MockDataGeneratorFaktum | MockDataValgFaktum;
+export type MockDataFaktum =
+  | MockDataBaseFaktum
+  | MockDataGeneratorFaktum
+  | MockDataValgFaktum
+  | MockDataLandFaktum;
 
 export interface MockDataBaseFaktum {
   id: string;
-  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType;
 }
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
@@ -34,13 +42,25 @@ export interface MockDataValgFaktum extends MockDataBaseFaktum {
   answerOptions: MockDataAnswerOption[];
 }
 
+export interface MockDataLandFaktum extends MockDataBaseFaktum {
+  type: LandFaktumType;
+  subFaktum?: MockDataSubFaktum[];
+  countryGroups: BlueprintCountryGroup[];
+}
+
+export type MockDataSubFaktum = MockDataFaktum & {
+  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType | LandFaktumType;
+  requiredAnswerIds: string[];
+};
+
 export interface MockDataAnswerOption {
   id: string;
 }
 
-export type MockDataSubFaktum = MockDataFaktum & {
-  requiredAnswerIds: string[];
-};
+export interface BlueprintCountryGroup {
+  id: string;
+  countries: string[];
+}
 
 export const mockSeksjoner: MockDataSeksjon[] = [
   koronaFortsattRett,

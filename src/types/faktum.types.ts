@@ -1,7 +1,8 @@
 import { TypedObject } from "@portabletext/types";
-export type ValgFaktumType = "boolean" | "envalg" | "flervalg" | "land";
+export type ValgFaktumType = "boolean" | "envalg" | "flervalg";
 export type PrimitivFaktumType = "int" | "double" | "localdate" | "periode" | "tekst";
 export type GeneratorFaktumType = "generator";
+export type LandFaktumType = "land";
 export type FaktumType = PrimitivFaktumType | ValgFaktumType | GeneratorFaktumType;
 
 export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
