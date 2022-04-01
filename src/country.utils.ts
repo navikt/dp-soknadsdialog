@@ -43,7 +43,7 @@ const EOSAndSwitzerland = [
   "AUT",
 ];
 const norwayAndJanMayen = ["NOR", "SJM"];
-const greatBritain = ["GBR"];
+const greatBritain = ["GBR", "JEY", "IMN"]; // Part of brexit
 
 const EOSWithoutNorwayAndJanMayen = EOSAndSwitzerland.filter(
   (code) => !norwayAndJanMayen.includes(code)
@@ -82,7 +82,7 @@ export function getCountryDropdownOptionsForFaktum(faktumId: string): DropdownOp
   });
   switch (faktumId) {
     case "faktum.dagpenger-hvilket-eos-land-utbetaler":
-      return EOSWithoutNorwayAndJanMayen.map(toDropDownOption);
+      return allCountryCodes.map(toDropDownOption);
     default:
       return allCountryCodes.map(toDropDownOption);
   }

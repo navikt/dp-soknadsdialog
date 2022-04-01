@@ -2,11 +2,77 @@ import {
   ARBEIDSFORHOLD_FAKTUM_ID,
   BARN_LISTE_FAKTUM_ID,
   getAnswerValuesByFaktumType,
+  isFaktumAnswered,
   isGeneratorFaktumAnswered,
 } from "./faktum.utils";
 import { Answer } from "./store/answers.slice";
 import { GeneratorState } from "./store/generator-utils";
-import { FaktumType, IGeneratorFaktum } from "./types/faktum.types";
+import {
+  FaktumType,
+  IFaktum,
+  IGeneratorFaktum,
+  IPrimitivFaktum,
+  IValgFaktum,
+} from "./types/faktum.types";
+
+const textFaktum: IPrimitivFaktum = {
+  id: "",
+  textId: "faktum.tekst",
+  title: "",
+  type: "tekst",
+};
+
+const generatorFaktum: IGeneratorFaktum = {
+  id: "",
+  textId: "faktum.generator",
+  title: "",
+  type: "generator",
+  faktum: [textFaktum],
+};
+
+const arbeidsforholdFaktum: IGeneratorFaktum = {
+  id: "",
+  textId: ARBEIDSFORHOLD_FAKTUM_ID,
+  title: "",
+  type: "generator",
+  faktum: [],
+};
+
+const barnFaktum: IGeneratorFaktum = {
+  id: "",
+  textId: BARN_LISTE_FAKTUM_ID,
+  title: "",
+  type: "generator",
+  faktum: [],
+};
+
+const envalgFaktumWithSubFaktum: IValgFaktum = {
+  id: "",
+  textId: "faktum.envalg",
+  title: "",
+  type: "envalg",
+  answerOptions: [{ textId: "faktum.envalg.svar", title: "ikke bry deg" }],
+  subFaktum: [
+    {
+      ...textFaktum,
+      requiredAnswerIds: ["faktum.envalg.svar"],
+    },
+  ],
+};
+
+const envalgFaktumWithGeneratorSubFaktum: IValgFaktum = {
+  id: "",
+  textId: "faktum.envalg",
+  title: "",
+  type: "envalg",
+  answerOptions: [{ textId: "faktum.envalg.svar", title: "ikke bry deg" }],
+  subFaktum: [
+    {
+      ...generatorFaktum,
+      requiredAnswerIds: ["faktum.envalg.svar"],
+    },
+  ],
+};
 
 describe("faktum.utils", () => {
   describe("getAnswerValuesByFaktumType", () => {
@@ -30,6 +96,7 @@ describe("faktum.utils", () => {
         id: "5002",
       },
     ];
+
     it("should only return answer.values matching input types [flervalg, envalg]", () => {
       const types: FaktumType[] = ["flervalg", "envalg"];
       const result = getAnswerValuesByFaktumType(answers, types);
@@ -46,67 +113,106 @@ describe("faktum.utils", () => {
   });
 
   describe("isGeneratorFaktumAnswered", () => {
-    let generatorState: GeneratorState;
-    let generatorFaktum: IGeneratorFaktum;
-
     it("should return false when faktum does not exist in state", () => {
-      generatorState = createState("faktum.some-state", true);
-      generatorFaktum = createGeneratorFaktum("faktum.not-in-state");
-      const result = isGeneratorFaktumAnswered(generatorFaktum, [generatorState]);
+      const result = isGeneratorFaktumAnswered(generatorFaktum, []);
       expect(result).toBeFalsy();
     });
 
     it("should return true for faktum.barn-liste", () => {
-      generatorState = createState(BARN_LISTE_FAKTUM_ID);
-      generatorFaktum = createGeneratorFaktum(BARN_LISTE_FAKTUM_ID);
-      const result = isGeneratorFaktumAnswered(generatorFaktum, [generatorState]);
+      const generatorState = createGeneratorState(barnFaktum);
+      const result = isGeneratorFaktumAnswered(barnFaktum, [generatorState]);
       expect(result).toBeTruthy();
     });
 
     it("should return true for faktum.arbeidsforhold", () => {
-      generatorState = createState(ARBEIDSFORHOLD_FAKTUM_ID);
-      generatorFaktum = createGeneratorFaktum(ARBEIDSFORHOLD_FAKTUM_ID);
-      const result = isGeneratorFaktumAnswered(generatorFaktum, [generatorState]);
+      const generatorState = createGeneratorState(arbeidsforholdFaktum);
+      const result = isGeneratorFaktumAnswered(arbeidsforholdFaktum, [generatorState]);
       expect(result).toBeTruthy();
     });
 
     it("should return false when faktum is unanswered", () => {
-      generatorState = createState("faktum.annet-generator-faktum");
-      generatorFaktum = createGeneratorFaktum("faktum.annet-generator-faktum");
+      const generatorState = createGeneratorState(generatorFaktum);
       const result = isGeneratorFaktumAnswered(generatorFaktum, [generatorState]);
       expect(result).toBeFalsy();
     });
 
     it("should return true when faktum is answered", () => {
-      generatorState = createState("faktum.annet-generator-faktum", true);
-      generatorFaktum = createGeneratorFaktum("faktum.annet-generator-faktum");
+      const generatorState = createGeneratorState(generatorFaktum, true);
       const result = isGeneratorFaktumAnswered(generatorFaktum, [generatorState]);
       expect(result).toBeTruthy();
     });
   });
+
+  describe("isFaktumAnswered", () => {
+    it("should return true when faktum is answered and has no subfaktum", () => {
+      const faktaToAnswer = [textFaktum];
+      const answerState = faktaToAnswer.map((faktum) => createAnswerState(faktum));
+      const result = isFaktumAnswered(textFaktum, answerState, []);
+      expect(result).toBeTruthy();
+    });
+
+    it("should return false when faktum is unanswered and has no subfaktum", () => {
+      const result = isFaktumAnswered(textFaktum, [], []);
+      expect(result).toBeFalsy();
+    });
+
+    it("should return true when faktum is answered and subfaktum is answered", () => {
+      const faktaToAnswer = [textFaktum, envalgFaktumWithSubFaktum];
+      const answerState = faktaToAnswer.map((faktum) => createAnswerState(faktum));
+      const result = isFaktumAnswered(envalgFaktumWithSubFaktum, answerState, []);
+      expect(result).toBeTruthy();
+    });
+
+    it("should return false when faktum is answered and subfaktum is not answered", () => {
+      const faktaToAnswer = [envalgFaktumWithSubFaktum];
+      const answerState = faktaToAnswer.map((faktum) => createAnswerState(faktum));
+      const result = isFaktumAnswered(envalgFaktumWithSubFaktum, answerState, []);
+      expect(result).toBeFalsy();
+    });
+
+    it("should return true when faktum is answered and subfaktum is generatorFaktum and is answered", () => {
+      const faktaToAnswer = [envalgFaktumWithGeneratorSubFaktum];
+      const answerState = faktaToAnswer.map((faktum) => createAnswerState(faktum));
+      const generatorState = createGeneratorState(generatorFaktum, true);
+      const result = isFaktumAnswered(envalgFaktumWithGeneratorSubFaktum, answerState, [
+        generatorState,
+      ]);
+      expect(result).toBeTruthy();
+    });
+
+    it("should return false when faktum is answered and subfaktum is generatorFaktum and is unanswered", () => {
+      const faktaToAnswer = [envalgFaktumWithGeneratorSubFaktum];
+      const answerState = faktaToAnswer.map((faktum) => createAnswerState(faktum));
+      const generatorState = createGeneratorState(generatorFaktum);
+      const result = isFaktumAnswered(envalgFaktumWithGeneratorSubFaktum, answerState, [
+        generatorState,
+      ]);
+      expect(result).toBeFalsy();
+    });
+  });
 });
 
-function createState(textId: string, withAnswer = false): GeneratorState {
-  const answer: Answer = {
-    id: "test-id",
-    textId,
-    type: "tekst",
-    value: "helo",
-  };
+function createAnswerState(faktum: IFaktum): Answer {
   return {
-    id: "",
-    textId: textId,
-    type: "generator",
-    answers: withAnswer ? [[answer]] : [],
+    id: faktum.id,
+    textId: faktum.textId,
+    type: faktum.type,
+    value: `${faktum.textId}.svar`,
   };
 }
 
-function createGeneratorFaktum(textId: string): IGeneratorFaktum {
+function createGeneratorState(faktum: IGeneratorFaktum, withAnswer = false): GeneratorState {
+  const answers = [];
+
+  if (withAnswer) {
+    const generatorAnswers = faktum.faktum.map((faktum) => createAnswerState(faktum));
+    answers.push(generatorAnswers);
+  }
+
   return {
-    id: "asdasd",
-    textId,
-    title: "test-title",
+    id: faktum.id,
+    textId: faktum.textId,
     type: "generator",
-    faktum: [{ textId: "", title: "", id: "faktum.egen-naering-organisasjonsnummer", type: "int" }],
+    answers: answers,
   };
 }

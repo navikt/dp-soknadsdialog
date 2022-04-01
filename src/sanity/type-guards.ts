@@ -12,7 +12,7 @@ export function isMockDataValgFaktum(faktum: MockDataFaktum): faktum is MockData
 }
 
 export function isValgFaktum(faktum: IFaktum): faktum is IValgFaktum {
-  return ["flervalg", "valg", "boolean"].includes(faktum.type) ?? (faktum as IValgFaktum);
+  return ["flervalg", "envalg", "boolean"].includes(faktum.type) ?? (faktum as IValgFaktum);
 }
 
 export function isSubFaktum<T>(faktum: T): faktum is SubFaktum<T> {
@@ -25,7 +25,10 @@ export function isMockDataGeneratorFaktum(
   return (faktum as MockDataGeneratorFaktum).faktum !== undefined;
 }
 export function isGeneratorFaktum(faktum: IFaktum): faktum is IGeneratorFaktum {
-  return (faktum as IGeneratorFaktum).faktum !== null;
+  return (
+    (faktum as IGeneratorFaktum).faktum !== null &&
+    (faktum as IGeneratorFaktum).faktum !== undefined
+  );
 }
 
 export function isPeriodAnswer(value: AnswerValue): value is AnswerPeriod {
