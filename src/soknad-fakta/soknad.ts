@@ -16,44 +16,44 @@ import {
 } from "../types/faktum.types";
 import { utdanning } from "./utdanning";
 
-export interface BlueprintDataSeksjon {
+export interface BlueprintSeksjon {
   id: string;
-  faktum: MockDataFaktum[];
+  faktum: BlueprintFaktum[];
 }
 
-export type MockDataFaktum =
-  | MockDataBaseFaktum
-  | MockDataGeneratorFaktum
-  | MockDataValgFaktum
-  | MockDataLandFaktum;
+export type BlueprintFaktum =
+  | BlueprintBaseFaktum
+  | BlueprintGeneratorFaktum
+  | BlueprintValgFaktum
+  | BlueprintLandFaktum;
 
-export interface MockDataBaseFaktum {
+export interface BlueprintBaseFaktum {
   id: string;
   type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType | LandFaktumType;
 }
 
-export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
+export interface BlueprintGeneratorFaktum extends BlueprintBaseFaktum {
   type: GeneratorFaktumType;
-  faktum: MockDataFaktum[];
+  faktum: BlueprintFaktum[];
 }
 
-export interface MockDataValgFaktum extends MockDataBaseFaktum {
+export interface BlueprintValgFaktum extends BlueprintBaseFaktum {
   type: ValgFaktumType;
-  subFaktum?: MockDataSubFaktum[];
-  answerOptions: MockDataAnswerOption[];
+  subFaktum?: BlueprintSubFaktum[];
+  answerOptions: BlueprintAnswerOption[];
 }
 
-export interface MockDataLandFaktum extends MockDataBaseFaktum {
+export interface BlueprintLandFaktum extends BlueprintBaseFaktum {
   type: LandFaktumType;
-  subFaktum?: MockDataSubFaktum[];
+  subFaktum?: BlueprintSubFaktum[];
   countryGroups: BlueprintCountryGroup[];
 }
 
-export type MockDataSubFaktum = MockDataFaktum & {
+export type BlueprintSubFaktum = BlueprintFaktum & {
   requiredAnswerIds: string[];
 };
 
-export interface MockDataAnswerOption {
+export interface BlueprintAnswerOption {
   id: string;
 }
 
@@ -62,7 +62,7 @@ export interface BlueprintCountryGroup {
   countries: string[];
 }
 
-export const blueprintDataSeksjoner: BlueprintDataSeksjon[] = [
+export const blueprintDataSeksjoner: BlueprintSeksjon[] = [
   koronaFortsattRett,
   reellArbeidssoker,
   arbeidsforhold,

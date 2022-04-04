@@ -1,14 +1,14 @@
 import { SubFaktum } from "./utils";
 import {
-  MockDataFaktum,
-  MockDataGeneratorFaktum,
-  MockDataValgFaktum,
+  BlueprintFaktum,
+  BlueprintGeneratorFaktum,
+  BlueprintValgFaktum,
 } from "../soknad-fakta/soknad";
 import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
 import { IFaktum, IGeneratorFaktum, IValgFaktum } from "../types/faktum.types";
 
-export function isMockDataValgFaktum(faktum: MockDataFaktum): faktum is MockDataValgFaktum {
-  return (faktum as MockDataValgFaktum).answerOptions !== undefined;
+export function isBlueprintValgFaktum(faktum: BlueprintFaktum): faktum is BlueprintValgFaktum {
+  return (faktum as BlueprintValgFaktum).answerOptions !== undefined;
 }
 
 export function isValgFaktum(faktum: IFaktum): faktum is IValgFaktum {
@@ -19,10 +19,10 @@ export function isSubFaktum<T>(faktum: T): faktum is SubFaktum<T> {
   return (faktum as SubFaktum<T>).requiredAnswerIds !== undefined;
 }
 
-export function isMockDataGeneratorFaktum(
-  faktum: MockDataFaktum
-): faktum is MockDataGeneratorFaktum {
-  return (faktum as MockDataGeneratorFaktum).faktum !== undefined;
+export function isBlueprintGeneratorFaktum(
+  faktum: BlueprintFaktum
+): faktum is BlueprintGeneratorFaktum {
+  return (faktum as BlueprintGeneratorFaktum).faktum !== undefined;
 }
 export function isGeneratorFaktum(faktum: IFaktum): faktum is IGeneratorFaktum {
   return (

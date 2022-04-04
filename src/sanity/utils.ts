@@ -8,16 +8,16 @@ import {
   SanityValgFaktum,
 } from "./types";
 import {
-  MockDataAnswerOption,
-  MockDataBaseFaktum,
-  MockDataGeneratorFaktum,
-  BlueprintDataSeksjon,
-  MockDataValgFaktum,
+  BlueprintAnswerOption,
+  BlueprintBaseFaktum,
+  BlueprintGeneratorFaktum,
+  BlueprintSeksjon,
+  BlueprintValgFaktum,
 } from "../soknad-fakta/soknad";
 import { isSubFaktum } from "./type-guards";
 
 export function createSanityAnswerFromApiAnswerOption(
-  answer: MockDataAnswerOption
+  answer: BlueprintAnswerOption
 ): SanityAnswerOption {
   return {
     _id: answer.id,
@@ -27,7 +27,7 @@ export function createSanityAnswerFromApiAnswerOption(
 }
 
 export function createSanityGeneratorFromApiFaktum(
-  faktum: MockDataGeneratorFaktum | SubFaktum<MockDataGeneratorFaktum>
+  faktum: BlueprintGeneratorFaktum | SubFaktum<BlueprintGeneratorFaktum>
 ): SanityGeneratorFaktum {
   return {
     _id: faktum.id,
@@ -46,7 +46,7 @@ export type SubFaktum<T> = T & {
 };
 
 export function createSanityValgFaktumFromApiFaktum(
-  faktum: MockDataValgFaktum | SubFaktum<MockDataValgFaktum>
+  faktum: BlueprintValgFaktum | SubFaktum<BlueprintValgFaktum>
 ): SanityValgFaktum {
   return {
     _id: faktum.id,
@@ -62,7 +62,7 @@ export function createSanityValgFaktumFromApiFaktum(
 }
 
 export function createSanityBaseFaktumFromApiFaktum(
-  faktum: MockDataBaseFaktum | SubFaktum<MockDataBaseFaktum>
+  faktum: BlueprintBaseFaktum | SubFaktum<BlueprintBaseFaktum>
 ): SanityBaseFaktum {
   return <SanityBaseFaktum>{
     _id: faktum.id,
@@ -75,7 +75,7 @@ export function createSanityBaseFaktumFromApiFaktum(
   };
 }
 
-export function createSanitySeksjonFromApiSeksjon(seksjon: BlueprintDataSeksjon): SanitySeksjon {
+export function createSanitySeksjonFromApiSeksjon(seksjon: BlueprintSeksjon): SanitySeksjon {
   return {
     _id: seksjon.id,
     _type: "seksjon",

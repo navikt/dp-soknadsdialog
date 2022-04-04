@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import {
-  MockDataFaktum,
-  MockDataGeneratorFaktum,
-  BlueprintDataSeksjon,
-  MockDataValgFaktum,
+  BlueprintFaktum,
+  BlueprintGeneratorFaktum,
+  BlueprintSeksjon,
+  BlueprintValgFaktum,
   blueprintDataSeksjoner,
 } from "../../../soknad-fakta/soknad";
 import {
@@ -15,11 +15,11 @@ import {
   SubFaktum,
 } from "../../../sanity/utils";
 import { SanityBaseDocument } from "../../../sanity/types";
-import { isMockDataGeneratorFaktum, isMockDataValgFaktum } from "../../../sanity/type-guards";
+import { isBlueprintGeneratorFaktum, isBlueprintValgFaktum } from "../../../sanity/type-guards";
 import { sanityClient } from "../../../../sanity-client";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
-  const quizSeksjoner: BlueprintDataSeksjon[] = blueprintDataSeksjoner;
+  const quizSeksjoner: BlueprintSeksjon[] = blueprintDataSeksjoner;
 
   let documents: SanityBaseDocument[] = [];
   const seksjoner = quizSeksjoner.map((apiSection) => {
@@ -48,7 +48,7 @@ const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 function createValgFaktum(
-  faktum: MockDataValgFaktum | SubFaktum<MockDataValgFaktum>
+  faktum: BlueprintValgFaktum | SubFaktum<BlueprintValgFaktum>
 ): SanityBaseDocument[] {
   let documents: SanityBaseDocument[] = [];
   documents = [...documents, ...faktum.answerOptions.map(createSanityAnswerFromApiAnswerOption)];
@@ -61,7 +61,7 @@ function createValgFaktum(
   return documents;
 }
 
-function createGeneratorFaktum(faktum: MockDataGeneratorFaktum): SanityBaseDocument[] {
+function createGeneratorFaktum(faktum: BlueprintGeneratorFaktum): SanityBaseDocument[] {
   let documents: SanityBaseDocument[] = [];
 
   documents = [...documents, ...faktum.faktum.flatMap(createSanityFaktum)];
@@ -70,11 +70,11 @@ function createGeneratorFaktum(faktum: MockDataGeneratorFaktum): SanityBaseDocum
   return documents;
 }
 
-function createSanityFaktum(faktum: MockDataFaktum): SanityBaseDocument[] {
+function createSanityFaktum(faktum: BlueprintFaktum): SanityBaseDocument[] {
   let documents: SanityBaseDocument[] = [];
-  if (isMockDataValgFaktum(faktum)) {
+  if (isBlueprintValgFaktum(faktum)) {
     documents = [...documents, ...createValgFaktum(faktum)];
-  } else if (isMockDataGeneratorFaktum(faktum)) {
+  } else if (isBlueprintGeneratorFaktum(faktum)) {
     documents = [...documents, ...createGeneratorFaktum(faktum)];
   } else {
     documents = [...documents, createSanityBaseFaktumFromApiFaktum(faktum)];

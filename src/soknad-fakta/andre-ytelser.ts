@@ -1,6 +1,6 @@
-import { BlueprintDataSeksjon } from "./soknad";
+import { BlueprintSeksjon } from "./soknad";
 
-export const andreYtelser: BlueprintDataSeksjon = {
+export const andreYtelser: BlueprintSeksjon = {
   id: "andre-ytelser",
   faktum: [
     {
