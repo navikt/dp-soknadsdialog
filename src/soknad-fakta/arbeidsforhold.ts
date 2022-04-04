@@ -8,13 +8,13 @@ export const arbeidsforhold: BlueprintSeksjon = {
       type: "localdate",
     },
     {
-      id: "faktum.fast-arbeidstid",
+      id: "faktum.type-arbeidstid",
       type: "envalg",
       answerOptions: [
-        { id: "faktum.fast-arbeidstid.svar.ja-fast" },
-        { id: "faktum.fast-arbeidstid.svar.nei-varierende" },
-        { id: "faktum.fast-arbeidstid.svar.kombinasjon" },
-        { id: "faktum.fast-arbeidstid.svar.ingen-passer" },
+        { id: "faktum.type-arbeidstid.svar.fast" },
+        { id: "faktum.type-arbeidstid.svar.varierende" },
+        { id: "faktum.type-arbeidstid.svar.kombinasjon" },
+        { id: "faktum.type-arbeidstid.svar.ingen-passer" },
       ],
       subFaktum: [],
     },
@@ -23,52 +23,52 @@ export const arbeidsforhold: BlueprintSeksjon = {
       type: "generator",
       faktum: [
         {
-          id: "faktum.navn-bedrift",
+          id: "faktum.arbeidsforhold.navn-bedrift",
           type: "tekst",
         },
         {
-          id: "faktum.arbeidsforhold-land",
+          id: "faktum.arbeidsforhold.land",
           type: "land",
-          answerOptions: [], // liste over alle land? generere maskinelt? quiz?
-          subFaktum: [], // her bør vi få inn subfaktum om PIN i det lander, hvis dropdown svaret inneholder et eos-land, logikk?
+          answerOptions: [],
+          subFaktum: [],
         },
         {
-          id: "faktum.arbeidsforhold-aarsak",
+          id: "faktum.arbeidsforhold.aarsak",
           type: "envalg",
           answerOptions: [
-            { id: "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.permittert" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.avskjediget" },
-            { id: "faktum.arbeidsforhold-aarsak.svar.ikke-endret" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.ikke-endret" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.avskjediget" },
+            { id: "faktum.arbeidsforhold.aarsak.svar.permittert" },
           ],
           subFaktum: [
             {
-              id: "faktum.arbeidsforhold-varighet",
+              id: "faktum.arbeidsforhold.varighet",
               type: "periode",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.avskjediget",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
               ],
-            }, // obs, beskrivelse på dette faktumet må passe samtlige arbeidsforhold-årsaker. trenger derfor gode hjelpetekster under svar på arbeidsforhold-aarsak
+            }, // obs, beskrivelse på dette faktumet må passe samtlige arbeidsforhold-årsaker. trenger derfor gode hjelpetekster under svar på arbeidsforhold.aarsak
             {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-laerlig",
               type: "flervalg",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.permittert",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.avskjediget",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.permittert",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
               ],
               answerOptions: [{ id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" }],
               subFaktum: [],
@@ -76,7 +76,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-fiskeindustri",
               type: "flervalg",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
               answerOptions: [
                 { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.fiskeindustri" },
               ],
@@ -86,13 +86,13 @@ export const arbeidsforhold: BlueprintSeksjon = {
               id: "faktum.arbeidsforhold-ekstra-opplysninger-flere-arbeidsforhold",
               type: "flervalg",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.permittert",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.avskjediget",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.permittert",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
               ],
               answerOptions: [
                 { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
@@ -111,32 +111,32 @@ export const arbeidsforhold: BlueprintSeksjon = {
               id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken",
               type: "double",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.permittert",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.avskjediget",
-                "faktum.arbeidsforhold-aarsak.svar.ikke-endret",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.permittert",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
+                "faktum.arbeidsforhold.aarsak.svar.ikke-endret",
               ],
             }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet ++ situasjonen ikke-endret bør ikke trigge spørsmål om arbeidstid
             {
-              id: "faktum.arbeidsforhold-aarsak-til-oppsigelse-fra-arbeidsgiver",
+              id: "faktum.arbeidsforhold.aarsak-til-oppsigelse-fra-arbeidsgiver",
               type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver"],
             },
             {
-              id: "faktum.arbeidsforhold-aarsak-til-avskjedigelse-fra-arbeidsgiver",
+              id: "faktum.arbeidsforhold.aarsak-til-avskjedigelse-fra-arbeidsgiver",
               type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.avskjediget"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.avskjediget"],
             }, // Duplikat spørsmål som over? Bør det være et generisk spørsmål? Er det to forskjellige fakta/spørsmål? Årsak endring i arbeidsforhold? for navsk?
             {
               id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver",
               type: "boolean",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
               ],
               answerOptions: [
                 { id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver.svar.ja" },
@@ -147,7 +147,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.tilbud-forsette-samme-arbeidsgiver",
               type: "boolean",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid"],
               answerOptions: [
                 { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.ja" },
                 { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.nei" },
@@ -158,11 +158,11 @@ export const arbeidsforhold: BlueprintSeksjon = {
               id: "faktum.arbeids-skift-turnus-rotasjon",
               type: "envalg",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold-aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold-aarsak.svar.permittert",
-                "faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold-aarsak.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.aarsak.svar.permittert",
+                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
               ],
               answerOptions: [
                 { id: "faktum.arbeids-skift-turnus-rotasjon.svar.nei" },
@@ -188,8 +188,8 @@ export const arbeidsforhold: BlueprintSeksjon = {
               id: "faktum.midlertidig-arbeidsforhold-med-sluttdato",
               type: "envalg",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold-aarsak.svar.permittert",
-                "faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver",
+                "faktum.arbeidsforhold.aarsak.svar.permittert",
+                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
               ],
               answerOptions: [
                 { id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.nei-fast-arbeid" },
@@ -209,32 +209,32 @@ export const arbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.arbeidsforhold-permitteringsperiode",
               type: "periode",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
             },
             {
               id: "faktum.arbeidsforhold-permitteringgrad",
               type: "int",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
             },
             {
               id: "faktum.arbeidsforhold-lonnsplinkt-arbeidsgiver",
               type: "periode",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
             }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet
             {
               id: "faktum.aarsak-til-sagt-opp-selv",
               type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.sagt-opp-selv"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv"],
             },
             {
               id: "faktum.arbeidsforhold-arbeidsgiver-konkurs-navn-bostyrer",
               type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
             },
             {
               id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler",
               type: "envalg",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
               answerOptions: [
                 {
                   id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
@@ -325,7 +325,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs",
               type: "boolean",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.konkurs-arbeidsgiver"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
               answerOptions: [
                 {
                   id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja",
@@ -345,7 +345,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.arbeidsforhold-tillegsinformasjon",
               type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold-aarsak.svar.ikke-endret"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.ikke-endret"],
             },
           ],
         },
