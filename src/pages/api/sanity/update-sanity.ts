@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from "next";
 import {
   MockDataFaktum,
   MockDataGeneratorFaktum,
-  MockDataSeksjon,
+  BlueprintDataSeksjon,
   MockDataValgFaktum,
-  mockSeksjoner,
+  blueprintDataSeksjoner,
 } from "../../../soknad-fakta/soknad";
 import {
   createSanityAnswerFromApiAnswerOption,
@@ -19,7 +19,7 @@ import { isMockDataGeneratorFaktum, isMockDataValgFaktum } from "../../../sanity
 import { sanityClient } from "../../../../sanity-client";
 
 const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
-  const quizSeksjoner: MockDataSeksjon[] = mockSeksjoner;
+  const quizSeksjoner: BlueprintDataSeksjon[] = blueprintDataSeksjoner;
 
   let documents: SanityBaseDocument[] = [];
   const seksjoner = quizSeksjoner.map((apiSection) => {

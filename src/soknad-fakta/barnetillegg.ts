@@ -1,6 +1,6 @@
-import { MockDataSeksjon } from "./soknad";
+import { BlueprintDataSeksjon } from "./soknad";
 
-export const barnetillegg: MockDataSeksjon = {
+export const barnetillegg: BlueprintDataSeksjon = {
   id: "barnetillegg", //todo: hvordan takler vi logikk rundt allerede genererte barn og oppfølgingspørsmålene der
   faktum: [
     {

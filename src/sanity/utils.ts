@@ -11,7 +11,7 @@ import {
   MockDataAnswerOption,
   MockDataBaseFaktum,
   MockDataGeneratorFaktum,
-  MockDataSeksjon,
+  BlueprintDataSeksjon,
   MockDataValgFaktum,
 } from "../soknad-fakta/soknad";
 import { isSubFaktum } from "./type-guards";
@@ -75,7 +75,7 @@ export function createSanityBaseFaktumFromApiFaktum(
   };
 }
 
-export function createSanitySeksjonFromApiSeksjon(seksjon: MockDataSeksjon): SanitySeksjon {
+export function createSanitySeksjonFromApiSeksjon(seksjon: BlueprintDataSeksjon): SanitySeksjon {
   return {
     _id: seksjon.id,
     _type: "seksjon",

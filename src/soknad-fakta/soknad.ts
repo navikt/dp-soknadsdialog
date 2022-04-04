@@ -16,7 +16,7 @@ import {
 } from "../types/faktum.types";
 import { utdanning } from "./utdanning";
 
-export interface MockDataSeksjon {
+export interface BlueprintDataSeksjon {
   id: string;
   faktum: MockDataFaktum[];
 }
@@ -62,7 +62,7 @@ export interface BlueprintCountryGroup {
   countries: string[];
 }
 
-export const mockSeksjoner: MockDataSeksjon[] = [
+export const blueprintDataSeksjoner: BlueprintDataSeksjon[] = [
   koronaFortsattRett,
   reellArbeidssoker,
   arbeidsforhold,

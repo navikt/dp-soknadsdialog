@@ -1,5 +1,5 @@
-import { MockDataSeksjon } from "./soknad";
-export const bostedsland: MockDataSeksjon = {
+import { BlueprintDataSeksjon } from "./soknad";
+export const bostedsland: BlueprintDataSeksjon = {
   id: "bostedsland",
   faktum: [
     {

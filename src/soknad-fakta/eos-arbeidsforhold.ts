@@ -1,6 +1,6 @@
-import { MockDataSeksjon } from "./soknad";
+import { BlueprintDataSeksjon } from "./soknad";
 // kan denne egentlig bakes inn i arbeidsforhold?
-export const eosArbeidsforhold: MockDataSeksjon = {
+export const eosArbeidsforhold: BlueprintDataSeksjon = {
   id: "eos-arbeidsforhold",
   faktum: [
     {
