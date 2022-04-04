@@ -29,6 +29,7 @@ export type MockDataFaktum =
 
 export interface MockDataBaseFaktum {
   id: string;
+  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType | LandFaktumType;
 }
 
 export interface MockDataGeneratorFaktum extends MockDataBaseFaktum {
@@ -49,7 +50,6 @@ export interface MockDataLandFaktum extends MockDataBaseFaktum {
 }
 
 export type MockDataSubFaktum = MockDataFaktum & {
-  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType | LandFaktumType;
   requiredAnswerIds: string[];
 };
 
