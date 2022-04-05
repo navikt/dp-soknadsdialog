@@ -47,12 +47,12 @@ export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promi
   })
     .then((response: Response) => {
       // eslint-disable-next-line no-console
-      console.error("NOT an error response: ", response);
+      console.error("NOT an error response: ", JSON.stringify(response));
       return response.json();
     })
     .catch((error) => {
       // eslint-disable-next-line no-console
-      console.error("An error response: ", error);
+      console.error("An error response: ", JSON.stringify(error));
       return Promise.reject(error);
     });
 }
