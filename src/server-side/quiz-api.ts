@@ -35,7 +35,7 @@ export function getFakta(soknadId: string, onBehalfOfToken: string): Promise<Qui
     });
 }
 
-export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promise<void> {
+export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/soknad/${soknadId}/ferdigstill`;
   return fetch(url, {
     method: "Put",
@@ -44,15 +44,5 @@ export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promi
       Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-  })
-    .then((response: Response) => {
-      // eslint-disable-next-line no-console
-      console.error("NOT an error response: ", JSON.stringify(response));
-      return response.json();
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error("An error response: ", JSON.stringify(error));
-      return Promise.reject(error);
-    });
+  });
 }
