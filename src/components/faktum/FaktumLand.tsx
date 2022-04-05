@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCountryDropdownOptionsForFaktum } from "../../country.utils";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { IValgFaktum } from "../../types/faktum.types";
+import { ILandFaktum } from "../../types/faktum.types";
 import { Dropdown } from "../input/dropdown/Dropdown";
 import { FaktumProps } from "./Faktum";
 
-export function FaktumLand(props: FaktumProps<IValgFaktum>) {
+export function FaktumLand(props: FaktumProps<ILandFaktum>) {
   const dispatch = useDispatch();
   const { faktum, onChange } = props;
   const answers = useSelector((state: RootState) => props.answers || state.answers);

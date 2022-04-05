@@ -1,4 +1,9 @@
-import { GeneratorFaktumType, PrimitivFaktumType, ValgFaktumType } from "./faktum.types";
+import {
+  GeneratorFaktumType,
+  LandFaktumType,
+  PrimitivFaktumType,
+  ValgFaktumType,
+} from "./faktum.types";
 
 export type QuizFaktumSvar = string | string[] | boolean | number;
 export type QuizFaktum = QuizPrimitiveFaktum | QuizGeneratorFaktum;
@@ -10,7 +15,7 @@ export interface QuizBaseFaktum {
 }
 
 export interface QuizPrimitiveFaktum extends QuizBaseFaktum {
-  type: PrimitivFaktumType | ValgFaktumType;
+  type: PrimitivFaktumType | ValgFaktumType | LandFaktumType;
   svar?: QuizFaktumSvar;
 }
 
@@ -22,7 +27,7 @@ export interface QuizGeneratorFaktum extends QuizBaseFaktum {
 
 interface QuizGeneratorTemplate {
   id: string;
-  type: PrimitivFaktumType | ValgFaktumType;
+  type: PrimitivFaktumType | ValgFaktumType | LandFaktumType;
   beskrivendeId: string;
 }
 

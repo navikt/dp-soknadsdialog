@@ -1,12 +1,6 @@
 import { mockFakta } from "../soknad-fakta/mock-fakta-response";
 import { QuizFaktum } from "../types/quiz.types";
 
-export interface QuizApi {
-  postSoknad: () => void;
-  getFakta: (soknadId: string) => void;
-  putFaktumSvar: (soknadId: string, beskrivendeId: string, faktumSvar: never) => void;
-}
-
 export function postSoknad(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
   return fetch(url, {
@@ -29,6 +23,22 @@ export function getFakta(soknadId: string, onBehalfOfToken: string): Promise<Qui
   const url = `${process.env.API_BASE_URL}/soknad/${soknadId}/fakta`;
   return fetch(url, {
     method: "Get",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  })
+    .then((response: Response) => response.json())
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}
+
+export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promise<void> {
+  const url = `${process.env.API_BASE_URL}/soknad/${soknadId}/ferdigstill`;
+  return fetch(url, {
+    method: "Put",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

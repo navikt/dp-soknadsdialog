@@ -3,9 +3,9 @@ export type ValgFaktumType = "boolean" | "envalg" | "flervalg";
 export type PrimitivFaktumType = "int" | "double" | "localdate" | "periode" | "tekst";
 export type GeneratorFaktumType = "generator";
 export type LandFaktumType = "land";
-export type FaktumType = PrimitivFaktumType | ValgFaktumType | GeneratorFaktumType;
+export type FaktumType = PrimitivFaktumType | ValgFaktumType | GeneratorFaktumType | LandFaktumType;
 
-export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum;
+export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum | ILandFaktum;
 
 export interface IBaseFaktum {
   id: string;
@@ -27,6 +27,11 @@ export interface IValgFaktum extends IBaseFaktum {
 export interface IGeneratorFaktum extends IBaseFaktum {
   type: GeneratorFaktumType;
   faktum: IFaktum[];
+}
+export interface ILandFaktum extends IBaseFaktum {
+  type: LandFaktumType;
+  subFaktum?: ISubFaktum[];
+  countryGroups: never[]; // Todo: Correct type
 }
 
 export type ISubFaktum = IFaktum & {
