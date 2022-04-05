@@ -45,8 +45,14 @@ export function completeSoknad(soknadId: string, onBehalfOfToken: string): Promi
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   })
-    .then((response: Response) => response.json())
+    .then((response: Response) => {
+      // eslint-disable-next-line no-console
+      console.error("NOT an error response: ", response);
+      return response.json();
+    })
     .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error("An error response: ", error);
       return Promise.reject(error);
     });
 }

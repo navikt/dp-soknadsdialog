@@ -15,9 +15,9 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
     const onBehalfOfToken = await apiToken(audience);
     try {
       await completeSoknad(uuid, onBehalfOfToken);
-      return res.status(201);
+      return res.status(201).end();
     } catch (error: unknown) {
-      return res.status(500);
+      return res.status(500).end();
     }
   }
 
