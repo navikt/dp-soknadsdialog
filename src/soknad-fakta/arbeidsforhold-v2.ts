@@ -67,11 +67,59 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.ikke-endret"],
             },
             {
+              id: "faktum.arbeidsforhold.startdato-arbeidsforhold",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato",
+              type: "envalg",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.ja" },
+                { id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.nei" },
+                {
+                  id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.vet-ikke",
+                },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.kontraktfestet-sluttdato",
+                  type: "localdate",
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.ja",
+                  ],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-oppstartsdato",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering.svar.ja" },
+                { id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering.svar.nei" },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+
+            {
               id: "faktum.arbeidsforhold.varighet",
               type: "periode",
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
               ],
             },
             {
@@ -105,12 +153,123 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
             },
             {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-selv"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
               id: "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold",
               type: "double",
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.ja",
                 "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.ja",
               ],
+            },
+            {
+              id: "faktum.arbeidsforhold.permittert-periode",
+              type: "periode",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.permittert-prosent",
+              type: "int",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            // Todo: Insert optional faktum - lønnsplikt-periode for arbeidsgiver
+
+            {
+              id: "faktum.arbeidsforhold.aarsak-til-du-sa-opp",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-selv"],
+            },
+            {
+              id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.ja" },
+                { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.nei" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling",
+                  type: "envalg",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ikke-svart",
+                    },
+                  ],
+                  subFaktum: [
+                    {
+                      id: "faktum.arbeidsforhold.aarsak-til-ikke-akseptert-tilbud",
+                      type: "tekst",
+                      requiredAnswerIds: [
+                        "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
+                      ],
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.ja",
+                  ],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt"],
             },
             {
               id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
@@ -216,6 +375,11 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
             },
             {
+              id: "faktum.arbeidsforhold.vet-du-aarsak-til-redusert-arbeidstid",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
               id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
               type: "envalg",
               answerOptions: [
@@ -228,13 +392,20 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
             },
             {
-              id: "faktum.arbeidsforhold.tilbud-om-annen-stilling",
+              id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge",
               type: "boolean",
               answerOptions: [
-                { id: "faktum.arbeidsforhold.tilbud-om-annen-stilling.svar.ja" },
-                { id: "faktum.arbeidsforhold.tilbud-om-annen-stilling.svar.nei" },
+                {
+                  id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge.svar.nei",
+                },
               ],
-              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+              ],
             },
             {
               id: "faktum.arbeidsforhold.skift-eller-turnus",
@@ -246,6 +417,10 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.endret.svar.permittert",
               ],
             },
             {
@@ -270,6 +445,10 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.endret.svar.permittert",
               ],
             },
           ],
