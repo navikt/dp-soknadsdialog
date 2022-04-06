@@ -85,19 +85,125 @@ export const arbeidsforhold: BlueprintSeksjon = {
                   id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.nei",
                 },
               ],
-              subFaktum: [
-                {
-                  id: "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold",
-                  type: "double",
-                  requiredAnswerIds: [
-                    "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.ja",
-                  ],
-                },
-              ],
+              subFaktum: [],
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold.endret.svar.avskjediget",
               ],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
+            },
+            {
+              id: "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold",
+              type: "double",
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.ja",
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja" },
+                { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.nei" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger",
+                  type: "boolean",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger.svar.nei",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler",
+                  type: "boolean",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler.svar.nei",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler",
+                  type: "envalg",
+                  answerOptions: [
+                    { id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.nei" },
+                    {
+                      id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.nei-men-skal",
+                    },
+                    { id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.ja" },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt",
+                  type: "envalg",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.nei",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.vet-ikke",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs",
+                  type: "boolean",
+                  answerOptions: [
+                    { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.ja" },
+                    { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.nei" },
+                  ],
+                  subFaktum: [
+                    {
+                      id: "faktum.arbeidsforhold.siste-dag-utbetalt-for-konkurs",
+                      type: "localdate",
+                      requiredAnswerIds: [
+                        "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.ja",
+                      ],
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
             },
             {
               id: "faktum.arbeidsforhold.hva-er-aarsak-til-avskjediget",
@@ -122,11 +228,6 @@ export const arbeidsforhold: BlueprintSeksjon = {
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
             },
             {
-              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
-              type: "boolean",
-              requiredAnswerIds: [],
-            },
-            {
               id: "faktum.arbeidsforhold.tilbud-om-annen-stilling",
               type: "boolean",
               answerOptions: [
@@ -142,7 +243,10 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.skift-eller-turnus.svar.ja" },
                 { id: "faktum.arbeidsforhold.skift-eller-turnus.svar.nei" },
               ],
-              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+              ],
             },
             {
               id: "faktum.arbeidsforhold.rotasjon",
@@ -163,7 +267,10 @@ export const arbeidsforhold: BlueprintSeksjon = {
                   requiredAnswerIds: ["faktum.arbeidsforhold.rotasjon.svar.ja"],
                 },
               ],
-              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+              ],
             },
           ],
         },
