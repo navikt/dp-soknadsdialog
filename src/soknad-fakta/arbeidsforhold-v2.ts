@@ -226,8 +226,22 @@ export const arbeidsforhold: BlueprintSeksjon = {
               type: "int",
               requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
             },
-            // Todo: Insert optional faktum - lønnsplikt-periode for arbeidsgiver
-
+            {
+              id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.ja" },
+                { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.nei" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.naar-var-lonnsplikt-periode",
+                  type: "periode",
+                  requiredAnswerIds: ["faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.ja"],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
             {
               id: "faktum.arbeidsforhold.aarsak-til-du-sa-opp",
               type: "tekst",
