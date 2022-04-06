@@ -16,7 +16,6 @@ export const arbeidsforhold: BlueprintSeksjon = {
         { id: "faktum.type-arbeidstid.svar.kombinasjon" },
         { id: "faktum.type-arbeidstid.svar.ingen-passer" },
       ],
-      subFaktum: [],
     },
     {
       id: "faktum.arbeidsforhold",
@@ -33,319 +32,438 @@ export const arbeidsforhold: BlueprintSeksjon = {
           subFaktum: [],
         },
         {
-          id: "faktum.arbeidsforhold.aarsak",
+          id: "faktum.arbeidsforhold.endret",
           type: "envalg",
           answerOptions: [
-            { id: "faktum.arbeidsforhold.aarsak.svar.ikke-endret" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.avskjediget" },
-            { id: "faktum.arbeidsforhold.aarsak.svar.permittert" },
+            { id: "faktum.arbeidsforhold.endret.svar.ikke-endret" },
+            { id: "faktum.arbeidsforhold.endret.svar.avskjediget" },
+            { id: "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver" },
+            { id: "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs" },
+            { id: "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt" },
+            { id: "faktum.arbeidsforhold.endret.svar.sagt-opp-selv" },
+            { id: "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid" },
+            { id: "faktum.arbeidsforhold.endret.svar.permittert" },
           ],
           subFaktum: [
+            {
+              id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja" },
+                { id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.antall-timer-jobbet",
+                  type: "double",
+                  requiredAnswerIds: ["faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja"],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.ikke-endret"],
+            },
+            {
+              id: "faktum.arbeidsforhold.tilleggsopplysninger",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.ikke-endret"],
+            },
+            {
+              id: "faktum.arbeidsforhold.startdato-arbeidsforhold",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato",
+              type: "envalg",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.ja" },
+                { id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.nei" },
+                {
+                  id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.vet-ikke",
+                },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.kontraktfestet-sluttdato",
+                  type: "localdate",
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.ja",
+                  ],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-oppstartsdato",
+              type: "localdate",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering.svar.ja" },
+                { id: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering.svar.nei" },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+
             {
               id: "faktum.arbeidsforhold.varighet",
               type: "periode",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
-                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
               ],
-            }, // obs, beskrivelse på dette faktumet må passe samtlige arbeidsforhold-årsaker. trenger derfor gode hjelpetekster under svar på arbeidsforhold.aarsak
-            {
-              id: "faktum.arbeidsforhold-ekstra-opplysninger-laerlig",
-              type: "flervalg",
-              requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.permittert",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
-                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
-              ],
-              answerOptions: [{ id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.laerling" }],
-              subFaktum: [],
             },
             {
-              id: "faktum.arbeidsforhold-ekstra-opplysninger-fiskeindustri",
-              type: "flervalg",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb",
+              type: "boolean",
               answerOptions: [
-                { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.fiskeindustri" },
-              ],
-              subFaktum: [],
-            },
-            {
-              id: "faktum.arbeidsforhold-ekstra-opplysninger-flere-arbeidsforhold",
-              type: "flervalg",
-              requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.permittert",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
-                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
-              ],
-              answerOptions: [
-                { id: "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold" },
-              ],
-              subFaktum: [
                 {
-                  id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken-alle-forhold",
-                  type: "double",
-                  requiredAnswerIds: [
-                    "faktum.arbeidsforhold-ekstra-opplysninger.svar.flere-arbeidsforhold",
-                  ],
-                }, // denne perioden trenger et vetikke faktum, som disabler spørsmålet
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.nei",
+                },
+              ],
+              subFaktum: [],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.avskjediget",
               ],
             },
             {
-              id: "faktum.arbeidsforhold-arbeidstid-timer-i-uken",
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-selv"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.nei",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold",
               type: "double",
               requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.permittert",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
-                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
-                "faktum.arbeidsforhold.aarsak.svar.avskjediget",
-                "faktum.arbeidsforhold.aarsak.svar.ikke-endret",
-              ],
-            }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet ++ situasjonen ikke-endret bør ikke trigge spørsmål om arbeidstid
-            {
-              id: "faktum.arbeidsforhold.aarsak-til-oppsigelse-fra-arbeidsgiver",
-              type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver"],
-            },
-            {
-              id: "faktum.arbeidsforhold.aarsak-til-avskjedigelse-fra-arbeidsgiver",
-              type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.avskjediget"],
-            }, // Duplikat spørsmål som over? Bør det være et generisk spørsmål? Er det to forskjellige fakta/spørsmål? Årsak endring i arbeidsforhold? for navsk?
-            {
-              id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver",
-              type: "boolean",
-              requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-              ],
-              answerOptions: [
-                { id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver.svar.ja" },
-                { id: "faktum.tilbud-annen-stilling-annet-sted-samme-arbeidsgiver.svar.nei" },
-              ],
-              subFaktum: [],
-            },
-            {
-              id: "faktum.tilbud-forsette-samme-arbeidsgiver",
-              type: "boolean",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid"],
-              answerOptions: [
-                { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.ja" },
-                { id: "faktum.tilbud-forsette-samme-arbeidsgiver.svar.nei" },
-              ],
-              subFaktum: [],
-            }, // Tenger vi denne? Spørsmål stilt i #dagpenger-soknad kanelen. Nesten identisk spørsmål over
-            {
-              id: "faktum.arbeids-skift-turnus-rotasjon",
-              type: "envalg",
-              requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-av-arbeidsgiver",
-                "faktum.arbeidsforhold.aarsak.svar.kontrakt-utgaatt",
-                "faktum.arbeidsforhold.aarsak.svar.permittert",
-                "faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv",
-                "faktum.arbeidsforhold.aarsak.svar.redusert-arbeidstid",
-              ],
-              answerOptions: [
-                { id: "faktum.arbeids-skift-turnus-rotasjon.svar.nei" },
-                { id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-skift-turnus" },
-                {
-                  id: "faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon",
-                },
-              ],
-              subFaktum: [
-                {
-                  id: "faktum.arbeidsforhold-rotasjon-antall-arbeidsdager",
-                  type: "int",
-                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
-                },
-                {
-                  id: "faktum.arbeidsforhold-rotasjon-antall-fridager",
-                  type: "int",
-                  requiredAnswerIds: ["faktum.arbeids-skift-turnus-rotasjon.svar.ja-rotasjon"],
-                },
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-kontrakt-utgikk.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-du-sa-opp.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-redusert-arbeidstid.svar.ja",
+                "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.ja",
               ],
             },
             {
-              id: "faktum.midlertidig-arbeidsforhold-med-sluttdato",
-              type: "envalg",
-              requiredAnswerIds: [
-                "faktum.arbeidsforhold.aarsak.svar.permittert",
-                "faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs",
-              ],
-              answerOptions: [
-                { id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.nei-fast-arbeid" },
-                { id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja" },
-                {
-                  id: "faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.vet-ikke",
-                },
-              ],
-              subFaktum: [
-                {
-                  id: "faktum.midlertidig-arbeidsforhold-sluttdato",
-                  type: "localdate",
-                  requiredAnswerIds: ["faktum.midlertidig-arbeidsforhold-med-sluttdato.svar.ja"],
-                },
-              ],
-            },
-            {
-              id: "faktum.arbeidsforhold-permitteringsperiode",
+              id: "faktum.arbeidsforhold.permittert-periode",
               type: "periode",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
             },
             {
-              id: "faktum.arbeidsforhold-permitteringgrad",
+              id: "faktum.arbeidsforhold.permittert-prosent",
               type: "int",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
             },
             {
-              id: "faktum.arbeidsforhold-lonnsplinkt-arbeidsgiver",
-              type: "periode",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.permittert"],
-            }, // Denne perioden trenger et vetikke faktum, som disabler spørsmålet
-            {
-              id: "faktum.aarsak-til-sagt-opp-selv",
-              type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.sagt-opp-selv"],
-            },
-            {
-              id: "faktum.arbeidsforhold-arbeidsgiver-konkurs-navn-bostyrer",
-              type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
-            },
-            {
-              id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler",
-              type: "envalg",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
+              id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode",
+              type: "boolean",
               answerOptions: [
-                {
-                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
-                },
-                {
-                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
-                },
-                {
-                  id: "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
-                },
+                { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.ja" },
+                { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.nei" },
               ],
               subFaktum: [
                 {
-                  id: "faktum.arbeidsforhold-godta-nav-trekk-direkte-lonnsgaranti",
-                  type: "boolean",
-                  requiredAnswerIds: [
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
-                  ],
-                  answerOptions: [
-                    {
-                      id: "faktum.arbeidsforhold-godta-nav-trekk-direkte-lonnsgaranti.svar.ja",
-                    },
-                    {
-                      id: "faktum.arbeidsforhold-godta-nav-trekk-direkte-lonnsgaranti.svar.nei",
-                    },
-                  ],
+                  id: "faktum.arbeidsforhold.naar-var-lonnsplikt-periode",
+                  type: "periode",
+                  requiredAnswerIds: ["faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.ja"],
                 },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.permittert"],
+            },
+            {
+              id: "faktum.arbeidsforhold.aarsak-til-du-sa-opp",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-selv"],
+            },
+            {
+              id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.ja" },
+                { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.nei" },
+              ],
+              subFaktum: [
                 {
-                  id: "faktum.arbeidsforhold-sok-lonnsgarantimidler",
+                  id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling",
                   type: "envalg",
-                  requiredAnswerIds: [
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-forskudd-lonnsgarantimidler",
-                  ],
                   answerOptions: [
                     {
-                      id: "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.ja-allerede-sendt",
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ja",
                     },
                     {
-                      id: "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.ja-skal-sende",
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
                     },
                     {
-                      id: "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.nei",
+                      id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ikke-svart",
                     },
                   ],
                   subFaktum: [
                     {
-                      id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav",
-                      type: "envalg",
+                      id: "faktum.arbeidsforhold.aarsak-til-ikke-akseptert-tilbud",
+                      type: "tekst",
                       requiredAnswerIds: [
-                        "faktum.arbeidsforhold-sok-lonnsgarantimidler.svar.ja-allerede-sendt",
+                        "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
                       ],
-                      answerOptions: [
-                        {
-                          id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav.svar.nei",
-                        },
-                        {
-                          id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav.svar.ja",
-                        },
-                        {
-                          id: "faktum.arbeidsforhold-lonnsgaranti-dekker-krav.svar.vet-ikke",
-                        },
-                      ],
-                      subFaktum: [],
                     },
                   ],
-                },
-                {
-                  id: "faktum.arbeidsforhold-godta-trekk-direkte-konkursbo",
-                  type: "boolean",
                   requiredAnswerIds: [
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.ja-begge",
-                    "faktum.arbeidsforhold-dagpenger-og-forskudd-lonnsgarantimidler.svar.nei-kun-dagpenger",
+                    "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.ja",
                   ],
-                  answerOptions: [
-                    {
-                      id: "faktum.arbeidsforhold-godta-trekk-direkte-konkursbo.svar.ja",
-                    },
-                    {
-                      id: "faktum.arbeidsforhold-godta-trekk-direkte-konkursbo.svar.nei",
-                    },
-                  ],
-                  subFaktum: [],
                 },
               ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt"],
             },
             {
-              id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs",
+              id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
               type: "boolean",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.arbeidsgiver-konkurs"],
               answerOptions: [
-                {
-                  id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja",
-                },
-                {
-                  id: "faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.nei",
-                },
+                { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja" },
+                { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.nei" },
               ],
               subFaktum: [
                 {
-                  id: "faktum.arbeidsforhold-konkurs-siste-dag-lonn",
-                  type: "localdate",
-                  requiredAnswerIds: ["faktum.arbeidsforhold-utbetalt-lonn-etter-konkurs.svar.ja"],
+                  id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger",
+                  type: "boolean",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger.svar.nei",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
                 },
+                {
+                  id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler",
+                  type: "boolean",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.godta-trekk-fra-nav-av-forskudd-fra-lonnsgarantimidler.svar.nei",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler",
+                  type: "envalg",
+                  answerOptions: [
+                    { id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.nei" },
+                    {
+                      id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.nei-men-skal",
+                    },
+                    { id: "faktum.arbeidsforhold.har-sokt-om-lonnsgarantimidler.svar.ja" },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt",
+                  type: "envalg",
+                  answerOptions: [
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.ja",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.nei",
+                    },
+                    {
+                      id: "faktum.arbeidsforhold.dekker-lonnsgarantiordningen-lonnskravet-ditt.svar.vet-ikke",
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+                {
+                  id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs",
+                  type: "boolean",
+                  answerOptions: [
+                    { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.ja" },
+                    { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.nei" },
+                  ],
+                  subFaktum: [
+                    {
+                      id: "faktum.arbeidsforhold.siste-dag-utbetalt-for-konkurs",
+                      type: "localdate",
+                      requiredAnswerIds: [
+                        "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.ja",
+                      ],
+                    },
+                  ],
+                  requiredAnswerIds: [
+                    "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja",
+                  ],
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
+            },
+            {
+              id: "faktum.arbeidsforhold.hva-er-aarsak-til-avskjediget",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.avskjediget"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-aarsak-til-sagt-opp-av-arbeidsgiver",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
+            },
+            {
+              id: "faktum.arbeidsforhold.vet-du-aarsak-til-redusert-arbeidstid",
+              type: "tekst",
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.redusert-arbeidstid"],
+            },
+            {
+              id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
+              type: "envalg",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato.svar.ja" },
+                { id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato.svar.nei" },
+                {
+                  id: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato.svar.vet-ikke",
+                },
+              ],
+              requiredAnswerIds: ["faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs"],
+            },
+            {
+              id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge",
+              type: "boolean",
+              answerOptions: [
+                {
+                  id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge.svar.ja",
+                },
+                {
+                  id: "faktum.arbeidsforhold.tilbud-om-annen-stilling-eller-annet-sted-i-norge.svar.nei",
+                },
+              ],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
               ],
             },
             {
-              id: "faktum.arbeidsforhold-tillegsinformasjon",
-              type: "tekst",
-              requiredAnswerIds: ["faktum.arbeidsforhold.aarsak.svar.ikke-endret"],
+              id: "faktum.arbeidsforhold.skift-eller-turnus",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.skift-eller-turnus.svar.ja" },
+                { id: "faktum.arbeidsforhold.skift-eller-turnus.svar.nei" },
+              ],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.endret.svar.permittert",
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.rotasjon",
+              type: "boolean",
+              answerOptions: [
+                { id: "faktum.arbeidsforhold.rotasjon.svar.ja" },
+                { id: "faktum.arbeidsforhold.rotasjon.svar.nei" },
+              ],
+              subFaktum: [
+                {
+                  id: "faktum.arbeidsforhold.arbeidsdager-siste-rotasjon",
+                  type: "int",
+                  requiredAnswerIds: ["faktum.arbeidsforhold.rotasjon.svar.ja"],
+                },
+                {
+                  id: "faktum.arbeidsforhold.fridager-siste-rotasjon",
+                  type: "int",
+                  requiredAnswerIds: ["faktum.arbeidsforhold.rotasjon.svar.ja"],
+                },
+              ],
+              requiredAnswerIds: [
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+                "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+                "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+                "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
+                "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+                "faktum.arbeidsforhold.endret.svar.permittert",
+              ],
             },
           ],
         },
