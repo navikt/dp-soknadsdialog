@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const andreYtelser: BlueprintSeksjon = {
   id: "andre-ytelser",
-  faktum: [
+  fakta: [
     {
       id: "faktum.andre-ytelser-mottatt-eller-sokt",
       type: "boolean",
@@ -10,7 +10,7 @@ export const andreYtelser: BlueprintSeksjon = {
         { id: "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja" },
         { id: "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.hvilke-andre-ytelser",
           type: "flervalg",
@@ -22,7 +22,7 @@ export const andreYtelser: BlueprintSeksjon = {
             { id: "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land" },
             { id: "faktum.hvilke-andre-ytelser.svar.annen-ytelse" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.tjenestepensjon-hvem-utbetaler",
               type: "tekst",
@@ -87,7 +87,7 @@ export const andreYtelser: BlueprintSeksjon = {
         },
         { id: "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.ja" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.okonomisk-gode-tidligere-arbeidsgiver-hva-omfatter-avtalen",
           type: "tekst",

@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const egenNaering: BlueprintSeksjon = {
   id: "egen-naering",
-  faktum: [
+  fakta: [
     {
       id: "faktum.driver-du-egen-naering",
       type: "boolean",
@@ -10,11 +10,11 @@ export const egenNaering: BlueprintSeksjon = {
         { id: "faktum.driver-du-egen-naering.svar.ja" },
         { id: "faktum.driver-du-egen-naering.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.egen-naering-organisasjonsnummer-liste",
           type: "generator",
-          faktum: [{ id: "faktum.egen-naering-organisasjonsnummer", type: "int" }],
+          fakta: [{ id: "faktum.egen-naering-organisasjonsnummer", type: "int" }],
           requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
         },
         {
@@ -36,7 +36,7 @@ export const egenNaering: BlueprintSeksjon = {
         { id: "faktum.driver-du-eget-gaardsbruk.svar.ja" }, //todo: dokumentfaktumKrav arbeidstimer
         { id: "faktum.driver-du-eget-gaardsbruk.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.eget-gaardsbruk-organisasjonsnummer",
           type: "int",
@@ -62,7 +62,7 @@ export const egenNaering: BlueprintSeksjon = {
             { id: "faktum.eget-gaardsbruk-hvem-eier.svar.andre" },
           ],
           requiredAnswerIds: ["faktum.driver-du-eget-gaardsbruk.svar.ja"],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.eget-gaardsbruk-jeg-andel-inntekt",
               type: "double",

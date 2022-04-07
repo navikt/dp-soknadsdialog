@@ -2,11 +2,11 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const barnetillegg: BlueprintSeksjon = {
   id: "barnetillegg", //todo: hvordan takler vi logikk rundt allerede genererte barn og oppfølgingspørsmålene der
-  faktum: [
+  fakta: [
     {
       id: "faktum.barn-liste",
       type: "generator",
-      faktum: [
+      fakta: [
         {
           id: "faktum.barn-fornavn-mellomnavn",
           type: "tekst",
@@ -31,7 +31,7 @@ export const barnetillegg: BlueprintSeksjon = {
             { id: "faktum.forsoerger-du-barnet.svar.ja" }, //todo: trigger dokumentkrav foedselsattest
             { id: "faktum.forsoerger-du-barnet.svar.nei" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.barn-aarsinntekt-over-1g",
               type: "boolean",
@@ -44,7 +44,7 @@ export const barnetillegg: BlueprintSeksjon = {
                   id: "faktum.barn-aarsinntekt-over-1g.svar.ja",
                 },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.barn-inntekt",
                   type: "int",

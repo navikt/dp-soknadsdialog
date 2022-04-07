@@ -4,7 +4,7 @@ export interface SanitySeksjon {
   _id: string;
   _type: "seksjon";
   key: string;
-  faktum: SanityRef<SanityFaktum>[];
+  fakta: SanityRef<SanityFaktum>[];
 }
 
 export interface SanityBaseDocument {
@@ -27,7 +27,7 @@ export interface SanityGeneratorFaktum {
   _type: "generatorFaktum";
   key: string;
   type: GeneratorFaktumType;
-  faktum: SanityRef<SanityFaktum>[];
+  fakta: SanityRef<SanityFaktum>[];
   requiredAnswerIds?: SanityRef<SanityFaktum>[];
 }
 
@@ -37,7 +37,7 @@ export interface SanityValgFaktum {
   key: string;
   type: ValgFaktumType;
   answerOptions: SanityRef<SanityAnswerOption>[];
-  subFaktum: SanityRef<SanityFaktum>[];
+  subFakta: SanityRef<SanityFaktum>[];
   requiredAnswerIds?: SanityRef<SanityFaktum>[];
 }
 

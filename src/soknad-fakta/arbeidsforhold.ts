@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const arbeidsforhold: BlueprintSeksjon = {
   id: "arbeidsforhold",
-  faktum: [
+  fakta: [
     {
       id: "faktum.dagpenger-soknadsdato",
       type: "localdate",
@@ -20,7 +20,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
     {
       id: "faktum.arbeidsforhold",
       type: "generator",
-      faktum: [
+      fakta: [
         {
           id: "faktum.arbeidsforhold.navn-bedrift",
           type: "tekst",
@@ -29,7 +29,6 @@ export const arbeidsforhold: BlueprintSeksjon = {
           id: "faktum.arbeidsforhold.land",
           type: "land",
           answerOptions: [],
-          subFaktum: [],
         },
         {
           id: "faktum.arbeidsforhold.endret",
@@ -44,7 +43,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
             { id: "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid" },
             { id: "faktum.arbeidsforhold.endret.svar.permittert" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
               type: "boolean",
@@ -52,7 +51,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja" },
                 { id: "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei" },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.antall-timer-jobbet",
                   type: "double",
@@ -86,7 +85,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                   id: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.vet-ikke",
                 },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.kontraktfestet-sluttdato",
                   type: "localdate",
@@ -133,7 +132,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                   id: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.nei",
                 },
               ],
-              subFaktum: [],
+              subFakta: [],
               requiredAnswerIds: [
                 "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
                 "faktum.arbeidsforhold.endret.svar.avskjediget",
@@ -233,7 +232,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.ja" },
                 { id: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.nei" },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.naar-var-lonnsplikt-periode",
                   type: "periode",
@@ -254,7 +253,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.ja" },
                 { id: "faktum.arbeidsforhold.tilbud-om-forlengelse-eller-annen-stilling.svar.nei" },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling",
                   type: "envalg",
@@ -269,7 +268,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                       id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ikke-svart",
                     },
                   ],
-                  subFaktum: [
+                  subFakta: [
                     {
                       id: "faktum.arbeidsforhold.aarsak-til-ikke-akseptert-tilbud",
                       type: "tekst",
@@ -292,7 +291,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.ja" },
                 { id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.nei" },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler-i-tillegg-til-dagpenger",
                   type: "boolean",
@@ -362,7 +361,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                     { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.ja" },
                     { id: "faktum.arbeidsforhold.utbetalt-lonn-etter-konkurs.svar.nei" },
                   ],
-                  subFaktum: [
+                  subFakta: [
                     {
                       id: "faktum.arbeidsforhold.siste-dag-utbetalt-for-konkurs",
                       type: "localdate",
@@ -444,7 +443,7 @@ export const arbeidsforhold: BlueprintSeksjon = {
                 { id: "faktum.arbeidsforhold.rotasjon.svar.ja" },
                 { id: "faktum.arbeidsforhold.rotasjon.svar.nei" },
               ],
-              subFaktum: [
+              subFakta: [
                 {
                   id: "faktum.arbeidsforhold.arbeidsdager-siste-rotasjon",
                   type: "int",

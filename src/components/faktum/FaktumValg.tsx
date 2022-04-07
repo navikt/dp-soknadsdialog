@@ -62,7 +62,7 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
         ))}
       </RadioGroup>
 
-      {faktum.subFaktum && faktum.subFaktum.length > 0 && (
+      {faktum.subFakta && faktum.subFakta.length > 0 && (
         <div className={styles["sub-faktum"]}>
           <SubFaktum
             faktum={faktum}

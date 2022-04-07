@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 // kan denne egentlig bakes inn i arbeidsforhold?
 export const eosArbeidsforhold: BlueprintSeksjon = {
   id: "eos-arbeidsforhold",
-  faktum: [
+  fakta: [
     {
       id: "faktum.eos-arbeid-siste-36-mnd",
       type: "boolean",
@@ -10,11 +10,11 @@ export const eosArbeidsforhold: BlueprintSeksjon = {
         { id: "faktum.eos-arbeid-siste-36-mnd.svar.ja" },
         { id: "faktum.eos-arbeid-siste-36-mnd.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.eos-arbeidsforhold",
           type: "generator",
-          faktum: [
+          fakta: [
             {
               id: "faktum.eos-arbeidsforhold-arbeidsgivernavn",
               type: "tekst",

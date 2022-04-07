@@ -20,19 +20,19 @@ const faktumGroq = `
 
 export const fetchAllSeksjoner = groq`*[_type == "seksjon" && !(_id in path("drafts.**"))]{
   'id': _id, title, description, helpText,
-  faktum[]->{
+  'fakta': faktum[]->{
     ${faktumGroq},
-    subFaktum[]->{
+    'subFakta': subFaktum[]->{
       ${faktumGroq},
-      faktum[]->{
+      'fakta': faktum[]->{
         ${faktumGroq}
       },
     },
-    faktum[]->{
+    'fakta': faktum[]->{
       ${faktumGroq},
-      subFaktum[]->{
+      'subFakta': subFaktum[]->{
         ${faktumGroq},
-        faktum[]->{
+        'fakta': faktum[]->{
           ${faktumGroq}
         }
       },

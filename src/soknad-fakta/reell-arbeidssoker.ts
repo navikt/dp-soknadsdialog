@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const reellArbeidssoker: BlueprintSeksjon = {
   id: "reell-arbeidsoker",
-  faktum: [
+  fakta: [
     {
       id: "faktum.jobbe-hel-deltid",
       type: "boolean",
@@ -10,7 +10,7 @@ export const reellArbeidssoker: BlueprintSeksjon = {
         { id: "faktum.jobbe-hel-deltid.svar.ja" },
         { id: "faktum.jobbe-hel-deltid.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.kun-deltid-aarsak",
           type: "flervalg",
@@ -30,7 +30,7 @@ export const reellArbeidssoker: BlueprintSeksjon = {
             { id: "faktum.kun-deltid-aarsak.svar.har-fylt-60" },
             { id: "faktum.kun-deltid-aarsak.svar.annen-situasjon" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.kort-om-hvorfor-kun-deltid",
               type: "tekst",
@@ -52,7 +52,7 @@ export const reellArbeidssoker: BlueprintSeksjon = {
         { id: "faktum.jobbe-hele-norge.svar.ja" },
         { id: "faktum.jobbe-hele-norge.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.ikke-jobbe-hele-norge",
           type: "flervalg",
@@ -74,7 +74,7 @@ export const reellArbeidssoker: BlueprintSeksjon = {
             { id: "faktum.ikke-jobbe-hele-norge.svar.har-fylt-60" },
             { id: "faktum.ikke-jobbe-hele-norge.svar.annen-situasjon" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.kort-om-hvorfor-ikke-jobbe-hele-norge",
               type: "tekst",

@@ -34,7 +34,7 @@ export function createSanityGeneratorFromApiFaktum(
     _type: "generatorFaktum",
     key: faktum.id,
     type: faktum.type,
-    faktum: faktum.faktum.map((faktum) => createSanityRef(faktum.id)),
+    fakta: faktum.fakta.map((faktum) => createSanityRef(faktum.id)),
     requiredAnswerIds: isSubFaktum(faktum)
       ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))
       : undefined,
@@ -54,7 +54,7 @@ export function createSanityValgFaktumFromApiFaktum(
     key: faktum.id,
     type: faktum.type,
     answerOptions: faktum.answerOptions.map((answer) => createSanityRef(answer.id)),
-    subFaktum: faktum.subFaktum?.map((subFaktum) => createSanityRef(subFaktum.id)) || [],
+    subFakta: faktum.subFakta?.map((subFaktum) => createSanityRef(subFaktum.id)) || [],
     requiredAnswerIds: isSubFaktum(faktum)
       ? faktum.requiredAnswerIds.map((id) => createSanityRef(id))
       : undefined,
@@ -80,7 +80,7 @@ export function createSanitySeksjonFromApiSeksjon(seksjon: BlueprintSeksjon): Sa
     _id: seksjon.id,
     _type: "seksjon",
     key: seksjon.id,
-    faktum: seksjon.faktum.map((faktum) => createSanityRef(faktum.id)),
+    fakta: seksjon.fakta.map((faktum) => createSanityRef(faktum.id)),
   };
 }
 

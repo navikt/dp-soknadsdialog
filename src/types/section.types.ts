@@ -6,5 +6,5 @@ export interface ISection {
   title: string;
   description?: TypedObject | TypedObject[];
   helpText?: string;
-  faktum: IFaktum[];
+  fakta: IFaktum[];
 }

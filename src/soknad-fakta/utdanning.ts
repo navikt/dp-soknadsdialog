@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const utdanning: BlueprintSeksjon = {
   id: "utdanning",
-  faktum: [
+  fakta: [
     {
       id: "faktum.utdanning",
       type: "envalg",

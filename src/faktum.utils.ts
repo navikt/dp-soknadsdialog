@@ -36,7 +36,7 @@ export function isFaktumAnswered(
       const faktumTypes: FaktumType[] = ["flervalg", "envalg", "boolean"];
       const valgFaktumAnswerValues = getAnswerValuesByFaktumType(answers, faktumTypes);
 
-      const triggeredSubFakta = faktum.subFaktum?.filter((subFaktum) =>
+      const triggeredSubFakta = faktum.subFakta?.filter((subFaktum) =>
         subFaktum.requiredAnswerIds.some((id) => valgFaktumAnswerValues.includes(id))
       );
 

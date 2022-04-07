@@ -48,7 +48,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
               <Button onClick={() => deleteList(faktum.textId)}>Slett svar</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.faktum}
+                fakta={faktum.fakta}
                 save={handleSaveList}
                 cancel={resetState}
               />
@@ -67,7 +67,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.faktum} save={handleSaveList} cancel={resetState} />
+        <GeneratorFakta fakta={faktum.fakta} save={handleSaveList} cancel={resetState} />
       )}
     </div>
   );

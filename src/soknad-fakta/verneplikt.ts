@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const verneplikt: BlueprintSeksjon = {
   id: "verneplikt",
-  faktum: [
+  fakta: [
     {
       id: "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd",
       type: "boolean",
