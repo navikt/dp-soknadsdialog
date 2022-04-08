@@ -7,13 +7,24 @@ export type FaktumType = PrimitivFaktumType | ValgFaktumType | GeneratorFaktumTy
 
 export type IFaktum = IPrimitivFaktum | IValgFaktum | IGeneratorFaktum | ILandFaktum;
 
+export interface HelpText {
+  title: string;
+  body: string;
+}
+
+export interface AlertText {
+  title?: string;
+  body: string;
+  type: "info" | "success" | "warning" | "error";
+}
+
 export interface IBaseFaktum {
   id: string;
   textId: string;
   title: string;
   description?: TypedObject | TypedObject[];
-  helpText?: string;
-  alertText?: string;
+  helpText?: HelpText;
+  alertText?: AlertText;
 }
 
 export interface IPrimitivFaktum extends IBaseFaktum {
