@@ -33,15 +33,15 @@ export interface IPrimitivFaktum extends IBaseFaktum {
 export interface IValgFaktum extends IBaseFaktum {
   type: ValgFaktumType;
   answerOptions: IAnswerOption[];
-  subFaktum?: ISubFaktum[];
+  subFakta?: ISubFaktum[];
 }
 export interface IGeneratorFaktum extends IBaseFaktum {
   type: GeneratorFaktumType;
-  faktum: IFaktum[];
+  fakta: IFaktum[];
 }
 export interface ILandFaktum extends IBaseFaktum {
   type: LandFaktumType;
-  subFaktum?: ISubFaktum[];
+  subFakta?: ISubFaktum[];
   countryGroups: never[]; // Todo: Correct type
 }
 

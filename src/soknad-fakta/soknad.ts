@@ -18,7 +18,7 @@ import { utdanning } from "./utdanning";
 
 export interface BlueprintSeksjon {
   id: string;
-  faktum: BlueprintFaktum[];
+  fakta: BlueprintFaktum[];
 }
 
 export type BlueprintFaktum =
@@ -34,18 +34,18 @@ export interface BlueprintBaseFaktum {
 
 export interface BlueprintGeneratorFaktum extends BlueprintBaseFaktum {
   type: GeneratorFaktumType;
-  faktum: BlueprintFaktum[];
+  fakta: BlueprintFaktum[];
 }
 
 export interface BlueprintValgFaktum extends BlueprintBaseFaktum {
   type: ValgFaktumType;
-  subFaktum?: BlueprintSubFaktum[];
+  subFakta?: BlueprintSubFaktum[];
   answerOptions: BlueprintAnswerOption[];
 }
 
 export interface BlueprintLandFaktum extends BlueprintBaseFaktum {
   type: LandFaktumType;
-  subFaktum?: BlueprintSubFaktum[];
+  subFakta?: BlueprintSubFaktum[];
   countryGroups: BlueprintCountryGroup[];
 }
 

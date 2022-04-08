@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const koronaFortsattRett: BlueprintSeksjon = {
   id: "korona-fortsatt-rett",
-  faktum: [
+  fakta: [
     {
       id: "faktum.oppbrukt-dagpengeperiode",
       type: "boolean",
@@ -10,7 +10,7 @@ export const koronaFortsattRett: BlueprintSeksjon = {
         { id: "faktum.oppbrukt-dagpengeperiode.svar.ja" },
         { id: "faktum.oppbrukt-dagpengeperiode.svar.nei" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.onsker-fortsette-avsluttet-periode",
           type: "boolean",
@@ -19,7 +19,7 @@ export const koronaFortsattRett: BlueprintSeksjon = {
             { id: "faktum.onsker-fortsette-avsluttet-periode.svar.ja" },
             { id: "faktum.onsker-fortsette-avsluttet-periode.svar.nei" },
           ],
-          subFaktum: [],
+          subFakta: [],
         },
       ],
     },

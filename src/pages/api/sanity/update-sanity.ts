@@ -23,7 +23,7 @@ const updateSanity = async (req: NextApiRequest, res: NextApiResponse) => {
 
   let documents: SanityBaseDocument[] = [];
   const seksjoner = quizSeksjoner.map((apiSection) => {
-    const faktum = apiSection.faktum.flatMap((apiFaktum) => {
+    const faktum = apiSection.fakta.flatMap((apiFaktum) => {
       return createSanityFaktum(apiFaktum);
     });
 
@@ -53,8 +53,8 @@ function createValgFaktum(
   let documents: SanityBaseDocument[] = [];
   documents = [...documents, ...faktum.answerOptions.map(createSanityAnswerFromApiAnswerOption)];
 
-  if (faktum.subFaktum) {
-    documents = [...documents, ...faktum.subFaktum.flatMap(createSanityFaktum)];
+  if (faktum.subFakta) {
+    documents = [...documents, ...faktum.subFakta.flatMap(createSanityFaktum)];
   }
   documents = [...documents, createSanityValgFaktumFromApiFaktum(faktum)];
 
@@ -64,7 +64,7 @@ function createValgFaktum(
 function createGeneratorFaktum(faktum: BlueprintGeneratorFaktum): SanityBaseDocument[] {
   let documents: SanityBaseDocument[] = [];
 
-  documents = [...documents, ...faktum.faktum.flatMap(createSanityFaktum)];
+  documents = [...documents, ...faktum.fakta.flatMap(createSanityFaktum)];
   documents = [...documents, createSanityGeneratorFromApiFaktum(faktum)];
 
   return documents;

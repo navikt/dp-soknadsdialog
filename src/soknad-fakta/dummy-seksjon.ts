@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const dummySeksjon: BlueprintSeksjon = {
   id: "dummy-seksjon-data",
-  faktum: [
+  fakta: [
     {
       id: "faktum.dummy-boolean",
       type: "boolean",
@@ -19,7 +19,7 @@ export const dummySeksjon: BlueprintSeksjon = {
         { id: "faktum.dummy-envalg.svar.nei" },
         { id: "faktum.dummy-envalg.svar.vetikke" },
       ],
-      subFaktum: [
+      subFakta: [
         {
           id: "faktum.dummy-subfaktum-tekst",
           type: "tekst",
@@ -63,7 +63,7 @@ export const dummySeksjon: BlueprintSeksjon = {
     {
       id: "faktum.dummy-generator",
       type: "generator",
-      faktum: [
+      fakta: [
         {
           id: "faktum.generator-dummy-boolean",
           type: "boolean",
@@ -80,7 +80,7 @@ export const dummySeksjon: BlueprintSeksjon = {
             { id: "faktum.generator-dummy-envalg.svar.nei" },
             { id: "faktum.generator-dummy-envalg.svar.vetikke" },
           ],
-          subFaktum: [
+          subFakta: [
             {
               id: "faktum.generator-dummy-subfaktum-tekst",
               type: "tekst",

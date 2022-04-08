@@ -29,7 +29,7 @@ export function Barnetillegg(faktum: IGeneratorFaktum) {
               <Button onClick={() => deleteList(faktum.textId)}>Slett barn</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.faktum}
+                fakta={faktum.fakta}
                 save={handleSaveBarnetillegg}
                 cancel={resetState}
               />
@@ -43,7 +43,7 @@ export function Barnetillegg(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.faktum} save={handleSaveBarnetillegg} cancel={resetState} />
+        <GeneratorFakta fakta={faktum.fakta} save={handleSaveBarnetillegg} cancel={resetState} />
       )}
     </div>
   );

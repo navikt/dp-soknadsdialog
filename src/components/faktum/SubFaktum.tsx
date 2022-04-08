@@ -10,7 +10,7 @@ export function SubFaktum(props: FaktumProps<IValgFaktum> & { currentAnswerIds: 
   const answers = useSelector((state: RootState) => props.answers || state.answers);
   const generators = useSelector((state: RootState) => state.generators);
 
-  const triggeredSubFakta = props.faktum.subFaktum?.filter((faktum) =>
+  const triggeredSubFakta = props.faktum.subFakta?.filter((faktum) =>
     faktum.requiredAnswerIds.find((id) => {
       if (id in CountryGroup) {
         return getListOfCountryCodes(id).includes(props.currentAnswerIds[0]);

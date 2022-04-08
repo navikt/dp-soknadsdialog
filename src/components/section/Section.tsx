@@ -35,7 +35,7 @@ export function Section(props: Props) {
   }, [answers, generators]);
 
   function showNextUnansweredFaktumOrNextSectionButton() {
-    const allFaktaAnswered = props.section.faktum.every((faktum, index) => {
+    const allFaktaAnswered = props.section.fakta.every((faktum, index) => {
       let faktumAnswered;
 
       if (isGeneratorFaktum(faktum)) {
@@ -67,7 +67,7 @@ export function Section(props: Props) {
         {props.section.description && <PortableText value={props.section.description} />}
         {props.section.helpText && <p>{props.section.helpText}</p>}
 
-        {props.section.faktum.map((faktum, index) => {
+        {props.section.fakta.map((faktum, index) => {
           if (index <= navigationState.sectionFaktumIndex) {
             return <Faktum key={faktum?.textId} faktum={faktum} />;
           }

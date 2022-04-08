@@ -27,7 +27,7 @@ const generatorFaktum: IGeneratorFaktum = {
   textId: "faktum.generator",
   title: "",
   type: "generator",
-  faktum: [textFaktum],
+  fakta: [textFaktum],
 };
 
 const arbeidsforholdFaktum: IGeneratorFaktum = {
@@ -35,7 +35,7 @@ const arbeidsforholdFaktum: IGeneratorFaktum = {
   textId: ARBEIDSFORHOLD_FAKTUM_ID,
   title: "",
   type: "generator",
-  faktum: [],
+  fakta: [],
 };
 
 const barnFaktum: IGeneratorFaktum = {
@@ -43,7 +43,7 @@ const barnFaktum: IGeneratorFaktum = {
   textId: BARN_LISTE_FAKTUM_ID,
   title: "",
   type: "generator",
-  faktum: [],
+  fakta: [],
 };
 
 const envalgFaktumWithSubFaktum: IValgFaktum = {
@@ -52,7 +52,7 @@ const envalgFaktumWithSubFaktum: IValgFaktum = {
   title: "",
   type: "envalg",
   answerOptions: [{ textId: "faktum.envalg.svar", title: "ikke bry deg" }],
-  subFaktum: [
+  subFakta: [
     {
       ...textFaktum,
       requiredAnswerIds: ["faktum.envalg.svar"],
@@ -66,7 +66,7 @@ const envalgFaktumWithGeneratorSubFaktum: IValgFaktum = {
   title: "",
   type: "envalg",
   answerOptions: [{ textId: "faktum.envalg.svar", title: "ikke bry deg" }],
-  subFaktum: [
+  subFakta: [
     {
       ...generatorFaktum,
       requiredAnswerIds: ["faktum.envalg.svar"],
@@ -205,7 +205,7 @@ function createGeneratorState(faktum: IGeneratorFaktum, withAnswer = false): Gen
   const answers = [];
 
   if (withAnswer) {
-    const generatorAnswers = faktum.faktum.map((faktum) => createAnswerState(faktum));
+    const generatorAnswers = faktum.fakta.map((faktum) => createAnswerState(faktum));
     answers.push(generatorAnswers);
   }
 

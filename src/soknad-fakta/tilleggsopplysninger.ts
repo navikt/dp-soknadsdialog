@@ -2,7 +2,7 @@ import { BlueprintSeksjon } from "./soknad";
 
 export const tilleggsopplysninger: BlueprintSeksjon = {
   id: "tilleggsopplysninger",
-  faktum: [
+  fakta: [
     {
       id: "faktum.tilleggsopplysninger",
       type: "tekst",

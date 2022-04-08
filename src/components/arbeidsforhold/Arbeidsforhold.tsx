@@ -30,7 +30,7 @@ export function Arbeidsforhold(faktum: IGeneratorFaktum) {
               <Button onClick={() => deleteList(faktum.textId)}>Slett arbeidsforhold</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.faktum}
+                fakta={faktum.fakta}
                 save={handleSaveArbeidsforhold}
                 cancel={resetState}
               />
@@ -49,7 +49,7 @@ export function Arbeidsforhold(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.faktum} save={handleSaveArbeidsforhold} cancel={resetState} />
+        <GeneratorFakta fakta={faktum.fakta} save={handleSaveArbeidsforhold} cancel={resetState} />
       )}
     </div>
   );
