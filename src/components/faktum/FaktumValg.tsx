@@ -44,7 +44,6 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
     <div>
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
-      {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <RadioGroup
         legend={faktum.title ? faktum.title : faktum.textId}
@@ -54,7 +53,6 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
         {faktum.answerOptions.map((answer) => (
           <div key={answer.textId}>
             <Radio value={answer.textId}>{answer.title ? answer.title : answer.textId}</Radio>
-            {answer.helpText ? <Alert variant={"info"}>{answer.helpText}</Alert> : undefined}
             {answer.alertText && currentAnswerId === answer.textId ? (
               <Alert variant={"warning"}>{answer.alertText}</Alert>
             ) : undefined}

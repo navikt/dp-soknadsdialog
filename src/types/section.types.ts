@@ -1,10 +1,9 @@
-import { IFaktum } from "./faktum.types";
-import { TypedObject } from "@portabletext/types";
+import { HelpText, IDescription, IFaktum } from "./faktum.types";
 
 export interface ISection {
   id: string;
   title: string;
-  description?: TypedObject | TypedObject[];
-  helpText?: string;
+  description?: IDescription;
+  helpText?: HelpText;
   fakta: IFaktum[];
 }

@@ -9,6 +9,8 @@ import { setSectionFaktumIndex } from "../../store/navigation.slice";
 import { ISection } from "../../types/section.types";
 import { Faktum } from "../faktum/Faktum";
 import styles from "./Section.module.css";
+import { Left, Right } from "@navikt/ds-icons";
+import { IDescription } from "../../types/faktum.types";
 
 interface Props {
   section: ISection;
@@ -60,11 +62,20 @@ export function Section(props: Props) {
     }
   }
 
+  function renderSectionDescription(description?: IDescription) {
+    if (!description) return null;
+    return (
+      <div className={styles.sectionDescription}>
+        <PortableText value={description} />
+      </div>
+    );
+  }
+
   return (
-    <div className={styles.container}>
-      <div className={styles.faktum}>
+    <div>
+      <div className={styles.rootFaktum}>
         <h1>{props.section.title ? props.section.title : props.section.id}</h1>
-        {props.section.description && <PortableText value={props.section.description} />}
+        {renderSectionDescription(props.section.description)}
         {props.section.helpText && <p>{props.section.helpText}</p>}
 
         {props.section.fakta.map((faktum, index) => {
@@ -73,14 +84,21 @@ export function Section(props: Props) {
           }
         })}
       </div>
-      <div>
-        {showNextSectionButton && (
-          <Button onClick={() => props.navigateNextSection()}>Neste seksjon</Button>
-        )}
-      </div>
-      <div>
-        <Button onClick={() => props.navigatePreviousSection()}>Forrige seksjon</Button>
-      </div>
+      <nav className={styles.sectionNavigation}>
+        <div>
+          <Button variant={"secondary"} onClick={() => props.navigatePreviousSection()}>
+            <Left />
+            Forrige steg
+          </Button>
+        </div>
+        <div>
+          {showNextSectionButton && (
+            <Button onClick={() => props.navigateNextSection()}>
+              Neste steg <Right />
+            </Button>
+          )}
+        </div>
+      </nav>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { isFaktumAnswered } from "../../faktum.utils";
 import { CountryGroup, getListOfCountryCodes } from "../../country.utils";
+import styles from "./Faktum.module.css";
 
 export function SubFaktum(props: FaktumProps<IValgFaktum> & { currentAnswerIds: string[] }) {
   const answers = useSelector((state: RootState) => props.answers || state.answers);
@@ -32,12 +33,14 @@ export function SubFaktum(props: FaktumProps<IValgFaktum> & { currentAnswerIds: 
 
         if (index <= lastFaktumIndexToShow) {
           return (
-            <Faktum
-              key={faktum.textId}
-              faktum={faktum}
-              onChange={props.onChange}
-              answers={props.answers}
-            />
+            <div className={styles.subFaktumWrapper}>
+              <Faktum
+                key={faktum.textId}
+                faktum={faktum}
+                onChange={props.onChange}
+                answers={props.answers}
+              />
+            </div>
           );
         }
       })}

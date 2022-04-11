@@ -2,6 +2,7 @@ import React from "react";
 import NextApp, { AppContext, AppProps } from "next/app";
 import styles from "./_app.module.css";
 import "../index.css";
+import "../variables.css";
 import SoknadHeader from "../components/SoknadHeader";
 import { useRouter } from "next/router";
 import { fetcher } from "../api.utils";
@@ -17,8 +18,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <SWRConfig value={{ fetcher }}>
+      {renderHeader()}
       <div className={styles.app}>
-        {renderHeader()}
         <Component {...pageProps} />
       </div>
     </SWRConfig>

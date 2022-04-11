@@ -36,7 +36,6 @@ export function FaktumFlervalg(props: FaktumProps<IValgFaktum>) {
     <div>
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
-      {faktum.alertText && <p>{faktum.alertText}</p>}
 
       <CheckboxGroup
         legend={faktum.title ? faktum.title : faktum.textId}

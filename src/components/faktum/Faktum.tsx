@@ -83,7 +83,7 @@ export function Faktum(props: FaktumProps<IFaktum>) {
   }
 
   return (
-    <div className={styles.container} id={props.faktum.textId}>
+    <div className={styles.faktum} id={props.faktum.textId}>
       {renderFaktumType()}
     </div>
   );

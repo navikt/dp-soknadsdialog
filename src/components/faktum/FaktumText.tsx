@@ -39,7 +39,6 @@ export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
     <div>
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
-      {faktum.alertText && <p>{faktum.alertText}</p>}
       <TextField
         defaultValue={currentAnswer}
         label={faktum.title ? faktum.title : faktum.textId}

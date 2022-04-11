@@ -1,9 +1,16 @@
-.container {
-  max-width: 600px;
-  margin: auto auto 50px;
+.rootFaktum {
+  border: 1px solid transparent;
 }
 
-.faktum {
-  min-width: 600px;
-  width: 100%;
+.sectionDescription {
+  margin-bottom: var(--faktum-spacing);
+}
+
+.sectionNavigation {
+  display: flex;
+  margin-bottom: var(--faktum-spacing);
+}
+
+.sectionNavigation div:first-child {
+  margin-right: 20px;
 }

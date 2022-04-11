@@ -55,7 +55,6 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
     <div>
       {faktum.description && <PortableText value={faktum.description} />}
       {faktum.helpText && <p>{faktum.helpText}</p>}
-      {faktum.alertText && <p>{faktum.alertText}</p>}
       <DatePicker
         label={"Fra dato"}
         onChange={setFromDate}

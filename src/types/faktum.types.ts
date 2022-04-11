@@ -18,13 +18,14 @@ export interface AlertText {
   type: "info" | "success" | "warning" | "error";
 }
 
+export type IDescription = TypedObject | TypedObject[];
+
 export interface IBaseFaktum {
   id: string;
   textId: string;
   title: string;
-  description?: TypedObject | TypedObject[];
+  description?: IDescription;
   helpText?: HelpText;
-  alertText?: AlertText;
 }
 
 export interface IPrimitivFaktum extends IBaseFaktum {
@@ -52,6 +53,5 @@ export type ISubFaktum = IFaktum & {
 export interface IAnswerOption {
   textId: string;
   title: string;
-  helpText?: string;
-  alertText?: string;
+  alertText?: AlertText;
 }

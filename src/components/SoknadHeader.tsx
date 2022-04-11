@@ -6,7 +6,7 @@ import styles from "./SoknadHeader.module.css";
 export default function SoknadHeader() {
   return (
     <div className={styles.soknadHeader}>
-      <Heading size="large">Søknad om dagpenger</Heading>
+      <Heading size="2xlarge">Søknad om dagpenger</Heading>
     </div>
   );
 }
