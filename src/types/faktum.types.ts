@@ -43,7 +43,7 @@ export interface IGeneratorFaktum extends IBaseFaktum {
 export interface ILandFaktum extends IBaseFaktum {
   type: LandFaktumType;
   subFakta?: ISubFaktum[];
-  countryGroups: never[]; // Todo: Correct type
+  countryAnswerOptions: ICountryAnswerOption[];
 }
 
 export type ISubFaktum = IFaktum & {
@@ -54,4 +54,14 @@ export interface IAnswerOption {
   textId: string;
   title: string;
   alertText?: AlertText;
+}
+
+export interface ICountryAnswerOption {
+  alertText?: AlertText;
+  countryList: ICountryList;
+}
+
+export interface ICountryList {
+  value: string; // Alpha3 code
+  title: string;
 }

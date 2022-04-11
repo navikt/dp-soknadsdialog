@@ -1,4 +1,6 @@
 
 :root {
---faktum-spacing: 44px;
+  --app-max-width: 680px;
+  --app-padding: 40px;
+  --faktum-spacing: 44px;
 }
