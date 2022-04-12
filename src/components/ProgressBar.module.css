@@ -1,4 +1,6 @@
 .progressBar {
+  --progress-bar-animation-duration: 500ms;
+  --progress-bar-height: 16px;
   width: 100%;
   margin: 20px 0;
 }
@@ -12,10 +14,11 @@
 
 .completed {
   display: inline-block;
-  height: 16px;
+  height: var(--progress-bar-height);
   min-width: 16px;
   border-radius: 100px;
   background-color: var(--navds-semantic-color-link-visited);
+  transition: width var(--progress-bar-animation-duration);
 }
 
 .remaining {
@@ -24,20 +27,22 @@
   align-items: center;
   column-gap: 5px;
   flex-grow: 2;
+  transition: width var(--progress-bar-animation-duration);
 }
 .remainingLine {
   display: inline-block;
   flex-grow: 40;
   height: 2px;
-  border: 1px solid var(--navds-semantic-color-border-muted);
+  background-color: var(--navds-semantic-color-border-muted);
   border-radius: 100px;
 
 }
 .finalCircle {
-  height: 16px;
-  width: 16px;
+  height: var(--progress-bar-height);
   display: inline-block;
-  flex-basis: 16px;
+  flex-basis: var(--progress-bar-height);
   border: 3px solid var(--navds-semantic-color-border);
+  transition: border-width var(--progress-bar-animation-duration), border-color var(--progress-bar-animation-duration);
+  box-sizing: border-box;
   border-radius: 100px;
 }

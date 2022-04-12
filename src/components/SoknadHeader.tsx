@@ -1,8 +1,8 @@
 import React from "react";
 import { Heading } from "@navikt/ds-react";
-import HeaderIcon from "../../assets/svg/HeaderIcon.svg";
 
 import styles from "./SoknadHeader.module.css";
+import { HeaderIcon } from "./HeaderIcon";
 
 export default function SoknadHeader() {
   return (

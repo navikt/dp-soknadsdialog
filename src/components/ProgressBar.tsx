@@ -13,17 +13,18 @@ export function ProgressBar(props: ProgressBarProps) {
   };
 
   const renderRemaining = () => {
-    if (props.currentStep === props.totalSteps) return <></>;
-
     const remainingProgress = 100 - progressPercentage();
-    const remainderWidthStyle = {
-      width: `${remainingProgress}%`,
-    };
+    const remainderWidthStyle = { width: `${remainingProgress}%` };
+
+    let finalCircleStyle = {};
+    if (props.currentStep === props.totalSteps) {
+      finalCircleStyle = { borderWidth: `0px`, borderColor: "transparent" };
+    }
 
     return (
       <div className={styles.remaining} style={remainderWidthStyle}>
         <div className={styles.remainingLine}></div>
-        <div className={styles.finalCircle}></div>
+        <div className={styles.finalCircle} style={finalCircleStyle}></div>
       </div>
     );
   };
