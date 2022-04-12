@@ -1,4 +1,4 @@
-import { mockFakta } from "../soknad-fakta/mock-fakta-response";
+import { mockFakta } from "./mock-fakta-response";
 import { QuizFaktum } from "../types/quiz.types";
 
 export function postSoknad(onBehalfOfToken: string) {
