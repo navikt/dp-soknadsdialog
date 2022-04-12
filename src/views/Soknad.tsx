@@ -5,6 +5,7 @@ import { RootState } from "../store";
 import { setCurrentSectionIndex } from "../store/navigation.slice";
 import { Button } from "@navikt/ds-react";
 import api from "../api.utils";
+import { ProgressBar } from "../components/ProgressBar";
 
 export function Soknad() {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ export function Soknad() {
   );
   const currentSection = useSelector((state: RootState) => state.sections[currentSectionIndex]);
   const soknadId = useSelector((state: RootState) => state.soknadId);
+  const sectionsCount = useSelector((state: RootState) => state.sections.length);
 
   function handleNavigateNext() {
     dispatch(setCurrentSectionIndex(currentSectionIndex + 1));
@@ -30,6 +32,7 @@ export function Soknad() {
 
   return (
     <div>
+      <ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />
       {currentSection && (
         <Section
           section={currentSection}

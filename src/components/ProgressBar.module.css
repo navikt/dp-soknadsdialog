@@ -1,0 +1,43 @@
+.progressBar {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.barContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.completed {
+  display: inline-block;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 100px;
+  background-color: var(--navds-semantic-color-link-visited);
+}
+
+.remaining {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 5px;
+  flex-grow: 2;
+}
+.remainingLine {
+  display: inline-block;
+  flex-grow: 40;
+  height: 2px;
+  border: 1px solid var(--navds-semantic-color-border-muted);
+  border-radius: 100px;
+
+}
+.finalCircle {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
+  flex-basis: 16px;
+  border: 3px solid var(--navds-semantic-color-border);
+  border-radius: 100px;
+}
