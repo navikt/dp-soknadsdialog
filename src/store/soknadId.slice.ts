@@ -9,3 +9,5 @@ export const soknadIdSlice = createSlice({
     },
   },
 });
+
+export const { setSoknadId } = soknadIdSlice.actions;

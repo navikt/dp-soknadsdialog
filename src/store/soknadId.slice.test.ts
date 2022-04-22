@@ -1,22 +1,17 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { combinedRootReducer } from ".";
-import { soknadIdSlice } from "./soknadId.slice";
+import { Action } from "@reduxjs/toolkit";
+import { setSoknadId, soknadIdSlice } from "./soknadId.slice";
 
-const store = configureStore({
-  reducer: combinedRootReducer,
-});
+const { reducer } = soknadIdSlice;
 
 describe("soknadId reducer", () => {
-  let state: string;
-
   it("should set the initial state to an empty string", () => {
-    expect(store.getState().soknadId).toEqual("");
+    const newState = reducer(undefined, {} as Action);
+    expect(newState).toEqual("");
   });
 
   it("sets soknadId correctly", () => {
     const testId = "soknad-testID";
-    store.dispatch(soknadIdSlice.actions.setSoknadId(testId));
-    state = store.getState().soknadId;
-    expect(state).toEqual(testId);
+    const newState = reducer(undefined, setSoknadId(testId));
+    expect(newState).toEqual(testId);
   });
 });

@@ -1,11 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { combinedRootReducer } from ".";
+import { Action } from "@reduxjs/toolkit";
+import { answersSlice } from "./answers.slice";
 
-const { getState } = configureStore({
-  reducer: combinedRootReducer,
-});
+const { reducer } = answersSlice;
+
 describe("answerSlice", () => {
   it("should initialize with empty array", () => {
-    expect(getState().answers).toEqual([]);
+    const newState = reducer(undefined, {} as Action);
+    expect(newState).toEqual([]);
+    // expect(getState().answers).toEqual([]);
   });
 });
