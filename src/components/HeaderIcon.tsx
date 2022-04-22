@@ -1,8 +1,6 @@
 import React from "react";
-import { v4 } from "uuid";
 
 function SvgHeaderIcon() {
-  const titleId = "icon-title-" + v4();
   return (
     <svg
       width="56"
@@ -12,7 +10,7 @@ function SvgHeaderIcon() {
       xmlns="http://www.w3.org/2000/svg"
       focusable={false}
       role="img"
-      aria-labelledby={titleId}
+      aria-labelledby="header-icon"
     >
       <g clipPath="url(#clip0_3649_100246)">
         <path
