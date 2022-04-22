@@ -11,6 +11,7 @@ import { Faktum } from "../faktum/Faktum";
 import styles from "./Section.module.css";
 import { Left, Right } from "@navikt/ds-icons";
 import { IDescription } from "../../types/faktum.types";
+import { isBackwardNavigationPossible } from "../../store/sections.slice";
 
 interface Props {
   section: ISection;
@@ -25,11 +26,16 @@ export function Section(props: Props) {
   const answers = useSelector((state: RootState) => state.answers);
   const generators = useSelector((state: RootState) => state.generators);
   const navigationState = useSelector((state: RootState) => state.navigation);
+  const currentSectionIndex = useSelector(
+    (state: RootState) => state.sectionsState.currentSectionIndex
+  );
+
+  const isBackNavigationPossible = useSelector(isBackwardNavigationPossible);
 
   // Checking to handle sections where answers are optional
   useEffect(() => {
     showNextUnansweredFaktumOrNextSectionButton();
-  }, [navigationState.currentSectionIndex]);
+  }, [currentSectionIndex]);
 
   // Listening to generators because answers for generator-faktum are stored there
   useEffect(() => {
@@ -85,19 +91,17 @@ export function Section(props: Props) {
         })}
       </div>
       <nav className={styles.sectionNavigation}>
-        <div>
+        {isBackNavigationPossible && (
           <Button variant={"secondary"} onClick={() => props.navigatePreviousSection()}>
             <Left />
             Forrige steg
           </Button>
-        </div>
-        <div>
-          {showNextSectionButton && (
-            <Button onClick={() => props.navigateNextSection()}>
-              Neste steg <Right />
-            </Button>
-          )}
-        </div>
+        )}
+        {showNextSectionButton && (
+          <Button onClick={() => props.navigateNextSection()}>
+            Neste steg <Right />
+          </Button>
+        )}
       </nav>
     </div>
   );

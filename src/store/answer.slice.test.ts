@@ -6,6 +6,6 @@ const { getState } = configureStore({
 });
 describe("answerSlice", () => {
   it("should initialize with empty array", () => {
-    expect(getState().sections).toEqual([]);
+    expect(getState().answers).toEqual([]);
   });
 });

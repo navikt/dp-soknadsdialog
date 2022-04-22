@@ -2,26 +2,28 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Section } from "../components/section/Section";
 import { RootState } from "../store";
-import { setCurrentSectionIndex } from "../store/navigation.slice";
 import { Button } from "@navikt/ds-react";
 import api from "../api.utils";
 import { ProgressBar } from "../components/ProgressBar";
+import { navigateToNextSection, navigateToPreviousSection } from "../store/sections.slice";
 
 export function Soknad() {
   const dispatch = useDispatch();
   const currentSectionIndex = useSelector(
-    (state: RootState) => state.navigation.currentSectionIndex
+    (state: RootState) => state.sectionsState.currentSectionIndex
   );
-  const currentSection = useSelector((state: RootState) => state.sections[currentSectionIndex]);
+  const currentSection = useSelector(
+    (state: RootState) => state.sectionsState.sections[currentSectionIndex]
+  );
   const soknadId = useSelector((state: RootState) => state.soknadId);
-  const sectionsCount = useSelector((state: RootState) => state.sections.length);
+  const sectionsCount = useSelector((state: RootState) => state.sectionsState.sections.length);
 
   function handleNavigateNext() {
-    dispatch(setCurrentSectionIndex(currentSectionIndex + 1));
+    dispatch(navigateToNextSection());
   }
 
   function handleNavigatePrevious() {
-    dispatch(setCurrentSectionIndex(currentSectionIndex - 1));
+    dispatch(navigateToPreviousSection());
   }
 
   async function finishSoknad() {

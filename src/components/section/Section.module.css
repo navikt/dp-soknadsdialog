@@ -11,6 +11,6 @@
   margin-bottom: var(--faktum-spacing);
 }
 
-.sectionNavigation div:first-child {
+.sectionNavigation button:first-child {
   margin-right: 20px;
 }

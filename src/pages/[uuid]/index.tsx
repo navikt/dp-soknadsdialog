@@ -28,12 +28,14 @@ export async function getServerSideProps(
   const { token, apiToken } = await getSession(context);
   let initialState: RootState = {
     soknadId: uuid,
-    sections: sanitySections,
+    sectionsState: {
+      sections: sanitySections,
+      currentSectionIndex: 0,
+    },
     answers: [],
     generators: [],
     quizFakta: [],
     navigation: {
-      currentSectionIndex: 0,
       sectionFaktumIndex: 0,
     },
   };
