@@ -6,7 +6,6 @@ import { QuizFaktum } from "../types/quiz.types";
 import { quizFaktaSlice } from "./quizfakta.slice";
 import { GeneratorState } from "./generator-utils";
 import { generatorsSlice } from "./generators.slice";
-import { navigationSlice, NavigationState } from "./navigation.slice";
 
 export const combinedRootReducer = combineReducers({
   soknadId: soknadIdSlice.reducer,
@@ -14,7 +13,6 @@ export const combinedRootReducer = combineReducers({
   answers: answersSlice.reducer,
   quizFakta: quizFaktaSlice.reducer,
   generators: generatorsSlice.reducer,
-  navigation: navigationSlice.reducer,
 });
 
 let store: EnhancedStore;
@@ -47,5 +45,4 @@ export interface RootState {
   answers: Answer[];
   quizFakta: QuizFaktum[];
   generators: GeneratorState[];
-  navigation: NavigationState;
 }

@@ -31,13 +31,11 @@ export async function getServerSideProps(
     sectionsState: {
       sections: sanitySections,
       currentSectionIndex: 0,
+      sectionFaktumIndex: 0,
     },
     answers: [],
     generators: [],
     quizFakta: [],
-    navigation: {
-      sectionFaktumIndex: 0,
-    },
   };
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {

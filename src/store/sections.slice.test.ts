@@ -5,6 +5,7 @@ import {
   navigateToNextSection,
   navigateToPreviousSection,
   sectionsSlice,
+  setSectionFaktumIndex,
   setSections,
 } from "./sections.slice";
 
@@ -23,16 +24,14 @@ describe("sectionsSlice", () => {
 
   describe("navigateToNextSection", () => {
     it("should increase currentSectionIndex by 1", () => {
-      const state = {
-        sections: testSections,
-        currentSectionIndex: 0,
-      };
+      const state = { ...initialSectionsState, sections: testSections };
       const newState = reducer(state, navigateToNextSection());
       expect(newState.currentSectionIndex).toEqual(1);
     });
 
     it("should not increase currentSectionIndex if currenSectionIndex === (sections.length-1) ", () => {
       const state = {
+        ...initialSectionsState,
         sections: testSections,
         currentSectionIndex: 2,
       };
@@ -44,7 +43,7 @@ describe("sectionsSlice", () => {
   describe("navigateToPreviousSection", () => {
     it("should decrease currentSectionIndex when currentSectionIndex > 0", () => {
       const state = {
-        sections: [],
+        ...initialSectionsState,
         currentSectionIndex: 3,
       };
       const newState = reducer(state, navigateToPreviousSection());
@@ -54,6 +53,13 @@ describe("sectionsSlice", () => {
     it("should not decrease currentSectionIndex when index === 0", () => {
       const newState = reducer(initialSectionsState, navigateToPreviousSection());
       expect(newState.currentSectionIndex).toEqual(0);
+    });
+  });
+
+  describe("setSectionFaktumIndex", () => {
+    it("should set sectionFaktumIndex to given value", () => {
+      const newState = reducer(undefined, setSectionFaktumIndex(8));
+      expect(newState.sectionFaktumIndex).toEqual(8);
     });
   });
 });

@@ -5,11 +5,13 @@ import { RootState } from "./index";
 export interface SectionsState {
   sections: ISection[];
   currentSectionIndex: number;
+  sectionFaktumIndex: number;
 }
 
 export const initialSectionsState: SectionsState = {
   sections: [],
   currentSectionIndex: 0,
+  sectionFaktumIndex: 0,
 };
 
 export const sectionsSlice = createSlice({
@@ -36,11 +38,19 @@ export const sectionsSlice = createSlice({
       }
       return state;
     },
+    setSectionFaktumIndex: (state: SectionsState, action: PayloadAction<number>) => {
+      state.sectionFaktumIndex = action.payload;
+      return state;
+    },
   },
 });
 
 export const isBackwardNavigationPossible = (state: RootState) =>
   state.sectionsState.currentSectionIndex > 0;
 
-export const { setSections, navigateToNextSection, navigateToPreviousSection } =
-  sectionsSlice.actions;
+export const {
+  setSections,
+  navigateToNextSection,
+  navigateToPreviousSection,
+  setSectionFaktumIndex,
+} = sectionsSlice.actions;

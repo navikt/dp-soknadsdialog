@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
 import { isGeneratorFaktum } from "../../sanity/type-guards";
 import { RootState } from "../../store";
-import { setSectionFaktumIndex } from "../../store/navigation.slice";
+import { setSectionFaktumIndex } from "../../store/sections.slice";
 import { ISection } from "../../types/section.types";
 import { Faktum } from "../faktum/Faktum";
 import styles from "./Section.module.css";
@@ -25,9 +25,11 @@ export function Section(props: Props) {
 
   const answers = useSelector((state: RootState) => state.answers);
   const generators = useSelector((state: RootState) => state.generators);
-  const navigationState = useSelector((state: RootState) => state.navigation);
   const currentSectionIndex = useSelector(
     (state: RootState) => state.sectionsState.currentSectionIndex
+  );
+  const sectionFaktumIndex = useSelector(
+    (state: RootState) => state.sectionsState.sectionFaktumIndex
   );
 
   const isBackNavigationPossible = useSelector(isBackwardNavigationPossible);
@@ -85,7 +87,7 @@ export function Section(props: Props) {
         {props.section.helpText && <p>{props.section.helpText}</p>}
 
         {props.section.fakta.map((faktum, index) => {
-          if (index <= navigationState.sectionFaktumIndex) {
+          if (index <= sectionFaktumIndex) {
             return <Faktum key={faktum?.textId} faktum={faktum} />;
           }
         })}
