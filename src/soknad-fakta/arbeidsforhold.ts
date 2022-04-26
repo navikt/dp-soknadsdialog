@@ -28,7 +28,12 @@ export const arbeidsforhold: BlueprintSeksjon = {
         {
           id: "faktum.arbeidsforhold.land",
           type: "land",
-          answerOptions: [],
+          answerOptions: [
+            {
+              id: "faktum.dagpenger-hvilket-eos-land-utbetaler.svar.alle-land",
+              countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+            },
+          ],
         },
         {
           id: "faktum.arbeidsforhold.endret",

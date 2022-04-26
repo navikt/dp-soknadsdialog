@@ -5,6 +5,24 @@ export const bostedsland: BlueprintSeksjon = {
     {
       id: "faktum.hvilket-land-bor-du-i",
       type: "land",
+      answerOptions: [
+        {
+          id: "faktum.hvilket-land-bor-du-i.svar.eos-sveits",
+          countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+        },
+        {
+          id: "faktum.hvilket-land-bor-du-i.svar.norge-svalbard",
+          countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+        },
+        {
+          id: "faktum.hvilket-land-bor-du-i.svar.storbritania",
+          countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+        },
+        {
+          id: "faktum.hvilket-land-bor-du-i.svar.utenfor-eos",
+          countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+        },
+      ],
       subFakta: [
         {
           id: "faktum.reist-tilbake-etter-arbeidsledig",

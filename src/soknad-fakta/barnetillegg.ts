@@ -22,6 +22,20 @@ export const barnetillegg: BlueprintSeksjon = {
         {
           id: "faktum.barn-bostedsland",
           type: "land",
+          answerOptions: [
+            {
+              id: "faktum.barn-bostedsland.svar.eos",
+              countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+            },
+            {
+              id: "faktum.barn-bostedsland.svar.utenfor-eos",
+              countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+            },
+            {
+              id: "faktum.barn-bostedsland.svar.norge",
+              countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+            },
+          ],
         },
         {
           id: "faktum.forsoerger-du-barnet",

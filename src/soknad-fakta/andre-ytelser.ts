@@ -50,7 +50,12 @@ export const andreYtelser: BlueprintSeksjon = {
             {
               id: "faktum.dagpenger-hvilket-eos-land-utbetaler",
               type: "land",
-              answerOptions: [], //todo: insert alle verdens land
+              answerOptions: [
+                {
+                  id: "faktum.dagpenger-hvilket-eos-land-utbetaler.svar.eos-uten-norge",
+                  countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+                },
+              ],
               requiredAnswerIds: ["faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land"],
             },
             {

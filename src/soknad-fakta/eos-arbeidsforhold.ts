@@ -21,6 +21,12 @@ export const eosArbeidsforhold: BlueprintSeksjon = {
             {
               id: "faktum.eos-arbeidsforhold.land",
               type: "land",
+              answerOptions: [
+                {
+                  id: "faktum.eos-arbeidsforhold.land.svar.eos-uten-norge",
+                  countries: [], // HER MÅ ALLE ALPHA3 KODER FOR LAND LIGGE FOR DENNE GRUPPEN
+                },
+              ],
             },
             {
               id: "faktum.eos-arbeidsforhold.personnummer",

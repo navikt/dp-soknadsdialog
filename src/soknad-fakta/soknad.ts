@@ -46,7 +46,7 @@ export interface BlueprintValgFaktum extends BlueprintBaseFaktum {
 export interface BlueprintLandFaktum extends BlueprintBaseFaktum {
   type: LandFaktumType;
   subFakta?: BlueprintSubFaktum[];
-  countryGroups: BlueprintCountryGroup[];
+  answerOptions: BlueprintCountryAnswer[];
 }
 
 export type BlueprintSubFaktum = BlueprintFaktum & {
@@ -55,11 +55,13 @@ export type BlueprintSubFaktum = BlueprintFaktum & {
 
 export interface BlueprintAnswerOption {
   id: string;
+  requiredDocumentIds?: string[];
 }
 
-export interface BlueprintCountryGroup {
+export interface BlueprintCountryAnswer {
   id: string;
   countries: string[];
+  requiredDocumentIds?: string[];
 }
 
 export const blueprintDataSeksjoner: BlueprintSeksjon[] = [
