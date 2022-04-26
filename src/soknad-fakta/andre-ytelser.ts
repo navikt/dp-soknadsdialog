@@ -15,12 +15,52 @@ export const andreYtelser: BlueprintSeksjon = {
           id: "faktum.hvilke-andre-ytelser",
           type: "flervalg",
           answerOptions: [
-            { id: "faktum.hvilke-andre-ytelser.svar.pensjon-offentlig-tjenestepensjon" },
-            { id: "faktum.hvilke-andre-ytelser.svar.arbeidsloshet-garantikassen-for-fiskere" },
-            { id: "faktum.hvilke-andre-ytelser.svar.garantilott-garantikassen-for-fiskere" },
-            { id: "faktum.hvilke-andre-ytelser.svar.etterlonn-arbeidsgiver" },
-            { id: "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land" },
-            { id: "faktum.hvilke-andre-ytelser.svar.annen-ytelse" },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.pensjon-offentlig-tjenestepensjon",
+              requiredDocuments: [
+                { id: "dokumentkrav.hvilke-andre-ytelser.svar.pensjon-offentlig-tjenestepensjon" },
+              ],
+            },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.arbeidsloshet-garantikassen-for-fiskere",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.hvilke-andre-ytelser.svar.arbeidsloshet-garantikassen-for-fiskere",
+                },
+              ],
+            },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.garantilott-garantikassen-for-fiskere",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.hvilke-andre-ytelser.svar.garantilott-garantikassen-for-fiskere",
+                },
+              ],
+            },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.etterlonn-arbeidsgiver",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.hvilke-andre-ytelser.svar.etterlonn-arbeidsgiver",
+                },
+              ],
+            },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land",
+                },
+              ],
+            },
+            {
+              id: "faktum.hvilke-andre-ytelser.svar.annen-ytelse",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.hvilke-andre-ytelser.svar.annen-ytelse",
+                },
+              ],
+            },
           ],
           subFakta: [
             {
@@ -90,7 +130,12 @@ export const andreYtelser: BlueprintSeksjon = {
         {
           id: "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.nei",
         },
-        { id: "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.ja" },
+        {
+          id: "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.ja",
+          requiredDocuments: [
+            { id: "dokumentkrav.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.ja" },
+          ],
+        },
       ],
       subFakta: [
         {

@@ -4,13 +4,34 @@ export const utdanning: BlueprintSeksjon = {
   id: "utdanning",
   fakta: [
     {
-      id: "faktum.utdanning",
-      type: "envalg",
+      id: "faktum.tar-du-utdanning",
+      type: "boolean",
       answerOptions: [
-        { id: "faktum.utdanning.svar.nei" },
-        { id: "faktum.utdanning.svar.nei-men-siste-6-mnd" }, //todo: trigge dokumentasjonskrav
-        { id: "faktum.utdanning.svar.nei-men-planlagt-start" },
-        { id: "faktum.utdanning.svar.ja" },
+        { id: "faktum.tar-du-utdanning.svar.ja" },
+        { id: "faktum.tar-du-utdanning.svar.nei" },
+      ],
+      subFakta: [
+        {
+          id: "faktum.avsluttet-utdanning-siste-6-mnd",
+          type: "boolean",
+          answerOptions: [
+            {
+              id: "faktum.avsluttet-utdanning-siste-6-mnd.svar.ja",
+              requiredDocuments: [{ id: "dokumentkrav.avsluttet-utdanning-siste-6-mnd.svar.ja" }],
+            },
+            { id: "faktum.avsluttet-utdanning-siste-6-mnd.svar.nei" },
+          ],
+          requiredAnswerIds: ["faktum.tar-du-utdanning.svar.nei"],
+        },
+        {
+          id: "faktum.planlegger-utdanning-med-dagpenger",
+          type: "boolean",
+          answerOptions: [
+            { id: "faktum.planlegger-utdanning-med-dagpenger.svar.ja" },
+            { id: "faktum.planlegger-utdanning-med-dagpenger.svar.nei" },
+          ],
+          requiredAnswerIds: ["faktum.tar-du-utdanning.svar.nei"],
+        },
       ],
     },
   ],

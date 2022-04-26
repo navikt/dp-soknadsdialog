@@ -55,13 +55,17 @@ export type BlueprintSubFaktum = BlueprintFaktum & {
 
 export interface BlueprintAnswerOption {
   id: string;
-  requiredDocumentIds?: string[];
+  requiredDocuments?: BlueprintDocument[];
+}
+
+export interface BlueprintDocument {
+  id: string;
 }
 
 export interface BlueprintCountryAnswer {
   id: string;
   countries: string[];
-  requiredDocumentIds?: string[];
+  requiredDocuments?: BlueprintDocument[];
 }
 
 export const blueprintDataSeksjoner: BlueprintSeksjon[] = [

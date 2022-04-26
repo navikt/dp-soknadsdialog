@@ -22,13 +22,26 @@ export const reellArbeidssoker: BlueprintSeksjon = {
             },
             {
               id: "faktum.kun-deltid-aarsak.svar.eneansvar-barn",
+              requiredDocuments: [{ id: "dokumentkrav.kun-deltid-aarsak.svar.eneansvar-barn" }],
             },
             {
               id: "faktum.kun-deltid-aarsak.svar.omsorg-barn-spesielle-behov",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.kun-deltid-aarsak.svar.omsorg-barn-spesielle-behov",
+                },
+              ],
             },
             { id: "faktum.kun-deltid-aarsak.svar.skift-turnus" },
             { id: "faktum.kun-deltid-aarsak.svar.har-fylt-60" },
-            { id: "faktum.kun-deltid-aarsak.svar.annen-situasjon" },
+            {
+              id: "faktum.kun-deltid-aarsak.svar.annen-situasjon",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.kun-deltid-aarsak.svar.annen-situasjon",
+                },
+              ],
+            },
           ],
           subFakta: [
             {
@@ -58,7 +71,14 @@ export const reellArbeidssoker: BlueprintSeksjon = {
           type: "flervalg",
           requiredAnswerIds: ["faktum.jobbe-hele-norge.svar.nei"],
           answerOptions: [
-            { id: "faktum.ikke-jobbe-hele-norge.svar.redusert-helse" },
+            {
+              id: "faktum.ikke-jobbe-hele-norge.svar.redusert-helse",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.ikke-jobbe-hele-norge.svar.redusert-helse",
+                },
+              ],
+            },
             {
               id: "faktum.ikke-jobbe-hele-norge.svar.omsorg-baby",
             },
@@ -67,12 +87,24 @@ export const reellArbeidssoker: BlueprintSeksjon = {
             },
             {
               id: "faktum.ikke-jobbe-hele-norge.svar.omsorg-barn-spesielle-behov",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.ikke-jobbe-hele-norge.svar.omsorg-barn-spesielle-behov",
+                },
+              ],
             },
             {
               id: "faktum.ikke-jobbe-hele-norge.svar.skift-turnus",
             },
             { id: "faktum.ikke-jobbe-hele-norge.svar.har-fylt-60" },
-            { id: "faktum.ikke-jobbe-hele-norge.svar.annen-situasjon" },
+            {
+              id: "faktum.ikke-jobbe-hele-norge.svar.annen-situasjon",
+              requiredDocuments: [
+                {
+                  id: "dokumentkrav.ikke-jobbe-hele-norge.svar.annen-situasjon",
+                },
+              ],
+            },
           ],
           subFakta: [
             {
@@ -89,7 +121,14 @@ export const reellArbeidssoker: BlueprintSeksjon = {
       type: "boolean",
       answerOptions: [
         { id: "faktum.alle-typer-arbeid.svar.ja" },
-        { id: "faktum.alle-typer-arbeid.svar.nei" },
+        {
+          id: "faktum.alle-typer-arbeid.svar.nei",
+          requiredDocuments: [
+            {
+              id: "dokumentkrav.alle-typer-arbeid.svar.nei",
+            },
+          ],
+        },
       ],
     },
     {

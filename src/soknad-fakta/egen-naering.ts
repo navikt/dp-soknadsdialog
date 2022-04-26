@@ -7,7 +7,14 @@ export const egenNaering: BlueprintSeksjon = {
       id: "faktum.driver-du-egen-naering",
       type: "boolean",
       answerOptions: [
-        { id: "faktum.driver-du-egen-naering.svar.ja" },
+        {
+          id: "faktum.driver-du-egen-naering.svar.ja",
+          requiredDocuments: [
+            {
+              id: "dokumentkrav.driver-du-egen-naering.svar.ja",
+            },
+          ],
+        },
         { id: "faktum.driver-du-egen-naering.svar.nei" },
       ],
       subFakta: [
@@ -20,12 +27,12 @@ export const egenNaering: BlueprintSeksjon = {
         {
           id: "faktum.egen-naering-arbeidstimer-for",
           type: "double",
-          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
         },
         {
           id: "faktum.egen-naering-arbeidstimer-naa",
           type: "double",
-          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"], //todo: vedleggskrav
+          requiredAnswerIds: ["faktum.driver-du-egen-naering.svar.ja"],
         },
       ],
     },
@@ -33,7 +40,10 @@ export const egenNaering: BlueprintSeksjon = {
       id: "faktum.driver-du-eget-gaardsbruk",
       type: "boolean",
       answerOptions: [
-        { id: "faktum.driver-du-eget-gaardsbruk.svar.ja" }, //todo: dokumentfaktumKrav arbeidstimer
+        {
+          id: "faktum.driver-du-eget-gaardsbruk.svar.ja",
+          requiredDocuments: [{ id: "dokumentkrav.driver-du-eget-gaardsbruk.svar.ja" }],
+        },
         { id: "faktum.driver-du-eget-gaardsbruk.svar.nei" },
       ],
       subFakta: [

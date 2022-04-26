@@ -40,13 +40,48 @@ export const arbeidsforhold: BlueprintSeksjon = {
           type: "envalg",
           answerOptions: [
             { id: "faktum.arbeidsforhold.endret.svar.ikke-endret" },
-            { id: "faktum.arbeidsforhold.endret.svar.avskjediget" },
-            { id: "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver" },
-            { id: "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs" },
-            { id: "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt" },
-            { id: "faktum.arbeidsforhold.endret.svar.sagt-opp-selv" },
-            { id: "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid" },
-            { id: "faktum.arbeidsforhold.endret.svar.permittert" },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.avskjediget",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.avskjediget" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.arbeidsgiver-konkurs" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.kontrakt-utgaatt" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.sagt-opp-selv",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.sagt-opp-selv" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.redusert-arbeidstid",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.redusert-arbeidstid" },
+              ],
+            },
+            {
+              id: "faktum.arbeidsforhold.endret.svar.permittert",
+              requiredDocuments: [
+                { id: "dokumentkrav.faktum.arbeidsforhold.endret.svar.permittert" },
+              ],
+            },
           ],
           subFakta: [
             {
@@ -265,9 +300,19 @@ export const arbeidsforhold: BlueprintSeksjon = {
                   answerOptions: [
                     {
                       id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ja",
+                      requiredDocuments: [
+                        {
+                          id: "dokumentkrav.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ja",
+                        },
+                      ],
                     },
                     {
                       id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
+                      requiredDocuments: [
+                        {
+                          id: "dokumentkrav.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.nei",
+                        },
+                      ],
                     },
                     {
                       id: "faktum.arbeidsforhold.svar-paa-forlengelse-eller-annen-stilling.svar.ikke-svart",
@@ -445,7 +490,10 @@ export const arbeidsforhold: BlueprintSeksjon = {
               id: "faktum.arbeidsforhold.rotasjon",
               type: "boolean",
               answerOptions: [
-                { id: "faktum.arbeidsforhold.rotasjon.svar.ja" },
+                {
+                  id: "faktum.arbeidsforhold.rotasjon.svar.ja",
+                  requiredDocuments: [{ id: "dokumentkrav.arbeidsforhold.rotasjon.svar.ja" }],
+                },
                 { id: "faktum.arbeidsforhold.rotasjon.svar.nei" },
               ],
               subFakta: [
