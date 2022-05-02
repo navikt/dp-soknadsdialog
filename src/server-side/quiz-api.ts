@@ -18,7 +18,11 @@ export function getSoknadMal(onBehalfOfToken: string) {
   return fetch(url, {
     method: "Get",
     headers: headersWithToken(onBehalfOfToken),
-  });
+  })
+    .then((response: Response) => response.json())
+    .catch((error) => {
+      return Promise.reject(error);
+    });
 }
 export function postSoknad(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
