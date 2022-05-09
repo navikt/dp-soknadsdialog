@@ -86,7 +86,7 @@ export function Section(props: Props) {
         {renderSectionDescription(props.section.description)}
         {props.section.helpText && <p>{props.section.helpText}</p>}
 
-        {props.section.fakta.map((faktum, index) => {
+        {props.section.fakta?.map((faktum, index) => {
           if (index <= sectionFaktumIndex) {
             return <Faktum key={faktum?.textId} faktum={faktum} />;
           }
