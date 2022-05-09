@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { allAnswerOptions } from "../../../soknad-fakta/answer-options";
 
-const updateAnswerOptions = async (req: NextApiRequest, res: NextApiResponse) => {
+const updateSvaralternativer = async (req: NextApiRequest, res: NextApiResponse) => {
   const query = '* [_type == "svaralternativ"]';
   const existingSvaralternativer = await sanityClient.fetch(query);
   const existingSvaralternativTextIds = existingSvaralternativer.map(
@@ -25,4 +25,4 @@ const updateAnswerOptions = async (req: NextApiRequest, res: NextApiResponse) =>
   return res.status(200).json(sanityResponse);
 };
 
-export default updateAnswerOptions;
+export default updateSvaralternativer;
