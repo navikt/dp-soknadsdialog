@@ -1,41 +1,28 @@
 import { groq } from "next-sanity";
 
-const faktumGroq = `
-  'textId': _id,
-  type,
+const seksjonerGroq = `* [_type == "seksjon"]{
+  textId,
   title,
-  type,
-  unit,
   description,
-  alertText,
-  helpText,
-  'requiredAnswerIds': requiredAnswerIds[]-> _id,
-  answerOptions[]->{
-    'textId': _id,
-    title,
-    alertText,
-    helpText
-  }
-`;
+  helpText
+}`;
 
-export const fetchAllSeksjoner = groq`*[_type == "seksjon" && !(_id in path("drafts.**"))]{
-  'id': _id, title, description, helpText,
-  'fakta': faktum[]->{
-    ${faktumGroq},
-    'subFakta': subFaktum[]->{
-      ${faktumGroq},
-      'fakta': faktum[]->{
-        ${faktumGroq}
-      },
-    },
-    'fakta': faktum[]->{
-      ${faktumGroq},
-      'subFakta': subFaktum[]->{
-        ${faktumGroq},
-        'fakta': faktum[]->{
-          ${faktumGroq}
-        }
-      },
-    }
-  }
+const faktaGroq = `* [_type == "faktum"]{
+  textId,
+  text,
+  description,
+  helpText,
+  unit
+}`;
+
+const svaralternativerGroq = `* [_type == "svaralternativ"]{
+  textId,
+  text,
+  alertText
+}`;
+
+export const allTexts = groq`{
+  "seksjoner": ${seksjonerGroq},
+  "fakta": ${faktaGroq},
+  "svaralternativer": ${svaralternativerGroq},
 }`;
