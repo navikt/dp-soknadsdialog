@@ -1,47 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { QuizPrimitiveFaktum } from "../../types/quiz.types";
 
-export function FaktumText(props: FaktumProps<IPrimitivFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumText(props: FaktumProps<QuizPrimitiveFaktum>) {
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  console.log(faktumTexts);
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer =
-    (answers.find((answer) => answer.textId === faktum.textId)?.value as string) || undefined;
 
-  const [debouncedText, setDebouncedText] = useState(currentAnswer);
+  const [debouncedText, setDebouncedText] = useState(faktum.svar as string);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    if (debouncedText && debouncedText !== currentAnswer) {
+    if (debouncedText && debouncedText !== faktum.svar) {
       onChange ? onChange(faktum, debouncedText) : saveFaktum(debouncedText);
     }
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: value,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
+    console.log("Should save: ", value);
   }
 
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <TextField
-        defaultValue={currentAnswer}
-        label={faktum.title ? faktum.title : faktum.textId}
+        defaultValue={faktum?.svar as string}
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         size="medium"
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}

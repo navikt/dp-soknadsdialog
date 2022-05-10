@@ -13,6 +13,12 @@ export interface QuizBaseFaktum {
   beskrivendeId: string;
 }
 
+export interface QuizFlervalgFaktum extends QuizBaseFaktum {
+  svar: string[];
+  type: ValgFaktumType;
+  gyldigeValg: string[];
+}
+
 export interface QuizValgFaktum extends QuizBaseFaktum {
   svar: string;
   type: ValgFaktumType;

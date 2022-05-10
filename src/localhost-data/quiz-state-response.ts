@@ -19,6 +19,7 @@ export const quizStateResponse: QuizState = {
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei",
           ],
+          svar: "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
         },
         {
           id: "2",
@@ -32,6 +33,12 @@ export const quizStateResponse: QuizState = {
             "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land",
             "faktum.hvilke-andre-ytelser.svar.annen-ytelse",
           ],
+        },
+        {
+          id: "3",
+          beskrivendeId: "faktum.eget-gaardsbruk-arbeidstimer-beregning",
+          type: "tekst",
+          svar: "Dette har jeg svart",
         },
       ],
     },
