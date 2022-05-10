@@ -11,18 +11,18 @@ import { getSoknadState } from "../../server-side/quiz-api";
 import { TypedObject } from "@portabletext/types";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 
-interface SanityHelpText {
+export interface SanityHelpText {
   title: string;
   body: TypedObject | TypedObject[];
 }
 
-interface SanityAlertText {
+export interface SanityAlertText {
   title: string;
   type: "info" | "warning" | "error" | "success";
   body: TypedObject | TypedObject[];
 }
 
-interface SanityFaktum {
+export interface SanityFaktum {
   textId: string;
   text: string;
   description: TypedObject | TypedObject[];
@@ -30,22 +30,23 @@ interface SanityFaktum {
   unit: string;
 }
 
-interface SanitySeksjon {
+export interface SanitySeksjon {
   textId: string;
   title: string;
   description: TypedObject | TypedObject[];
   helpText: SanityHelpText;
 }
 
-interface SanitySvarAlternativ {
+export interface SanitySvaralternativ {
   textId: string;
   text: string;
   alertText: SanityAlertText;
 }
-interface SanityTexts {
+
+export interface SanityTexts {
   fakta: SanityFaktum[];
   seksjoner: SanitySeksjon[];
-  svaralternativer: SanitySvarAlternativ[];
+  svaralternativer: SanitySvaralternativ[];
 }
 
 export async function getServerSideProps(
@@ -54,9 +55,7 @@ export async function getServerSideProps(
   const { query } = context;
   const uuid = query.uuid as string;
 
-  const allSanityTexts = await sanityClient.fetch<SanityTexts>(allTexts);
-  // eslint-disable-next-line
-  console.log(allSanityTexts);
+  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTexts);
 
   const { token, apiToken } = await getSession(context);
   const initialState: RootState = {
@@ -83,13 +82,18 @@ export async function getServerSideProps(
   }
 
   return {
-    props: { reduxState: initialState, soknadState },
+    props: {
+      reduxState: initialState,
+      soknadState: soknadState ? soknadState : undefined,
+      sanityTexts,
+    },
   };
 }
 
 interface SoknadMedIdParams {
   reduxState: RootState;
   soknadState: QuizState | undefined;
+  sanityTexts: SanityTexts;
 }
 
 export default function SoknadMedId(props: SoknadMedIdParams) {
@@ -98,9 +102,17 @@ export default function SoknadMedId(props: SoknadMedIdParams) {
   // eslint-disable-next-line no-console
   console.log(props.soknadState);
 
+  if (!props.soknadState) {
+    return <div>Noe gikk galt ved henting av soknad state fra quiz</div>;
+  }
+
   return (
     <Provider store={reduxStore}>
-      <Soknad />
+      <SanityContext.Provider value={props.sanityTexts}>
+        <Soknad soknadState={props.soknadState} sanityTexts={props.sanityTexts} />
+      </SanityContext.Provider>
     </Provider>
   );
 }
+
+export const SanityContext = React.createContext<SanityTexts | null>(null);

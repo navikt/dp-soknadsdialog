@@ -9,7 +9,7 @@ export const quizStateResponse: QuizState = {
   ferdig: false,
   seksjoner: [
     {
-      beskrivendeId: "andre-ytelse",
+      beskrivendeId: "andre-ytelser",
       fakta: [
         {
           id: "1",

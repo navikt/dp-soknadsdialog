@@ -6,12 +6,17 @@ import {
 } from "./faktum.types";
 
 export type QuizFaktumSvar = string | string[] | boolean | number;
-export type QuizFaktum = QuizPrimitiveFaktum | QuizGeneratorFaktum;
+export type QuizFaktum = QuizPrimitiveFaktum | QuizValgFaktum | QuizGeneratorFaktum;
 
 export interface QuizBaseFaktum {
   id: string;
   beskrivendeId: string;
-  gyldigeValg?: string[];
+}
+
+export interface QuizValgFaktum extends QuizBaseFaktum {
+  svar: string;
+  type: ValgFaktumType;
+  gyldigeValg: string[];
 }
 
 export interface QuizPrimitiveFaktum extends QuizBaseFaktum {

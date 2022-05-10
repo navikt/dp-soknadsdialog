@@ -6,16 +6,14 @@ import { PortableText } from "@portabletext/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { SubFaktum } from "./SubFaktum";
-import styles from "./Faktum.module.css";
+import { QuizValgFaktum } from "../../types/quiz.types";
+import { SanityContext } from "../../pages/[uuid]";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
 
-export function FaktumValg(props: FaktumProps<IValgFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswerId = answers.find((answer) => answer.textId === faktum.textId)?.value as
-    | string
-    | undefined;
+  const faktumText = getFaktumSanityText(faktum.beskrivendeId);
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -29,47 +27,29 @@ export function FaktumValg(props: FaktumProps<IValgFaktum>) {
       // eslint-disable-next-line no-console
       console.error("ERROR");
     }
-
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: mappedAnswer,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
   }
 
+  // eslint-disable-next-line no-console
+  console.log(faktumText);
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumText?.description && <PortableText value={faktumText.description} />}
+      {faktumText?.helpText && <p>{faktumText.helpText.title}</p>}
 
       <RadioGroup
-        legend={faktum.title ? faktum.title : faktum.textId}
+        legend={faktumText ? faktumText.text : faktum.beskrivendeId}
         onChange={onSelection}
-        value={currentAnswerId || ""}
+        value={props.faktum?.svar}
       >
-        {faktum.answerOptions.map((answer) => (
-          <div key={answer.textId}>
-            <Radio value={answer.textId}>{answer.title ? answer.title : answer.textId}</Radio>
-            {answer.alertText && currentAnswerId === answer.textId ? (
-              <Alert variant={"warning"}>{answer.alertText}</Alert>
-            ) : undefined}
-          </div>
-        ))}
+        {faktum.gyldigeValg.map((textId) => {
+          const svaralternativText = getSvaralternativSanityText(textId);
+          return (
+            <div key={textId}>
+              <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>
+            </div>
+          );
+        })}
       </RadioGroup>
-
-      {faktum.subFakta && faktum.subFakta.length > 0 && (
-        <div className={styles["sub-faktum"]}>
-          <SubFaktum
-            faktum={faktum}
-            answers={answers}
-            onChange={onChange}
-            currentAnswerIds={currentAnswerId ? [currentAnswerId] : []}
-          />
-        </div>
-      )}
     </div>
   );
 }
