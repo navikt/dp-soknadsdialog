@@ -7,9 +7,9 @@ import { sanityClient } from "../../../sanity-client";
 import { allTexts } from "../../sanity/groq-queries";
 import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../api.utils";
-import { getFakta } from "../../server-side/quiz-api";
-import { mapQuizFaktaToReduxState } from "../../server-side/quiz-to-redux-mapper";
+import { getSoknadState } from "../../server-side/quiz-api";
 import { TypedObject } from "@portabletext/types";
+import { QuizState } from "../../localhost-data/quiz-state-response";
 
 interface SanityHelpText {
   title: string;
@@ -50,7 +50,7 @@ interface SanityTexts {
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<RootState>> {
+): Promise<GetServerSidePropsResult<SoknadMedIdParams>> {
   const { query } = context;
   const uuid = query.uuid as string;
 
@@ -59,7 +59,7 @@ export async function getServerSideProps(
   console.log(allSanityTexts);
 
   const { token, apiToken } = await getSession(context);
-  let initialState: RootState = {
+  const initialState: RootState = {
     soknadId: uuid,
     sectionsState: {
       sections: [],
@@ -71,24 +71,32 @@ export async function getServerSideProps(
     quizFakta: [],
   };
 
+  let soknadState;
+
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    const quizFakta = await getFakta(uuid, "");
-    initialState = { ...initialState, ...mapQuizFaktaToReduxState(quizFakta), quizFakta };
+    soknadState = await getSoknadState(uuid, "");
   }
 
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
-    const quizFakta = await getFakta(uuid, onBehalfOfToken);
-    initialState = { ...initialState, ...mapQuizFaktaToReduxState(quizFakta), quizFakta };
+    soknadState = await getSoknadState(uuid, onBehalfOfToken);
   }
 
   return {
-    props: { ...initialState },
+    props: { reduxState: initialState, soknadState },
   };
 }
 
-export default function SoknadMedId(props: RootState) {
-  const reduxStore = initialiseStore(props);
+interface SoknadMedIdParams {
+  reduxState: RootState;
+  soknadState: QuizState | undefined;
+}
+
+export default function SoknadMedId(props: SoknadMedIdParams) {
+  const reduxStore = initialiseStore(props.reduxState);
+
+  // eslint-disable-next-line no-console
+  console.log(props.soknadState);
 
   return (
     <Provider store={reduxStore}>

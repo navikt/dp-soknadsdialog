@@ -31,6 +31,11 @@ interface QuizGeneratorTemplate {
   beskrivendeId: string;
 }
 
+export interface QuizSeksjon {
+  beskrivendeId: string;
+  fakta: QuizFaktum[];
+}
+
 export interface QuizAnswer {
   id: string;
   beskrivendeId: string;
