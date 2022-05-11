@@ -1,5 +1,4 @@
-import { BlueprintSeksjon } from "./soknad";
-export const eosArbeidsforhold: BlueprintSeksjon = {
+export const eosArbeidsforhold = {
   id: "eos-arbeidsforhold",
   fakta: [
     {

@@ -1,6 +1,4 @@
-import { BlueprintSeksjon } from "./soknad";
-
-export const arbeidsforhold: BlueprintSeksjon = {
+export const arbeidsforhold = {
   id: "arbeidsforhold",
   fakta: [
     {

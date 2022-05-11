@@ -11,6 +11,7 @@ interface Props {
 
 export function Soknad(props: Props) {
   const [soknadState, setSoknadState] = useState(props.soknadState);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   // const dispatch = useDispatch();
   // const currentSectionIndex = useSelector(
   //   (state: RootState) => state.sectionsState.currentSectionIndex
@@ -28,7 +29,6 @@ export function Soknad(props: Props) {
   // function handleNavigatePrevious() {
   //   dispatch(navigateToPreviousSection());
   // }
-  const currentSectionIndex = 0;
   const currentQuizStateSection = soknadState.seksjoner[currentSectionIndex];
 
   async function finishSoknad() {

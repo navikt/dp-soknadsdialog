@@ -1,43 +1,32 @@
-import React from "react";
-import { IPrimitivFaktum } from "../../types/faktum.types";
+import React, { useState } from "react";
 import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { formatISO } from "date-fns";
-import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { QuizDatoFaktum } from "../../types/quiz.types";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 
-export function FaktumDato(props: FaktumProps<IPrimitivFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = answers.find((answer) => answer.textId === faktum.textId)?.value as
-    | string
-    | undefined;
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
   const onDateSelection = (value: Date) => {
     const date = formatISO(value, { representation: "date" });
+    setCurrentAnswer(date);
     onChange ? onChange(faktum, date) : saveFaktum(date);
   };
 
   function saveFaktum(value: string) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: value,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
+    console.log("TODO: Save the date....");
   }
 
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <DatePicker
-        label={faktum.title ? faktum.title : faktum.textId}
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onDateSelection}
         value={currentAnswer}
       />

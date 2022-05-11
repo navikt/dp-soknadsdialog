@@ -1,45 +1,33 @@
 import { PortableText } from "@portabletext/react";
-import React, { ChangeEvent } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { ChangeEvent, useState } from "react";
 import { getCountryDropdownOptionsForFaktum } from "../../country.utils";
-import { RootState } from "../../store";
-import { saveAnswerToQuiz } from "../../store/answers.slice";
-import { ILandFaktum } from "../../types/faktum.types";
 import { Dropdown } from "../input/dropdown/Dropdown";
 import { FaktumProps } from "./Faktum";
+import { QuizLandFaktum } from "../../types/quiz.types";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 
-export function FaktumLand(props: FaktumProps<ILandFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = answers.find((answer) => answer.textId === faktum.textId)?.value as
-    | string
-    | undefined;
-
-  const options = getCountryDropdownOptionsForFaktum(props.faktum.textId);
+  const faktumTexts = getFaktumSanityText(faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
+  const options = getCountryDropdownOptionsForFaktum(faktum.beskrivendeId);
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
     onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
+    setCurrentAnswer(event.target.value);
   }
 
   function saveFaktum(value: string) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: value,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
+    console.log("Todo: Save land");
   }
 
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
 
       <Dropdown
-        label={faktum.title ? faktum.title : faktum.textId}
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelect}
         options={options}
         currentValue={currentAnswer || "Velg et land"}

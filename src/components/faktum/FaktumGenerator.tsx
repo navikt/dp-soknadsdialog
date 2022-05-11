@@ -1,6 +1,4 @@
 import React from "react";
-import { IGeneratorFaktum } from "../../types/faktum.types";
-import { FaktumProps } from "./Faktum";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barnetillegg } from "../barnetillegg/Barnetillegg";
 import styles from "./Faktum.module.css";
@@ -10,13 +8,14 @@ import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
 import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../faktum.utils";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 
-export function FaktumGenerator(props: Omit<FaktumProps<IGeneratorFaktum>, "onChange">) {
+export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
   return <div>{renderGeneratorType(props.faktum)}</div>;
 }
 
-function renderGeneratorType(faktum: IGeneratorFaktum) {
-  switch (faktum.textId) {
+function renderGeneratorType(faktum: QuizGeneratorFaktum) {
+  switch (faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...faktum} />;
     case BARN_LISTE_FAKTUM_ID:
@@ -26,13 +25,13 @@ function renderGeneratorType(faktum: IGeneratorFaktum) {
   }
 }
 
-function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
-  const generatorAnswers = useGeneratorStateAnswers(faktum.textId);
+function StandardGeneratorFaktum(faktum: QuizGeneratorFaktum) {
+  const generatorAnswers = useGeneratorStateAnswers(faktum.beskrivendeId);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveList(answers: Answer[]) {
-    saveList(answers, faktum.textId);
+    saveList(answers, faktum.beskrivendeId);
   }
 
   return (
@@ -45,10 +44,10 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.textId)}>Slett svar</Button>
+              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett svar</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.fakta}
+                fakta={faktum.templates}
                 save={handleSaveList}
                 cancel={resetState}
               />
@@ -67,7 +66,7 @@ function StandardGeneratorFaktum(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.fakta} save={handleSaveList} cancel={resetState} />
+        <GeneratorFakta fakta={faktum.templates} save={handleSaveList} cancel={resetState} />
       )}
     </div>
   );

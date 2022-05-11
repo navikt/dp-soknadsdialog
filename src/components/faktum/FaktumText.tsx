@@ -4,14 +4,13 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
-import { QuizPrimitiveFaktum } from "../../types/quiz.types";
+import { QuizTekstFaktum } from "../../types/quiz.types";
 
-export function FaktumText(props: FaktumProps<QuizPrimitiveFaktum>) {
+export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
-  console.log(faktumTexts);
   const { faktum, onChange } = props;
 
-  const [debouncedText, setDebouncedText] = useState(faktum.svar as string);
+  const [debouncedText, setDebouncedText] = useState(faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ export function FaktumText(props: FaktumProps<QuizPrimitiveFaktum>) {
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <TextField
-        defaultValue={faktum?.svar as string}
+        defaultValue={faktum?.svar}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         size="medium"
         type="text"

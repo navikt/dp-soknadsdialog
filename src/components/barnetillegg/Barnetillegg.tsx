@@ -1,19 +1,19 @@
 import React from "react";
-import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { FAKTUM_BARNETILLEGG } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 
-export function Barnetillegg(faktum: IGeneratorFaktum) {
+export function Barnetillegg(faktum: QuizGeneratorFaktum) {
   const barnetillegg = useGeneratorStateAnswers(FAKTUM_BARNETILLEGG);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveBarnetillegg(answers: Answer[]) {
-    saveList(answers, faktum.textId);
+    saveList(answers, faktum.beskrivendeId);
   }
 
   return (
@@ -26,10 +26,10 @@ export function Barnetillegg(faktum: IGeneratorFaktum) {
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.textId)}>Slett barn</Button>
+              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett barn</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.fakta}
+                fakta={faktum.templates}
                 save={handleSaveBarnetillegg}
                 cancel={resetState}
               />
@@ -43,7 +43,11 @@ export function Barnetillegg(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.fakta} save={handleSaveBarnetillegg} cancel={resetState} />
+        <GeneratorFakta
+          fakta={faktum.templates}
+          save={handleSaveBarnetillegg}
+          cancel={resetState}
+        />
       )}
     </div>
   );

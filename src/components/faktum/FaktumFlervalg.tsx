@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -10,9 +10,11 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
 
   const faktumText = getFaktumSanityText(faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
 
   function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
+    setCurrentAnswer(value);
   }
 
   function saveFaktum(value: string[]) {}
@@ -25,7 +27,7 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
       <CheckboxGroup
         legend={faktumText?.text ? faktumText.text : faktum.beskrivendeId}
         onChange={onSelection}
-        value={props.faktum?.svar}
+        value={currentAnswer}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativSanityText(textId);

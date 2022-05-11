@@ -1,10 +1,8 @@
-import React, { ChangeEvent } from "react";
-import { IFaktum } from "../../../types/faktum.types";
+import React, { ChangeEvent, useState } from "react";
 import { FaktumProps } from "../Faktum";
 import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../store";
-import { saveAnswerToQuiz } from "../../../store/answers.slice";
+import { QuizNumberFaktum } from "../../../types/quiz.types";
+import { getFaktumSanityText } from "../../../hooks/getFaktumSanityText";
 
 const years: DropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -14,32 +12,24 @@ for (let i = 0; i <= 4; i++) {
   years.push({ value: year, label: year });
 }
 
-export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<IFaktum>) {
-  const dispatch = useDispatch();
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = answers.find((answer) => answer.textId === props.faktum.textId)?.value as
-    | number
-    | undefined;
+export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<QuizNumberFaktum>) {
+  const { faktum } = props;
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
+    setCurrentAnswer(value);
     props.onChange ? props.onChange(props.faktum, value) : saveFaktum(value);
   }
 
   function saveFaktum(value: number) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: props.faktum.textId,
-        value: value,
-        type: props.faktum.type,
-        id: props.faktum.id,
-      })
-    );
+    console.log("Todo: Save eget gaardsbruk int");
   }
 
   return (
     <Dropdown
-      label={props.faktum.title ? props.faktum.title : props.faktum.textId}
+      label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
       onChange={handleOnSelect}
       options={years}
       currentValue={currentAnswer?.toString() || ""}

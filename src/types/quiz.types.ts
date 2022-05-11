@@ -1,12 +1,11 @@
-import {
-  GeneratorFaktumType,
-  LandFaktumType,
-  PrimitivFaktumType,
-  ValgFaktumType,
-} from "./faktum.types";
-
-export type QuizFaktumSvar = string | string[] | boolean | number;
-export type QuizFaktum = QuizPrimitiveFaktum | QuizValgFaktum | QuizGeneratorFaktum;
+export type QuizFaktum =
+  | QuizFlervalgFaktum
+  | QuizValgFaktum
+  | QuizTekstFaktum
+  | QuizDatoFaktum
+  | QuizPeriodeFaktum
+  | QuizNumberFaktum
+  | QuizLandFaktum;
 
 export interface QuizBaseFaktum {
   id: string;
@@ -14,49 +13,58 @@ export interface QuizBaseFaktum {
 }
 
 export interface QuizFlervalgFaktum extends QuizBaseFaktum {
-  svar: string[];
-  type: ValgFaktumType;
+  svar?: string[];
+  type: "flervalg";
   gyldigeValg: string[];
 }
 
 export interface QuizValgFaktum extends QuizBaseFaktum {
-  svar: string;
-  type: ValgFaktumType;
+  svar?: string;
+  type: "boolean" | "envalg";
   gyldigeValg: string[];
 }
+export interface QuizTekstFaktum extends QuizBaseFaktum {
+  type: "tekst";
+  svar?: string;
+}
 
-export interface QuizPrimitiveFaktum extends QuizBaseFaktum {
-  type: PrimitivFaktumType | ValgFaktumType | LandFaktumType;
-  svar?: QuizFaktumSvar;
+export interface QuizDatoFaktum extends QuizBaseFaktum {
+  type: "localdate";
+  svar?: string;
+}
+
+export interface QuizPeriodeFaktum extends QuizBaseFaktum {
+  type: "periode";
+  svar?: {
+    fom: string;
+    tom?: string;
+  };
+}
+
+export interface QuizNumberFaktum extends QuizBaseFaktum {
+  type: "int" | "double";
+  svar?: number;
+}
+
+export interface QuizLandFaktum extends QuizBaseFaktum {
+  type: "land";
+  svar: string;
 }
 
 export interface QuizGeneratorFaktum extends QuizBaseFaktum {
-  type: GeneratorFaktumType;
-  svar?: QuizPrimitiveFaktum[][];
-  templates: QuizGeneratorTemplate[];
-}
-
-interface QuizGeneratorTemplate {
-  id: string;
-  type: PrimitivFaktumType | ValgFaktumType | LandFaktumType;
-  beskrivendeId: string;
+  type: "generator";
+  svar?: QuizFaktum[][];
+  templates: Omit<QuizFaktum, "svar">[];
 }
 
 export interface QuizSeksjon {
   beskrivendeId: string;
-  fakta: QuizFaktum[];
+  fakta: (QuizFaktum | QuizGeneratorFaktum)[];
 }
 
 export interface QuizAnswer {
   id: string;
   beskrivendeId: string;
   type: string;
-  svar: QuizAnswerValue;
-}
-
-export type QuizAnswerValue = string | string[] | number | boolean | QuizAnswerPeriod | undefined;
-
-export interface QuizAnswerPeriod {
-  fom: string;
-  tom?: string;
+  svar: string;
 }

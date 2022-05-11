@@ -12,12 +12,12 @@ import { TypedObject } from "@portabletext/types";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 
 export interface SanityHelpText {
-  title: string;
+  title?: string;
   body: TypedObject | TypedObject[];
 }
 
 export interface SanityAlertText {
-  title: string;
+  title?: string;
   type: "info" | "warning" | "error" | "success";
   body: TypedObject | TypedObject[];
 }
@@ -25,22 +25,22 @@ export interface SanityAlertText {
 export interface SanityFaktum {
   textId: string;
   text: string;
-  description: TypedObject | TypedObject[];
-  helpText: SanityHelpText;
-  unit: string;
+  description?: TypedObject | TypedObject[];
+  helpText?: SanityHelpText;
+  unit?: string;
 }
 
 export interface SanitySeksjon {
   textId: string;
   title: string;
-  description: TypedObject | TypedObject[];
-  helpText: SanityHelpText;
+  description?: TypedObject | TypedObject[];
+  helpText?: SanityHelpText;
 }
 
 export interface SanitySvaralternativ {
   textId: string;
   text: string;
-  alertText: SanityAlertText;
+  alertText?: SanityAlertText;
 }
 
 export interface SanityTexts {

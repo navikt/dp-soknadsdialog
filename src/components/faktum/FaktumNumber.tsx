@@ -1,25 +1,20 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { IPrimitivFaktum } from "../../types/faktum.types";
 import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { saveAnswerToQuiz } from "../../store/answers.slice";
+import { QuizNumberFaktum } from "../../types/quiz.types";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 
-export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer =
-    (answers.find((answer) => answer.textId === faktum.textId)?.value as number) || undefined;
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
 
-  const [debouncedValue, setDebouncedValue] = useState(currentAnswer);
+  const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
 
   useEffect(() => {
-    if (debouncedValue && debouncedValue !== currentAnswer) {
+    if (debouncedValue && debouncedValue !== props.faktum.svar) {
       onChange ? onChange(faktum, debouncedValue) : saveFaktum(debouncedValue);
     }
   }, [debouncedValue]);
@@ -28,6 +23,10 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   //TODO Add som validation for different int vs float
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     let number;
+    if (!event.target.value) {
+      setDebouncedValue(undefined);
+      return;
+    }
     switch (faktum.type) {
       case "int":
         number = parseInt(event.target.value);
@@ -46,23 +45,16 @@ export function FaktumNumber(props: FaktumProps<IPrimitivFaktum>) {
   }
 
   function saveFaktum(value: number) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: value,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
+    console.log("TODO: Save the number...");
   }
 
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <TextField
-        defaultValue={currentAnswer}
-        label={faktum.title ? faktum.title : faktum.textId}
+        defaultValue={debouncedValue}
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         step={faktum.type === "double" ? "0.1" : "1"}
         size="medium"
         type="number"

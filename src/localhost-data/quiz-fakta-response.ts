@@ -1,6 +1,4 @@
-import { QuizFaktum } from "../types/quiz.types";
-
-export const mockFakta: QuizFaktum[] = [
+export const mockFakta = [
   { id: "1", type: "boolean", beskrivendeId: "faktum.hel-deltid" },
   {
     id: "2",

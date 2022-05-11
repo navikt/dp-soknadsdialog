@@ -1,12 +1,11 @@
-import { IFaktum } from "../../types/faktum.types";
-import { Answer, AnswerValue } from "../../store/answers.slice";
+import { Answer } from "../../store/answers.slice";
 import React, { useEffect, useState } from "react";
-import { Faktum } from "../faktum/Faktum";
 import { Button } from "@navikt/ds-react";
 import styles from "../arbeidsforhold/Arbeidsforhold.module.css";
+import { QuizFaktum } from "../../types/quiz.types";
 
 interface Props {
-  fakta: IFaktum[];
+  fakta: Omit<QuizFaktum, "svar">[];
   answers?: Answer[];
   save: (answers: Answer[]) => void;
   cancel: () => void;
@@ -21,24 +20,26 @@ export function GeneratorFakta(props: Props) {
     }
   }, []);
 
-  function saveFaktum(faktum: IFaktum, value: AnswerValue) {
-    const answerIndex = generatorAnswers.findIndex((answer) => answer.textId === faktum.textId);
-
-    const newAnswer = {
-      id: faktum.id,
-      textId: faktum.textId,
-      type: faktum.type,
-      value,
-    };
-
-    if (answerIndex === -1) {
-      setGeneratorAnswers((state) => [...state, newAnswer]);
-    } else {
-      const newState = [...generatorAnswers];
-      newState[answerIndex] = newAnswer;
-      setGeneratorAnswers(newState);
-    }
-  }
+  // function saveFaktum(faktum: QuizFaktum, value: AnswerValue) {
+  //   const answerIndex = generatorAnswers.findIndex(
+  //     (answer) => answer.textId === faktum.beskrivendeId
+  //   );
+  //
+  //   const newAnswer = {
+  //     id: faktum.id,
+  //     textId: faktum.beskrivendeId,
+  //     type: faktum.type,
+  //     value,
+  //   };
+  //
+  //   if (answerIndex === -1) {
+  //     setGeneratorAnswers((state) => [...state, newAnswer]);
+  //   } else {
+  //     const newState = [...generatorAnswers];
+  //     newState[answerIndex] = newAnswer;
+  //     setGeneratorAnswers(newState);
+  //   }
+  // }
 
   function cancel() {
     setGeneratorAnswers([]);
@@ -48,8 +49,8 @@ export function GeneratorFakta(props: Props) {
   return (
     <>
       {props.fakta.map((faktum) => (
-        <div key={faktum.textId}>
-          <Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />
+        <div key={faktum.beskrivendeId}>
+          {/*<Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />*/}
         </div>
       ))}
       <div className={styles["button-container"]}>

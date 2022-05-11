@@ -8,67 +8,9 @@ import { verneplikt } from "./verneplikt";
 import { tilleggsopplysninger } from "./tilleggsopplysninger";
 import { barnetillegg } from "./barnetillegg";
 import { andreYtelser } from "./andre-ytelser";
-import {
-  GeneratorFaktumType,
-  LandFaktumType,
-  PrimitivFaktumType,
-  ValgFaktumType,
-} from "../types/faktum.types";
 import { utdanning } from "./utdanning";
 
-export interface BlueprintSeksjon {
-  id: string;
-  fakta: BlueprintFaktum[];
-}
-
-export type BlueprintFaktum =
-  | BlueprintBaseFaktum
-  | BlueprintGeneratorFaktum
-  | BlueprintValgFaktum
-  | BlueprintLandFaktum;
-
-export interface BlueprintBaseFaktum {
-  id: string;
-  type: PrimitivFaktumType | GeneratorFaktumType | ValgFaktumType | LandFaktumType;
-}
-
-export interface BlueprintGeneratorFaktum extends BlueprintBaseFaktum {
-  type: GeneratorFaktumType;
-  fakta: BlueprintFaktum[];
-}
-
-export interface BlueprintValgFaktum extends BlueprintBaseFaktum {
-  type: ValgFaktumType;
-  subFakta?: BlueprintSubFaktum[];
-  answerOptions: BlueprintAnswerOption[];
-}
-
-export interface BlueprintLandFaktum extends BlueprintBaseFaktum {
-  type: LandFaktumType;
-  subFakta?: BlueprintSubFaktum[];
-  answerOptions: BlueprintCountryAnswer[];
-}
-
-export type BlueprintSubFaktum = BlueprintFaktum & {
-  requiredAnswerIds: string[];
-};
-
-export interface BlueprintAnswerOption {
-  id: string;
-  requiredDocuments?: BlueprintDocument[];
-}
-
-export interface BlueprintDocument {
-  id: string;
-}
-
-export interface BlueprintCountryAnswer {
-  id: string;
-  countries: string[];
-  requiredDocuments?: BlueprintDocument[];
-}
-
-export const blueprintDataSeksjoner: BlueprintSeksjon[] = [
+export const blueprintDataSeksjoner = [
   koronaFortsattRett,
   reellArbeidssoker,
   arbeidsforhold,

@@ -1,22 +1,19 @@
-import React from "react";
-import { Alert, Radio, RadioGroup } from "@navikt/ds-react";
+import React, { useState } from "react";
+import { Radio, RadioGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
-import { IValgFaktum } from "../../types/faktum.types";
 import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { saveAnswerToQuiz } from "../../store/answers.slice";
 import { QuizValgFaktum } from "../../types/quiz.types";
-import { SanityContext } from "../../pages/[uuid]";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
 
 export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
   const { faktum, onChange } = props;
   const faktumText = getFaktumSanityText(faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
+    setCurrentAnswer(value);
   }
 
   function saveFaktum(value: string) {
@@ -29,8 +26,6 @@ export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
     }
   }
 
-  // eslint-disable-next-line no-console
-  console.log(faktumText);
   return (
     <div>
       {faktumText?.description && <PortableText value={faktumText.description} />}
@@ -39,7 +34,7 @@ export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
       <RadioGroup
         legend={faktumText ? faktumText.text : faktum.beskrivendeId}
         onChange={onSelection}
-        value={props.faktum?.svar}
+        value={currentAnswer}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativSanityText(textId);

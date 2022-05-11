@@ -1,5 +1,4 @@
 import React from "react";
-import { IGeneratorFaktum } from "../../types/faktum.types";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Answer } from "../../store/answers.slice";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
@@ -7,14 +6,15 @@ import styles from "./Arbeidsforhold.module.css";
 import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 
-export function Arbeidsforhold(faktum: IGeneratorFaktum) {
+export function Arbeidsforhold(faktum: QuizGeneratorFaktum) {
   const arbeidsforhold = useGeneratorStateAnswers(FAKTUM_ARBEIDSFORHOLD);
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
   function handleSaveArbeidsforhold(answers: Answer[]) {
-    saveList(answers, faktum.textId);
+    saveList(answers, faktum.beskrivendeId);
   }
 
   return (
@@ -27,10 +27,10 @@ export function Arbeidsforhold(faktum: IGeneratorFaktum) {
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.textId)}>Slett arbeidsforhold</Button>
+              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett arbeidsforhold</Button>
               <GeneratorFakta
                 answers={answers}
-                fakta={faktum.fakta}
+                fakta={faktum.templates}
                 save={handleSaveArbeidsforhold}
                 cancel={resetState}
               />
@@ -49,7 +49,11 @@ export function Arbeidsforhold(faktum: IGeneratorFaktum) {
       )}
 
       {isNewList && (
-        <GeneratorFakta fakta={faktum.fakta} save={handleSaveArbeidsforhold} cancel={resetState} />
+        <GeneratorFakta
+          fakta={faktum.templates}
+          save={handleSaveArbeidsforhold}
+          cancel={resetState}
+        />
       )}
     </div>
   );

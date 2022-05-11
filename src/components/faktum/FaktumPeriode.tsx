@@ -1,32 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { IPrimitivFaktum } from "../../types/faktum.types";
 import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { AnswerPeriod, saveAnswerToQuiz } from "../../store/answers.slice";
 import { formatISO } from "date-fns";
+import { QuizPeriodeFaktum } from "../../types/quiz.types";
+import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 
-export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
-  const dispatch = useDispatch();
+export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
-  const answers = useSelector((state: RootState) => props.answers || state.answers);
-  const currentAnswer = answers.find((answer) => answer.textId === faktum.textId)?.value as
-    | AnswerPeriod
-    | undefined;
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
-    currentAnswer?.fromDate ? new Date(currentAnswer.fromDate) : undefined
+    faktum.svar?.fom ? new Date(faktum.svar?.fom) : undefined
   );
   const [toDate, setToDate] = useState<Date | undefined>(
-    currentAnswer?.toDate ? new Date(currentAnswer.toDate) : undefined
+    faktum.svar?.tom ? new Date(faktum.svar?.tom) : undefined
   );
 
   useEffect(() => {
     if (fromDate) {
       const parsedFromDate = formatISO(fromDate, { representation: "date" });
-      const period = { ...currentAnswer, fromDate: parsedFromDate };
+      const period = { ...faktum.svar, fom: parsedFromDate };
       onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [fromDate]);
@@ -35,26 +29,19 @@ export function FaktumPeriode(props: FaktumProps<IPrimitivFaktum>) {
     if (toDate) {
       const parsedToDate = formatISO(toDate, { representation: "date" });
       // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as AnswerPeriod
-      const period = { ...currentAnswer, toDate: parsedToDate } as AnswerPeriod;
+      const period = { ...faktum.svar, tom: parsedToDate };
       onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [toDate]);
 
-  function saveFaktum(value: AnswerPeriod) {
-    dispatch(
-      saveAnswerToQuiz({
-        textId: faktum.textId,
-        value: value,
-        type: faktum.type,
-        id: faktum.id,
-      })
-    );
+  function saveFaktum(value: any) {
+    console.log("Todo: Save period");
   }
 
   return (
     <div>
-      {faktum.description && <PortableText value={faktum.description} />}
-      {faktum.helpText && <p>{faktum.helpText}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <DatePicker
         label={"Fra dato"}
         onChange={setFromDate}

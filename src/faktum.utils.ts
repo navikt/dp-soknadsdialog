@@ -1,15 +1,14 @@
 import { Answer, AnswerValue } from "./store/answers.slice";
-import { FaktumType, IFaktum, IGeneratorFaktum } from "./types/faktum.types";
-import { isEmpty, isEqual, xorWith } from "lodash";
 import { GeneratorState } from "./store/generator-utils";
 import { isGeneratorFaktum, isValgFaktum } from "./sanity/type-guards";
+import { QuizFaktum, QuizGeneratorFaktum } from "./types/quiz.types";
 
 export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";
 export const BARN_LISTE_FAKTUM_ID = "faktum.barn-liste";
 
 export function getAnswerValuesByFaktumType(
   answers: Answer[],
-  faktumTypes: FaktumType[]
+  faktumTypes: string[]
 ): AnswerValue[] {
   return answers
     .flatMap((answer) => {
@@ -20,54 +19,50 @@ export function getAnswerValuesByFaktumType(
     .filter(Boolean);
 }
 
-export function isArrayEqual(x: unknown[], y: unknown[]) {
-  return isEmpty(xorWith(x, y, isEqual));
-}
-
 export function isFaktumAnswered(
-  faktum: IFaktum,
+  faktum: QuizFaktum,
   answers: Answer[],
   generators: GeneratorState[]
 ): boolean {
-  const answerIds = answers.map((a) => a.textId);
-
-  if (answerIds.includes(faktum.textId)) {
-    if (isValgFaktum(faktum)) {
-      const faktumTypes: FaktumType[] = ["flervalg", "envalg", "boolean"];
-      const valgFaktumAnswerValues = getAnswerValuesByFaktumType(answers, faktumTypes);
-
-      const triggeredSubFakta = faktum.subFakta?.filter((subFaktum) =>
-        subFaktum.requiredAnswerIds.some((id) => valgFaktumAnswerValues.includes(id))
-      );
-
-      const triggeredGeneratorSubFakta = triggeredSubFakta?.filter((faktum) =>
-        isGeneratorFaktum(faktum)
-      ) as IGeneratorFaktum[] | undefined;
-
-      const allGeneratorSubFaktaAnswered =
-        triggeredGeneratorSubFakta?.every((faktum) =>
-          isGeneratorFaktumAnswered(faktum, generators)
-        ) ?? true;
-
-      const allSubFaktaAnswered = triggeredSubFakta
-        ?.filter((faktum) => !isGeneratorFaktum(faktum))
-        .map((faktum) => faktum.textId)
-        .every((id) => answerIds.includes(id));
-
-      return (allSubFaktaAnswered && allGeneratorSubFaktaAnswered) ?? false;
-    }
-    return true;
-  }
+  // const answerIds = answers.map((a) => a.textId);
+  //
+  // if (answerIds.includes(faktum.beskrivendeId)) {
+  //   if (isValgFaktum(faktum)) {
+  //     const faktumTypes = ["flervalg", "envalg", "boolean"];
+  //     const valgFaktumAnswerValues = getAnswerValuesByFaktumType(answers, faktumTypes);
+  //
+  //     const triggeredSubFakta = faktum.subFakta?.filter((subFaktum) =>
+  //       subFaktum.requiredAnswerIds.some((id) => valgFaktumAnswerValues.includes(id))
+  //     );
+  //
+  //     const triggeredGeneratorSubFakta = triggeredSubFakta?.filter((faktum) =>
+  //       isGeneratorFaktum(faktum)
+  //     ) as QuizGeneratorFaktum[] | undefined;
+  //
+  //     const allGeneratorSubFaktaAnswered =
+  //       triggeredGeneratorSubFakta?.every((faktum) =>
+  //         isGeneratorFaktumAnswered(faktum, generators)
+  //       ) ?? true;
+  //
+  //     const allSubFaktaAnswered = triggeredSubFakta
+  //       ?.filter((faktum) => !isGeneratorFaktum(faktum))
+  //       .map((faktum) => faktum.textId)
+  //       .every((id) => answerIds.includes(id));
+  //
+  //     return (allSubFaktaAnswered && allGeneratorSubFaktaAnswered) ?? false;
+  //   }
+  //   return true;
+  // }
 
   return false;
 }
 
 export function isGeneratorFaktumAnswered(
-  faktum: IGeneratorFaktum,
+  faktum: QuizGeneratorFaktum,
   generators: GeneratorState[]
 ): boolean {
   const generatorStateForFaktum = generators.find(
-    (generator) => generator.textId === faktum.textId
+    (generator) => generator.textId === faktum.beskrivendeId
   );
   if (!generatorStateForFaktum) {
     // Todo: Sentry-log: Why is generator-state missing on state?

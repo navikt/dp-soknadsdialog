@@ -40,6 +40,18 @@ export const quizStateResponse: QuizState = {
           type: "tekst",
           svar: "Dette har jeg svart",
         },
+        {
+          id: "6",
+          type: "localdate",
+          beskrivendeId: "dato6",
+          svar: "2022-01-14T13:39Z",
+        },
+        {
+          id: "3",
+          type: "double",
+          beskrivendeId: "desimaltall3",
+          svar: 3.0,
+        },
       ],
     },
   ],

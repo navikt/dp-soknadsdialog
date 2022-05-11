@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ISection } from "../types/section.types";
 import { RootState } from "./index";
 
 export interface SectionsState {
-  sections: ISection[];
+  sections: any[];
   currentSectionIndex: number;
   sectionFaktumIndex: number;
 }
@@ -18,7 +17,7 @@ export const sectionsSlice = createSlice({
   name: "sections",
   initialState: initialSectionsState,
   reducers: {
-    setSections: (state: SectionsState, action: PayloadAction<ISection[]>) => {
+    setSections: (state: SectionsState, action: PayloadAction<any[]>) => {
       state.sections = action.payload;
       return state;
     },

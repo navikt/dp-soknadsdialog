@@ -6,11 +6,9 @@ import { isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils"
 import { isGeneratorFaktum } from "../../sanity/type-guards";
 import { RootState } from "../../store";
 import { setSectionFaktumIndex } from "../../store/sections.slice";
-import { ISection } from "../../types/section.types";
 import { Faktum } from "../faktum/Faktum";
 import styles from "./Section.module.css";
 import { Left, Right } from "@navikt/ds-icons";
-import { IDescription } from "../../types/faktum.types";
 import { isBackwardNavigationPossible } from "../../store/sections.slice";
 import { QuizSeksjon } from "../../types/quiz.types";
 

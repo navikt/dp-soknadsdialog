@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import api from "../api.utils";
-import { FaktumType } from "../types/faktum.types";
 import { QuizAnswer } from "../types/quiz.types";
 import { isPeriodAnswer } from "../sanity/type-guards";
 
@@ -14,7 +13,7 @@ export interface AnswerPeriod {
 export interface Answer {
   id: string;
   textId: string;
-  type: FaktumType;
+  type: string;
   value: AnswerValue;
   // loading: boolean;
   // errorMessages: string[];

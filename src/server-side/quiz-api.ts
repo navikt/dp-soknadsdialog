@@ -57,7 +57,7 @@ export function getSoknadState(uuid: string, onBehalfOfToken: string): Promise<Q
 
 export function getFakta(uuid: string, onBehalfOfToken: string): Promise<QuizFaktum[]> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return Promise.resolve(mockFakta);
+    return Promise.resolve(mockFakta as QuizFaktum[]);
   }
 
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/fakta`;
