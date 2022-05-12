@@ -1,19 +1,17 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { Answer } from "../../store/generator-utils";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import styles from "./Arbeidsforhold.module.css";
-import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";
-import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 
 export function Arbeidsforhold(faktum: QuizGeneratorFaktum) {
-  const arbeidsforhold = useGeneratorStateAnswers(FAKTUM_ARBEIDSFORHOLD);
+  const arbeidsforhold = faktum.svar || [];
+
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
-  function handleSaveArbeidsforhold(answers: Answer[]) {
+  function handleSaveArbeidsforhold(answers: QuizFaktum[]) {
     saveList(answers, faktum.beskrivendeId);
   }
 
@@ -59,9 +57,9 @@ export function Arbeidsforhold(faktum: QuizGeneratorFaktum) {
   );
 }
 
-function getArbeidsforholdName(arbeidsforhold: Answer[]): string {
+function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
   return (
-    (arbeidsforhold.find((answer) => answer.textId === "faktum.navn-bedrift")?.value as string) ??
-    "Fant ikke navn på arbeidsgiver"
+    (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.navn-bedrift")
+      ?.svar as string) ?? "Fant ikke navn på arbeidsgiver"
   );
 }

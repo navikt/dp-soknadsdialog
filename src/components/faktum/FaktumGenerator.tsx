@@ -2,13 +2,11 @@ import React from "react";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barnetillegg } from "../barnetillegg/Barnetillegg";
 import styles from "./Faktum.module.css";
-import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
-import { Answer } from "../../store/generator-utils";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
 import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../faktum.utils";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 
 export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
   return <div>{renderGeneratorType(props.faktum)}</div>;
@@ -26,11 +24,11 @@ function renderGeneratorType(faktum: QuizGeneratorFaktum) {
 }
 
 function StandardGeneratorFaktum(faktum: QuizGeneratorFaktum) {
-  const generatorAnswers = useGeneratorStateAnswers(faktum.beskrivendeId);
+  const generatorAnswers = faktum.svar || [];
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
-  function handleSaveList(answers: Answer[]) {
+  function handleSaveList(answers: QuizFaktum[]) {
     saveList(answers, faktum.beskrivendeId);
   }
 
@@ -40,7 +38,7 @@ function StandardGeneratorFaktum(faktum: QuizGeneratorFaktum) {
         {generatorAnswers.map((answers, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
             <Accordion.Header onClick={() => toggleActiveList(index)}>
-              {answers[0]?.value}
+              {answers[0]?.svar}
             </Accordion.Header>
 
             <Accordion.Content>

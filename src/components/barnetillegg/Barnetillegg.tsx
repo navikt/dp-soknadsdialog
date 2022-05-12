@@ -1,18 +1,15 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { Answer } from "../../store/generator-utils";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import { FAKTUM_BARNETILLEGG } from "../../constants";
-import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 
 export function Barnetillegg(faktum: QuizGeneratorFaktum) {
-  const barnetillegg = useGeneratorStateAnswers(FAKTUM_BARNETILLEGG);
+  const barnetillegg = faktum.svar || [];
   const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
     useGeneratorState();
 
-  function handleSaveBarnetillegg(answers: Answer[]) {
+  function handleSaveBarnetillegg(answers: QuizFaktum[]) {
     saveList(answers, faktum.beskrivendeId);
   }
 
@@ -53,13 +50,13 @@ export function Barnetillegg(faktum: QuizGeneratorFaktum) {
   );
 }
 
-function getChildName(barnetillegg: Answer[]): string {
+function getChildName(barnetillegg: QuizFaktum[]): string {
   const firstName = barnetillegg.find(
-    (answer) => answer.textId === "faktum.barn-fornavn-mellomnavn"
-  )?.value as string;
+    (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
+  )?.svar as string;
 
-  const lastName = barnetillegg.find((answer) => answer.textId === "faktum.barn-etternavn")
-    ?.value as string;
+  const lastName = barnetillegg.find((answer) => answer.beskrivendeId === "faktum.barn-etternavn")
+    ?.svar as string;
 
   return `${firstName} ${lastName}`;
 }
