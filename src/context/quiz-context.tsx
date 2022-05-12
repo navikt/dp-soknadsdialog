@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useEffect, useState } from "react";
+import React, { createContext, PropsWithChildren, useState } from "react";
 import { QuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
@@ -12,16 +12,16 @@ export interface QuizContext {
 
 export const QuizContext = createContext<QuizContext | undefined>(undefined);
 
-function QuizProvider(props: PropsWithChildren<unknown>) {
+interface Props {
+  initialState: QuizState;
+}
+
+function QuizProvider(props: PropsWithChildren<Props>) {
   const router = useRouter();
   const { uuid } = router.query;
-  const [soknadState, setSoknadState] = useState<QuizState>({ ferdig: false, seksjoner: [] });
+  const [soknadState, setSoknadState] = useState<QuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    getNeste();
-  }, []);
 
   async function saveFaktumToQuiz(id: string, payload: unknown) {
     try {
