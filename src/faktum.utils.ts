@@ -1,6 +1,6 @@
 import { Answer, AnswerValue } from "./store/answers.slice";
 import { GeneratorState } from "./store/generator-utils";
-import { isGeneratorFaktum, isValgFaktum } from "./sanity/type-guards";
+import { isGeneratorFaktum, isValgFaktum } from "./types/type-guards";
 import { QuizFaktum, QuizGeneratorFaktum } from "./types/quiz.types";
 
 export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";

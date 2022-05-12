@@ -1,10 +1,5 @@
 import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
-import {
-  QuizFaktum,
-  QuizFlervalgFaktum,
-  QuizGeneratorFaktum,
-  QuizValgFaktum,
-} from "../types/quiz.types";
+import { QuizFaktum, QuizFlervalgFaktum, QuizGeneratorFaktum, QuizValgFaktum } from "./quiz.types";
 
 export type SubFaktum<T> = T & {
   requiredAnswerIds: string[];

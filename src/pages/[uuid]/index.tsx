@@ -8,46 +8,8 @@ import { allTexts } from "../../sanity/groq-queries";
 import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../api.utils";
 import { getSoknadState } from "../../server-side/quiz-api";
-import { TypedObject } from "@portabletext/types";
 import { QuizState } from "../../localhost-data/quiz-state-response";
-
-export interface SanityHelpText {
-  title?: string;
-  body: TypedObject | TypedObject[];
-}
-
-export interface SanityAlertText {
-  title?: string;
-  type: "info" | "warning" | "error" | "success";
-  body: TypedObject | TypedObject[];
-}
-
-export interface SanityFaktum {
-  textId: string;
-  text: string;
-  description?: TypedObject | TypedObject[];
-  helpText?: SanityHelpText;
-  unit?: string;
-}
-
-export interface SanitySeksjon {
-  textId: string;
-  title: string;
-  description?: TypedObject | TypedObject[];
-  helpText?: SanityHelpText;
-}
-
-export interface SanitySvaralternativ {
-  textId: string;
-  text: string;
-  alertText?: SanityAlertText;
-}
-
-export interface SanityTexts {
-  fakta: SanityFaktum[];
-  seksjoner: SanitySeksjon[];
-  svaralternativer: SanitySvaralternativ[];
-}
+import { SanityTexts } from "../../types/sanity.types";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext

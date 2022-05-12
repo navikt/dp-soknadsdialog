@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { isFaktumAnswered, isGeneratorFaktumAnswered } from "../../faktum.utils";
-import { isGeneratorFaktum } from "../../sanity/type-guards";
+import { isGeneratorFaktum } from "../../types/type-guards";
 import { RootState } from "../../store";
 import { setSectionFaktumIndex } from "../../store/sections.slice";
 import { Faktum } from "../faktum/Faktum";

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import api from "../api.utils";
 import { QuizAnswer } from "../types/quiz.types";
-import { isPeriodAnswer } from "../sanity/type-guards";
+import { isPeriodAnswer } from "../types/type-guards";
 
 export type AnswerValue = string | string[] | number | boolean | AnswerPeriod | undefined;
 export interface AnswerPeriod {
