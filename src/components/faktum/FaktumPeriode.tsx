@@ -3,15 +3,14 @@ import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { QuizPeriodeFaktum } from "../../types/quiz.types";
+import { QuizPeriodeFaktum, QuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
-import { useRouter } from "next/router";
-import { saveFaktumToQuiz } from "../../api/answer-service";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
+  const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
-  const { uuid } = useRouter().query;
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
     faktum.svar?.fom ? new Date(faktum.svar?.fom) : undefined
@@ -31,14 +30,14 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   useEffect(() => {
     if (toDate) {
       const parsedToDate = formatISO(toDate, { representation: "date" });
-      // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as AnswerPeriod
-      const period = { ...faktum.svar, tom: parsedToDate };
+      // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as QuizPeriodeFaktumAnswerType
+      const period = { ...faktum.svar, tom: parsedToDate } as QuizPeriodeFaktumAnswerType;
       onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [toDate]);
 
-  function saveFaktum(value: any) {
-    saveFaktumToQuiz(uuid as string, faktum, value);
+  function saveFaktum(value: QuizPeriodeFaktumAnswerType) {
+    saveFaktumToQuiz(faktum.id, value);
   }
 
   return (

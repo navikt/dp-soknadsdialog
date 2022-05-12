@@ -24,7 +24,7 @@ export default function SoknadMedId(props: SanityTexts) {
   return (
     <SanityContext.Provider value={props}>
       <QuizProvider>
-        <Soknad sanityTexts={props} />
+        <Soknad />
       </QuizProvider>
     </SanityContext.Provider>
   );

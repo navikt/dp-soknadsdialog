@@ -1,2 +1,2 @@
-export const FAKTUM_BARNETILLEGG = "faktum.barn-liste";
-export const FAKTUM_ARBEIDSFORHOLD = "faktum.arbeidsforhold";
+export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";
+export const BARN_LISTE_FAKTUM_ID = "faktum.barn-liste";

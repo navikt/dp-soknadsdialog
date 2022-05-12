@@ -5,13 +5,12 @@ import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 import { QuizTekstFaktum } from "../../types/quiz.types";
-import { saveFaktumToQuiz } from "../../api/answer-service";
-import { useRouter } from "next/router";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
-  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
   const { faktum, onChange } = props;
-  const { uuid } = useRouter().query;
+  const { saveFaktumToQuiz } = useQuiz();
+  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
@@ -23,7 +22,7 @@ export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(uuid as string, faktum, value);
+    saveFaktumToQuiz(faktum.id, value);
   }
 
   return (

@@ -5,7 +5,7 @@ import api from "../api.utils";
 
 export interface QuizContext {
   soknadState: QuizState;
-  saveFaktum: (id: string, payload: unknown) => void;
+  saveFaktumToQuiz: (id: string, payload: unknown) => void;
   isLoading: boolean;
   isError: boolean;
 }
@@ -23,7 +23,7 @@ function QuizProvider(props: PropsWithChildren<unknown>) {
     getNeste();
   }, []);
 
-  async function saveFaktum(id: string, payload: unknown) {
+  async function saveFaktumToQuiz(id: string, payload: unknown) {
     try {
       setIsError(false);
       setIsLoading(true);
@@ -36,6 +36,7 @@ function QuizProvider(props: PropsWithChildren<unknown>) {
       await getNeste();
       setIsLoading(false);
     } catch (error: unknown) {
+      // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
@@ -49,12 +50,15 @@ function QuizProvider(props: PropsWithChildren<unknown>) {
       const quizState = await nesteResponse.json();
       setSoknadState(quizState);
     } catch (error: unknown) {
+      // eslint-disable-next-line no-console
       console.error("GET NESTE ERROR: ", error);
     }
   }
 
   return (
-    <QuizContext.Provider value={{ soknadState, saveFaktum, isLoading, isError }}>
+    <QuizContext.Provider
+      value={{ soknadState, saveFaktumToQuiz: saveFaktumToQuiz, isLoading, isError }}
+    >
       {props.children}
     </QuizContext.Provider>
   );

@@ -5,14 +5,13 @@ import { PortableText } from "@portabletext/react";
 import { QuizValgFaktum } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
-import { useRouter } from "next/router";
-import { saveFaktumToQuiz } from "../../api/answer-service";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
   const { faktum, onChange } = props;
+  const { saveFaktumToQuiz } = useQuiz();
   const faktumText = getFaktumSanityText(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const { uuid } = useRouter().query;
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -21,13 +20,13 @@ export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
 
   function saveFaktum(value: string) {
     const mappedAnswer = faktum.type === "boolean" ? mapStringToBoolean(value) : value;
-    saveFaktumToQuiz(uuid as string, faktum, mappedAnswer);
 
     if (mappedAnswer === undefined) {
       // TODO sentry
       // eslint-disable-next-line no-console
       console.error("ERROR");
     }
+    saveFaktumToQuiz(faktum.id, mappedAnswer);
   }
 
   return (

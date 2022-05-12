@@ -5,8 +5,8 @@ import styles from "./Faktum.module.css";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../faktum.utils";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../constants";
 
 export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
   return <div>{renderGeneratorType(props.faktum)}</div>;

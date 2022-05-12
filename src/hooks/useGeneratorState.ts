@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { deleteGeneratorFromQuiz } from "../store/generators.slice";
-import { useDispatch } from "react-redux";
 import { QuizFaktum } from "../types/quiz.types";
 
 interface GeneratorState {
@@ -14,7 +12,6 @@ interface GeneratorState {
 }
 
 export function useGeneratorState(): GeneratorState {
-  const dispatch = useDispatch();
   const [isNewList, setIsNewList] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
@@ -46,12 +43,9 @@ export function useGeneratorState(): GeneratorState {
       return;
     }
 
-    // dispatch();
-    // saveGeneratorStateToQuiz({
-    //   index: activeIndex,
-    //   textId,
-    //   answers,
-    // })
+    // eslint-disable-next-line no-console
+    console.log("save list: ", answers, textId);
+
     resetState();
   }
 
@@ -62,12 +56,9 @@ export function useGeneratorState(): GeneratorState {
       console.error("prøver å lagre arbeidsforhold uten av active index er satt");
       return;
     }
-    dispatch(
-      deleteGeneratorFromQuiz({
-        index: activeIndex,
-        textId,
-      })
-    );
+
+    // eslint-disable-next-line no-console
+    console.log("slett liste: ", textId);
     resetState();
   }
 

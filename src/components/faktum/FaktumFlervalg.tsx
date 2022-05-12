@@ -5,12 +5,11 @@ import { PortableText } from "@portabletext/react";
 import { QuizFlervalgFaktum } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
 import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
-import { saveFaktumToQuiz } from "../../api/answer-service";
-import { useRouter } from "next/router";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
-  const { uuid } = useRouter().query;
+  const { saveFaktumToQuiz } = useQuiz();
 
   const faktumText = getFaktumSanityText(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
@@ -21,7 +20,7 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   }
 
   function saveFaktum(value: string[]) {
-    saveFaktumToQuiz(uuid as string, faktum, value);
+    saveFaktumToQuiz(faktum.id, value);
   }
 
   return (

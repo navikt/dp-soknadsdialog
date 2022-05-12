@@ -5,12 +5,11 @@ import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizDatoFaktum } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
-import { useRouter } from "next/router";
-import { saveFaktumToQuiz } from "../../api/answer-service";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
-  const { uuid } = useRouter().query;
+  const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
@@ -21,7 +20,7 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(uuid as string, faktum, value);
+    saveFaktumToQuiz(faktum.id, value);
   }
 
   return (
