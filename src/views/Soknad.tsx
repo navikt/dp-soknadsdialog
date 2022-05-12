@@ -1,34 +1,11 @@
 import React, { useState } from "react";
-import { Section } from "../components/section/Section";
 import { Button } from "@navikt/ds-react";
-import { QuizState } from "../localhost-data/quiz-state-response";
-import { SanityTexts } from "../types/sanity.types";
+import { useQuiz } from "../context/quiz-context";
+import { Section } from "../components/section/Section";
 
-interface Props {
-  soknadState: QuizState;
-  sanityTexts: SanityTexts;
-}
-
-export function Soknad(props: Props) {
-  const [soknadState, setSoknadState] = useState(props.soknadState);
+export function Soknad() {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  // const dispatch = useDispatch();
-  // const currentSectionIndex = useSelector(
-  //   (state: RootState) => state.sectionsState.currentSectionIndex
-  // );
-  // const currentSection = useSelector(
-  //   (state: RootState) => state.sectionsState.sections[currentSectionIndex]
-  // );
-  // const soknadId = useSelector((state: RootState) => state.soknadId);
-  // const sectionsCount = useSelector((state: RootState) => state.sectionsState.sections.length);
-  //
-  // function handleNavigateNext() {
-  //   dispatch(navigateToNextSection());
-  // }
-  //
-  // function handleNavigatePrevious() {
-  //   dispatch(navigateToPreviousSection());
-  // }
+  const { soknadState, isError, isLoading } = useQuiz();
   const currentQuizStateSection = soknadState.seksjoner[currentSectionIndex];
 
   async function finishSoknad() {
@@ -47,12 +24,18 @@ export function Soknad(props: Props) {
       {/*    navigatePreviousSection={handleNavigatePrevious}*/}
       {/*  />*/}
       {/*)}*/}
+      <div>
+        <pre>{JSON.stringify(soknadState)}</pre>
+      </div>
       <Section
         section={currentQuizStateSection}
         navigateNextSection={() => null}
         navigatePreviousSection={() => null}
       />
       <Button onClick={() => finishSoknad()}>Send inn søknad</Button>
+
+      {isError && <pre>Det har gått ått skaugum</pre>}
+      {isLoading && <pre>Vi venter på drit treig backend.</pre>}
     </div>
   );
 }

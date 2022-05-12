@@ -73,9 +73,9 @@ export function Section(props: Props) {
   return (
     <div>
       <div className={styles.rootFaktum}>
-        {props.section.beskrivendeId}
+        {props.section?.beskrivendeId}
 
-        {props.section.fakta?.map((faktum, index) => {
+        {props.section?.fakta?.map((faktum, index) => {
           if (index <= sectionFaktumIndex) {
             return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
           }
