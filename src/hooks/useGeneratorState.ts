@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Answer } from "../store/generator-utils";
 import { deleteGeneratorFromQuiz } from "../store/generators.slice";
 import { useDispatch } from "react-redux";
+import { QuizFaktum } from "../types/quiz.types";
 
 interface GeneratorState {
   activeIndex: number | undefined;
@@ -9,7 +9,7 @@ interface GeneratorState {
   resetState: () => void;
   toggleActiveList: (index: number) => void;
   addNewList: (index: number) => void;
-  saveList: (answers: Answer[], textId: string) => void;
+  saveList: (answers: QuizFaktum[], textId: string) => void;
   deleteList: (textId: string) => void;
 }
 
@@ -38,7 +38,7 @@ export function useGeneratorState(): GeneratorState {
     setActiveIndex(undefined);
   }
 
-  function saveList(answers: Answer[], textId: string) {
+  function saveList(answers: QuizFaktum[], textId: string) {
     if (activeIndex === undefined) {
       // TODO sentry
       // eslint-disable-next-line no-console

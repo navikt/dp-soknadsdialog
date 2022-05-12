@@ -1,4 +1,3 @@
-import { Answer } from "../../store/generator-utils";
 import React, { useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import styles from "../arbeidsforhold/Arbeidsforhold.module.css";
@@ -6,13 +5,13 @@ import { QuizFaktum } from "../../types/quiz.types";
 
 interface Props {
   fakta: Omit<QuizFaktum, "svar">[];
-  answers?: Answer[];
-  save: (answers: Answer[]) => void;
+  answers?: QuizFaktum[];
+  save: (answers: QuizFaktum[]) => void;
   cancel: () => void;
 }
 
 export function GeneratorFakta(props: Props) {
-  const [generatorAnswers, setGeneratorAnswers] = useState<Answer[]>([]);
+  const [generatorAnswers, setGeneratorAnswers] = useState<QuizFaktum[]>([]);
 
   useEffect(() => {
     if (props.answers) {
