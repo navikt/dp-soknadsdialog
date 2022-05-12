@@ -3,7 +3,7 @@ import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barnetillegg } from "../barnetillegg/Barnetillegg";
 import styles from "./Faktum.module.css";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";
-import { Answer } from "../../store/answers.slice";
+import { Answer } from "../../store/generator-utils";
 import { Accordion, Button } from "@navikt/ds-react";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { useGeneratorState } from "../../hooks/useGeneratorState";

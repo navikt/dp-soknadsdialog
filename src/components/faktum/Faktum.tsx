@@ -2,13 +2,7 @@ import React from "react";
 import { FaktumValg } from "./FaktumValg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import styles from "./Faktum.module.css";
-import {
-  QuizFaktum,
-  QuizFlervalgFaktum,
-  QuizGeneratorFaktum,
-  QuizNumberFaktum,
-  QuizValgFaktum,
-} from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum, QuizNumberFaktum } from "../../types/quiz.types";
 import { FaktumText } from "./FaktumText";
 import { FaktumNumber } from "./FaktumNumber";
 import { FaktumDato } from "./FaktumDato";

@@ -5,10 +5,13 @@ import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizPeriodeFaktum } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { useRouter } from "next/router";
+import { saveFaktumToQuiz } from "../../api/answer-service";
 
 export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const { uuid } = useRouter().query;
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
     faktum.svar?.fom ? new Date(faktum.svar?.fom) : undefined
@@ -35,7 +38,7 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   }, [toDate]);
 
   function saveFaktum(value: any) {
-    console.log("Todo: Save period");
+    saveFaktumToQuiz(uuid as string, faktum, value);
   }
 
   return (

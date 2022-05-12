@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Section } from "../components/section/Section";
 import { Button } from "@navikt/ds-react";
 import { QuizState } from "../localhost-data/quiz-state-response";
-import { SanityTexts } from "../pages/[uuid]";
+import { SanityTexts } from "../types/sanity.types";
 
 interface Props {
   soknadState: QuizState;

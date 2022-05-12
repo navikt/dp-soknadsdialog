@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { Answer } from "../../store/answers.slice";
+import { Answer } from "../../store/generator-utils";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import { FAKTUM_BARNETILLEGG } from "../../constants";
 import { useGeneratorStateAnswers } from "../../hooks/useGeneratorStateAnswers";

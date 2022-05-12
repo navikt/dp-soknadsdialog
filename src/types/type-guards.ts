@@ -1,5 +1,11 @@
-import { AnswerPeriod, AnswerValue } from "../store/answers.slice";
-import { QuizFaktum, QuizFlervalgFaktum, QuizGeneratorFaktum, QuizValgFaktum } from "./quiz.types";
+import {
+  QuizFaktum,
+  QuizFaktumAnswerType,
+  QuizFlervalgFaktum,
+  QuizGeneratorFaktum,
+  QuizPeriodeFaktumAnswerType,
+  QuizValgFaktum,
+} from "./quiz.types";
 
 export type SubFaktum<T> = T & {
   requiredAnswerIds: string[];
@@ -21,6 +27,6 @@ export function isGeneratorFaktum(faktum: QuizGeneratorFaktum): faktum is QuizGe
   return faktum.type === "generator" ?? (faktum as QuizGeneratorFaktum);
 }
 
-export function isPeriodAnswer(value: AnswerValue): value is AnswerPeriod {
-  return (value as AnswerPeriod).toDate !== undefined;
+export function isPeriodeAnswer(value: QuizFaktumAnswerType): value is QuizPeriodeFaktumAnswerType {
+  return (value as QuizPeriodeFaktumAnswerType).tom !== undefined;
 }

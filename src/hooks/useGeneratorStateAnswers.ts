@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import { Answer } from "../store/answers.slice";
+import { Answer } from "../store/generator-utils";
 
 export function useGeneratorStateAnswers(id: string): Answer[][] {
   return useSelector(

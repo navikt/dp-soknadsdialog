@@ -1,27 +1,25 @@
-import { Answer, AnswerValue } from "./store/answers.slice";
 import { GeneratorState } from "./store/generator-utils";
-import { isGeneratorFaktum, isValgFaktum } from "./types/type-guards";
 import { QuizFaktum, QuizGeneratorFaktum } from "./types/quiz.types";
 
 export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";
 export const BARN_LISTE_FAKTUM_ID = "faktum.barn-liste";
 
-export function getAnswerValuesByFaktumType(
-  answers: Answer[],
-  faktumTypes: string[]
-): AnswerValue[] {
-  return answers
-    .flatMap((answer) => {
-      if (faktumTypes.includes(answer.type)) {
-        return answer.value;
-      }
-    })
-    .filter(Boolean);
-}
+// export function getAnswerValuesByFaktumType(
+//   answers: Answer[],
+//   faktumTypes: string[]
+// ): AnswerValue[] {
+//   return answers
+//     .flatMap((answer) => {
+//       if (faktumTypes.includes(answer.type)) {
+//         return answer.value;
+//       }
+//     })
+//     .filter(Boolean);
+// }
 
 export function isFaktumAnswered(
   faktum: QuizFaktum,
-  answers: Answer[],
+  answers: any[],
   generators: GeneratorState[]
 ): boolean {
   // const answerIds = answers.map((a) => a.textId);

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Answer } from "../store/answers.slice";
-import { deleteGeneratorFromQuiz, saveGeneratorStateToQuiz } from "../store/generators.slice";
+import { Answer } from "../store/generator-utils";
+import { deleteGeneratorFromQuiz } from "../store/generators.slice";
 import { useDispatch } from "react-redux";
 
 interface GeneratorState {
@@ -46,13 +46,12 @@ export function useGeneratorState(): GeneratorState {
       return;
     }
 
-    dispatch(
-      saveGeneratorStateToQuiz({
-        index: activeIndex,
-        textId,
-        answers,
-      })
-    );
+    // dispatch();
+    // saveGeneratorStateToQuiz({
+    //   index: activeIndex,
+    //   textId,
+    //   answers,
+    // })
     resetState();
   }
 

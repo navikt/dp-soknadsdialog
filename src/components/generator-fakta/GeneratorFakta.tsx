@@ -1,4 +1,4 @@
-import { Answer } from "../../store/answers.slice";
+import { Answer } from "../../store/generator-utils";
 import React, { useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import styles from "../arbeidsforhold/Arbeidsforhold.module.css";

@@ -5,10 +5,13 @@ import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { QuizNumberFaktum } from "../../types/quiz.types";
 import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { saveFaktumToQuiz } from "../../api/answer-service";
+import { useRouter } from "next/router";
 
 export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const { uuid } = useRouter().query;
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
@@ -45,7 +48,7 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   }
 
   function saveFaktum(value: number) {
-    console.log("TODO: Save the number...");
+    saveFaktumToQuiz(uuid as string, faktum, value);
   }
 
   return (

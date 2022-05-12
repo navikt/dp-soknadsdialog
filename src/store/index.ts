@@ -1,5 +1,4 @@
 import { combineReducers, configureStore, EnhancedStore } from "@reduxjs/toolkit";
-import { Answer, answersSlice } from "./answers.slice";
 import { sectionsSlice, SectionsState } from "./sections.slice";
 import { soknadIdSlice } from "./soknadId.slice";
 import { QuizFaktum } from "../types/quiz.types";
@@ -10,7 +9,6 @@ import { generatorsSlice } from "./generators.slice";
 export const combinedRootReducer = combineReducers({
   soknadId: soknadIdSlice.reducer,
   sectionsState: sectionsSlice.reducer,
-  answers: answersSlice.reducer,
   quizFakta: quizFaktaSlice.reducer,
   generators: generatorsSlice.reducer,
 });
@@ -42,7 +40,6 @@ function createStore(initialState: RootState, name: string) {
 export interface RootState {
   soknadId: string;
   sectionsState: SectionsState;
-  answers: Answer[];
   quizFakta: QuizFaktum[];
   generators: GeneratorState[];
 }

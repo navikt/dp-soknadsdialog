@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { Answer } from "../../store/answers.slice";
+import { Answer } from "../../store/generator-utils";
 import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
 import styles from "./Arbeidsforhold.module.css";
 import { FAKTUM_ARBEIDSFORHOLD } from "../../constants";

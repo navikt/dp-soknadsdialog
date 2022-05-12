@@ -27,7 +27,6 @@ export async function getServerSideProps(
       currentSectionIndex: 0,
       sectionFaktumIndex: 0,
     },
-    answers: [],
     generators: [],
     quizFakta: [],
   };

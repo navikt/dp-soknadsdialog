@@ -62,9 +62,22 @@ export interface QuizSeksjon {
   fakta: (QuizFaktum | QuizGeneratorFaktum)[];
 }
 
-export interface QuizAnswer {
+export interface QuizFaktumAnswerPayload {
   id: string;
   beskrivendeId: string;
   type: string;
-  svar: string;
+  svar: QuizFaktumAnswerType;
 }
+
+export interface QuizPeriodeFaktumAnswerType {
+  fom: string;
+  tom?: string;
+}
+
+export type QuizFaktumAnswerType =
+  | string[]
+  | string
+  | boolean
+  | number
+  | QuizPeriodeFaktumAnswerType
+  | undefined;
