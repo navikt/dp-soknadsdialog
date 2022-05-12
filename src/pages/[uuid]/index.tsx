@@ -9,6 +9,7 @@ import { audience } from "../../api.utils";
 import { getSoknadState } from "../../server-side/quiz-api";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
+import { SanityProvider } from "../../context/sanity-context";
 
 interface SoknadMedIdParams {
   soknadState: QuizState | undefined;
@@ -51,12 +52,10 @@ export default function SoknadMedId(props: SoknadMedIdParams) {
   }
 
   return (
-    <SanityContext.Provider value={props.sanityTexts}>
+    <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
         <Soknad />
       </QuizProvider>
-    </SanityContext.Provider>
+    </SanityProvider>
   );
 }
-
-export const SanityContext = React.createContext<SanityTexts | null>(null);
