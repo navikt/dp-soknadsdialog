@@ -37,7 +37,7 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   }, [toDate]);
 
   function saveFaktum(value: QuizPeriodeFaktumAnswerType) {
-    saveFaktumToQuiz(faktum.id, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (

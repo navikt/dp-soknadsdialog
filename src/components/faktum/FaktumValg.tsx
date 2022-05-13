@@ -26,7 +26,7 @@ export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
       // eslint-disable-next-line no-console
       console.error("ERROR");
     }
-    saveFaktumToQuiz(faktum.id, mappedAnswer);
+    saveFaktumToQuiz(faktum, mappedAnswer);
   }
 
   return (

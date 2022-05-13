@@ -47,7 +47,7 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   }
 
   function saveFaktum(value: number) {
-    saveFaktumToQuiz(faktum.id, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (

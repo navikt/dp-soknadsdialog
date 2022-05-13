@@ -20,7 +20,7 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   }
 
   function saveFaktum(value: string[]) {
-    saveFaktumToQuiz(faktum.id, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (

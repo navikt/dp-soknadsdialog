@@ -3,8 +3,7 @@ import { FaktumProps } from "../Faktum";
 import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
 import { QuizNumberFaktum } from "../../../types/quiz.types";
 import { getFaktumSanityText } from "../../../hooks/getFaktumSanityText";
-import { saveFaktumToQuiz } from "../../../api/answer-service";
-import { useRouter } from "next/router";
+import { useQuiz } from "../../../context/quiz-context";
 
 const years: DropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -16,9 +15,9 @@ for (let i = 0; i <= 4; i++) {
 
 export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum } = props;
+  const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = getFaktumSanityText(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
-  const { uuid } = useRouter().query;
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
@@ -27,7 +26,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<QuizNumberFakt
   }
 
   function saveFaktum(value: number) {
-    saveFaktumToQuiz(uuid as string, faktum, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (
