@@ -20,7 +20,7 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum.id, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (

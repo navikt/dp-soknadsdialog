@@ -2,10 +2,11 @@ import React, { createContext, PropsWithChildren, useState } from "react";
 import { QuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
+import { QuizFaktum, QuizFaktumAnswerPayload, QuizFaktumAnswerType } from "../types/quiz.types";
 
 export interface QuizContext {
   soknadState: QuizState;
-  saveFaktumToQuiz: (id: string, payload: unknown) => void;
+  saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumAnswerType) => void;
   isLoading: boolean;
   isError: boolean;
 }
@@ -23,14 +24,17 @@ function QuizProvider(props: PropsWithChildren<Props>) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
-  async function saveFaktumToQuiz(id: string, payload: unknown) {
+  async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumAnswerType) {
+    const { id, beskrivendeId, type } = faktum;
+    const quizAnswerPayload: QuizFaktumAnswerPayload = { id, beskrivendeId, type, svar };
+
     try {
       setIsError(false);
       setIsLoading(true);
 
       await fetch(api(`/soknad/${uuid}/faktum/${id}`), {
         method: "PUT",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(quizAnswerPayload),
       });
 
       await getNeste();
@@ -56,9 +60,7 @@ function QuizProvider(props: PropsWithChildren<Props>) {
   }
 
   return (
-    <QuizContext.Provider
-      value={{ soknadState, saveFaktumToQuiz: saveFaktumToQuiz, isLoading, isError }}
-    >
+    <QuizContext.Provider value={{ soknadState, saveFaktumToQuiz, isLoading, isError }}>
       {props.children}
     </QuizContext.Provider>
   );

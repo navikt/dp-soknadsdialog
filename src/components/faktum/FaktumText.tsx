@@ -22,7 +22,7 @@ export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum.id, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (
