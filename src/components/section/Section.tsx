@@ -5,19 +5,16 @@ import styles from "./Section.module.css";
 
 interface Props {
   section: QuizSeksjon;
-  navigateNextSection: () => void;
-  navigatePreviousSection: () => void;
+  firstUnansweredFaktumIndex: number;
 }
 
 export function Section(props: Props) {
-  const sectionFaktumIndex = 999;
-
   return (
     <div>
-      <div className={styles.rootFaktum}>
+      <div className={styles.faktum}>
         {props.section?.beskrivendeId}
         {props.section?.fakta?.map((faktum, index) => {
-          if (index <= sectionFaktumIndex) {
+          if (index <= props.firstUnansweredFaktumIndex) {
             return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
           }
         })}

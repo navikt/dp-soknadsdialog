@@ -48,7 +48,7 @@ export interface QuizNumberFaktum extends QuizBaseFaktum {
 
 export interface QuizLandFaktum extends QuizBaseFaktum {
   type: "land";
-  svar: string;
+  svar?: string;
 }
 
 export interface QuizGeneratorFaktum extends QuizBaseFaktum {

@@ -11,7 +11,7 @@ export function FaktumValg(props: FaktumProps<QuizValgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumText = getFaktumSanityText(faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
+  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || "");
 
   function onSelection(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);

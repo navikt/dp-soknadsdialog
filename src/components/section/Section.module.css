@@ -1,16 +1,3 @@
-.rootFaktum {
+.faktum {
   border: 1px solid transparent;
-}
-
-.sectionDescription {
-  margin-bottom: var(--faktum-spacing);
-}
-
-.sectionNavigation {
-  display: flex;
-  margin-bottom: var(--faktum-spacing);
-}
-
-.sectionNavigation button:first-child {
-  margin-right: 20px;
 }

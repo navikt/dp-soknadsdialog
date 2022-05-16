@@ -1,0 +1,8 @@
+.navigation {
+  display: flex;
+  margin-bottom: 44px;
+}
+
+.navigation button:first-child {
+  margin-right: 20px;
+}

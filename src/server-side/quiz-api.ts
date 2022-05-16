@@ -39,8 +39,23 @@ export function postSoknad(onBehalfOfToken: string) {
     });
 }
 
-export function getSoknadState(uuid: string, onBehalfOfToken: string): Promise<QuizState> {
+export function getSoknadState(
+  uuid: string,
+  onBehalfOfToken: string,
+  localhostFirstRender = false
+): Promise<QuizState> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    if (localhostFirstRender) {
+      const quizSeksjoner = quizStateResponse.seksjoner.map((seksjon) => {
+        const fakta = seksjon.fakta.map((faktum) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { svar, ...faktumWithoutAnswer } = faktum;
+          return faktumWithoutAnswer;
+        });
+        return { ...seksjon, fakta };
+      });
+      return Promise.resolve({ ...quizStateResponse, seksjoner: quizSeksjoner });
+    }
     return Promise.resolve(quizStateResponse);
   }
 

@@ -33,6 +33,7 @@ export const quizStateResponse: QuizState = {
             "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land",
             "faktum.hvilke-andre-ytelser.svar.annen-ytelse",
           ],
+          svar: ["faktum.hvilke-andre-ytelser.svar.annen-ytelse"],
         },
         {
           id: "3",
