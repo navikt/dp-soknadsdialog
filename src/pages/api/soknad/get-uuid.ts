@@ -13,7 +13,7 @@ async function getUuiddHandler(req: NextApiRequest, res: NextApiResponse) {
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     soknadId = await postSoknad(onBehalfOfToken);
-    return res.status(200).json(soknadId);
+    return res.status(200).send(soknadId);
   } else {
     return res.status(401).send({});
   }
