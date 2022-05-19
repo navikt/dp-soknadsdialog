@@ -43,12 +43,7 @@ function StandardGeneratorFaktum(faktum: QuizGeneratorFaktum) {
 
             <Accordion.Content>
               <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett svar</Button>
-              <GeneratorFakta
-                answers={answers}
-                fakta={faktum.templates}
-                save={handleSaveList}
-                cancel={resetState}
-              />
+              <GeneratorFakta fakta={faktum.templates} save={handleSaveList} cancel={resetState} />
             </Accordion.Content>
           </Accordion.Item>
         ))}

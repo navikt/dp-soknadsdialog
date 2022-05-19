@@ -1,8 +1,13 @@
 import React from "react";
-import { FaktumValg } from "./FaktumValg";
+import { FaktumEnvalg } from "./FaktumEnvalg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import styles from "./Faktum.module.css";
-import { QuizFaktum, QuizGeneratorFaktum, QuizNumberFaktum } from "../../types/quiz.types";
+import {
+  QuizFaktum,
+  QuizFaktumSvarType,
+  QuizGeneratorFaktum,
+  QuizNumberFaktum,
+} from "../../types/quiz.types";
 import { FaktumText } from "./FaktumText";
 import { FaktumNumber } from "./FaktumNumber";
 import { FaktumDato } from "./FaktumDato";
@@ -10,10 +15,11 @@ import { FaktumPeriode } from "./FaktumPeriode";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
 import { FaktumLand } from "./FaktumLand";
 import { FaktumGenerator } from "./FaktumGenerator";
+import { FaktumBoolean } from "./FaktumBoolean";
 
 export interface FaktumProps<P> {
   faktum: P;
-  onChange?: (faktum: QuizFaktum, value: any) => void;
+  onChange?: (faktum: QuizFaktum, value: QuizFaktumSvarType) => void;
 }
 
 const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
@@ -27,10 +33,14 @@ export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
 
     switch (faktum.type) {
       case "boolean":
+        return <FaktumBoolean faktum={faktum} onChange={props.onChange} />;
+
       case "envalg":
-        return <FaktumValg faktum={faktum} onChange={props.onChange} />;
+        return <FaktumEnvalg faktum={faktum} onChange={props.onChange} />;
+
       case "flervalg":
         return <FaktumFlervalg faktum={faktum} onChange={props.onChange} />;
+
       case "tekst":
         return <FaktumText faktum={faktum} onChange={props.onChange} />;
 

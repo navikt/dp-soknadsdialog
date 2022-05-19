@@ -25,7 +25,6 @@ export function Barnetillegg(faktum: QuizGeneratorFaktum) {
             <Accordion.Content>
               <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett barn</Button>
               <GeneratorFakta
-                answers={answers}
                 fakta={faktum.templates}
                 save={handleSaveBarnetillegg}
                 cancel={resetState}

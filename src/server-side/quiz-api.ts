@@ -2,6 +2,7 @@ import { mockFakta } from "../localhost-data/quiz-fakta-response";
 import { QuizFaktum } from "../types/quiz.types";
 import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
+import { quizStateGeneratorResponse } from "../localhost-data/quiz-state-generator-response";
 
 const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -54,9 +55,9 @@ export function getSoknadState(
         });
         return { ...seksjon, fakta };
       });
-      return Promise.resolve({ ...quizStateResponse, seksjoner: quizSeksjoner });
+      return Promise.resolve({ ...quizStateGeneratorResponse, seksjoner: quizSeksjoner });
     }
-    return Promise.resolve(quizStateResponse);
+    return Promise.resolve(quizStateGeneratorResponse);
   }
 
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;

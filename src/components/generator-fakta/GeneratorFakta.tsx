@@ -1,59 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import styles from "../arbeidsforhold/Arbeidsforhold.module.css";
-import { QuizFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizFaktumSvarType } from "../../types/quiz.types";
+import { Faktum } from "../faktum/Faktum";
 
 interface Props {
   fakta: Omit<QuizFaktum, "svar">[];
-  answers?: QuizFaktum[];
-  save: (answers: QuizFaktum[]) => void;
+  save: (svar: QuizFaktum[]) => void;
   cancel: () => void;
 }
 
 export function GeneratorFakta(props: Props) {
-  const [generatorAnswers, setGeneratorAnswers] = useState<QuizFaktum[]>([]);
+  const [generatorSvar, setGeneratorSvar] = useState<QuizFaktum[]>([]);
 
   useEffect(() => {
-    if (props.answers) {
-      setGeneratorAnswers(props.answers);
+    if (props.svar) {
+      setGeneratorSvar(props.svar);
     }
   }, []);
 
-  // function saveFaktum(faktum: QuizFaktum, value: AnswerValue) {
-  //   const answerIndex = generatorAnswers.findIndex(
-  //     (answer) => answer.textId === faktum.beskrivendeId
-  //   );
-  //
-  //   const newAnswer = {
-  //     id: faktum.id,
-  //     textId: faktum.beskrivendeId,
-  //     type: faktum.type,
-  //     value,
-  //   };
-  //
-  //   if (answerIndex === -1) {
-  //     setGeneratorAnswers((state) => [...state, newAnswer]);
-  //   } else {
-  //     const newState = [...generatorAnswers];
-  //     newState[answerIndex] = newAnswer;
-  //     setGeneratorAnswers(newState);
-  //   }
-  // }
+  function saveFaktum(faktum: QuizFaktum, value: QuizFaktumSvarType) {
+    const answerIndex = generatorSvar.findIndex(
+      (svar) => svar.beskrivendeId === faktum.beskrivendeId
+    );
+
+    const newAnswer: QuizFaktum = {
+      ...faktum,
+      svar: value,
+    };
+
+    if (answerIndex === -1) {
+      setGeneratorSvar((state) => [...state, newAnswer]);
+    } else {
+      const newState = [...generatorSvar];
+      newState[answerIndex] = newAnswer;
+      setGeneratorSvar(newState);
+    }
+  }
 
   function cancel() {
-    setGeneratorAnswers([]);
+    setGeneratorSvar([]);
     props.cancel();
   }
 
   return (
     <>
-      {props.fakta.map((faktum) => (
-        <div key={faktum.beskrivendeId}>
-          {/*<Faktum faktum={faktum} onChange={saveFaktum} answers={generatorAnswers} />*/}
-        </div>
-      ))}
+      {props.fakta.map((faktum) => {
+        const faktumWithSvar = generatorSvar.find(
+          (svar) => svar.beskrivendeId === faktum.beskrivendeId
+        );
+        return (
+          <div key={faktum.beskrivendeId}>
+            <Faktum faktum={faktumWithSvar || (faktum as QuizFaktum)} onChange={saveFaktum} />
+          </div>
+        );
+      })}
       <div className={styles["button-container"]}>
-        <Button onClick={() => props.save(generatorAnswers)}>Lagre svar</Button>
+        <Button onClick={() => props.save(generatorSvar)}>Lagre svar</Button>
         <Button onClick={cancel}>Avbryt</Button>
       </div>
     </>

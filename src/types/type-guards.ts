@@ -1,18 +1,18 @@
 import {
   QuizFaktum,
-  QuizFaktumAnswerType,
+  QuizFaktumSvarType,
   QuizFlervalgFaktum,
   QuizGeneratorFaktum,
   QuizPeriodeFaktumAnswerType,
-  QuizValgFaktum,
+  QuizEnvalgFaktum,
 } from "./quiz.types";
 
 export type SubFaktum<T> = T & {
   requiredAnswerIds: string[];
 };
 
-export function isValgFaktum(faktum: QuizFaktum): faktum is QuizValgFaktum {
-  return ["envalg", "boolean"].includes(faktum.type) ?? (faktum as QuizValgFaktum);
+export function isValgFaktum(faktum: QuizFaktum): faktum is QuizEnvalgFaktum {
+  return ["envalg", "boolean"].includes(faktum.type) ?? (faktum as QuizEnvalgFaktum);
 }
 
 export function isFlervalgFaktum(faktum: QuizFaktum): faktum is QuizFlervalgFaktum {
@@ -27,6 +27,6 @@ export function isGeneratorFaktum(faktum: QuizGeneratorFaktum): faktum is QuizGe
   return faktum.type === "generator" ?? (faktum as QuizGeneratorFaktum);
 }
 
-export function isPeriodeAnswer(value: QuizFaktumAnswerType): value is QuizPeriodeFaktumAnswerType {
+export function isPeriodeAnswer(value: QuizFaktumSvarType): value is QuizPeriodeFaktumAnswerType {
   return (value as QuizPeriodeFaktumAnswerType).tom !== undefined;
 }

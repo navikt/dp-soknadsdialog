@@ -18,19 +18,18 @@ export function Arbeidsforhold(faktum: QuizGeneratorFaktum) {
   return (
     <div>
       <Accordion>
-        {arbeidsforhold.map((answers, index) => (
+        {arbeidsforhold.map((svar, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
             <Accordion.Header onClick={() => toggleActiveList(index)}>
-              {getArbeidsforholdName(answers)}
+              {getArbeidsforholdName(svar)}
             </Accordion.Header>
 
             <Accordion.Content>
               <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett arbeidsforhold</Button>
               <GeneratorFakta
-                answers={answers}
                 fakta={faktum.templates}
-                save={handleSaveArbeidsforhold}
                 cancel={resetState}
+                save={handleSaveArbeidsforhold}
               />
             </Accordion.Content>
           </Accordion.Item>

@@ -1,6 +1,7 @@
 export type QuizFaktum =
   | QuizFlervalgFaktum
-  | QuizValgFaktum
+  | QuizEnvalgFaktum
+  | QuizBooleanFaktum
   | QuizTekstFaktum
   | QuizDatoFaktum
   | QuizPeriodeFaktum
@@ -13,16 +14,23 @@ export interface QuizBaseFaktum {
 }
 
 export interface QuizFlervalgFaktum extends QuizBaseFaktum {
-  svar?: string[];
   type: "flervalg";
   gyldigeValg: string[];
+  svar?: string[];
 }
 
-export interface QuizValgFaktum extends QuizBaseFaktum {
-  svar?: string;
-  type: "boolean" | "envalg";
+export interface QuizBooleanFaktum extends QuizBaseFaktum {
+  type: "boolean";
   gyldigeValg: string[];
+  svar?: boolean;
 }
+
+export interface QuizEnvalgFaktum extends QuizBaseFaktum {
+  type: "envalg";
+  gyldigeValg: string[];
+  svar?: string;
+}
+
 export interface QuizTekstFaktum extends QuizBaseFaktum {
   type: "tekst";
   svar?: string;
@@ -48,10 +56,13 @@ export interface QuizNumberFaktum extends QuizBaseFaktum {
 
 export interface QuizLandFaktum extends QuizBaseFaktum {
   type: "land";
+  gyldigeValg: string[];
   svar?: string;
 }
 
-export interface QuizGeneratorFaktum extends QuizBaseFaktum {
+export interface QuizGeneratorFaktum {
+  id: string;
+  beskrivendeId: string;
   type: "generator";
   svar?: QuizFaktum[][];
   templates: Omit<QuizFaktum, "svar">[];
@@ -62,19 +73,12 @@ export interface QuizSeksjon {
   fakta: (QuizFaktum | QuizGeneratorFaktum)[];
 }
 
-export interface QuizFaktumAnswerPayload {
-  id: string;
-  beskrivendeId: string;
-  type: string;
-  svar: QuizFaktumAnswerType;
-}
-
 export interface QuizPeriodeFaktumAnswerType {
   fom: string;
   tom?: string;
 }
 
-export type QuizFaktumAnswerType =
+export type QuizFaktumSvarType =
   | string[]
   | string
   | boolean

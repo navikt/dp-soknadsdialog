@@ -55,5 +55,52 @@ export const quizStateResponse: QuizState = {
         },
       ],
     },
+    {
+      beskrivendeId: "flere-ytelser",
+      fakta: [
+        {
+          id: "11",
+          type: "boolean",
+          beskrivendeId: "faktum.andre-ytelser-mottatt-eller-sokt-2",
+          gyldigeValg: [
+            "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
+            "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei",
+          ],
+          svar: "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
+        },
+        {
+          id: "12",
+          type: "flervalg",
+          beskrivendeId: "faktum.hvilke-andre-ytelser-2",
+          gyldigeValg: [
+            "faktum.hvilke-andre-ytelser.svar.pensjon-offentlig-tjenestepensjon",
+            "faktum.hvilke-andre-ytelser.svar.arbeidsloshet-garantikassen-for-fiskere",
+            "faktum.hvilke-andre-ytelser.svar.garantilott-garantikassen-for-fiskere",
+            "faktum.hvilke-andre-ytelser.svar.etterlonn-arbeidsgiver",
+            "faktum.hvilke-andre-ytelser.svar.dagpenger-annet-eos-land",
+            "faktum.hvilke-andre-ytelser.svar.annen-ytelse",
+          ],
+          svar: ["faktum.hvilke-andre-ytelser.svar.annen-ytelse"],
+        },
+        {
+          id: "13",
+          beskrivendeId: "faktum.eget-gaardsbruk-arbeidstimer-beregning-2",
+          type: "tekst",
+          svar: "Dette har jeg svart",
+        },
+        {
+          id: "16",
+          type: "localdate",
+          beskrivendeId: "dato6-2",
+          svar: "2022-01-14T13:39Z",
+        },
+        {
+          id: "13",
+          type: "double",
+          beskrivendeId: "desimaltall3-2",
+          svar: 3.0,
+        },
+      ],
+    },
   ],
 };

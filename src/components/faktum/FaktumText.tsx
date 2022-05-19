@@ -12,7 +12,7 @@ export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
 
-  const [debouncedText, setDebouncedText] = useState(faktum.svar);
+  const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
