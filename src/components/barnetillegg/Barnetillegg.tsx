@@ -1,32 +1,36 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
+import { GeneratorSkjema } from "../generator-skjema/GeneratorSkjema";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 
-export function Barnetillegg(faktum: QuizGeneratorFaktum) {
-  const barnetillegg = faktum.svar || [];
-  const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
-    useGeneratorState();
-
-  function handleSaveBarnetillegg(answers: QuizFaktum[]) {
-    saveList(answers, faktum.beskrivendeId);
-  }
+export function Barnetillegg(generatorFaktum: QuizGeneratorFaktum) {
+  const {
+    resetState,
+    saveSkjema,
+    activeIndex,
+    addNewSkjema,
+    deleteSkjema,
+    generatorSvar,
+    toggleActiveSkjema,
+    isNewGeneratorSkjema,
+  } = useGeneratorState(generatorFaktum.svar);
 
   return (
     <div>
       <Accordion>
-        {barnetillegg.map((answers, index) => (
+        {generatorSvar.map((faktum, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
-            <Accordion.Header onClick={() => toggleActiveList(index)}>
-              {getChildName(answers)}
+            <Accordion.Header onClick={() => toggleActiveSkjema(index)}>
+              {getChildName(faktum)}
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett barn</Button>
-              <GeneratorFakta
-                fakta={faktum.templates}
-                save={handleSaveBarnetillegg}
+              <Button onClick={() => deleteSkjema()}>Slett barn</Button>
+              <GeneratorSkjema
+                templates={generatorFaktum.templates}
+                svar={faktum}
+                save={(svar) => saveSkjema(generatorFaktum, svar)}
                 cancel={resetState}
               />
             </Accordion.Content>
@@ -34,14 +38,15 @@ export function Barnetillegg(faktum: QuizGeneratorFaktum) {
         ))}
       </Accordion>
 
-      {!isNewList && (
-        <Button onClick={() => addNewList(barnetillegg.length)}>Legg til barnetillegg</Button>
+      {!isNewGeneratorSkjema && (
+        <Button onClick={() => addNewSkjema(generatorSvar.length)}>Legg til barnetillegg</Button>
       )}
 
-      {isNewList && (
-        <GeneratorFakta
-          fakta={faktum.templates}
-          save={handleSaveBarnetillegg}
+      {isNewGeneratorSkjema && (
+        <GeneratorSkjema
+          svar={[]}
+          templates={generatorFaktum.templates}
+          save={(svar) => saveSkjema(generatorFaktum, svar)}
           cancel={resetState}
         />
       )}
@@ -51,10 +56,10 @@ export function Barnetillegg(faktum: QuizGeneratorFaktum) {
 
 function getChildName(barnetillegg: QuizFaktum[]): string {
   const firstName = barnetillegg.find(
-    (answer) => answer.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
+    (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.svar as string;
 
-  const lastName = barnetillegg.find((answer) => answer.beskrivendeId === "faktum.barn-etternavn")
+  const lastName = barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-etternavn")
     ?.svar as string;
 
   return `${firstName} ${lastName}`;

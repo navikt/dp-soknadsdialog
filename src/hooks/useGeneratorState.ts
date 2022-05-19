@@ -1,27 +1,31 @@
 import { useState } from "react";
-import { QuizFaktum } from "../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
+import { useQuiz } from "../context/quiz-context";
 
 interface GeneratorState {
-  activeIndex: number | undefined;
-  isNewList: boolean;
   resetState: () => void;
-  toggleActiveList: (index: number) => void;
-  addNewList: (index: number) => void;
-  saveList: (answers: QuizFaktum[], textId: string) => void;
-  deleteList: (textId: string) => void;
+  deleteSkjema: () => void;
+  generatorSvar: QuizFaktum[][];
+  activeIndex: number | undefined;
+  isNewGeneratorSkjema: boolean;
+  addNewSkjema: (index: number) => void;
+  toggleActiveSkjema: (index: number) => void;
+  saveSkjema: (faktum: QuizGeneratorFaktum, svar: QuizFaktum[]) => void;
 }
 
-export function useGeneratorState(): GeneratorState {
-  const [isNewList, setIsNewList] = useState(false);
+export function useGeneratorState(initialGeneratorState?: QuizFaktum[][]): GeneratorState {
+  const { saveGeneratorFaktumToQuiz } = useQuiz();
+  const [generatorSvar, setGeneratorSvar] = useState<QuizFaktum[][]>(initialGeneratorState || []);
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
+  const [isNewGeneratorSkjema, setIsNewGeneratorSkjema] = useState(false);
 
-  function handleAddNewList(index: number) {
+  function addNewSkjema(index: number) {
     setActiveIndex(index);
-    setIsNewList(true);
+    setIsNewGeneratorSkjema(true);
   }
 
-  function toggleActiveList(index: number) {
-    setIsNewList(false);
+  function toggleActiveSkjema(index: number) {
+    setIsNewGeneratorSkjema(false);
 
     if (index === activeIndex) {
       setActiveIndex(undefined);
@@ -31,25 +35,33 @@ export function useGeneratorState(): GeneratorState {
   }
 
   function resetState() {
-    setIsNewList(false);
+    setIsNewGeneratorSkjema(false);
     setActiveIndex(undefined);
   }
 
-  function saveList(answers: QuizFaktum[], textId: string) {
+  function saveSkjema(faktum: QuizGeneratorFaktum, svar: QuizFaktum[]) {
     if (activeIndex === undefined) {
       // TODO sentry
       // eslint-disable-next-line no-console
-      console.error("prøver å lagre arbeidsforhold uten av active index er satt");
+      console.error("prøver å lagre generator uten av active index er satt");
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log("save list: ", answers, textId);
+    let newState;
+    if (isNewGeneratorSkjema) {
+      newState = [...generatorSvar, svar];
+    } else {
+      newState = [...generatorSvar];
+      newState[activeIndex] = svar;
+    }
+
+    setGeneratorSvar(newState);
+    saveGeneratorFaktumToQuiz(faktum, newState);
 
     resetState();
   }
 
-  function deleteList(textId: string) {
+  function deleteSkjema() {
     if (activeIndex === undefined) {
       // TODO sentry
       // eslint-disable-next-line no-console
@@ -57,18 +69,21 @@ export function useGeneratorState(): GeneratorState {
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log("slett liste: ", textId);
+    const newState = generatorSvar;
+    newState.splice(activeIndex, 1);
+
+    setGeneratorSvar(newState);
     resetState();
   }
 
   return {
-    isNewList,
     activeIndex,
-    addNewList: handleAddNewList,
-    toggleActiveList,
     resetState,
-    saveList,
-    deleteList,
+    saveSkjema,
+    deleteSkjema,
+    addNewSkjema,
+    generatorSvar,
+    toggleActiveSkjema,
+    isNewGeneratorSkjema,
   };
 }

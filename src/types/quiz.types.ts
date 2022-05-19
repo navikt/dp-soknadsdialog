@@ -1,7 +1,7 @@
 export type QuizFaktum =
+  | QuizBooleanFaktum
   | QuizFlervalgFaktum
   | QuizEnvalgFaktum
-  | QuizBooleanFaktum
   | QuizTekstFaktum
   | QuizDatoFaktum
   | QuizPeriodeFaktum

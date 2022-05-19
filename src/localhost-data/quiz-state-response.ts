@@ -19,7 +19,7 @@ export const quizStateResponse: QuizState = {
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei",
           ],
-          svar: "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
+          svar: true,
         },
         {
           id: "2",
@@ -66,7 +66,7 @@ export const quizStateResponse: QuizState = {
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei",
           ],
-          svar: "faktum.andre-ytelser-mottatt-eller-sokt.svar.ja",
+          svar: true,
         },
         {
           id: "12",

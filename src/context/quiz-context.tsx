@@ -2,11 +2,12 @@ import React, { createContext, PropsWithChildren, useState } from "react";
 import { QuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
-import { QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
+import { QuizFaktum, QuizFaktumSvarType, QuizGeneratorFaktum } from "../types/quiz.types";
 
 export interface QuizContext {
   soknadState: QuizState;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
+  saveGeneratorFaktumToQuiz: (faktum: QuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
   isLoading: boolean;
   isError: boolean;
 }
@@ -44,6 +45,26 @@ function QuizProvider(props: PropsWithChildren<Props>) {
     }
   }
 
+  async function saveGeneratorFaktumToQuiz(faktum: QuizGeneratorFaktum, svar: QuizFaktum[][]) {
+    try {
+      setIsError(false);
+      setIsLoading(true);
+
+      await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+        method: "PUT",
+        body: JSON.stringify({ ...faktum, svar }),
+      });
+
+      await getNeste();
+      setIsLoading(false);
+    } catch (error: unknown) {
+      // eslint-disable-next-line no-console
+      console.error("Lagre faktum error: ", error);
+      setIsLoading(false);
+      setIsError(true);
+    }
+  }
+
   async function getNeste() {
     // throw new Error("FEIL I QUIZ");
     try {
@@ -57,7 +78,9 @@ function QuizProvider(props: PropsWithChildren<Props>) {
   }
 
   return (
-    <QuizContext.Provider value={{ soknadState, saveFaktumToQuiz, isLoading, isError }}>
+    <QuizContext.Provider
+      value={{ soknadState, saveFaktumToQuiz, saveGeneratorFaktumToQuiz, isLoading, isError }}
+    >
       {props.children}
     </QuizContext.Provider>
   );

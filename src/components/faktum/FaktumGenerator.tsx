@@ -3,9 +3,9 @@ import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barnetillegg } from "../barnetillegg/Barnetillegg";
 import styles from "./Faktum.module.css";
 import { Accordion, Button } from "@navikt/ds-react";
-import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
+import { GeneratorSkjema } from "../generator-skjema/GeneratorSkjema";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../constants";
 
 export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
@@ -23,43 +23,56 @@ function renderGeneratorType(faktum: QuizGeneratorFaktum) {
   }
 }
 
-function StandardGeneratorFaktum(faktum: QuizGeneratorFaktum) {
-  const generatorAnswers = faktum.svar || [];
-  const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
-    useGeneratorState();
-
-  function handleSaveList(answers: QuizFaktum[]) {
-    saveList(answers, faktum.beskrivendeId);
-  }
+function StandardGeneratorFaktum(generatorFaktum: QuizGeneratorFaktum) {
+  const {
+    resetState,
+    saveSkjema,
+    activeIndex,
+    addNewSkjema,
+    deleteSkjema,
+    generatorSvar,
+    toggleActiveSkjema,
+    isNewGeneratorSkjema,
+  } = useGeneratorState(generatorFaktum.svar);
 
   return (
     <div>
       <Accordion>
-        {generatorAnswers.map((answers, index) => (
+        {generatorSvar.map((faktum, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
-            <Accordion.Header onClick={() => toggleActiveList(index)}>
-              {answers[0]?.svar}
+            <Accordion.Header onClick={() => toggleActiveSkjema(index)}>
+              {faktum[0]?.svar}
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett svar</Button>
-              <GeneratorFakta fakta={faktum.templates} save={handleSaveList} cancel={resetState} />
+              <Button onClick={() => deleteSkjema()}>Slett barn</Button>
+              <GeneratorSkjema
+                templates={generatorFaktum.templates}
+                svar={faktum}
+                save={(svar) => saveSkjema(generatorFaktum, svar)}
+                cancel={resetState}
+              />
             </Accordion.Content>
           </Accordion.Item>
         ))}
       </Accordion>
 
-      {!isNewList && (
+      {!isNewGeneratorSkjema && (
         <Button
           className={styles["button-container"]}
-          onClick={() => addNewList(generatorAnswers.length)}
+          onClick={() => addNewSkjema(generatorSvar.length)}
         >
           Legg til svar
         </Button>
       )}
 
-      {isNewList && (
-        <GeneratorFakta fakta={faktum.templates} save={handleSaveList} cancel={resetState} />
+      {isNewGeneratorSkjema && (
+        <GeneratorSkjema
+          svar={[]}
+          templates={generatorFaktum.templates}
+          save={(svar) => saveSkjema(generatorFaktum, svar)}
+          cancel={resetState}
+        />
       )}
     </div>
   );

@@ -34,29 +34,16 @@ export const quizStateGeneratorResponse: QuizState = {
               id: "1005",
               type: "land",
               beskrivendeId: "faktum.barn-bostedsland",
-              gyldigeValg: [
-                "faktum.barn-bostedsland.svar.utenfor-eos",
-                "faktum.barn-bostedsland.svar.eos",
-                "faktum.barn-bostedsland.svar.norge-jan-mayen",
-              ],
             },
             {
               id: "1006",
               type: "boolean",
               beskrivendeId: "faktum.forsoerger-du-barnet",
-              gyldigeValg: [
-                "faktum.forsoerger-du-barnet.svar.ja",
-                "faktum.forsoerger-du-barnet.svar.nei",
-              ],
             },
             {
               id: "1007",
               type: "boolean",
               beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
-              gyldigeValg: [
-                "faktum.barn-aarsinntekt-over-1g.svar.ja",
-                "faktum.barn-aarsinntekt-over-1g.svar.nei",
-              ],
             },
             {
               id: "1008",

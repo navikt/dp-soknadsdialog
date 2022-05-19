@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@navikt/ds-react";
 import styles from "../arbeidsforhold/Arbeidsforhold.module.css";
 import { QuizFaktum, QuizFaktumSvarType } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 
 interface Props {
-  fakta: Omit<QuizFaktum, "svar">[];
+  templates: Omit<QuizFaktum, "svar">[];
+  svar: QuizFaktum[];
   save: (svar: QuizFaktum[]) => void;
   cancel: () => void;
 }
 
-export function GeneratorFakta(props: Props) {
-  const [generatorSvar, setGeneratorSvar] = useState<QuizFaktum[]>([]);
-
-  useEffect(() => {
-    if (props.svar) {
-      setGeneratorSvar(props.svar);
-    }
-  }, []);
+export function GeneratorSkjema(props: Props) {
+  const [generatorSvar, setGeneratorSvar] = useState<QuizFaktum[]>(props.svar);
 
   function saveFaktum(faktum: QuizFaktum, value: QuizFaktumSvarType) {
     const answerIndex = generatorSvar.findIndex(
       (svar) => svar.beskrivendeId === faktum.beskrivendeId
     );
 
+    // TODO typescript
+    // @ts-ignore
     const newAnswer: QuizFaktum = {
       ...faktum,
       svar: value,
@@ -45,7 +42,7 @@ export function GeneratorFakta(props: Props) {
 
   return (
     <>
-      {props.fakta.map((faktum) => {
+      {props.templates.map((faktum) => {
         const faktumWithSvar = generatorSvar.find(
           (svar) => svar.beskrivendeId === faktum.beskrivendeId
         );

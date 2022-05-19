@@ -1,54 +1,58 @@
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { GeneratorFakta } from "../generator-fakta/GeneratorFakta";
-import styles from "./Arbeidsforhold.module.css";
+import { GeneratorSkjema } from "../generator-skjema/GeneratorSkjema";
 import { useGeneratorState } from "../../hooks/useGeneratorState";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import styles from "./Arbeidsforhold.module.css";
 
-export function Arbeidsforhold(faktum: QuizGeneratorFaktum) {
-  const arbeidsforhold = faktum.svar || [];
-
-  const { activeIndex, addNewList, toggleActiveList, isNewList, resetState, saveList, deleteList } =
-    useGeneratorState();
-
-  function handleSaveArbeidsforhold(answers: QuizFaktum[]) {
-    saveList(answers, faktum.beskrivendeId);
-  }
+export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
+  const {
+    resetState,
+    saveSkjema,
+    activeIndex,
+    addNewSkjema,
+    deleteSkjema,
+    generatorSvar,
+    toggleActiveSkjema,
+    isNewGeneratorSkjema,
+  } = useGeneratorState(generatorFaktum.svar);
 
   return (
     <div>
       <Accordion>
-        {arbeidsforhold.map((svar, index) => (
+        {generatorSvar.map((faktum, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
-            <Accordion.Header onClick={() => toggleActiveList(index)}>
-              {getArbeidsforholdName(svar)}
+            <Accordion.Header onClick={() => toggleActiveSkjema(index)}>
+              {getArbeidsforholdName(faktum)}
             </Accordion.Header>
 
             <Accordion.Content>
-              <Button onClick={() => deleteList(faktum.beskrivendeId)}>Slett arbeidsforhold</Button>
-              <GeneratorFakta
-                fakta={faktum.templates}
+              <Button onClick={() => deleteSkjema()}>Slett arbeidsforhold</Button>
+              <GeneratorSkjema
+                svar={faktum}
                 cancel={resetState}
-                save={handleSaveArbeidsforhold}
+                templates={generatorFaktum.templates}
+                save={(svar) => saveSkjema(generatorFaktum, svar)}
               />
             </Accordion.Content>
           </Accordion.Item>
         ))}
       </Accordion>
 
-      {!isNewList && (
+      {!isNewGeneratorSkjema && (
         <Button
           className={styles["button-container"]}
-          onClick={() => addNewList(arbeidsforhold.length)}
+          onClick={() => addNewSkjema(generatorSvar.length)}
         >
           Legg til arbreidsforhold
         </Button>
       )}
 
-      {isNewList && (
-        <GeneratorFakta
-          fakta={faktum.templates}
-          save={handleSaveArbeidsforhold}
+      {isNewGeneratorSkjema && (
+        <GeneratorSkjema
+          svar={[]}
+          templates={generatorFaktum.templates}
+          save={(svar) => saveSkjema(generatorFaktum, svar)}
           cancel={resetState}
         />
       )}
