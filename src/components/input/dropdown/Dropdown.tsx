@@ -6,7 +6,7 @@ interface Props {
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   options: DropdownOption[];
   currentValue: string;
-  placeHolderText: string;
+  placeHolderText?: string;
 }
 
 export interface DropdownOption {
@@ -17,7 +17,7 @@ export interface DropdownOption {
 export function Dropdown(props: Props) {
   return (
     <Select label={props.label} size="medium" onChange={props.onChange} value={props.currentValue}>
-      <option value="">{props.placeHolderText}</option>
+      {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (
         <option key={option.value} value={option.value}>
           {option.label}

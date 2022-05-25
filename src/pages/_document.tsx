@@ -26,7 +26,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
-    const language = (locale as Locale) === undefined ? "nb" : (locale as Locale);
+    const language = locale === undefined ? "nb" : (locale as Locale);
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,

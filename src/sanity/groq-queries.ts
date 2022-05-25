@@ -1,13 +1,13 @@
 import { groq } from "next-sanity";
 
-const seksjonerGroq = `* [_type == "seksjon"]{
+const seksjonFields = `{
   textId,
   title,
   description,
   helpText
 }`;
 
-const faktaGroq = `* [_type == "faktum"]{
+const faktumFields = `{
   textId,
   text,
   description,
@@ -15,13 +15,25 @@ const faktaGroq = `* [_type == "faktum"]{
   unit
 }`;
 
-const svaralternativerGroq = `* [_type == "svaralternativ"]{
+const svaralternativFields = `{
   textId,
   text,
   alertText
 }`;
 
-export const allTexts = groq`{
+const seksjonerGroq = `* [_type=="seksjon" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${seksjonFields}, ${seksjonFields})
+}`;
+
+const faktaGroq = `* [_type=="faktum" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${faktumFields}, ${faktumFields})
+}`;
+
+const svaralternativerGroq = `* [_type=="svaralternativ" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${svaralternativFields}, ${svaralternativFields})
+}`;
+
+export const allTextsQuery = groq`{
   "seksjoner": ${seksjonerGroq},
   "fakta": ${faktaGroq},
   "svaralternativer": ${svaralternativerGroq},

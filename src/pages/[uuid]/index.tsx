@@ -2,7 +2,7 @@ import React from "react";
 import { Soknad } from "../../views/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
-import { allTexts } from "../../sanity/groq-queries";
+import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { SanityTexts } from "../../types/sanity.types";
 import { audience } from "../../api.utils";
@@ -20,10 +20,13 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<SoknadMedIdParams>> {
   const { token, apiToken } = await getSession(context);
-  const { query } = context;
+  const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTexts);
+  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
+    baseLang: "nb",
+    lang: locale,
+  });
   let soknadState;
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {

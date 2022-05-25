@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useSession } from "../session.utils";
+import { Dropdown } from "../components/input/dropdown/Dropdown";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -28,6 +29,17 @@ export function StartSoknad() {
       <Heading spacing size="xlarge" level="1">
         Søknad om dagpenger
       </Heading>
+
+      <Dropdown
+        label={"Velg språk"}
+        currentValue={router.locale || "nb"}
+        options={[
+          { value: "nb", label: "Bokmål" },
+          { value: "nn", label: "Nynorsk" },
+          { value: "en", label: "Engelsk" },
+        ]}
+        onChange={(event) => router.push(`/`, "/", { locale: event.target.value })}
+      />
 
       {session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
