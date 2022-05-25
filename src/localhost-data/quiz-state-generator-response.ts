@@ -33,16 +33,19 @@ export const quizStateGeneratorResponse: QuizState = {
             {
               id: "1005",
               type: "land",
+              gyldigeValg: [],
               beskrivendeId: "faktum.barn-bostedsland",
             },
             {
               id: "1006",
               type: "boolean",
+              gyldigeValg: [],
               beskrivendeId: "faktum.forsoerger-du-barnet",
             },
             {
               id: "1007",
               type: "boolean",
+              gyldigeValg: [],
               beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
             },
             {

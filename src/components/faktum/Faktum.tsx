@@ -26,6 +26,7 @@ const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
 
 export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
   const { faktum } = props;
+
   function renderFaktumType() {
     if (specialCaseFaktum.includes(faktum.beskrivendeId)) {
       return renderSpecialFaktumType(props);

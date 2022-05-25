@@ -3,9 +3,11 @@ import { Button } from "@navikt/ds-react";
 import { useQuiz } from "../context/quiz-context";
 import { Section } from "../components/section/Section";
 import { Left, Right } from "@navikt/ds-icons";
+import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 
 export function Soknad() {
+  const router = useRouter();
   const { soknadState, isError, isLoading } = useQuiz();
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [showNextSectionButton, setShowNextSectionButton] = useState(false);
@@ -15,9 +17,14 @@ export function Soknad() {
     (faktum) => faktum?.svar === undefined
   );
 
+  const isLastSection = currentSectionIndex === soknadState.seksjoner.length - 1;
+  const isFirstSection = currentSectionIndex === 0;
+
   useEffect(() => {
-    if (firstUnansweredFaktumIndex === -1) {
+    if (firstUnansweredFaktumIndex === -1 && !isLastSection) {
       setShowNextSectionButton(true);
+    } else {
+      setShowNextSectionButton(false);
     }
   }, [firstUnansweredFaktumIndex]);
 
@@ -35,6 +42,10 @@ export function Soknad() {
     // });
   }
 
+  function cancelSoknad() {
+    router.push(`/`);
+  }
+
   return (
     <div>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
@@ -49,19 +60,25 @@ export function Soknad() {
       />
 
       <nav className={styles.navigation}>
-        <Button variant={"secondary"} onClick={() => navigatePreviousSection()}>
-          <Left />
-          Forrige steg
-        </Button>
+        {isFirstSection ? (
+          <Button variant={"secondary"} onClick={() => cancelSoknad()}>
+            Avbryt søknad
+          </Button>
+        ) : (
+          <Button variant={"secondary"} onClick={() => navigatePreviousSection()}>
+            <Left />
+            Forrige steg
+          </Button>
+        )}
 
         {showNextSectionButton && (
           <Button onClick={() => navigateNextSection()}>
             Neste steg <Right />
           </Button>
         )}
-      </nav>
 
-      <Button onClick={() => finishSoknad()}>Send inn søknad</Button>
+        {isLastSection && <Button onClick={() => finishSoknad()}>Send inn søknad</Button>}
+      </nav>
 
       {isError && <pre>Det har gått ått skaugum</pre>}
       {isLoading && <pre>Vi venter på quiz-o-rama.</pre>}

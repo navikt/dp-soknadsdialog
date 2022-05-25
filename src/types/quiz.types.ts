@@ -65,7 +65,7 @@ export interface QuizGeneratorFaktum {
   beskrivendeId: string;
   type: "generator";
   svar?: QuizFaktum[][];
-  templates: Omit<QuizFaktum, "svar">[];
+  templates: QuizFaktum[];
 }
 
 export interface QuizSeksjon {

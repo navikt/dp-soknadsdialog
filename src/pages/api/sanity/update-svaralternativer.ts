@@ -10,16 +10,23 @@ const updateSvaralternativer = async (req: NextApiRequest, res: NextApiResponse)
     (alternativ: any) => alternativ?.textId
   );
 
+  // const existingSvaralternativIds = existingSvaralternativer.map(
+  //   (svaralternativ: any) => svaralternativ._id
+  // );
+
   const newSanityAlternativer = allAnswerOptions
     .filter((textId) => !existingSvaralternativTextIds.includes(textId))
     .map((textId) => ({
-      _type: "svaralternativ",
       textId,
       text: textId,
+      __i18n_lang: "nb",
+      _type: "svaralternativ",
     }));
 
   const transaction = sanityClient.transaction();
   newSanityAlternativer.forEach((alternativ) => transaction.create(alternativ));
+  // existingSvaralternativIds.forEach((id: string) => transaction.delete(id));
+
   const sanityResponse = await transaction.commit();
 
   return res.status(200).json(sanityResponse);

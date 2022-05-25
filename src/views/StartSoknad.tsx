@@ -28,6 +28,7 @@ export function StartSoknad() {
       <Heading spacing size="xlarge" level="1">
         Søknad om dagpenger
       </Heading>
+
       {session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
           logg inn først!
