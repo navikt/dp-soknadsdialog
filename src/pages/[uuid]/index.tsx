@@ -36,6 +36,9 @@ export async function getServerSideProps(
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     soknadState = await getSoknadState(uuid, onBehalfOfToken);
+
+    // eslint-disable-next-line no-console
+    console.log("ServerSideProps SoknadState", soknadState);
   }
   return {
     props: {

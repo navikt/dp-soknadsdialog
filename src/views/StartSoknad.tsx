@@ -25,7 +25,7 @@ export function StartSoknad() {
   }
 
   return (
-    <div>
+    <main>
       <Heading spacing size="xlarge" level="1">
         Søknad om dagpenger
       </Heading>
@@ -49,6 +49,6 @@ export function StartSoknad() {
       <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
         Start søknad
       </Button>
-    </div>
+    </main>
   );
 }

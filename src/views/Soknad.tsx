@@ -47,7 +47,7 @@ export function Soknad() {
   }
 
   return (
-    <div>
+    <main>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
 
       <Section
@@ -82,6 +82,6 @@ export function Soknad() {
 
       {isError && <pre>Det har gått ått skaugum</pre>}
       {isLoading && <pre>Vi venter på quiz-o-rama.</pre>}
-    </div>
+    </main>
   );
 }
