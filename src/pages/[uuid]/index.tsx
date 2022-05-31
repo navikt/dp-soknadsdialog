@@ -10,6 +10,7 @@ import { getSoknadState } from "../../server-side/quiz-api";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
+import { Alert } from "@navikt/ds-react";
 
 interface SoknadMedIdParams {
   soknadState: QuizState | undefined;
@@ -51,7 +52,7 @@ export default function SoknadMedId(props: SoknadMedIdParams) {
   }
 
   if (!props.soknadState) {
-    return <div>Quiz er ducked</div>;
+    return <Alert variant="error">Quiz er ducked</Alert>;
   }
 
   return (
