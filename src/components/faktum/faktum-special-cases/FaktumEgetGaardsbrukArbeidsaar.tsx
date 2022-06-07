@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from "react";
 import { FaktumProps } from "../Faktum";
 import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
 import { QuizNumberFaktum } from "../../../types/quiz.types";
-import { getFaktumSanityText } from "../../../hooks/getFaktumSanityText";
+import { useFaktumSanityText } from "../../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../../context/quiz-context";
 
 const years: DropdownOption[] = [];
@@ -16,7 +16,7 @@ for (let i = 0; i <= 4; i++) {
 export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = getFaktumSanityText(faktum.beskrivendeId);
+  const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {

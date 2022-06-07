@@ -32,8 +32,14 @@ export interface SanitySvaralternativ {
   alertText?: SanityAlertText;
 }
 
+export interface SanityLandGruppe {
+  textId: string;
+  alertText?: SanityAlertText;
+}
+
 export interface SanityTexts {
   fakta: SanityFaktum[];
   seksjoner: SanitySeksjon[];
   svaralternativer: SanitySvaralternativ[];
+  landgrupper: SanityLandGruppe[];
 }

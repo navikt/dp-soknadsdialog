@@ -4,13 +4,13 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizDatoFaktum } from "../../types/quiz.types";
-import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const faktumTexts = useFaktumSanityText(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
   const onDateSelection = (value: Date) => {

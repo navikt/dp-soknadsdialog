@@ -3,14 +3,14 @@ import { TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { QuizTekstFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const faktumTexts = useFaktumSanityText(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);

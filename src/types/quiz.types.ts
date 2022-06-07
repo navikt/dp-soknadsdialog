@@ -54,9 +54,15 @@ export interface QuizNumberFaktum extends QuizBaseFaktum {
   svar?: number;
 }
 
+interface QuizLandGruppe {
+  gruppeId: string;
+  land: string[];
+}
+
 export interface QuizLandFaktum extends QuizBaseFaktum {
   type: "land";
-  gyldigeValg: string[];
+  grupper: QuizLandGruppe[];
+  gyldigeLand: string[];
   svar?: string;
 }
 

@@ -4,13 +4,13 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizPeriodeFaktum, QuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
-import { getFaktumSanityText } from "../../hooks/getFaktumSanityText";
+import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = getFaktumSanityText(props.faktum.beskrivendeId);
+  const faktumTexts = useFaktumSanityText(props.faktum.beskrivendeId);
 
   const [fromDate, setFromDate] = useState<Date | undefined>(
     faktum.svar?.fom ? new Date(faktum.svar?.fom) : undefined

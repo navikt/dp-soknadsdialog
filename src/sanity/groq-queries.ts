@@ -21,6 +21,11 @@ const svaralternativFields = `{
   alertText
 }`;
 
+const landGruppeFields = `{
+  textId,
+  alertText
+}`;
+
 const seksjonerGroq = `* [_type=="seksjon" && __i18n_lang==$baseLang]{
 ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${seksjonFields}, ${seksjonFields})
 }`;
@@ -33,8 +38,13 @@ const svaralternativerGroq = `* [_type=="svaralternativ" && __i18n_lang==$baseLa
 ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${svaralternativFields}, ${svaralternativFields})
 }`;
 
+const landGrupperGroq = `* [_type=="landgruppe" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${landGruppeFields}, ${landGruppeFields})
+}`;
+
 export const allTextsQuery = groq`{
   "seksjoner": ${seksjonerGroq},
   "fakta": ${faktaGroq},
   "svaralternativer": ${svaralternativerGroq},
+  "landgrupper": ${landGrupperGroq},
 }`;
