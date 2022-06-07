@@ -5,6 +5,7 @@ import { Section } from "../components/section/Section";
 import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
+import { PingLoader } from "../components/PingLoader";
 
 export function Soknad() {
   const router = useRouter();
@@ -81,7 +82,7 @@ export function Soknad() {
       </nav>
 
       {isError && <pre>Det har gått ått skaugum</pre>}
-      {isLoading && <pre>Vi venter på quiz-o-rama.</pre>}
+      {isLoading && <PingLoader />}
     </main>
   );
 }
