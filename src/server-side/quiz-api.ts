@@ -1,5 +1,3 @@
-import { mockFakta } from "../localhost-data/quiz-fakta-response";
-import { QuizFaktum } from "../types/quiz.types";
 import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
 
@@ -60,22 +58,6 @@ export function getSoknadState(
   }
 
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
-  return fetch(url, {
-    method: "Get",
-    headers: headersWithToken(onBehalfOfToken),
-  })
-    .then((response: Response) => response.json())
-    .catch((error) => {
-      return Promise.reject(error);
-    });
-}
-
-export function getFakta(uuid: string, onBehalfOfToken: string): Promise<QuizFaktum[]> {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return Promise.resolve(mockFakta as QuizFaktum[]);
-  }
-
-  const url = `${process.env.API_BASE_URL}/soknad/${uuid}/fakta`;
   return fetch(url, {
     method: "Get",
     headers: headersWithToken(onBehalfOfToken),
