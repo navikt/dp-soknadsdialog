@@ -54,7 +54,7 @@ export function DatePicker(props: DatePickerProps) {
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
           placeholder={placeholder}
-          value={value}
+          value={value?.toString()}
         />
         {<Calender className={styles.customInputIcon} />}
       </div>

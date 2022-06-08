@@ -5,32 +5,29 @@ import { FaktumProps } from "./Faktum";
 import { QuizLandFaktum } from "../../types/quiz.types";
 import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
-import countries, { getName } from "i18n-iso-countries";
-import norwegianLocale from "i18n-iso-countries/langs/nb.json";
+import { getName } from "i18n-iso-countries";
 import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
-
-countries.registerLocale(norwegianLocale);
+import { useRouter } from "next/router";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
+  const router = useRouter();
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { landgrupper } = useSanity();
 
   const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
+
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
   const [currentCountryGroupText, setCurrentCountryGroupText] = useState<
     SanityLandGruppe | undefined
-  >(undefined);
-  const options = faktum.gyldigeLand.map(toDropDownOption);
+  >();
 
-  function toDropDownOption(code: string) {
-    return {
-      value: code,
-      label: getName(code, "nb"),
-    };
-  }
+  const options = faktum.gyldigeLand.map((code) => ({
+    value: code,
+    label: getName(code, router.locale || "nb"),
+  }));
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
     onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
@@ -51,16 +48,10 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
     return faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
   }
 
-  function gruppeAlertBox(groupText: SanityLandGruppe) {
-    if (!groupText.alertText) return <></>;
-    return <AlertText {...groupText.alertText} />;
-  }
-
   return (
     <div>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
-
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelect}
@@ -68,8 +59,9 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
       />
-
-      {currentCountryGroupText && gruppeAlertBox(currentCountryGroupText)}
+      {currentCountryGroupText?.alertText && (
+        <AlertText alertText={currentCountryGroupText.alertText} inAccordion />
+      )}
     </div>
   );
 }

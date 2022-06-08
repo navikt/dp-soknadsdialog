@@ -55,7 +55,7 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <TextField
-        defaultValue={debouncedValue}
+        defaultValue={debouncedValue?.toString()}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         step={faktum.type === "double" ? "0.1" : "1"}
         size="medium"

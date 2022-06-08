@@ -11,7 +11,7 @@ export default function SoknadHeader() {
         <div className={styles.icon}>
           <HeaderIcon />
         </div>
-        <Heading size="2xlarge">Søknad om dagpenger</Heading>
+        <Heading size="xlarge">Søknad om dagpenger</Heading>
       </div>
     </div>
   );
