@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 import { FaktumProps } from "../Faktum";
-import { Dropdown, DropdownOption } from "../../input/dropdown/Dropdown";
+import { Dropdown, DropdownOption } from "../../dropdown/Dropdown";
 import { QuizNumberFaktum } from "../../../types/quiz.types";
 import { useFaktumSanityText } from "../../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../../context/quiz-context";

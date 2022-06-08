@@ -1,6 +1,6 @@
 import { PortableText } from "@portabletext/react";
 import React, { ChangeEvent, useState } from "react";
-import { Dropdown } from "../input/dropdown/Dropdown";
+import { Dropdown } from "../dropdown/Dropdown";
 import { FaktumProps } from "./Faktum";
 import { QuizLandFaktum } from "../../types/quiz.types";
 import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";

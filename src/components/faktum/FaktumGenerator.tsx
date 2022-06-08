@@ -41,7 +41,7 @@ function StandardGeneratorFaktum(generatorFaktum: QuizGeneratorFaktum) {
         {generatorSvar.map((faktum, index) => (
           <Accordion.Item key={index} open={index === activeIndex}>
             <Accordion.Header onClick={() => toggleActiveSkjema(index)}>
-              {faktum[0]?.svar}
+              <>{faktum[0]?.svar}</>
             </Accordion.Header>
 
             <Accordion.Content>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { DatePicker } from "../input/date-picker";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizPeriodeFaktum, QuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
+import { DatePicker } from "../date-picker/DatePicker";
 
 export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;

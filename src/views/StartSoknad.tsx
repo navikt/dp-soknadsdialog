@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useSession } from "../session.utils";
-import { Dropdown } from "../components/input/dropdown/Dropdown";
+import { Dropdown } from "../components/dropdown/Dropdown";
 
 export function StartSoknad() {
   const router = useRouter();
