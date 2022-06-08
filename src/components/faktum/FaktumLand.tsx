@@ -10,6 +10,7 @@ import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
+import { ReadMore } from "@navikt/ds-react";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
@@ -51,7 +52,6 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   return (
     <div>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelect}
@@ -59,6 +59,11 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
       />
+      {faktumTexts?.helpText && (
+        <ReadMore header={faktumTexts.helpText.title}>
+          <PortableText value={faktumTexts.helpText.body} />
+        </ReadMore>
+      )}
       {currentCountryGroupText?.alertText && (
         <AlertText alertText={currentCountryGroupText.alertText} inAccordion />
       )}
