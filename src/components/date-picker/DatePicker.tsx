@@ -24,7 +24,6 @@ export function DatePicker(props: DatePickerProps) {
 
   return (
     <>
-      <div>DATOVELGER</div>
       <DayPicker mode="single" required={true} selected={date} onSelect={onDateChange} />
     </>
   );

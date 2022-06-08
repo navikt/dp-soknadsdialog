@@ -5,29 +5,31 @@ import { FaktumProps } from "./Faktum";
 import { QuizLandFaktum } from "../../types/quiz.types";
 import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
-import { getName } from "i18n-iso-countries";
 import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
 import { ReadMore } from "@navikt/ds-react";
+import countries, { getName } from "i18n-iso-countries";
+import bokmalLocale from "i18n-iso-countries/langs/nb.json";
+import nynorskLocale from "i18n-iso-countries/langs/nn.json";
+import englishLocale from "i18n-iso-countries/langs/en.json";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
   const { landgrupper } = useSanity();
-
-  const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
+  const { saveFaktumToQuiz } = useQuiz();
 
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
   const [currentCountryGroupText, setCurrentCountryGroupText] = useState<
     SanityLandGruppe | undefined
   >();
 
+  const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
   const options = faktum.gyldigeLand.map((code) => ({
     value: code,
-    label: getName(code, router.locale || "nb"),
+    label: getName(code, setLocale(router.locale)),
   }));
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
@@ -69,4 +71,22 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
       )}
     </div>
   );
+}
+
+function setLocale(locale: string | undefined): string {
+  switch (locale) {
+    case "nb":
+      countries.registerLocale(bokmalLocale);
+      return "nb";
+    case "nn":
+      countries.registerLocale(nynorskLocale);
+      return "nn";
+    case "en":
+      countries.registerLocale(englishLocale);
+      return "en";
+
+    default:
+      countries.registerLocale(bokmalLocale);
+      return "nb";
+  }
 }
