@@ -13,8 +13,5 @@
 
 .heading {
   font-weight: 600;
-}
-
-.description {
-  margin: 0;
+  display: block;
 }
