@@ -2,11 +2,6 @@
   margin-bottom: var(--faktum-spacing);
 }
 
-.subFaktumWrapper {
-  margin-top: var(--faktum-spacing);
-}
-
-.generator-faktum-list {
-  border: solid 1px #3b3b3b;
-  border-radius: 5px;
+.landFaktumReadMore {
+  margin: 20px 0;
 }

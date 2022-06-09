@@ -14,6 +14,7 @@ import countries, { getName } from "i18n-iso-countries";
 import bokmalLocale from "i18n-iso-countries/langs/nb.json";
 import nynorskLocale from "i18n-iso-countries/langs/nn.json";
 import englishLocale from "i18n-iso-countries/langs/en.json";
+import styles from "./Faktum.module.css";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
@@ -53,16 +54,16 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
 
   return (
     <div>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelect}
         options={options}
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
       />
       {faktumTexts?.helpText && (
-        <ReadMore header={faktumTexts.helpText.title}>
+        <ReadMore className={styles.landFaktumReadMore} header={faktumTexts.helpText.title}>
           <PortableText value={faktumTexts.helpText.body} />
         </ReadMore>
       )}

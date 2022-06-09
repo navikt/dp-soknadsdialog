@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, ReactNode } from "react";
 import { Select } from "@navikt/ds-react";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
   options: DropdownOption[];
   currentValue: string;
   placeHolderText?: string;
+  description?: ReactNode;
 }
 
 export interface DropdownOption {
@@ -16,7 +17,13 @@ export interface DropdownOption {
 
 export function Dropdown(props: Props) {
   return (
-    <Select label={props.label} size="medium" onChange={props.onChange} value={props.currentValue}>
+    <Select
+      label={props.label}
+      size="medium"
+      onChange={props.onChange}
+      value={props.currentValue}
+      description={props.description && props.description}
+    >
       {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (
         <option key={option.value} value={option.value}>
