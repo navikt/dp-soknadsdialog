@@ -1,6 +1,6 @@
 import { PortableText } from "@portabletext/react";
 import React, { ChangeEvent, useState } from "react";
-import { Dropdown } from "../dropdown/Dropdown";
+import { Dropdown, DropdownOption } from "../dropdown/Dropdown";
 import { FaktumProps } from "./Faktum";
 import { QuizLandFaktum } from "../../types/quiz.types";
 import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
@@ -27,11 +27,17 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
     SanityLandGruppe | undefined
   >();
 
+  const sortByLabel = (optionA: DropdownOption, optionB: DropdownOption) => {
+    if (optionA.label === optionB.label) return 0;
+    return optionA.label > optionB.label ? 1 : -1;
+  };
   const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
-  const options = faktum.gyldigeLand.map((code) => ({
-    value: code,
-    label: getName(code, setLocale(router.locale)),
-  }));
+  const options = faktum.gyldigeLand
+    .map((code) => ({
+      value: code,
+      label: getName(code, setLocale(router.locale)),
+    }))
+    .sort(sortByLabel);
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
     onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
@@ -53,7 +59,7 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   }
 
   return (
-    <div>
+    <div className={styles.landFaktumReadMore}>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -63,9 +69,11 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
         placeHolderText={"Velg et land"}
       />
       {faktumTexts?.helpText && (
-        <ReadMore className={styles.landFaktumReadMore} header={faktumTexts.helpText.title}>
-          <PortableText value={faktumTexts.helpText.body} />
-        </ReadMore>
+        <div className={styles.landFaktumReadMore}>
+          <ReadMore header={faktumTexts.helpText.title}>
+            <PortableText value={faktumTexts.helpText.body} />
+          </ReadMore>
+        </div>
       )}
       {currentCountryGroupText?.alertText && (
         <AlertText alertText={currentCountryGroupText.alertText} inAccordion />
