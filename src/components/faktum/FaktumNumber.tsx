@@ -4,13 +4,13 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { QuizNumberFaktum } from "../../types/quiz.types";
-import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
 
 export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = useFaktumSanityText(props.faktum.beskrivendeId);
+  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);

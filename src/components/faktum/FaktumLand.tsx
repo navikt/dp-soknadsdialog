@@ -3,7 +3,6 @@ import React, { ChangeEvent, useState } from "react";
 import { Dropdown, DropdownOption } from "../dropdown/Dropdown";
 import { FaktumProps } from "./Faktum";
 import { QuizLandFaktum } from "../../types/quiz.types";
-import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
@@ -19,11 +18,11 @@ import styles from "./Faktum.module.css";
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { landgrupper } = useSanity();
+  const { getFaktumTextById, getLandGruppeTextById } = useSanity();
   const { saveFaktumToQuiz } = useQuiz();
 
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
-  const [currentCountryGroupText, setCurrentCountryGroupText] = useState<
+  const [currentLandGruppeText, setCurrentLandGruppeText] = useState<
     SanityLandGruppe | undefined
   >();
 
@@ -31,7 +30,7 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
     if (optionA.label === optionB.label) return 0;
     return optionA.label > optionB.label ? 1 : -1;
   };
-  const faktumTexts = useFaktumSanityText(faktum.beskrivendeId);
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const options = faktum.gyldigeLand
     .map((code) => ({
       value: code,
@@ -43,11 +42,8 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
     onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
     setCurrentAnswer(event.target.value);
 
-    setCurrentCountryGroupText(
-      landgrupper.find(
-        (gruppe) => gruppe.textId === getLandGruppeIdByAlpha3Code(event.target.value)
-      )
-    );
+    const landGruppeId = getLandGruppeIdByAlpha3Code(event.target.value);
+    setCurrentLandGruppeText(getLandGruppeTextById(landGruppeId));
   }
 
   function saveFaktum(value: string) {
@@ -75,8 +71,8 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
           </ReadMore>
         </div>
       )}
-      {currentCountryGroupText?.alertText && (
-        <AlertText alertText={currentCountryGroupText.alertText} inAccordion />
+      {currentLandGruppeText?.alertText && (
+        <AlertText alertText={currentLandGruppeText.alertText} inAccordion />
       )}
     </div>
   );

@@ -3,14 +3,14 @@ import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizDatoFaktum } from "../../types/quiz.types";
-import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
+import { useSanity } from "../../context/sanity-context";
 
 export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = useFaktumSanityText(props.faktum.beskrivendeId);
+  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
   const onDateSelection = (value: Date) => {

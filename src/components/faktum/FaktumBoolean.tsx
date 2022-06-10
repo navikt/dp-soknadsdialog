@@ -3,14 +3,14 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { QuizBooleanFaktum } from "../../types/quiz.types";
-import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
-import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
 import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
 
 export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumText = useFaktumSanityText(faktum.beskrivendeId);
+  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const faktumText = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(mapBooleanToTextId(props.faktum) || "");
 
   function onSelection(value: string) {
@@ -41,7 +41,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
         value={currentAnswer}
       >
         {faktum.gyldigeValg?.map((textId) => {
-          const svaralternativText = getSvaralternativSanityText(textId);
+          const svaralternativText = getSvaralternativTextById(textId);
           return (
             <div key={textId}>
               <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>

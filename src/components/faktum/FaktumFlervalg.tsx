@@ -3,15 +3,14 @@ import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { QuizFlervalgFaktum } from "../../types/quiz.types";
-import { useFaktumSanityText } from "../../hooks/useFaktumSanityText";
-import { getSvaralternativSanityText } from "../../hooks/getSvaralternativSanityText";
 import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
 
 export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-
-  const faktumText = useFaktumSanityText(faktum.beskrivendeId);
+  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const faktumText = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
 
   function onSelection(value: string[]) {
@@ -34,7 +33,7 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
         value={currentAnswer}
       >
         {faktum.gyldigeValg.map((textId) => {
-          const svaralternativText = getSvaralternativSanityText(textId);
+          const svaralternativText = getSvaralternativTextById(textId);
           return (
             <Checkbox key={textId} value={textId}>
               {svaralternativText ? svaralternativText.text : textId}

@@ -1,5 +1,10 @@
 import React, { PropsWithChildren } from "react";
-import { SanityTexts } from "../types/sanity.types";
+import {
+  SanityFaktum,
+  SanityLandGruppe,
+  SanitySvaralternativ,
+  SanityTexts,
+} from "../types/sanity.types";
 
 export const SanityContext = React.createContext<SanityTexts | undefined>(undefined);
 
@@ -18,7 +23,24 @@ function useSanity() {
   if (context === undefined) {
     throw new Error("useSanity must be used within a SanityProvider");
   }
-  return context;
+
+  function getFaktumTextById(textId: string): SanityFaktum | undefined {
+    return context?.fakta.find((faktum) => faktum.textId === textId);
+  }
+
+  function getLandGruppeTextById(textId: string | undefined): SanityLandGruppe | undefined {
+    return context?.landgrupper.find((gruppe) => gruppe.textId === textId);
+  }
+
+  function getSvaralternativTextById(textId: string): SanitySvaralternativ | undefined {
+    return context?.svaralternativer.find((svaralternativ) => svaralternativ.textId === textId);
+  }
+
+  return {
+    getFaktumTextById,
+    getLandGruppeTextById,
+    getSvaralternativTextById,
+  };
 }
 
 export { SanityProvider, useSanity };
