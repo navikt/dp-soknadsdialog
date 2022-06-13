@@ -11,6 +11,7 @@ export type QuizFaktum =
 export interface QuizBaseFaktum {
   id: string;
   beskrivendeId: string;
+  readOnly: boolean;
 }
 
 export interface QuizFlervalgFaktum extends QuizBaseFaktum {
@@ -71,7 +72,7 @@ export interface QuizGeneratorFaktum {
   beskrivendeId: string;
   type: "generator";
   svar?: QuizFaktum[][];
-  templates: QuizFaktum[];
+  templates: Omit<QuizFaktum, "readOnly">[];
 }
 
 export interface QuizSeksjon {

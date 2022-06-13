@@ -5,7 +5,7 @@ import { QuizFaktum, QuizFaktumSvarType } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 
 interface Props {
-  templates: Omit<QuizFaktum, "svar">[];
+  templates: Omit<QuizFaktum, "svar" | "readOnly">[];
   svar: QuizFaktum[];
   save: (svar: QuizFaktum[]) => void;
   cancel: () => void;
