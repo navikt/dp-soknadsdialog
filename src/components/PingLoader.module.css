@@ -10,8 +10,3 @@
 .loadingText {
   margin-left: var(--navds-spacing-5);
 }
-
-.heading {
-  font-weight: 600;
-  display: block;
-}
