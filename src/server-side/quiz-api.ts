@@ -43,7 +43,7 @@ export function getPaabegynt(onBehalfOfToken: string) {
     method: "Get",
     headers: headersWithToken(onBehalfOfToken),
   })
-    .then((response) => response.text())
+    .then((response) => response.json())
     .catch((error) => {
       return Promise.reject(error);
     });

@@ -5,7 +5,7 @@ import { getPaabegynt } from "../../../server-side/quiz-api";
 
 async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(200).send("localhost-uuid-paabegynt");
+    return res.status(200).send({ uuid: "localhost-uuid-paabegynt", startDato: "2021-10-03" });
   }
 
   const { token, apiToken } = await getSession({ req });
