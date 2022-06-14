@@ -1,0 +1,12 @@
+.pingLoader {
+  display: flex;
+  padding: var(--navds-spacing-5);
+  margin-bottom: var(--navds-spacing-5);
+  border: 1px solid var(--navds-global-color-blue-100);
+  border-radius: 4px;
+  background-color: var(--navds-global-color-lightblue-50);
+}
+
+.loadingText {
+  margin-left: var(--navds-spacing-5);
+}
