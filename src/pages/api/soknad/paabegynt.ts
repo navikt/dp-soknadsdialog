@@ -13,7 +13,7 @@ async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     paabegynt = await getPaabegynt(onBehalfOfToken);
-    return res.status(200).send(paabegynt);
+    return res.status(200).json(paabegynt);
   } else {
     return res.status(401).send({});
   }
