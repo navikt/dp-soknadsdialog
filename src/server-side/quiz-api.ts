@@ -37,6 +37,18 @@ export function postSoknad(onBehalfOfToken: string) {
     });
 }
 
+export function getPaabegynt(onBehalfOfToken: string) {
+  const url = `${process.env.API_BASE_URL}/paabegynt`;
+  return fetch(url, {
+    method: "Get",
+    headers: headersWithToken(onBehalfOfToken),
+  })
+    .then((response) => response.text())
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}
+
 export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
