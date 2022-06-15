@@ -1,12 +1,12 @@
-import React from "react";
-import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
-import { Barnetillegg } from "../barnetillegg/Barnetillegg";
-import styles from "./Faktum.module.css";
-import { Accordion, Button } from "@navikt/ds-react";
-import { GeneratorSkjema } from "../generator-skjema/GeneratorSkjema";
-import { useGeneratorState } from "../../hooks/useGeneratorState";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../constants";
+import React from "react";
+import { Accordion, Button } from "@navikt/ds-react";
+import { Faktum } from "./Faktum";
+import { Delete } from "@navikt/ds-icons";
+import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
+import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
+import { Barn } from "../barn/Barn";
 
 export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
   return <div>{renderGeneratorType(props.faktum)}</div>;
@@ -17,63 +17,61 @@ function renderGeneratorType(faktum: QuizGeneratorFaktum) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...faktum} />;
     case BARN_LISTE_FAKTUM_ID:
-      return <Barnetillegg {...faktum} />;
+      return <Barn {...faktum} />;
     default:
-      return <StandardGeneratorFaktum {...faktum} />;
+      return <StandardGenerator {...faktum} />;
   }
 }
 
-function StandardGeneratorFaktum(generatorFaktum: QuizGeneratorFaktum) {
-  const {
-    resetState,
-    saveSkjema,
-    activeIndex,
-    addNewSkjema,
-    deleteSkjema,
-    generatorSvar,
-    toggleActiveSkjema,
-    isNewGeneratorSkjema,
-  } = useGeneratorState(generatorFaktum.svar);
+function StandardGenerator(generatorFaktum: QuizGeneratorFaktum) {
+  const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
+    useGeneratorUtils();
 
   return (
-    <div>
-      <Accordion>
-        {generatorSvar.map((faktum, index) => (
-          <Accordion.Item key={index} open={index === activeIndex}>
-            <Accordion.Header onClick={() => toggleActiveSkjema(index)}>
-              <>{faktum[0]?.svar}</>
-            </Accordion.Header>
+    <>
+      {generatorFaktum?.svar?.map((faktum, svarIndex) => {
+        return (
+          <Accordion key={svarIndex}>
+            <Accordion.Item open={activeIndex === svarIndex}>
+              <Accordion.Header onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                {getStandardTitle(faktum, svarIndex)}
+              </Accordion.Header>
 
-            <Accordion.Content>
-              <Button onClick={() => deleteSkjema()}>Slett barn</Button>
-              <GeneratorSkjema
-                templates={generatorFaktum.templates}
-                svar={faktum}
-                save={(svar) => saveSkjema(generatorFaktum, svar)}
-                cancel={resetState}
-              />
-            </Accordion.Content>
-          </Accordion.Item>
-        ))}
-      </Accordion>
+              <Accordion.Content>
+                {faktum.map((faktum) => (
+                  <Faktum key={faktum.id} faktum={faktum} />
+                ))}
 
-      {!isNewGeneratorSkjema && (
-        <Button
-          className={styles["button-container"]}
-          onClick={() => addNewSkjema(generatorSvar.length)}
-        >
-          Legg til svar
-        </Button>
-      )}
+                <Button
+                  variant="danger"
+                  onClick={() => deleteGeneratorAnswer(generatorFaktum, svarIndex)}
+                >
+                  <Delete />
+                  Fjern dette svaret
+                </Button>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        );
+      })}
 
-      {isNewGeneratorSkjema && (
-        <GeneratorSkjema
-          svar={[]}
-          templates={generatorFaktum.templates}
-          save={(svar) => saveSkjema(generatorFaktum, svar)}
-          cancel={resetState}
-        />
-      )}
-    </div>
+      <Button variant="secondary" onClick={() => addNewGeneratorAnswer(generatorFaktum)}>
+        Legg til svar
+      </Button>
+    </>
   );
+}
+
+function getStandardTitle(fakta: QuizFaktum[], index: number): string {
+  const fallback = `Svar ${index}`;
+  const title = fakta[0].svar;
+
+  switch (typeof title) {
+    case "string":
+      return title;
+    case "number":
+      return title.toString();
+    default:
+      return fallback;
+  }
 }

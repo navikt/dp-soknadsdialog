@@ -5,7 +5,7 @@ import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 import { Delete } from "@navikt/ds-icons";
 
-export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
+export function Barn(generatorFaktum: QuizGeneratorFaktum) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
 
@@ -16,7 +16,7 @@ export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
           <Accordion key={svarIndex}>
             <Accordion.Item open={activeIndex === svarIndex}>
               <Accordion.Header onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                {getArbeidsforholdName(faktum)}
+                {getChildName(faktum)}
               </Accordion.Header>
 
               <Accordion.Content>
@@ -29,7 +29,7 @@ export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
                   onClick={() => deleteGeneratorAnswer(generatorFaktum, svarIndex)}
                 >
                   <Delete />
-                  Fjern dette arbeidsforholdet
+                  Fjern dette barnet
                 </Button>
               </Accordion.Content>
             </Accordion.Item>
@@ -38,15 +38,19 @@ export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
       })}
 
       <Button variant="secondary" onClick={() => addNewGeneratorAnswer(generatorFaktum)}>
-        Legg til arbeidsforhold
+        Legg til barn
       </Button>
     </>
   );
 }
 
-function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
-  return (
-    (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift")
-      ?.svar as string) ?? "Fant ikke navn på arbeidsgiver"
-  );
+function getChildName(barnetillegg: QuizFaktum[]): string {
+  const firstName = barnetillegg.find(
+    (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
+  )?.svar as string;
+
+  const lastName = barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-etternavn")
+    ?.svar as string;
+
+  return `${firstName} ${lastName}`;
 }

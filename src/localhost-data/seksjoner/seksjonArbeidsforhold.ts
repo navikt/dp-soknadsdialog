@@ -1,4 +1,5 @@
 import { QuizSeksjon } from "../../types/quiz.types";
+import { gyldigeLand } from "./seksjonBostedsland";
 
 export const seksjonArbeidsforhold: QuizSeksjon = {
   fakta: [
@@ -25,6 +26,54 @@ export const seksjonArbeidsforhold: QuizSeksjon = {
     {
       id: "8003",
       type: "generator",
+      svar: [
+        [
+          {
+            id: "8004.1",
+            type: "tekst",
+            svar: "Iskremfabrikken",
+            readOnly: false,
+            beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+          },
+          {
+            id: "8005.1",
+            type: "land",
+            svar: "NOR",
+            readOnly: false,
+            gyldigeLand,
+            grupper: [
+              {
+                land: ["SJM", "NOR"],
+                gruppeId: "faktum.hvilket-land-bor-du-i.gruppe.norge-jan-mayen",
+              },
+            ],
+            beskrivendeId: "faktum.arbeidsforhold.land",
+          },
+        ],
+        [
+          {
+            id: "8004.2",
+            type: "tekst",
+            svar: "Narvesen",
+            readOnly: false,
+            beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+          },
+          {
+            id: "8005.2",
+            type: "land",
+            svar: "DKK",
+            readOnly: false,
+            gyldigeLand,
+            grupper: [
+              {
+                land: ["SJM", "NOR"],
+                gruppeId: "faktum.hvilket-land-bor-du-i.gruppe.norge-jan-mayen",
+              },
+            ],
+            beskrivendeId: "faktum.arbeidsforhold.land",
+          },
+        ],
+      ],
       templates: [
         {
           id: "8004",

@@ -23,7 +23,9 @@ export function isSubFaktum<T>(faktum: T): faktum is SubFaktum<T> {
   return (faktum as SubFaktum<T>).requiredAnswerIds !== undefined;
 }
 
-export function isGeneratorFaktum(faktum: QuizGeneratorFaktum): faktum is QuizGeneratorFaktum {
+export function isGeneratorFaktum(
+  faktum: QuizFaktum | QuizGeneratorFaktum
+): faktum is QuizGeneratorFaktum {
   return faktum.type === "generator" ?? (faktum as QuizGeneratorFaktum);
 }
 

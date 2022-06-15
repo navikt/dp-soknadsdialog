@@ -6,6 +6,15 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { PingLoader } from "../components/PingLoader";
+import { QuizFaktum, QuizGeneratorFaktum } from "../types/quiz.types";
+import { isGeneratorFaktum } from "../types/type-guards";
+
+function isFaktumAnswered(faktum: QuizFaktum | QuizGeneratorFaktum) {
+  if (isGeneratorFaktum(faktum)) {
+    return faktum.svar?.every((faktum) => faktum.every((faktum) => faktum.svar !== undefined));
+  }
+  return !!faktum.svar;
+}
 
 export function Soknad() {
   const router = useRouter();
@@ -17,17 +26,18 @@ export function Soknad() {
   const firstUnansweredFaktumIndex = currentSection.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
+  const allFaktaInSectionAnswered = currentSection.fakta.every(isFaktumAnswered);
 
   const isLastSection = currentSectionIndex === soknadState.seksjoner.length - 1;
   const isFirstSection = currentSectionIndex === 0;
 
   useEffect(() => {
-    if (firstUnansweredFaktumIndex === -1 && !isLastSection) {
+    if (allFaktaInSectionAnswered && !isLastSection) {
       setShowNextSectionButton(true);
     } else {
       setShowNextSectionButton(false);
     }
-  }, [firstUnansweredFaktumIndex]);
+  }, [allFaktaInSectionAnswered]);
 
   function navigateNextSection() {
     setCurrentSectionIndex(() => currentSectionIndex + 1);

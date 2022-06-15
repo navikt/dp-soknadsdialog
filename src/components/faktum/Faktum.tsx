@@ -14,8 +14,8 @@ import { FaktumDato } from "./FaktumDato";
 import { FaktumPeriode } from "./FaktumPeriode";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
 import { FaktumLand } from "./FaktumLand";
-import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumBoolean } from "./FaktumBoolean";
+import { FaktumGenerator } from "./FaktumGenerator";
 
 export interface FaktumProps<P> {
   faktum: P;
