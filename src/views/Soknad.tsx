@@ -13,7 +13,7 @@ function isFaktumAnswered(faktum: QuizFaktum | QuizGeneratorFaktum) {
   if (isGeneratorFaktum(faktum)) {
     return faktum.svar?.every((faktum) => faktum.every((faktum) => faktum.svar !== undefined));
   }
-  return !!faktum.svar;
+  return faktum.svar !== undefined;
 }
 
 export function Soknad() {
