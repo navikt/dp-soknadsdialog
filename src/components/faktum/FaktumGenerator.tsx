@@ -64,7 +64,7 @@ function StandardGenerator(generatorFaktum: QuizGeneratorFaktum) {
 
 function getStandardTitle(fakta: QuizFaktum[], index: number): string {
   const fallback = `Svar ${index}`;
-  const title = fakta[0].svar;
+  const title = fakta[0]?.svar;
 
   switch (typeof title) {
     case "string":
