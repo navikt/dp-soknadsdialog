@@ -6,6 +6,7 @@ import { QuizPeriodeFaktum, QuizPeriodeFaktumAnswerType } from "../../types/quiz
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
+import { BodyShort, Label } from "@navikt/ds-react";
 
 export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
@@ -38,6 +39,17 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
 
   function saveFaktum(value: QuizPeriodeFaktumAnswerType) {
     saveFaktumToQuiz(faktum, value);
+  }
+
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        <BodyShort>
+          {fromDate?.toLocaleDateString()} – {toDate?.toLocaleDateString()}
+        </BodyShort>
+      </>
+    );
   }
 
   return (

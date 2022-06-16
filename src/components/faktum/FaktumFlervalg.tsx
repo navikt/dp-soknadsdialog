@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
+import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { QuizFlervalgFaktum } from "../../types/quiz.types";
@@ -10,7 +10,7 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
-  const faktumText = getFaktumTextById(faktum.beskrivendeId);
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
 
   function onSelection(value: string[]) {
@@ -22,13 +22,24 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
     saveFaktumToQuiz(faktum, value);
   }
 
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        {currentAnswer.map((textId) => (
+          <BodyShort key={textId}>{getSvaralternativTextById(textId)?.text || textId}</BodyShort>
+        ))}
+      </>
+    );
+  }
+
   return (
     <div>
-      {faktumText?.description && <PortableText value={faktumText.description} />}
-      {faktumText?.helpText && <p>{faktumText.helpText.title}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
 
       <CheckboxGroup
-        legend={faktumText?.text ? faktumText.text : faktum.beskrivendeId}
+        legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelection}
         value={currentAnswer}
       >

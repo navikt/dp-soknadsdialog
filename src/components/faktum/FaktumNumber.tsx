@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { TextField } from "@navikt/ds-react";
+import { BodyShort, Label, TextField } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
@@ -48,6 +48,15 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
 
   function saveFaktum(value: number) {
     saveFaktumToQuiz(faktum, value);
+  }
+
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        <BodyShort>{debouncedValue}</BodyShort>
+      </>
+    );
   }
 
   return (

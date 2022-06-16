@@ -8,7 +8,7 @@ import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
-import { ReadMore } from "@navikt/ds-react";
+import { BodyShort, Label, ReadMore } from "@navikt/ds-react";
 import countries, { getName } from "i18n-iso-countries";
 import bokmalLocale from "i18n-iso-countries/langs/nb.json";
 import nynorskLocale from "i18n-iso-countries/langs/nn.json";
@@ -52,6 +52,19 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
 
   function getLandGruppeIdByAlpha3Code(code: string) {
     return faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
+  }
+
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        <BodyShort>
+          {props.faktum.svar
+            ? getName(props.faktum.svar, setLocale(router.locale))
+            : props.faktum.svar}
+        </BodyShort>
+      </>
+    );
   }
 
   return (

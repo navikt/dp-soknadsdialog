@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Radio, RadioGroup } from "@navikt/ds-react";
+import { Radio, RadioGroup, Label, BodyShort } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { QuizBooleanFaktum } from "../../types/quiz.types";
@@ -10,7 +10,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
-  const faktumText = getFaktumTextById(faktum.beskrivendeId);
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(mapBooleanToTextId(props.faktum) || "");
 
   function onSelection(value: string) {
@@ -30,13 +30,22 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
     onChange ? onChange(faktum, mappedAnswer) : saveFaktumToQuiz(faktum, mappedAnswer);
   }
 
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        <BodyShort>{getSvaralternativTextById(currentAnswer)?.text || currentAnswer}</BodyShort>
+      </>
+    );
+  }
+
   return (
     <div>
-      {faktumText?.description && <PortableText value={faktumText.description} />}
-      {faktumText?.helpText && <p>{faktumText.helpText.title}</p>}
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
 
       <RadioGroup
-        legend={faktumText ? faktumText.text : faktum.beskrivendeId}
+        legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelection}
         value={currentAnswer}
       >

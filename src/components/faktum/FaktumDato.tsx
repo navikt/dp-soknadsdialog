@@ -6,6 +6,7 @@ import { QuizDatoFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
+import { BodyShort, Label } from "@navikt/ds-react";
 
 export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
@@ -21,6 +22,15 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
 
   function saveFaktum(value: string) {
     saveFaktumToQuiz(faktum, value);
+  }
+
+  if (props.faktum.readOnly || props.readonly) {
+    return (
+      <>
+        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+        <BodyShort>{currentAnswer}</BodyShort>
+      </>
+    );
   }
 
   return (

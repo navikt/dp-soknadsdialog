@@ -20,6 +20,7 @@ import { FaktumGenerator } from "./FaktumGenerator";
 export interface FaktumProps<P> {
   faktum: P;
   onChange?: (faktum: QuizFaktum, value: QuizFaktumSvarType) => void;
+  readonly?: boolean;
 }
 
 const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
