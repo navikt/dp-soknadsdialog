@@ -44,7 +44,7 @@ export function Arbeidsforhold(generatorFaktum: QuizGeneratorFaktum) {
   );
 }
 
-function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
+export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
   return (
     (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift")
       ?.svar as string) ?? "Fant ikke navn på arbeidsgiver"

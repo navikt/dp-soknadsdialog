@@ -11,7 +11,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(mapBooleanToTextId(props.faktum) || "");
+  const [currentAnswer, setCurrentAnswer] = useState(booleanToTextId(props.faktum) || "");
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -19,7 +19,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   }
 
   function saveFaktum(value: string) {
-    const mappedAnswer = mapTextIdToBoolean(value);
+    const mappedAnswer = textIdToBoolean(value);
 
     if (mappedAnswer === undefined) {
       // TODO sentry
@@ -62,7 +62,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   );
 }
 
-function mapTextIdToBoolean(textId: string): boolean | undefined {
+function textIdToBoolean(textId: string): boolean | undefined {
   if (textId.match(".*.svar.ja")) {
     return true;
   }
@@ -74,7 +74,7 @@ function mapTextIdToBoolean(textId: string): boolean | undefined {
   return undefined;
 }
 
-function mapBooleanToTextId(faktum: QuizBooleanFaktum): string | undefined {
+export function booleanToTextId(faktum: QuizBooleanFaktum): string | undefined {
   if (faktum.svar === undefined) {
     return undefined;
   }

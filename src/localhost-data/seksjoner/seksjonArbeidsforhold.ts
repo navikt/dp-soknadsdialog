@@ -61,7 +61,7 @@ export const seksjonArbeidsforhold: QuizSeksjon = {
           {
             id: "8005.2",
             type: "land",
-            svar: "DKK",
+            svar: "DNK",
             readOnly: false,
             gyldigeLand,
             grupper: [
