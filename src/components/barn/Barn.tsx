@@ -2,16 +2,16 @@ import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
-import { Faktum } from "../faktum/Faktum";
+import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { Delete } from "@navikt/ds-icons";
 
-export function Barn(generatorFaktum: QuizGeneratorFaktum) {
+export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
 
   return (
     <>
-      {generatorFaktum?.svar?.map((faktum, svarIndex) => {
+      {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
           <Accordion key={svarIndex}>
             <Accordion.Item open={activeIndex === svarIndex}>
@@ -21,25 +21,29 @@ export function Barn(generatorFaktum: QuizGeneratorFaktum) {
 
               <Accordion.Content>
                 {faktum.map((faktum) => (
-                  <Faktum key={faktum.id} faktum={faktum} />
+                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                <Button
-                  variant="danger"
-                  onClick={() => deleteGeneratorAnswer(generatorFaktum, svarIndex)}
-                >
-                  <Delete />
-                  Fjern dette barnet
-                </Button>
+                {!props.readonly && (
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+                  >
+                    <Delete />
+                    Fjern dette barnet
+                  </Button>
+                )}
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
         );
       })}
 
-      <Button variant="secondary" onClick={() => addNewGeneratorAnswer(generatorFaktum)}>
-        Legg til barn
-      </Button>
+      {!props.readonly && (
+        <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
+          Legg til barn
+        </Button>
+      )}
     </>
   );
 }

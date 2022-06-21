@@ -2,34 +2,30 @@ import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../constants";
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
-import { Faktum } from "./Faktum";
+import { Faktum, FaktumProps } from "./Faktum";
 import { Delete } from "@navikt/ds-icons";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
 
-export function FaktumGenerator(props: { faktum: QuizGeneratorFaktum }) {
-  return <div>{renderGeneratorType(props.faktum)}</div>;
-}
-
-function renderGeneratorType(faktum: QuizGeneratorFaktum) {
-  switch (faktum.beskrivendeId) {
+export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
+  switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
-      return <Arbeidsforhold {...faktum} />;
+      return <Arbeidsforhold {...props} />;
     case BARN_LISTE_FAKTUM_ID:
-      return <Barn {...faktum} />;
+      return <Barn {...props} />;
     default:
-      return <StandardGenerator {...faktum} />;
+      return <StandardGenerator {...props} />;
   }
 }
 
-function StandardGenerator(generatorFaktum: QuizGeneratorFaktum) {
+function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
 
   return (
     <>
-      {generatorFaktum?.svar?.map((faktum, svarIndex) => {
+      {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
           <Accordion key={svarIndex}>
             <Accordion.Item open={activeIndex === svarIndex}>
@@ -39,25 +35,29 @@ function StandardGenerator(generatorFaktum: QuizGeneratorFaktum) {
 
               <Accordion.Content>
                 {faktum.map((faktum) => (
-                  <Faktum key={faktum.id} faktum={faktum} />
+                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                <Button
-                  variant="danger"
-                  onClick={() => deleteGeneratorAnswer(generatorFaktum, svarIndex)}
-                >
-                  <Delete />
-                  Fjern dette svaret
-                </Button>
+                {!props.readonly && (
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+                  >
+                    <Delete />
+                    Fjern dette svaret
+                  </Button>
+                )}
               </Accordion.Content>
             </Accordion.Item>
           </Accordion>
         );
       })}
 
-      <Button variant="secondary" onClick={() => addNewGeneratorAnswer(generatorFaktum)}>
-        Legg til svar
-      </Button>
+      {!props.readonly && (
+        <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
+          Legg til svar
+        </Button>
+      )}
     </>
   );
 }

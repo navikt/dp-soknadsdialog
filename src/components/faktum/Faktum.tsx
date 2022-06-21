@@ -60,7 +60,7 @@ export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
         return <FaktumPeriode faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "generator":
-        return <FaktumGenerator faktum={faktum as QuizGeneratorFaktum} />;
+        return <FaktumGenerator faktum={faktum as QuizGeneratorFaktum} readonly={readonly} />;
     }
 
     function renderSpecialFaktumType(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
