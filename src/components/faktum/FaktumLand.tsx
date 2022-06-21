@@ -9,11 +9,8 @@ import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
 import { BodyShort, Label, ReadMore } from "@navikt/ds-react";
-import countries, { getName } from "i18n-iso-countries";
-import bokmalLocale from "i18n-iso-countries/langs/nb.json";
-import nynorskLocale from "i18n-iso-countries/langs/nn.json";
-import englishLocale from "i18n-iso-countries/langs/en.json";
 import styles from "./Faktum.module.css";
+import { getCountryName } from "../../country.utils";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
@@ -34,7 +31,7 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const options = faktum.gyldigeLand
     .map((code) => ({
       value: code,
-      label: getName(code, setLocale(router.locale)),
+      label: getCountryName(code, router.locale),
     }))
     .sort(sortByLabel);
 
@@ -59,9 +56,7 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
         <BodyShort>
-          {props.faktum.svar
-            ? getName(props.faktum.svar, setLocale(router.locale))
-            : props.faktum.svar}
+          {props.faktum.svar ? getCountryName(props.faktum.svar, router.locale) : props.faktum.svar}
         </BodyShort>
       </>
     );
@@ -89,22 +84,4 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
       )}
     </div>
   );
-}
-
-function setLocale(locale: string | undefined): string {
-  switch (locale) {
-    case "nb":
-      countries.registerLocale(bokmalLocale);
-      return "nb";
-    case "nn":
-      countries.registerLocale(nynorskLocale);
-      return "nn";
-    case "en":
-      countries.registerLocale(englishLocale);
-      return "en";
-
-    default:
-      countries.registerLocale(bokmalLocale);
-      return "nb";
-  }
 }
