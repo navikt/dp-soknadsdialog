@@ -26,7 +26,7 @@ export interface FaktumProps<P> {
 const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
 
 export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
-  const { faktum } = props;
+  const { faktum, readonly } = props;
 
   function renderFaktumType() {
     if (specialCaseFaktum.includes(faktum.beskrivendeId)) {
@@ -35,29 +35,29 @@ export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
 
     switch (faktum.type) {
       case "boolean":
-        return <FaktumBoolean faktum={faktum} onChange={props.onChange} />;
+        return <FaktumBoolean faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "envalg":
-        return <FaktumEnvalg faktum={faktum} onChange={props.onChange} />;
+        return <FaktumEnvalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "flervalg":
-        return <FaktumFlervalg faktum={faktum} onChange={props.onChange} />;
+        return <FaktumFlervalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "tekst":
-        return <FaktumText faktum={faktum} onChange={props.onChange} />;
+        return <FaktumText faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "double":
       case "int":
-        return <FaktumNumber faktum={faktum} onChange={props.onChange} />;
+        return <FaktumNumber faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "land":
-        return <FaktumLand faktum={faktum} onChange={props.onChange} />;
+        return <FaktumLand faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "localdate":
-        return <FaktumDato faktum={faktum} onChange={props.onChange} />;
+        return <FaktumDato faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "periode":
-        return <FaktumPeriode faktum={faktum} onChange={props.onChange} />;
+        return <FaktumPeriode faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "generator":
         return <FaktumGenerator faktum={faktum as QuizGeneratorFaktum} />;
