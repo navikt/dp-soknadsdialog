@@ -23,20 +23,23 @@ export function Soknad() {
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
+
   const currentSection = soknadState.seksjoner[sectionIndex];
-  const firstUnansweredFaktumIndex = currentSection.fakta?.findIndex(
+  const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
 
-  const allFaktaInSectionAnswered = currentSection.fakta.every(isFaktumAnswered);
+  const allFaktaInSectionAnswered = currentSection?.fakta.every(isFaktumAnswered);
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const isFirstSection = sectionIndex === 0;
   const showNextSectionButton = allFaktaInSectionAnswered && !isLastSection;
   const showPreviousSectionButton = sectionIndex !== 0;
 
   useEffect(() => {
+    const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
+
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
-    if (!sectionParam) {
+    if (!validSection) {
       router.push(`/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
     }
   }, []);
