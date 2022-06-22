@@ -49,13 +49,18 @@ export function getPaabegynt(onBehalfOfToken: string) {
     });
 }
 
+interface LocalhostOpts {
+  firstRender?: boolean;
+  summary?: boolean;
+}
+
 export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
-  localhostFirstRender = false
+  localhostOpts: LocalhostOpts = {}
 ): Promise<QuizState> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    if (localhostFirstRender) {
+    if (localhostOpts.firstRender) {
       const quizSeksjoner = quizStateResponse.seksjoner.map((seksjon) => {
         const fakta = seksjon.fakta.map((faktum) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -65,6 +70,8 @@ export function getSoknadState(
         return { ...seksjon, fakta };
       });
       return Promise.resolve({ ...quizStateResponse, seksjoner: quizSeksjoner });
+    } else if (localhostOpts.summary) {
+      return Promise.resolve({ ...quizStateResponse, ferdig: true });
     }
     return Promise.resolve(quizStateResponse);
   }

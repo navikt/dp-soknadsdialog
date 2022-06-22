@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button } from "@navikt/ds-react";
 import { useQuiz } from "../context/quiz-context";
 import { Section } from "../components/section/Section";
@@ -19,38 +19,40 @@ function isFaktumAnswered(faktum: QuizFaktum | QuizGeneratorFaktum) {
 export function Soknad() {
   const router = useRouter();
   const { soknadState, isError, isLoading } = useQuiz();
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  const [showNextSectionButton, setShowNextSectionButton] = useState(false);
+  const sectionParam = router.query.seksjon as string;
 
-  const currentSection = soknadState.seksjoner[currentSectionIndex];
+  // Vis første seksjon hvis ingenting annet er spesifisert
+  const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
+  const currentSection = soknadState.seksjoner[sectionIndex];
   const firstUnansweredFaktumIndex = currentSection.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
-  const allFaktaInSectionAnswered = currentSection.fakta.every(isFaktumAnswered);
 
-  const isLastSection = currentSectionIndex === soknadState.seksjoner.length - 1;
-  const isFirstSection = currentSectionIndex === 0;
+  const allFaktaInSectionAnswered = currentSection.fakta.every(isFaktumAnswered);
+  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
+  const isFirstSection = sectionIndex === 0;
+  const showNextSectionButton = allFaktaInSectionAnswered && !isLastSection;
+  const showPreviousSectionButton = sectionIndex !== 0;
 
   useEffect(() => {
-    if (allFaktaInSectionAnswered && !isLastSection) {
-      setShowNextSectionButton(true);
-    } else {
-      setShowNextSectionButton(false);
+    // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
+    if (!sectionParam) {
+      router.push(`/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
     }
-  }, [allFaktaInSectionAnswered]);
+  }, []);
 
   function navigateNextSection() {
-    setCurrentSectionIndex(() => currentSectionIndex + 1);
+    const nextIndex = sectionParam && parseInt(sectionParam) + 1;
+    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
   function navigatePreviousSection() {
-    setCurrentSectionIndex(() => currentSectionIndex - 1);
+    const nextIndex = sectionParam && parseInt(sectionParam) - 1;
+    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
-  async function finishSoknad() {
-    // await fetch(api(`/soknad/${soknadId}/complete`), {
-    //   method: "PUT",
-    // });
+  async function navigateToSummary() {
+    router.push(`/${router.query.uuid}/oppsummering`);
   }
 
   function cancelSoknad() {
@@ -71,11 +73,13 @@ export function Soknad() {
       />
 
       <nav className={styles.navigation}>
-        {isFirstSection ? (
+        {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
             Avbryt søknad
           </Button>
-        ) : (
+        )}
+
+        {showPreviousSectionButton && (
           <Button variant={"secondary"} onClick={() => navigatePreviousSection()}>
             <Left />
             Forrige steg
@@ -88,7 +92,7 @@ export function Soknad() {
           </Button>
         )}
 
-        {isLastSection && <Button onClick={() => finishSoknad()}>Send inn søknad</Button>}
+        {isLastSection && <Button onClick={() => navigateToSummary()}>Gå til oppsummering</Button>}
       </nav>
 
       {isError && <pre>Det har gått ått skaugum</pre>}

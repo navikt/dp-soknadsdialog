@@ -1,5 +1,5 @@
 import React from "react";
-import { Soknad } from "../../views/Soknad";
+import { Summary } from "../../views/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
@@ -12,14 +12,14 @@ import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
 
-interface SoknadMedIdParams {
+interface SummaryPageProps {
   soknadState: QuizState | undefined;
   sanityTexts: SanityTexts;
 }
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<SoknadMedIdParams>> {
+): Promise<GetServerSidePropsResult<SummaryPageProps>> {
   const { token, apiToken } = await getSession(context);
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -28,18 +28,16 @@ export async function getServerSideProps(
     baseLang: "nb",
     lang: locale,
   });
+
   let soknadState;
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    soknadState = await getSoknadState(uuid, "", { firstRender: true });
+    soknadState = await getSoknadState(uuid, "", { summary: true });
   }
 
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audience);
     soknadState = await getSoknadState(uuid, onBehalfOfToken);
-
-    // eslint-disable-next-line no-console
-    console.log("ServerSideProps SoknadState", soknadState);
   }
   return {
     props: {
@@ -49,7 +47,7 @@ export async function getServerSideProps(
   };
 }
 
-export default function SoknadMedId(props: SoknadMedIdParams) {
+export default function SummaryPage(props: SummaryPageProps) {
   if (!props.sanityTexts.seksjoner) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
@@ -61,7 +59,7 @@ export default function SoknadMedId(props: SoknadMedIdParams) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Soknad />
+        <Summary sections={props.soknadState.seksjoner} />
       </QuizProvider>
     </SanityProvider>
   );
