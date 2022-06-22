@@ -2,6 +2,10 @@
   margin-bottom: var(--faktum-spacing);
 }
 
+.faktum:last-child {
+  margin-bottom: 0;
+}
+
 .landFaktumReadMore {
   margin: 20px 0;
 }
