@@ -95,7 +95,9 @@ export function Soknad() {
           </Button>
         )}
 
-        {isLastSection && <Button onClick={() => navigateToSummary()}>Gå til oppsummering</Button>}
+        {soknadState.ferdig && (
+          <Button onClick={() => navigateToSummary()}>Gå til oppsummering</Button>
+        )}
       </nav>
 
       {isError && <pre>Det har gått ått skaugum</pre>}
