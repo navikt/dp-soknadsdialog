@@ -38,7 +38,7 @@ export function postSoknad(onBehalfOfToken: string) {
 }
 
 export function getPaabegynt(onBehalfOfToken: string) {
-  const url = `${process.env.API_BASE_URL}/paabegynt`;
+  const url = `${process.env.API_BASE_URL}/soknad/paabegynt`;
   return fetch(url, {
     method: "Get",
     headers: headersWithToken(onBehalfOfToken),
