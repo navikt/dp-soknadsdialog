@@ -1,5 +1,8 @@
 import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
+import { sanityClient } from "../../sanity-client";
+import { SanityTexts } from "../types/sanity.types";
+import { allTextsQuery } from "../sanity/groq-queries";
 
 const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -88,11 +91,18 @@ export function getSoknadState(
     });
 }
 
-export function completeSoknad(uuid: string, onBehalfOfToken: string): Promise<Response> {
+export async function completeSoknad(uuid: string, onBehalfOfToken: string): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`;
+
+  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
+    baseLang: "nb",
+    // TODO: Få riktig locale fra frontend
+    lang: "nb",
+  });
+
   return fetch(url, {
     method: "Put",
     headers: headersWithToken(onBehalfOfToken),
-    body: JSON.stringify([]),
+    body: JSON.stringify({ sanityTexts }),
   });
 }
