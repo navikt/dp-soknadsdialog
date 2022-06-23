@@ -23,6 +23,7 @@ export function getSoknadMal(onBehalfOfToken: string) {
       return Promise.reject(error);
     });
 }
+
 export function postSoknad(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
   return fetch(url, {
@@ -92,5 +93,6 @@ export function completeSoknad(uuid: string, onBehalfOfToken: string): Promise<R
   return fetch(url, {
     method: "Put",
     headers: headersWithToken(onBehalfOfToken),
+    body: JSON.stringify([]),
   });
 }

@@ -6,6 +6,7 @@ import { Button } from "@navikt/ds-react";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
+import api from "../api.utils";
 
 interface Props {
   sections: QuizSeksjon[];
@@ -22,8 +23,9 @@ export function Summary(props: Props) {
     router.push(`/`);
   }
 
-  async function finishSoknad() {
+  function finishSoknad() {
     alert("Vi skal sende inn søknaden ^___^");
+    return fetch(api(`/soknad/${router.query.uuid}/complete`));
   }
 
   return (
