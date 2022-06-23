@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { QuizSeksjon } from "../types/quiz.types";
-import { Accordion } from "@navikt/ds-react";
+import { Accordion, Alert, Button } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
-import { Button } from "@navikt/ds-react";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
@@ -13,6 +12,7 @@ interface Props {
 }
 
 export function Summary(props: Props) {
+  const [hasError, setHasError] = useState(false);
   const router = useRouter();
 
   function goToSoknad() {
@@ -24,8 +24,21 @@ export function Summary(props: Props) {
   }
 
   function finishSoknad() {
-    alert("Vi skal sende inn søknaden ^___^");
-    return fetch(api(`/soknad/${router.query.uuid}/complete`));
+    return fetch(api(`/soknad/${router.query.uuid}/complete`))
+      .then(() => {
+        router.push(`/${router.query.uuid}/kvittering`);
+      })
+      .catch(() => setHasError(true));
+  }
+
+  if (hasError) {
+    return (
+      <>
+        <Alert variant="error" size="medium">
+          Noe skjedde feil med innsendingen av søknaden.
+        </Alert>
+      </>
+    );
   }
 
   return (
