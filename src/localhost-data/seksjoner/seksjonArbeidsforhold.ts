@@ -307,4 +307,5 @@ export const seksjonArbeidsforhold: QuizSeksjon = {
     },
   ],
   beskrivendeId: "arbeidsforhold",
+  ferdig: true,
 };

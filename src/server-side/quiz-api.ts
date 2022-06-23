@@ -67,7 +67,7 @@ export function getSoknadState(
           const { svar, ...faktumWithoutAnswer } = faktum;
           return faktumWithoutAnswer;
         });
-        return { ...seksjon, fakta };
+        return { ...seksjon, ferdig: false, fakta };
       });
       return Promise.resolve({ ...quizStateResponse, seksjoner: quizSeksjoner });
     } else if (localhostOpts.summary) {

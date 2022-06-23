@@ -10,15 +10,13 @@ interface Props {
 
 export function Section(props: Props) {
   return (
-    <div>
-      <div className={styles.faktum}>
-        {props.section?.beskrivendeId}
-        {props.section?.fakta?.map((faktum, index) => {
-          if (index <= props.firstUnansweredFaktumIndex) {
-            return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
-          }
-        })}
-      </div>
+    <div className={styles.faktum}>
+      {props.section?.beskrivendeId}
+      {props.section?.fakta?.map((faktum, index) => {
+        if (index <= props.firstUnansweredFaktumIndex) {
+          return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
+        }
+      })}
     </div>
   );
 }

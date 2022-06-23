@@ -156,4 +156,5 @@ export const seksjonBarnetillegg: QuizSeksjon = {
     },
   ],
   beskrivendeId: "barnetillegg-register",
+  ferdig: true,
 };

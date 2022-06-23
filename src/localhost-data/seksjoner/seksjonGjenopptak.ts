@@ -16,4 +16,5 @@ export const seksjonGjenopptak: QuizSeksjon = {
     },
   ],
   beskrivendeId: "gjenopptak",
+  ferdig: true,
 };

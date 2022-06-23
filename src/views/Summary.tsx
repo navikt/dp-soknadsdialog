@@ -14,7 +14,7 @@ interface Props {
 export function Summary(props: Props) {
   const router = useRouter();
 
-  function navigateToSoknad() {
+  function goToSoknad() {
     router.push(`/${router.query.uuid}`);
   }
 
@@ -55,7 +55,7 @@ export function Summary(props: Props) {
       </Accordion>
 
       <nav className={styles.navigation}>
-        <Button variant={"secondary"} onClick={() => navigateToSoknad()}>
+        <Button variant={"secondary"} onClick={() => goToSoknad()}>
           <Left />
           Forrige steg
         </Button>

@@ -342,4 +342,5 @@ export const seksjonBostedsland: QuizSeksjon = {
     },
   ],
   beskrivendeId: "bostedsland",
+  ferdig: true,
 };

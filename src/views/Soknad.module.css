@@ -1,8 +1,21 @@
-.navigation {
-  display: flex;
-  margin-bottom: 44px;
+.seksjonContainer {
+  margin-bottom: var(--navds-spacing-5);
 }
 
-.navigation button:first-child {
-  margin-right: 20px;
+.loaderContainer {
+  margin-bottom: var(--navds-spacing-5);
+}
+
+.navigation {
+  display: flex;
+  margin-top: var(--navds-spacing-9);
+}
+
+.navigation button {
+  margin-bottom: var(--navds-spacing-9);
+  margin-right: var(--navds-spacing-6);
+}
+
+.navigation button:last-child {
+  margin-right: 0;
 }

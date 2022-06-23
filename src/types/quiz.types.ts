@@ -77,6 +77,7 @@ export interface QuizGeneratorFaktum {
 
 export interface QuizSeksjon {
   beskrivendeId: string;
+  ferdig: boolean;
   fakta: (QuizFaktum | QuizGeneratorFaktum)[];
 }
 
