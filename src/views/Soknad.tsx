@@ -83,7 +83,7 @@ export function Soknad() {
           </Button>
         )}
 
-        {currentSection.ferdig && (
+        {currentSection.ferdig && !soknadState.ferdig && (
           <Button onClick={() => goNext()}>
             Neste steg <Right />
           </Button>
