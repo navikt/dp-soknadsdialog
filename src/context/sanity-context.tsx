@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from "react";
 import {
   SanityFaktum,
   SanityLandGruppe,
+  SanitySeksjon,
   SanitySvaralternativ,
   SanityTexts,
 } from "../types/sanity.types";
@@ -24,6 +25,10 @@ function useSanity() {
     throw new Error("useSanity must be used within a SanityProvider");
   }
 
+  function getSeksjonTextById(textId: string): SanitySeksjon | undefined {
+    return context?.seksjoner.find((seksjon) => seksjon.textId === textId);
+  }
+
   function getFaktumTextById(textId: string): SanityFaktum | undefined {
     return context?.fakta.find((faktum) => faktum.textId === textId);
   }
@@ -37,6 +42,7 @@ function useSanity() {
   }
 
   return {
+    getSeksjonTextById,
     getFaktumTextById,
     getLandGruppeTextById,
     getSvaralternativTextById,
