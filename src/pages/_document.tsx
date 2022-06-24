@@ -3,13 +3,20 @@ import React from "react";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
+  Env,
   fetchDecoratorReact,
   Locale,
   Props as DecoratorProps,
-  Env,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
+
+const supportedLocales = ["nb", "en"];
+const availableLanguages = supportedLocales.map((l) => ({
+  locale: l,
+  url: "https://www.nav.no/arbeid/dagpenger/soknad/" + l,
+  handleInApp: true,
+})) as DecoratorProps["availableLanguages"];
 
 const decoratorProps: DecoratorProps = {
   env: dekoratorEnv ?? "prod",
@@ -20,6 +27,7 @@ const decoratorProps: DecoratorProps = {
   redirectToApp: true,
   level: "Level4",
   utloggingsvarsel: true,
+  availableLanguages,
 };
 
 export default class MyDocument extends Document<DecoratorComponents> {

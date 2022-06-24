@@ -7,6 +7,7 @@ import SoknadHeader from "../components/SoknadHeader";
 import { useRouter } from "next/router";
 import { fetcher } from "../api.utils";
 import { SWRConfig } from "swr";
+import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -15,6 +16,8 @@ export default function App({ Component, pageProps }: AppProps) {
     if (router.pathname === "/") return <></>;
     return <SoknadHeader />;
   };
+
+  onLanguageSelect(({ locale }) => router.push(router.asPath, router.asPath, { locale }));
 
   return (
     <SWRConfig value={{ fetcher }}>
