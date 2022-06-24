@@ -91,13 +91,16 @@ export function getSoknadState(
     });
 }
 
-export async function completeSoknad(uuid: string, onBehalfOfToken: string): Promise<Response> {
+export async function completeSoknad(
+  uuid: string,
+  lang: string,
+  onBehalfOfToken: string
+): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`;
 
   const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
     baseLang: "nb",
-    // TODO: Få riktig locale fra frontend
-    lang: "nb",
+    lang,
   });
 
   return fetch(url, {

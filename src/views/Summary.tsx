@@ -24,7 +24,7 @@ export function Summary(props: Props) {
   }
 
   function finishSoknad() {
-    return fetch(api(`/soknad/${router.query.uuid}/complete`))
+    return fetch(api(`/soknad/${router.query.uuid}/complete?locale=${router.locale}`))
       .then(() => {
         router.push(`/${router.query.uuid}/kvittering`);
       })
