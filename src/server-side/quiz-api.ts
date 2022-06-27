@@ -27,8 +27,11 @@ export function getSoknadMal(onBehalfOfToken: string) {
     });
 }
 
-export function postSoknad(onBehalfOfToken: string) {
-  const url = `${process.env.API_BASE_URL}/soknad`;
+export type Prosesstype = "Søknad" | "Innsending";
+
+export function postSoknad(onBehalfOfToken: string, prosesstype?: Prosesstype) {
+  const url = new URL(`${process.env.API_BASE_URL}/soknad`);
+  if (prosesstype) url.searchParams.append("prosesstype", prosesstype);
   return fetch(url, {
     method: "Post",
     headers: {
