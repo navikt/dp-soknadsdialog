@@ -55,7 +55,7 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
   }
 
   return (
-    <div>
+    <>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       <DatePicker
         label={"Fra dato"}
@@ -71,6 +71,6 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }

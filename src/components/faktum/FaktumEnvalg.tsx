@@ -34,11 +34,10 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
   }
 
   return (
-    <div>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-
+    <>
       <RadioGroup
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
       >
@@ -54,6 +53,6 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }

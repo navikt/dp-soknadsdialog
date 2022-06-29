@@ -36,7 +36,7 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   }
 
   return (
-    <div>
+    <>
       <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       <DatePicker
@@ -47,6 +47,6 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }

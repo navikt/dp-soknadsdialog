@@ -37,11 +37,11 @@ export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
   }
 
   return (
-    <div>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+    <>
       <TextField
         defaultValue={faktum?.svar}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         size="medium"
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}
@@ -50,6 +50,6 @@ export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }

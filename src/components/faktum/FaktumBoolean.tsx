@@ -42,13 +42,13 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   }
 
   return (
-    <div>
+    <>
       <RadioGroup
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
       >
-        {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         {faktum.gyldigeValg?.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);
           return (
@@ -61,7 +61,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }
 

@@ -36,11 +36,10 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   }
 
   return (
-    <div>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-
+    <>
       <CheckboxGroup
         legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
       >
@@ -56,6 +55,6 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </div>
+    </>
   );
 }
