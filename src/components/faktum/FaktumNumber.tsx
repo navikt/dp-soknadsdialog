@@ -6,6 +6,8 @@ import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { QuizNumberFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { HelpText } from "../HelpText";
+import styles from "./Faktum.module.css";
 
 export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -62,7 +64,6 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
   return (
     <div>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <TextField
         defaultValue={debouncedValue?.toString()}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
@@ -72,6 +73,9 @@ export function FaktumNumber(props: FaktumProps<QuizNumberFaktum>) {
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
       />
+      {faktumTexts?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
     </div>
   );
 }

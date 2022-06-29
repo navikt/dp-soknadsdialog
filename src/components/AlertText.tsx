@@ -5,7 +5,6 @@ import { SanityAlertText } from "../types/sanity.types";
 
 interface Props {
   alertText: SanityAlertText;
-  inAccordion: boolean;
 }
 
 export function AlertText(props: Props) {

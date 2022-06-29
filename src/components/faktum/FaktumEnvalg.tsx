@@ -5,6 +5,8 @@ import { PortableText } from "@portabletext/react";
 import { QuizEnvalgFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { HelpText } from "../HelpText";
+import styles from "./Faktum.module.css";
 
 export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
@@ -34,7 +36,6 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
   return (
     <div>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
 
       <RadioGroup
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
@@ -50,6 +51,9 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
           );
         })}
       </RadioGroup>
+      {faktumTexts?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
     </div>
   );
 }

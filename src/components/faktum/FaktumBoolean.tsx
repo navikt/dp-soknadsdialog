@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Radio, RadioGroup, Label, BodyShort } from "@navikt/ds-react";
+import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { QuizBooleanFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { HelpText } from "../HelpText";
+import styles from "./Faktum.module.css";
 
 export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { faktum, onChange } = props;
@@ -41,14 +43,12 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
 
   return (
     <div>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
-
       <RadioGroup
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onSelection}
         value={currentAnswer}
       >
+        {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         {faktum.gyldigeValg?.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);
           return (
@@ -58,6 +58,9 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
           );
         })}
       </RadioGroup>
+      {faktumTexts?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
     </div>
   );
 }

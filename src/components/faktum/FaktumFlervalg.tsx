@@ -5,6 +5,8 @@ import { PortableText } from "@portabletext/react";
 import { QuizFlervalgFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { HelpText } from "../HelpText";
+import styles from "./Faktum.module.css";
 
 export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
@@ -36,7 +38,6 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
   return (
     <div>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
 
       <CheckboxGroup
         legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
@@ -52,6 +53,9 @@ export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
           );
         })}
       </CheckboxGroup>
+      {faktumTexts?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
     </div>
   );
 }

@@ -7,6 +7,8 @@ import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
 import { BodyShort, Label } from "@navikt/ds-react";
+import { HelpText } from "../HelpText";
+import styles from "./Faktum.module.css";
 
 export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
   const { faktum, onChange } = props;
@@ -35,13 +37,16 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
 
   return (
     <div>
+      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      {faktumTexts?.helpText && <p>{faktumTexts.helpText.title}</p>}
       <DatePicker
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={onDateSelection}
         value={currentAnswer}
       />
+      {faktumTexts?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
     </div>
   );
 }

@@ -8,9 +8,10 @@ import { useSanity } from "../../context/sanity-context";
 import { SanityLandGruppe } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
-import { BodyShort, Label, ReadMore } from "@navikt/ds-react";
+import { BodyShort, Label } from "@navikt/ds-react";
 import styles from "./Faktum.module.css";
 import { getCountryName } from "../../country.utils";
+import { HelpText } from "../HelpText";
 
 export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   const router = useRouter();
@@ -63,7 +64,7 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
   }
 
   return (
-    <div className={styles.landFaktumReadMore}>
+    <>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -73,15 +74,11 @@ export function FaktumLand(props: FaktumProps<QuizLandFaktum>) {
         placeHolderText={"Velg et land"}
       />
       {faktumTexts?.helpText && (
-        <div className={styles.landFaktumReadMore}>
-          <ReadMore header={faktumTexts.helpText.title}>
-            <PortableText value={faktumTexts.helpText.body} />
-          </ReadMore>
-        </div>
+        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
       {currentLandGruppeText?.alertText && (
-        <AlertText alertText={currentLandGruppeText.alertText} inAccordion />
+        <AlertText alertText={currentLandGruppeText.alertText} />
       )}
-    </div>
+    </>
   );
 }
