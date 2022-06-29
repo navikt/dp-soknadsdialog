@@ -61,7 +61,7 @@ export function Summary(props: Props) {
                       variant="secondary"
                       onClick={() => router.push(`/${router.query.uuid}?seksjon=${index + 1}`)}
                     >
-                      {getAppTekst("knapp.endre-svar")}
+                      {getAppTekst("oppsummering.endre-svar")}
                     </Button>
                   </>
                 </Accordion.Content>
@@ -80,7 +80,7 @@ export function Summary(props: Props) {
         <Button onClick={() => finishSoknad()}>{getAppTekst("oppsummering.send-soknad")}</Button>
 
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-          {getAppTekst("knapp.slett-soknad")}
+          {getAppTekst("oppsummering.slett-soknad")}
         </Button>
       </nav>
     </>

@@ -47,7 +47,7 @@ export function StartSoknad() {
         </Button>
       )}
       <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
-        {getAppTekst("knapp.start-soknad")}
+        {getAppTekst("start-soknad.start-knapp")}
       </Button>
       <Heading spacing size="small" level="3">
         Påbegynt uuid:
