@@ -41,11 +41,16 @@ function useSanity() {
     return context?.svaralternativer.find((svaralternativ) => svaralternativ.textId === textId);
   }
 
+  function getAppTekst(textId: string): string {
+    return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+  }
+
   return {
     getSeksjonTextById,
     getFaktumTextById,
     getLandGruppeTextById,
     getSvaralternativTextById,
+    getAppTekst,
   };
 }
 

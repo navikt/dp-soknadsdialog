@@ -7,6 +7,7 @@ import { Delete } from "@navikt/ds-icons";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
+import { useSanity } from "../../context/sanity-context";
 
 export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -22,6 +23,7 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
 function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
+  const { getAppTekst } = useSanity();
 
   return (
     <>
@@ -44,7 +46,7 @@ function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
                     onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
                   >
                     <Delete />
-                    Fjern dette svaret
+                    {getAppTekst("generator.fjern")}
                   </Button>
                 )}
               </Accordion.Content>
@@ -55,7 +57,7 @@ function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
 
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          Legg til svar
+          {getAppTekst("generator.legg-til")}
         </Button>
       )}
     </>

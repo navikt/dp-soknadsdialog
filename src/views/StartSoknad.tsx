@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useSession } from "../session.utils";
+import { useSanity } from "../context/sanity-context";
 
 export function StartSoknad() {
   const router = useRouter();
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [paabegynt, setPaabegynt] = useState("");
+  const { getAppTekst } = useSanity();
 
   async function startSoknad() {
     setIsCreatingSoknadUUID(true);
@@ -36,7 +38,7 @@ export function StartSoknad() {
   return (
     <main>
       <Heading spacing size="xlarge" level="1">
-        Søknad om dagpenger
+        {getAppTekst("start-soknad.tittel")}
       </Heading>
 
       {session === undefined && (
@@ -45,7 +47,7 @@ export function StartSoknad() {
         </Button>
       )}
       <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
-        Start søknad
+        {getAppTekst("knapp.start-soknad")}
       </Button>
       <Heading spacing size="small" level="3">
         Påbegynt uuid:

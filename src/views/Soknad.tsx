@@ -6,9 +6,11 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { PingLoader } from "../components/PingLoader";
+import { useSanity } from "../context/sanity-context";
 
 export function Soknad() {
   const router = useRouter();
+  const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading } = useQuiz();
   const sectionParam = router.query.seksjon as string;
 
@@ -72,24 +74,26 @@ export function Soknad() {
       <nav className={styles.navigation}>
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-            Avbryt søknad
+            {getAppTekst("knapp.avbryt")}
           </Button>
         )}
 
         {!isFirstSection && (
           <Button variant={"secondary"} onClick={() => goPrevious()}>
             <Left />
-            Forrige steg
+            {getAppTekst("knapp.forrige")}
           </Button>
         )}
 
         {currentSection.ferdig && !soknadState.ferdig && (
           <Button onClick={() => goNext()}>
-            Neste steg <Right />
+            {getAppTekst("knapp.neste")} <Right />
           </Button>
         )}
 
-        {soknadState.ferdig && <Button onClick={() => goToSummary()}>Gå til oppsummering</Button>}
+        {soknadState.ferdig && (
+          <Button onClick={() => goToSummary()}>{getAppTekst("soknad.til-oppsummering")}</Button>
+        )}
       </nav>
 
       {isError && <pre>Det har gått ått skaugum</pre>}

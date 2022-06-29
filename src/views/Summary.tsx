@@ -6,6 +6,7 @@ import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import api from "../api.utils";
+import { useSanity } from "../context/sanity-context";
 
 interface Props {
   sections: QuizSeksjon[];
@@ -14,6 +15,7 @@ interface Props {
 export function Summary(props: Props) {
   const [hasError, setHasError] = useState(false);
   const router = useRouter();
+  const { getAppTekst } = useSanity();
 
   function goToSoknad() {
     router.push(`/${router.query.uuid}`);
@@ -35,7 +37,7 @@ export function Summary(props: Props) {
     return (
       <>
         <Alert variant="error" size="medium">
-          Noe skjedde feil med innsendingen av søknaden.
+          {getAppTekst("oppsummering.feil")}
         </Alert>
       </>
     );
@@ -59,7 +61,7 @@ export function Summary(props: Props) {
                       variant="secondary"
                       onClick={() => router.push(`/${router.query.uuid}?seksjon=${index + 1}`)}
                     >
-                      Endre svar
+                      {getAppTekst("knapp.endre-svar")}
                     </Button>
                   </>
                 </Accordion.Content>
@@ -72,13 +74,13 @@ export function Summary(props: Props) {
       <nav className={styles.navigation}>
         <Button variant={"secondary"} onClick={() => goToSoknad()}>
           <Left />
-          Forrige steg
+          {getAppTekst("knapp.forrige")}
         </Button>
 
-        <Button onClick={() => finishSoknad()}>Send inn søknad</Button>
+        <Button onClick={() => finishSoknad()}>{getAppTekst("oppsummering.send-soknad")}</Button>
 
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-          Slett søknad
+          {getAppTekst("knapp.slett-soknad")}
         </Button>
       </nav>
     </>

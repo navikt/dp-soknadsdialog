@@ -4,10 +4,12 @@ import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { Delete } from "@navikt/ds-icons";
+import { useSanity } from "../../context/sanity-context";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
+  const { getAppTekst } = useSanity();
 
   return (
     <>
@@ -30,7 +32,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                     onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
                   >
                     <Delete />
-                    Fjern dette barnet
+                    {getAppTekst("barn.fjern")}
                   </Button>
                 )}
               </Accordion.Content>
@@ -41,7 +43,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
 
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          Legg til barn
+          {getAppTekst("barn.legg-til")}
         </Button>
       )}
     </>
