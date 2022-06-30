@@ -23,14 +23,19 @@ export interface FaktumProps<P> {
   readonly?: boolean;
 }
 
-const specialCaseFaktum = ["faktum.eget-gaardsbruk-arbeidsaar-for-timer"];
+const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
   const { faktum, readonly } = props;
 
   function renderFaktumType() {
-    if (specialCaseFaktum.includes(faktum.beskrivendeId)) {
-      return renderSpecialFaktumType(props);
+    if (faktum.beskrivendeId === FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER) {
+      return (
+        <FaktumEgetGaardsbrukArbeidsaar
+          faktum={faktum as QuizNumberFaktum}
+          onChange={props.onChange}
+        />
+      );
     }
 
     switch (faktum.type) {
@@ -61,18 +66,6 @@ export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
 
       case "generator":
         return <FaktumGenerator faktum={faktum as QuizGeneratorFaktum} readonly={readonly} />;
-    }
-
-    function renderSpecialFaktumType(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
-      switch (faktum.beskrivendeId) {
-        case "faktum.eget-gaardsbruk-arbeidsaar":
-          return (
-            <FaktumEgetGaardsbrukArbeidsaar
-              faktum={faktum as QuizNumberFaktum}
-              onChange={props.onChange}
-            />
-          );
-      }
     }
   }
 
