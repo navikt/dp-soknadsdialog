@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useSession } from "../session.utils";
@@ -8,7 +8,6 @@ export function StartSoknad() {
   const router = useRouter();
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  const [paabegynt, setPaabegynt] = useState("");
   const { getAppTekst } = useSanity();
 
   async function startSoknad() {
@@ -19,15 +18,6 @@ export function StartSoknad() {
     router.push(`/${uuid}`);
     setIsCreatingSoknadUUID(false);
   }
-
-  async function getPaabegynt() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/paabegynt`);
-    setPaabegynt(await response.text());
-  }
-
-  useEffect(() => {
-    getPaabegynt();
-  }, []);
 
   function login() {
     if (session === undefined) {
@@ -49,10 +39,6 @@ export function StartSoknad() {
       <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
         {getAppTekst("start-soknad.start-knapp")}
       </Button>
-      <Heading spacing size="small" level="3">
-        Påbegynt uuid:
-      </Heading>
-      <span>{paabegynt}</span>
     </main>
   );
 }
