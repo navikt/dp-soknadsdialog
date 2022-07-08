@@ -13,7 +13,6 @@
 !.npmrc
 !.env
 !.env.production
-!.env.development
 
 !csp.js
 !prepare.js
