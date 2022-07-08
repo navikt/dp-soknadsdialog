@@ -25,7 +25,7 @@
     ]
   },
   "dependencies": {
-    "@navikt/dp-auth": "^0.0.36",
+    "@navikt/dp-auth": "^0.0.37",
     "@navikt/ds-css": "^0.18.2",
     "@navikt/ds-icons": "^0.8.15",
     "@navikt/ds-react": "^0.19.4",
