@@ -67,9 +67,7 @@ export interface QuizLandFaktum extends QuizBaseFaktum {
   svar?: string;
 }
 
-export interface QuizGeneratorFaktum {
-  id: string;
-  beskrivendeId: string;
+export interface QuizGeneratorFaktum extends QuizBaseFaktum {
   type: "generator";
   svar?: QuizFaktum[][];
   templates: Omit<QuizFaktum, "readOnly">[];

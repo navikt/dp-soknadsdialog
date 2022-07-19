@@ -26,6 +26,7 @@ export const seksjonArbeidsforhold: QuizSeksjon = {
     {
       id: "8003",
       type: "generator",
+      readOnly: false,
       svar: [
         [
           {

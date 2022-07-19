@@ -1,5 +1,9 @@
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
-import { ARBEIDSFORHOLD_FAKTUM_ID, BARN_LISTE_FAKTUM_ID } from "../../constants";
+import {
+  ARBEIDSFORHOLD_FAKTUM_ID,
+  BARN_LISTE_FAKTUM_ID,
+  BARN_LISTE_REGISTER_FAKTUM_ID,
+} from "../../constants";
 import React from "react";
 import { Accordion, Button } from "@navikt/ds-react";
 import { Faktum, FaktumProps } from "./Faktum";
@@ -14,6 +18,7 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...props} />;
     case BARN_LISTE_FAKTUM_ID:
+    case BARN_LISTE_REGISTER_FAKTUM_ID:
       return <Barn {...props} />;
     default:
       return <StandardGenerator {...props} />;
