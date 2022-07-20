@@ -2,9 +2,81 @@ import { QuizSeksjon } from "../../types/quiz.types";
 import { gyldigeLand } from "./seksjonBostedsland";
 
 export const seksjonBarnetillegg: QuizSeksjon = {
+  beskrivendeId: "barnetillegg",
   fakta: [
     {
-      id: "1009",
+      beskrivendeId: "faktum.legge-til-egne-barn",
+      gyldigeValg: ["faktum.legge-til-egne-barn.svar.ja", "faktum.legge-til-egne-barn.svar.nei"],
+      id: "1007",
+      readOnly: false,
+      svar: true,
+      type: "boolean",
+    },
+    {
+      beskrivendeId: "faktum.barn-liste",
+      id: "1001",
+      readOnly: false,
+      svar: [
+        [
+          {
+            id: "1002.1",
+            svar: "SIV",
+            type: "tekst",
+            readOnly: true,
+            beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+          },
+          {
+            id: "1003.1",
+            svar: "JENSEN",
+            type: "tekst",
+            readOnly: true,
+            beskrivendeId: "faktum.barn-etternavn",
+          },
+        ],
+      ],
+      templates: [
+        {
+          beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+          id: "1002",
+          type: "tekst",
+        },
+        {
+          beskrivendeId: "faktum.barn-etternavn",
+          id: "1003",
+          type: "tekst",
+        },
+        {
+          beskrivendeId: "faktum.barn-foedselsdato",
+          id: "1004",
+          type: "localdate",
+        },
+        {
+          beskrivendeId: "faktum.barn-statsborgerskap",
+          id: "1005",
+          type: "land",
+        },
+        {
+          beskrivendeId: "faktum.forsoerger-du-barnet",
+          id: "1006",
+          type: "boolean",
+        },
+        {
+          beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
+          id: "1007",
+          type: "boolean",
+        },
+        {
+          beskrivendeId: "faktum.barn-inntekt",
+          id: "1008",
+          type: "int",
+        },
+      ],
+      type: "generator",
+    },
+    {
+      beskrivendeId: "faktum.register.barn-liste",
+      id: "1008",
+      readOnly: true,
       svar: [
         [
           {
@@ -114,47 +186,45 @@ export const seksjonBarnetillegg: QuizSeksjon = {
         ],
         [],
       ],
-      type: "generator",
       templates: [
         {
+          beskrivendeId: "faktum.barn-fornavn-mellomnavn",
           id: "1010",
           type: "tekst",
-          beskrivendeId: "faktum.barn-fornavn-mellomnavn",
         },
         {
+          beskrivendeId: "faktum.barn-etternavn",
           id: "1011",
           type: "tekst",
-          beskrivendeId: "faktum.barn-etternavn",
         },
         {
+          beskrivendeId: "faktum.barn-foedselsdato",
           id: "1012",
           type: "localdate",
-          beskrivendeId: "faktum.barn-foedselsdato",
         },
         {
+          beskrivendeId: "faktum.barn-statsborgerskap",
           id: "1013",
           type: "land",
-          beskrivendeId: "faktum.barn-statsborgerskap",
         },
         {
+          beskrivendeId: "faktum.forsoerger-du-barnet",
           id: "1014",
           type: "boolean",
-          beskrivendeId: "faktum.forsoerger-du-barnet",
         },
         {
+          beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
           id: "1015",
           type: "boolean",
-          beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
         },
         {
+          beskrivendeId: "faktum.barn-inntekt",
           id: "1016",
           type: "int",
-          beskrivendeId: "faktum.barn-inntekt",
         },
       ],
-      beskrivendeId: "faktum.register.barn-liste",
+      type: "generator",
     },
   ],
-  beskrivendeId: "barnetillegg-register",
-  ferdig: true,
+  ferdig: false,
 };

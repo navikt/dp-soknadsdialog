@@ -2,6 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
 import { getSoknadState } from "../../../../server-side/quiz-api";
+import { BARN_LISTE_REGISTER_FAKTUM_ID } from "../../../../constants";
 
 let localhostAnswerIndex = 0;
 
@@ -14,6 +15,10 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const quizSeksjoner = soknadState.seksjoner.map((seksjon) => {
       const fakta = seksjon.fakta.map((faktum, index) => {
+        if (faktum.beskrivendeId === BARN_LISTE_REGISTER_FAKTUM_ID) {
+          return faktum;
+        }
+
         const { svar, ...faktumWithoutAnswer } = faktum;
         if (index <= localhostAnswerIndex) {
           return { ...faktumWithoutAnswer, svar };
