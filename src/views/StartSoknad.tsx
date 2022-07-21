@@ -21,7 +21,7 @@ export function StartSoknad() {
 
   function login() {
     if (session === undefined) {
-      router.push("/api/auth/signin");
+      router.push("/oauth2/login");
     }
   }
 
