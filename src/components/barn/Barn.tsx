@@ -11,7 +11,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
     useGeneratorUtils();
   const { getAppTekst } = useSanity();
 
-  // Set active index to open modal when adding a new child. Quiz returns an empty array after adding a new child.
+  // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.log("props.faktum?.svar: ", props.faktum?.svar);
@@ -24,7 +24,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       // eslint-disable-next-line no-console
       console.log("lastGeneratorAnswer: ", lastGeneratorAnswer);
       // eslint-disable-next-line no-console
-      console.log("lastGeneratorAnswer?.length === 0: ", lastGeneratorAnswer?.length === 0);
+      console.log("lastGeneratorAnswer?.length === 0: ", lastGeneratorAnswer?.length === 1);
 
       if (lastGeneratorAnswer?.length === 0) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
