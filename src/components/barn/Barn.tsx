@@ -13,15 +13,24 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
 
   // Set active index to open modal when adding a new child. Quiz returns an empty array after adding a new child.
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log("props.faktum?.svar: ", props.faktum?.svar);
     if (props.faktum?.svar) {
       const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
       const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
+
+      // eslint-disable-next-line no-console
+      console.log("lastGeneratorAnswerIndex: ", lastGeneratorAnswerIndex);
+      // eslint-disable-next-line no-console
+      console.log("lastGeneratorAnswer: ", lastGeneratorAnswer);
+      // eslint-disable-next-line no-console
+      console.log("lastGeneratorAnswer?.length === 0: ", lastGeneratorAnswer?.length === 0);
 
       if (lastGeneratorAnswer?.length === 0) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
-  }, [props.faktum?.svar?.length]);
+  }, [props.faktum?.svar]);
 
   return (
     <>
