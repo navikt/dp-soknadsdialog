@@ -21,7 +21,7 @@ export function StartSoknad() {
 
   function login() {
     if (session === undefined) {
-      router.push("/oauth2/login");
+      window.location.assign(`${router.basePath}/oauth2/login`);
     }
   }
 
