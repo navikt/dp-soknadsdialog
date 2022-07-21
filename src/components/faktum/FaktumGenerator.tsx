@@ -12,13 +12,21 @@ import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
 import { useSanity } from "../../context/sanity-context";
+import { BarnPreview } from "../barn/BarnPreview";
 
 export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...props} />;
-    case BARN_LISTE_FAKTUM_ID:
     case BARN_LISTE_REGISTER_FAKTUM_ID:
+      return (
+        <>
+          {props.faktum.svar?.map((fakta, index) => (
+            <BarnPreview key={index} barnFaktum={fakta} />
+          ))}
+        </>
+      );
+    case BARN_LISTE_FAKTUM_ID:
       return <Barn {...props} />;
     default:
       return <StandardGenerator {...props} />;

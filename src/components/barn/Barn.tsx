@@ -1,10 +1,10 @@
 import React from "react";
-import { Accordion, Button } from "@navikt/ds-react";
+import { Button, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
-import { Delete } from "@navikt/ds-icons";
 import { useSanity } from "../../context/sanity-context";
+import { BarnPreview } from "./BarnPreview";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -15,29 +15,28 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
     <>
       {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
-          <Accordion key={svarIndex}>
-            <Accordion.Item open={activeIndex === svarIndex}>
-              <Accordion.Header onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                {getChildName(faktum)}
-              </Accordion.Header>
+          <div key={svarIndex}>
+            <BarnPreview
+              barnFaktum={faktum}
+              editChild={() => toggleActiveGeneratorAnswer(svarIndex)}
+              deleteChild={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+            />
 
-              <Accordion.Content>
+            <Modal
+              open={activeIndex === svarIndex}
+              closeButton={false}
+              shouldCloseOnOverlayClick={false}
+              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
+            >
+              <Modal.Content>
                 {faktum.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {!props.readonly && (
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-                  >
-                    <Delete />
-                    {getAppTekst("barn.fjern")}
-                  </Button>
-                )}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
+                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>Lage og lukk</Button>
+              </Modal.Content>
+            </Modal>
+          </div>
         );
       })}
 
@@ -48,15 +47,4 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       )}
     </>
   );
-}
-
-function getChildName(barnetillegg: QuizFaktum[]): string {
-  const firstName = barnetillegg.find(
-    (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
-  )?.svar as string;
-
-  const lastName = barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-etternavn")
-    ?.svar as string;
-
-  return `${firstName} ${lastName}`;
 }
