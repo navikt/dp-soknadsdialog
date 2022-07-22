@@ -12,7 +12,7 @@ import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
 import { useSanity } from "../../context/sanity-context";
-import { BarnPreview } from "../barn/BarnPreview";
+import { BarnCard } from "../barn/BarnCard";
 
 export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -22,7 +22,7 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
       return (
         <>
           {props.faktum.svar?.map((fakta, index) => (
-            <BarnPreview key={index} barnFaktum={fakta} showFaktumInline={true} />
+            <BarnCard key={index} barnFaktum={fakta} showFaktumInline={true} />
           ))}
         </>
       );

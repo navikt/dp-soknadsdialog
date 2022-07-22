@@ -5,6 +5,10 @@
   margin-bottom: var(--navds-spacing-2);
 }
 
+.barnFaktum {
+  margin-top: var(--navds-spacing-8);
+}
+
 .barn button:first-child {
   margin-right: var(--navds-spacing-2);
 }

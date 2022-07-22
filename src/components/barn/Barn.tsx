@@ -4,7 +4,7 @@ import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
-import { BarnPreview } from "./BarnPreview";
+import { BarnCard } from "./BarnCard";
 import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
 
@@ -31,7 +31,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
           <div key={svarIndex}>
-            <BarnPreview
+            <BarnCard
               barnFaktum={faktum}
               editChild={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteChild={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
