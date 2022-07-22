@@ -3,6 +3,7 @@ import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-respo
 import { sanityClient } from "../../sanity-client";
 import { SanityTexts } from "../types/sanity.types";
 import { allTextsPlainQuery } from "../sanity/groq-queries";
+import { textStructureToHtml } from "../sanity/textStructureToHtml";
 
 const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -106,9 +107,11 @@ export async function completeSoknad(
     lang,
   });
 
+  const sanityTextsWithHTML = textStructureToHtml(sanityTexts);
+
   return fetch(url, {
     method: "Put",
     headers: headersWithToken(onBehalfOfToken),
-    body: JSON.stringify({ sanityTexts }),
+    body: JSON.stringify({ sanityTexts: sanityTextsWithHTML }),
   });
 }
