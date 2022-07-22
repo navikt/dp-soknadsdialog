@@ -2,7 +2,7 @@ import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
 import { sanityClient } from "../../sanity-client";
 import { SanityTexts } from "../types/sanity.types";
-import { allTextsPlainQuery } from "../sanity/groq-queries";
+import { allTextsQuery } from "../sanity/groq-queries";
 import { textStructureToHtml } from "../sanity/textStructureToHtml";
 
 const headersWithToken = (onBehalfOfToken: string) => ({
@@ -102,7 +102,7 @@ export async function completeSoknad(
 ): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`;
 
-  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsPlainQuery, {
+  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
     baseLang: "nb",
     lang,
   });
