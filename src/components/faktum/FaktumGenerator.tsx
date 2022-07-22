@@ -22,7 +22,7 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
       return (
         <>
           {props.faktum.svar?.map((fakta, index) => (
-            <BarnPreview key={index} barnFaktum={fakta} />
+            <BarnPreview key={index} barnFaktum={fakta} showFaktumInline={true} />
           ))}
         </>
       );

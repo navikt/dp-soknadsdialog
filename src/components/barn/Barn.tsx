@@ -5,11 +5,14 @@ import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { BarnPreview } from "./BarnPreview";
+import { PingLoader } from "../PingLoader";
+import { useQuiz } from "../../context/quiz-context";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const { getAppTekst } = useSanity();
+  const { isLoading } = useQuiz();
 
   // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
@@ -44,6 +47,12 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                 {faktum.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
+
+                {isLoading && (
+                  <div>
+                    <PingLoader />
+                  </div>
+                )}
 
                 <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>Lage og lukk</Button>
               </Modal.Content>

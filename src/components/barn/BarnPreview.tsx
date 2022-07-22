@@ -2,11 +2,13 @@ import React from "react";
 import styles from "./BarnPreview.module.css";
 import { QuizFaktum } from "../../types/quiz.types";
 import { BodyShort, Button } from "@navikt/ds-react";
+import { Faktum } from "../faktum/Faktum";
 
 interface Props {
   barnFaktum: QuizFaktum[];
   editChild?: () => void;
   deleteChild?: () => void;
+  showFaktumInline?: boolean;
 }
 
 export function BarnPreview(props: Props) {
@@ -14,6 +16,14 @@ export function BarnPreview(props: Props) {
     <div className={styles.barn}>
       <BodyShort>{getChildName(props.barnFaktum)}</BodyShort>
       <BodyShort size={"small"}>{getChildBirthDate(props.barnFaktum)}</BodyShort>
+
+      {props.showFaktumInline && (
+        <div>
+          {props.barnFaktum.map((faktum) => (
+            <Faktum key={faktum.id} faktum={faktum} readonly={faktum.readOnly} />
+          ))}
+        </div>
+      )}
 
       {props.editChild && props.deleteChild && (
         <div>
