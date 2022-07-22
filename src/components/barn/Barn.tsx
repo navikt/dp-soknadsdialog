@@ -73,12 +73,12 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   );
 }
 
-function getChildBirthDate(barnetillegg: QuizFaktum[]) {
+export function getChildBirthDate(barnetillegg: QuizFaktum[]) {
   return barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-foedselsdato")
     ?.svar as string;
 }
 
-function getChildName(barnetillegg: QuizFaktum[]): string {
+export function getChildName(barnetillegg: QuizFaktum[]): string {
   const firstName = barnetillegg.find(
     (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
   )?.svar as string;
