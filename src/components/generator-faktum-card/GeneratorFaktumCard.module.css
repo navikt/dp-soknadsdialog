@@ -1,22 +1,22 @@
-.barn {
+.container {
   padding: var(--navds-spacing-4);
   border: 1px solid var(--navds-panel-color-border);
   border-radius: var(--navds-border-radius-medium);
   margin-bottom: var(--navds-spacing-2);
 }
 
-.barnFakta {
+.fakta {
   margin-top: var(--navds-spacing-4);
 }
 
-.barnFakta:empty {
+.fakta:empty {
   margin-top: 0;
 }
 
-.barn button:first-child {
+.container button:first-child {
   margin-right: var(--navds-spacing-2);
 }
 
-.barn button {
+.container button {
   margin-top: var(--navds-spacing-2);
 }

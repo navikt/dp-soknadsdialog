@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { Button, Modal } from "@navikt/ds-react";
+import { BodyShort, Button, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
-import { BarnCard } from "./BarnCard";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
 
@@ -31,11 +31,14 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
           <div key={svarIndex}>
-            <BarnCard
-              barnFaktum={faktum}
-              editChild={() => toggleActiveGeneratorAnswer(svarIndex)}
-              deleteChild={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-            />
+            <GeneratorFaktumCard
+              fakta={faktum}
+              editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
+              deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+            >
+              <BodyShort>{getChildName(faktum)}</BodyShort>
+              <BodyShort size={"small"}>{getChildBirthDate(faktum)}</BodyShort>
+            </GeneratorFaktumCard>
 
             <Modal
               open={activeIndex === svarIndex}
@@ -68,4 +71,20 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       )}
     </>
   );
+}
+
+function getChildBirthDate(barnetillegg: QuizFaktum[]) {
+  return barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-foedselsdato")
+    ?.svar as string;
+}
+
+function getChildName(barnetillegg: QuizFaktum[]): string {
+  const firstName = barnetillegg.find(
+    (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
+  )?.svar as string;
+
+  const lastName = barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-etternavn")
+    ?.svar as string;
+
+  return `${firstName} ${lastName}`;
 }

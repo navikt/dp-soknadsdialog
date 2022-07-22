@@ -1,43 +1,65 @@
-import React from "react";
-import { Accordion, Button } from "@navikt/ds-react";
+import React, { useEffect } from "react";
+import { BodyShort, Button, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
-import { Delete } from "@navikt/ds-icons";
 import { useSanity } from "../../context/sanity-context";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { PingLoader } from "../PingLoader";
+import { useQuiz } from "../../context/quiz-context";
 
 export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
+  const { isLoading } = useQuiz();
   const { getAppTekst } = useSanity();
+
+  // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
+  useEffect(() => {
+    if (props.faktum?.svar) {
+      const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
+      const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
+
+      if (lastGeneratorAnswer?.length === 1) {
+        toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
+      }
+    }
+  }, [props.faktum?.svar]);
 
   return (
     <>
       {props.faktum?.svar?.map((faktum, svarIndex) => {
         return (
-          <Accordion key={svarIndex}>
-            <Accordion.Item open={activeIndex === svarIndex}>
-              <Accordion.Header onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                {getArbeidsforholdName(faktum)}
-              </Accordion.Header>
+          <div key={svarIndex}>
+            <GeneratorFaktumCard
+              fakta={faktum}
+              editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
+              deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+            >
+              <BodyShort>{getArbeidsforholdName(faktum)}</BodyShort>
+            </GeneratorFaktumCard>
 
-              <Accordion.Content>
+            <Modal
+              open={activeIndex === svarIndex}
+              closeButton={false}
+              shouldCloseOnOverlayClick={false}
+              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
+            >
+              <Modal.Content>
                 {faktum.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {!props.readonly && (
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-                  >
-                    <Delete />
-                    {getAppTekst("arbeidsforhold.fjern")}
-                  </Button>
+                {isLoading && (
+                  <div>
+                    <PingLoader />
+                  </div>
                 )}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
+
+                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>Lage og lukk</Button>
+              </Modal.Content>
+            </Modal>
+          </div>
         );
       })}
 
