@@ -18,7 +18,7 @@ export function BarnCard(props: Props) {
       <BodyShort size={"small"}>{getChildBirthDate(props.barnFaktum)}</BodyShort>
 
       {props.showFaktumInline && (
-        <div className={styles.barnFaktum}>
+        <div className={styles.barnFakta}>
           {props.barnFaktum.map(
             (faktum) =>
               !faktum.readOnly && (
