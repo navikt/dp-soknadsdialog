@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
-import { getCountryName } from "../../country.utils";
 import { useRouter } from "next/router";
+import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
+import styles from "./Barn.module.css";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -42,16 +43,19 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
               <Heading level={"3"} size={"small"}>
                 {getChildName(faktum)}
               </Heading>
+
               <BodyShort>{getChildBirthDate(faktum)}</BodyShort>
+
               <Detail uppercase>
                 <>{getChildBostedsland(faktum, locale)}</>
               </Detail>
             </GeneratorFaktumCard>
 
             <Modal
-              open={activeIndex === svarIndex}
               closeButton={false}
               shouldCloseOnOverlayClick={false}
+              className={styles.barnModal}
+              open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
@@ -79,27 +83,4 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       )}
     </>
   );
-}
-
-export function getChildBirthDate(barnetillegg: QuizFaktum[]) {
-  return barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-foedselsdato")
-    ?.svar as string;
-}
-
-export function getChildName(barnetillegg: QuizFaktum[]): string {
-  const firstName = barnetillegg.find(
-    (svar) => svar.beskrivendeId === "faktum.barn-fornavn-mellomnavn"
-  )?.svar as string;
-
-  const lastName = barnetillegg.find((svar) => svar.beskrivendeId === "faktum.barn-etternavn")
-    ?.svar as string;
-
-  return `${firstName} ${lastName}`;
-}
-
-export function getChildBostedsland(barn: QuizFaktum[], locale = "nb"): string {
-  const bostedland = barn.find((svar) => svar.beskrivendeId === "faktum.barn-statsborgerskap")
-    ?.svar as string;
-  if (!bostedland) return "Fant ikke bostedsland";
-  return `Bor i ${getCountryName(bostedland, locale)}`;
 }

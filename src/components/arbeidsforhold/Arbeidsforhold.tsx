@@ -44,17 +44,19 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
               <Heading level={"3"} size={"small"}>
                 {getArbeidsforholdName(faktum)}
               </Heading>
+
               <BodyShort>{getArbeidsforholdVarighet(faktum)}</BodyShort>
+
               <Detail uppercase>
                 <>{getSvaralternativTextById(getArbeidsforholdEndret(faktum))?.text}</>
               </Detail>
             </GeneratorFaktumCard>
 
             <Modal
-              open={activeIndex === svarIndex}
               closeButton={false}
-              className={styles.arbeidsforholdModal}
               shouldCloseOnOverlayClick={false}
+              open={activeIndex === svarIndex}
+              className={styles.arbeidsforholdModal}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
