@@ -1,9 +1,4 @@
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin: auto;
-}
-
-.button-container button:first-child {
-  margin-right: 25px;
+.arbeidsforholdModal {
+  width: 100%;
+  max-width: var(--app-max-width);
 }

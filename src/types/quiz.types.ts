@@ -44,10 +44,7 @@ export interface QuizDatoFaktum extends QuizBaseFaktum {
 
 export interface QuizPeriodeFaktum extends QuizBaseFaktum {
   type: "periode";
-  svar?: {
-    fom: string;
-    tom?: string;
-  };
+  svar?: QuizPeriodeFaktumAnswerType;
 }
 
 export interface QuizNumberFaktum extends QuizBaseFaktum {

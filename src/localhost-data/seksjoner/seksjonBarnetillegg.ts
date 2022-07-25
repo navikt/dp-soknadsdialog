@@ -32,6 +32,15 @@ export const seksjonBarnetillegg: QuizSeksjon = {
             readOnly: false,
             beskrivendeId: "faktum.barn-etternavn",
           },
+          {
+            id: "1004.1",
+            beskrivendeId: "faktum.barn-statsborgerskap",
+            svar: "NOR",
+            type: "land",
+            readOnly: false,
+            gyldigeLand,
+            grupper: [],
+          },
         ],
       ],
       templates: [

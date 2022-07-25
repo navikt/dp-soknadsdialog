@@ -50,6 +50,21 @@ export const seksjonArbeidsforhold: QuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.land",
           },
+          {
+            beskrivendeId: "faktum.arbeidsforhold.varighet",
+            id: "8016.1",
+            readOnly: false,
+            svar: { fom: "2022-07-14", tom: "2022-07-31" },
+            type: "periode",
+          },
+          {
+            beskrivendeId: "faktum.arbeidsforhold.endret",
+            id: "8017.1",
+            readOnly: false,
+            svar: "faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver",
+            gyldigeValg: ["faktum.arbeidsforhold.endret.svar.sagt-opp-av-arbeidsgiver"],
+            type: "envalg",
+          },
         ],
         [
           {

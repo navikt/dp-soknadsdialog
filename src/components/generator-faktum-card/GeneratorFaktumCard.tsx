@@ -3,6 +3,7 @@ import styles from "./GeneratorFaktumCard.module.css";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Button } from "@navikt/ds-react";
 import { Faktum } from "../faktum/Faktum";
+import { Delete, Edit } from "@navikt/ds-icons";
 
 interface Props {
   fakta: QuizFaktum[];
@@ -29,9 +30,13 @@ export function GeneratorFaktumCard(props: PropsWithChildren<Props>) {
 
       {props.editFaktum && props.deleteFaktum && (
         <div>
-          <Button onClick={props.editFaktum}>Endre</Button>
-          <Button variant={"danger"} onClick={props.deleteFaktum}>
+          <Button size={"small"} onClick={props.editFaktum}>
+            Endre
+            <Edit />
+          </Button>
+          <Button size={"small"} variant={"danger"} onClick={props.deleteFaktum}>
             Slett
+            <Delete />
           </Button>
         </div>
       )}
