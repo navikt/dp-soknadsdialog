@@ -11,7 +11,6 @@ import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
-import styles from "./Arbeidsforhold.module.css";
 
 export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -56,7 +55,7 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
               closeButton={false}
               shouldCloseOnOverlayClick={false}
               open={activeIndex === svarIndex}
-              className={styles.arbeidsforholdModal}
+              className={"modal-container"}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
@@ -73,7 +72,9 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
                   </div>
                 )}
 
-                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>Lage og lukk</Button>
+                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                  Lagre og lukk
+                </Button>
               </Modal.Content>
             </Modal>
           </div>

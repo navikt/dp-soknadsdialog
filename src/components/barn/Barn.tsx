@@ -9,7 +9,6 @@ import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
 import { useRouter } from "next/router";
 import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
-import styles from "./Barn.module.css";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -54,7 +53,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
             <Modal
               closeButton={false}
               shouldCloseOnOverlayClick={false}
-              className={styles.barnModal}
+              className={"modal-container"}
               open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
@@ -69,7 +68,9 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                   </div>
                 )}
 
-                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>Lage og lukk</Button>
+                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                  Lagre og lukk
+                </Button>
               </Modal.Content>
             </Modal>
           </div>

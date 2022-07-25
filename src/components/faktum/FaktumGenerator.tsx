@@ -5,14 +5,16 @@ import {
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
 import React from "react";
-import { Accordion, Button } from "@navikt/ds-react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import { Faktum, FaktumProps } from "./Faktum";
-import { Delete } from "@navikt/ds-icons";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
 import { useSanity } from "../../context/sanity-context";
 import { BarnRegister } from "../barn/BarnRegister";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { PingLoader } from "../PingLoader";
+import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -30,35 +32,48 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
 function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
+  const { isLoading } = useQuiz();
   const { getAppTekst } = useSanity();
 
   return (
     <>
-      {props.faktum?.svar?.map((faktum, svarIndex) => {
+      {props.faktum?.svar?.map((fakta, svarIndex) => {
         return (
-          <Accordion key={svarIndex}>
-            <Accordion.Item open={activeIndex === svarIndex}>
-              <Accordion.Header onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                {getStandardTitle(faktum, svarIndex)}
-              </Accordion.Header>
+          <div key={svarIndex}>
+            <GeneratorFaktumCard
+              fakta={fakta}
+              editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
+              deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+            >
+              <Heading level={"3"} size={"small"}>
+                {getStandardTitle(fakta, svarIndex)}
+              </Heading>
+            </GeneratorFaktumCard>
 
-              <Accordion.Content>
-                {faktum.map((faktum) => (
+            <Modal
+              closeButton={false}
+              shouldCloseOnOverlayClick={false}
+              className={"modal-container"}
+              open={activeIndex === svarIndex}
+              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
+            >
+              <Modal.Content>
+                {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {!props.readonly && (
-                  <Button
-                    variant="danger"
-                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-                  >
-                    <Delete />
-                    {getAppTekst("generator.fjern")}
-                  </Button>
+                {isLoading && (
+                  <div>
+                    <PingLoader />
+                  </div>
                 )}
-              </Accordion.Content>
-            </Accordion.Item>
-          </Accordion>
+
+                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                  Lagre og lukk
+                </Button>
+              </Modal.Content>
+            </Modal>
+          </div>
         );
       })}
 

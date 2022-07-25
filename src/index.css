@@ -12,3 +12,8 @@
   --navds-font-size-m: 0.8888888888888888rem;
   --navds-font-size-s: 0.7777777777777778rem;
 }
+
+.modal-container {
+  width: 100%;
+  max-width: var(--app-max-width);
+}
