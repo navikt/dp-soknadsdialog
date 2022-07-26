@@ -24,7 +24,7 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
       const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
       const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
 
-      if (lastGeneratorAnswer?.length === 1) {
+      if (lastGeneratorAnswer?.length === 1 && !lastGeneratorAnswer[0].svar) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }

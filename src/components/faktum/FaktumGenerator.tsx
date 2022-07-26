@@ -4,7 +4,7 @@ import {
   BARN_LISTE_FAKTUM_ID,
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { Faktum, FaktumProps } from "./Faktum";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
@@ -34,6 +34,18 @@ function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
     useGeneratorUtils();
   const { isLoading } = useQuiz();
   const { getAppTekst } = useSanity();
+
+  // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
+  useEffect(() => {
+    if (props.faktum?.svar) {
+      const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
+      const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
+
+      if (lastGeneratorAnswer?.length === 1 && !lastGeneratorAnswer[0].svar) {
+        toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
+      }
+    }
+  }, [props.faktum?.svar]);
 
   return (
     <>
