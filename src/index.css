@@ -17,3 +17,8 @@
   width: 100%;
   max-width: var(--app-max-width);
 }
+
+/*Override for react-day-picker*/
+.rdp.rdp {
+  margin: 0;
+}

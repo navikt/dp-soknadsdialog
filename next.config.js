@@ -3,7 +3,7 @@ const withReactSvg = require("next-react-svg");
 const path = require("path");
 
 // TODO: Denne bør deles med _document.tsx
-const supportedLocales = ["nb", "en"];
+const supportedLocales = ["nb", "nn", "en"];
 
 module.exports = withReactSvg({
   include: path.resolve(__dirname, "assets/svg"),

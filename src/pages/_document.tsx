@@ -11,7 +11,7 @@ import {
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
 
-const supportedLocales = ["nb", "en"];
+const supportedLocales = ["nb", "nn", "en"];
 const availableLanguages = supportedLocales.map((l) => ({
   locale: l,
   url: "https://www.nav.no/arbeid/dagpenger/soknad/" + l,
