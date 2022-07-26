@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FaktumProps } from "./Faktum";
-import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { QuizDatoFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
@@ -37,12 +36,11 @@ export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
 
   return (
     <>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
       <DatePicker
-        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
-        onChange={onDateSelection}
         value={currentAnswer}
+        onChange={onDateSelection}
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        description={faktumTexts?.description}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

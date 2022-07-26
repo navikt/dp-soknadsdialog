@@ -6,9 +6,12 @@ import { TextField } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import nbLocale from "date-fns/locale/nb";
 import styles from "./DatePicker.module.css";
+import { TypedObject } from "@portabletext/types";
+import { PortableText } from "@portabletext/react";
 
 interface DatePickerProps {
   label: string;
+  description?: TypedObject | TypedObject[];
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
@@ -54,6 +57,7 @@ export function DatePicker(props: DatePickerProps) {
       <div className={styles.container}>
         <TextField
           label={props.label}
+          description={props.description ? <PortableText value={props.description} /> : undefined}
           type={"text"}
           placeholder={format(new Date(), "dd.MM.yyyy")}
           value={date ? format(date, "dd.MM.yyyy") : ""}
