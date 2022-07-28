@@ -1,4 +1,5 @@
 .container input[readonly] {
   max-width: 200px;
+  min-width: 120px;
   cursor: pointer;
 }
