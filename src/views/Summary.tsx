@@ -15,7 +15,7 @@ interface Props {
 export function Summary(props: Props) {
   const [hasError, setHasError] = useState(false);
   const router = useRouter();
-  const { getAppTekst } = useSanity();
+  const { getAppTekst, getSeksjonTextById } = useSanity();
 
   function goToSoknad() {
     router.push(`/${router.query.uuid}`);
@@ -50,7 +50,9 @@ export function Summary(props: Props) {
           return (
             <div key={section.beskrivendeId}>
               <Accordion.Item key={section.beskrivendeId}>
-                <Accordion.Header>{section.beskrivendeId}</Accordion.Header>
+                <Accordion.Header>
+                  {getSeksjonTextById(section.beskrivendeId)?.title}
+                </Accordion.Header>
                 <Accordion.Content>
                   <>
                     {section.fakta.map((faktum) => {
