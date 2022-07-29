@@ -3,6 +3,7 @@ import {
   SanityFaktum,
   SanityLandGruppe,
   SanitySeksjon,
+  SanityStartSideTekst,
   SanitySvaralternativ,
   SanityTexts,
 } from "../types/sanity.types";
@@ -45,12 +46,17 @@ function useSanity() {
     return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
   }
 
+  function getStartsideText(): SanityStartSideTekst | undefined {
+    return context?.startside[0];
+  }
+
   return {
     getSeksjonTextById,
     getFaktumTextById,
     getLandGruppeTextById,
     getSvaralternativTextById,
     getAppTekst,
+    getStartsideText,
   };
 }
 

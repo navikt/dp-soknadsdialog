@@ -42,10 +42,15 @@ export interface SanityAppTekst {
   valueText: string;
 }
 
+export interface SanityStartSideTekst {
+  body: TypedObject | TypedObject[];
+}
+
 export interface SanityTexts {
   fakta: SanityFaktum[];
   seksjoner: SanitySeksjon[];
   svaralternativer: SanitySvaralternativ[];
   landgrupper: SanityLandGruppe[];
   apptekster: SanityAppTekst[];
+  startside: SanityStartSideTekst[];
 }
