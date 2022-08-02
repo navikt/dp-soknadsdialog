@@ -8,7 +8,7 @@ import { PortableText } from "@portabletext/react";
 import { PortableTextComponentProps } from "@portabletext/react/src/types";
 
 interface ItemProps {
-  icon: string;
+  iconName: string;
   title: string;
   body: TypedObject | TypedObject[];
 }
@@ -19,7 +19,7 @@ export function Timeline(props: PortableTextComponentProps<{ elements: ItemProps
 
 function TimelineItem(props: ItemProps) {
   // @ts-ignore
-  const Icon: typeof React.Component = AllIcons[props.icon];
+  const Icon: typeof React.Component = AllIcons[props.iconName];
   return (
     <div key={props.title} className={styles.timelineItem}>
       <div className={styles.iconWrapper}>{Icon && <Icon className={styles.icon} />}</div>
