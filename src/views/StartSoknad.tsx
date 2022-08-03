@@ -10,7 +10,7 @@ export function StartSoknad() {
   const router = useRouter();
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  const [consentGiven, setConsentGiven] = useState(false);
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const { getAppTekst, getStartsideText } = useSanity();
 
   async function startSoknad() {
