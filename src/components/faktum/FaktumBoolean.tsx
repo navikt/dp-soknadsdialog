@@ -10,10 +10,11 @@ import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { SanityAlertText } from "../../types/sanity.types";
 
-export function FaktumBoolean({ faktum, onChange, readonly }: FaktumProps<QuizBooleanFaktum>) {
+export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
+  const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
-  const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(faktum) || "");
+  const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<SanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
@@ -40,7 +41,7 @@ export function FaktumBoolean({ faktum, onChange, readonly }: FaktumProps<QuizBo
     onChange ? onChange(faktum, mappedAnswer) : saveFaktumToQuiz(faktum, mappedAnswer);
   }
 
-  if (faktum.readOnly || readonly) {
+  if (props.faktum.readOnly || props.readonly) {
     return (
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>

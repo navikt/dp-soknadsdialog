@@ -10,7 +10,8 @@ import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { SanityAlertText } from "../../types/sanity.types";
 
-export function FaktumEnvalg({ faktum, onChange, readonly }: FaktumProps<QuizEnvalgFaktum>) {
+export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
+  const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
@@ -32,7 +33,7 @@ export function FaktumEnvalg({ faktum, onChange, readonly }: FaktumProps<QuizEnv
     onChange ? onChange(faktum, value) : saveFaktumToQuiz(faktum, value);
   }
 
-  if (faktum.readOnly || readonly) {
+  if (props.faktum.readOnly || props.readonly) {
     return (
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
