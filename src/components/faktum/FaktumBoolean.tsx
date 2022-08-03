@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
 import { FaktumProps } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -7,18 +7,27 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import { AlertText } from "../AlertText";
+import { SanityAlertText } from "../../types/sanity.types";
 
 export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
+  const [alertText, setAlertText] = useState<SanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(booleanToTextId(props.faktum) || "");
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
     saveFaktum(value);
   }
+
+  useEffect(() => {
+    if (currentAnswer !== "") {
+      setAlertText(getSvaralternativTextById(currentAnswer)?.alertText);
+    }
+  }, [currentAnswer]);
 
   function saveFaktum(value: string) {
     const mappedAnswer = textIdToBoolean(value);
@@ -61,6 +70,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+      {alertText && <AlertText alertText={alertText} />}
     </>
   );
 }
