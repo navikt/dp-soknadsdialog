@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Heading } from "@navikt/ds-react";
+import { Button, ConfirmationPanel, Heading } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
@@ -10,6 +10,7 @@ export function StartSoknad() {
   const router = useRouter();
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const { getAppTekst, getStartsideText } = useSanity();
 
   async function startSoknad() {
@@ -40,12 +41,27 @@ export function StartSoknad() {
         <PortableText value={startSideText.body} components={portableTextComponents} />
       )}
 
+      <ConfirmationPanel
+        className="consent-panel"
+        checked={consentGiven}
+        label={getAppTekst("start-soknad.samtykke-innhenting-data.checkbox-label")}
+        onChange={() => setConsentGiven(!consentGiven)}
+      >
+        {getAppTekst("start-soknad.samtykke-innhenting-data.tekst")}
+      </ConfirmationPanel>
+
       {session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
           logg inn først!
         </Button>
       )}
-      <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
+      <Button
+        variant="primary"
+        size="medium"
+        onClick={startSoknad}
+        loading={isCreatingSoknadUUID}
+        disabled={!consentGiven}
+      >
         {getAppTekst("start-soknad.start-knapp")}
       </Button>
     </main>
