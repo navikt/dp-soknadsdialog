@@ -9,3 +9,7 @@
 .helpTextSpacing {
   margin: 20px 0;
 }
+
+.alertText p:last-of-type {
+  margin-bottom: 0;
+}

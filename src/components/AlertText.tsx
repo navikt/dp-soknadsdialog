@@ -5,15 +5,18 @@ import { SanityAlertText } from "../types/sanity.types";
 
 interface Props {
   alertText: SanityAlertText;
+  className?: string;
 }
 
 export function AlertText(props: Props) {
   const { type, title, body } = props.alertText;
 
   return (
-    <Alert variant={type}>
-      {title && <Heading size={"small"}>{title} </Heading>}
-      <PortableText value={body} />
-    </Alert>
+    <div className={props.className}>
+      <Alert variant={type}>
+        {title && <Heading size={"small"}>{title} </Heading>}
+        <PortableText value={body} />
+      </Alert>
+    </div>
   );
 }

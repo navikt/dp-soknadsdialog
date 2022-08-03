@@ -62,7 +62,7 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && <AlertText alertText={alertText} />}
+      {alertText && <AlertText className={styles.alertText} alertText={alertText} />}
     </>
   );
 }
