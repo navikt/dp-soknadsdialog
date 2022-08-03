@@ -42,7 +42,7 @@ export function StartSoknad() {
       )}
 
       <ConfirmationPanel
-        className={"consent-panel"}
+        className="consent-panel"
         checked={consentGiven}
         label={getAppTekst("start-soknad.samtykke-innhenting-data.checkbox-label")}
         onChange={() => setConsentGiven(!consentGiven)}
