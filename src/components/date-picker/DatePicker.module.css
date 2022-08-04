@@ -1,5 +1,32 @@
-.container input[readonly] {
+.datePicker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--navds-spacing-2);
+}
+
+.datePickerInput {
+  padding: var(--navds-spacing-2);
+  background-color: var(--navds-text-field-color-background);
+  border-radius: var(--navds-border-radius-medium);
+  border: 1px solid var(--navds-text-field-color-border);
+  min-height: 48px;
+  width: 100%;
+  color: var(--navds-text-field-color-text);
   max-width: 200px;
   min-width: 120px;
-  cursor: pointer;
+}
+
+.datePickerInputError,
+.datePickerInputError:focus {
+  border-color: var(--navds-text-field-color-border-error);
+  box-shadow: 0 0 0 1px var(--navds-text-field-color-border-error);
+}
+
+.datePickerInputErrorLabel {
+  display: flex;
+  gap: var(--navds-spacing-2);
+}
+
+.datePickerInputErrorLabel:before {
+  content: "•";
 }

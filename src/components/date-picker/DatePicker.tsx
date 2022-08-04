@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { DayPicker } from "react-day-picker";
+import React, { useState } from "react";
+import classNames from "classnames";
 import "react-day-picker/dist/style.css";
 import { format, isValid } from "date-fns";
-import { TextField } from "@navikt/ds-react";
-import { useRouter } from "next/router";
-import nbLocale from "date-fns/locale/nb";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
+import { v4 as uuidv4 } from "uuid";
 
 interface DatePickerProps {
   label: string;
@@ -19,64 +17,68 @@ interface DatePickerProps {
 }
 
 export function DatePicker(props: DatePickerProps) {
-  const { locale } = useRouter();
-  const [dateLocale, setDateLocale] = useState(nbLocale);
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isValidDate, setIsValidDate] = useState(true);
 
-  useEffect(() => {
-    const importLocaleFile = async () => {
-      const localeToSet = await import(
-        /* webpackMode: "lazy", webpackChunkName: "df-[index]", webpackExclude: /_lib/ */
-        `date-fns/locale/${locale === "en" ? "en-GB" : locale}/index.js`
-      );
-      setDateLocale(localeToSet.default);
-    };
+  function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
+    const selectedDate = event.target.value;
+    const formattedDate = new Date(selectedDate);
 
-    if (dateLocale.code !== locale) {
-      importLocaleFile();
-    }
-  }, [locale, dateLocale.code]);
-
-  function onDateChange(value: Date) {
-    if (isValid(value)) {
+    if (!selectedDate) {
+      setDate(undefined);
+    } else if (isValid(formattedDate)) {
       setIsValidDate(true);
-      setDate(value);
-      props.onChange(value);
-      setIsDatePickerOpen(false);
+      setDate(formattedDate);
+      props.onChange(formattedDate);
     } else {
       setIsValidDate(false);
     }
   }
 
-  return (
-    <>
-      <div className={styles.container}>
-        <TextField
-          label={props.label}
-          description={props.description ? <PortableText value={props.description} /> : undefined}
-          type={"text"}
-          placeholder={format(new Date(), "dd.MM.yyyy")}
-          value={date ? format(date, "dd.MM.yyyy") : ""}
-          onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-          onChange={() => undefined}
-          readOnly
-          error={!isValidDate ? "Ugyldig dato" : null}
-        />
+  function onLeaveDate(event: React.ChangeEvent<HTMLInputElement>) {
+    const selectedDate = event.target.value;
 
-        {isDatePickerOpen && (
-          <DayPicker
-            locale={dateLocale}
-            mode="single"
-            defaultMonth={date}
-            selected={date}
-            onSelect={(_, selectedDay) => onDateChange(selectedDay)}
-          />
-        )}
-      </div>
-    </>
+    if (!selectedDate) {
+      setIsValidDate(false);
+    }
+  }
+
+  return (
+    <div className={styles.datePicker}>
+      {props.label && (
+        <label className="navds-form-field__label navds-label" htmlFor={`date-picker-${uuidv4()}`}>
+          {props.label}
+        </label>
+      )}
+      {props.description && (
+        <div className="navds-form-field__description navds-body-short navds-body-short--small">
+          {props.description ? <PortableText value={props.description} /> : undefined}
+        </div>
+      )}
+      <input
+        className={classNames(styles.datePickerInput, {
+          [styles.datePickerInputError]: !isValidDate,
+        })}
+        type="date"
+        id={`date-picker-${uuidv4()}`}
+        name={`date-picker-${uuidv4()}`}
+        value={date ? format(date, "yyyy-MM-dd") : ""}
+        pattern="\d{4}-\d{2}-\d{2}"
+        onChange={(e) => onChangeDate(e)}
+        onBlur={(e) => onLeaveDate(e)}
+      />
+      {!isValidDate && (
+        <div
+          className={classNames(
+            styles.datePickerInputErrorLabel,
+            "navds-error-message navds-label"
+          )}
+        >
+          Ugyldig dato
+        </div>
+      )}
+    </div>
   );
 }
