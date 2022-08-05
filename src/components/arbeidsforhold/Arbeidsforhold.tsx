@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
+import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import {
   QuizFaktum,
@@ -11,58 +11,66 @@ import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
+import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
+import { PortableText } from "@portabletext/react";
 
 export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
+  const { faktum } = props;
+  const { isLoading } = useQuiz();
+  const { getAppTekst, getSvaralternativTextById, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const { isLoading } = useQuiz();
-  const { getAppTekst, getSvaralternativTextById } = useSanity();
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
-    if (props.faktum?.svar) {
-      const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
-      const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
+    if (faktum?.svar) {
+      const lastGeneratorAnswerIndex = faktum.svar.length - 1;
+      const lastGeneratorAnswer = faktum.svar[lastGeneratorAnswerIndex];
 
       if (lastGeneratorAnswer?.length === 1 && !lastGeneratorAnswer[0].svar) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
-  }, [props.faktum?.svar]);
+  }, [faktum?.svar]);
 
   return (
     <>
-      {props.faktum?.svar?.map((faktum, svarIndex) => {
+      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+
+      {faktum?.svar?.map((fakta, svarIndex) => {
+        const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
+
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
-              fakta={faktum}
+              allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
-              deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+              deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
             >
-              <Heading level={"3"} size={"small"}>
-                {getArbeidsforholdName(faktum)}
+              <Heading level={"3"} size={"small"} spacing>
+                {getArbeidsforholdName(fakta)}
               </Heading>
 
-              <BodyShort>{getArbeidsforholdVarighet(faktum)}</BodyShort>
+              <BodyShort>{getArbeidsforholdVarighet(fakta)}</BodyShort>
 
-              <Detail uppercase>
-                <>{getSvaralternativTextById(getArbeidsforholdEndret(faktum))?.text}</>
+              <Detail uppercase spacing>
+                <>{getSvaralternativTextById(getArbeidsforholdEndret(fakta))?.text}</>
               </Detail>
             </GeneratorFaktumCard>
 
             <Modal
-              closeButton={false}
-              shouldCloseOnOverlayClick={false}
-              open={activeIndex === svarIndex}
               className={"modal-container"}
+              open={activeIndex === svarIndex}
+              shouldCloseOnOverlayClick={false}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
                 <Heading size={"large"} spacing>
                   {getAppTekst("arbeidsforhold.legg-til")}{" "}
                 </Heading>
-                {faktum.map((faktum) => (
+                {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
@@ -71,10 +79,17 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
                     <PingLoader />
                   </div>
                 )}
-
-                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                  Lagre og lukk
-                </Button>
+                <div className={"modal-container__button-container"}>
+                  <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                    Lagre og lukk
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
+                  >
+                    Slett
+                  </Button>
+                </div>
               </Modal.Content>
             </Modal>
           </div>
@@ -82,8 +97,12 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
       })}
 
       {!props.readonly && (
-        <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          {getAppTekst("arbeidsforhold.legg-til")}
+        <Button
+          variant="secondary"
+          className={"generator-faktum__add-button"}
+          onClick={() => addNewGeneratorAnswer(faktum)}
+        >
+          <BriefcaseAdd /> {getAppTekst("arbeidsforhold.legg-til")}
         </Button>
       )}
     </>

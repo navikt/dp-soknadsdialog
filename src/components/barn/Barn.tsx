@@ -9,6 +9,7 @@ import { PingLoader } from "../PingLoader";
 import { useQuiz } from "../../context/quiz-context";
 import { useRouter } from "next/router";
 import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
+import { ChildAdd } from "../../svg-icons/ChildAdd";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -31,34 +32,34 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
 
   return (
     <>
-      {props.faktum?.svar?.map((faktum, svarIndex) => {
+      {props.faktum?.svar?.map((fakta, svarIndex) => {
+        const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
-              fakta={faktum}
+              allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
             >
               <Heading level={"3"} size={"small"}>
-                {getChildName(faktum)}
+                {getChildName(fakta)}
               </Heading>
 
-              <BodyShort>{getChildBirthDate(faktum)}</BodyShort>
+              <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
 
               <Detail uppercase>
-                <>{getChildBostedsland(faktum, locale)}</>
+                <>{getChildBostedsland(fakta, locale)}</>
               </Detail>
             </GeneratorFaktumCard>
 
             <Modal
-              closeButton={false}
-              shouldCloseOnOverlayClick={false}
               className={"modal-container"}
               open={activeIndex === svarIndex}
+              shouldCloseOnOverlayClick={false}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
-                {faktum.map((faktum) => (
+                {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
@@ -78,8 +79,12 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
       })}
 
       {!props.readonly && (
-        <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          {getAppTekst("barn.legg-til")}
+        <Button
+          variant="secondary"
+          className={"generator-faktum__add-button"}
+          onClick={() => addNewGeneratorAnswer(props.faktum)}
+        >
+          <ChildAdd /> {getAppTekst("barn.legg-til")}
         </Button>
       )}
     </>
