@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QuizSeksjon } from "../types/quiz.types";
-import { Accordion, Alert, Button } from "@navikt/ds-react";
+import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
@@ -14,6 +14,7 @@ interface Props {
 
 export function Summary(props: Props) {
   const [hasError, setHasError] = useState(false);
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const router = useRouter();
   const { getAppTekst, getSeksjonTextById } = useSanity();
 
@@ -73,13 +74,24 @@ export function Summary(props: Props) {
         })}
       </Accordion>
 
+      <ConfirmationPanel
+        className="consent-panel"
+        checked={consentGiven}
+        label={getAppTekst("oppsummering.samtykke-riktige-opplysninger.checkbox-label")}
+        onChange={() => setConsentGiven(!consentGiven)}
+      >
+        {getAppTekst("oppsummering.samtykke-riktige-opplysninger.tekst")}
+      </ConfirmationPanel>
+
       <nav className={styles.navigation}>
         <Button variant={"secondary"} onClick={() => goToSoknad()}>
           <Left />
           {getAppTekst("knapp.forrige")}
         </Button>
 
-        <Button onClick={() => finishSoknad()}>{getAppTekst("oppsummering.send-soknad")}</Button>
+        <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
+          {getAppTekst("oppsummering.send-soknad")}
+        </Button>
 
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
           {getAppTekst("oppsummering.slett-soknad")}
