@@ -33,6 +33,7 @@ function getSvaralternativFields(usePlainText: boolean) {
   return `{
   textId,
   text,
+  'alertTextIsActive': activateAlertText,
   alertText,
   alertText != null => {
     "alertText": {
@@ -121,7 +122,7 @@ export const allTextsQuery = groq`{
 }`;
 
 export const allTextsPlainQuery = groq`{
-    "seksjoner": ${getSeksjonerGroq(true)},
+  "seksjoner": ${getSeksjonerGroq(true)},
   "fakta": ${getFaktaGroq(true)},
   "svaralternativer": ${getSvaralternativerGroq(true)},
   "landgrupper": ${getLandGrupperGroq(true)},

@@ -16,6 +16,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<SanityAlertText>();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   function onSelection(value: string) {
@@ -25,6 +26,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
 
   useEffect(() => {
     if (currentAnswer !== "") {
+      setShowAlert(!!getSvaralternativTextById(currentAnswer)?.alertTextIsActive);
       setAlertText(getSvaralternativTextById(currentAnswer)?.alertText);
     }
   }, [currentAnswer]);
@@ -70,7 +72,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && <AlertText alertText={alertText} />}
+      {showAlert && alertText && <AlertText alertText={alertText} />}
     </>
   );
 }

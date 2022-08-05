@@ -16,10 +16,12 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<SanityAlertText>();
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   useEffect(() => {
     if (currentAnswer !== "") {
+      setShowAlert(!!getSvaralternativTextById(currentAnswer)?.alertTextIsActive);
       setAlertText(getSvaralternativTextById(currentAnswer)?.alertText);
     }
   }, [currentAnswer]);
@@ -62,7 +64,7 @@ export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && <AlertText alertText={alertText} />}
+      {showAlert && alertText && <AlertText alertText={alertText} />}
     </>
   );
 }

@@ -29,6 +29,7 @@ export interface SanitySeksjon {
 export interface SanitySvaralternativ {
   textId: string;
   text: string;
+  alertTextIsActive?: boolean;
   alertText?: SanityAlertText;
 }
 
