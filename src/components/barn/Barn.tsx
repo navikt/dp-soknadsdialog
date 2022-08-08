@@ -47,7 +47,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
 
               <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
 
-              <Detail uppercase>
+              <Detail uppercase spacing>
                 <>{getChildBostedsland(fakta, locale)}</>
               </Detail>
             </GeneratorFaktumCard>
