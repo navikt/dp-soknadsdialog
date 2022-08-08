@@ -9,6 +9,7 @@ export interface SanityAlertText {
   title?: string;
   type: "info" | "warning" | "error" | "success";
   body: TypedObject | TypedObject[];
+  active: boolean | undefined;
 }
 
 export interface SanityFaktum {
@@ -29,7 +30,6 @@ export interface SanitySeksjon {
 export interface SanitySvaralternativ {
   textId: string;
   text: string;
-  alertTextIsActive?: boolean;
   alertText?: SanityAlertText;
 }
 

@@ -33,7 +33,6 @@ function getSvaralternativFields(usePlainText: boolean) {
   return `{
   textId,
   text,
-  'alertTextIsActive': activateAlertText,
   alertText,
   alertText != null => {
     "alertText": {
