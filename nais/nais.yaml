@@ -61,3 +61,4 @@ spec:
         - host: dev.dekoratoren.nav.no
       rules:
         - application: dp-soknad
+        - application: dp-mellomlagring
