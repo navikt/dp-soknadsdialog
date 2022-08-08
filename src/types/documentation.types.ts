@@ -9,6 +9,11 @@ export interface DocumentItem {
   files?: string[];
 }
 
+export interface DocumentationAnswers {
+  sendeInn?: string;
+  hvemSender?: string;
+}
+
 export interface UploadedFile {
   urn: string;
 }

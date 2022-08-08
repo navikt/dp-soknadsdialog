@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { DocumentItem, UploadedFile } from "../../types/documentation.types";
+import { Button, Heading } from "@navikt/ds-react";
+import { DocumentItem, UploadedFile, DocumentationAnswers } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { ListFiles } from "../file-uploader/ListFiles";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
+import { DocumentQuestions } from "./DocumentQuestions";
 
 interface Props {
   documentItem: DocumentItem;
@@ -16,10 +17,8 @@ export function DocumentItem({ documentItem }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
-  const [sendeInnSpm, setSendeInnSpm] = useState("");
-  const [hvemSenderSpm, setHvemSenderSpm] = useState("");
+  const [answers, setAnswers] = useState<DocumentationAnswers>({});
   const [uploadedFiles, setuploadedFiles] = useState<UploadedFile[]>([]);
-  const mellomlagringId = `${router.query.uuid}-${documentItem.id}`;
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,14 +35,6 @@ export function DocumentItem({ documentItem }: Props) {
       });
   }, []);
 
-  const selectSendeInn = (val: string) => {
-    setSendeInnSpm(val);
-  };
-
-  const selectHvemSender = (val: string) => {
-    setHvemSenderSpm(val);
-  };
-
   function sendDocuments() {
     alert("TODO: Send inn svar");
   }
@@ -57,37 +48,14 @@ export function DocumentItem({ documentItem }: Props) {
         {documentItem.beskrivendeId}
       </Heading>
 
-      <RadioGroup
-        legend="Skal du sende dokumentet nå?"
-        onChange={selectSendeInn}
-        value={sendeInnSpm}
-      >
-        <Radio value="ja">Ja</Radio>
-        <Radio value="nei">Nei</Radio>
-      </RadioGroup>
+      <DocumentQuestions setAnswers={setAnswers}>
+        <FileUploader id={documentItem.id} filer={uploadedFiles} onUpload={setuploadedFiles} />
+        <ListFiles files={uploadedFiles} />
 
-      {sendeInnSpm && (
-        <RadioGroup
-          legend="Hvem skal sende dette dokumentet?"
-          onChange={selectHvemSender}
-          value={hvemSenderSpm}
-        >
-          <Radio value="meg">Jeg</Radio>
-          <Radio value="noenAndre">Noen andre sender</Radio>
-          <Radio value={false}>Det har blitt sendt med en tidligere søknad</Radio>
-        </RadioGroup>
-      )}
-
-      {sendeInnSpm === "ja" && hvemSenderSpm === "meg" && (
-        <>
-          <FileUploader id={mellomlagringId} filer={uploadedFiles} onUpload={setuploadedFiles} />
-          <ListFiles files={uploadedFiles} />
-        </>
-      )}
-
-      {sendeInnSpm !== "" && hvemSenderSpm !== "" && (
-        <Button onClick={sendDocuments}>Send inn</Button>
-      )}
+        {answers?.sendeInn !== "" && answers?.hvemSender !== "" && (
+          <Button onClick={sendDocuments}>Send inn</Button>
+        )}
+      </DocumentQuestions>
     </>
   );
 }
