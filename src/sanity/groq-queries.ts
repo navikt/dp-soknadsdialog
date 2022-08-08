@@ -121,7 +121,7 @@ export const allTextsQuery = groq`{
 }`;
 
 export const allTextsPlainQuery = groq`{
-    "seksjoner": ${getSeksjonerGroq(true)},
+  "seksjoner": ${getSeksjonerGroq(true)},
   "fakta": ${getFaktaGroq(true)},
   "svaralternativer": ${getSvaralternativerGroq(true)},
   "landgrupper": ${getLandGrupperGroq(true)},
