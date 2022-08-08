@@ -5,7 +5,6 @@ import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { Timeline as timeline } from "../components/timeline/Timeline";
-import styles from "./StartSoknad.module.css";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -50,22 +49,20 @@ export function StartSoknad() {
         {getAppTekst("start-soknad.samtykke-innhenting-data.tekst")}
       </ConfirmationPanel>
 
-      <div className={styles.startSoknadButtonContainer}>
-        {session === undefined && (
-          <Button variant="primary" size="medium" onClick={login}>
-            logg inn først!
-          </Button>
-        )}
-        <Button
-          variant="primary"
-          size="medium"
-          onClick={startSoknad}
-          loading={isCreatingSoknadUUID}
-          disabled={!consentGiven}
-        >
-          {getAppTekst("start-soknad.start-knapp")}
+      {session === undefined && (
+        <Button variant="primary" size="medium" onClick={login}>
+          logg inn først!
         </Button>
-      </div>
+      )}
+      <Button
+        variant="primary"
+        size="medium"
+        onClick={startSoknad}
+        loading={isCreatingSoknadUUID}
+        disabled={!consentGiven}
+      >
+        {getAppTekst("start-soknad.start-knapp")}
+      </Button>
     </main>
   );
 }
