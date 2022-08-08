@@ -19,7 +19,6 @@ export function StartSoknad() {
     const uuid = await response.text();
 
     router.push(`/${uuid}`);
-    setIsCreatingSoknadUUID(false);
   }
 
   function login() {
