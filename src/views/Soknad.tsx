@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button } from "@navikt/ds-react";
+import React, { useEffect, useState } from "react";
+import { Button, Alert } from "@navikt/ds-react";
 import { useQuiz } from "../context/quiz-context";
 import { Section } from "../components/section/Section";
 import { Left, Right } from "@navikt/ds-icons";
@@ -12,6 +12,7 @@ export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading } = useQuiz();
+  const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -32,9 +33,17 @@ export function Soknad() {
     }
   }, []);
 
+  useEffect(() => {
+    setShowNotFinishedError(false);
+  }, [soknadState]);
+
   function goNext() {
-    const nextIndex = sectionParam && parseInt(sectionParam) + 1;
-    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    if (currentSection.ferdig) {
+      const nextIndex = sectionParam && parseInt(sectionParam) + 1;
+      router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    } else {
+      setShowNotFinishedError(true);
+    }
   }
 
   function goPrevious() {
@@ -71,6 +80,12 @@ export function Soknad() {
         </div>
       )}
 
+      {showNotFinishedError && (
+        <Alert variant="error" size="medium" inline>
+          Du må svare på alle spørsmålene
+        </Alert>
+      )}
+
       <nav className={styles.navigation}>
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
@@ -85,7 +100,7 @@ export function Soknad() {
           </Button>
         )}
 
-        {currentSection.ferdig && !soknadState.ferdig && (
+        {!soknadState.ferdig && (
           <Button onClick={() => goNext()}>
             {getAppTekst("knapp.neste")} <Right />
           </Button>
