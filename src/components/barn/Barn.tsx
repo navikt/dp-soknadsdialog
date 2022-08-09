@@ -75,17 +75,18 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                     <PingLoader />
                   </div>
                 )}
+                <div className={"modal-container__button-container"}>
+                  <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                    Lagre og lukk
+                  </Button>
 
-                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                  Lagre og lukk
-                </Button>
-
-                <Button
-                  variant={"secondary"}
-                  onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
-                >
-                  Slett
-                </Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
+                  >
+                    Slett
+                  </Button>
+                </div>
               </Modal.Content>
             </Modal>
           </div>
