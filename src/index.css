@@ -15,7 +15,16 @@
 
 .modal-container {
   width: 100%;
+  padding: var(--navds-spacing-4);
   max-width: var(--app-max-width);
+}
+
+.modal-container__button-container button:first-child {
+  margin-right: var(--navds-spacing-6);
+}
+
+.generator-faktum__add-button {
+  margin: var(--navds-spacing-4) 0 var(--navds-spacing-1);
 }
 
 /*Override for react-day-picker*/

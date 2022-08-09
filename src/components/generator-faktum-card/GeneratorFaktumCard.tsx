@@ -1,45 +1,39 @@
 import React, { PropsWithChildren } from "react";
 import styles from "./GeneratorFaktumCard.module.css";
-import { QuizFaktum } from "../../types/quiz.types";
-import { Button } from "@navikt/ds-react";
-import { Faktum } from "../faktum/Faktum";
-import { Delete, Edit } from "@navikt/ds-icons";
+import { Button, Detail } from "@navikt/ds-react";
+import { WarningColored } from "@navikt/ds-icons";
 
 interface Props {
-  fakta: QuizFaktum[];
   editFaktum?: () => void;
   deleteFaktum?: () => void;
-  showFaktaInline?: boolean;
+  allFaktumAnswered?: boolean;
 }
 
 export function GeneratorFaktumCard(props: PropsWithChildren<Props>) {
   return (
-    <div className={styles.container}>
+    <div className={styles.card}>
       {props.children}
 
-      {props.showFaktaInline && (
-        <div className={styles.fakta}>
-          {props.fakta.map(
-            (faktum) =>
-              !faktum.readOnly && (
-                <Faktum key={faktum.id} faktum={faktum} readonly={faktum.readOnly} />
-              )
-          )}
-        </div>
-      )}
+      <div className={styles.buttonContainer}>
+        {props.editFaktum && props.allFaktumAnswered && (
+          <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
+            Endre svar
+          </Button>
+        )}
 
-      {props.editFaktum && props.deleteFaktum && (
-        <div>
-          <Button size={"small"} onClick={props.editFaktum}>
-            Endre
-            <Edit />
-          </Button>
-          <Button size={"small"} variant={"danger"} onClick={props.deleteFaktum}>
-            Slett
-            <Delete />
-          </Button>
-        </div>
-      )}
+        {!props.allFaktumAnswered && (
+          <>
+            <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
+              Fyll ut
+            </Button>
+
+            <Detail uppercase>
+              <WarningColored />
+              Delvis utfylt
+            </Detail>
+          </>
+        )}
+      </div>
     </div>
   );
 }

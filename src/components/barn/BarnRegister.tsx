@@ -1,17 +1,17 @@
 import React from "react";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { BodyShort, Detail, Heading } from "@navikt/ds-react";
 import { FaktumProps } from "../faktum/Faktum";
 import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
 import { useRouter } from "next/router";
 import { getCountryName } from "../../country.utils";
+import { GeneratorFaktumCardWithFakta } from "../generator-faktum-card/GeneratorFaktumCardWithFakta";
 
 export function BarnRegister(props: FaktumProps<QuizGeneratorFaktum>) {
   const { locale } = useRouter();
   return (
     <>
       {props.faktum.svar?.map((fakta, index) => (
-        <GeneratorFaktumCard key={index} fakta={fakta} showFaktaInline={true}>
+        <GeneratorFaktumCardWithFakta key={index} fakta={fakta}>
           <Heading level={"3"} size={"small"}>
             {getChildName(fakta)}
           </Heading>
@@ -21,7 +21,7 @@ export function BarnRegister(props: FaktumProps<QuizGeneratorFaktum>) {
           <Detail uppercase>
             <>{getChildBostedsland(fakta, locale)}</>
           </Detail>
-        </GeneratorFaktumCard>
+        </GeneratorFaktumCardWithFakta>
       ))}
     </>
   );
