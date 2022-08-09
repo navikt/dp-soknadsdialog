@@ -22,6 +22,12 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
     useGeneratorUtils();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
+
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
     if (faktum?.svar) {

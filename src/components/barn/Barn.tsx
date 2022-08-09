@@ -12,34 +12,41 @@ import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegi
 import { ChildAdd } from "../../svg-icons/ChildAdd";
 
 export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
+  const { faktum } = props;
+  const { locale } = useRouter();
+  const { isLoading } = useQuiz();
+  const { getAppTekst } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const { getAppTekst } = useSanity();
-  const { isLoading } = useQuiz();
-  const { locale } = useRouter();
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
-    if (props.faktum?.svar) {
-      const lastGeneratorAnswerIndex = props.faktum.svar.length - 1;
-      const lastGeneratorAnswer = props.faktum.svar[lastGeneratorAnswerIndex];
+    if (faktum?.svar) {
+      const lastGeneratorAnswerIndex = faktum.svar.length - 1;
+      const lastGeneratorAnswer = faktum.svar[lastGeneratorAnswerIndex];
 
       if (lastGeneratorAnswer?.length === 1 && !lastGeneratorAnswer[0].svar) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
-  }, [props.faktum?.svar]);
+  }, [faktum?.svar]);
 
   return (
     <>
-      {props.faktum?.svar?.map((fakta, svarIndex) => {
+      {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
-              deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+              deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
             >
               <Heading level={"3"} size={"small"}>
                 {getChildName(fakta)}
@@ -72,6 +79,13 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                 <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                   Lagre og lukk
                 </Button>
+
+                <Button
+                  variant={"secondary"}
+                  onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
+                >
+                  Slett
+                </Button>
               </Modal.Content>
             </Modal>
           </div>
@@ -82,7 +96,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
         <Button
           variant="secondary"
           className={"generator-faktum__add-button"}
-          onClick={() => addNewGeneratorAnswer(props.faktum)}
+          onClick={() => addNewGeneratorAnswer(faktum)}
         >
           <ChildAdd /> {getAppTekst("barn.legg-til")}
         </Button>
