@@ -56,7 +56,7 @@ export function DocumentItem({ documentItem }: Props) {
       </Heading>
 
       <DocumentQuestions setAnswers={setAnswers}>
-        <FileUploader id={documentItem.id} filer={uploadedFiles} onHandle={setHandlesFiles} />
+        <FileUploader id={documentItem.id} onHandle={setHandlesFiles} />
         <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
 
         {answers?.sendeInn !== "" && answers?.hvemSender !== "" && (

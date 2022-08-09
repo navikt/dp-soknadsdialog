@@ -16,6 +16,7 @@ export interface DocumentationAnswers {
 
 export interface UploadedFile {
   urn: string;
+  filnavn: string;
 }
 
 export interface FileState {

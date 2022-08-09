@@ -18,7 +18,7 @@ export function FileList({ previouslyUploaded, handledFiles }: Props) {
             {previouslyUploaded.map((file) => {
               return (
                 <li key={file.urn}>
-                  <FileItem key={file.urn} id={file.urn} name={file.urn} state="UPLOADED" />
+                  <FileItem key={file.urn} id={file.urn} name={file.filnavn} state="UPLOADED" />
                 </li>
               );
             })}

@@ -3,12 +3,11 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import api from "../../api.utils";
-import { FileState, UploadedFile } from "../../types/documentation.types";
+import { FileState } from "../../types/documentation.types";
 import styles from "./FileUploader.module.css";
 
 interface Props {
   id: string;
-  filer?: UploadedFile[];
   onHandle: (value: FileState[]) => void;
 }
 
