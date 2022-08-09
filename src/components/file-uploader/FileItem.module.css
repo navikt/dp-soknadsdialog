@@ -1,4 +1,4 @@
-.file {
+.fileItem {
   border: 1px solid var(--navds-global-color-gray-300);
   border-radius: var(--navds-border-radius-large);
   padding: var(--navds-spacing-4);

@@ -3,7 +3,7 @@ import { Radio, RadioGroup } from "@navikt/ds-react";
 import { DocumentationAnswers } from "../../types/documentation.types";
 
 interface Props {
-  setAnswers: React.Dispatch<React.SetStateAction<DocumentationAnswers>>;
+  setAnswers: (value: DocumentationAnswers) => void;
 }
 
 export function DocumentQuestions(props: PropsWithChildren<Props>) {

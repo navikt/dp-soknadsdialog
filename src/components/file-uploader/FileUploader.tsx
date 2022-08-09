@@ -1,71 +1,97 @@
-import { Alert, Button } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import api from "../../api.utils";
-import { FileError, UploadedFile } from "../../types/documentation.types";
+import { FileState, UploadedFile } from "../../types/documentation.types";
 import styles from "./FileUploader.module.css";
 
 interface Props {
   id: string;
   filer?: UploadedFile[];
-  onUpload: (value: UploadedFile[]) => void;
+  onHandle: (value: FileState[]) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function FileUploader({ id, filer, onUpload }: Props) {
+export function FileUploader({ id, onHandle }: Props) {
   const router = useRouter();
-  const MAX_FILE_SIZE = 1000000; // 1 mb inntil videre
-  const FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg"]; // Kun bilder inntil videre
+  const MAX_FILE_SIZE = 52428800; // 400mb
+  const FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
+  const [handledFiles, setHandledFiles] = useState<FileState[]>([]);
 
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>(filer || []);
-  const [errors, setErrors] = useState<FileError[]>([]);
+  useEffect(() => {
+    onHandle(handledFiles);
+
+    handledFiles.forEach((fileObj, index) => {
+      if (fileObj.state === "UPLOADING") {
+        uploadFile(fileObj, index);
+      }
+    });
+  }, [handledFiles]);
+
+  function addHandledFile(fileObj: FileState) {
+    setHandledFiles([...handledFiles, fileObj]);
+  }
+
+  function changeHandledFile(fileObj: FileState, index: number) {
+    const copy = [...handledFiles];
+    copy[index] = fileObj;
+    setHandledFiles(copy);
+  }
+
+  function uploadFile(fileObj: FileState, index: number) {
+    if (!fileObj.file) {
+      return;
+    }
+
+    const requestData = new FormData();
+    requestData.append("file", fileObj.file);
+    const url = api(`/documentation/${router.query.uuid}/${id}/upload`);
+
+    // Do NOT specify content-type here, it gets browser generated with the correct boundary by default
+    fetch(url, {
+      method: "Post",
+      headers: {
+        accept: "application/json",
+      },
+      body: requestData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        fileObj.state = "UPLOADED";
+        fileObj.urn = res.urn;
+
+        changeHandledFile(fileObj, index);
+      })
+      .catch(() => {
+        fileObj.state = "ERROR";
+        fileObj.error = "SERVER_ERROR";
+
+        changeHandledFile(fileObj, index);
+      });
+  }
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      const errorList: FileError[] = [];
-      const newFiles: File[] = [];
+    (selectedFiles: File[]) => {
+      selectedFiles.forEach((file) => {
+        const id = `${new Date().getTime()}-${file.name}`;
+        const fileObj: FileState = { id: id, file: file, name: file.name };
 
-      acceptedFiles.forEach((file) => {
         if (file.size > MAX_FILE_SIZE) {
-          errorList.push({ file: file.name, reason: "FILE_SIZE" });
+          fileObj.state = "ERROR";
+          fileObj.error = "FILE_SIZE";
+
+          addHandledFile(fileObj);
         } else if (!FILE_FORMATS.includes(file.type)) {
-          errorList.push({ file: file.name, reason: "FILE_FORMAT" });
+          fileObj.state = "ERROR";
+          fileObj.error = "FILE_FORMAT";
+          addHandledFile(fileObj);
         } else {
-          newFiles.push(file);
+          fileObj.state = "UPLOADING";
+          addHandledFile(fileObj);
         }
       });
-
-      const requestData = new FormData();
-
-      newFiles.forEach((file) => {
-        requestData.append("file", file);
-      });
-
-      const url = api(`/documentation/${router.query.uuid}/${id}/upload`);
-
-      // Do NOT specify content-type here, it gets browser generated with the correct boundary by default
-      fetch(url, {
-        method: "Post",
-        headers: {
-          accept: "application/json",
-        },
-        body: requestData,
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          // eslint-disable-next-line no-console
-          console.log(res);
-          setUploadedFiles(uploadedFiles.concat(res));
-          onUpload(uploadedFiles);
-        })
-        .catch((error) => {
-          alert("Dette feilet: " + error);
-        });
-
-      setErrors(errorList);
     },
-    [uploadedFiles]
+    [handledFiles]
   );
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -83,15 +109,6 @@ export function FileUploader({ id, filer, onUpload }: Props) {
           <Button onClick={open}>Velg filer</Button>
         </>
       </div>
-
-      {errors.length > 0 &&
-        errors.map((error, index) => {
-          return (
-            <Alert key={index} variant="error">
-              Fil med filnavn {error.file} kunne ikke lastes opp grunnet {error.reason}
-            </Alert>
-          ); // TODO: Fiks en bedre index
-        })}
     </>
   );
 }
