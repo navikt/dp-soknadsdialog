@@ -34,7 +34,9 @@ export function Soknad() {
   }, []);
 
   useEffect(() => {
-    setShowNotFinishedError(false);
+    if (showNotFinishedError) {
+      setShowNotFinishedError(false);
+    }
   }, [soknadState]);
 
   function goNext() {
