@@ -55,6 +55,13 @@ export function FileUploader({ id, onHandle }: Props) {
       },
       body: requestData,
     })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(res.statusText);
+        }
+
+        return res;
+      })
       .then((res) => res.json())
       .then((res) => {
         fileObj.state = "UPLOADED";

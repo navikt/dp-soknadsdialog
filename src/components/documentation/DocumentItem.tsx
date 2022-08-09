@@ -11,6 +11,7 @@ import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
 import { DocumentQuestions } from "./DocumentQuestions";
+import styles from "./DocumentItem.module.css";
 
 interface Props {
   documentItem: DocumentItem;
@@ -49,7 +50,7 @@ export function DocumentItem({ documentItem }: Props) {
   // TODO: Spinner og error handling
 
   return (
-    <>
+    <div className={styles.documentItem}>
       <Heading size="small" level="3">
         {documentItem.beskrivendeId}
       </Heading>
@@ -62,6 +63,6 @@ export function DocumentItem({ documentItem }: Props) {
           <Button onClick={sendDocuments}>Send inn</Button>
         )}
       </DocumentQuestions>
-    </>
+    </div>
   );
 }

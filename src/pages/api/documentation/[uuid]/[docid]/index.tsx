@@ -9,7 +9,10 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
   const docid = req.query.docid as string;
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(200).json([{ urn: "urn:vedlegg:id/fil1" }, { urn: "urn:vedlegg:id/fil2" }]);
+    return res.status(200).json([
+      { filnavn: "fil1.jpg", urn: "urn:vedlegg:id/fil1" },
+      { filnavn: "filnavn2.jpg", urn: "urn:vedlegg:id/fil2" },
+    ]);
   }
 
   if (token && apiToken) {
