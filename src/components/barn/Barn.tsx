@@ -5,7 +5,7 @@ import { QuizGeneratorFaktum } from "../../types/quiz.types";
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { PingLoader } from "../PingLoader";
+import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { useRouter } from "next/router";
 import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
@@ -64,7 +64,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
 
                 {isLoading && (
                   <div>
-                    <PingLoader />
+                    <FetchIndicator isLoading={isLoading} />
                   </div>
                 )}
 
