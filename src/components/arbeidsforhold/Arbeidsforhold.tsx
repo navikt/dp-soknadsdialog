@@ -9,7 +9,7 @@ import {
 import { Faktum, FaktumProps } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { PingLoader } from "../PingLoader";
+import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import { PortableText } from "@portabletext/react";
@@ -82,7 +82,7 @@ export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
 
                 {isLoading && (
                   <div>
-                    <PingLoader />
+                    <FetchIndicator isLoading={isLoading} />
                   </div>
                 )}
                 <div className={"modal-container__button-container"}>

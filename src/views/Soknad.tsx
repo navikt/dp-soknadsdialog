@@ -5,7 +5,7 @@ import { Section } from "../components/section/Section";
 import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
-import { PingLoader } from "../components/PingLoader";
+import { FetchIndicator } from "../components/FetchIndicator";
 import { useSanity } from "../context/sanity-context";
 
 export function Soknad() {
@@ -78,7 +78,7 @@ export function Soknad() {
 
       {isLoading && (
         <div className={styles.loaderContainer}>
-          <PingLoader />
+          <FetchIndicator isLoading={isLoading} />
         </div>
       )}
 

@@ -13,7 +13,7 @@ import { Barn } from "../barn/Barn";
 import { useSanity } from "../../context/sanity-context";
 import { BarnRegister } from "../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { PingLoader } from "../PingLoader";
+import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 
 export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
@@ -75,7 +75,7 @@ function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
 
                 {isLoading && (
                   <div>
-                    <PingLoader />
+                    <FetchIndicator isLoading={isLoading} />
                   </div>
                 )}
 
