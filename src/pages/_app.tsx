@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { fetcher } from "../api.utils";
 import { SWRConfig } from "swr";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
+import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -20,12 +21,14 @@ export default function App({ Component, pageProps }: AppProps) {
   onLanguageSelect(({ locale }) => router.push(router.asPath, router.asPath, { locale }));
 
   return (
-    <SWRConfig value={{ fetcher }}>
-      {renderHeader()}
-      <div className={styles.app}>
-        <Component {...pageProps} />
-      </div>
-    </SWRConfig>
+    <ErrorBoundary>
+      <SWRConfig value={{ fetcher }}>
+        {renderHeader()}
+        <div className={styles.app}>
+          <Component {...pageProps} />
+        </div>
+      </SWRConfig>
+    </ErrorBoundary>
   );
 }
 

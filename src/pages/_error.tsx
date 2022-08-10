@@ -2,13 +2,19 @@ import React from "react";
 import { NextPageContext } from "next";
 import Error from "../components/error/Error";
 
-export default function ErrorPage() {
+interface Props {
+  statusCode?: number;
+}
+
+export default function ErrorPage(props: Props) {
+  const { statusCode } = props;
   return (
     <Error
       variant="error"
       title="Beklager, det skjedde en teknisk feil."
-      details="Feilen blir automatisk rapportert og vi jobber med å løse den så raskt som mulig. Prøv igjen
-        om litt."
+      details={
+        statusCode ? `An error ${statusCode} occurred on server` : "An error occurred on client"
+      }
     />
   );
 }
