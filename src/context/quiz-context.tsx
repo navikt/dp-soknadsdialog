@@ -10,6 +10,13 @@ export interface QuizContext {
   saveGeneratorFaktumToQuiz: (faktum: QuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
   isLoading: boolean;
   isError: boolean;
+  isSaved: boolean;
+}
+
+export enum SavingState {
+  SAVING = "SAVING",
+  SAVED = "SAVED",
+  ERROR = "ERROR",
 }
 
 export const QuizContext = createContext<QuizContext | undefined>(undefined);
@@ -23,12 +30,14 @@ function QuizProvider(props: PropsWithChildren<Props>) {
   const { uuid } = router.query;
   const [soknadState, setSoknadState] = useState<QuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
   const [isError, setIsError] = useState(false);
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
     try {
       setIsError(false);
       setIsLoading(true);
+      setIsSaved(false);
 
       await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
@@ -37,11 +46,13 @@ function QuizProvider(props: PropsWithChildren<Props>) {
 
       await getNeste();
       setIsLoading(false);
+      setIsSaved(true);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setIsSaved(false);
     }
   }
 
@@ -49,6 +60,7 @@ function QuizProvider(props: PropsWithChildren<Props>) {
     try {
       setIsError(false);
       setIsLoading(true);
+      setIsSaved(false);
 
       await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
@@ -57,11 +69,13 @@ function QuizProvider(props: PropsWithChildren<Props>) {
 
       await getNeste();
       setIsLoading(false);
+      setIsSaved(true);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setIsSaved(false);
     }
   }
 
@@ -79,7 +93,14 @@ function QuizProvider(props: PropsWithChildren<Props>) {
 
   return (
     <QuizContext.Provider
-      value={{ soknadState, saveFaktumToQuiz, saveGeneratorFaktumToQuiz, isLoading, isError }}
+      value={{
+        soknadState,
+        saveFaktumToQuiz,
+        saveGeneratorFaktumToQuiz,
+        isLoading,
+        isError,
+        isSaved,
+      }}
     >
       {props.children}
     </QuizContext.Provider>

@@ -7,11 +7,12 @@ import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
 import { useSanity } from "../context/sanity-context";
+import { FileSuccess } from "@navikt/ds-icons";
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { soknadState, isError, isLoading, isSaved } = useQuiz();
   const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
@@ -112,6 +113,13 @@ export function Soknad() {
           <Button onClick={() => goToSummary()}>{getAppTekst("soknad.til-oppsummering")}</Button>
         )}
       </nav>
+
+      {isSaved && (
+        <p className={styles.autoSaveLabel}>
+          <FileSuccess />
+          Lagret automatisk
+        </p>
+      )}
 
       {isError && <pre>Det har gått ått skaugum</pre>}
     </main>

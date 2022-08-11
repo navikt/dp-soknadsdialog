@@ -12,10 +12,20 @@
 }
 
 .navigation button {
-  margin-bottom: var(--navds-spacing-9);
+  margin-bottom: var(--navds-spacing-6);
   margin-right: var(--navds-spacing-6);
 }
 
 .navigation button:last-child {
   margin-right: 0;
+}
+
+.autoSaveLabel {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+.autoSaveLabel svg {
+  margin-right: var(--navds-spacing-1);
 }
