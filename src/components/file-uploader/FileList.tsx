@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./FileList.module.css";
 import { FileItem } from "./FileItem";
 import { UploadedFile, FileState } from "../../types/documentation.types";
+import { Detail } from "@navikt/ds-react";
 
 interface Props {
   previouslyUploaded: UploadedFile[];
@@ -9,40 +10,33 @@ interface Props {
 }
 
 export function FileList({ previouslyUploaded, handledFiles }: Props) {
+  const uploadedLength = previouslyUploaded.length + handledFiles.length;
+
   return (
     <>
-      {previouslyUploaded.length > 0 && (
+      {uploadedLength > 0 && (
         <>
-          <p>Allerede opplastede filer</p>
+          <Detail uppercase>Filer ({uploadedLength})</Detail>
           <ul className={styles.fileList}>
             {previouslyUploaded.map((file) => {
-              return (
-                <li key={file.urn}>
-                  <FileItem key={file.urn} id={file.urn} name={file.filnavn} state="UPLOADED" />
-                </li>
-              );
+              return <FileItem key={file.urn} id={file.urn} name={file.filnavn} state="UPLOADED" />;
             })}
-          </ul>
-        </>
-      )}
 
-      {handledFiles.length > 0 && (
-        <>
-          <p>Nye filer</p>
-          <ul className={styles.fileList}>
-            {handledFiles.map((file) => {
-              return (
-                <li key={file.id}>
-                  <FileItem
-                    key={file.id}
-                    id={file.id}
-                    name={file.name}
-                    state={file.state}
-                    error={file.error}
-                  />
-                </li>
-              );
-            })}
+            {handledFiles.length > 0 && (
+              <>
+                {handledFiles.map((file) => {
+                  return (
+                    <FileItem
+                      key={file.id}
+                      id={file.id}
+                      name={file.name}
+                      state={file.state}
+                      error={file.error}
+                    />
+                  );
+                })}
+              </>
+            )}
           </ul>
         </>
       )}
