@@ -13,7 +13,7 @@ import classNames from "classnames";
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const { soknadState, isError, isLoading, isSaved } = useQuiz();
+  const { soknadState, isError, isLoading } = useQuiz();
   const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
@@ -116,7 +116,7 @@ export function Soknad() {
       </nav>
 
       <div className={styles.savingStateContainer}>
-        {isSaved && (
+        {!isError && (
           <p className={styles.savingStateText}>
             <FileSuccess />
             Lagret automatisk
