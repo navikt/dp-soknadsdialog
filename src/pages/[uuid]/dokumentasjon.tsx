@@ -6,11 +6,11 @@ import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { SanityTexts } from "../../types/sanity.types";
 import { audience } from "../../api.utils";
-import { getSoknadState, getDocumentationList } from "../../server-side/quiz-api";
+import { getSoknadState } from "../../server-side/quiz-api";
+import { getDocumentationList } from "../../server-side/documentation-api";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import { DocumentationProvider } from "../../context/documentation-context";
 import { Alert } from "@navikt/ds-react";
 import { Documents } from "../../types/documentation.types";
 
@@ -70,9 +70,7 @@ export default function DocumentPage(props: Props) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <DocumentationProvider initialState={props.documents}>
-          <Documentation />
-        </DocumentationProvider>
+        <Documentation documents={props.documents} />
       </QuizProvider>
     </SanityProvider>
   );

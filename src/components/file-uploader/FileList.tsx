@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./FileList.module.css";
 import { FileItem } from "./FileItem";
-import { UploadedFile, FileState } from "../../types/documentation.types";
+import { UploadedFile, FileState, FileHandleState } from "../../types/documentation.types";
 import { Detail } from "@navikt/ds-react";
 
 interface Props {
@@ -19,7 +19,14 @@ export function FileList({ previouslyUploaded, handledFiles }: Props) {
           <Detail uppercase>Filer ({uploadedLength})</Detail>
           <ul className={styles.fileList}>
             {previouslyUploaded.map((file) => {
-              return <FileItem key={file.urn} id={file.urn} name={file.filnavn} state="UPLOADED" />;
+              return (
+                <FileItem
+                  key={file.urn}
+                  id={file.urn}
+                  name={file.filnavn}
+                  state={FileHandleState.Uploaded}
+                />
+              );
             })}
 
             {handledFiles.length > 0 && (

@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-import { getDocumentationList } from "../../../../server-side/quiz-api";
+import { getDocumentationList } from "../../../../server-side/documentation-api";
 
 async function statusHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });

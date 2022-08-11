@@ -1,18 +1,20 @@
 import { Heading } from "@navikt/ds-react";
 import React from "react";
 import { DocumentItem } from "../components/documentation/DocumentItem";
-import { useDocumentation } from "../context/documentation-context";
+import { Documents } from "../types/documentation.types";
 
-export function Documentation() {
-  const { documents } = useDocumentation();
+interface Props {
+  documents: Documents;
+}
 
+export function Documentation(props: Props) {
   return (
     <>
       <Heading level="2" size="medium">
         Dokumentasjon
       </Heading>
-      <p>Antall fakta som må dokumenteres: {documents.list.length}</p>
-      {documents.list.map((item) => {
+      <p>Antall fakta som må dokumenteres: {props.documents.list.length}</p>
+      {props.documents.list.map((item) => {
         return <DocumentItem key={item.id} documentItem={item} />;
       })}
     </>

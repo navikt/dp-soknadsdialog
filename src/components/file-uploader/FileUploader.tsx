@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import api from "../../api.utils";
-import { FileState } from "../../types/documentation.types";
+import { FileState, ErrorType, FileHandleState } from "../../types/documentation.types";
 import styles from "./FileUploader.module.css";
 
 interface Props {
@@ -21,7 +21,7 @@ export function FileUploader({ id, onHandle }: Props) {
     onHandle(handledFiles);
 
     handledFiles.forEach((fileObj, index) => {
-      if (fileObj.state === "UPLOADING") {
+      if (fileObj.state === FileHandleState.AwaitingUpload) {
         uploadFile(fileObj, index);
       }
     });
@@ -63,14 +63,14 @@ export function FileUploader({ id, onHandle }: Props) {
       })
       .then((res) => res.json())
       .then((res) => {
-        fileObj.state = "UPLOADED";
+        fileObj.state = FileHandleState.Uploaded;
         fileObj.urn = res.urn;
 
         changeHandledFile(fileObj, index);
       })
       .catch(() => {
-        fileObj.state = "ERROR";
-        fileObj.error = "SERVER_ERROR";
+        fileObj.state = FileHandleState.Error;
+        fileObj.error = ErrorType.ServerError;
 
         changeHandledFile(fileObj, index);
       });
@@ -83,15 +83,15 @@ export function FileUploader({ id, onHandle }: Props) {
         const fileObj: FileState = { id: id, file: file, name: file.name };
 
         if (!FILE_FORMATS.includes(file.type)) {
-          fileObj.state = "ERROR";
-          fileObj.error = "FILE_FORMAT";
+          fileObj.state = FileHandleState.Error;
+          fileObj.error = ErrorType.FileFormat;
           addHandledFile(fileObj);
         } else if (file.size > MAX_FILE_SIZE) {
-          fileObj.state = "ERROR";
-          fileObj.error = "FILE_SIZE";
+          fileObj.state = FileHandleState.Error;
+          fileObj.error = ErrorType.FileSize;
           addHandledFile(fileObj);
         } else {
-          fileObj.state = "UPLOADING";
+          fileObj.state = FileHandleState.AwaitingUpload;
           addHandledFile(fileObj);
         }
       });

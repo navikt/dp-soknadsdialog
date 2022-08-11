@@ -18,7 +18,7 @@ export function DocumentItem({ documentItem }: Props) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState<string>("");
-  const [uploadedFiles, setuploadedFiles] = useState<UploadedFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [handledFiles, setHandlesFiles] = useState<FileState[]>([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function DocumentItem({ documentItem }: Props) {
     fetch(url)
       .then((res) => res.json())
       .then((res) => {
-        setuploadedFiles(res);
+        setUploadedFiles(res);
         setIsLoading(false);
       })
       .catch(() => {

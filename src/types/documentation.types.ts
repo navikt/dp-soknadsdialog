@@ -17,13 +17,20 @@ export interface UploadedFile {
 export interface FileState {
   id: string;
   name?: string;
-  state?: "UPLOADING" | "UPLOADED" | "ERROR";
+  state?: FileHandleState;
   file?: File;
-  error?: "FILE_FORMAT" | "FILE_SIZE" | "SERVER_ERROR";
+  error?: ErrorType;
   urn?: string;
 }
 
-export interface FileError {
-  file: string;
-  reason: string;
+export enum FileHandleState {
+  AwaitingUpload,
+  Uploaded,
+  Error,
+}
+
+export enum ErrorType {
+  FileFormat,
+  FileSize,
+  ServerError,
 }
