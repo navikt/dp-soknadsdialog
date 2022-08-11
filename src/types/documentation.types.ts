@@ -1,17 +1,12 @@
 export interface Documents {
   id: string;
-  list: DocumentItem[];
+  list: DocumentListItem[];
 }
 
-export interface DocumentItem {
+export interface DocumentListItem {
   id: string;
   beskrivendeId: string;
   files?: string[];
-}
-
-export interface DocumentationAnswers {
-  sendeInn?: string;
-  hvemSender?: string;
 }
 
 export interface UploadedFile {

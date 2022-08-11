@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading } from "@navikt/ds-react";
-import {
-  DocumentItem,
-  UploadedFile,
-  DocumentationAnswers,
-  FileState,
-} from "../../types/documentation.types";
+import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { DocumentListItem, UploadedFile, FileState } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
-import { DocumentQuestions } from "./DocumentQuestions";
 import styles from "./DocumentItem.module.css";
 
 interface Props {
-  documentItem: DocumentItem;
+  documentItem: DocumentListItem;
 }
 
 export function DocumentItem({ documentItem }: Props) {
@@ -23,7 +17,7 @@ export function DocumentItem({ documentItem }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
-  const [answers, setAnswers] = useState<DocumentationAnswers>({});
+  const [answer, setAnswer] = useState<string>("");
   const [uploadedFiles, setuploadedFiles] = useState<UploadedFile[]>([]);
   const [handledFiles, setHandlesFiles] = useState<FileState[]>([]);
 
@@ -36,6 +30,7 @@ export function DocumentItem({ documentItem }: Props) {
       .then((res) => res.json())
       .then((res) => {
         setuploadedFiles(res);
+        setIsLoading(false);
       })
       .catch(() => {
         setIsError(true);
@@ -51,18 +46,31 @@ export function DocumentItem({ documentItem }: Props) {
 
   return (
     <div className={styles.documentItem}>
-      <Heading size="small" level="3">
-        {documentItem.beskrivendeId}
-      </Heading>
+      {isLoading && <span>Laster</span>}
 
-      <DocumentQuestions setAnswers={setAnswers}>
-        <FileUploader id={documentItem.id} onHandle={setHandlesFiles} />
-        <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
+      {!isLoading && (
+        <>
+          <Heading size="small" level="3">
+            {documentItem.beskrivendeId}
+          </Heading>
 
-        {answers?.sendeInn !== "" && answers?.hvemSender !== "" && (
-          <Button onClick={sendDocuments}>Send inn</Button>
-        )}
-      </DocumentQuestions>
+          <RadioGroup legend="Velg hva du vil gjøre" onChange={setAnswer} value={answer}>
+            <Radio value="upload_now">Laste opp nå</Radio>
+            <Radio value="upload_later">Laste opp senere</Radio>
+            <Radio value="somebody_else_sends">Noen andre sender dokumentet</Radio>
+            <Radio value="already_sent">Har sendt tidligere</Radio>
+            <Radio value="will_not_send">Sender ikke</Radio>
+          </RadioGroup>
+
+          {answer === "upload_now" && (
+            <>
+              <FileUploader id={documentItem.id} onHandle={setHandlesFiles} />
+              <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
+            </>
+          )}
+          {answer !== "" && <Button onClick={sendDocuments}>Send inn</Button>}
+        </>
+      )}
     </div>
   );
 }
