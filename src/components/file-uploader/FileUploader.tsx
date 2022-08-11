@@ -20,15 +20,18 @@ export function FileUploader({ id, onHandle }: Props) {
   useEffect(() => {
     onHandle(handledFiles);
 
-    handledFiles.forEach((fileObj, index) => {
-      if (fileObj.state === FileHandleState.AwaitingUpload) {
-        uploadFile(fileObj, index);
-      }
+    // Only do one upload per useEffect call
+    const uploadIndex = handledFiles.findIndex((fileObj) => {
+      return fileObj.state === FileHandleState.AwaitingUpload;
     });
+
+    if (uploadIndex > -1) {
+      uploadFile(handledFiles[uploadIndex], uploadIndex);
+    }
   }, [handledFiles]);
 
-  function addHandledFile(fileObj: FileState) {
-    setHandledFiles([...handledFiles, fileObj]);
+  function addHandledFiles(fileArray: FileState[]) {
+    setHandledFiles([...handledFiles, ...fileArray]);
   }
 
   function changeHandledFile(fileObj: FileState, index: number) {
@@ -78,6 +81,8 @@ export function FileUploader({ id, onHandle }: Props) {
 
   const onDrop = useCallback(
     (selectedFiles: File[]) => {
+      const tempFileList: FileState[] = [];
+
       selectedFiles.forEach((file) => {
         const id = `${new Date().getTime()}-${file.name}`;
         const fileObj: FileState = { id: id, file: file, name: file.name };
@@ -85,16 +90,19 @@ export function FileUploader({ id, onHandle }: Props) {
         if (!FILE_FORMATS.includes(file.type)) {
           fileObj.state = FileHandleState.Error;
           fileObj.error = ErrorType.FileFormat;
-          addHandledFile(fileObj);
+
+          tempFileList.push(fileObj);
         } else if (file.size > MAX_FILE_SIZE) {
           fileObj.state = FileHandleState.Error;
           fileObj.error = ErrorType.FileSize;
-          addHandledFile(fileObj);
+          tempFileList.push(fileObj);
         } else {
           fileObj.state = FileHandleState.AwaitingUpload;
-          addHandledFile(fileObj);
+          tempFileList.push(fileObj);
         }
       });
+
+      addHandledFiles(tempFileList);
     },
     [handledFiles]
   );
