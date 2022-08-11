@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
-import ErrorPage from "../../pages/_error";
+import { Alert, BodyShort, Detail } from "@navikt/ds-react";
 
 interface Props {
   children?: ReactNode;
@@ -31,7 +31,13 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <>
-          <ErrorPage />
+          <Alert variant="error">
+            <BodyShort>Beklager, det skjedde en teknisk feil.</BodyShort>
+            <Detail>
+              Feilen blir automatisk rapportert og vi jobber med å løse den så raskt som mulig. Prøv
+              igjen om litt.
+            </Detail>
+          </Alert>
 
           <Button
             variant="primary"

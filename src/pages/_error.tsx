@@ -1,21 +1,24 @@
 import React from "react";
 import { NextPageContext } from "next";
-import Error from "../components/error/Error";
+import { Alert, BodyShort, Detail } from "@navikt/ds-react";
 
 interface Props {
+  variant: "error" | "warning" | "info" | "success";
+  title: string;
+  details: string;
   statusCode?: number;
 }
-
 export default function ErrorPage(props: Props) {
-  const { statusCode } = props;
+  const { statusCode, variant, title, details } = props;
+
+  // eslint-disable-next-line no-console
+  console.log(statusCode);
+
   return (
-    <Error
-      variant="error"
-      title="Beklager, det skjedde en teknisk feil."
-      details={
-        statusCode ? `An error ${statusCode} occurred on server` : "An error occurred on client"
-      }
-    />
+    <Alert variant={variant}>
+      <BodyShort>{title}</BodyShort>
+      <Detail>{details}</Detail>
+    </Alert>
   );
 }
 

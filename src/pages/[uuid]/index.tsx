@@ -10,14 +10,11 @@ import { getSoknadState } from "../../server-side/quiz-api";
 import { QuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import { Alert } from "@navikt/ds-react";
 import ErrorPage from "../_error";
 
 interface SoknadMedIdParams {
   soknadState: QuizState | undefined;
   sanityTexts: SanityTexts;
-  sanityTextsError: number | null;
-  soknadStatError: number | null;
 }
 
 export async function getServerSideProps(
@@ -26,8 +23,6 @@ export async function getServerSideProps(
   const { token, apiToken } = await getSession(context);
   const { query, locale } = context;
   const uuid = query.uuid as string;
-  const sanityTextsError = null;
-  const soknadStatError = null;
 
   const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
     baseLang: "nb",
@@ -50,27 +45,29 @@ export async function getServerSideProps(
     props: {
       sanityTexts,
       soknadState,
-      sanityTextsError,
-      soknadStatError,
     },
   };
 }
 
 export default function SoknadMedId(props: SoknadMedIdParams) {
   if (!props.sanityTexts.seksjoner) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
+    return (
+      <ErrorPage
+        variant="error"
+        title="Beklager, det skjedde en teknisk feil."
+        details="Noe gikk galt ved henting av texter fra sanity"
+      />
+    );
   }
 
   if (!props.soknadState) {
-    return <Alert variant="error">Quiz er ducked</Alert>;
-  }
-
-  if (props.sanityTextsError) {
-    return <ErrorPage statusCode={props.sanityTextsError} />;
-  }
-
-  if (props.soknadStatError) {
-    return <ErrorPage statusCode={props.soknadStatError} />;
+    return (
+      <ErrorPage
+        variant="error"
+        title="Beklager, det skjedde en teknisk feil."
+        details="Noe gikk galt ved data fra Quiz"
+      />
+    );
   }
 
   return (
