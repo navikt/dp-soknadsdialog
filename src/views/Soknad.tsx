@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
 import { useSanity } from "../context/sanity-context";
+import { FileSuccess, FileError } from "@navikt/ds-icons";
+import classNames from "classnames";
 
 export function Soknad() {
   const router = useRouter();
@@ -113,7 +115,18 @@ export function Soknad() {
         )}
       </nav>
 
-      {isError && <pre>Det har gått ått skaugum</pre>}
+      {!isError && (
+        <p className={styles.autoSaveText}>
+          <FileSuccess />
+          Lagret automatisk
+        </p>
+      )}
+      {isError && (
+        <p className={classNames(styles.autoSaveText, "navds-error-message")}>
+          <FileError />
+          Lagring feilet, det har skjedd noe feil
+        </p>
+      )}
     </main>
   );
 }
