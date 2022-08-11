@@ -1,3 +1,15 @@
 .alertText p:last-of-type {
   margin-bottom: 0;
 }
+
+.alertText p:first-of-type {
+  margin-top: 0;
+}
+
+.alertTextHeading {
+  margin-bottom: var(--navds-spacing-3);
+}
+
+.spacingTop {
+  margin-top: var(--navds-spacing-4);
+}

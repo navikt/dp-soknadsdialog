@@ -70,7 +70,7 @@ export function FaktumBoolean(props: FaktumProps<QuizBooleanFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && alertText.active && <AlertText alertText={alertText} />}
+      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
     </>
   );
 }
