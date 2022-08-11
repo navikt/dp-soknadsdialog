@@ -13,10 +13,10 @@ export interface QuizContext {
   isSaved: boolean;
 }
 
-export enum SavingState {
+export enum SavingStateEnum {
+  INITIAL = "INITIAL",
   SAVING = "SAVING",
   SAVED = "SAVED",
-  ERROR = "ERROR",
 }
 
 export const QuizContext = createContext<QuizContext | undefined>(undefined);
@@ -47,12 +47,12 @@ function QuizProvider(props: PropsWithChildren<Props>) {
       await getNeste();
       setIsLoading(false);
       setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 2500);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
-      setIsSaved(false);
     }
   }
 
@@ -60,7 +60,7 @@ function QuizProvider(props: PropsWithChildren<Props>) {
     try {
       setIsError(false);
       setIsLoading(true);
-      setIsSaved(false);
+      setIsSaved(true);
 
       await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
@@ -69,13 +69,13 @@ function QuizProvider(props: PropsWithChildren<Props>) {
 
       await getNeste();
       setIsLoading(false);
-      setIsSaved(true);
+      setIsSaved(false);
+      setTimeout(() => setIsSaved(false), 2500);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
-      setIsSaved(false);
     }
   }
 

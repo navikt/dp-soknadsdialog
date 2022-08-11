@@ -20,12 +20,16 @@
   margin-right: 0;
 }
 
-.autoSaveLabel {
+.savingStateContainer {
+  height: 42px;
+}
+
+.savingStateText {
   display: flex;
   align-items: center;
   margin-top: 0;
 }
 
-.autoSaveLabel svg {
+.savingStateText svg {
   margin-right: var(--navds-spacing-1);
 }
