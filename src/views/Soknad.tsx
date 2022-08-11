@@ -115,20 +115,18 @@ export function Soknad() {
         )}
       </nav>
 
-      <div className={styles.savingStateContainer}>
-        {!isError && (
-          <p className={styles.savingStateText}>
-            <FileSuccess />
-            Lagret automatisk
-          </p>
-        )}
-        {isError && (
-          <p className={classNames(styles.savingStateText, "navds-error-message")}>
-            <FileError />
-            Lagring feilet, det har skjedd noe feil
-          </p>
-        )}
-      </div>
+      {!isError && (
+        <p className={styles.autoSaveText}>
+          <FileSuccess />
+          Lagret automatisk
+        </p>
+      )}
+      {isError && (
+        <p className={classNames(styles.autoSaveText, "navds-error-message")}>
+          <FileError />
+          Lagring feilet, det har skjedd noe feil
+        </p>
+      )}
     </main>
   );
 }

@@ -20,16 +20,12 @@
   margin-right: 0;
 }
 
-.savingStateContainer {
-  height: 42px;
-}
-
-.savingStateText {
+.autoSaveText {
   display: flex;
   align-items: center;
   margin-top: 0;
 }
 
-.savingStateText svg {
+.autoSaveText svg {
   margin-right: var(--navds-spacing-1);
 }
