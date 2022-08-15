@@ -85,6 +85,18 @@ jobs:
           RESOURCE: nais/nais.yaml
           VARS: nais/dev.yaml
           PRINT_PAYLOAD: true
+
+      - name: Lag deployment i Sentry
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: https://sentry.gc.nav.no
+          SENTRY_ORG: nav
+          SENTRY_PROJECT: dp-soknadsdialog
+        with:
+          environment: development
+          version: ${{ github.sha }}
+          set_commits: skip
 #  deploy-prod:
 #    name: Deploy to Production
 #    needs: [deploy-dev]
@@ -104,6 +116,19 @@ jobs:
 #          RESOURCE: nais/nais.yaml
 #          VARS: nais/prod.yaml
 #          PRINT_PAYLOAD: true
+
+#      - name: Lag deployment i Sentry
+#        uses: getsentry/action-release@v1
+#        env:
+#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+#          SENTRY_URL: https://sentry.gc.nav.no
+#          SENTRY_ORG: nav
+#          SENTRY_PROJECT: dp-soknadsdialog
+#        with:
+#          environment: production
+#          version: ${{ github.sha }}
+#          set_commits: skip
+
 #  reportFailure:
 #    name: Report build failure to Slack
 #    needs: [ test, build ]

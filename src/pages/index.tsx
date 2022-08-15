@@ -5,6 +5,7 @@ import { StartSoknad } from "../views/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
+import * as Sentry from "@sentry/nextjs";
 
 interface Props {
   sanityTexts: SanityTexts;
@@ -28,6 +29,7 @@ export async function getServerSideProps(
 }
 
 export default function Soknad(props: Props) {
+  Sentry.captureEvent({ message: "App init" });
   if (!props.sanityTexts.apptekster) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
