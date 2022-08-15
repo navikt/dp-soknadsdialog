@@ -1,7 +1,7 @@
-import { QuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 import { gyldigeLand } from "./seksjonBostedsland";
 
-export const seksjonBarnetillegg: QuizSeksjon = {
+export const seksjonBarnetillegg: IQuizSeksjon = {
   beskrivendeId: "barnetillegg",
   fakta: [
     {

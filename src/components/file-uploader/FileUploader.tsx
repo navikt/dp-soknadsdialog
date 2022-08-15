@@ -3,20 +3,20 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import api from "../../api.utils";
-import { FileState, ErrorType, FileHandleState } from "../../types/documentation.types";
+import { IFileState, ErrorType, FileHandleState } from "../../types/documentation.types";
 import styles from "./FileUploader.module.css";
 
-interface Props {
+interface IProps {
   id: string;
-  onHandle: (value: FileState[]) => void;
+  onHandle: (value: IFileState[]) => void;
 }
 
 const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
 const MAX_FILE_SIZE = 52428800; // 400mb
 
-export function FileUploader({ id, onHandle }: Props) {
+export function FileUploader({ id, onHandle }: IProps) {
   const router = useRouter();
-  const [handledFiles, setHandledFiles] = useState<FileState[]>([]);
+  const [handledFiles, setHandledFiles] = useState<IFileState[]>([]);
 
   useEffect(() => {
     onHandle(handledFiles);
@@ -31,17 +31,17 @@ export function FileUploader({ id, onHandle }: Props) {
     }
   }, [handledFiles]);
 
-  function addHandledFiles(fileArray: FileState[]) {
+  function addHandledFiles(fileArray: IFileState[]) {
     setHandledFiles([...handledFiles, ...fileArray]);
   }
 
-  function changeHandledFile(fileObj: FileState, index: number) {
+  function changeHandledFile(fileObj: IFileState, index: number) {
     const copy = [...handledFiles];
     copy[index] = fileObj;
     setHandledFiles(copy);
   }
 
-  async function uploadFile(fileObj: FileState, index: number) {
+  async function uploadFile(fileObj: IFileState, index: number) {
     if (!fileObj.file) {
       return;
     }
@@ -78,11 +78,11 @@ export function FileUploader({ id, onHandle }: Props) {
 
   const onDrop = useCallback(
     (selectedFiles: File[]) => {
-      const tempFileList: FileState[] = [];
+      const tempFileList: IFileState[] = [];
 
       selectedFiles.forEach((file) => {
         const id = `${new Date().getTime()}-${file.name}`;
-        const fileObj: FileState = { id: id, file: file, name: file.name };
+        const fileObj: IFileState = { id: id, file: file, name: file.name };
 
         if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
           fileObj.state = FileHandleState.Error;

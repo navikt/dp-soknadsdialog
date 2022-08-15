@@ -1,57 +1,57 @@
 import { TypedObject } from "@portabletext/types";
 
-export interface SanityHelpText {
+export interface ISanityHelpText {
   title?: string;
   body: TypedObject | TypedObject[];
 }
 
-export interface SanityAlertText {
+export interface ISanityAlertText {
   title?: string;
   type: "info" | "warning" | "error" | "success";
   body: TypedObject | TypedObject[];
   active: boolean | undefined;
 }
 
-export interface SanityFaktum {
+export interface ISanityFaktum {
   textId: string;
   text: string;
   description?: TypedObject | TypedObject[];
-  helpText?: SanityHelpText;
+  helpText?: ISanityHelpText;
   unit?: string;
 }
 
-export interface SanitySeksjon {
+export interface ISanitySeksjon {
   textId: string;
   title: string;
   description?: TypedObject | TypedObject[];
-  helpText?: SanityHelpText;
+  helpText?: ISanityHelpText;
 }
 
-export interface SanitySvaralternativ {
+export interface ISanitySvaralternativ {
   textId: string;
   text: string;
-  alertText?: SanityAlertText;
+  alertText?: ISanityAlertText;
 }
 
-export interface SanityLandGruppe {
+export interface ISanityLandGruppe {
   textId: string;
-  alertText?: SanityAlertText;
+  alertText?: ISanityAlertText;
 }
 
-export interface SanityAppTekst {
+export interface ISanityAppTekst {
   textId: string;
   valueText: string;
 }
 
-export interface SanityStartSideTekst {
+export interface ISanityStartSideTekst {
   body: TypedObject | TypedObject[];
 }
 
-export interface SanityTexts {
-  fakta: SanityFaktum[];
-  seksjoner: SanitySeksjon[];
-  svaralternativer: SanitySvaralternativ[];
-  landgrupper: SanityLandGruppe[];
-  apptekster: SanityAppTekst[];
-  startside: SanityStartSideTekst[];
+export interface ISanityTexts {
+  fakta: ISanityFaktum[];
+  seksjoner: ISanitySeksjon[];
+  svaralternativer: ISanitySvaralternativ[];
+  landgrupper: ISanityLandGruppe[];
+  apptekster: ISanityAppTekst[];
+  startside: ISanityStartSideTekst[];
 }

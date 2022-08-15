@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { FaktumProps } from "./Faktum";
+import { IFaktum } from "./Faktum";
 import { formatISO } from "date-fns";
-import { QuizDatoFaktum } from "../../types/quiz.types";
+import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
@@ -9,7 +9,7 @@ import { BodyShort, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 
-export function FaktumDato(props: FaktumProps<QuizDatoFaktum>) {
+export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);

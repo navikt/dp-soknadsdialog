@@ -3,13 +3,13 @@ import styles from "./GeneratorFaktumCard.module.css";
 import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
 
-interface Props {
+interface IProps {
   editFaktum?: () => void;
   deleteFaktum?: () => void;
   allFaktumAnswered?: boolean;
 }
 
-export function GeneratorFaktumCard(props: PropsWithChildren<Props>) {
+export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
   return (
     <div className={styles.card}>
       {props.children}

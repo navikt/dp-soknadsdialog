@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
-import { FaktumProps } from "./Faktum";
+import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { QuizEnvalgFaktum } from "../../types/quiz.types";
+import { IQuizEnvalgFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
-import { SanityAlertText } from "../../types/sanity.types";
+import { ISanityAlertText } from "../../types/sanity.types";
 
-export function FaktumEnvalg(props: FaktumProps<QuizEnvalgFaktum>) {
+export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
-  const [alertText, setAlertText] = useState<SanityAlertText>();
+  const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   useEffect(() => {

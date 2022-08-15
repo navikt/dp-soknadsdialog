@@ -1,12 +1,12 @@
 import React from "react";
 import { BodyShort, Detail, Heading } from "@navikt/ds-react";
-import { FaktumProps } from "../faktum/Faktum";
-import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { IFaktum } from "../faktum/Faktum";
+import { QuizFaktum, IQuizGeneratorFaktum } from "../../types/quiz.types";
 import { useRouter } from "next/router";
 import { getCountryName } from "../../country.utils";
 import { GeneratorFaktumCardWithFakta } from "../generator-faktum-card/GeneratorFaktumCardWithFakta";
 
-export function BarnRegister(props: FaktumProps<QuizGeneratorFaktum>) {
+export function BarnRegister(props: IFaktum<IQuizGeneratorFaktum>) {
   const { locale } = useRouter();
   return (
     <>

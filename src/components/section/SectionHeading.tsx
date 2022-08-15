@@ -1,14 +1,14 @@
 import React from "react";
 import { Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { SanitySeksjon } from "../../types/sanity.types";
+import { ISanitySeksjon } from "../../types/sanity.types";
 
-interface Props {
-  text: SanitySeksjon | undefined;
+interface IProps {
+  text: ISanitySeksjon | undefined;
   fallback: string;
 }
 
-export function SectionHeading(props: Props) {
+export function SectionHeading(props: IProps) {
   return (
     <>
       <Heading spacing size="xlarge" level="2">

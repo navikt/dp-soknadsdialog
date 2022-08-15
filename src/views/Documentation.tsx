@@ -1,13 +1,13 @@
 import { Heading } from "@navikt/ds-react";
 import React from "react";
 import { DocumentItem } from "../components/documentation/DocumentItem";
-import { DokumentkravListe } from "../types/documentation.types";
+import { IDokumentkravListe } from "../types/documentation.types";
 
-interface Props {
-  documents: DokumentkravListe;
+interface IProps {
+  documents: IDokumentkravListe;
 }
 
-export function Documentation(props: Props) {
+export function Documentation(props: IProps) {
   return (
     <>
       <Heading level="2" size="medium">

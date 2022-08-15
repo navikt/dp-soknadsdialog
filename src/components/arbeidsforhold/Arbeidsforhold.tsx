@@ -3,10 +3,10 @@ import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-rea
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import {
   QuizFaktum,
-  QuizGeneratorFaktum,
-  QuizPeriodeFaktumAnswerType,
+  IQuizGeneratorFaktum,
+  IQuizPeriodeFaktumAnswerType,
 } from "../../types/quiz.types";
-import { Faktum, FaktumProps } from "../faktum/Faktum";
+import { Faktum, IFaktum } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../FetchIndicator";
@@ -14,7 +14,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import { PortableText } from "@portabletext/react";
 
-export function Arbeidsforhold(props: FaktumProps<QuizGeneratorFaktum>) {
+export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { isLoading } = useQuiz();
   const { getAppTekst, getSvaralternativTextById, getFaktumTextById } = useSanity();
@@ -125,7 +125,7 @@ export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
 export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]): string {
   const varighetFaktum = arbeidsforhold.find(
     (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet"
-  )?.svar as QuizPeriodeFaktumAnswerType;
+  )?.svar as IQuizPeriodeFaktumAnswerType;
   if (!varighetFaktum) return "Fant ikke periode";
   return `${varighetFaktum.fom} - ${varighetFaktum.tom}`;
 }

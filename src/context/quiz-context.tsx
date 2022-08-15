@@ -1,27 +1,27 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { QuizState } from "../localhost-data/quiz-state-response";
+import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
-import { QuizFaktum, QuizFaktumSvarType, QuizGeneratorFaktum } from "../types/quiz.types";
+import { QuizFaktum, QuizFaktumSvarType, IQuizGeneratorFaktum } from "../types/quiz.types";
 
-export interface QuizContext {
-  soknadState: QuizState;
+export interface IQuizContext {
+  soknadState: IQuizState;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
-  saveGeneratorFaktumToQuiz: (faktum: QuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
+  saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
   isLoading: boolean;
   isError: boolean;
 }
 
-export const QuizContext = createContext<QuizContext | undefined>(undefined);
+export const QuizContext = createContext<IQuizContext | undefined>(undefined);
 
-interface Props {
-  initialState: QuizState;
+interface IProps {
+  initialState: IQuizState;
 }
 
-function QuizProvider(props: PropsWithChildren<Props>) {
+function QuizProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
   const { uuid } = router.query;
-  const [soknadState, setSoknadState] = useState<QuizState>(props.initialState);
+  const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -45,7 +45,7 @@ function QuizProvider(props: PropsWithChildren<Props>) {
     }
   }
 
-  async function saveGeneratorFaktumToQuiz(faktum: QuizGeneratorFaktum, svar: QuizFaktum[][]) {
+  async function saveGeneratorFaktumToQuiz(faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) {
     try {
       setIsError(false);
       setIsLoading(true);

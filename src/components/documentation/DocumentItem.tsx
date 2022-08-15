@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { Dokumentkrav, UploadedFile, FileState } from "../../types/documentation.types";
+import { IDokumentkrav, IUploadedFile, IFileState } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
 import styles from "./DocumentItem.module.css";
 
-interface Props {
-  documentItem: Dokumentkrav;
+interface IProps {
+  documentItem: IDokumentkrav;
 }
 
-export function DocumentItem({ documentItem }: Props) {
+export function DocumentItem({ documentItem }: IProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-  const [handledFiles, setHandlesFiles] = useState<FileState[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<IUploadedFile[]>([]);
+  const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
 
   useEffect(() => {
     loadDokumentkrav();

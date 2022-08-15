@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./FileList.module.css";
 import { FileItem } from "./FileItem";
-import { UploadedFile, FileState, FileHandleState } from "../../types/documentation.types";
+import { IUploadedFile, IFileState, FileHandleState } from "../../types/documentation.types";
 import { Detail } from "@navikt/ds-react";
 
-interface Props {
-  previouslyUploaded: UploadedFile[];
-  handledFiles: FileState[];
+interface IProps {
+  previouslyUploaded: IUploadedFile[];
+  handledFiles: IFileState[];
 }
 
-export function FileList({ previouslyUploaded, handledFiles }: Props) {
+export function FileList({ previouslyUploaded, handledFiles }: IProps) {
   const uploadedLength = previouslyUploaded.length + handledFiles.length;
 
   return (

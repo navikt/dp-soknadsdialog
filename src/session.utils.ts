@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import api from "./api.utils";
 import { useEffect } from "react";
 
-export interface Session extends Record<string, unknown> {
+export interface ISession extends Record<string, unknown> {
   expires_in?: number;
 }
 
@@ -11,9 +11,9 @@ export const useSession = ({
   enforceLogin = true,
   redirectTo = "/api/auth/signin",
   initialSession = undefined,
-}): { session: Session | undefined } => {
+}): { session: ISession | undefined } => {
   const router = useRouter();
-  const { data: session, error } = useSWR<Session>(api(`/auth/session`), {
+  const { data: session, error } = useSWR<ISession>(api(`/auth/session`), {
     fallbackData: initialSession,
   });
 

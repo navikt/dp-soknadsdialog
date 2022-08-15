@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
-import { FaktumProps } from "./Faktum";
+import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { QuizFlervalgFaktum } from "../../types/quiz.types";
+import { IQuizFlervalgFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 
-export function FaktumFlervalg(props: FaktumProps<QuizFlervalgFaktum>) {
+export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getSvaralternativTextById } = useSanity();

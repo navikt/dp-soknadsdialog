@@ -1,16 +1,16 @@
 import React from "react";
 import { Faktum } from "../faktum/Faktum";
-import { QuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 import styles from "./Section.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { SectionHeading } from "./SectionHeading";
 
-interface Props {
-  section: QuizSeksjon;
+interface IProps {
+  section: IQuizSeksjon;
   firstUnansweredFaktumIndex: number;
 }
 
-export function Section(props: Props) {
+export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
 
