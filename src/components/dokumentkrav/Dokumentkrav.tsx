@@ -16,7 +16,7 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
-export const TRIGGER_FILE_UPLOAD = "dokumentkrav.send.inn.na";
+export const TRIGGER_FILE_UPLOAD = "dokumentkrav.svar.send.inn.na";
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;

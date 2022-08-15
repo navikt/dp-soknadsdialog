@@ -12,7 +12,7 @@ export function getDocumentationList(
     krav: [
       {
         id: "5678",
-        beskrivendeId: "dokumentasjonskrav.arbeidsforhold",
+        beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
         filer: [
           {
             filnavn: "hei på du1.jpg",
@@ -31,16 +31,16 @@ export function getDocumentationList(
           },
         ],
         gyldigeValg: [
-          "dokumentkrav.send.inn.na",
-          "dokumentkrav.send.inn.senere",
-          "dokumentkrav.send.inn.noen_andre",
-          "dokumentkrav.sendt.inn.tidligere",
-          "dokumentkrav.send.inn.sender.ikke",
+          "dokumentkrav.svar.send.inn.na",
+          "dokumentkrav.svar.send.inn.senere",
+          "dokumentkrav.svar.send.inn.noen_andre",
+          "dokumentkrav.svar.sendt.inn.tidligere",
+          "dokumentkrav.svar.send.inn.sender.ikke",
         ],
       },
       {
         id: "6678",
-        beskrivendeId: "dokumentasjonskrav.arbeidsforhold",
+        beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
         filer: [
           {
             filnavn: "hei på du1.jpg",
@@ -59,11 +59,11 @@ export function getDocumentationList(
           },
         ],
         gyldigeValg: [
-          "dokumentkrav.send.inn.na",
-          "dokumentkrav.send.inn.senere",
-          "dokumentkrav.send.inn.noen_andre",
-          "dokumentkrav.sendt.inn.tidligere",
-          "dokumentkrav.send.inn.sender.ikke",
+          "dokumentkrav.svar.send.inn.na",
+          "dokumentkrav.svar.send.inn.senere",
+          "dokumentkrav.svar.send.inn.noen_andre",
+          "dokumentkrav.svar.sendt.inn.tidligere",
+          "dokumentkrav.svar.send.inn.sender.ikke",
         ],
       },
     ],
