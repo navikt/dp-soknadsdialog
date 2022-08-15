@@ -58,6 +58,9 @@ jobs:
           cache-to: type=gha,mode=max
           secrets: |
             "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
+            "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
+          build-args: |
+            SENTRY_RELEASE=${{ github.sha }}
 
       - name: Archive NAIS yaml
         # if: github.ref == 'refs/heads/main'
