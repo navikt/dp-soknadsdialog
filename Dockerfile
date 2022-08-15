@@ -14,6 +14,7 @@ ARG SENTRY_RELEASE
 RUN node /usr/src/app/node_modules/@sentry/cli/scripts/install.js
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     echo token=$(cat /run/secrets/SENTRY_AUTH_TOKEN) >> .sentryclirc && \
+    echo $(cut -c1-c20 .sentryclirc) && \
     npm run build
 
 # ---- Runner ----
