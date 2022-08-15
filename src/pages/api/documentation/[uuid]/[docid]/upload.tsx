@@ -13,12 +13,8 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
   const docid = req.query.docid as string;
-  /* eslint-disable @typescript-eslint/no-explicit-any */
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const buffers: any[] = [];
-
-  // if (process.env.NEXT_PUBLIC_LOCALHOST) {
-  //   return res.status(201).json({ content: "created" });
-  // }
 
   if (token && apiToken) {
     const onBehalfOfToken = await apiToken(audienceMellomlagring);
