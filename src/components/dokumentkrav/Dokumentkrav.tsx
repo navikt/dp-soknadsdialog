@@ -6,18 +6,26 @@ import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
 import styles from "./dokumentkrav.module.css";
+import { useSanity } from "../../context/sanity-context";
+import { PortableText } from "@portabletext/react";
+import { HelpText } from "../HelpText";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
-export function Dokumentkrav({ dokumentkrav }: IProps) {
+export const TRIGGER_FILE_UPLOAD = "dokumentkrav.send.inn.na";
+
+export function Dokumentkrav(props: IProps) {
+  const { dokumentkrav } = props;
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState<IUploadedFile[]>([]);
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const kravText = getFaktumTextById(dokumentkrav.beskrivendeId);
 
   useEffect(() => {
     loadDokumentkrav();
@@ -60,18 +68,33 @@ export function Dokumentkrav({ dokumentkrav }: IProps) {
       {!isLoading && !isError && (
         <>
           <Heading size="small" level="3">
-            {dokumentkrav.beskrivendeId}
+            {kravText ? kravText.text : dokumentkrav.beskrivendeId}
           </Heading>
 
-          <RadioGroup legend="Velg hva du vil gjøre" onChange={setAnswer} value={answer}>
-            <Radio value="upload_now">Laste opp nå</Radio>
-            <Radio value="upload_later">Laste opp senere</Radio>
-            <Radio value="somebody_else_sends">Noen andre sender dokumentet</Radio>
-            <Radio value="already_sent">Har sendt tidligere</Radio>
-            <Radio value="will_not_send">Sender ikke</Radio>
+          {kravText?.description && <PortableText value={kravText.description} />}
+
+          <RadioGroup
+            legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
+            onChange={setAnswer}
+            value={answer}
+          >
+            {dokumentkrav.gyldigeValg.map((textId) => {
+              const svaralternativText = getSvaralternativTextById(textId);
+              return (
+                <div key={textId}>
+                  <Radio value={textId}>
+                    {svaralternativText ? svaralternativText.text : textId}
+                  </Radio>
+                </div>
+              );
+            })}
           </RadioGroup>
 
-          {answer === "upload_now" && (
+          {kravText?.helpText && (
+            <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
+          )}
+
+          {answer === TRIGGER_FILE_UPLOAD && (
             <>
               <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
               <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />

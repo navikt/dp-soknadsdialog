@@ -1,12 +1,20 @@
 export interface IDokumentkravListe {
-  id: string;
-  list: IDokumentkrav[];
+  soknad_uuid: string;
+  krav: IDokumentkrav[];
 }
 
 export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
-  files?: string[];
+  filer?: IDokumentkravFil[];
+  gyldigeValg: string[];
+  svar?: string;
+}
+
+export interface IDokumentkravFil {
+  filnavn: string;
+  urn: string;
+  timestamp: string;
 }
 
 export interface IUploadedFile {

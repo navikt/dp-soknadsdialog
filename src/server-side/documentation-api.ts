@@ -7,19 +7,64 @@ export function getDocumentationList(
 ): Promise<IDokumentkravListe> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`;
 
-  //if (process.env.NEXT_PUBLIC_LOCALHOST) {
   const response: IDokumentkravListe = {
-    id: "12345",
-    list: [
+    soknad_uuid: "12345",
+    krav: [
       {
         id: "5678",
-        beskrivendeId: "arbeidsforhold.1",
-        files: ["urn:dokumen1", "urn:dokumen2", "urn:dokumen3"],
+        beskrivendeId: "dokumentasjonskrav.arbeidsforhold",
+        filer: [
+          {
+            filnavn: "hei på du1.jpg",
+            urn: "urn:dokumen1",
+            timestamp: "1660571365067",
+          },
+          {
+            filnavn: "hei på du2.jpg",
+            urn: "urn:dokumen2",
+            timestamp: "1660571365067",
+          },
+          {
+            filnavn: "hei på du3.jpg",
+            urn: "urn:dokumen3",
+            timestamp: "1660571365067",
+          },
+        ],
+        gyldigeValg: [
+          "dokumentkrav.send.inn.na",
+          "dokumentkrav.send.inn.senere",
+          "dokumentkrav.send.inn.noen_andre",
+          "dokumentkrav.sendt.inn.tidligere",
+          "dokumentkrav.send.inn.sender.ikke",
+        ],
       },
       {
-        id: "91011",
-        beskrivendeId: "arbeidsforhold.2",
-        files: [],
+        id: "6678",
+        beskrivendeId: "dokumentasjonskrav.arbeidsforhold",
+        filer: [
+          {
+            filnavn: "hei på du1.jpg",
+            urn: "urn:dokumen1",
+            timestamp: "1660571365067",
+          },
+          {
+            filnavn: "hei på du2.jpg",
+            urn: "urn:dokumen2",
+            timestamp: "1660571365067",
+          },
+          {
+            filnavn: "hei på du3.jpg",
+            urn: "urn:dokumen3",
+            timestamp: "1660571365067",
+          },
+        ],
+        gyldigeValg: [
+          "dokumentkrav.send.inn.na",
+          "dokumentkrav.send.inn.senere",
+          "dokumentkrav.send.inn.noen_andre",
+          "dokumentkrav.sendt.inn.tidligere",
+          "dokumentkrav.send.inn.sender.ikke",
+        ],
       },
     ],
   };
