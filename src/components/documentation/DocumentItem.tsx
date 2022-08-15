@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { DocumentListItem, UploadedFile, FileState } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
@@ -13,9 +13,7 @@ interface Props {
 
 export function DocumentItem({ documentItem }: Props) {
   const router = useRouter();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState<string>("");
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
@@ -47,8 +45,9 @@ export function DocumentItem({ documentItem }: Props) {
   return (
     <div className={styles.documentItem}>
       {isLoading && <span>Laster</span>}
+      {isError && <Alert variant="error">Det skjedde noe feil</Alert>}
 
-      {!isLoading && (
+      {!isLoading && !isError && (
         <>
           <Heading size="small" level="3">
             {documentItem.beskrivendeId}
