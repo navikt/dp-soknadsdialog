@@ -1,0 +1,7 @@
+.documentItem {
+  margin-bottom: 40px;
+}
+
+.documentItem:last-child {
+  margin-bottom: 0;
+}
