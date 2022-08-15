@@ -91,16 +91,13 @@ export function FileUploader({ id, onHandle }: Props) {
         if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
           fileObj.state = FileHandleState.Error;
           fileObj.error = ErrorType.FileFormat;
-
-          tempFileList.push(fileObj);
         } else if (file.size > MAX_FILE_SIZE) {
           fileObj.state = FileHandleState.Error;
           fileObj.error = ErrorType.FileSize;
-          tempFileList.push(fileObj);
         } else {
           fileObj.state = FileHandleState.AwaitingUpload;
-          tempFileList.push(fileObj);
         }
+        tempFileList.push(fileObj);
       });
 
       addHandledFiles(tempFileList);
