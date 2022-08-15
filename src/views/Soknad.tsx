@@ -124,7 +124,7 @@ export function Soknad() {
       {isError && (
         <p className={classNames(styles.autoSaveText, "navds-error-message")}>
           <FileError />
-          Lagring feilet, det har skjedd noe feil
+          Kunne ikke lagre
         </p>
       )}
     </main>
