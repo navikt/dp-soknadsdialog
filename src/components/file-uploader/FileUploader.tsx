@@ -11,10 +11,11 @@ interface Props {
   onHandle: (value: FileState[]) => void;
 }
 
+const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
+const MAX_FILE_SIZE = 52428800; // 400mb
+
 export function FileUploader({ id, onHandle }: Props) {
   const router = useRouter();
-  const FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
-  const MAX_FILE_SIZE = 52428800; // 400mb
   const [handledFiles, setHandledFiles] = useState<FileState[]>([]);
 
   useEffect(() => {
@@ -87,7 +88,7 @@ export function FileUploader({ id, onHandle }: Props) {
         const id = `${new Date().getTime()}-${file.name}`;
         const fileObj: FileState = { id: id, file: file, name: file.name };
 
-        if (!FILE_FORMATS.includes(file.type)) {
+        if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
           fileObj.state = FileHandleState.Error;
           fileObj.error = ErrorType.FileFormat;
 
