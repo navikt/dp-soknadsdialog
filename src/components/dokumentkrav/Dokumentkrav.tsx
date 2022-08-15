@@ -5,13 +5,13 @@ import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
-import styles from "./DocumentItem.module.css";
+import styles from "./dokumentkrav.module.css";
 
 interface IProps {
-  documentItem: IDokumentkrav;
+  dokumentkrav: IDokumentkrav;
 }
 
-export function DocumentItem({ documentItem }: IProps) {
+export function Dokumentkrav({ dokumentkrav }: IProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -26,19 +26,18 @@ export function DocumentItem({ documentItem }: IProps) {
   async function loadDokumentkrav() {
     setIsLoading(true);
 
-    const url = api(`/documentation/${router.query.uuid}/${documentItem.id}`);
+    const url = api(`/documentation/${router.query.uuid}/${dokumentkrav.id}`);
 
-    const dokumentasjonskravRequest = fetch(url)
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(res.statusText);
-        }
-
-        return res;
-      })
-      .then((res) => res.json());
     try {
-      const response = await dokumentasjonskravRequest;
+      const response = await fetch(url)
+        .then((res) => {
+          if (!res.ok) {
+            throw Error(res.statusText);
+          }
+
+          return res;
+        })
+        .then((res) => res.json());
       setUploadedFiles(response);
       setIsLoading(false);
     } catch {
@@ -54,14 +53,14 @@ export function DocumentItem({ documentItem }: IProps) {
   // TODO: Spinner og error handling
 
   return (
-    <div className={styles.documentItem}>
+    <div className={styles.dokumentkrav}>
       {isLoading && <span>Laster</span>}
       {isError && <Alert variant="error">Det skjedde noe feil</Alert>}
 
       {!isLoading && !isError && (
         <>
           <Heading size="small" level="3">
-            {documentItem.beskrivendeId}
+            {dokumentkrav.beskrivendeId}
           </Heading>
 
           <RadioGroup legend="Velg hva du vil gjøre" onChange={setAnswer} value={answer}>
@@ -74,7 +73,7 @@ export function DocumentItem({ documentItem }: IProps) {
 
           {answer === "upload_now" && (
             <>
-              <FileUploader id={documentItem.id} onHandle={setHandlesFiles} />
+              <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
               <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
             </>
           )}

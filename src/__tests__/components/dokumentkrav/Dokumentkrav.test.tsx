@@ -1,10 +1,10 @@
 import React from "react";
 import { render, waitFor, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DocumentItem } from "../../../components/documentation/DocumentItem";
+import { Dokumentkrav } from "../../../components/dokumentkrav/Dokumentkrav";
 import fetchMock from "fetch-mock-jest";
 
-const mockdataDocumentItem = {
+const mockdataDokumentkrav = {
   id: "5678",
   beskrivendeId: "arbeidsforhold.1",
   files: ["urn:dokumen1", "urn:dokumen2", "urn:dokumen3"],
@@ -23,19 +23,19 @@ afterEach(() => {
 });
 
 test("Shows document item info", async () => {
-  render(<DocumentItem documentItem={mockdataDocumentItem} />);
+  render(<Dokumentkrav dokumentkrav={mockdataDokumentkrav} />);
 
   await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
 
   await waitFor(() => {
-    expect(screen.queryByText(mockdataDocumentItem.beskrivendeId)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.beskrivendeId)).toBeInTheDocument();
   });
 });
 
 test("Shows upload when question has a specific answer", async () => {
   const user = userEvent.setup();
 
-  render(<DocumentItem documentItem={mockdataDocumentItem} />);
+  render(<Dokumentkrav dokumentkrav={mockdataDokumentkrav} />);
 
   await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
 

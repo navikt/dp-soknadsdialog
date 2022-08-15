@@ -1,7 +1,7 @@
-.documentItem {
+.dokumentkrav {
   margin-bottom: 40px;
 }
 
-.documentItem:last-child {
+.dokumentkrav:last-child {
   margin-bottom: 0;
 }
