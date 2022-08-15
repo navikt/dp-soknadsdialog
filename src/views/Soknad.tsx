@@ -65,11 +65,9 @@ export function Soknad() {
         />
       </div>
 
-      {isLoading && (
-        <div className={styles.loaderContainer}>
-          <FetchIndicator isLoading={isLoading} />
-        </div>
-      )}
+      <div className={styles.loaderContainer}>
+        <FetchIndicator isLoading={isLoading} />
+      </div>
 
       <nav className={styles.navigation}>
         {isFirstSection && (

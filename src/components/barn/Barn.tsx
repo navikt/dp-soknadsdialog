@@ -62,11 +62,7 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {isLoading && (
-                  <div>
-                    <FetchIndicator isLoading={isLoading} />
-                  </div>
-                )}
+                <FetchIndicator isLoading={isLoading} />
 
                 <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                   Lagre og lukk

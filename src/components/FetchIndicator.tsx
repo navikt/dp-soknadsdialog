@@ -16,13 +16,16 @@ export function FetchIndicator({ isLoading = false }) {
       setTimeout(() => {
         setShowText(true);
       }, textDisplayDelayMs);
+    } else {
+      setIsLoadingInternal(isLoading);
+      setShowText(false);
     }
   }, [isLoading]);
 
   return (
-    <>
+    <div className={styles.loader}>
       {isLoadingInternal && (
-        <div className={styles.loader}>
+        <>
           <div className={styles.dots}>
             <div className={styles.dotContainer}>
               <div className={classNames(styles.dot, styles.dot1)}></div>
@@ -35,8 +38,8 @@ export function FetchIndicator({ isLoading = false }) {
             </div>
           </div>
           {showText && <BodyShort tabIndex={0}>{getAppTekst("laster-sporsmal.tittel")}</BodyShort>}
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
