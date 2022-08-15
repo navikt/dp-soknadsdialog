@@ -12,7 +12,8 @@ COPY . /usr/src/app
 
 ARG SENTRY_RELEASE
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    echo token=$(cat /run/secrets/SENTRY_AUTH_TOKEN) >> .sentryclirc && \
+    echo "[auth]\n"\
+         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc && \
     npm run build
 
 # ---- Runner ----
