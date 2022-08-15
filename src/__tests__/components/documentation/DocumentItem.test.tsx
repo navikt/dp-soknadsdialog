@@ -1,6 +1,5 @@
 import React from "react";
 import { render, waitFor, screen, waitForElementToBeRemoved } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import userEvent from "@testing-library/user-event";
 import { DocumentItem } from "../../../components/documentation/DocumentItem";
 import fetchMock from "fetch-mock-jest";
