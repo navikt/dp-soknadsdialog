@@ -1,9 +1,9 @@
-export interface Documents {
+export interface DokumentkravListe {
   id: string;
-  list: DocumentListItem[];
+  list: Dokumentkrav[];
 }
 
-export interface DocumentListItem {
+export interface Dokumentkrav {
   id: string;
   beskrivendeId: string;
   files?: string[];

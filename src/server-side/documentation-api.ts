@@ -1,14 +1,14 @@
-import { Documents } from "../types/documentation.types";
+import { DokumentkravListe } from "../types/documentation.types";
 
 export function getDocumentationList(
   uuid: string,
   /* eslint-disable @typescript-eslint/no-unused-vars */
   onBehalfOfToken: string
-): Promise<Documents> {
+): Promise<DokumentkravListe> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`;
 
   //if (process.env.NEXT_PUBLIC_LOCALHOST) {
-  const response: Documents = {
+  const response: DokumentkravListe = {
     id: "12345",
     list: [
       {

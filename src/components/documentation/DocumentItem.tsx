@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { DocumentListItem, UploadedFile, FileState } from "../../types/documentation.types";
+import { Dokumentkrav, UploadedFile, FileState } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import styles from "./DocumentItem.module.css";
 
 interface Props {
-  documentItem: DocumentListItem;
+  documentItem: Dokumentkrav;
 }
 
 export function DocumentItem({ documentItem }: Props) {

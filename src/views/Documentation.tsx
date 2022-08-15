@@ -1,10 +1,10 @@
 import { Heading } from "@navikt/ds-react";
 import React from "react";
 import { DocumentItem } from "../components/documentation/DocumentItem";
-import { Documents } from "../types/documentation.types";
+import { DokumentkravListe } from "../types/documentation.types";
 
 interface Props {
-  documents: Documents;
+  documents: DokumentkravListe;
 }
 
 export function Documentation(props: Props) {

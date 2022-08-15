@@ -12,12 +12,12 @@ import { QuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
-import { Documents } from "../../types/documentation.types";
+import { DokumentkravListe } from "../../types/documentation.types";
 
 interface Props {
   soknadState: QuizState | undefined;
   sanityTexts: SanityTexts;
-  documents: Documents | undefined;
+  documents: DokumentkravListe | undefined;
 }
 
 export async function getServerSideProps(
