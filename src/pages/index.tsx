@@ -29,7 +29,7 @@ export async function getServerSideProps(
 }
 
 export default function Soknad(props: Props) {
-  Sentry.captureEvent({ message: "App init" });
+  Sentry.captureEvent({ message: "App init v2" });
   if (!props.sanityTexts.apptekster) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
