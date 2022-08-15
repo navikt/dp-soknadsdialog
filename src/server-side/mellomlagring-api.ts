@@ -11,7 +11,7 @@ export function getDocumentation(uuid: string, docid: string, onBehalfOfToken: s
   })
     .then((response: Response) => response.json())
     .catch((error) => {
-      return Promise.reject(error);
+      return Promise.reject(new Error(error));
     });
 }
 
