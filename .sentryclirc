@@ -1,6 +1,1 @@
-[defaults]
-project=dp-soknadsdialog
-url=https://sentry.gc.nav.no/
-org=nav
-
 [auth]
