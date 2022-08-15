@@ -76,6 +76,13 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     Lagre og lukk
                   </Button>
+
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
+                  >
+                    Slett
+                  </Button>
                 </div>
               </Modal.Content>
             </Modal>
