@@ -18,32 +18,24 @@ export function FileList({ previouslyUploaded, handledFiles }: Props) {
         <>
           <Detail uppercase>Filer ({uploadedLength})</Detail>
           <ul className={styles.fileList}>
-            {previouslyUploaded.map((file) => {
-              return (
-                <FileItem
-                  key={file.urn}
-                  id={file.urn}
-                  name={file.filnavn}
-                  state={FileHandleState.Uploaded}
-                />
-              );
-            })}
+            {previouslyUploaded.map((file) => (
+              <FileItem
+                key={file.urn}
+                id={file.urn}
+                name={file.filnavn}
+                state={FileHandleState.Uploaded}
+              />
+            ))}
 
-            {handledFiles.length > 0 && (
-              <>
-                {handledFiles.map((file) => {
-                  return (
-                    <FileItem
-                      key={file.id}
-                      id={file.id}
-                      name={file.name}
-                      state={file.state}
-                      error={file.error}
-                    />
-                  );
-                })}
-              </>
-            )}
+            {handledFiles.map((file) => (
+              <FileItem
+                key={file.id}
+                id={file.id}
+                name={file.name}
+                state={file.state}
+                error={file.error}
+              />
+            ))}
           </ul>
         </>
       )}
