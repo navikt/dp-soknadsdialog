@@ -15,7 +15,7 @@ export function DocumentItem({ documentItem }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [answer, setAnswer] = useState<string>("");
+  const [answer, setAnswer] = useState("");
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [handledFiles, setHandlesFiles] = useState<FileState[]>([]);
 
