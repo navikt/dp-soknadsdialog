@@ -9,6 +9,8 @@ import styles from "./dokumentkrav.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
+import { ISanityAlertText } from "../../types/sanity.types";
+import { AlertText } from "../AlertText";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -26,10 +28,17 @@ export function Dokumentkrav(props: IProps) {
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const kravText = getFaktumTextById(dokumentkrav.beskrivendeId);
+  const [alertText, setAlertText] = useState<ISanityAlertText>();
 
   useEffect(() => {
     loadDokumentkrav();
   }, []);
+
+  useEffect(() => {
+    if (answer !== "") {
+      setAlertText(getSvaralternativTextById(answer)?.alertText);
+    }
+  }, [answer]);
 
   async function loadDokumentkrav() {
     setIsLoading(true);
@@ -89,6 +98,8 @@ export function Dokumentkrav(props: IProps) {
               );
             })}
           </RadioGroup>
+
+          {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
 
           {kravText?.helpText && (
             <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
