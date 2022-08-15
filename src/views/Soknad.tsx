@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button } from "@navikt/ds-react";
+import React, { useEffect, useState } from "react";
+import { Button, Alert } from "@navikt/ds-react";
 import { useQuiz } from "../context/quiz-context";
 import { Section } from "../components/section/Section";
 import { Left, Right } from "@navikt/ds-icons";
@@ -7,11 +7,14 @@ import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
 import { useSanity } from "../context/sanity-context";
+import { FileSuccess, FileError } from "@navikt/ds-icons";
+import classNames from "classnames";
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading } = useQuiz();
+  const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -32,9 +35,19 @@ export function Soknad() {
     }
   }, []);
 
+  useEffect(() => {
+    if (showNotFinishedError) {
+      setShowNotFinishedError(false);
+    }
+  }, [soknadState]);
+
   function goNext() {
-    const nextIndex = sectionParam && parseInt(sectionParam) + 1;
-    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    if (currentSection.ferdig) {
+      const nextIndex = sectionParam && parseInt(sectionParam) + 1;
+      router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    } else {
+      setShowNotFinishedError(true);
+    }
   }
 
   function goPrevious() {
@@ -69,6 +82,12 @@ export function Soknad() {
         <FetchIndicator isLoading={isLoading} />
       </div>
 
+      {showNotFinishedError && (
+        <Alert variant="error" size="medium" inline>
+          Du må svare på alle spørsmålene
+        </Alert>
+      )}
+
       <nav className={styles.navigation}>
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
@@ -83,7 +102,7 @@ export function Soknad() {
           </Button>
         )}
 
-        {currentSection.ferdig && !soknadState.ferdig && (
+        {!soknadState.ferdig && (
           <Button onClick={() => goNext()}>
             {getAppTekst("knapp.neste")} <Right />
           </Button>
@@ -94,7 +113,18 @@ export function Soknad() {
         )}
       </nav>
 
-      {isError && <pre>Det har gått ått skaugum</pre>}
+      {!isError && (
+        <p className={styles.autoSaveText}>
+          <FileSuccess />
+          Lagret automatisk
+        </p>
+      )}
+      {isError && (
+        <p className={classNames(styles.autoSaveText, "navds-error-message")}>
+          <FileError />
+          Lagring feilet, det har skjedd noe feil
+        </p>
+      )}
     </main>
   );
 }

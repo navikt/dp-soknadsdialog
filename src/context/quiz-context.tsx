@@ -79,7 +79,13 @@ function QuizProvider(props: PropsWithChildren<Props>) {
 
   return (
     <QuizContext.Provider
-      value={{ soknadState, saveFaktumToQuiz, saveGeneratorFaktumToQuiz, isLoading, isError }}
+      value={{
+        soknadState,
+        saveFaktumToQuiz,
+        saveGeneratorFaktumToQuiz,
+        isLoading,
+        isError,
+      }}
     >
       {props.children}
     </QuizContext.Provider>
