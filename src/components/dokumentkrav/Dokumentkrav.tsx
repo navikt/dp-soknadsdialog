@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { IDokumentkrav, IUploadedFile, IFileState } from "../../types/documentation.types";
+import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { IDokumentkrav, IFileState, IDokumentkravFil } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
-import api from "../../api.utils";
-import { useRouter } from "next/router";
 import styles from "./dokumentkrav.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -20,47 +18,18 @@ export const TRIGGER_FILE_UPLOAD = "dokumentkrav.svar.send.inn.na";
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
   const [answer, setAnswer] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<IUploadedFile[]>([]);
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const kravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
-
-  useEffect(() => {
-    loadDokumentkrav();
-  }, []);
+  const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
 
   useEffect(() => {
     if (answer !== "") {
       setAlertText(getSvaralternativTextById(answer)?.alertText);
     }
   }, [answer]);
-
-  async function loadDokumentkrav() {
-    setIsLoading(true);
-
-    const url = api(`/documentation/${router.query.uuid}/${dokumentkrav.id}`);
-
-    try {
-      const response = await fetch(url)
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(res.statusText);
-          }
-
-          return res;
-        })
-        .then((res) => res.json());
-      setUploadedFiles(response);
-      setIsLoading(false);
-    } catch {
-      setIsError(true);
-    }
-  }
 
   function sendDocuments() {
     alert("TODO: Send inn svar");
@@ -71,49 +40,40 @@ export function Dokumentkrav(props: IProps) {
 
   return (
     <div className={styles.dokumentkrav}>
-      {isLoading && <span>Laster</span>}
-      {isError && <Alert variant="error">Det skjedde noe feil</Alert>}
+      <Heading size="small" level="3">
+        {kravText ? kravText.text : dokumentkrav.beskrivendeId}
+      </Heading>
 
-      {!isLoading && !isError && (
+      {kravText?.description && <PortableText value={kravText.description} />}
+
+      <RadioGroup
+        legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
+        onChange={setAnswer}
+        value={answer}
+      >
+        {dokumentkrav.gyldigeValg.map((textId) => {
+          const svaralternativText = getSvaralternativTextById(textId);
+          return (
+            <div key={textId}>
+              <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>
+            </div>
+          );
+        })}
+      </RadioGroup>
+
+      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+
+      {kravText?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
+      )}
+
+      {answer === TRIGGER_FILE_UPLOAD && (
         <>
-          <Heading size="small" level="3">
-            {kravText ? kravText.text : dokumentkrav.beskrivendeId}
-          </Heading>
-
-          {kravText?.description && <PortableText value={kravText.description} />}
-
-          <RadioGroup
-            legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
-            onChange={setAnswer}
-            value={answer}
-          >
-            {dokumentkrav.gyldigeValg.map((textId) => {
-              const svaralternativText = getSvaralternativTextById(textId);
-              return (
-                <div key={textId}>
-                  <Radio value={textId}>
-                    {svaralternativText ? svaralternativText.text : textId}
-                  </Radio>
-                </div>
-              );
-            })}
-          </RadioGroup>
-
-          {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
-
-          {kravText?.helpText && (
-            <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
-          )}
-
-          {answer === TRIGGER_FILE_UPLOAD && (
-            <>
-              <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
-              <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
-            </>
-          )}
-          {answer !== "" && <Button onClick={sendDocuments}>Send inn</Button>}
+          <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
+          <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
         </>
       )}
+      {answer !== "" && <Button onClick={sendDocuments}>Send inn</Button>}
     </div>
   );
 }

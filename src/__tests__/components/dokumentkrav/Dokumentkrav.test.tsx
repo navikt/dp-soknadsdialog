@@ -1,8 +1,7 @@
 import React from "react";
-import { render, waitFor, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Dokumentkrav, TRIGGER_FILE_UPLOAD } from "../../../components/dokumentkrav/Dokumentkrav";
-import fetchMock from "fetch-mock-jest";
 import { SanityProvider } from "../../../context/sanity-context";
 
 const mockdataDokumentkrav = {
@@ -10,7 +9,7 @@ const mockdataDokumentkrav = {
   krav: [
     {
       id: "5678",
-      beskrivendeId: "dokumentasjonskrav.arbeidsforhold",
+      beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
       filer: [
         {
           filnavn: "hei på du1.jpg",
@@ -29,20 +28,15 @@ const mockdataDokumentkrav = {
         },
       ],
       gyldigeValg: [
-        "dokumentkrav.send.inn.na",
-        "dokumentkrav.send.inn.senere",
-        "dokumentkrav.send.inn.noen_andre",
-        "dokumentkrav.sendt.inn.tidligere",
-        "dokumentkrav.send.inn.sender.ikke",
+        "dokumentkrav.svar.send.inn.na",
+        "dokumentkrav.svar.send.inn.senere",
+        "dokumentkrav.svar.send.inn.noen_andre",
+        "dokumentkrav.svar.sendt.inn.tidligere",
+        "dokumentkrav.svar.send.inn.sender.ikke",
       ],
     },
   ],
 };
-
-const mockdataDocuments = [
-  { filnavn: "fil1.jpg", urn: "urn:vedlegg:id/fil1" },
-  { filnavn: "filnavn2.jpg", urn: "urn:vedlegg:id/fil2" },
-];
 
 const mockSanity = {
   fakta: [],
@@ -53,13 +47,6 @@ const mockSanity = {
   startside: [],
 };
 
-beforeEach(() => {
-  fetchMock.get("/api/documentation/localhost-uuid/5678", mockdataDocuments);
-});
-afterEach(() => {
-  fetchMock.mockReset();
-});
-
 test("Shows document item info", async () => {
   render(
     <SanityProvider initialState={mockSanity}>
@@ -67,7 +54,7 @@ test("Shows document item info", async () => {
     </SanityProvider>
   );
 
-  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
+  //  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
 
   await waitFor(() => {
     expect(screen.queryByText(mockdataDokumentkrav.krav[0].beskrivendeId)).toBeInTheDocument();
@@ -83,13 +70,13 @@ test("Shows upload when question has a specific answer", async () => {
     </SanityProvider>
   );
 
-  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
+  //  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
 
   await user.click(screen.getByLabelText(TRIGGER_FILE_UPLOAD));
 
   await waitFor(() => {
     expect(screen.queryByText("Dra filene hit eller")).toBeInTheDocument();
-    expect(screen.queryByText(mockdataDocuments[0].filnavn)).toBeInTheDocument();
-    expect(screen.queryByText(mockdataDocuments[1].filnavn)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[0].filnavn)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[1].filnavn)).toBeInTheDocument();
   });
 });

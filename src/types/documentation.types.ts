@@ -17,11 +17,6 @@ export interface IDokumentkravFil {
   timestamp: string;
 }
 
-export interface IUploadedFile {
-  urn: string;
-  filnavn: string;
-}
-
 export interface IFileState {
   id: string;
   name?: string;

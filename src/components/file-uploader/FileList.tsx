@@ -1,11 +1,11 @@
 import React from "react";
 import styles from "./FileList.module.css";
 import { FileItem } from "./FileItem";
-import { IUploadedFile, IFileState, FileHandleState } from "../../types/documentation.types";
+import { IFileState, FileHandleState, IDokumentkravFil } from "../../types/documentation.types";
 import { Detail } from "@navikt/ds-react";
 
 interface IProps {
-  previouslyUploaded: IUploadedFile[];
+  previouslyUploaded: IDokumentkravFil[];
   handledFiles: IFileState[];
 }
 
