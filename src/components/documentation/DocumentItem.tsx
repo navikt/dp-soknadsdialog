@@ -20,20 +20,31 @@ export function DocumentItem({ documentItem }: Props) {
   const [handledFiles, setHandlesFiles] = useState<FileState[]>([]);
 
   useEffect(() => {
+    loadDokumentkrav();
+  }, []);
+
+  async function loadDokumentkrav() {
     setIsLoading(true);
 
     const url = api(`/documentation/${router.query.uuid}/${documentItem.id}`);
 
-    fetch(url)
-      .then((res) => res.json())
+    const dokumentasjonskravRequest = fetch(url)
       .then((res) => {
-        setUploadedFiles(res);
-        setIsLoading(false);
+        if (!res.ok) {
+          throw Error(res.statusText);
+        }
+
+        return res;
       })
-      .catch(() => {
-        setIsError(true);
-      });
-  }, []);
+      .then((res) => res.json());
+    try {
+      const response = await dokumentasjonskravRequest;
+      setUploadedFiles(response);
+      setIsLoading(false);
+    } catch {
+      setIsError(true);
+    }
+  }
 
   function sendDocuments() {
     alert("TODO: Send inn svar");

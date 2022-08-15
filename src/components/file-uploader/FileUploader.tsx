@@ -41,7 +41,7 @@ export function FileUploader({ id, onHandle }: Props) {
     setHandledFiles(copy);
   }
 
-  function uploadFile(fileObj: FileState, index: number) {
+  async function uploadFile(fileObj: FileState, index: number) {
     if (!fileObj.file) {
       return;
     }
@@ -51,33 +51,29 @@ export function FileUploader({ id, onHandle }: Props) {
     const url = api(`/documentation/${router.query.uuid}/${id}/upload`);
 
     // Do NOT specify content-type here, it gets browser generated with the correct boundary by default
-    fetch(url, {
+    const postRequest = fetch(url, {
       method: "Post",
       headers: {
         accept: "application/json",
       },
       body: requestData,
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error(res.statusText);
-        }
+    }).then((res) => res.json());
 
-        return res;
-      })
-      .then((res) => res.json())
-      .then((res) => {
-        fileObj.state = FileHandleState.Uploaded;
-        fileObj.urn = res.urn;
+    try {
+      const response = await postRequest;
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      fileObj.state = FileHandleState.Uploaded;
+      fileObj.urn = response.urn;
 
-        changeHandledFile(fileObj, index);
-      })
-      .catch(() => {
-        fileObj.state = FileHandleState.Error;
-        fileObj.error = ErrorType.ServerError;
+      changeHandledFile(fileObj, index);
+    } catch {
+      fileObj.state = FileHandleState.Error;
+      fileObj.error = ErrorType.ServerError;
 
-        changeHandledFile(fileObj, index);
-      });
+      changeHandledFile(fileObj, index);
+    }
   }
 
   const onDrop = useCallback(
