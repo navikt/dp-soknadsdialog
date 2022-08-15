@@ -1,14 +1,14 @@
 import { ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import React from "react";
-import { SanityHelpText } from "../types/sanity.types";
+import { ISanityHelpText } from "../types/sanity.types";
 
-interface Props {
-  helpText: SanityHelpText;
+interface IProps {
+  helpText: ISanityHelpText;
   className?: string;
 }
 
-export function HelpText(props: Props) {
+export function HelpText(props: IProps) {
   const { title, body } = props.helpText;
 
   return (

@@ -1,15 +1,15 @@
-import { QuizSeksjon } from "../types/quiz.types";
+import { IQuizSeksjon } from "../types/quiz.types";
 import { seksjonBostedsland } from "./seksjoner/seksjonBostedsland";
 import { seksjonGjenopptak } from "./seksjoner/seksjonGjenopptak";
 import { seksjonArbeidsforhold } from "./seksjoner/seksjonArbeidsforhold";
 import { seksjonBarnetillegg } from "./seksjoner/seksjonBarnetillegg";
 
-export interface QuizState {
+export interface IQuizState {
   ferdig: boolean;
-  seksjoner: QuizSeksjon[];
+  seksjoner: IQuizSeksjon[];
 }
 
-export const quizStateResponse: QuizState = {
+export const quizStateResponse: IQuizState = {
   ferdig: false,
   seksjoner: [seksjonBostedsland, seksjonGjenopptak, seksjonArbeidsforhold, seksjonBarnetillegg],
 };

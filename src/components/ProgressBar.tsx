@@ -2,12 +2,12 @@ import React from "react";
 import styles from "./ProgressBar.module.css";
 import { Label } from "@navikt/ds-react";
 
-interface ProgressBarProps {
+interface IProgressBar {
   totalSteps: number;
   currentStep: number;
 }
 
-export function ProgressBar(props: ProgressBarProps) {
+export function ProgressBar(props: IProgressBar) {
   const progressPercentage = () => {
     return (props.currentStep / props.totalSteps) * 100;
   };

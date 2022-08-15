@@ -1,7 +1,7 @@
 import { quizMalResponse } from "../localhost-data/quiz-mal-response";
-import { QuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
+import { IQuizState, quizStateResponse } from "../localhost-data/quiz-state-response";
 import { sanityClient } from "../../sanity-client";
-import { SanityTexts } from "../types/sanity.types";
+import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { textStructureToHtml } from "../sanity/textStructureToHtml";
 
@@ -57,7 +57,7 @@ export function getPaabegynt(onBehalfOfToken: string) {
     });
 }
 
-interface LocalhostOpts {
+interface ILocalhostOpts {
   firstRender?: boolean;
   summary?: boolean;
 }
@@ -65,8 +65,8 @@ interface LocalhostOpts {
 export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
-  localhostOpts: LocalhostOpts = {}
-): Promise<QuizState> {
+  localhostOpts: ILocalhostOpts = {}
+): Promise<IQuizState> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     if (localhostOpts.firstRender) {
       const quizSeksjoner = quizStateResponse.seksjoner.map((seksjon) => {
@@ -102,7 +102,7 @@ export async function completeSoknad(
 ): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`;
 
-  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
+  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
     baseLang: "nb",
     lang,
   });

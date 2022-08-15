@@ -1,9 +1,9 @@
 import { BodyShort } from "@navikt/ds-react";
 import React from "react";
-import { ErrorType, FileHandleState, FileState } from "../../types/documentation.types";
+import { ErrorType, FileHandleState, IFileState } from "../../types/documentation.types";
 import styles from "./FileItem.module.css";
 
-export function FileItem(props: FileState) {
+export function FileItem(props: IFileState) {
   return (
     <li className={styles.fileItem}>
       <BodyShort size="medium">{props.name}</BodyShort>

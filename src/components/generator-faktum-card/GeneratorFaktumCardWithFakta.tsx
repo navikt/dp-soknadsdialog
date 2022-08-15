@@ -3,11 +3,11 @@ import { Faktum } from "../faktum/Faktum";
 import { QuizFaktum } from "../../types/quiz.types";
 import styles from "./GeneratorFaktumCard.module.css";
 
-interface Props {
+interface IProps {
   fakta: QuizFaktum[];
 }
 
-export function GeneratorFaktumCardWithFakta(props: PropsWithChildren<Props>) {
+export function GeneratorFaktumCardWithFakta(props: PropsWithChildren<IProps>) {
   return (
     <div className={styles.card}>
       {props.children}

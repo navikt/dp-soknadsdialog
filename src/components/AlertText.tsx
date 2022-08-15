@@ -2,15 +2,15 @@ import { Alert, Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import classNames from "classnames";
 import React from "react";
-import { SanityAlertText } from "../types/sanity.types";
+import { ISanityAlertText } from "../types/sanity.types";
 import styles from "./AlertText.module.css";
 
-interface Props {
-  alertText: SanityAlertText;
+interface IProps {
+  alertText: ISanityAlertText;
   spacingTop?: boolean;
 }
 
-export function AlertText(props: Props) {
+export function AlertText(props: IProps) {
   const { type, title, body } = props.alertText;
 
   return (

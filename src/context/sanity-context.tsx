@@ -1,20 +1,20 @@
 import React, { PropsWithChildren } from "react";
 import {
-  SanityFaktum,
-  SanityLandGruppe,
-  SanitySeksjon,
-  SanityStartSideTekst,
-  SanitySvaralternativ,
-  SanityTexts,
+  ISanityFaktum,
+  ISanityLandGruppe,
+  ISanitySeksjon,
+  ISanityStartSideTekst,
+  ISanitySvaralternativ,
+  ISanityTexts,
 } from "../types/sanity.types";
 
-export const SanityContext = React.createContext<SanityTexts | undefined>(undefined);
+export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
 
-interface Props {
-  initialState: SanityTexts;
+interface IProps {
+  initialState: ISanityTexts;
 }
 
-function SanityProvider(props: PropsWithChildren<Props>) {
+function SanityProvider(props: PropsWithChildren<IProps>) {
   return (
     <SanityContext.Provider value={props.initialState}>{props.children}</SanityContext.Provider>
   );
@@ -26,19 +26,19 @@ function useSanity() {
     throw new Error("useSanity must be used within a SanityProvider");
   }
 
-  function getSeksjonTextById(textId: string): SanitySeksjon | undefined {
+  function getSeksjonTextById(textId: string): ISanitySeksjon | undefined {
     return context?.seksjoner.find((seksjon) => seksjon.textId === textId);
   }
 
-  function getFaktumTextById(textId: string): SanityFaktum | undefined {
+  function getFaktumTextById(textId: string): ISanityFaktum | undefined {
     return context?.fakta.find((faktum) => faktum.textId === textId);
   }
 
-  function getLandGruppeTextById(textId: string | undefined): SanityLandGruppe | undefined {
+  function getLandGruppeTextById(textId: string | undefined): ISanityLandGruppe | undefined {
     return context?.landgrupper.find((gruppe) => gruppe.textId === textId);
   }
 
-  function getSvaralternativTextById(textId: string): SanitySvaralternativ | undefined {
+  function getSvaralternativTextById(textId: string): ISanitySvaralternativ | undefined {
     return context?.svaralternativer.find((svaralternativ) => svaralternativ.textId === textId);
   }
 
@@ -46,7 +46,7 @@ function useSanity() {
     return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
   }
 
-  function getStartsideText(): SanityStartSideTekst | undefined {
+  function getStartsideText(): ISanityStartSideTekst | undefined {
     return context?.startside[0];
   }
 

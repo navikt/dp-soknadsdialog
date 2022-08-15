@@ -1,21 +1,21 @@
 import React, { ChangeEvent, ReactNode } from "react";
 import { Select } from "@navikt/ds-react";
 
-interface Props {
+interface IProps {
   label: string;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-  options: DropdownOption[];
+  options: IDropdownOption[];
   currentValue: string;
   placeHolderText?: string;
   description?: ReactNode;
 }
 
-export interface DropdownOption {
+export interface IDropdownOption {
   value: string;
   label: string;
 }
 
-export function Dropdown(props: Props) {
+export function Dropdown(props: IProps) {
   return (
     <Select
       label={props.label}

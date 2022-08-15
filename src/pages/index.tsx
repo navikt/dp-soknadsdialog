@@ -1,21 +1,21 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import React from "react";
-import { SanityTexts } from "../types/sanity.types";
+import { ISanityTexts } from "../types/sanity.types";
 import { StartSoknad } from "../views/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
 
-interface Props {
-  sanityTexts: SanityTexts;
+interface IProps {
+  sanityTexts: ISanityTexts;
 }
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<Props>> {
+): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  const sanityTexts = await sanityClient.fetch<SanityTexts>(allTextsQuery, {
+  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
     baseLang: "nb",
     lang: locale,
   });
@@ -27,7 +27,7 @@ export async function getServerSideProps(
   };
 }
 
-export default function Soknad(props: Props) {
+export default function Soknad(props: IProps) {
   if (!props.sanityTexts.apptekster) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }

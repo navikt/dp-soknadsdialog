@@ -1,20 +1,20 @@
-export interface DokumentkravListe {
+export interface IDokumentkravListe {
   id: string;
-  list: Dokumentkrav[];
+  list: IDokumentkrav[];
 }
 
-export interface Dokumentkrav {
+export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
   files?: string[];
 }
 
-export interface UploadedFile {
+export interface IUploadedFile {
   urn: string;
   filnavn: string;
 }
 
-export interface FileState {
+export interface IFileState {
   id: string;
   name?: string;
   state?: FileHandleState;

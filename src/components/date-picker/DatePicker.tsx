@@ -7,7 +7,7 @@ import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { v4 as uuidv4 } from "uuid";
 
-interface DatePickerProps {
+interface IDatePicker {
   label: string;
   description?: TypedObject | TypedObject[];
   placeholder?: string;
@@ -16,7 +16,7 @@ interface DatePickerProps {
   value?: string;
 }
 
-export function DatePicker(props: DatePickerProps) {
+export function DatePicker(props: IDatePicker) {
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
