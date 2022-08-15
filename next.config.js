@@ -17,5 +17,5 @@ const config = withReactSvg({
 });
 
 module.exports = withSentryConfig(config, {
-  silent: false,
+  silent: true,
 });
