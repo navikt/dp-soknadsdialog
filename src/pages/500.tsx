@@ -6,7 +6,7 @@ export default function Error500() {
     <Error
       variant="error"
       title="Beklager, det skjedde en teknisk feil."
-      details="Feilen blir automatisk rapportert og vi jobber med å løse den så raskt som mulig. Prøv igjen
+      details="Vi jobber med å løse den så raskt som mulig. Prøv igjen
         om litt."
     />
   );
