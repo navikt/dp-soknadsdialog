@@ -95,7 +95,7 @@ jobs:
           SENTRY_ORG: nav
           SENTRY_PROJECT: dp-soknadsdialog
         with:
-          environment: 'development'
+          environment: development
           version: ${{ github.sha }}
           set_commits: skip
 #  deploy-prod:
