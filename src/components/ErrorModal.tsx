@@ -14,7 +14,8 @@ export default function ErrorModal(props: IProps) {
   const { title, details } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  let reloadCount = 0;
+  const storage = localStorage.getItem("errorCount");
+  const errorCount = storage ? parseInt(storage) : 1;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -22,36 +23,26 @@ export default function ErrorModal(props: IProps) {
     }
   }, []);
 
-  useEffect(() => {
-    const storedReloadCount = localStorage.getItem("reloadCount");
-    if (storedReloadCount) {
-      reloadCount = parseInt(storedReloadCount);
-    } else {
-      localStorage.setItem("reloadCount", JSON.stringify(0));
-    }
-
-    if (reloadCount >= 2) {
-      localStorage.setItem("reloadCount", JSON.stringify(0));
-      router.push("/500");
-    }
-  }, []);
-
-  function increaseReloadCount() {
-    localStorage.setItem("reloadCount", JSON.stringify(reloadCount + 1));
+  if (!storage) {
+    localStorage.setItem("errorCount", JSON.stringify(1));
   }
 
-  function refresh() {
-    increaseReloadCount();
+  function reload() {
+    localStorage.setItem("errorCount", JSON.stringify(errorCount + 1));
     router.reload();
+  }
+
+  if (errorCount > 2) {
+    router.push("/500");
   }
 
   return (
     <Modal
       className={classNames("modal-container", [styles.errorModal])}
       onClose={() => {
-        return false;
+        return;
       }}
-      open={true}
+      open={errorCount <= 2}
       closeButton={false}
       shouldCloseOnOverlayClick={false}
     >
@@ -63,7 +54,7 @@ export default function ErrorModal(props: IProps) {
         )}
         <div className={styles.errorModalButtonContainer}>
           {details && <p>{details}</p>}
-          <Button variant={"primary"} onClick={refresh}>
+          <Button variant={"primary"} onClick={reload}>
             {getAppTekst("teknisk-feil.reload.knapp-tekst")}
           </Button>
         </div>
