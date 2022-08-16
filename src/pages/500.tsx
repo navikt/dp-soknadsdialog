@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Error from "../components/error/Error";
 
 export default function Error500() {
-  const storage = localStorage.getItem("errorCount");
+  useEffect(() => {
+    const storage = localStorage.getItem("errorCount");
 
-  if (storage) {
-    localStorage.removeItem("errorCount");
-  }
+    if (storage) {
+      localStorage.removeItem("errorCount");
+    }
+  }, []);
 
   return (
     <Error
