@@ -14,16 +14,20 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
-export const TRIGGER_FILE_UPLOAD = "dokumentkrav.svar.send.inn.na";
+export const TRIGGER_FILE_UPLOAD = "dokumentkrav.svar.send.inn.naa";
+const DOKUMENTKRAV_DESCRIPTION = "faktum.arbeidsforhold.navn-bedrift";
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState(dokumentkrav.svar || "");
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const kravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
+  const describedBy = dokumentkrav.fakta.find((faktum) => {
+    return faktum.beskrivendeId === DOKUMENTKRAV_DESCRIPTION;
+  });
 
   useEffect(() => {
     if (answer !== "") {
@@ -41,7 +45,8 @@ export function Dokumentkrav(props: IProps) {
   return (
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3">
-        {kravText ? kravText.text : dokumentkrav.beskrivendeId}
+        {kravText ? kravText.text : dokumentkrav.beskrivendeId}{" "}
+        {describedBy && `(${describedBy.svar})`}
       </Heading>
 
       {kravText?.description && <PortableText value={kravText.description} />}

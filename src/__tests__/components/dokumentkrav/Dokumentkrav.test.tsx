@@ -32,7 +32,7 @@ const mockdataDokumentkrav = {
         },
       ],
       gyldigeValg: [
-        "dokumentkrav.svar.send.inn.na",
+        "dokumentkrav.svar.send.inn.naa",
         "dokumentkrav.svar.send.inn.senere",
         "dokumentkrav.svar.send.inn.noen_andre",
         "dokumentkrav.svar.sendt.inn.tidligere",

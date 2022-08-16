@@ -43,12 +43,14 @@ export function getDocumentationList(
           },
         ],
         gyldigeValg: [
-          "dokumentkrav.svar.send.inn.na",
+          "dokumentkrav.svar.send.inn.naa",
           "dokumentkrav.svar.send.inn.senere",
           "dokumentkrav.svar.send.inn.noen_andre",
           "dokumentkrav.svar.sendt.inn.tidligere",
           "dokumentkrav.svar.send.inn.sender.ikke",
         ],
+        svar: "dokumentkrav.svar.send.inn.naa",
+        begrunnelse: "",
       },
       {
         id: "6678",
@@ -64,7 +66,7 @@ export function getDocumentationList(
         ],
         filer: [],
         gyldigeValg: [
-          "dokumentkrav.svar.send.inn.na",
+          "dokumentkrav.svar.send.inn.naa",
           "dokumentkrav.svar.send.inn.senere",
           "dokumentkrav.svar.send.inn.noen_andre",
           "dokumentkrav.svar.sendt.inn.tidligere",
@@ -79,7 +81,7 @@ export function getDocumentationList(
         fakta: [],
         filer: [],
         gyldigeValg: [
-          "dokumentkrav.svar.send.inn.na",
+          "dokumentkrav.svar.send.inn.naa",
           "dokumentkrav.svar.send.inn.senere",
           "dokumentkrav.svar.send.inn.noen_andre",
           "dokumentkrav.svar.sendt.inn.tidligere",
