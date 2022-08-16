@@ -48,7 +48,7 @@ spec:
       value: {{loginservice.url}}
     - name: LOGINSERVICE_WELL_KNOWN_URL
       value: {{loginservice.wellKnown}}
-    - name: SENTRY_ENV
+    - name: NEXT_PUBLIC_SENTRY_ENV
       value: {{sentry_env}}
   idporten:
     enabled: true
