@@ -47,27 +47,31 @@ export function Dokumentkrav(props: IProps) {
 
   return (
     <div className={styles.dokumentkrav}>
-      <Heading size="small" level="3">
+      <Heading size="small" level="3" spacing>
         {kravText ? kravText.text : dokumentkrav.beskrivendeId}{" "}
         {describedBy && `(${describedBy.svar})`}
       </Heading>
 
       {kravText?.description && <PortableText value={kravText.description} />}
 
-      <RadioGroup
-        legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
-        onChange={setSvar}
-        value={svar}
-      >
-        {dokumentkrav.gyldigeValg.map((textId) => {
-          const svaralternativText = getSvaralternativTextById(textId);
-          return (
-            <div key={textId}>
-              <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>
-            </div>
-          );
-        })}
-      </RadioGroup>
+      <div className={styles.dokumentkravSvar}>
+        <RadioGroup
+          legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
+          onChange={setSvar}
+          value={svar}
+        >
+          {dokumentkrav.gyldigeValg.map((textId) => {
+            const svaralternativText = getSvaralternativTextById(textId);
+            return (
+              <div key={textId}>
+                <Radio value={textId}>
+                  {svaralternativText ? svaralternativText.text : textId}
+                </Radio>
+              </div>
+            );
+          })}
+        </RadioGroup>
+      </div>
 
       {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
 
@@ -83,16 +87,22 @@ export function Dokumentkrav(props: IProps) {
       )}
 
       {svar === TRIGGER_BEGRUNNELSE && (
-        <TextField
-          defaultValue={dokumentkrav.begrunnelse}
-          label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
-          size="medium"
-          type="text"
-          onChange={(event) => setBegrunnelse(event?.currentTarget.value)}
-        />
+        <div className={styles.dokumentkravBegrunnelse}>
+          <TextField
+            defaultValue={dokumentkrav.begrunnelse}
+            label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
+            size="medium"
+            type="text"
+            onChange={(event) => setBegrunnelse(event?.currentTarget.value)}
+          />
+        </div>
       )}
 
-      {svar !== "" && <Button onClick={sendDocuments}>Send inn</Button>}
+      {svar !== "" && (
+        <div className={styles.dokumentkravSend}>
+          <Button onClick={sendDocuments}>Send inn</Button>
+        </div>
+      )}
     </div>
   );
 }

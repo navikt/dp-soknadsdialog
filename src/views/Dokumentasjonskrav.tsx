@@ -3,6 +3,7 @@ import React from "react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
 import { IDokumentkravListe } from "../types/documentation.types";
+import styles from "./Dokumentasjonskrav.module.css";
 
 interface IProps {
   dokumentasjonskrav: IDokumentkravListe;
@@ -18,7 +19,7 @@ export function Dokumentasjonskrav(props: IProps) {
       </Heading>
       {dokumentasjonskrav.krav.map((krav, index) => {
         return (
-          <div key={index}>
+          <div className={styles.dokumentkravContainer} key={index}>
             <Detail key={`${krav.id}-detail`}>
               {index + 1} {getAppTekst("dokumentkrav.nummer.av.krav")}{" "}
               {dokumentasjonskrav.krav.length}

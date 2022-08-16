@@ -1,7 +1,3 @@
-.dokumentkrav {
-  margin-bottom: 40px;
-}
-
-.dokumentkrav:last-child {
-  margin-bottom: 0;
+.dokumentkravSvar, .dokumentkravBegrunnelse, .dokumentkravSend {
+  margin-bottom: var(--navds-spacing-4);
 }
