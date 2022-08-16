@@ -6,8 +6,8 @@ import { useSanity } from "../context/sanity-context";
 import styles from "./ErrorModal.module.css";
 
 interface IProps {
-  title?: string;
-  details?: string;
+  title: string;
+  details: string;
 }
 
 export default function ErrorModal(props: IProps) {
@@ -47,13 +47,11 @@ export default function ErrorModal(props: IProps) {
       shouldCloseOnOverlayClick={false}
     >
       <Modal.Content>
-        {title && (
-          <Heading size={"medium"} spacing>
-            {title}
-          </Heading>
-        )}
+        <Heading size={"medium"} spacing>
+          {title}
+        </Heading>
         <div className={styles.errorModalButtonContainer}>
-          {details && <p>{details}</p>}
+          <p>{details}</p>
           <Button variant={"primary"} onClick={reload}>
             {getAppTekst("teknisk-feil.reload.knapp-tekst")}
           </Button>
