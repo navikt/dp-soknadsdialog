@@ -80,11 +80,8 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {isLoading && (
-                  <div>
-                    <FetchIndicator isLoading={isLoading} />
-                  </div>
-                )}
+                <FetchIndicator isLoading={isLoading} />
+
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     Lagre og lukk
