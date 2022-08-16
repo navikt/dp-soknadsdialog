@@ -54,8 +54,6 @@ test("Shows document item info", async () => {
     </SanityProvider>
   );
 
-  //  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
-
   await waitFor(() => {
     expect(screen.queryByText(mockdataDokumentkrav.krav[0].beskrivendeId)).toBeInTheDocument();
   });
@@ -69,8 +67,6 @@ test("Shows upload when question has a specific answer", async () => {
       <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
     </SanityProvider>
   );
-
-  //  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
 
   await user.click(screen.getByLabelText(TRIGGER_FILE_UPLOAD));
 

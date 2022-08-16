@@ -18,13 +18,13 @@ export function Dokumentasjonskrav(props: IProps) {
       </Heading>
       {dokumentasjonskrav.krav.map((krav, index) => {
         return (
-          <>
+          <div key={index}>
             <Detail key={`${krav.id}-detail`}>
               {index + 1} {getAppTekst("dokumentkrav.nummer.av.krav")}{" "}
               {dokumentasjonskrav.krav.length}
             </Detail>
             <Dokumentkrav key={krav.id} dokumentkrav={krav} />
-          </>
+          </div>
         );
       })}
     </>
