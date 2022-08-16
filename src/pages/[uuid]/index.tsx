@@ -10,7 +10,7 @@ import { getSoknadState } from "../../server-side/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import { Alert } from "@navikt/ds-react";
+import ErrorPage from "../_error";
 
 interface ISoknadMedIdParams {
   soknadState: IQuizState | undefined;
@@ -51,11 +51,23 @@ export async function getServerSideProps(
 
 export default function SoknadMedId(props: ISoknadMedIdParams) {
   if (!props.sanityTexts.seksjoner) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
+    return (
+      <ErrorPage
+        variant="error"
+        title="Beklager, det skjedde en teknisk feil."
+        details="Noe gikk galt ved henting av texter fra sanity"
+      />
+    );
   }
 
   if (!props.soknadState) {
-    return <Alert variant="error">Quiz er ducked</Alert>;
+    return (
+      <ErrorPage
+        variant="error"
+        title="Beklager, det skjedde en teknisk feil."
+        details="Noe gikk galt ved data fra Quiz"
+      />
+    );
   }
 
   return (
