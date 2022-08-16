@@ -10,21 +10,25 @@ const mockdataDokumentkrav = {
     {
       id: "5678",
       beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
+      fakta: [],
       filer: [
         {
           filnavn: "hei på du1.jpg",
           urn: "urn:dokumen1",
-          timestamp: "1660571365067",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
         },
         {
           filnavn: "hei på du2.jpg",
           urn: "urn:dokumen2",
-          timestamp: "1660571365067",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
         },
         {
           filnavn: "hei på du3.jpg",
           urn: "urn:dokumen3",
-          timestamp: "1660571365067",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
         },
       ],
       gyldigeValg: [

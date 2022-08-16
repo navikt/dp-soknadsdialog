@@ -1,3 +1,5 @@
+import { QuizFaktum } from "./quiz.types";
+
 export interface IDokumentkravListe {
   soknad_uuid: string;
   krav: IDokumentkrav[];
@@ -6,15 +8,18 @@ export interface IDokumentkravListe {
 export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
+  fakta: QuizFaktum[];
   filer?: IDokumentkravFil[];
   gyldigeValg: string[];
   svar?: string;
+  begrunnelse?: string;
 }
 
 export interface IDokumentkravFil {
   filnavn: string;
   urn: string;
-  timestamp: string;
+  tidspunkt: string;
+  storrelse: number;
 }
 
 export interface IFileState {
