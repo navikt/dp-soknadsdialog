@@ -5,7 +5,7 @@ import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
-import styles from "./dokumentkrav.module.css";
+import styles from "./Dokumentkrav.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
