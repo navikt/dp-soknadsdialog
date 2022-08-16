@@ -75,7 +75,7 @@ export function Summary(props: IProps) {
       </Accordion>
 
       <ConfirmationPanel
-        className="consent-panel"
+        className="confirmation-panel"
         checked={consentGiven}
         label={getAppTekst("oppsummering.samtykke-riktige-opplysninger.checkbox-label")}
         onChange={() => setConsentGiven(!consentGiven)}
