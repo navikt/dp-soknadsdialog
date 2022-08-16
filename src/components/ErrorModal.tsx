@@ -1,7 +1,7 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSanity } from "../context/sanity-context";
 import styles from "./ErrorModal.module.css";
 
@@ -13,8 +13,8 @@ interface IProps {
 export default function ErrorModal(props: IProps) {
   const { title, details } = props;
   const router = useRouter();
-  const [reloadCount, setReloadCount] = useState<number>(0);
   const { getAppTekst } = useSanity();
+  let reloadCount = 0;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -24,21 +24,19 @@ export default function ErrorModal(props: IProps) {
 
   useEffect(() => {
     const storedReloadCount = localStorage.getItem("reloadCount");
-
-    if (!storedReloadCount) {
-      localStorage.setItem("reloadCount", JSON.stringify(0));
+    if (storedReloadCount) {
+      reloadCount = parseInt(storedReloadCount);
     } else {
-      setReloadCount(parseInt(storedReloadCount));
+      localStorage.setItem("reloadCount", JSON.stringify(0));
     }
 
-    if (storedReloadCount && parseInt(storedReloadCount) >= 2) {
+    if (reloadCount >= 2) {
       localStorage.setItem("reloadCount", JSON.stringify(0));
       router.push("/500");
     }
   }, []);
 
   function increaseReloadCount() {
-    setReloadCount(reloadCount + 1);
     localStorage.setItem("reloadCount", JSON.stringify(reloadCount + 1));
   }
 
