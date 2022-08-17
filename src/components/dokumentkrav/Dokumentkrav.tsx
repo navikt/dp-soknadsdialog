@@ -29,7 +29,7 @@ export function Dokumentkrav(props: IProps) {
   const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
-  const describedBy = dokumentkrav.fakta.find((faktum) => {
+  const linkedArbeidsgiverFaktum = dokumentkrav.fakta.find((faktum) => {
     return faktum.beskrivendeId === FAKTUM_SVAR_BEDRIFTSNAVN;
   });
 
@@ -50,7 +50,7 @@ export function Dokumentkrav(props: IProps) {
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
         {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}{" "}
-        {describedBy && `(${describedBy.svar})`}
+        {linkedArbeidsgiverFaktum && `(${linkedArbeidsgiverFaktum.svar})`}
       </Heading>
 
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
@@ -99,7 +99,7 @@ export function Dokumentkrav(props: IProps) {
         </div>
       )}
 
-      {svar !== "" && (
+      {svar && (
         <div className={styles.dokumentkravSend}>
           <Button onClick={sendDocuments}>Send inn</Button>
         </div>
