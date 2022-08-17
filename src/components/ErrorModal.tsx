@@ -14,8 +14,8 @@ export default function ErrorModal(props: IProps) {
   const { title, details } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const storage = localStorage.getItem("errorCount");
-  const errorCount = storage ? parseInt(storage) : 1;
+  const localStorageErrorsCounts = localStorage.getItem("errorsCount");
+  const errorsCount = localStorageErrorsCounts ? parseInt(localStorageErrorsCounts) : 1;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -23,16 +23,16 @@ export default function ErrorModal(props: IProps) {
     }
   }, []);
 
-  if (!storage) {
-    localStorage.setItem("errorCount", JSON.stringify(1));
+  if (!localStorageErrorsCounts) {
+    localStorage.setItem("errorsCount", JSON.stringify(1));
   }
 
   function reload() {
-    localStorage.setItem("errorCount", JSON.stringify(errorCount + 1));
+    localStorage.setItem("errorsCount", JSON.stringify(errorsCount + 1));
     router.reload();
   }
 
-  if (errorCount > 2) {
+  if (errorsCount > 2) {
     router.push("/500");
   }
 
@@ -42,7 +42,7 @@ export default function ErrorModal(props: IProps) {
       onClose={() => {
         return;
       }}
-      open={errorCount <= 2}
+      open={errorsCount <= 2}
       closeButton={false}
       shouldCloseOnOverlayClick={false}
     >

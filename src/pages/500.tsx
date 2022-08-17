@@ -3,10 +3,10 @@ import Error from "../components/error/Error";
 
 export default function Error500() {
   useEffect(() => {
-    const storage = localStorage.getItem("errorCount");
+    const localStorageErrorsCounts = localStorage.getItem("errorsCount");
 
-    if (storage) {
-      localStorage.removeItem("errorCount");
+    if (localStorageErrorsCounts) {
+      localStorage.removeItem("errorsCount");
     }
   }, []);
 
