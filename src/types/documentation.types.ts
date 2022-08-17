@@ -1,17 +1,25 @@
+import { QuizFaktum } from "./quiz.types";
+
 export interface IDokumentkravListe {
-  id: string;
-  list: IDokumentkrav[];
+  soknad_uuid: string;
+  krav: IDokumentkrav[];
 }
 
 export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
-  files?: string[];
+  fakta: QuizFaktum[];
+  filer?: IDokumentkravFil[];
+  gyldigeValg: string[];
+  svar?: string;
+  begrunnelse?: string;
 }
 
-export interface IUploadedFile {
-  urn: string;
+export interface IDokumentkravFil {
   filnavn: string;
+  urn: string;
+  tidspunkt: string;
+  storrelse: number;
 }
 
 export interface IFileState {

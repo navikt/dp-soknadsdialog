@@ -1,49 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { IDokumentkrav, IUploadedFile, IFileState } from "../../types/documentation.types";
+import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
+import { IDokumentkrav, IFileState, IDokumentkravFil } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
-import api from "../../api.utils";
-import { useRouter } from "next/router";
 import styles from "./Dokumentkrav.module.css";
+import { useSanity } from "../../context/sanity-context";
+import { PortableText } from "@portabletext/react";
+import { HelpText } from "../HelpText";
+import { ISanityAlertText } from "../../types/sanity.types";
+import { AlertText } from "../AlertText";
+import {
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  FAKTUM_SVAR_BEDRIFTSNAVN,
+} from "../../constants";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
-export function Dokumentkrav({ dokumentkrav }: IProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [answer, setAnswer] = useState("");
-  const [uploadedFiles, setUploadedFiles] = useState<IUploadedFile[]>([]);
+export function Dokumentkrav(props: IProps) {
+  const { dokumentkrav } = props;
+  const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
+  const [alertText, setAlertText] = useState<ISanityAlertText>();
+  const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
+  const linkedArbeidsgiverFaktum = dokumentkrav.fakta.find((faktum) => {
+    return faktum.beskrivendeId === FAKTUM_SVAR_BEDRIFTSNAVN;
+  });
 
   useEffect(() => {
-    loadDokumentkrav();
-  }, []);
-
-  async function loadDokumentkrav() {
-    setIsLoading(true);
-
-    const url = api(`/documentation/${router.query.uuid}/${dokumentkrav.id}`);
-
-    try {
-      const response = await fetch(url)
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(res.statusText);
-          }
-
-          return res;
-        })
-        .then((res) => res.json());
-      setUploadedFiles(response);
-      setIsLoading(false);
-    } catch {
-      setIsError(true);
+    if (svar !== "") {
+      setAlertText(getSvaralternativTextById(svar)?.alertText);
     }
-  }
+  }, [svar]);
 
   function sendDocuments() {
     alert("TODO: Send inn svar");
@@ -54,31 +48,61 @@ export function Dokumentkrav({ dokumentkrav }: IProps) {
 
   return (
     <div className={styles.dokumentkrav}>
-      {isLoading && <span>Laster</span>}
-      {isError && <Alert variant="error">Det skjedde noe feil</Alert>}
+      <Heading size="small" level="3" spacing>
+        {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}{" "}
+        {linkedArbeidsgiverFaktum && `(${linkedArbeidsgiverFaktum.svar})`}
+      </Heading>
 
-      {!isLoading && !isError && (
+      {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
+
+      <div className={styles.dokumentkravSvar}>
+        <RadioGroup
+          legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
+          onChange={setSvar}
+          value={svar}
+        >
+          {dokumentkrav.gyldigeValg.map((textId) => {
+            const svaralternativText = getSvaralternativTextById(textId);
+            return (
+              <div key={textId}>
+                <Radio value={textId}>
+                  {svaralternativText ? svaralternativText.text : textId}
+                </Radio>
+              </div>
+            );
+          })}
+        </RadioGroup>
+      </div>
+
+      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+
+      {dokumentkravText?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
+      )}
+
+      {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <Heading size="small" level="3">
-            {dokumentkrav.beskrivendeId}
-          </Heading>
-
-          <RadioGroup legend="Velg hva du vil gjøre" onChange={setAnswer} value={answer}>
-            <Radio value="upload_now">Laste opp nå</Radio>
-            <Radio value="upload_later">Laste opp senere</Radio>
-            <Radio value="somebody_else_sends">Noen andre sender dokumentet</Radio>
-            <Radio value="already_sent">Har sendt tidligere</Radio>
-            <Radio value="will_not_send">Sender ikke</Radio>
-          </RadioGroup>
-
-          {answer === "upload_now" && (
-            <>
-              <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
-              <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
-            </>
-          )}
-          {answer !== "" && <Button onClick={sendDocuments}>Send inn</Button>}
+          <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
+          <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
         </>
+      )}
+
+      {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
+        <div className={styles.dokumentkravBegrunnelse}>
+          <TextField
+            defaultValue={dokumentkrav.begrunnelse}
+            label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
+            size="medium"
+            type="text"
+            onChange={(event) => setBegrunnelse(event?.currentTarget.value)}
+          />
+        </div>
+      )}
+
+      {svar && (
+        <div className={styles.dokumentkravSend}>
+          <Button onClick={sendDocuments}>Send inn</Button>
+        </div>
       )}
     </div>
   );

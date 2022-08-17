@@ -7,19 +7,88 @@ export function getDocumentationList(
 ): Promise<IDokumentkravListe> {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`;
 
-  //if (process.env.NEXT_PUBLIC_LOCALHOST) {
   const response: IDokumentkravListe = {
-    id: "12345",
-    list: [
+    soknad_uuid: "12345",
+    krav: [
       {
         id: "5678",
-        beskrivendeId: "arbeidsforhold.1",
-        files: ["urn:dokumen1", "urn:dokumen2", "urn:dokumen3"],
+        beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
+        fakta: [
+          {
+            id: "8004.1",
+            svar: "Rema 1000",
+            type: "tekst",
+            readOnly: false,
+            beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+          },
+        ],
+        filer: [
+          {
+            filnavn: "hei på du1.jpg",
+            urn: "urn:dokumen1",
+            tidspunkt: "1660571365067",
+            storrelse: 12345,
+          },
+          {
+            filnavn: "hei på du2.jpg",
+            urn: "urn:dokumen2",
+            tidspunkt: "1660571365067",
+            storrelse: 12345,
+          },
+          {
+            filnavn: "hei på du3.jpg",
+            urn: "urn:dokumen3",
+            tidspunkt: "1660571365067",
+            storrelse: 12345,
+          },
+        ],
+        gyldigeValg: [
+          "dokumentkrav.svar.send.naa",
+          "dokumentkrav.svar.send.senere",
+          "dokumentkrav.svar.send.noen_andre",
+          "dokumentkrav.svar.sendt.tidligere",
+          "dokumentkrav.svar.sender.ikke",
+        ],
+        svar: "dokumentkrav.svar.send.naa",
+        begrunnelse: "",
       },
       {
-        id: "91011",
-        beskrivendeId: "arbeidsforhold.2",
-        files: [],
+        id: "6678",
+        beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
+        fakta: [
+          {
+            id: "8004.1",
+            svar: "Rema 1000",
+            type: "tekst",
+            readOnly: false,
+            beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+          },
+        ],
+        filer: [],
+        gyldigeValg: [
+          "dokumentkrav.svar.send.naa",
+          "dokumentkrav.svar.send.senere",
+          "dokumentkrav.svar.send.noen_andre",
+          "dokumentkrav.svar.sendt.inn.tidligere",
+          "dokumentkrav.svar.sender.ikke",
+        ],
+        svar: "dokumentkrav.svar.sender.ikke",
+        begrunnelse: "Jeg har ingen dokumenter å sende inn. De gikk tapt i en husbrann.",
+      },
+      {
+        id: "6778",
+        beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
+        fakta: [],
+        filer: [],
+        gyldigeValg: [
+          "dokumentkrav.svar.send.naa",
+          "dokumentkrav.svar.send.senere",
+          "dokumentkrav.svar.send.noen_andre",
+          "dokumentkrav.svar.sendt.inn.tidligere",
+          "dokumentkrav.svar.sender.ikke",
+        ],
+        svar: "",
+        begrunnelse: "",
       },
     ],
   };

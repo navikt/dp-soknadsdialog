@@ -1,20 +1,5 @@
 import { NextApiRequest } from "next";
 
-export function getDocumentation(uuid: string, docid: string, onBehalfOfToken: string) {
-  const id = `${uuid}-${docid}`;
-  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${id}`;
-  return fetch(url, {
-    method: "Get",
-    headers: {
-      Authorization: `Bearer ${onBehalfOfToken}`,
-    },
-  })
-    .then((response: Response) => response.json())
-    .catch((error) => {
-      return Promise.reject(new Error(error));
-    });
-}
-
 export function postDocumentation(
   uuid: string,
   soknadsId: string,

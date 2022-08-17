@@ -1,49 +1,83 @@
 import React from "react";
-import { render, waitFor, screen, waitForElementToBeRemoved } from "@testing-library/react";
+import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Dokumentkrav } from "../../../components/dokumentkrav/Dokumentkrav";
-import fetchMock from "fetch-mock-jest";
+import { SanityProvider } from "../../../context/sanity-context";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../constants";
 
 const mockdataDokumentkrav = {
-  id: "5678",
-  beskrivendeId: "arbeidsforhold.1",
-  files: ["urn:dokumen1", "urn:dokumen2", "urn:dokumen3"],
+  soknad_uuid: "12345",
+  krav: [
+    {
+      id: "5678",
+      beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
+      fakta: [],
+      filer: [
+        {
+          filnavn: "hei på du1.jpg",
+          urn: "urn:dokumen1",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
+        },
+        {
+          filnavn: "hei på du2.jpg",
+          urn: "urn:dokumen2",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
+        },
+        {
+          filnavn: "hei på du3.jpg",
+          urn: "urn:dokumen3",
+          tidspunkt: "1660571365067",
+          storrelse: 1234556,
+        },
+      ],
+      gyldigeValg: [
+        "dokumentkrav.svar.send.naa",
+        "dokumentkrav.svar.send.senere",
+        "dokumentkrav.svar.send.noen_andre",
+        "dokumentkrav.svar.sendt.inn.tidligere",
+        "dokumentkrav.svar.sender.ikke",
+      ],
+    },
+  ],
 };
 
-const mockdataDocuments = [
-  { filnavn: "fil1.jpg", urn: "urn:vedlegg:id/fil1" },
-  { filnavn: "filnavn2.jpg", urn: "urn:vedlegg:id/fil2" },
-];
-
-beforeEach(() => {
-  fetchMock.get("/api/documentation/localhost-uuid/5678", mockdataDocuments);
-});
-afterEach(() => {
-  fetchMock.mockReset();
-});
+const mockSanity = {
+  fakta: [],
+  seksjoner: [],
+  svaralternativer: [],
+  landgrupper: [],
+  apptekster: [],
+  startside: [],
+};
 
 test("Shows document item info", async () => {
-  render(<Dokumentkrav dokumentkrav={mockdataDokumentkrav} />);
-
-  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
+  render(
+    <SanityProvider initialState={mockSanity}>
+      <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+    </SanityProvider>
+  );
 
   await waitFor(() => {
-    expect(screen.queryByText(mockdataDokumentkrav.beskrivendeId)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.krav[0].beskrivendeId)).toBeInTheDocument();
   });
 });
 
 test("Shows upload when question has a specific answer", async () => {
   const user = userEvent.setup();
 
-  render(<Dokumentkrav dokumentkrav={mockdataDokumentkrav} />);
+  render(
+    <SanityProvider initialState={mockSanity}>
+      <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+    </SanityProvider>
+  );
 
-  await waitForElementToBeRemoved(() => screen.queryByText("Laster"));
-
-  await user.click(screen.getByLabelText("Laste opp nå"));
+  await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
   await waitFor(() => {
     expect(screen.queryByText("Dra filene hit eller")).toBeInTheDocument();
-    expect(screen.queryByText(mockdataDocuments[0].filnavn)).toBeInTheDocument();
-    expect(screen.queryByText(mockdataDocuments[1].filnavn)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[0].filnavn)).toBeInTheDocument();
+    expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[1].filnavn)).toBeInTheDocument();
   });
 });
