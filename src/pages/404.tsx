@@ -1,12 +1,8 @@
 import React from "react";
-import Error from "../components/error/Error";
 
 export default function Error404() {
-  return (
-    <Error
-      variant="warning"
-      title="Siden finnes ikke"
-      details="Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte deg hit."
-    />
-  );
+  if (typeof window !== "undefined") {
+    window.location.replace("https://www.nav.no/404");
+  }
+  return <></>;
 }
