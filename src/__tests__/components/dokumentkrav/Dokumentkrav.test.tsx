@@ -1,8 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Dokumentkrav, TRIGGER_FILE_UPLOAD } from "../../../components/dokumentkrav/Dokumentkrav";
+import { Dokumentkrav } from "../../../components/dokumentkrav/Dokumentkrav";
 import { SanityProvider } from "../../../context/sanity-context";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../constants";
 
 const mockdataDokumentkrav = {
   soknad_uuid: "12345",
@@ -72,7 +73,7 @@ test("Shows upload when question has a specific answer", async () => {
     </SanityProvider>
   );
 
-  await user.click(screen.getByLabelText(TRIGGER_FILE_UPLOAD));
+  await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
   await waitFor(() => {
     expect(screen.queryByText("Dra filene hit eller")).toBeInTheDocument();

@@ -9,14 +9,15 @@ import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
+import {
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  FAKTUM_SVAR_BEDRIFTSNAVN,
+} from "../../constants";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
-
-export const TRIGGER_FILE_UPLOAD = "dokumentkrav.svar.send.naa";
-const DOKUMENTKRAV_DESCRIPTION = "faktum.arbeidsforhold.navn-bedrift";
-const TRIGGER_BEGRUNNELSE = "dokumentkrav.svar.sender.ikke";
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
@@ -29,7 +30,7 @@ export function Dokumentkrav(props: IProps) {
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
   const describedBy = dokumentkrav.fakta.find((faktum) => {
-    return faktum.beskrivendeId === DOKUMENTKRAV_DESCRIPTION;
+    return faktum.beskrivendeId === FAKTUM_SVAR_BEDRIFTSNAVN;
   });
 
   useEffect(() => {
@@ -79,14 +80,14 @@ export function Dokumentkrav(props: IProps) {
         <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
       )}
 
-      {svar === TRIGGER_FILE_UPLOAD && (
+      {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
           <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
           <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
         </>
       )}
 
-      {svar === TRIGGER_BEGRUNNELSE && (
+      {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
         <div className={styles.dokumentkravBegrunnelse}>
           <TextField
             defaultValue={dokumentkrav.begrunnelse}
