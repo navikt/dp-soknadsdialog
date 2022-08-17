@@ -24,9 +24,9 @@ export function Dokumentkrav(props: IProps) {
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
+  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
-  const kravText = getFaktumTextById(dokumentkrav.beskrivendeId);
+  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
   const describedBy = dokumentkrav.fakta.find((faktum) => {
@@ -49,11 +49,11 @@ export function Dokumentkrav(props: IProps) {
   return (
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
-        {kravText ? kravText.text : dokumentkrav.beskrivendeId}{" "}
+        {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}{" "}
         {describedBy && `(${describedBy.svar})`}
       </Heading>
 
-      {kravText?.description && <PortableText value={kravText.description} />}
+      {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
 
       <div className={styles.dokumentkravSvar}>
         <RadioGroup
@@ -76,8 +76,8 @@ export function Dokumentkrav(props: IProps) {
 
       {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
 
-      {kravText?.helpText && (
-        <HelpText className={styles.helpTextSpacing} helpText={kravText.helpText} />
+      {dokumentkravText?.helpText && (
+        <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
