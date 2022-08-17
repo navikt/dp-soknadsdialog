@@ -3,9 +3,9 @@ import Error from "../components/error/Error";
 
 export default function Error500() {
   useEffect(() => {
-    const localStorageErrorsCounts = localStorage.getItem("errorsCount");
+    const localStorageErrorsCount = localStorage.getItem("errorsCount");
 
-    if (localStorageErrorsCounts) {
+    if (localStorageErrorsCount) {
       localStorage.removeItem("errorsCount");
     }
   }, []);

@@ -14,8 +14,8 @@ export default function ErrorModal(props: IProps) {
   const { title, details } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const localStorageErrorsCounts = localStorage.getItem("errorsCount");
-  const errorsCount = localStorageErrorsCounts ? parseInt(localStorageErrorsCounts) : 1;
+  const localStorageErrorsCount = localStorage.getItem("errorsCount");
+  const errorsCount = localStorageErrorsCount ? parseInt(localStorageErrorsCount) : 1;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -23,7 +23,7 @@ export default function ErrorModal(props: IProps) {
     }
   }, []);
 
-  if (!localStorageErrorsCounts) {
+  if (!localStorageErrorsCount) {
     localStorage.setItem("errorsCount", JSON.stringify(1));
   }
 
