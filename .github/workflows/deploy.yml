@@ -86,6 +86,7 @@ jobs:
           RESOURCE: nais/nais.yaml
           VARS: nais/dev.yaml
           PRINT_PAYLOAD: true
+          NEXT_PUBLIC_SENTRY_STAGE: development
 
       - name: Lag deployment i Sentry
         uses: getsentry/action-release@v1
