@@ -22,10 +22,10 @@ WORKDIR /usr/src/app
 
 ARG BASE_PATH
 ENV PORT=3000 \
-    NODE_ENV=production
+    NODE_ENV=production \
+    NEXT_PUBLIC_SENTRY_ENV=development
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
-RUN echo "------"$NEXT_PUBLIC_SENTRY_ENV"------"
 
 EXPOSE 3000
 USER node
