@@ -110,7 +110,7 @@ export function FileUploader({ id, onHandle }: IProps) {
   return (
     <>
       <div {...getRootProps()} className={styles.fileUploader}>
-        <input {...getInputProps()} />
+        <input data-testid="dropzone" {...getInputProps()} />
         <>
           <p>Dra filene hit eller</p>
           <Button onClick={open}>Velg filer</Button>
