@@ -23,7 +23,7 @@ WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
-    TZ=Europe/Oslo \
+    TZ=Europe/Oslo
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
 
