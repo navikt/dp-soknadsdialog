@@ -48,8 +48,8 @@ spec:
       value: {{loginservice.url}}
     - name: LOGINSERVICE_WELL_KNOWN_URL
       value: {{loginservice.wellKnown}}
-    - name: NEXT_PUBLIC_SENTRY_ENV
-      value: {{sentry_env}}
+    - name: NEXT_PUBLIC_SENTRY_STAGE
+      value: {{sentry_stage}}
   idporten:
     enabled: true
     sidecar:
