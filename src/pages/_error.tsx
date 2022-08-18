@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NextPageContext } from "next";
 import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
 import styles from "./_error.module.css";
@@ -10,14 +10,6 @@ interface IProps {
 }
 export default function Error(props: IProps) {
   const { statusCode, title, details } = props;
-
-  useEffect(() => {
-    const localStorageErrorsCount = localStorage.getItem("errorsCount");
-
-    if (localStorageErrorsCount) {
-      localStorage.removeItem("errorsCount");
-    }
-  }, []);
 
   return (
     <Alert variant="error">
