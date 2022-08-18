@@ -19,7 +19,6 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
 # ---- Runner ----
 FROM node:16-alpine AS runtime
 WORKDIR /usr/src/app
-ENV
 
 ARG BASE_PATH
 ENV PORT=3000 \
