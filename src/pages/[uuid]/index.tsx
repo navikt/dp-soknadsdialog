@@ -55,7 +55,7 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
     return (
       <Error
         title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved henting av texter fra sanity"
+        details="Noe gikk galt ved henting av texter fra sanity."
         statusCode={500}
       />
     );
@@ -65,7 +65,7 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
     return (
       <Error
         title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved data fra Quiz"
+        details="Noe gikk galt ved henting av data fra Quiz."
         statusCode={500}
       />
     );
