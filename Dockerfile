@@ -21,10 +21,12 @@ FROM node:16-alpine AS runtime
 WORKDIR /usr/src/app
 
 ARG BASE_PATH
+ARG NEXT_PUBLIC_SENTRY_ENV
 ENV PORT=3000 \
     NODE_ENV=production
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
+RUN echo "NEXT_PUBLIC_SENTRY_ENV=$NEXT_PUBLIC_SENTRY_ENV" >> .env.production
 
 EXPOSE 3000
 USER node
