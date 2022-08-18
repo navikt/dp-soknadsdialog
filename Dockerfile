@@ -11,7 +11,6 @@ RUN npm ci
 COPY . /usr/src/app
 
 ARG SENTRY_RELEASE
-ENV NEXT_PUBLIC_SENTRY_STAGE=development
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     echo "[auth]\n"\
          "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc && \
@@ -20,11 +19,12 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
 # ---- Runner ----
 FROM node:16-alpine AS runtime
 WORKDIR /usr/src/app
-
+ENV
 
 ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
+    TZ=Europe/Oslo \
     NEXT_PUBLIC_SENTRY_STAGE=development
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
