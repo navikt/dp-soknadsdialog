@@ -17,6 +17,9 @@ const config = withReactSvg({
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },
+  serverRuntimeConfig: {
+    NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
+  },
 });
 
 module.exports = withSentryConfig(config, {
