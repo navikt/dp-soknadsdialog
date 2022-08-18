@@ -24,7 +24,6 @@ ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
     TZ=Europe/Oslo \
-    NEXT_PUBLIC_SENTRY_STAGE=development
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
 

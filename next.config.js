@@ -14,6 +14,9 @@ const config = withReactSvg({
     locales: supportedLocales,
     defaultLocale: "nb",
   },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
+  },
 });
 
 module.exports = withSentryConfig(config, {
