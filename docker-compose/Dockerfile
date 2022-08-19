@@ -18,8 +18,8 @@ ARG BASE_PATH
 ENV PORT=3001 \
     NODE_ENV=development
 
-COPY --from=deps --chown=node:node /app/node_modules ./node_modules
-COPY --chown=node:node package*.json .npmrc next.config.js tsconfig.json sanity-client.ts ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json .npmrc next.config.js tsconfig.json sanity-client.ts ./
 
 EXPOSE 3001
 
