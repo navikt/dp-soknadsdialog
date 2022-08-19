@@ -5,7 +5,7 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
 * Nødvendig programvare, kan legges inn vha Brew: 
   * Colima
   * docker-compose 
-* Github Personal Access Token (PAT) [token](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages)
+* Github Personal Access Token (PAT) [token](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages), lagret i miljøvariabelen `GITHUB_PAT`.
 * `127.0.0.1 host.docker.internal` må være lagt til i `/etc/hosts`
 
 ### Opprette PAT hos Github
@@ -13,8 +13,8 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
    1. `Github.com > Settings > Developer settings > Personal access tokens > Generate new token` ([direkte lenke](https://github.com/settings/tokens))
    2. Sørg for at å krysse av for tilgang til å lese pakker.
    3. Etter at tokenet er lagd er det viktig å klikke på "Configure SSO" og velge "Authorize", og deretter følge flyten.
-2. Sett tokenet til f.eks. miljøvariabel `GITHUB_TOKEN` (`export GITHUB_TOKEN=<token>`)
-3. Logg inn i docker `echo $GITHUB_TOKEN | docker login ghcr.io -u <BRUKERNAVN> --password-stdin`
+2. Sett tokenet i miljøvariabel `GITHUB_PAT` (`export GITHUB_PAT=<token>`)
+3. Logg inn i docker `echo $GITHUB_PAT | docker login ghcr.io -u <BRUKERNAVN> --password-stdin`
 
 
 ### Bruke søknadsdialogen lokalt
