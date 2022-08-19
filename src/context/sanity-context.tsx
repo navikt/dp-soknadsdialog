@@ -7,6 +7,7 @@ import {
   SanitySvaralternativ,
   SanityTexts,
 } from "../types/sanity.types";
+import * as SentryLogger from "../sentry.logger";
 
 export const SanityContext = React.createContext<SanityTexts | undefined>(undefined);
 
@@ -27,23 +28,46 @@ function useSanity() {
   }
 
   function getSeksjonTextById(textId: string): SanitySeksjon | undefined {
-    return context?.seksjoner.find((seksjon) => seksjon.textId === textId);
+    const text = context?.seksjoner.find((seksjon) => seksjon.textId === textId);
+    if (!text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   function getFaktumTextById(textId: string): SanityFaktum | undefined {
-    return context?.fakta.find((faktum) => faktum.textId === textId);
+    const text = context?.fakta.find((faktum) => faktum.textId === textId);
+    if (!text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   function getLandGruppeTextById(textId: string | undefined): SanityLandGruppe | undefined {
-    return context?.landgrupper.find((gruppe) => gruppe.textId === textId);
+    const text = context?.landgrupper.find((gruppe) => gruppe.textId === textId);
+    if (textId && !text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   function getSvaralternativTextById(textId: string): SanitySvaralternativ | undefined {
-    return context?.svaralternativer.find((svaralternativ) => svaralternativ.textId === textId);
+    const text = context?.svaralternativer.find(
+      (svaralternativ) => svaralternativ.textId === textId
+    );
+    if (!text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   function getAppTekst(textId: string): string {
-    return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+    const text =
+      context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+    if (!text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   function getStartsideText(): SanityStartSideTekst | undefined {
