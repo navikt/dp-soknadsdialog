@@ -73,9 +73,9 @@ services:
       KAFKA_RESET_POLICY: "earliest"
       TOKEN_X_CLIENT_ID: "localhost:teamdagpenger:dp-soknad"
 
-  quizmock:
+  mock:
     image: ghcr.io/navikt/dp-mock-quiz-behovloser/dp-mock-quiz-behovloser:latest
-    container_name: quizmock
+    container_name: mock
     depends_on:
       - kafka
     ports:
