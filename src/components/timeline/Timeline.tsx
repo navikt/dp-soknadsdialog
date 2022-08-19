@@ -7,17 +7,17 @@ import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponentProps } from "@portabletext/react/src/types";
 
-interface ItemProps {
+interface ITimelineItem {
   iconName: string;
   title: string;
   body: TypedObject | TypedObject[];
 }
 
-export function Timeline(props: PortableTextComponentProps<{ elements: ItemProps[] }>) {
+export function Timeline(props: PortableTextComponentProps<{ elements: ITimelineItem[] }>) {
   return <>{props.value.elements.map(TimelineItem)}</>;
 }
 
-function TimelineItem(props: ItemProps) {
+function TimelineItem(props: ITimelineItem) {
   // @ts-ignore
   const Icon: typeof React.Component = AllIcons[props.iconName];
   return (

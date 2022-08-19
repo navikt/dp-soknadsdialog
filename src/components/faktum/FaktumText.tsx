@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { BodyShort, Label, TextField } from "@navikt/ds-react";
-import { FaktumProps } from "./Faktum";
+import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { QuizTekstFaktum } from "../../types/quiz.types";
+import { IQuizTekstFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 
-export function FaktumText(props: FaktumProps<QuizTekstFaktum>) {
+export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);

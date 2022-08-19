@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { FaktumProps } from "./Faktum";
+import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { QuizPeriodeFaktum, QuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
+import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
@@ -10,7 +10,7 @@ import { BodyShort, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 
-export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
+export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
@@ -34,12 +34,12 @@ export function FaktumPeriode(props: FaktumProps<QuizPeriodeFaktum>) {
     if (toDate) {
       const parsedToDate = formatISO(toDate, { representation: "date" });
       // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as QuizPeriodeFaktumAnswerType
-      const period = { ...faktum.svar, tom: parsedToDate } as QuizPeriodeFaktumAnswerType;
+      const period = { ...faktum.svar, tom: parsedToDate } as IQuizPeriodeFaktumAnswerType;
       onChange ? onChange(faktum, period) : saveFaktum(period);
     }
   }, [toDate]);
 
-  function saveFaktum(value: QuizPeriodeFaktumAnswerType) {
+  function saveFaktum(value: IQuizPeriodeFaktumAnswerType) {
     saveFaktumToQuiz(faktum, value);
   }
 

@@ -5,8 +5,8 @@ import styles from "./Faktum.module.css";
 import {
   QuizFaktum,
   QuizFaktumSvarType,
-  QuizGeneratorFaktum,
-  QuizNumberFaktum,
+  IQuizGeneratorFaktum,
+  IQuizNumberFaktum,
 } from "../../types/quiz.types";
 import { FaktumText } from "./FaktumText";
 import { FaktumNumber } from "./FaktumNumber";
@@ -17,7 +17,7 @@ import { FaktumLand } from "./FaktumLand";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumGenerator } from "./FaktumGenerator";
 
-export interface FaktumProps<P> {
+export interface IFaktum<P> {
   faktum: P;
   onChange?: (faktum: QuizFaktum, value: QuizFaktumSvarType) => void;
   readonly?: boolean;
@@ -25,14 +25,14 @@ export interface FaktumProps<P> {
 
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
-export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
+export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   const { faktum, readonly } = props;
 
   function renderFaktumType() {
     if (faktum.beskrivendeId === FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER) {
       return (
         <FaktumEgetGaardsbrukArbeidsaar
-          faktum={faktum as QuizNumberFaktum}
+          faktum={faktum as IQuizNumberFaktum}
           onChange={props.onChange}
         />
       );
@@ -65,7 +65,7 @@ export function Faktum(props: FaktumProps<QuizFaktum | QuizGeneratorFaktum>) {
         return <FaktumPeriode faktum={faktum} onChange={props.onChange} readonly={readonly} />;
 
       case "generator":
-        return <FaktumGenerator faktum={faktum as QuizGeneratorFaktum} readonly={readonly} />;
+        return <FaktumGenerator faktum={faktum as IQuizGeneratorFaktum} readonly={readonly} />;
     }
   }
 

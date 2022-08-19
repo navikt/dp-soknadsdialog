@@ -1,7 +1,7 @@
-import { QuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 import { gyldigeLand } from "./seksjonBostedsland";
 
-export const seksjonArbeidsforhold: QuizSeksjon = {
+export const seksjonArbeidsforhold: IQuizSeksjon = {
   fakta: [
     {
       id: "8001",

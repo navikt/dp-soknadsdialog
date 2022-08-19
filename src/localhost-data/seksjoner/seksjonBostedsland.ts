@@ -1,4 +1,4 @@
-import { QuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 
 export const gyldigeLand = [
   "AFG",
@@ -252,7 +252,7 @@ export const gyldigeLand = [
   "ALA",
 ];
 
-export const seksjonBostedsland: QuizSeksjon = {
+export const seksjonBostedsland: IQuizSeksjon = {
   fakta: [
     {
       id: "6001",

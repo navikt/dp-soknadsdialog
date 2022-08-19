@@ -1,10 +1,10 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { Personalia } from "../../../types/personalia.types";
+import { IPersonalia } from "../../../types/personalia.types";
 import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../../api.utils";
 
 // As of https://tools.ietf.org/html/rfc7807
-export interface HttpProblem {
+export interface IHttpProblem {
   type: URL;
   title: string;
   status?: number;
@@ -12,8 +12,8 @@ export interface HttpProblem {
   instance?: URL;
 }
 
-const isHttpProblem = (variableToCheck: unknown): variableToCheck is HttpProblem =>
-  (variableToCheck as HttpProblem).type !== undefined;
+const isHttpProblem = (variableToCheck: unknown): variableToCheck is IHttpProblem =>
+  (variableToCheck as IHttpProblem).type !== undefined;
 
 function getPersonalia(onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/personalia`, {
@@ -25,15 +25,15 @@ function getPersonalia(onBehalfOfToken: string) {
     },
   }).then(async (response: Response) => {
     if (!response.ok) {
-      return Promise.reject<HttpProblem>(await response.json());
+      return Promise.reject<IHttpProblem>(await response.json());
     }
     return response.json();
   });
 }
 
-const personaliaHandler: NextApiHandler<Personalia | HttpProblem> = async (
+const personaliaHandler: NextApiHandler<IPersonalia | IHttpProblem> = async (
   req: NextApiRequest,
-  res: NextApiResponse<Personalia | HttpProblem>
+  res: NextApiResponse<IPersonalia | IHttpProblem>
 ) => {
   try {
     const { token, apiToken } = await getSession({ req });
@@ -50,14 +50,14 @@ const personaliaHandler: NextApiHandler<Personalia | HttpProblem> = async (
     }
   } catch (error) {
     if (isHttpProblem(error)) {
-      const httpProblem: HttpProblem = <HttpProblem>error;
+      const httpProblem: IHttpProblem = <IHttpProblem>error;
       // eslint-disable-next-line no-console
       console.error(`Kall mot personalia API feilet. Feilmelding: ${httpProblem.title}`);
       return res
         .status(httpProblem.status !== undefined ? httpProblem.status : 500)
         .json(httpProblem);
     } else {
-      const httpProblem: HttpProblem = {
+      const httpProblem: IHttpProblem = {
         status: 500,
         title: "Noe galt ved personalia kall",
         type: new URL("urn:oppslag:personalia"),

@@ -6,9 +6,9 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
+import ErrorModal from "../components/ErrorModal";
 import { useSanity } from "../context/sanity-context";
-import { FileSuccess, FileError } from "@navikt/ds-icons";
-import classNames from "classnames";
+import { FileSuccess } from "@navikt/ds-icons";
 
 export function Soknad() {
   const router = useRouter();
@@ -78,11 +78,9 @@ export function Soknad() {
         />
       </div>
 
-      {isLoading && (
-        <div className={styles.loaderContainer}>
-          <FetchIndicator isLoading={isLoading} />
-        </div>
-      )}
+      <div className={styles.loaderContainer}>
+        <FetchIndicator isLoading={isLoading} />
+      </div>
 
       {showNotFinishedError && (
         <Alert variant="error" size="medium" inline>
@@ -118,14 +116,14 @@ export function Soknad() {
       {!isError && (
         <p className={styles.autoSaveText}>
           <FileSuccess />
-          Lagret automatisk
+          {getAppTekst("auto-lagret.tekst")}
         </p>
       )}
       {isError && (
-        <p className={classNames(styles.autoSaveText, "navds-error-message")}>
-          <FileError />
-          Lagring feilet, det har skjedd noe feil
-        </p>
+        <ErrorModal
+          title={getAppTekst("teknisk-feil.med-reload.tittel")}
+          details={getAppTekst("teknisk-feil.med-reload.detaljer")}
+        />
       )}
     </main>
   );

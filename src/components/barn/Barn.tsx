@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { QuizGeneratorFaktum } from "../../types/quiz.types";
-import { Faktum, FaktumProps } from "../faktum/Faktum";
+import { IQuizGeneratorFaktum } from "../../types/quiz.types";
+import { Faktum, IFaktum } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../FetchIndicator";
@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
 import { ChildAdd } from "../../svg-icons/ChildAdd";
 
-export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
+export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { locale } = useRouter();
   const { isLoading } = useQuiz();
@@ -70,11 +70,8 @@ export function Barn(props: FaktumProps<QuizGeneratorFaktum>) {
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {isLoading && (
-                  <div>
-                    <FetchIndicator isLoading={isLoading} />
-                  </div>
-                )}
+                <FetchIndicator isLoading={isLoading} />
+
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     Lagre og lukk

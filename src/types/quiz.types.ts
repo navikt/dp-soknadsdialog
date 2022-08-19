@@ -1,82 +1,82 @@
 export type QuizFaktum =
-  | QuizBooleanFaktum
-  | QuizFlervalgFaktum
-  | QuizEnvalgFaktum
-  | QuizTekstFaktum
-  | QuizDatoFaktum
-  | QuizPeriodeFaktum
-  | QuizNumberFaktum
-  | QuizLandFaktum;
+  | IQuizBooleanFaktum
+  | IQuizFlervalgFaktum
+  | IQuizEnvalgFaktum
+  | IQuizTekstFaktum
+  | IQuizDatoFaktum
+  | IQuizPeriodeFaktum
+  | IQuizNumberFaktum
+  | IQuizLandFaktum;
 
-export interface QuizBaseFaktum {
+export interface IQuizBaseFaktum {
   id: string;
   beskrivendeId: string;
   readOnly: boolean;
 }
 
-export interface QuizFlervalgFaktum extends QuizBaseFaktum {
+export interface IQuizFlervalgFaktum extends IQuizBaseFaktum {
   type: "flervalg";
   gyldigeValg: string[];
   svar?: string[];
 }
 
-export interface QuizBooleanFaktum extends QuizBaseFaktum {
+export interface IQuizBooleanFaktum extends IQuizBaseFaktum {
   type: "boolean";
   gyldigeValg: string[];
   svar?: boolean;
 }
 
-export interface QuizEnvalgFaktum extends QuizBaseFaktum {
+export interface IQuizEnvalgFaktum extends IQuizBaseFaktum {
   type: "envalg";
   gyldigeValg: string[];
   svar?: string;
 }
 
-export interface QuizTekstFaktum extends QuizBaseFaktum {
+export interface IQuizTekstFaktum extends IQuizBaseFaktum {
   type: "tekst";
   svar?: string;
 }
 
-export interface QuizDatoFaktum extends QuizBaseFaktum {
+export interface IQuizDatoFaktum extends IQuizBaseFaktum {
   type: "localdate";
   svar?: string;
 }
 
-export interface QuizPeriodeFaktum extends QuizBaseFaktum {
+export interface IQuizPeriodeFaktum extends IQuizBaseFaktum {
   type: "periode";
-  svar?: QuizPeriodeFaktumAnswerType;
+  svar?: IQuizPeriodeFaktumAnswerType;
 }
 
-export interface QuizNumberFaktum extends QuizBaseFaktum {
+export interface IQuizNumberFaktum extends IQuizBaseFaktum {
   type: "int" | "double";
   svar?: number;
 }
 
-interface QuizLandGruppe {
+interface IQuizLandGruppe {
   gruppeId: string;
   land: string[];
 }
 
-export interface QuizLandFaktum extends QuizBaseFaktum {
+export interface IQuizLandFaktum extends IQuizBaseFaktum {
   type: "land";
-  grupper: QuizLandGruppe[];
+  grupper: IQuizLandGruppe[];
   gyldigeLand: string[];
   svar?: string;
 }
 
-export interface QuizGeneratorFaktum extends QuizBaseFaktum {
+export interface IQuizGeneratorFaktum extends IQuizBaseFaktum {
   type: "generator";
   svar?: QuizFaktum[][];
   templates: Omit<QuizFaktum, "readOnly">[];
 }
 
-export interface QuizSeksjon {
+export interface IQuizSeksjon {
   beskrivendeId: string;
   ferdig: boolean;
-  fakta: (QuizFaktum | QuizGeneratorFaktum)[];
+  fakta: (QuizFaktum | IQuizGeneratorFaktum)[];
 }
 
-export interface QuizPeriodeFaktumAnswerType {
+export interface IQuizPeriodeFaktumAnswerType {
   fom: string;
   tom?: string;
 }
@@ -86,5 +86,5 @@ export type QuizFaktumSvarType =
   | string
   | boolean
   | number
-  | QuizPeriodeFaktumAnswerType
+  | IQuizPeriodeFaktumAnswerType
   | undefined;

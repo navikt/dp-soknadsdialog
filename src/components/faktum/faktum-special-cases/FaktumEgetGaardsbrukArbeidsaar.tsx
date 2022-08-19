@@ -1,11 +1,11 @@
 import React, { ChangeEvent, useState } from "react";
-import { FaktumProps } from "../Faktum";
-import { Dropdown, DropdownOption } from "../../dropdown/Dropdown";
-import { QuizNumberFaktum } from "../../../types/quiz.types";
+import { IFaktum } from "../Faktum";
+import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
+import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 
-const years: DropdownOption[] = [];
+const years: IDropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
 
 for (let i = 0; i <= 4; i++) {
@@ -13,7 +13,7 @@ for (let i = 0; i <= 4; i++) {
   years.push({ value: year, label: year });
 }
 
-export function FaktumEgetGaardsbrukArbeidsaar(props: FaktumProps<QuizNumberFaktum>) {
+export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);

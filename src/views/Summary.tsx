@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { QuizSeksjon } from "../types/quiz.types";
+import { IQuizSeksjon } from "../types/quiz.types";
 import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
@@ -8,11 +8,11 @@ import { useRouter } from "next/router";
 import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
 
-interface Props {
-  sections: QuizSeksjon[];
+interface IProps {
+  sections: IQuizSeksjon[];
 }
 
-export function Summary(props: Props) {
+export function Summary(props: IProps) {
   const [hasError, setHasError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const router = useRouter();
@@ -75,7 +75,7 @@ export function Summary(props: Props) {
       </Accordion>
 
       <ConfirmationPanel
-        className="consent-panel"
+        className="confirmation-panel"
         checked={consentGiven}
         label={getAppTekst("oppsummering.samtykke-riktige-opplysninger.checkbox-label")}
         onChange={() => setConsentGiven(!consentGiven)}

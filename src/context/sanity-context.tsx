@@ -1,21 +1,21 @@
 import React, { PropsWithChildren } from "react";
 import {
-  SanityFaktum,
-  SanityLandGruppe,
-  SanitySeksjon,
-  SanityStartSideTekst,
-  SanitySvaralternativ,
-  SanityTexts,
+  ISanityFaktum,
+  ISanityLandGruppe,
+  ISanitySeksjon,
+  ISanityStartSideTekst,
+  ISanitySvaralternativ,
+  ISanityTexts,
 } from "../types/sanity.types";
 import * as SentryLogger from "../sentry.logger";
 
-export const SanityContext = React.createContext<SanityTexts | undefined>(undefined);
+export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
 
-interface Props {
-  initialState: SanityTexts;
+interface IProps {
+  initialState: ISanityTexts;
 }
 
-function SanityProvider(props: PropsWithChildren<Props>) {
+function SanityProvider(props: PropsWithChildren<IProps>) {
   return (
     <SanityContext.Provider value={props.initialState}>{props.children}</SanityContext.Provider>
   );
@@ -27,7 +27,7 @@ function useSanity() {
     throw new Error("useSanity must be used within a SanityProvider");
   }
 
-  function getSeksjonTextById(textId: string): SanitySeksjon | undefined {
+  function getSeksjonTextById(textId: string): ISanitySeksjon | undefined {
     const text = context?.seksjoner.find((seksjon) => seksjon.textId === textId);
     if (!text) {
       SentryLogger.logMissingSanityText(textId);
@@ -35,7 +35,7 @@ function useSanity() {
     return text;
   }
 
-  function getFaktumTextById(textId: string): SanityFaktum | undefined {
+  function getFaktumTextById(textId: string): ISanityFaktum | undefined {
     const text = context?.fakta.find((faktum) => faktum.textId === textId);
     if (!text) {
       SentryLogger.logMissingSanityText(textId);
@@ -43,7 +43,7 @@ function useSanity() {
     return text;
   }
 
-  function getLandGruppeTextById(textId: string | undefined): SanityLandGruppe | undefined {
+  function getLandGruppeTextById(textId: string | undefined): ISanityLandGruppe | undefined {
     const text = context?.landgrupper.find((gruppe) => gruppe.textId === textId);
     if (textId && !text) {
       SentryLogger.logMissingSanityText(textId);
@@ -51,7 +51,7 @@ function useSanity() {
     return text;
   }
 
-  function getSvaralternativTextById(textId: string): SanitySvaralternativ | undefined {
+  function getSvaralternativTextById(textId: string): ISanitySvaralternativ | undefined {
     const text = context?.svaralternativer.find(
       (svaralternativ) => svaralternativ.textId === textId
     );
@@ -70,7 +70,7 @@ function useSanity() {
     return text;
   }
 
-  function getStartsideText(): SanityStartSideTekst | undefined {
+  function getStartsideText(): ISanityStartSideTekst | undefined {
     return context?.startside[0];
   }
 

@@ -10,7 +10,7 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/(?!(nav-.+)/)", "^.+\\.module\\.(css|sass|scss)$"],
   moduleNameMapper: {
     "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-    "^.+\\.svg$": "jest-transform-stub",
+    "^.+\\.(css|svg)$": "jest-transform-stub",
     "^jose/(.*)$": "identity-obj-proxy",
     "^@navikt/dp-auth/(.*)$": "<rootDir>/node_modules/@navikt/dp-auth/dist/$1",
   },

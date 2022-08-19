@@ -1,7 +1,7 @@
 import { createMocks } from "node-mocks-http";
-import personaliaHandler, { HttpProblem } from "../../../pages/api/personalia";
+import personaliaHandler, { IHttpProblem } from "../../../pages/api/personalia";
 import { getSession as _getSession } from "@navikt/dp-auth/server";
-import { Personalia } from "../../../types/personalia.types";
+import { IPersonalia } from "../../../types/personalia.types";
 
 jest.mock("@navikt/dp-auth/server");
 const getSession = _getSession as jest.MockedFunction<typeof _getSession>;
@@ -11,7 +11,7 @@ global.fetch = jest.fn(() => {
     headers: new Headers({ "content-type": "application/json" }),
     ok: true,
     json: () =>
-      Promise.resolve<Personalia>({
+      Promise.resolve<IPersonalia>({
         forNavn: "Donald",
         mellomNavn: "J",
         etterNavn: "Trumpf",
@@ -87,7 +87,7 @@ describe("/api/personalia", () => {
         status: 400,
         ok: false,
         json: () =>
-          Promise.resolve<HttpProblem>({
+          Promise.resolve<IHttpProblem>({
             detail: "En lengre beskrivelse av hvorfor det feiler",
             status: 400,
             title: "Feil token",

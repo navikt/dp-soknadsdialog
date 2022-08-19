@@ -1,6 +1,6 @@
-import { QuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 
-export const seksjonGjenopptak: QuizSeksjon = {
+export const seksjonGjenopptak: IQuizSeksjon = {
   fakta: [
     {
       id: "10001",

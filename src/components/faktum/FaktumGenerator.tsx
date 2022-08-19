@@ -1,4 +1,4 @@
-import { QuizFaktum, QuizGeneratorFaktum } from "../../types/quiz.types";
+import { QuizFaktum, IQuizGeneratorFaktum } from "../../types/quiz.types";
 import {
   ARBEIDSFORHOLD_FAKTUM_ID,
   BARN_LISTE_FAKTUM_ID,
@@ -6,7 +6,7 @@ import {
 } from "../../constants";
 import React, { useEffect } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { Faktum, FaktumProps } from "./Faktum";
+import { Faktum, IFaktum } from "./Faktum";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../barn/Barn";
@@ -16,7 +16,7 @@ import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCar
 import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 
-export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
+export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return <Arbeidsforhold {...props} />;
@@ -29,7 +29,7 @@ export function FaktumGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
   }
 }
 
-function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
+function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const { isLoading } = useQuiz();
@@ -73,11 +73,7 @@ function StandardGenerator(props: FaktumProps<QuizGeneratorFaktum>) {
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
 
-                {isLoading && (
-                  <div>
-                    <FetchIndicator isLoading={isLoading} />
-                  </div>
-                )}
+                <FetchIndicator isLoading={isLoading} />
 
                 <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                   Lagre og lukk
