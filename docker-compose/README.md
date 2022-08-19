@@ -18,7 +18,8 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
 
 
 ### Bruke søknadsdialogen lokalt
-1. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
+1. `docker-compose build` --> bygger de tilnærmet statiske docker-lagene for frontenden. Bla `node_modules`.
+2. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
 2. Vent til dp-soknad er klar. 
    * Kjør `docker-compose logs soknad -f` og se etter `"Mottatt søknadsmal med versjon_navn Dagpenger og versjon_id XXX"`
 3. Gå til http://localhost:4000/arbeid/dagpenger/soknad/en, i feltet `Optional claims JSON value` fyll inn følgende:
