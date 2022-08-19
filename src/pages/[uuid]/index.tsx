@@ -10,7 +10,7 @@ import { getSoknadState } from "../../server-side/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import ErrorPage from "../_error";
+import Error from "../_error";
 
 interface ISoknadMedIdParams {
   soknadState: IQuizState | undefined;
@@ -41,6 +41,7 @@ export async function getServerSideProps(
     // eslint-disable-next-line no-console
     console.log("ServerSideProps SoknadState", soknadState);
   }
+
   return {
     props: {
       sanityTexts,
@@ -52,20 +53,20 @@ export async function getServerSideProps(
 export default function SoknadMedId(props: ISoknadMedIdParams) {
   if (!props.sanityTexts.seksjoner) {
     return (
-      <ErrorPage
-        variant="error"
+      <Error
         title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved henting av texter fra sanity"
+        details="Noe gikk galt ved henting av texter fra sanity."
+        statusCode={500}
       />
     );
   }
 
   if (!props.soknadState) {
     return (
-      <ErrorPage
-        variant="error"
+      <Error
         title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved data fra Quiz"
+        details="Noe gikk galt ved henting av data fra Quiz."
+        statusCode={500}
       />
     );
   }

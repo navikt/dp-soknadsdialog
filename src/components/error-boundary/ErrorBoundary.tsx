@@ -3,22 +3,22 @@ import { Button } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
 import { Alert, BodyShort, Detail } from "@navikt/ds-react";
 
-interface Props {
+interface IProps {
   children?: ReactNode;
 }
 
-interface State {
+interface IState {
   hasError: boolean;
 }
 
-export default class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+export default class ErrorBoundary extends Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
 
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(): State {
+  static getDerivedStateFromError(): IState {
     return { hasError: true };
   }
 

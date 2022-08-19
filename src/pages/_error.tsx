@@ -1,28 +1,28 @@
 import React from "react";
 import { NextPageContext } from "next";
-import { Alert, BodyShort, Detail } from "@navikt/ds-react";
+import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
+import styles from "./_error.module.css";
 
-interface Props {
-  variant: "error" | "warning" | "info" | "success";
-  title: string;
-  details: string;
+interface IProps {
   statusCode?: number;
+  title: string;
+  details?: string;
 }
-export default function ErrorPage(props: Props) {
-  const { statusCode, variant, title, details } = props;
-
-  // eslint-disable-next-line no-console
-  console.log(statusCode);
+export default function Error(props: IProps) {
+  const { statusCode, title, details } = props;
 
   return (
-    <Alert variant={variant}>
-      <BodyShort>{title}</BodyShort>
-      <Detail>{details}</Detail>
+    <Alert variant="error">
+      <Heading size={"medium"} className={styles.error}>
+        {title}
+      </Heading>
+      <BodyLong>{details}</BodyLong>
+      {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
     </Alert>
   );
 }
 
-ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
+Error.getInitialProps = ({ res, err }: NextPageContext) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };
