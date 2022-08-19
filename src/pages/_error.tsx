@@ -17,7 +17,7 @@ export default function Error(props: IProps) {
         {title}
       </Heading>
       <BodyLong>{details}</BodyLong>
-      {statusCode && <BodyShort>Statuskode {statusCode}</BodyShort>}
+      {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
     </Alert>
   );
 }

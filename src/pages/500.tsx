@@ -17,7 +17,7 @@ export default function Error500() {
         Beklager, det skjedde en teknisk feil.
       </Heading>
       <BodyLong>Vi jobber med å løse den så raskt som mulig. Prøv igjen om litt.</BodyLong>
-      <BodyShort>Statuskode 500</BodyShort>
+      <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
     </Alert>
   );
 }
