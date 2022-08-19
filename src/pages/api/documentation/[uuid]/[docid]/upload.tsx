@@ -10,6 +10,9 @@ export const config = {
 };
 
 async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(201).json({ filnavn: "test.png", urn: "jdsopfjop:jdis-1dhiodhois" });
+  }
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
   const docid = req.query.docid as string;
@@ -45,7 +48,7 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
       });
   } else {
     res.status(500);
-    res.send('{"errror": "Could not upload file"}');
+    res.send('{"error": "Could not upload file"}');
   }
 }
 

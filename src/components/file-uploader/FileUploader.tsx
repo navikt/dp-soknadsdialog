@@ -57,13 +57,17 @@ export function FileUploader({ id, onHandle }: IProps) {
         accept: "application/json",
       },
       body: requestData,
-    }).then((res) => res.json());
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      } else {
+        throw Error(res.statusText);
+      }
+    });
 
     try {
       const response = await postRequest;
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
+
       fileObj.state = FileHandleState.Uploaded;
       fileObj.urn = response.urn;
 
