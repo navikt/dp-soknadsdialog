@@ -13,7 +13,7 @@ import { FileSuccess } from "@navikt/ds-icons";
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { soknadState, isError, isLoading, errorType } = useQuiz();
   const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
@@ -119,12 +119,7 @@ export function Soknad() {
           {getAppTekst("auto-lagret.tekst")}
         </p>
       )}
-      {isError && (
-        <ErrorModal
-          title={getAppTekst("teknisk-feil.med-reload.tittel")}
-          details={getAppTekst("teknisk-feil.med-reload.detaljer")}
-        />
-      )}
+      {isError && <ErrorModal errorType={errorType} />}
     </main>
   );
 }
