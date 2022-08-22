@@ -1,5 +1,7 @@
 import React, { PropsWithChildren } from "react";
 import {
+  ISanityDokumentkrav,
+  ISanityDokumentkravSvar,
   ISanityFaktum,
   ISanityLandGruppe,
   ISanitySeksjon,
@@ -50,6 +52,14 @@ function useSanity() {
     return context?.startside[0];
   }
 
+  function getDokumentkravTextById(textId: string): ISanityDokumentkrav | undefined {
+    return context?.dokumentkrav.find((krav) => krav.textId === textId);
+  }
+
+  function getDokumentkravSvarTextById(textId: string): ISanityDokumentkravSvar | undefined {
+    return context?.dokumentkravSvar.find((svar) => svar.textId === textId);
+  }
+
   return {
     getSeksjonTextById,
     getFaktumTextById,
@@ -57,6 +67,8 @@ function useSanity() {
     getSvaralternativTextById,
     getAppTekst,
     getStartsideText,
+    getDokumentkravTextById,
+    getDokumentkravSvarTextById,
   };
 }
 

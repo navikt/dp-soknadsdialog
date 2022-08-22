@@ -67,6 +67,33 @@ function getStartsideTextsFields() {
 }`;
 }
 
+function getDokumentkravFields(usePlainText: boolean) {
+  return `{
+  textId,
+  text,
+  ${usePlainText ? '"description": pt::text(description)' : "description"},
+  helpText,
+  helpText != null => {
+    "helpText": {
+      ...helpText, ${usePlainText ? '"body": pt::text(helpText.body)' : '"body": helpText.body'}
+    }
+  },
+}`;
+}
+
+function getDokumentkravSvarFields(usePlainText: boolean) {
+  return `{
+  textId,
+  text,
+  alertText,
+  alertText != null => {
+    "alertText": {
+      ...alertText, ${usePlainText ? '"body": pt::text(alertText.body)' : '"body": alertText.body'}
+    }
+  },
+}`;
+}
+
 function getSeksjonerGroq(usePlainText: boolean) {
   return `* [_type=="seksjon" && __i18n_lang==$baseLang]{
 ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getSeksjonFields(
@@ -111,13 +138,31 @@ function getStartSideTextsGroq() {
   }`;
 }
 
+function getDokumentkravGroq(usePlainText: boolean) {
+  return `* [_type=="dokumentkrav" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
+    usePlainText
+  )}, ${getDokumentkravFields(usePlainText)})
+  }`;
+}
+
+function getDokumentkravSvarGroq(usePlainText: boolean) {
+  return `* [_type=="dokumentkravSvar" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
+    usePlainText
+  )}, ${getDokumentkravSvarFields(usePlainText)})
+  }`;
+}
+
 export const allTextsQuery = groq`{
   "seksjoner": ${getSeksjonerGroq(false)},
   "fakta": ${getFaktaGroq(false)},
   "svaralternativer": ${getSvaralternativerGroq(false)},
   "landgrupper": ${getLandGrupperGroq(false)},
   "apptekster": ${getAppTextsGroq()},
-  "startside": ${getStartSideTextsGroq()}
+  "startside": ${getStartSideTextsGroq()},
+  "dokumentkrav": ${getDokumentkravGroq(false)},
+  "dokumentkravSvar": ${getDokumentkravSvarGroq(false)}
 }`;
 
 export const allTextsPlainQuery = groq`{

@@ -13,6 +13,8 @@ const mockSanity = {
   landgrupper: [],
   apptekster: [],
   startside: [],
+  dokumentkrav: [],
+  dokumentkravSvar: [],
 };
 
 const sectionMockData: IQuizSeksjon = {

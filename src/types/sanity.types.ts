@@ -47,6 +47,19 @@ export interface ISanityStartSideTekst {
   body: TypedObject | TypedObject[];
 }
 
+export interface ISanityDokumentkrav {
+  textId: string;
+  text: string;
+  description?: TypedObject | TypedObject[];
+  helpText?: ISanityHelpText;
+}
+
+export interface ISanityDokumentkravSvar {
+  textId: string;
+  text: string;
+  alertText?: ISanityAlertText;
+}
+
 export interface ISanityTexts {
   fakta: ISanityFaktum[];
   seksjoner: ISanitySeksjon[];
@@ -54,4 +67,6 @@ export interface ISanityTexts {
   landgrupper: ISanityLandGruppe[];
   apptekster: ISanityAppTekst[];
   startside: ISanityStartSideTekst[];
+  dokumentkrav: ISanityDokumentkrav[];
+  dokumentkravSvar: ISanityDokumentkravSvar[];
 }
