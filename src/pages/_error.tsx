@@ -8,6 +8,7 @@ interface IProps {
   title: string;
   details?: string;
 }
+
 export default function Error(props: IProps) {
   const { statusCode, title, details } = props;
 
