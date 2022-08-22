@@ -5,6 +5,7 @@ import { StartSoknad } from "../views/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
+import Error from "./_error";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -29,7 +30,14 @@ export async function getServerSideProps(
 
 export default function Soknad(props: IProps) {
   if (!props.sanityTexts.apptekster) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
+    return (
+      <Error
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
+        statusCode={500}
+        developerErrorMessage="Noe gikk galt ved henting av texter fra sanity."
+      />
+    );
   }
 
   return (
