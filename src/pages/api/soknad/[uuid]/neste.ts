@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
 import { getSoknadState } from "../../../../server-side/quiz-api";
 import { BARN_LISTE_REGISTER_FAKTUM_ID } from "../../../../constants";
+import { withSentry } from "@sentry/nextjs";
 
 let localhostAnswerIndex = 0;
 
@@ -42,4 +43,4 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
 
   res.status(404).end();
 }
-export default nesteHandler;
+export default withSentry(nesteHandler);
