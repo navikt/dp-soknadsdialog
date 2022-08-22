@@ -7,11 +7,10 @@ interface IProps {
   title: string;
   details: string;
   statusCode?: number;
-  developerErrorMessage?: string;
 }
 
 export default function Error(props: IProps) {
-  const { statusCode, title, details, developerErrorMessage } = props;
+  const { statusCode, title, details } = props;
 
   return (
     <Alert variant="error">
@@ -20,9 +19,6 @@ export default function Error(props: IProps) {
       </Heading>
       <BodyLong>{details}</BodyLong>
       {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
-      {process.env.NEXT_PUBLIC_LOCALHOST && (
-        <BodyShort className={styles.developerErrorMessage}>{developerErrorMessage}</BodyShort>
-      )}
     </Alert>
   );
 }

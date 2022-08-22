@@ -2,7 +2,6 @@
   margin-bottom: var(--navds-spacing-4);
 }
 
-.statusCode,
-.developerErrorMessage {
+.statusCode {
   margin-top: var(--navds-spacing-4);
 }
