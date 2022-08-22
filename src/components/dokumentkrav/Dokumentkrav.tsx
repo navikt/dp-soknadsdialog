@@ -25,8 +25,8 @@ export function Dokumentkrav(props: IProps) {
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
-  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
-  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
+  const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
+  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
   const linkedArbeidsgiverFaktum = dokumentkrav.fakta.find((faktum) => {
@@ -35,7 +35,7 @@ export function Dokumentkrav(props: IProps) {
 
   useEffect(() => {
     if (svar !== "") {
-      setAlertText(getSvaralternativTextById(svar)?.alertText);
+      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
 
@@ -62,10 +62,11 @@ export function Dokumentkrav(props: IProps) {
           value={svar}
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
-            const svaralternativText = getSvaralternativTextById(textId);
+            const id = `${dokumentkrav.id}-${textId}`;
+            const svaralternativText = getDokumentkravSvarTextById(textId);
             return (
-              <div key={textId}>
-                <Radio value={textId} id={textId}>
+              <div key={id}>
+                <Radio value={textId} id={id}>
                   {svaralternativText ? svaralternativText.text : textId}
                 </Radio>
               </div>
@@ -74,7 +75,7 @@ export function Dokumentkrav(props: IProps) {
         </RadioGroup>
       </div>
 
-      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingTop />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />

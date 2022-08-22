@@ -15,6 +15,8 @@ const mockSanity = {
   landgrupper: [],
   apptekster: [],
   startside: [],
+  dokumentkrav: [],
+  dokumentkravSvar: [],
 };
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {

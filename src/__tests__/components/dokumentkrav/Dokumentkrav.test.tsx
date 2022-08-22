@@ -53,6 +53,8 @@ const mockSanity = {
   landgrupper: [],
   apptekster: [],
   startside: [],
+  dokumentkrav: [],
+  dokumentkravSvar: [],
 };
 
 describe("Dokumentkrav", () => {
