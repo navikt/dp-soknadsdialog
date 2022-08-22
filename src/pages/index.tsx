@@ -35,7 +35,6 @@ export default function Soknad(props: IProps) {
         title="Det har skjedd en teknisk feil"
         details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={500}
-        developerErrorMessage="Noe gikk galt ved henting av texter fra sanity."
       />
     );
   }

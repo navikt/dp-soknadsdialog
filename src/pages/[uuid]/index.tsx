@@ -57,7 +57,6 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
         title="Det har skjedd en teknisk feil"
         details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={500}
-        developerErrorMessage="Noe gikk galt ved henting av texter fra sanity."
       />
     );
   }
@@ -68,7 +67,6 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
         title="Det har skjedd en teknisk feil"
         details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={500}
-        developerErrorMessage="Noe gikk galt ved henting av data fra Quiz."
       />
     );
   }
