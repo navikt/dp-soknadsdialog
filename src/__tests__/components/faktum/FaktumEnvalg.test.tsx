@@ -5,6 +5,8 @@ import { SanityProvider } from "../../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../../types/quiz.types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { IQuizState } from "../../../localhost-data/quiz-state-response";
+import fetch from "jest-fetch-mock";
+import userEvent from "@testing-library/user-event";
 
 const mockSanity = {
   fakta: [],
@@ -28,6 +30,19 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
 };
 
+const lagreFaktumMock = { status: "ok" };
+
+const nesteMockData = {
+  ferdig: false,
+  seksjoner: [
+    {
+      fakta: [faktumMockData],
+      beskrivendeId: "gjenopptak",
+      ferdig: true,
+    },
+  ],
+};
+
 const sectionMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
   beskrivendeId: "gjenopptak",
@@ -39,7 +54,7 @@ const soknadStateMockData: IQuizState = {
   seksjoner: [sectionMockData],
 };
 
-describe("Faktum", () => {
+describe("FaktumEnvalg", () => {
   test("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={mockSanity}>
@@ -75,6 +90,52 @@ describe("Faktum", () => {
 
     await waitFor(() => {
       expect(checkedRadio.value).toBe(svar);
+    });
+  });
+
+  describe("When user selects an answer", () => {
+    beforeEach(() => {
+      fetch.enableMocks();
+    });
+
+    afterEach(() => {
+      fetch.mockReset();
+    });
+
+    test("Should post the answer to the server", async () => {
+      // First save the answer
+      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
+      // Then get next question (if any)
+      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+
+      const user = userEvent.setup();
+      const svar = faktumMockData.gyldigeValg[0];
+
+      render(
+        <SanityProvider initialState={mockSanity}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <FaktumEnvalg faktum={faktumMockData} />
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const firstRadio = screen.getByLabelText(svar);
+
+      user.click(firstRadio);
+
+      await waitFor(() => {
+        const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
+        expect(checkedRadio).toBeInTheDocument();
+        expect(checkedRadio.value).toEqual(svar);
+        expect(fetch.mock.calls.length).toEqual(2);
+
+        // Does the first call save the faktum with the right answer?
+        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
+        const requestJson = JSON.parse(putRequestBody);
+
+        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
+        expect(requestJson.svar).toBe(svar);
+      });
     });
   });
 });

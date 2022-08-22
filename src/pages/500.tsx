@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import Error from "../components/error/Error";
+import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
+import styles from "./_error.module.css";
 
 export default function Error500() {
   useEffect(() => {
@@ -11,11 +12,12 @@ export default function Error500() {
   }, []);
 
   return (
-    <Error
-      variant="error"
-      title="Beklager, det skjedde en teknisk feil."
-      details="Vi jobber med å løse den så raskt som mulig. Prøv igjen
-        om litt."
-    />
+    <Alert variant="error">
+      <Heading size={"medium"} className={styles.error}>
+        Beklager, det skjedde en teknisk feil.
+      </Heading>
+      <BodyLong>Vi jobber med å løse den så raskt som mulig. Prøv igjen om litt.</BodyLong>
+      <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
+    </Alert>
   );
 }

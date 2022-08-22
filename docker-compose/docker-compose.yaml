@@ -73,9 +73,9 @@ services:
       KAFKA_RESET_POLICY: "earliest"
       TOKEN_X_CLIENT_ID: "localhost:teamdagpenger:dp-soknad"
 
-  quizmock:
+  mock:
     image: ghcr.io/navikt/dp-mock-quiz-behovloser/dp-mock-quiz-behovloser:latest
-    container_name: quizmock
+    container_name: mock
     depends_on:
       - kafka
     ports:
@@ -141,7 +141,13 @@ services:
       WONDERWALL_LOG_FORMAT: "text"
 
   frontend:
-    image: ghcr.io/navikt/dp-soknadsdialog/dp-soknadsdialog:latest
+    build:
+      context: ..
+      dockerfile: "docker-compose/FastRefreshDockerfile"
+      args:
+        PAT: "${GITHUB_PAT}"
+    volumes:
+      - "../src:/app/src"
     container_name: frontend
     ports:
       - "3001:3001"
