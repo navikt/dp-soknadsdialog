@@ -2,6 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { IPersonalia } from "../../../types/personalia.types";
 import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../../api.utils";
+import { withSentry } from "@sentry/nextjs";
 
 // As of https://tools.ietf.org/html/rfc7807
 export interface IHttpProblem {
@@ -69,4 +70,4 @@ const personaliaHandler: NextApiHandler<IPersonalia | IHttpProblem> = async (
   }
 };
 
-export default personaliaHandler;
+export default withSentry(personaliaHandler);

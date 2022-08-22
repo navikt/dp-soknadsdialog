@@ -2,6 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../api.utils";
 import { getPaabegynt } from "../../../server-side/quiz-api";
+import { withSentry } from "@sentry/nextjs";
 
 async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -19,4 +20,4 @@ async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default getPaabegyntHandler;
+export default withSentry(getPaabegyntHandler);

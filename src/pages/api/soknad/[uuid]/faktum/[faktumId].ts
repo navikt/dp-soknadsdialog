@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import { audience } from "../../../../../api.utils";
+import { withSentry } from "@sentry/nextjs";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const {
@@ -33,4 +34,4 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default saveFaktumHandler;
+export default withSentry(saveFaktumHandler);
