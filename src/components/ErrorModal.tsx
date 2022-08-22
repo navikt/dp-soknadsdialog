@@ -14,14 +14,21 @@ export default function ErrorModal(props: IProps) {
   const { errorType } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const localStorageErrorsCount = localStorage.getItem("errorsCount");
-  const errorsCount = localStorageErrorsCount ? parseInt(localStorageErrorsCount) : 1;
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorsCount, setErrorsCount] = useState(1);
 
   useEffect(() => {
     if (Modal.setAppElement) {
       Modal.setAppElement("#__next");
     }
+
+    const localStorageErrorsCount = localStorage.getItem("errorsCount");
+    if (localStorageErrorsCount) {
+      setErrorsCount(parseInt(localStorageErrorsCount));
+    } else {
+      localStorage.setItem("errorsCount", JSON.stringify(1));
+    }
+
     setErrorMessage(getErrorMessageByType());
   }, []);
 
@@ -38,10 +45,6 @@ export default function ErrorModal(props: IProps) {
       default:
         return getAppTekst("teknisk-feil.modal.detaljer.generell");
     }
-  }
-
-  if (!localStorageErrorsCount) {
-    localStorage.setItem("errorsCount", JSON.stringify(1));
   }
 
   function reload() {
