@@ -13,8 +13,6 @@ ARG BASE_PATH
 ENV PORT=3001 \
     NODE_ENV=development
 
-COPY .npmrc *.json *.js *.ts ./
-
 EXPOSE 3001
 
 CMD ["./node_modules/.bin/next", "dev"]

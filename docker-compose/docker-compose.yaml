@@ -147,7 +147,9 @@ services:
       args:
         PAT: "${GITHUB_PAT}"
     volumes:
-      - "../src:/app/src"
+      - "../:/app"
+      - "/app/node_modules"
+      - "/app/.next"
     container_name: frontend
     ports:
       - "3001:3001"
