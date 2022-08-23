@@ -34,12 +34,8 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
 NB! Det er opprettet en egen [oppgave](https://jira.adeo.no/browse/DAG-340) på å automatisere steg 3-5.
 
 #### Hvordan få frontenden til å snappe opp endringer
-1. Gjør endringene i kildekoden
-2. Kjør kommandoen:
-   ```docker-compose restart frontend```
-4. Etter cirka 20 sekunder vil nettleseren refreshe appen, og endringene vil bli vist.
-   * Hvis du er nysgjerrig på hva som skjer kan man kjøre følgende kommando for å følge med: `docker-compose logs frontend -f`
-
+Gjør eventuelle endringer i kildekoden, disse endringene blir automatisk snappet opp etter cirka 10 sekunder.
+Følg gjerne med i loggen for frontenden: `docker-compose logs frontend -f`
 
 ### Stoppe alle containere
 * `docker-compose down` --> stopper alle kjørende containere, men beholder tilstand i databaser og på kafka. 
