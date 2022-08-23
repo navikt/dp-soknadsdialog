@@ -9,7 +9,7 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
-import ErrorModal from "../ErrorModal";
+import { ErrorModal } from "../ErrorModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {

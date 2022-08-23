@@ -5,7 +5,7 @@ import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { Timeline as timeline } from "../components/timeline/Timeline";
-import ErrorModal from "../components/ErrorModal";
+import { ErrorModal } from "../components/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 
 export function StartSoknad() {

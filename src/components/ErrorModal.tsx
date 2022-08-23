@@ -10,7 +10,7 @@ interface IProps {
   errorType: ErrorTypesEnum;
 }
 
-export default function ErrorModal(props: IProps) {
+export function ErrorModal(props: IProps) {
   const { errorType } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();

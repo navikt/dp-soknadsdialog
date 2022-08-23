@@ -4,7 +4,7 @@ import { IQuizSeksjon } from "../../types/quiz.types";
 import styles from "./Section.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { SectionHeading } from "./SectionHeading";
-import ErrorModal from "../ErrorModal";
+import { ErrorModal } from "../ErrorModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 
 interface IProps {

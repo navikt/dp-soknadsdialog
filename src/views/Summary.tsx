@@ -7,7 +7,7 @@ import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
-import ErrorModal from "../components/ErrorModal";
+import { ErrorModal } from "../components/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 
 interface IProps {
