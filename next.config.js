@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { withSentryConfig } = require("@sentry/nextjs");
+const {withSentryConfig} = require("@sentry/nextjs");
 const withReactSvg = require("next-react-svg");
 const path = require("path");
 
@@ -17,6 +17,15 @@ const config = withReactSvg({
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },
+  webpack: (config, {dev}) => {
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      }
+    }
+    return config
+  }
 });
 
 module.exports = withSentryConfig(config, {
