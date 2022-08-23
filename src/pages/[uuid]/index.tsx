@@ -54,8 +54,8 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
   if (!props.sanityTexts.seksjoner) {
     return (
       <Error
-        title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved henting av texter fra sanity."
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={500}
       />
     );
@@ -64,8 +64,8 @@ export default function SoknadMedId(props: ISoknadMedIdParams) {
   if (!props.soknadState) {
     return (
       <Error
-        title="Beklager, det skjedde en teknisk feil."
-        details="Noe gikk galt ved henting av data fra Quiz."
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={500}
       />
     );

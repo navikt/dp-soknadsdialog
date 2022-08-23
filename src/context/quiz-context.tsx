@@ -3,6 +3,7 @@ import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
 import { QuizFaktum, QuizFaktumSvarType, IQuizGeneratorFaktum } from "../types/quiz.types";
+import { ErrorTypesEnum } from "../types/error.types";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -10,6 +11,7 @@ export interface IQuizContext {
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
   isLoading: boolean;
   isError: boolean;
+  errorType: ErrorTypesEnum;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -24,6 +26,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
     try {
@@ -42,6 +45,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setErrorType(ErrorTypesEnum.SaveFaktumError);
     }
   }
 
@@ -62,6 +66,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setErrorType(ErrorTypesEnum.GenericError);
     }
   }
 
@@ -74,6 +79,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("GET NESTE ERROR: ", error);
+      setIsError(true);
+      setErrorType(ErrorTypesEnum.GetNesteError);
     }
   }
 
@@ -85,6 +92,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         saveGeneratorFaktumToQuiz,
         isLoading,
         isError,
+        errorType,
       }}
     >
       {props.children}

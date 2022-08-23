@@ -4,9 +4,9 @@ import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
 import styles from "./_error.module.css";
 
 interface IProps {
-  statusCode?: number;
   title: string;
-  details?: string;
+  details: string;
+  statusCode?: number;
 }
 
 export default function Error(props: IProps) {

@@ -5,20 +5,26 @@ import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { Timeline as timeline } from "../components/timeline/Timeline";
+import { ErrorModal } from "../components/ErrorModal";
+import { ErrorTypesEnum } from "../types/error.types";
 
 export function StartSoknad() {
   const router = useRouter();
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [isError, setIsError] = useState(false);
   const { getAppTekst, getStartsideText } = useSanity();
 
   async function startSoknad() {
-    setIsCreatingSoknadUUID(true);
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/get-uuid`);
-    const uuid = await response.text();
-
-    router.push(`/${uuid}`);
+    try {
+      setIsCreatingSoknadUUID(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/get-uuid`);
+      const uuid = await response.text();
+      router.push(`/${uuid}`);
+    } catch (e) {
+      setIsError(true);
+    }
   }
 
   function login() {
@@ -29,6 +35,10 @@ export function StartSoknad() {
 
   const startSideText = getStartsideText();
   const portableTextComponents = { types: { timeline } };
+
+  if (isError) {
+    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
+  }
 
   return (
     <main>

@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { IQuizSeksjon } from "../types/quiz.types";
-import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
+import { Accordion, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
+import { ErrorModal } from "../components/ErrorModal";
+import { ErrorTypesEnum } from "../types/error.types";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -35,13 +37,7 @@ export function Summary(props: IProps) {
   }
 
   if (hasError) {
-    return (
-      <>
-        <Alert variant="error" size="medium">
-          {getAppTekst("oppsummering.feil")}
-        </Alert>
-      </>
-    );
+    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
   return (

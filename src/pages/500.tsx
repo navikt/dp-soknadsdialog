@@ -14,9 +14,12 @@ export default function Error500() {
   return (
     <Alert variant="error">
       <Heading size={"medium"} className={styles.error}>
-        Beklager, det skjedde en teknisk feil.
+        Vi har tekniske problemer akkurat nå
       </Heading>
-      <BodyLong>Vi jobber med å løse den så raskt som mulig. Prøv igjen om litt.</BodyLong>
+      <BodyLong>
+        Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve
+        igjen om litt.
+      </BodyLong>
       <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
     </Alert>
   );

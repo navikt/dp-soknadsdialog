@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
 import { Alert, BodyShort, Detail } from "@navikt/ds-react";
+import styles from "./ErrorBoundary.module.css";
 
 interface IProps {
   children?: ReactNode;
@@ -32,13 +33,13 @@ export default class ErrorBoundary extends Component<IProps, IState> {
       return (
         <>
           <Alert variant="error">
-            <BodyShort>Beklager, det skjedde en teknisk feil.</BodyShort>
+            <BodyShort>Vi har tekniske problemer akkurat nå</BodyShort>
             <Detail>
-              Feilen blir automatisk rapportert og vi jobber med å løse den så raskt som mulig. Prøv
-              igjen om litt.
+              Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan
+              prøve igjen om litt.
             </Detail>
+            <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
           </Alert>
-
           <Button
             variant="primary"
             size="medium"

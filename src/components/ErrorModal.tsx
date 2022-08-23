@@ -1,30 +1,50 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSanity } from "../context/sanity-context";
+import { ErrorTypesEnum } from "../types/error.types";
 import styles from "./ErrorModal.module.css";
 
 interface IProps {
-  title: string;
-  details: string;
+  errorType: ErrorTypesEnum;
 }
 
-export default function ErrorModal(props: IProps) {
-  const { title, details } = props;
+export function ErrorModal(props: IProps) {
+  const { errorType } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const localStorageErrorsCount = localStorage.getItem("errorsCount");
-  const errorsCount = localStorageErrorsCount ? parseInt(localStorageErrorsCount) : 1;
+  const [errorMessage, setErrorMessage] = useState("");
+  const [errorsCount, setErrorsCount] = useState(1);
 
   useEffect(() => {
     if (Modal.setAppElement) {
       Modal.setAppElement("#__next");
     }
+
+    const localStorageErrorsCount = localStorage.getItem("errorsCount");
+    if (localStorageErrorsCount) {
+      setErrorsCount(parseInt(localStorageErrorsCount));
+    } else {
+      localStorage.setItem("errorsCount", JSON.stringify(1));
+    }
+
+    setErrorMessage(getErrorMessageByType());
   }, []);
 
-  if (!localStorageErrorsCount) {
-    localStorage.setItem("errorsCount", JSON.stringify(1));
+  function getErrorMessageByType() {
+    switch (errorType) {
+      case ErrorTypesEnum.GenericError:
+        return getAppTekst("teknisk-feil.modal.detaljer.generell");
+      case ErrorTypesEnum.GetNesteError:
+        return getAppTekst("teknisk-feil.modal.detaljer.hent-neste");
+      case ErrorTypesEnum.SaveFaktumError:
+        return getAppTekst("teknisk-feil.modal.detaljer.lagre-faktum");
+      case ErrorTypesEnum.SendSoknadError:
+        return getAppTekst("teknisk-feil.modal.detaljer.send-soknad");
+      default:
+        return getAppTekst("teknisk-feil.modal.detaljer.generell");
+    }
   }
 
   function reload() {
@@ -48,12 +68,12 @@ export default function ErrorModal(props: IProps) {
     >
       <Modal.Content>
         <Heading size={"medium"} spacing>
-          {title}
+          {getAppTekst("teknisk-feil.modal.tittel")}
         </Heading>
         <div className={styles.errorModalButtonContainer}>
-          <p>{details}</p>
+          <p>{errorMessage}</p>
           <Button variant={"primary"} onClick={reload}>
-            {getAppTekst("teknisk-feil.reload.knapp-tekst")}
+            {getAppTekst("teknisk-feil.modal.knapp-tekst")}
           </Button>
         </div>
       </Modal.Content>
