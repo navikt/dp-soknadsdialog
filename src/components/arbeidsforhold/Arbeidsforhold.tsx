@@ -13,7 +13,7 @@ import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import { PortableText } from "@portabletext/react";
-import { FAKTUM_SVAR_BEDRIFTSNAVN } from "../../constants";
+import { ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID } from "../../constants";
 
 export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
@@ -115,7 +115,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
 
 export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
   return (
-    (arbeidsforhold.find((answer) => answer.beskrivendeId === FAKTUM_SVAR_BEDRIFTSNAVN)
+    (arbeidsforhold.find((answer) => answer.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID)
       ?.svar as string) ?? "Fant ikke navn på arbeidsgiver"
   );
 }

@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceMellomlagring } from "../../../../../api.utils";
-import { postDocumentation } from "../../../../../server-side/mellomlagring-api";
+import { audienceMellomlagring } from "../../../../api.utils";
+import { postDocumentation } from "../../../../server-side/mellomlagring-api";
 
 export const config = {
   api: {
@@ -15,7 +15,7 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
-  const docid = req.query.docid as string;
+
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const buffers: any[] = [];
 
@@ -33,7 +33,6 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
         try {
           const response = await postDocumentation(
             uuid,
-            docid,
             Buffer.concat(buffers),
             onBehalfOfToken,
             req

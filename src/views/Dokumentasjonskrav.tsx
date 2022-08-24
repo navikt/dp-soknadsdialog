@@ -11,20 +11,22 @@ interface IProps {
 
 export function Dokumentasjonskrav(props: IProps) {
   const { getAppTekst } = useSanity();
-  const { dokumentasjonskrav } = props;
+  const { krav } = props.dokumentasjonskrav;
   return (
     <>
       <Heading level="2" size="medium">
         Dokumentasjon
       </Heading>
-      {dokumentasjonskrav.krav.map((krav, index) => {
+
+      {krav.map((dokumentkrav, index) => {
         const formattedCounter = `${index + 1} ${getAppTekst("dokumentkrav.nummer.av.krav")} ${
-          dokumentasjonskrav.krav.length
+          krav.length
         }`;
+
         return (
           <div className={styles.dokumentkravContainer} key={index}>
-            <Detail key={`${krav.id}-detail`}>{formattedCounter}</Detail>
-            <Dokumentkrav key={krav.id} dokumentkrav={krav} />
+            <Detail>{formattedCounter}</Detail>
+            <Dokumentkrav dokumentkrav={dokumentkrav} />
           </div>
         );
       })}

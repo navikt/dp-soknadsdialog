@@ -2,8 +2,9 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
 import { getDocumentationList } from "../../../../server-side/documentation-api";
+import { withSentry } from "@sentry/nextjs";
 
-async function statusHandler(req: NextApiRequest, res: NextApiResponse) {
+async function dokumentasjonskravHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
 
@@ -19,4 +20,5 @@ async function statusHandler(req: NextApiRequest, res: NextApiResponse) {
 
   res.status(404).end();
 }
-export default statusHandler;
+
+export default withSentry(dokumentasjonskravHandler);

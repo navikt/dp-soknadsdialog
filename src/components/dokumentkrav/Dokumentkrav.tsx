@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
-import { IDokumentkrav, IFileState, IDokumentkravFil } from "../../types/documentation.types";
+import { IDokumentkrav, IFileState } from "../../types/documentation.types";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-uploader/FileList";
 import styles from "./Dokumentkrav.module.css";
@@ -10,9 +10,9 @@ import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import {
-  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID,
   DOKUMENTKRAV_SVAR_SEND_NAA,
-  FAKTUM_SVAR_BEDRIFTSNAVN,
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
 
 interface IProps {
@@ -21,17 +21,18 @@ interface IProps {
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
-  const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+  const [alertText, setAlertText] = useState<ISanityAlertText>();
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
-  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+
   const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
-  const [alertText, setAlertText] = useState<ISanityAlertText>();
-  const uploadedFiles: IDokumentkravFil[] = dokumentkrav.filer || [];
-  const linkedArbeidsgiverFaktum = dokumentkrav.fakta.find((faktum) => {
-    return faktum.beskrivendeId === FAKTUM_SVAR_BEDRIFTSNAVN;
-  });
+  const uploadedFiles = dokumentkrav.filer || [];
+  const employerName = dokumentkrav.fakta.find(
+    (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
+  )?.svar;
 
   useEffect(() => {
     if (svar !== "") {
@@ -50,7 +51,7 @@ export function Dokumentkrav(props: IProps) {
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
         {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}{" "}
-        {linkedArbeidsgiverFaktum && `(${linkedArbeidsgiverFaktum.svar})`}
+        {employerName && `(${employerName})`}
       </Heading>
 
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
@@ -74,7 +75,7 @@ export function Dokumentkrav(props: IProps) {
         </RadioGroup>
       </div>
 
-      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingTop />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
