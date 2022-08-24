@@ -6,6 +6,7 @@ import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
 import Error from "./_error";
+import * as Sentry from "@sentry/nextjs";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -29,6 +30,7 @@ export async function getServerSideProps(
 }
 
 export default function Soknad(props: IProps) {
+  Sentry.captureEvent({ message: "Testing ..." });
   if (!props.sanityTexts.apptekster) {
     return (
       <Error
