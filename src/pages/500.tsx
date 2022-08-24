@@ -7,11 +7,6 @@ import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
 import * as SentryLogger from "../sentry.logger";
 
-interface IErrorText {
-  title?: string;
-  details?: string;
-}
-
 const fallbackErrorText = {
   title: "Vi har tekniske problemer akkurat nå",
   details:
@@ -20,7 +15,7 @@ const fallbackErrorText = {
 
 export default function Error500() {
   const { locale } = useRouter();
-  const [errorMessage, setErrorMessage] = useState<IErrorText>(fallbackErrorText);
+  const [errorMessage, setErrorMessage] = useState(fallbackErrorText);
 
   useEffect(() => {
     getSanityText();
