@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import "react-day-picker/dist/style.css";
 import { format, isValid } from "date-fns";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
