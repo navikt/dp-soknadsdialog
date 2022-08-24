@@ -7,6 +7,6 @@ export function logMissingSanityText(textId: string) {
 class MissingTextError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = this.constructor.name;
+    this.name = "MissingTextError";
   }
 }
