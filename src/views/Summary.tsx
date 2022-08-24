@@ -80,8 +80,7 @@ export function Summary(props: IProps) {
       </ConfirmationPanel>
 
       <nav className={styles.navigation}>
-        <Button variant={"secondary"} onClick={() => goToSoknad()}>
-          <Left />
+        <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
           {getAppTekst("knapp.forrige")}
         </Button>
 
