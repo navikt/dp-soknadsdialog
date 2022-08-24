@@ -1,9 +1,29 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
+import { useRouter } from "next/router";
 import styles from "./_error.module.css";
+import { sanityClient } from "../../sanity-client";
+import { ISanityTexts } from "../types/sanity.types";
+import { allTextsQuery } from "../sanity/groq-queries";
+import { getAppTekst } from "../utils/getAppText";
+
+interface IErrorText {
+  title?: string;
+  details?: string;
+}
+
+const fallbackErrorText = {
+  title: "Vi har tekniske problemer akkurat nå",
+  details:
+    " Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt.",
+};
 
 export default function Error500() {
+  const { locale } = useRouter();
+  const [errorMessage, setErrorMessage] = useState<IErrorText>(fallbackErrorText);
+
   useEffect(() => {
+    getSanityText();
     const localStorageErrorsCount = localStorage.getItem("errorsCount");
 
     if (localStorageErrorsCount) {
@@ -11,15 +31,28 @@ export default function Error500() {
     }
   }, []);
 
+  async function getSanityText() {
+    try {
+      const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
+        baseLang: "nb",
+        lang: locale,
+      });
+
+      const title = getAppTekst("teknisk-feil.helside.tittel", sanityTexts);
+      const details = getAppTekst("teknisk-feil.helside.detaljer", sanityTexts);
+
+      setErrorMessage({ title, details });
+    } catch (err) {
+      setErrorMessage(fallbackErrorText);
+    }
+  }
+
   return (
     <Alert variant="error">
       <Heading size={"medium"} className={styles.error}>
-        Vi har tekniske problemer akkurat nå
+        {errorMessage.title}
       </Heading>
-      <BodyLong>
-        Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve
-        igjen om litt.
-      </BodyLong>
+      <BodyLong>{errorMessage.details}</BodyLong>
       <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
     </Alert>
   );
