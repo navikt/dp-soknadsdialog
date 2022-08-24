@@ -147,9 +147,9 @@ services:
       args:
         PAT: "${GITHUB_PAT}"
     volumes:
-      - "../:/app"
-      - "/app/node_modules"
-      - "/app/.next"
+      - "../:/app"            # Mount inn hele repo-et for frontenden,
+      - "/app/node_modules"   # unntatt node_modules som må hentes av docker selv
+      - "/app/.next"          # og .next som vi ønsker å bruke docker sin versjon av.
     container_name: frontend
     ports:
       - "3001:3001"
