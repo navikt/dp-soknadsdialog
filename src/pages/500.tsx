@@ -5,7 +5,7 @@ import styles from "./_error.module.css";
 import { sanityClient } from "../../sanity-client";
 import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
-import { getAppTekst } from "../utils/getAppText";
+import * as SentryLogger from "../sentry.logger";
 
 interface IErrorText {
   title?: string;
@@ -45,6 +45,15 @@ export default function Error500() {
     } catch (err) {
       setErrorMessage(fallbackErrorText);
     }
+  }
+
+  function getAppTekst(textId: string, sanityText: ISanityTexts): string {
+    const text =
+      sanityText?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+    if (!text) {
+      SentryLogger.logMissingSanityText(textId);
+    }
+    return text;
   }
 
   return (
