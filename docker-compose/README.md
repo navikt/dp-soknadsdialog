@@ -20,8 +20,6 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
 ### Bruke søknadsdialogen lokalt
 1. `docker-compose build` --> bygger de tilnærmet statiske docker-lagene for frontenden. Bla `node_modules`.
 2. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
-2. Vent til dp-soknad er klar. 
-   * Kjør `docker-compose logs soknad -f` og se etter `"Mottatt søknadsmal med versjon_navn Dagpenger og versjon_id XXX"`
 3. Gå til http://localhost:4000/arbeid/dagpenger/soknad/en, i feltet `Optional claims JSON value` fyll inn følgende:
 ```json
 {
@@ -34,8 +32,15 @@ Muliggjøre lokal kjøring av søknadsdialogen og quiz lokalt.
 NB! Det er opprettet en egen [oppgave](https://jira.adeo.no/browse/DAG-340) på å automatisere steg 3-5.
 
 #### Hvordan få frontenden til å snappe opp endringer
+
+##### I egen kode
 Gjør eventuelle endringer i kildekoden, disse endringene blir automatisk snappet opp etter cirka 10 sekunder.
 Følg gjerne med i loggen for frontenden: `docker-compose logs frontend -f`
+
+##### Endring i avhengigheter
+Typisk noe nytt som har kommet inn i `node_modules`. Kjør kommandoen `docker-compose up -d --build`, da vil docker kjøre 
+`npm install` på nytt og cache-e resultatet.
+
 
 ### Stoppe alle containere
 * `docker-compose down` --> stopper alle kjørende containere, men beholder tilstand i databaser og på kafka. 
@@ -46,3 +51,5 @@ Følg gjerne med i loggen for frontenden: `docker-compose logs frontend -f`
 * Tail-e loggene for alle containerene: `docker-compose logs -f`
 * Hvis oppsettet ikke oppfører seg som forventet kan følgende kommandø kjøres `docker-compose down -v`, det sørger for å
   rydde opp etter tidligere kjøringer.
+* Hvis frontenden lugger så kan man kjøre kommandoen `docker-compose build --no-cache`, da tvinger man docker til å 
+  bygge frontenden helt på nytt og uten å hente lag som ligger i cache-en. 
