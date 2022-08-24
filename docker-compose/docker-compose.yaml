@@ -127,6 +127,8 @@ services:
   wonderwall:
     image: "ghcr.io/nais/wonderwall:latest"
     container_name: wonderwall
+    depends_on:
+      - auth
     ports:
       - "4000:4000"
     restart: on-failure
@@ -151,6 +153,8 @@ services:
       - "/app/node_modules"   # unntatt node_modules som må hentes av docker selv
       - "/app/.next"          # og .next som vi ønsker å bruke docker sin versjon av.
     container_name: frontend
+    depends_on:
+      - soknad
     ports:
       - "3001:3001"
     env_file: .env
