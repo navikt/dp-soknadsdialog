@@ -4,17 +4,17 @@ WORKDIR /usr/src/app
 COPY package*.json .npmrc /usr/src/app/
 
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN \
-    echo '//npm.pkg.github.com/:_authToken='$(cat /run/secrets/NODE_AUTH_TOKEN) >> .npmrc
+    NODE_AUTH_TOKEN=$(cat /run/secrets/NODE_AUTH_TOKEN) \
+    npm ci --prefer-offline --no-audit --ignore-scripts
 
-RUN npm ci
+# Kjør prepare uten NODE_AUTH_TOKEN tilgjengelig
+RUN npm rebuild && npm run prepare --if-present
 
 COPY . /usr/src/app
 
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    echo "[auth]\n"\
-         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
-RUN npm run build
-RUN rm -f .sentryclirc
+    SENTRY_AUTH_TOKEN=$(cat /run/secrets/SENTRY_AUTH_TOKEN) \
+    npm run build
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
