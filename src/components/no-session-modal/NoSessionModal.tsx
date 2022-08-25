@@ -35,7 +35,7 @@ export function NoSessionModal() {
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [timeLeft, session?.expires_in]);
+  }, [timeLeft]);
 
   function login() {
     window.location.assign(`${router.basePath}/oauth2/login`);
