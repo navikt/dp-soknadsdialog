@@ -10,7 +10,11 @@ RUN npm ci
 
 COPY . /usr/src/app
 
+RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
+    echo "[auth]\n"\
+         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
 RUN npm run build
+RUN rm -f .sentryclirc
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
@@ -22,9 +26,6 @@ ENV PORT=3000 \
     TZ=Europe/Oslo
 
 COPY --from=builder /usr/src/app/ /usr/src/app/
-RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
-    echo "[auth]\n"\
-         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
 
 EXPOSE 3000
 USER node
