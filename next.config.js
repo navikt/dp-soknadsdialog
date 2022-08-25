@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const {withSentryConfig} = require("@sentry/nextjs");
-const withReactSvg = require("next-react-svg");
-const path = require("path");
+const { withSentryConfig } = require("@sentry/nextjs");
 
 // TODO: Denne bør deles med _document.tsx
 const supportedLocales = ["nb", "nn", "en"];
 
-const config = withReactSvg({
-  include: path.resolve(__dirname, "assets/svg"),
+const config = {
   reactStrictMode: true,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
   i18n: {
@@ -17,16 +14,16 @@ const config = withReactSvg({
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },
-  webpack: (config, {dev}) => {
+  webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {
         poll: 1000,
         aggregateTimeout: 300,
-      }
+      };
     }
-    return config
-  }
-});
+    return config;
+  },
+};
 
 module.exports = withSentryConfig(config, {
   silent: true,
