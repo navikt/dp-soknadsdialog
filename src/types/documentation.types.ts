@@ -16,6 +16,7 @@ export interface IDokumentkrav {
 }
 
 export interface IDokumentkravFil {
+  filid: string;
   filnavn: string;
   urn: string;
   tidspunkt: string;
@@ -29,6 +30,7 @@ export interface IFileState {
   file?: File;
   error?: ErrorType;
   urn?: string;
+  fileId?: string;
 }
 
 export enum FileHandleState {

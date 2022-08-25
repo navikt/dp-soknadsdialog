@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
-import { audienceMellomlagring } from "../../../../../../api.utils";
+import { audienceMellomlagring } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
 export const config = {
@@ -11,13 +11,12 @@ export const config = {
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
-  const uuid = req.query.uuid as string;
-  const fileId = req.query.docid as string;
+  const filePath = req.query.filePath as string;
 
   if (token && apiToken) {
     try {
       const onBehalfOfToken = await apiToken(audienceMellomlagring);
-      const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${fileId}`, {
+      const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/${filePath}`, {
         headers: {
           Authorization: `Bearer ${onBehalfOfToken}`,
         },

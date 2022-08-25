@@ -3,17 +3,11 @@ import { BodyShort, Link } from "@navikt/ds-react";
 import { ErrorType, FileHandleState, IFileState } from "../../types/documentation.types";
 import styles from "./FileItem.module.css";
 import api from "../../api.utils";
-import { useRouter } from "next/router";
 
 export function FileItem(props: IFileState) {
-  const router = useRouter();
-
   return (
     <li className={styles.fileItem}>
-      <Link
-        href={api(`/documentation/${router.query.uuid}/${props.id}/download`)}
-        download={props.name}
-      >
+      <Link href={api(`/documentation/file/${props.fileId}/download`)} download={props.name}>
         <BodyShort size="medium">{props.name}</BodyShort>
       </Link>
 
