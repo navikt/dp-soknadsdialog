@@ -10,11 +10,11 @@ RUN npm ci
 
 COPY . /usr/src/app
 
-ARG SENTRY_RELEASE
 RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
     echo "[auth]\n"\
-         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc && \
-    npm run build
+         "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
+RUN npm run build
+RUN rm -f .sentryclirc
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
@@ -25,9 +25,13 @@ ENV PORT=3000 \
     NODE_ENV=production \
     TZ=Europe/Oslo
 
-COPY --from=builder /usr/src/app/ /usr/src/app/
+COPY --from=builder /usr/src/app/next.config.js ./
+COPY --from=builder /usr/src/app/package.json ./
+
+COPY --from=builder /usr/src/app/.next/standalone ./
+COPY --from=builder /usr/src/app/.next/static ./.next/static
 
 EXPOSE 3000
 USER node
 
-CMD ["./node_modules/.bin/next", "start"]
+CMD ["node", "server.js"]

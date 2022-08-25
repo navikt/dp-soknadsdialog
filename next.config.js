@@ -11,6 +11,7 @@ const config = {
     locales: supportedLocales,
     defaultLocale: "nb",
   },
+  output: "standalone",
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },
