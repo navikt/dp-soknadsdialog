@@ -1,5 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
 
 export function logMissingSanityText(textId: string) {
-  Sentry.captureEvent({ message: `Fant ikke seksjonsTekst med id: ${textId}` });
+  Sentry.captureException(new MissingTextError(`Mangler tekst for "${textId}"`));
+}
+
+class MissingTextError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "MissingTextError";
+  }
 }

@@ -96,15 +96,14 @@ export function Soknad() {
         )}
 
         {!isFirstSection && (
-          <Button variant={"secondary"} onClick={() => goPrevious()}>
-            <Left />
+          <Button variant={"secondary"} onClick={() => goPrevious()} icon={<Left />}>
             {getAppTekst("knapp.forrige")}
           </Button>
         )}
 
         {!soknadState.ferdig && (
-          <Button onClick={() => goNext()}>
-            {getAppTekst("knapp.neste")} <Right />
+          <Button onClick={() => goNext()} icon={<Right />} iconPosition={"right"}>
+            {getAppTekst("knapp.neste")}
           </Button>
         )}
 
