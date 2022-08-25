@@ -25,10 +25,13 @@ ENV PORT=3000 \
     NODE_ENV=production \
     TZ=Europe/Oslo
 
+COPY --from=builder /usr/src/app/next.config.js ./
+COPY --from=builder /usr/src/app/package.json ./
+
 COPY --from=builder /usr/src/app/.next/standalone ./
 COPY --from=builder /usr/src/app/.next/static ./.next/static
 
 EXPOSE 3000
 USER node
 
-CMD ["./node_modules/.bin/next", "start"]
+CMD ["node", "server.js"]
