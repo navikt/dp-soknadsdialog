@@ -15,7 +15,6 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
          "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
 RUN npm run build
 RUN rm -f .sentryclirc
-RUN echo "---BUILD COMPLETE---"
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
@@ -25,8 +24,11 @@ ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
     TZ=Europe/Oslo
+COPY --from=builder /usr/src/app/next.config.js /usr/src/app/
+COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
+COPY --from=builder /usr/src/app/.next /usr/src/app/.next
 
-COPY --from=builder /usr/src/app/ /usr/src/app/
+#COPY --from=builder /usr/src/app/ /usr/src/app/
 
 EXPOSE 3000
 USER node
