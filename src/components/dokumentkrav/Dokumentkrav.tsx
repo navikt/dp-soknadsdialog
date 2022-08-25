@@ -83,7 +83,7 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <FileUploader id={dokumentkrav.id} onHandle={setHandlesFiles} />
+          <FileUploader dokumentkravId={dokumentkrav.id} onHandle={setHandlesFiles} />
           <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
         </>
       )}

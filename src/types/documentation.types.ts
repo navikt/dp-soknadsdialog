@@ -9,14 +9,14 @@ export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
   fakta: QuizFaktum[];
-  filer?: IDokumentkravFil[];
+  filer: IDokumentkravFil[];
   gyldigeValg: string[];
   svar?: string;
   begrunnelse?: string;
 }
 
 export interface IDokumentkravFil {
-  filid: string;
+  filsti: string;
   filnavn: string;
   urn: string;
   tidspunkt: string;
