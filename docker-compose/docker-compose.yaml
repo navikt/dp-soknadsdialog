@@ -45,6 +45,7 @@ services:
 
   quiz:
     image: "ghcr.io/navikt/dp-quiz/dp-quiz-mediator:latest"
+    pull_policy: always
     container_name: quiz
     depends_on:
       - kafka
@@ -58,6 +59,7 @@ services:
 
   soknad:
     image: "ghcr.io/navikt/dp-soknad/dp-soknad:latest"
+    pull_policy: always
     container_name: soknad
     depends_on:
       - kafka
