@@ -10,7 +10,7 @@ export function NoSessionModal() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const [modalOpen, setModalOpen] = useState(false);
-  const { session } = useSession({ enforceLogin: false });
+  const { session } = useSession({});
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
 
   useEffect(() => {
