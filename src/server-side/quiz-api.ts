@@ -5,7 +5,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { textStructureToHtml } from "../sanity/textStructureToHtml";
 
-const headersWithToken = (onBehalfOfToken: string) => ({
+export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
   Accept: "application/json",
   Authorization: `Bearer ${onBehalfOfToken}`,
