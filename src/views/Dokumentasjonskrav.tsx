@@ -4,6 +4,7 @@ import React from "react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
 import { IDokumentkravListe } from "../types/documentation.types";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import styles from "./Dokumentasjonskrav.module.css";
 
 interface IProps {
@@ -28,6 +29,8 @@ export function Dokumentasjonskrav(props: IProps) {
           </div>
         );
       })}
+
+      <NoSessionModal />
     </>
   );
 }

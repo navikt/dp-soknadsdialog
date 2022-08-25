@@ -1,0 +1,9 @@
+.noSessionModal {
+  background-color: var(--navds-global-color-orange-50);
+  box-shadow: 0 0 0 1px var(--navds-global-color-orange-600);
+  padding: 8px;
+}
+
+.noSessionModal:focus {
+  box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
+}

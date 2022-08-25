@@ -6,9 +6,10 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
-import { ErrorModal } from "../components/ErrorModal";
+import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { useSanity } from "../context/sanity-context";
 import { FileSuccess } from "@navikt/ds-icons";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 
 export function Soknad() {
   const router = useRouter();
@@ -119,6 +120,8 @@ export function Soknad() {
         </p>
       )}
       {isError && <ErrorModal errorType={errorType} />}
+
+      <NoSessionModal />
     </main>
   );
 }
