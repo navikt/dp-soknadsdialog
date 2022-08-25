@@ -15,6 +15,7 @@ RUN --mount=type=secret,id=SENTRY_AUTH_TOKEN \
          "token=$(cat /run/secrets/SENTRY_AUTH_TOKEN)" >> .sentryclirc
 RUN npm run build
 RUN rm -f .sentryclirc
+RUN echo "---BUILD COMPLETE---"
 
 # ---- Runner ----
 FROM node:16-alpine AS runtime
