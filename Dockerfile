@@ -24,11 +24,9 @@ ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
     TZ=Europe/Oslo
-COPY --from=builder /usr/src/app/next.config.js /usr/src/app/
-COPY --from=builder /usr/src/app/package.json /usr/src/app/package.json
-COPY --from=builder /usr/src/app/.next /usr/src/app/.next
 
-#COPY --from=builder /usr/src/app/ /usr/src/app/
+COPY --from=builder /user/src/app/.next/standalone ./
+COPY --from=builder /user/src/app/.next/static ./.next/static
 
 EXPOSE 3000
 USER node
