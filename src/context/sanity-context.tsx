@@ -3,9 +3,9 @@ import {
   ISanityDokumentkrav,
   ISanityDokumentkravSvar,
   ISanityFaktum,
+  ISanityInfoside,
   ISanityLandGruppe,
   ISanitySeksjon,
-  ISanityStartSideTekst,
   ISanitySvaralternativ,
   ISanityTexts,
 } from "../types/sanity.types";
@@ -72,8 +72,10 @@ function useSanity() {
     return text;
   }
 
-  function getStartsideText(): ISanityStartSideTekst | undefined {
-    return context?.startside[0];
+  function getInfosideText(slug: string): ISanityInfoside | undefined {
+    return context?.infosider.find((side) => {
+      return side.slug === slug;
+    });
   }
 
   function getDokumentkravTextById(textId: string): ISanityDokumentkrav | undefined {
@@ -90,9 +92,9 @@ function useSanity() {
     getLandGruppeTextById,
     getSvaralternativTextById,
     getAppTekst,
-    getStartsideText,
     getDokumentkravTextById,
     getDokumentkravSvarTextById,
+    getInfosideText,
   };
 }
 

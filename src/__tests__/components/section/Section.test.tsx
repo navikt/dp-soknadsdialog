@@ -15,6 +15,7 @@ const mockSanity = {
   startside: [],
   dokumentkrav: [],
   dokumentkravSvar: [],
+  infosider: [],
 };
 
 const sectionMockData: IQuizSeksjon = {
