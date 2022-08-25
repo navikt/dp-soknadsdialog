@@ -14,7 +14,7 @@ export function StartSoknad() {
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [isError, setIsError] = useState(false);
-  const { getAppTekst, getStartsideText } = useSanity();
+  const { getAppTekst, getInfosideText } = useSanity();
 
   async function startSoknad() {
     try {
@@ -33,7 +33,7 @@ export function StartSoknad() {
     }
   }
 
-  const startSideText = getStartsideText();
+  const startSideText = getInfosideText("startside");
   const portableTextComponents = { types: { timeline } };
 
   if (isError) {

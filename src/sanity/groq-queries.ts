@@ -61,8 +61,9 @@ function getAppTextsFields() {
 }`;
 }
 
-function getStartsideTextsFields() {
+function getInfosideFields() {
   return `{
+  "slug": slug.current,
   body
 }`;
 }
@@ -132,9 +133,9 @@ function getAppTextsGroq() {
   }`;
 }
 
-function getStartSideTextsGroq() {
-  return `* [_type=="startside" && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getStartsideTextsFields()}, ${getStartsideTextsFields()})
+function getInfosiderGroq() {
+  return `* [_type=="infopage"  && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getInfosideFields()}, ${getInfosideFields()})
   }`;
 }
 
@@ -160,9 +161,9 @@ export const allTextsQuery = groq`{
   "svaralternativer": ${getSvaralternativerGroq(false)},
   "landgrupper": ${getLandGrupperGroq(false)},
   "apptekster": ${getAppTextsGroq()},
-  "startside": ${getStartSideTextsGroq()},
   "dokumentkrav": ${getDokumentkravGroq(false)},
-  "dokumentkravSvar": ${getDokumentkravSvarGroq(false)}
+  "dokumentkravSvar": ${getDokumentkravSvarGroq(false)},
+  "infosider": ${getInfosiderGroq()}
 }`;
 
 export const allTextsPlainQuery = groq`{

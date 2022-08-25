@@ -1,4 +1,5 @@
-import { Detail, Heading } from "@navikt/ds-react";
+import { Detail } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
 import React from "react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
@@ -10,13 +11,12 @@ interface IProps {
 }
 
 export function Dokumentasjonskrav(props: IProps) {
-  const { getAppTekst } = useSanity();
+  const { getAppTekst, getInfosideText } = useSanity();
   const { dokumentasjonskrav } = props;
+  const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
   return (
     <>
-      <Heading level="2" size="medium">
-        Dokumentasjon
-      </Heading>
+      {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
       {dokumentasjonskrav.krav.map((krav, index) => {
         const formattedCounter = `${index + 1} ${getAppTekst("dokumentkrav.nummer.av.krav")} ${
           dokumentasjonskrav.krav.length

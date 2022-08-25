@@ -17,6 +17,7 @@ const mockSanity = {
   startside: [],
   dokumentkrav: [],
   dokumentkravSvar: [],
+  infosider: [],
 };
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
