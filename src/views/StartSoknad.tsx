@@ -5,8 +5,9 @@ import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { Timeline as timeline } from "../components/timeline/Timeline";
-import { ErrorModal } from "../components/ErrorModal";
+import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -73,6 +74,8 @@ export function StartSoknad() {
       >
         {getAppTekst("start-soknad.start-knapp")}
       </Button>
+
+      <NoSessionModal />
     </main>
   );
 }

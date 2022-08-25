@@ -2,8 +2,8 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useSanity } from "../context/sanity-context";
-import { ErrorTypesEnum } from "../types/error.types";
+import { useSanity } from "../../context/sanity-context";
+import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./ErrorModal.module.css";
 
 interface IProps {

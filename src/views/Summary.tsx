@@ -7,8 +7,9 @@ import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
-import { ErrorModal } from "../components/ErrorModal";
+import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -91,6 +92,8 @@ export function Summary(props: IProps) {
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
           {getAppTekst("oppsummering.slett-soknad")}
         </Button>
+
+        <NoSessionModal />
       </nav>
     </>
   );
