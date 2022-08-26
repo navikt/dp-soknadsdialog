@@ -40,7 +40,6 @@ const sectionStateMockData: IQuizSeksjon = {
 const mockSoknadState: IQuizState = {
   ferdig: false,
   seksjoner: [sectionStateMockData],
-  "@opprettet": "2022-08-26T09:27:59.4094522144",
 };
 
 describe("Faktum", () => {

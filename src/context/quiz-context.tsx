@@ -24,7 +24,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
   const { uuid } = router.query;
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
-  const [soknadLastSaved, setSoknadLastSaved] = useState<string>(props.initialState["@opprettet"]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
@@ -34,13 +33,12 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(false);
       setIsLoading(true);
 
-      const data = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
       }).then((res) => res.json());
 
-      setSoknadLastSaved(data["sistBesvart"]);
-      await getNeste();
+      await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -56,13 +54,12 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(false);
       setIsLoading(true);
 
-      const data = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
       }).then((res) => res.json());
 
-      setSoknadLastSaved(data["sistBesvart"]);
-      await getNeste();
+      await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -73,9 +70,9 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     }
   }
 
-  async function getNeste() {
+  async function getNeste(sistBesvart: string) {
     try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${soknadLastSaved}`));
+      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${sistBesvart}`));
       const quizState: IQuizState = await nesteResponse.json();
       setSoknadState(quizState);
     } catch (error: unknown) {
