@@ -34,11 +34,12 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(false);
       setIsLoading(true);
 
-      await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const data = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
-      });
+      }).then((res) => res.json());
 
+      setSoknadLastSaved(data["sistBesvart"]);
       await getNeste();
       setIsLoading(false);
     } catch (error: unknown) {
@@ -55,11 +56,12 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(false);
       setIsLoading(true);
 
-      await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const data = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
-      });
+      }).then((res) => res.json());
 
+      setSoknadLastSaved(data["sistBesvart"]);
       await getNeste();
       setIsLoading(false);
     } catch (error: unknown) {
@@ -76,7 +78,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${soknadLastSaved}`));
       const quizState: IQuizState = await nesteResponse.json();
       setSoknadState(quizState);
-      setSoknadLastSaved(quizState["@opprettet"]);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("GET NESTE ERROR: ", error);
