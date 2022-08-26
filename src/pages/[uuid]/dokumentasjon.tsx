@@ -36,7 +36,7 @@ export async function getServerSideProps(
   let documents;
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    soknadState = await getSoknadState(uuid, "", { summary: true });
+    soknadState = await getSoknadState(uuid, "", null, { summary: true });
     documents = await getDocumentationList(uuid, "1234");
   }
 
