@@ -38,8 +38,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
       }).then((res) => res.json());
-      // eslint-disable-next-line no-console
-      console.log(data);
+
       setSoknadLastSaved(data["sistBesvart"]);
       await getNeste();
       setIsLoading(false);
