@@ -65,6 +65,7 @@ interface ILocalhostOpts {
 export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
+  sistLagret: string | null = null,
   localhostOpts: ILocalhostOpts = {}
 ): Promise<IQuizState> {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -84,7 +85,10 @@ export function getSoknadState(
     return Promise.resolve(quizStateResponse);
   }
 
-  const url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
+  let url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
+  if (sistLagret != null) {
+    url += `?sistLagret=${sistLagret}`;
+  }
   return fetch(url, {
     method: "Get",
     headers: headersWithToken(onBehalfOfToken),

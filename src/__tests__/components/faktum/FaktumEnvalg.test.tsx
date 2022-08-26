@@ -55,6 +55,7 @@ const sectionMockData: IQuizSeksjon = {
 const soknadStateMockData: IQuizState = {
   ferdig: false,
   seksjoner: [sectionMockData],
+  "@opprettet": "2022-08-26T09:27:59.4094522144",
 };
 
 describe("FaktumEnvalg", () => {
