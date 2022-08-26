@@ -2,7 +2,7 @@ import React, { createContext, PropsWithChildren, useState } from "react";
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
-import { QuizFaktum, QuizFaktumSvarType, IQuizGeneratorFaktum } from "../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
 import { ErrorTypesEnum } from "../types/error.types";
 
 export interface IQuizContext {
@@ -24,6 +24,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
   const { uuid } = router.query;
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
+  const [soknadLastSaved, setSoknadLastSaved] = useState<string>(props.initialState["@opprettet"]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
@@ -71,11 +72,11 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   }
 
   async function getNeste() {
-    // throw new Error("FEIL I QUIZ");
     try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste`));
-      const quizState = await nesteResponse.json();
+      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?etter=${soknadLastSaved}`));
+      const quizState: IQuizState = await nesteResponse.json();
       setSoknadState(quizState);
+      setSoknadLastSaved(quizState["@opprettet"]);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("GET NESTE ERROR: ", error);
