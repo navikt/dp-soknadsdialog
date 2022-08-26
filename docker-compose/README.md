@@ -3,11 +3,12 @@ Muliggjøre lokal kjøring av søknadsdialogen og Quiz lokalt.
 
 ## Forutsettninger 
 * Nødvendig programvare, kan legges inn vha `Brew`: 
-  * Colima
+  * colima
   * docker-compose
   * docker
+* Colima må være startet, gjøres ved å kjøre `colima start`.
 * Github Personal Access Token (PAT) [token](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages), lagret i miljøvariabelen `GITHUB_PAT`.
-* `127.0.0.1 host.docker.internal` må være lagt til i `/etc/hosts`
+* `127.0.0.1 host.docker.internal` må være lagt til i `/etc/hosts`. Kan være nødvendig med restart for at endringene skal snappes opp.
 
 ### Opprette PAT hos Github
 1. Lag et PAT hos Github, må gjøres fr å kunne laste ned docker-images fra Github sitt pakkerepo.
@@ -19,10 +20,11 @@ Muliggjøre lokal kjøring av søknadsdialogen og Quiz lokalt.
 
 
 ### Bruke søknadsdialogen lokalt
-1. `docker-compose build` --> bygger de tilnærmet statiske docker-lagene for frontenden. Bla `node_modules`.
-2. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
-3. Gå til http://localhost:4000/arbeid/dagpenger/soknad/en
-4. Du er nå innlogget som den fiktive brukeren `12345678901`
+1. `docker-compose pull` --> henter inn eventuelle nye versjoner av backendene, mao om det har kommet en ny versjon av med `latest`-taggen.
+2. `docker-compose build` --> bygger det tilnærmet statiske docker-laget for frontenden, som inneholder `node_modules`.
+3. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
+4. Gå til http://localhost:4000/arbeid/dagpenger/soknad/en
+5. Du er nå innlogget som den fiktive brukeren `12345678901`
 
 
 #### Hvordan få frontenden til å snappe opp endringer
@@ -41,9 +43,11 @@ Typisk noe nytt som har kommet inn i `node_modules`. Kjør kommandoen `docker-co
 
 
 ### Feilsøking
-* Verifisere at alle containere kjører: `docker-compose ps`
+* Verifisere at alle containere kjører: `docker-compose ps`, hvis noen av de har stoppet forsøk `docker-compose up -d` på nytt.
 * Tail-e loggene for alle containerene: `docker-compose logs -f`
 * Hvis oppsettet ikke oppfører seg som forventet kan følgende kommandø kjøres `docker-compose down -v`, det sørger for å
   rydde opp etter tidligere kjøringer.
 * Hvis frontenden lugger så kan man kjøre kommandoen `docker-compose build --no-cache`, da tvinger man docker til å 
-  bygge frontenden helt på nytt og uten å hente lag som ligger i cache-en. 
+  bygge frontenden helt på nytt og uten å hente lag som ligger i cache-en.
+* Hvis det alltid er en eller flere containere som ikke klarer så starte, så kan det være at det er satt av for lite minne til Colima.
+  Dette gjøres ved å redigere filen `~/.colima/colima.yaml`, og endre feltet `memory` til 4 (under `vm`).
