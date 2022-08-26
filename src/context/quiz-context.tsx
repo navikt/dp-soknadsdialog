@@ -73,7 +73,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
 
   async function getNeste() {
     try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?etter=${soknadLastSaved}`));
+      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${soknadLastSaved}`));
       const quizState: IQuizState = await nesteResponse.json();
       setSoknadState(quizState);
       setSoknadLastSaved(quizState["@opprettet"]);
