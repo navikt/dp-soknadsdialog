@@ -1,10 +1,10 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumEnvalg } from "../../../components/faktum/FaktumEnvalg";
-import { SanityProvider } from "../../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../../types/quiz.types";
-import { QuizProvider } from "../../../context/quiz-context";
-import { IQuizState } from "../../../localhost-data/quiz-state-response";
+import { FaktumEnvalg } from "./FaktumEnvalg";
+import { SanityProvider } from "../../context/sanity-context";
+import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { QuizProvider } from "../../context/quiz-context";
+import { IQuizState } from "../../localhost-data/quiz-state-response";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 

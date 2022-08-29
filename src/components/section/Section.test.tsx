@@ -1,10 +1,10 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { Section } from "../../../components/section/Section";
-import { SanityProvider } from "../../../context/sanity-context";
-import { IQuizSeksjon } from "../../../types/quiz.types";
-import { QuizProvider } from "../../../context/quiz-context";
-import { IQuizState } from "../../../localhost-data/quiz-state-response";
+import { Section } from "./Section";
+import { SanityProvider } from "../../context/sanity-context";
+import { IQuizSeksjon } from "../../types/quiz.types";
+import { QuizProvider } from "../../context/quiz-context";
+import { IQuizState } from "../../localhost-data/quiz-state-response";
 
 const mockSanity = {
   fakta: [],

@@ -1,11 +1,11 @@
 import React from "react";
-import { QuizProvider, useQuiz } from "../../context/quiz-context";
-import { FaktumBoolean } from "../../components/faktum/FaktumBoolean";
+import { QuizProvider, useQuiz } from "./quiz-context";
+import { FaktumBoolean } from "../components/faktum/FaktumBoolean";
 import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
-import { IQuizState } from "../../localhost-data/quiz-state-response";
-import { IQuizBooleanFaktum } from "../../types/quiz.types";
-import { SanityProvider } from "../../context/sanity-context";
-import { ISanityTexts } from "../../types/sanity.types";
+import { IQuizState } from "../localhost-data/quiz-state-response";
+import { IQuizBooleanFaktum } from "../types/quiz.types";
+import { SanityProvider } from "./sanity-context";
+import { ISanityTexts } from "../types/sanity.types";
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import userEvent from "@testing-library/user-event";

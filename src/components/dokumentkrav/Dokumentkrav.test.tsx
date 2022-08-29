@@ -1,9 +1,9 @@
 import React from "react";
 import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Dokumentkrav } from "../../../components/dokumentkrav/Dokumentkrav";
-import { SanityProvider } from "../../../context/sanity-context";
-import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../constants";
+import { Dokumentkrav } from "./Dokumentkrav";
+import { SanityProvider } from "../../context/sanity-context";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import fetch from "jest-fetch-mock";
 
 const mockdataDokumentkrav = {
