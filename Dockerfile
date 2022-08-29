@@ -23,8 +23,7 @@ WORKDIR /usr/src/app
 ARG BASE_PATH
 ENV PORT=3000 \
     NODE_ENV=production \
-    TZ=Europe/Oslo \
-    NODE_OPTIONS='-r next-logger'
+    TZ=Europe/Oslo
 
 COPY --from=builder /usr/src/app/next.config.js ./
 COPY --from=builder /usr/src/app/package.json ./
