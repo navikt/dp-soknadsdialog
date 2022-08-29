@@ -21,8 +21,8 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const { getAppTekst, getSeksjonTextById } = useSanity();
 
-  function goToSoknad() {
-    router.push(`/${router.query.uuid}`);
+  function goToDocumentation() {
+    router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
@@ -81,7 +81,7 @@ export function Summary(props: IProps) {
       </ConfirmationPanel>
 
       <nav className={styles.navigation}>
-        <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
+        <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
           {getAppTekst("knapp.forrige")}
         </Button>
 

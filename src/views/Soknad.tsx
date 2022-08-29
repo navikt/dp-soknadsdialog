@@ -23,6 +23,7 @@ export function Soknad() {
 
   const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
+  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
@@ -56,8 +57,8 @@ export function Soknad() {
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
-  async function goToSummary() {
-    router.push(`/${router.query.uuid}/oppsummering`);
+  function goToDocumentation() {
+    router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
@@ -102,14 +103,16 @@ export function Soknad() {
           </Button>
         )}
 
-        {!soknadState.ferdig && (
+        {!isLastSection && (
           <Button onClick={() => goNext()} icon={<Right />} iconPosition={"right"}>
             {getAppTekst("knapp.neste")}
           </Button>
         )}
 
-        {soknadState.ferdig && (
-          <Button onClick={() => goToSummary()}>{getAppTekst("soknad.til-oppsummering")}</Button>
+        {isLastSection && soknadState.ferdig && (
+          <Button onClick={() => goToDocumentation()}>
+            {getAppTekst("soknad.til-dokumentasjon")}
+          </Button>
         )}
       </nav>
 
