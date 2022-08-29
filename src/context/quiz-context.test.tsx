@@ -5,10 +5,11 @@ import { render, screen, waitForElementToBeRemoved } from "@testing-library/reac
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { IQuizBooleanFaktum } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";
-import { ISanityTexts } from "../types/sanity.types";
+
 import { setupServer } from "msw/node";
 import { rest } from "msw";
 import userEvent from "@testing-library/user-event";
+import { sanityMocks } from "../__mocks__/sanity.mocks";
 
 const initialState: IQuizState = { ferdig: false, seksjoner: [] };
 const faktum: IQuizBooleanFaktum = {
@@ -17,16 +18,6 @@ const faktum: IQuizBooleanFaktum = {
   id: "1",
   readOnly: false,
   type: "boolean",
-};
-const sanityText: ISanityTexts = {
-  apptekster: [],
-  dokumentkrav: [],
-  dokumentkravSvar: [],
-  fakta: [],
-  infosider: [],
-  landgrupper: [],
-  seksjoner: [],
-  svaralternativer: [],
 };
 
 const server = setupServer(
@@ -59,7 +50,7 @@ function ContextSpion() {
 
 test("Vi henter sistLagret hver gang vi lagrer et faktum", async () => {
   render(
-    <SanityProvider initialState={sanityText}>
+    <SanityProvider initialState={sanityMocks}>
       <QuizProvider initialState={initialState}>
         <FaktumBoolean faktum={faktum} />
         <ContextSpion></ContextSpion>

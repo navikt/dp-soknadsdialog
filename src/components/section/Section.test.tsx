@@ -5,18 +5,7 @@ import { SanityProvider } from "../../context/sanity-context";
 import { IQuizSeksjon } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
-
-const mockSanity = {
-  fakta: [],
-  seksjoner: [],
-  svaralternativer: [],
-  landgrupper: [],
-  apptekster: [],
-  startside: [],
-  dokumentkrav: [],
-  dokumentkravSvar: [],
-  infosider: [],
-};
+import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [
@@ -45,7 +34,7 @@ const mockSoknadState: IQuizState = {
 describe("Section", () => {
   test("Should show section info and the first unanswered question", async () => {
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
           <Section section={sectionMockData} firstUnansweredFaktumIndex={0} />
         </QuizProvider>
