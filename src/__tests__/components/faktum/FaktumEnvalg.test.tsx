@@ -33,7 +33,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
 };
 
-const lagreFaktumMock = { status: "ok" };
+const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
 
 const nesteMockData = {
   ferdig: false,
