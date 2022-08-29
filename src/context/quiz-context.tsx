@@ -1,4 +1,4 @@
-import React, { createContext, PropsWithChildren, useState } from "react";
+import React, { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
@@ -24,6 +24,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
   const { uuid } = router.query;
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
+  const [lastSaved, setLastSaved] = useState<string | null>();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
@@ -38,7 +39,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         body: JSON.stringify({ ...faktum, svar }),
       }).then((res) => res.json());
 
-      await getNeste(sistBesvart);
+      setLastSaved(sistBesvart);
+      //await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -59,7 +61,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         body: JSON.stringify({ ...faktum, svar }),
       }).then((res) => res.json());
 
-      await getNeste(sistBesvart);
+      setLastSaved(sistBesvart);
+      //await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -69,6 +72,10 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setErrorType(ErrorTypesEnum.GenericError);
     }
   }
+  useEffect(() => {
+    if (lastSaved == null) return;
+    getNeste(lastSaved);
+  }, [lastSaved]);
 
   async function getNeste(sistBesvart: string) {
     try {
