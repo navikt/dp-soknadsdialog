@@ -95,8 +95,9 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
           variant="secondary"
           className={"generator-faktum__add-button"}
           onClick={() => addNewGeneratorAnswer(faktum)}
+          icon={<ChildAdd />}
         >
-          <ChildAdd /> {getAppTekst("barn.legg-til")}
+          {getAppTekst("barn.legg-til")}
         </Button>
       )}
     </>

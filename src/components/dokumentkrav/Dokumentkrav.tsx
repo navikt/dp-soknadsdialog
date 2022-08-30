@@ -21,7 +21,8 @@ interface IProps {
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
-  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const { getFaktumTextById, getSvaralternativTextById, getDokumentkravSvarTextById, getAppTekst } =
+    useSanity();
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -36,7 +37,7 @@ export function Dokumentkrav(props: IProps) {
 
   useEffect(() => {
     if (svar !== "") {
-      setAlertText(getSvaralternativTextById(svar)?.alertText);
+      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
 

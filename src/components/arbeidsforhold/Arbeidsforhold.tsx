@@ -105,8 +105,9 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
           variant="secondary"
           className={"generator-faktum__add-button"}
           onClick={() => addNewGeneratorAnswer(faktum)}
+          icon={<BriefcaseAdd />}
         >
-          <BriefcaseAdd /> {getAppTekst("arbeidsforhold.legg-til")}
+          {getAppTekst("arbeidsforhold.legg-til")}
         </Button>
       )}
     </>

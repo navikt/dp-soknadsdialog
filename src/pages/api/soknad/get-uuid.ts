@@ -2,6 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../api.utils";
 import { postSoknad, Prosesstype } from "../../../server-side/quiz-api";
+import { withSentry } from "@sentry/nextjs";
 
 async function getUuiddHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -21,4 +22,4 @@ async function getUuiddHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default getUuiddHandler;
+export default withSentry(getUuiddHandler);

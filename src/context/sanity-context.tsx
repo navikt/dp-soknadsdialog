@@ -1,9 +1,11 @@
 import React, { PropsWithChildren } from "react";
 import {
+  ISanityDokumentkrav,
+  ISanityDokumentkravSvar,
   ISanityFaktum,
+  ISanityInfoside,
   ISanityLandGruppe,
   ISanitySeksjon,
-  ISanityStartSideTekst,
   ISanitySvaralternativ,
   ISanityTexts,
 } from "../types/sanity.types";
@@ -70,8 +72,18 @@ function useSanity() {
     return text;
   }
 
-  function getStartsideText(): ISanityStartSideTekst | undefined {
-    return context?.startside[0];
+  function getInfosideText(slug: string): ISanityInfoside | undefined {
+    return context?.infosider.find((side) => {
+      return side.slug === slug;
+    });
+  }
+
+  function getDokumentkravTextById(textId: string): ISanityDokumentkrav | undefined {
+    return context?.dokumentkrav.find((krav) => krav.textId === textId);
+  }
+
+  function getDokumentkravSvarTextById(textId: string): ISanityDokumentkravSvar | undefined {
+    return context?.dokumentkravSvar.find((svar) => svar.textId === textId);
   }
 
   return {
@@ -80,7 +92,9 @@ function useSanity() {
     getLandGruppeTextById,
     getSvaralternativTextById,
     getAppTekst,
-    getStartsideText,
+    getDokumentkravTextById,
+    getDokumentkravSvarTextById,
+    getInfosideText,
   };
 }
 

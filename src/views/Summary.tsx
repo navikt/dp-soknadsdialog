@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { IQuizSeksjon } from "../types/quiz.types";
-import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
+import { Accordion, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
+import { ErrorModal } from "../components/error-modal/ErrorModal";
+import { ErrorTypesEnum } from "../types/error.types";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -18,8 +21,8 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const { getAppTekst, getSeksjonTextById } = useSanity();
 
-  function goToSoknad() {
-    router.push(`/${router.query.uuid}`);
+  function goToDocumentation() {
+    router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
@@ -35,13 +38,7 @@ export function Summary(props: IProps) {
   }
 
   if (hasError) {
-    return (
-      <>
-        <Alert variant="error" size="medium">
-          {getAppTekst("oppsummering.feil")}
-        </Alert>
-      </>
-    );
+    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
   return (
@@ -84,8 +81,7 @@ export function Summary(props: IProps) {
       </ConfirmationPanel>
 
       <nav className={styles.navigation}>
-        <Button variant={"secondary"} onClick={() => goToSoknad()}>
-          <Left />
+        <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
           {getAppTekst("knapp.forrige")}
         </Button>
 
@@ -96,6 +92,8 @@ export function Summary(props: IProps) {
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
           {getAppTekst("oppsummering.slett-soknad")}
         </Button>
+
+        <NoSessionModal />
       </nav>
     </>
   );

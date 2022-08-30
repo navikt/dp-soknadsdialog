@@ -2,7 +2,8 @@ import React, { createContext, PropsWithChildren, useState } from "react";
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
 import api from "../api.utils";
-import { QuizFaktum, QuizFaktumSvarType, IQuizGeneratorFaktum } from "../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
+import { ErrorTypesEnum } from "../types/error.types";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -10,6 +11,7 @@ export interface IQuizContext {
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
   isLoading: boolean;
   isError: boolean;
+  errorType: ErrorTypesEnum;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -24,24 +26,26 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
     try {
       setIsError(false);
       setIsLoading(true);
 
-      await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
-      });
+      }).then((res) => res.json());
 
-      await getNeste();
+      await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setErrorType(ErrorTypesEnum.SaveFaktumError);
     }
   }
 
@@ -50,30 +54,32 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(false);
       setIsLoading(true);
 
-      await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
+      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
         method: "PUT",
         body: JSON.stringify({ ...faktum, svar }),
-      });
+      }).then((res) => res.json());
 
-      await getNeste();
+      await getNeste(sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
       setIsLoading(false);
       setIsError(true);
+      setErrorType(ErrorTypesEnum.GenericError);
     }
   }
 
-  async function getNeste() {
-    // throw new Error("FEIL I QUIZ");
+  async function getNeste(sistBesvart: string) {
     try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste`));
-      const quizState = await nesteResponse.json();
+      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${sistBesvart}`));
+      const quizState: IQuizState = await nesteResponse.json();
       setSoknadState(quizState);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("GET NESTE ERROR: ", error);
+      setIsError(true);
+      setErrorType(ErrorTypesEnum.GetNesteError);
     }
   }
 
@@ -85,6 +91,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         saveGeneratorFaktumToQuiz,
         isLoading,
         isError,
+        errorType,
       }}
     >
       {props.children}

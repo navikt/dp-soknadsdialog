@@ -1,4 +1,4 @@
-import { textStructureToHtml } from "../../sanity/textStructureToHtml";
+import { textStructureToHtml } from "./textStructureToHtml";
 
 const sanityTexts = {
   apptekster: [

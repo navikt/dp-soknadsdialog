@@ -2,6 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../api.utils";
 import { getSoknadMal } from "../../../server-side/quiz-api";
+import { withSentry } from "@sentry/nextjs";
 
 async function getMal(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
@@ -21,4 +22,4 @@ async function getMal(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default getMal;
+export default withSentry(getMal);

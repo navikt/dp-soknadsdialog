@@ -9,6 +9,8 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
+import { ErrorModal } from "../error-modal/ErrorModal";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
@@ -39,6 +41,10 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
     }
 
     onChange ? onChange(faktum, mappedAnswer) : saveFaktumToQuiz(faktum, mappedAnswer);
+  }
+
+  if (!faktum.beskrivendeId) {
+    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
   if (props.faktum.readOnly || props.readonly) {

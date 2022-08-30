@@ -32,7 +32,7 @@ export async function getServerSideProps(
   let soknadState;
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    soknadState = await getSoknadState(uuid, "", { summary: true });
+    soknadState = await getSoknadState(uuid, "", null, { summary: true });
   }
 
   if (token && apiToken) {

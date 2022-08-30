@@ -12,44 +12,39 @@ jobs:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up node
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
           cache: "npm"
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Install
-        run: npm install --no-save --no-audit --prefer-offline --ignore-scripts
+      - run: npm install --no-save --no-audit --prefer-offline --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-      - name: Test
-        run: npm test
+      - run: npm rebuild && npm run prepare --if-present
+      - run: npm test
 
   build:
     name: Build and Publish Docker image
     # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@master
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - uses: actions/checkout@v3
+      - uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: "https://npm.pkg.github.com"
+      - run: cp $NPM_CONFIG_USERCONFIG .npmrc
 
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           context: .
           push: true
@@ -60,33 +55,19 @@ jobs:
             "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
             "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
 
-      - name: Archive NAIS yaml
-        # if: github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v1
-        with:
-          name: nais-yaml
-          path: nais
-
   deploy-dev:
-    name: Deploy to dev
     needs: [test, build]
     # if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch NAIS yaml
-        uses: actions/download-artifact@v1
-        with:
-          name: nais-yaml
-          path: nais
-
+      - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/nais.yaml
-          VARS: nais/dev.yaml
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/vars-dev.yaml
           PRINT_PAYLOAD: true
-
 
       - name: Lag deployment i Sentry
         uses: getsentry/action-release@v1

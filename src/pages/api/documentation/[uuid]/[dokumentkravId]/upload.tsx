@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audienceMellomlagring } from "../../../../../api.utils";
 import { postDocumentation } from "../../../../../server-side/mellomlagring-api";
 import { mockDokumentkravList } from "../../../../../localhost-data/dokumentkrav-list";
+import { withSentry } from "@sentry/nextjs";
 
 export const config = {
   api: {
@@ -55,4 +56,4 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default uploadHandler;
+export default withSentry(uploadHandler);

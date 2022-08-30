@@ -1,16 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NextPageContext } from "next";
 import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
 import styles from "./_error.module.css";
 
 interface IProps {
-  statusCode?: number;
   title: string;
-  details?: string;
+  details: string;
+  statusCode?: number;
 }
 
 export default function Error(props: IProps) {
   const { statusCode, title, details } = props;
+
+  useEffect(() => {
+    if (statusCode === 404) {
+      window.location.href = "http://www.nav.no/404";
+    }
+  }, []);
+
+  if (statusCode === 404) {
+    return (
+      <Alert variant="info">
+        <Heading size={"medium"} className={styles.error}>
+          Fant ikke siden
+        </Heading>
+        <BodyLong>
+          Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
+          deg hit.
+        </BodyLong>
+        {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
+      </Alert>
+    );
+  }
 
   return (
     <Alert variant="error">

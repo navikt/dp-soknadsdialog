@@ -4,6 +4,8 @@ import { IQuizSeksjon } from "../../types/quiz.types";
 import styles from "./Section.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { SectionHeading } from "./SectionHeading";
+import { ErrorModal } from "../error-modal/ErrorModal";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 interface IProps {
   section: IQuizSeksjon;
@@ -13,6 +15,10 @@ interface IProps {
 export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
+
+  if (!props.section.beskrivendeId) {
+    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
+  }
 
   return (
     <div className={styles.faktum}>

@@ -1,25 +1,17 @@
 import React from "react";
 import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Dokumentkrav } from "../../../components/dokumentkrav/Dokumentkrav";
-import { SanityProvider } from "../../../context/sanity-context";
-import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../constants";
+import { Dokumentkrav } from "./Dokumentkrav";
+import { SanityProvider } from "../../context/sanity-context";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
+import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
-import { mockDokumentkravList } from "../../../localhost-data/dokumentkrav-list";
-
-const mockSanity = {
-  fakta: [],
-  seksjoner: [],
-  svaralternativer: [],
-  landgrupper: [],
-  apptekster: [],
-  startside: [],
-};
 
 describe("Dokumentkrav", () => {
   test("Should show dokumentkrav info", async () => {
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
@@ -33,7 +25,7 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
@@ -49,7 +41,7 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
@@ -66,7 +58,7 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
@@ -122,7 +114,7 @@ describe("Dokumentkrav", () => {
         const user = userEvent.setup();
 
         render(
-          <SanityProvider initialState={mockSanity}>
+          <SanityProvider initialState={sanityMocks}>
             <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
           </SanityProvider>
         );
@@ -150,7 +142,7 @@ describe("Dokumentkrav", () => {
       const user = userEvent.setup();
 
       render(
-        <SanityProvider initialState={mockSanity}>
+        <SanityProvider initialState={sanityMocks}>
           <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
         </SanityProvider>
       );

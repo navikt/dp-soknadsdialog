@@ -6,14 +6,15 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
-import ErrorModal from "../components/ErrorModal";
+import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { useSanity } from "../context/sanity-context";
 import { FileSuccess } from "@navikt/ds-icons";
+import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { soknadState, isError, isLoading, errorType } = useQuiz();
   const [showNotFinishedError, setShowNotFinishedError] = useState(false);
   const sectionParam = router.query.seksjon as string;
 
@@ -22,6 +23,7 @@ export function Soknad() {
 
   const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
+  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
@@ -55,8 +57,8 @@ export function Soknad() {
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
-  async function goToSummary() {
-    router.push(`/${router.query.uuid}/oppsummering`);
+  function goToDocumentation() {
+    router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
@@ -96,20 +98,21 @@ export function Soknad() {
         )}
 
         {!isFirstSection && (
-          <Button variant={"secondary"} onClick={() => goPrevious()}>
-            <Left />
+          <Button variant={"secondary"} onClick={() => goPrevious()} icon={<Left />}>
             {getAppTekst("knapp.forrige")}
           </Button>
         )}
 
-        {!soknadState.ferdig && (
-          <Button onClick={() => goNext()}>
-            {getAppTekst("knapp.neste")} <Right />
+        {!isLastSection && (
+          <Button onClick={() => goNext()} icon={<Right />} iconPosition={"right"}>
+            {getAppTekst("knapp.neste")}
           </Button>
         )}
 
-        {soknadState.ferdig && (
-          <Button onClick={() => goToSummary()}>{getAppTekst("soknad.til-oppsummering")}</Button>
+        {isLastSection && soknadState.ferdig && (
+          <Button onClick={() => goToDocumentation()}>
+            {getAppTekst("soknad.til-dokumentasjon")}
+          </Button>
         )}
       </nav>
 
@@ -119,12 +122,9 @@ export function Soknad() {
           {getAppTekst("auto-lagret.tekst")}
         </p>
       )}
-      {isError && (
-        <ErrorModal
-          title={getAppTekst("teknisk-feil.med-reload.tittel")}
-          details={getAppTekst("teknisk-feil.med-reload.detaljer")}
-        />
-      )}
+      {isError && <ErrorModal errorType={errorType} />}
+
+      <NoSessionModal />
     </main>
   );
 }

@@ -61,9 +61,37 @@ function getAppTextsFields() {
 }`;
 }
 
-function getStartsideTextsFields() {
+function getInfosideFields() {
   return `{
+  "slug": slug.current,
   body
+}`;
+}
+
+function getDokumentkravFields(usePlainText: boolean) {
+  return `{
+  textId,
+  text,
+  ${usePlainText ? '"description": pt::text(description)' : "description"},
+  helpText,
+  helpText != null => {
+    "helpText": {
+      ...helpText, ${usePlainText ? '"body": pt::text(helpText.body)' : '"body": helpText.body'}
+    }
+  },
+}`;
+}
+
+function getDokumentkravSvarFields(usePlainText: boolean) {
+  return `{
+  textId,
+  text,
+  alertText,
+  alertText != null => {
+    "alertText": {
+      ...alertText, ${usePlainText ? '"body": pt::text(alertText.body)' : '"body": alertText.body'}
+    }
+  },
 }`;
 }
 
@@ -105,9 +133,25 @@ function getAppTextsGroq() {
   }`;
 }
 
-function getStartSideTextsGroq() {
-  return `* [_type=="startside" && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getStartsideTextsFields()}, ${getStartsideTextsFields()})
+function getInfosiderGroq() {
+  return `* [_type=="infopage"  && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getInfosideFields()}, ${getInfosideFields()})
+  }`;
+}
+
+function getDokumentkravGroq(usePlainText: boolean) {
+  return `* [_type=="dokumentkrav" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
+    usePlainText
+  )}, ${getDokumentkravFields(usePlainText)})
+  }`;
+}
+
+function getDokumentkravSvarGroq(usePlainText: boolean) {
+  return `* [_type=="dokumentkravSvar" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
+    usePlainText
+  )}, ${getDokumentkravSvarFields(usePlainText)})
   }`;
 }
 
@@ -117,7 +161,9 @@ export const allTextsQuery = groq`{
   "svaralternativer": ${getSvaralternativerGroq(false)},
   "landgrupper": ${getLandGrupperGroq(false)},
   "apptekster": ${getAppTextsGroq()},
-  "startside": ${getStartSideTextsGroq()}
+  "dokumentkrav": ${getDokumentkravGroq(false)},
+  "dokumentkravSvar": ${getDokumentkravSvarGroq(false)},
+  "infosider": ${getInfosiderGroq()}
 }`;
 
 export const allTextsPlainQuery = groq`{

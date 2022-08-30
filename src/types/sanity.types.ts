@@ -43,8 +43,22 @@ export interface ISanityAppTekst {
   valueText: string;
 }
 
-export interface ISanityStartSideTekst {
+export interface ISanityInfoside {
+  slug: string;
   body: TypedObject | TypedObject[];
+}
+
+export interface ISanityDokumentkrav {
+  textId: string;
+  text: string;
+  description?: TypedObject | TypedObject[];
+  helpText?: ISanityHelpText;
+}
+
+export interface ISanityDokumentkravSvar {
+  textId: string;
+  text: string;
+  alertText?: ISanityAlertText;
 }
 
 export interface ISanityTexts {
@@ -53,5 +67,7 @@ export interface ISanityTexts {
   svaralternativer: ISanitySvaralternativ[];
   landgrupper: ISanityLandGruppe[];
   apptekster: ISanityAppTekst[];
-  startside: ISanityStartSideTekst[];
+  dokumentkrav: ISanityDokumentkrav[];
+  dokumentkravSvar: ISanityDokumentkravSvar[];
+  infosider: ISanityInfoside[];
 }
