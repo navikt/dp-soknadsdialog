@@ -5,9 +5,8 @@ import { render, screen, waitForElementToBeRemoved } from "@testing-library/reac
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { IQuizBooleanFaktum } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";
+import fetch from "jest-fetch-mock";
 
-import { setupServer } from "msw/node";
-import { rest } from "msw";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../__mocks__/sanity.mocks";
 
@@ -20,26 +19,13 @@ const faktum: IQuizBooleanFaktum = {
   type: "boolean",
 };
 
-const server = setupServer(
-  rest.put("/api/soknad/localhost-uuid/faktum/1", (req, res, ctx) =>
-    res(
-      ctx.json({
-        status: "ok",
-        sistBesvart: "123",
-      })
-    )
-  ),
-  rest.get("/api/soknad/localhost-uuid/neste", (req, res, ctx) => {
-    const sistLagret = req.url.searchParams.get("sistLagret");
-    if (sistLagret == "123") {
-      return res(ctx.status(200), ctx.json({ ...faktum, svar: true }));
-    } else {
-      return res(ctx.status(500));
-    }
-  })
-);
-beforeAll(() => server.listen());
-beforeEach(() => server.resetHandlers());
+beforeEach(() => {
+  fetch.enableMocks();
+});
+
+afterEach(() => {
+  fetch.mockReset();
+});
 
 function ContextSpion() {
   const { isLoading, isError } = useQuiz();
@@ -49,6 +35,14 @@ function ContextSpion() {
 }
 
 test("Vi henter sistLagret hver gang vi lagrer et faktum", async () => {
+  fetch.mockResponseOnce(
+    JSON.stringify({
+      status: "ok",
+      sistBesvart: "123",
+    })
+  );
+  fetch.mockResponseOnce(JSON.stringify({ ...faktum, svar: true }));
+
   render(
     <SanityProvider initialState={sanityMocks}>
       <QuizProvider initialState={initialState}>
