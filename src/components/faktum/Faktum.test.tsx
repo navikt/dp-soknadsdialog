@@ -1,22 +1,11 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { Faktum } from "../../../components/faktum/Faktum";
-import { SanityProvider } from "../../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../../types/quiz.types";
-import { QuizProvider } from "../../../context/quiz-context";
-import { IQuizState } from "../../../localhost-data/quiz-state-response";
-
-const mockSanity = {
-  fakta: [],
-  seksjoner: [],
-  svaralternativer: [],
-  landgrupper: [],
-  apptekster: [],
-  startside: [],
-  dokumentkrav: [],
-  dokumentkravSvar: [],
-  infosider: [],
-};
+import { Faktum } from "./Faktum";
+import { SanityProvider } from "../../context/sanity-context";
+import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { QuizProvider } from "../../context/quiz-context";
+import { IQuizState } from "../../localhost-data/quiz-state-response";
+import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -45,7 +34,7 @@ const mockSoknadState: IQuizState = {
 describe("Faktum", () => {
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
           <Faktum faktum={faktumMockData} />
         </QuizProvider>

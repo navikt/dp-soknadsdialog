@@ -1,24 +1,13 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumEnvalg } from "../../../components/faktum/FaktumEnvalg";
-import { SanityProvider } from "../../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../../types/quiz.types";
-import { QuizProvider } from "../../../context/quiz-context";
-import { IQuizState } from "../../../localhost-data/quiz-state-response";
+import { FaktumEnvalg } from "./FaktumEnvalg";
+import { SanityProvider } from "../../context/sanity-context";
+import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { QuizProvider } from "../../context/quiz-context";
+import { IQuizState } from "../../localhost-data/quiz-state-response";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
-
-const mockSanity = {
-  fakta: [],
-  seksjoner: [],
-  svaralternativer: [],
-  landgrupper: [],
-  apptekster: [],
-  startside: [],
-  dokumentkrav: [],
-  dokumentkravSvar: [],
-  infosider: [],
-};
+import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -60,7 +49,7 @@ const soknadStateMockData: IQuizState = {
 describe("FaktumEnvalg", () => {
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
           <FaktumEnvalg faktum={faktumMockData} />
         </QuizProvider>
@@ -81,7 +70,7 @@ describe("FaktumEnvalg", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SanityProvider initialState={mockSanity}>
+      <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
           <FaktumEnvalg faktum={faktumMockData} />
         </QuizProvider>
@@ -115,7 +104,7 @@ describe("FaktumEnvalg", () => {
       const svar = faktumMockData.gyldigeValg[0];
 
       render(
-        <SanityProvider initialState={mockSanity}>
+        <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <FaktumEnvalg faktum={faktumMockData} />
           </QuizProvider>
