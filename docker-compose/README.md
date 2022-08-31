@@ -6,7 +6,9 @@ Muliggjøre lokal kjøring av søknadsdialogen og Quiz lokalt.
   * colima
   * docker-compose
   * docker
-* Colima må være startet, gjøres ved å kjøre `colima start`.
+* Konfigurer og start Colima
+  * Sørg for at Colima og docker har nok minne tilgjengelig. Dette gjøres ved å redigere filen `~/.colima/colima.yaml`, og endre feltet `memory` til 4 (under `vm`).
+  * Colima må være startet, gjøres ved å kjøre `colima start`.
 * Github Personal Access Token (PAT) [token](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-docker-for-use-with-github-packages), lagret i miljøvariabelen `GITHUB_PAT`.
 * `127.0.0.1 host.docker.internal` må være lagt til i `/etc/hosts`. Kan være nødvendig med restart for at endringene skal snappes opp.
 
@@ -49,5 +51,3 @@ Typisk noe nytt som har kommet inn i `node_modules`. Kjør kommandoen `docker-co
   rydde opp etter tidligere kjøringer.
 * Hvis frontenden lugger så kan man kjøre kommandoen `docker-compose build --no-cache`, da tvinger man docker til å 
   bygge frontenden helt på nytt og uten å hente lag som ligger i cache-en.
-* Hvis det alltid er en eller flere containere som ikke klarer så starte, så kan det være at det er satt av for lite minne til Colima.
-  Dette gjøres ved å redigere filen `~/.colima/colima.yaml`, og endre feltet `memory` til 4 (under `vm`).
