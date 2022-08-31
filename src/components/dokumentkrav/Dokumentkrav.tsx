@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
-import { IDokumentkrav, IFileState } from "../../types/documentation.types";
-import { FileUploader } from "../file-uploader/FileUploader";
-import { FileList } from "../file-uploader/FileList";
+import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./Dokumentkrav.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -14,21 +12,22 @@ import {
   DOKUMENTKRAV_SVAR_SEND_NAA,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
+import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
+import { saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
+import { useRouter } from "next/router";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
 export function Dokumentkrav(props: IProps) {
+  const router = useRouter();
   const { dokumentkrav } = props;
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
-  const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
 
-  const uploadedFiles = dokumentkrav.filer || [];
+  const uuid = router.query.uuid as string;
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
   const employerName = dokumentkrav.fakta.find(
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
@@ -39,10 +38,6 @@ export function Dokumentkrav(props: IProps) {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
-
-  function sendDocuments() {
-    alert("TODO: Send inn svar");
-  }
 
   return (
     <div className={styles.dokumentkrav}>
@@ -80,27 +75,16 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <FileUploader dokumentkravId={dokumentkrav.id} onHandle={setHandlesFiles} />
-          <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
+          {/*<FileUploader dokumentkravId={dokumentkrav.id} onHandle={setHandlesFiles} />*/}
+          {/*<FileList previouslyUploaded={dokumentkrav.filer} handledFiles={handledFiles} />*/}
         </>
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-        <div className={styles.dokumentkravBegrunnelse}>
-          <TextField
-            defaultValue={dokumentkrav.begrunnelse}
-            label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
-            size="medium"
-            type="text"
-            onChange={(event) => setBegrunnelse(event?.currentTarget.value)}
-          />
-        </div>
-      )}
-
-      {svar && (
-        <div className={styles.dokumentkravSend}>
-          <Button onClick={sendDocuments}>Send inn</Button>
-        </div>
+        <DokumentkravBegrunnelse
+          begrunnelse={dokumentkrav.begrunnelse}
+          onChange={(value) => saveDokumentkravBegrunnelse(uuid, dokumentkrav, value)}
+        />
       )}
     </div>
   );

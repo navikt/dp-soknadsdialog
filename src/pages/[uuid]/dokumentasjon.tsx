@@ -1,5 +1,5 @@
 import React from "react";
-import { Dokumentasjonskrav } from "../../views/Dokumentasjonskrav";
+import { Documentation } from "../../views/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
@@ -70,7 +70,7 @@ export default function DocumentPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Dokumentasjonskrav dokumentasjonskrav={props.documents} />
+        <Documentation dokumentasjonskravList={props.documents} />
       </QuizProvider>
     </SanityProvider>
   );

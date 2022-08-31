@@ -11,13 +11,13 @@ import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
 
 interface IProps {
-  dokumentasjonskrav: IDokumentkravListe;
+  dokumentasjonskravList: IDokumentkravListe;
 }
 
-export function Dokumentasjonskrav(props: IProps) {
+export function Documentation(props: IProps) {
   const router = useRouter();
   const { getAppTekst, getInfosideText } = useSanity();
-  const { dokumentasjonskrav } = props;
+  const { dokumentasjonskravList } = props;
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
 
   function goToSummary() {
@@ -31,21 +31,24 @@ export function Dokumentasjonskrav(props: IProps) {
   return (
     <>
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
-      {dokumentasjonskrav.krav.map((krav, index) => {
+      {dokumentasjonskravList.krav.map((dokumentkrav, index) => {
         const formattedCounter = `${index + 1} ${getAppTekst("dokumentkrav.nummer.av.krav")} ${
-          dokumentasjonskrav.krav.length
+          dokumentasjonskravList.krav.length
         }`;
+
         return (
           <div className={styles.dokumentkravContainer} key={index}>
-            <Detail key={`${krav.id}-detail`}>{formattedCounter}</Detail>
-            <Dokumentkrav key={krav.id} dokumentkrav={krav} />
+            <Detail key={`${dokumentkrav.id}-detail`}>{formattedCounter}</Detail>
+            <Dokumentkrav key={dokumentkrav.id} dokumentkrav={dokumentkrav} />
           </div>
         );
       })}
 
-      <Alert variant="info" size="medium">
-        {getAppTekst("dokumentasjonskrav.ingen.krav.funnet")}
-      </Alert>
+      {dokumentasjonskravList.krav.length === 0 && (
+        <Alert variant="info" size="medium">
+          {getAppTekst("dokumentasjonskrav.ingen.krav.funnet")}
+        </Alert>
+      )}
 
       <nav className={soknadStyles.navigation}>
         <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
