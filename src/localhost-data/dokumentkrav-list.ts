@@ -18,21 +18,21 @@ export const mockDokumentkravList: IDokumentkravListe = {
       filer: [
         {
           filnavn: "hei på du1.jpg",
-          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id",
+          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-1",
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id",
         },
         {
           filnavn: "hei på du2.jpg",
-          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id",
+          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-2",
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id",
         },
         {
           filnavn: "hei på du3.jpg",
-          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id",
+          urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-3",
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id",

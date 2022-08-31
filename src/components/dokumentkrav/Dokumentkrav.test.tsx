@@ -9,7 +9,7 @@ import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 
 describe("Dokumentkrav", () => {
-  test("Should show dokumentkrav info", async () => {
+  test("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
@@ -17,7 +17,22 @@ describe("Dokumentkrav", () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByText(mockDokumentkravList.krav[0].beskrivendeId)).toBeInTheDocument();
+      expect(screen.getByRole("heading")).toHaveTextContent(
+        mockDokumentkravList.krav[0].beskrivendeId
+      );
+    });
+  });
+
+  test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
+    render(
+      <SanityProvider initialState={sanityMocks}>
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+      </SanityProvider>
+    );
+
+    await waitFor(() => {
+      const dokumentkravTitle = `${mockDokumentkravList.krav[0].beskrivendeId} (${mockDokumentkravList.krav[0].fakta[0].svar})`;
+      expect(screen.getByRole("heading")).toHaveTextContent(dokumentkravTitle);
     });
   });
 

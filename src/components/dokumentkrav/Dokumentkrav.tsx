@@ -21,23 +21,22 @@ interface IProps {
 
 export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
-  const { getFaktumTextById, getSvaralternativTextById, getDokumentkravSvarTextById, getAppTekst } =
-    useSanity();
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
 
-  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const uploadedFiles = dokumentkrav.filer || [];
+  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
   const employerName = dokumentkrav.fakta.find(
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
   )?.svar;
 
   useEffect(() => {
     if (svar !== "") {
-      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
+      setAlertText(getSvaralternativTextById(svar)?.alertText);
     }
   }, [svar]);
 
@@ -45,14 +44,11 @@ export function Dokumentkrav(props: IProps) {
     alert("TODO: Send inn svar");
   }
 
-  //TODO: Lag logikk for når svaret er "klart", altså med filer lastet opp eller med et svar som ikke krever dokumenter
-  // TODO: Spinner og error handling
-
   return (
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
-        {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}{" "}
-        {employerName && `(${employerName})`}
+        {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}
+        {employerName && ` (${employerName})`}
       </Heading>
 
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
@@ -76,7 +72,7 @@ export function Dokumentkrav(props: IProps) {
         </RadioGroup>
       </div>
 
-      {alertText && <AlertText alertText={alertText} spacingTop />}
+      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
