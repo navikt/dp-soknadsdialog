@@ -30,7 +30,7 @@ export interface IFileState {
   file?: File;
   error?: ErrorType;
   urn?: string;
-  fileId?: string;
+  filsti?: string;
 }
 
 export enum FileHandleState {

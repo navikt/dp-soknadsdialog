@@ -7,7 +7,7 @@ import api from "../../api.utils";
 export function FileItem(props: IFileState) {
   return (
     <li className={styles.fileItem}>
-      <Link href={api(`/documentation/file/${props.fileId}/download`)} download={props.name}>
+      <Link href={api(`/documentation/file/${props.filsti}/download`)} download={props.name}>
         <BodyShort size="medium">{props.name}</BodyShort>
       </Link>
 
