@@ -21,7 +21,6 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
           Authorization: `Bearer ${onBehalfOfToken}`,
         },
       });
-      // const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error(`unexpected response ${response.statusText}`);
