@@ -7,10 +7,12 @@ import { useSession } from "../../session.utils";
 import styles from "./NoSessionModal.module.css";
 
 export function NoSessionModal() {
+  const isLocalhost = process.env.NEXT_PUBLIC_LOCALHOST;
+
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const [modalOpen, setModalOpen] = useState(false);
-  const { session } = useSession({});
+  const { session } = useSession({ enforceLogin: !isLocalhost });
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
 
   useEffect(() => {
