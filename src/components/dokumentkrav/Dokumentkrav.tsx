@@ -26,17 +26,17 @@ export function Dokumentkrav(props: IProps) {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
   const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
-  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
 
   const uploadedFiles = dokumentkrav.filer || [];
-  const dokumentkravText = getFaktumTextById(dokumentkrav.beskrivendeId);
+  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
   const employerName = dokumentkrav.fakta.find(
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
   )?.svar;
 
   useEffect(() => {
     if (svar !== "") {
-      setAlertText(getSvaralternativTextById(svar)?.alertText);
+      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
 
@@ -60,7 +60,7 @@ export function Dokumentkrav(props: IProps) {
           value={svar}
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
-            const svaralternativText = getSvaralternativTextById(textId);
+            const svaralternativText = getDokumentkravTextById(textId);
             return (
               <div key={textId}>
                 <Radio value={textId} id={textId}>
@@ -72,7 +72,7 @@ export function Dokumentkrav(props: IProps) {
         </RadioGroup>
       </div>
 
-      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingTop />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
