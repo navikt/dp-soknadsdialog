@@ -2,6 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceMellomlagring } from "../../../../../api.utils";
 import { postDocumentation } from "../../../../../server-side/mellomlagring-api";
+import { mockDokumentkravList } from "../../../../../localhost-data/dokumentkrav-list";
 import { withSentry } from "@sentry/nextjs";
 
 export const config = {
@@ -12,11 +13,13 @@ export const config = {
 
 async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(201).json({ filnavn: "test.png", urn: "jdsopfjop:jdis-1dhiodhois" });
+    return res.status(201).json(mockDokumentkravList.krav[0].filer[0]);
   }
+
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
-  const docid = req.query.docid as string;
+  const dokumentkravId = req.query.dokumentkravId as string;
+
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const buffers: any[] = [];
 
@@ -34,7 +37,7 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
         try {
           const response = await postDocumentation(
             uuid,
-            docid,
+            dokumentkravId,
             Buffer.concat(buffers),
             onBehalfOfToken,
             req

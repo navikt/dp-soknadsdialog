@@ -4,59 +4,35 @@ import userEvent from "@testing-library/user-event";
 import { Dokumentkrav } from "./Dokumentkrav";
 import { SanityProvider } from "../../context/sanity-context";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import fetch from "jest-fetch-mock";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
-
-const mockdataDokumentkrav = {
-  soknad_uuid: "12345",
-  krav: [
-    {
-      id: "5678",
-      beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
-      fakta: [],
-      filer: [
-        {
-          filnavn: "hei på du1.jpg",
-          urn: "urn:dokumen1",
-          tidspunkt: "1660571365067",
-          storrelse: 1234556,
-        },
-        {
-          filnavn: "hei på du2.jpg",
-          urn: "urn:dokumen2",
-          tidspunkt: "1660571365067",
-          storrelse: 1234556,
-        },
-        {
-          filnavn: "hei på du3.jpg",
-          urn: "urn:dokumen3",
-          tidspunkt: "1660571365067",
-          storrelse: 1234556,
-        },
-      ],
-      gyldigeValg: [
-        "dokumentkrav.svar.send.naa",
-        "dokumentkrav.svar.send.senere",
-        "dokumentkrav.svar.send.noen_andre",
-        "dokumentkrav.svar.sendt.inn.tidligere",
-        "dokumentkrav.svar.sender.ikke",
-      ],
-      svar: "",
-      begrunnelse: "",
-    },
-  ],
-};
+import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
+import fetch from "jest-fetch-mock";
 
 describe("Dokumentkrav", () => {
-  test("Should show dokumentkrav info", async () => {
+  test("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
 
     await waitFor(() => {
-      expect(screen.queryByText(mockdataDokumentkrav.krav[0].beskrivendeId)).toBeInTheDocument();
+      expect(screen.getByRole("heading")).toHaveTextContent(
+        mockDokumentkravList.krav[0].beskrivendeId
+      );
+    });
+  });
+
+  test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
+    render(
+      <SanityProvider initialState={sanityMocks}>
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+      </SanityProvider>
+    );
+
+    await waitFor(() => {
+      const dokumentkravTitle = `${mockDokumentkravList.krav[0].beskrivendeId} (${mockDokumentkravList.krav[0].fakta[0].svar})`;
+      expect(screen.getByRole("heading")).toHaveTextContent(dokumentkravTitle);
     });
   });
 
@@ -65,7 +41,7 @@ describe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
 
@@ -81,15 +57,15 @@ describe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
     await waitFor(() => {
-      expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[0].filnavn)).toBeInTheDocument();
-      expect(screen.queryByText(mockdataDokumentkrav.krav[0].filer[1].filnavn)).toBeInTheDocument();
+      expect(screen.queryByText(mockDokumentkravList.krav[0].filer[0].filnavn)).toBeInTheDocument();
+      expect(screen.queryByText(mockDokumentkravList.krav[0].filer[1].filnavn)).toBeInTheDocument();
     });
   });
 
@@ -98,7 +74,7 @@ describe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
       </SanityProvider>
     );
 
@@ -154,7 +130,7 @@ describe("Dokumentkrav", () => {
 
         render(
           <SanityProvider initialState={sanityMocks}>
-            <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+            <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
           </SanityProvider>
         );
 
@@ -182,7 +158,7 @@ describe("Dokumentkrav", () => {
 
       render(
         <SanityProvider initialState={sanityMocks}>
-          <Dokumentkrav dokumentkrav={mockdataDokumentkrav.krav[0]} />
+          <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
         </SanityProvider>
       );
 

@@ -10,13 +10,13 @@ interface IProps {
 }
 
 export function FileList({ previouslyUploaded, handledFiles }: IProps) {
-  const uploadedLength = previouslyUploaded.length + handledFiles.length;
+  const numberOfUploadedFiles = previouslyUploaded.length + handledFiles.length;
 
   return (
     <>
-      {uploadedLength > 0 && (
+      {numberOfUploadedFiles > 0 && (
         <>
-          <Detail uppercase>Filer ({uploadedLength})</Detail>
+          <Detail uppercase>Filer ({numberOfUploadedFiles})</Detail>
           <ul className={styles.fileList}>
             {previouslyUploaded.map((file) => (
               <FileItem
@@ -24,17 +24,12 @@ export function FileList({ previouslyUploaded, handledFiles }: IProps) {
                 id={file.urn}
                 name={file.filnavn}
                 state={FileHandleState.Uploaded}
+                filsti={file.filsti}
               />
             ))}
 
             {handledFiles.map((file) => (
-              <FileItem
-                key={file.id}
-                id={file.id}
-                name={file.name}
-                state={file.state}
-                error={file.error}
-              />
+              <FileItem key={file.id} {...file} />
             ))}
           </ul>
         </>

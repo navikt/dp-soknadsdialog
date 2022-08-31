@@ -2,13 +2,12 @@ import { NextApiRequest } from "next";
 
 export function postDocumentation(
   uuid: string,
-  soknadsId: string,
+  dokumentkravId: string,
   files: Buffer,
   onBehalfOfToken: string,
   originalRequest: NextApiRequest
 ) {
-  const id = `${uuid}-${soknadsId}`;
-  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${id}`;
+  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${dokumentkravId}`;
 
   return fetch(url, {
     method: "Post",

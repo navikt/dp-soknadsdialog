@@ -9,13 +9,14 @@ export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
   fakta: QuizFaktum[];
-  filer?: IDokumentkravFil[];
+  filer: IDokumentkravFil[];
   gyldigeValg: string[];
   svar?: string;
   begrunnelse?: string;
 }
 
 export interface IDokumentkravFil {
+  filsti: string;
   filnavn: string;
   urn: string;
   tidspunkt: string;
@@ -29,6 +30,7 @@ export interface IFileState {
   file?: File;
   error?: ErrorType;
   urn?: string;
+  filsti?: string;
 }
 
 export enum FileHandleState {

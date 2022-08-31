@@ -1,20 +1,20 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import api from "../../api.utils";
 import { IFileState, ErrorType, FileHandleState } from "../../types/documentation.types";
 import styles from "./FileUploader.module.css";
 
 interface IProps {
-  id: string;
+  dokumentkravId: string;
   onHandle: (value: IFileState[]) => void;
 }
 
 const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
 const MAX_FILE_SIZE = 52428800; // 400mb
 
-export function FileUploader({ id, onHandle }: IProps) {
+export function FileUploader({ onHandle, dokumentkravId }: IProps) {
   const router = useRouter();
   const [handledFiles, setHandledFiles] = useState<IFileState[]>([]);
 
@@ -48,7 +48,7 @@ export function FileUploader({ id, onHandle }: IProps) {
 
     const requestData = new FormData();
     requestData.append("file", fileObj.file);
-    const url = api(`/documentation/${router.query.uuid}/${id}/upload`);
+    const url = api(`/documentation/${router.query.uuid}/${dokumentkravId}/upload`);
 
     // Do NOT specify content-type here, it gets browser generated with the correct boundary by default
     const postRequest = fetch(url, {
