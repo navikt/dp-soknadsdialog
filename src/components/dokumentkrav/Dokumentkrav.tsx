@@ -16,6 +16,7 @@ import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploaderV2 } from "../file-uploader-v2/FileUploaderV2";
+import { FileList } from "../file-list/FileList";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -44,8 +45,6 @@ export function Dokumentkrav(props: IProps) {
   function handUploadedFiles(file: IDokumentkravFil) {
     setUploadedFiles([...uploadedFiles, file]);
   }
-
-  console.log("Uploaded files: ", uploadedFiles);
 
   return (
     <div className={styles.dokumentkrav}>
@@ -84,7 +83,7 @@ export function Dokumentkrav(props: IProps) {
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
           <FileUploaderV2 dokumentkravId={dokumentkrav.id} setUploadedFiles={handUploadedFiles} />
-          {/*<FileList previouslyUploaded={dokumentkrav.filer} handledFiles={handledFiles} />*/}
+          {<FileList uploadedFiles={uploadedFiles} />}
         </>
       )}
 
