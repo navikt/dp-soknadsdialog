@@ -114,7 +114,7 @@ describe("Dokumentkrav", () => {
       });
     }
 
-    describe("When user selects a valid file to upload", () => {
+    xdescribe("When user selects a valid file to upload", () => {
       beforeEach(() => {
         fetch.mockResponse(
           JSON.stringify({
@@ -153,7 +153,7 @@ describe("Dokumentkrav", () => {
       });
     });
 
-    it("Should show info on invalid files, and not upload anything", async () => {
+    xit("Should show info on invalid files, and not upload anything", async () => {
       const user = userEvent.setup();
 
       render(
