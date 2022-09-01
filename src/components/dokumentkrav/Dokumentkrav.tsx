@@ -43,7 +43,7 @@ export function Dokumentkrav(props: IProps) {
   }, [svar]);
 
   function handUploadedFiles(file: IDokumentkravFil) {
-    setUploadedFiles([...uploadedFiles, file]);
+    setUploadedFiles((currentState) => [...currentState, file]);
   }
 
   return (
@@ -83,7 +83,7 @@ export function Dokumentkrav(props: IProps) {
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
           <FileUploader dokumentkravId={dokumentkrav.id} setUploadedFiles={handUploadedFiles} />
-          {<FileList uploadedFiles={uploadedFiles} />}
+          <FileList uploadedFiles={uploadedFiles} />
         </>
       )}
 
