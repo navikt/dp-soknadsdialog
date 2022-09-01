@@ -16,8 +16,8 @@ interface IProps {
 
 export function Documentation(props: IProps) {
   const router = useRouter();
-  const { getAppTekst, getInfosideText } = useSanity();
   const { dokumentasjonskravList } = props;
+  const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
 
   function goToSummary() {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { IDokumentkrav } from "../../types/documentation.types";
+import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import styles from "./Dokumentkrav.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -15,6 +15,7 @@ import {
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
+import { FileUploaderV2 } from "../file-uploader-v2/FileUploaderV2";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -25,6 +26,7 @@ export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
+  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
 
   const uuid = router.query.uuid as string;
@@ -38,6 +40,12 @@ export function Dokumentkrav(props: IProps) {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
+
+  function handUploadedFiles(file: IDokumentkravFil) {
+    setUploadedFiles([...uploadedFiles, file]);
+  }
+
+  console.log("Uploaded files: ", uploadedFiles);
 
   return (
     <div className={styles.dokumentkrav}>
@@ -75,7 +83,7 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          {/*<FileUploader dokumentkravId={dokumentkrav.id} onHandle={setHandlesFiles} />*/}
+          <FileUploaderV2 dokumentkravId={dokumentkrav.id} setUploadedFiles={handUploadedFiles} />
           {/*<FileList previouslyUploaded={dokumentkrav.filer} handledFiles={handledFiles} />*/}
         </>
       )}

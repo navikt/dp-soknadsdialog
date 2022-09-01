@@ -50,3 +50,26 @@ export async function saveDokumentkravFiler(
   const updatedDokumentkrav = { ...dokumentkrav, filer };
   return saveDokumentkrav(uuid, updatedDokumentkrav);
 }
+
+export async function saveDokumenkravFile(file: File, uuid: string, dokumentkravId: string) {
+  const requestData = new FormData();
+  requestData.append("file", file);
+  const url = api(`/documentation/${uuid}/${dokumentkravId}/upload`);
+
+  try {
+    const response = await fetch(url, {
+      method: "Post",
+      headers: {
+        accept: "application/json",
+      },
+      body: requestData,
+    });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return response.json();
+  } catch (error: unknown) {
+    console.error(error);
+  }
+}
