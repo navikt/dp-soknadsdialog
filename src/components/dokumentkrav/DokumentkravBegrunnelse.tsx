@@ -11,7 +11,6 @@ interface IProps {
 
 export function DokumentkravBegrunnelse(props: IProps) {
   const { getAppTekst } = useSanity();
-
   const [begrunnelse, setBegrunnelse] = useState(props.begrunnelse || "");
   const debouncedChange = useDebouncedCallback(setBegrunnelse, 500);
 
@@ -24,10 +23,10 @@ export function DokumentkravBegrunnelse(props: IProps) {
   return (
     <div className={styles.dokumentkravBegrunnelse}>
       <TextField
+        type="text"
+        size="medium"
         defaultValue={begrunnelse}
         label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
-        size="medium"
-        type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}
       />
     </div>
