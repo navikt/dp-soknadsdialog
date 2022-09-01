@@ -1,6 +1,6 @@
 import { QuizFaktum } from "./quiz.types";
 
-export interface IDokumentkravListe {
+export interface IDokumentkravList {
   soknad_uuid: string;
   krav: IDokumentkrav[];
 }

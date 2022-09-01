@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
-import styles from "./Dokumentkrav.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
@@ -13,10 +12,12 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
+import { saveDokumentkrav, saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
+import { useFirstRender } from "../../hooks/useFirstRender";
+import styles from "./Dokumentkrav.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -24,7 +25,9 @@ interface IProps {
 
 export function Dokumentkrav(props: IProps) {
   const router = useRouter();
+  const isFirstRender = useFirstRender();
   const { dokumentkrav } = props;
+
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
@@ -41,6 +44,26 @@ export function Dokumentkrav(props: IProps) {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
+
+  useEffect(() => {
+    const save = async () => {
+      const updatedDokumentkrav = {
+        ...dokumentkrav,
+        svar: svar,
+        filer: uploadedFiles,
+      };
+      try {
+        await saveDokumentkrav(uuid, updatedDokumentkrav);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    };
+
+    if (!isFirstRender) {
+      save();
+    }
+  }, [svar, uploadedFiles]);
 
   function handUploadedFiles(file: IDokumentkravFil) {
     setUploadedFiles((currentState) => [...currentState, file]);

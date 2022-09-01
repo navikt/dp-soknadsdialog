@@ -1,6 +1,6 @@
-import { IDokumentkravListe } from "../types/documentation.types";
+import { IDokumentkravList } from "../types/documentation.types";
 
-export const mockDokumentkravList: IDokumentkravListe = {
+export const mockDokumentkravList: IDokumentkravList = {
   soknad_uuid: "12345",
   krav: [
     {
@@ -21,21 +21,21 @@ export const mockDokumentkravList: IDokumentkravListe = {
           urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-1",
           tidspunkt: "1660571365067",
           storrelse: 12345,
-          filsti: "soknad-uuid/faktumId/file-id",
+          filsti: "soknad-uuid/faktumId/file-id-1",
         },
         {
           filnavn: "hei på du2.jpg",
           urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-2",
           tidspunkt: "1660571365067",
           storrelse: 12345,
-          filsti: "soknad-uuid/faktumId/file-id",
+          filsti: "soknad-uuid/faktumId/file-id-2",
         },
         {
           filnavn: "hei på du3.jpg",
           urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-3",
           tidspunkt: "1660571365067",
           storrelse: 12345,
-          filsti: "soknad-uuid/faktumId/file-id",
+          filsti: "soknad-uuid/faktumId/file-id-3",
         },
       ],
       gyldigeValg: [
