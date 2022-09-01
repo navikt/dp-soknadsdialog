@@ -2,7 +2,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceMellomlagring } from "../../../../../api.utils";
 import { postDocumentation } from "../../../../../server-side/mellomlagring-api";
-import { mockDokumentkravList } from "../../../../../localhost-data/dokumentkrav-list";
+import { mockMellomlagringLagreFil } from "../../../../../localhost-data/dokumentkrav-list";
 import { withSentry } from "@sentry/nextjs";
 
 export const config = {
@@ -13,7 +13,7 @@ export const config = {
 
 async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(201).json(mockDokumentkravList.krav[0].filer[0]);
+    return res.status(201).json(mockMellomlagringLagreFil);
   }
 
   const { token, apiToken } = await getSession({ req });

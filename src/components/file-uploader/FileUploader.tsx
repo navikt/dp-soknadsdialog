@@ -39,7 +39,8 @@ export function FileUploader({ dokumentkravId, setUploadedFiles }: IProps) {
       } else {
         try {
           const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkravId);
-          setUploadedFiles(fileResponse);
+          // Only save the first response, since we only save one file at a time
+          setUploadedFiles(fileResponse[0]);
         } catch (error) {
           setErrors((currentState) => [
             ...currentState,

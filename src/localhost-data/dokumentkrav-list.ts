@@ -88,3 +88,13 @@ export const mockDokumentkravList: IDokumentkravListe = {
     },
   ],
 };
+
+export const mockMellomlagringLagreFil = [
+  {
+    filnavn: "hei på du1.jpg",
+    urn: "urn:vedlegg:soknad-uuid/faktumId/file-id-1",
+    tidspunkt: "1660571365067",
+    storrelse: 12345,
+    filsti: "soknad-uuid/faktumId/file-id",
+  },
+];
