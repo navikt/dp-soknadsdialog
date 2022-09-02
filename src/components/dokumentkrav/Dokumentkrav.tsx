@@ -12,11 +12,7 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import {
-  saveDokumentkravBegrunnelse,
-  saveDokumentkravFil,
-  saveDokumentkravSvar,
-} from "../../api/dokumentasjon-api";
+import { saveDokumentkravBegrunnelse, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -62,21 +58,6 @@ export function Dokumentkrav(props: IProps) {
     }
   }, [svar]);
 
-  useEffect(() => {
-    const save = async () => {
-      try {
-        await saveDokumentkravFil(uuid, dokumentkrav, uploadedFiles);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    };
-
-    if (!isFirstRender) {
-      save();
-    }
-  }, [uploadedFiles]);
-
   function handUploadedFiles(file: IDokumentkravFil) {
     setUploadedFiles((currentState) => [...currentState, file]);
   }
@@ -117,7 +98,7 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <FileUploader dokumentkravId={dokumentkrav.id} setUploadedFiles={handUploadedFiles} />
+          <FileUploader dokumentkrav={dokumentkrav} setUploadedFiles={handUploadedFiles} />
           <FileList uploadedFiles={uploadedFiles} />
         </>
       )}

@@ -58,14 +58,14 @@ export async function saveDokumentkravSvar(
   }
 }
 
-export async function saveDokumentkravFil(
+export async function saveDokumentkravFilToQuiz(
   uuid: string,
   dokumentkrav: IDokumentkrav,
-  filer: IDokumentkravFil[]
+  fil: IDokumentkravFil
 ) {
   const saveRequest = fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/fil`), {
     method: "PUT",
-    body: JSON.stringify(filer),
+    body: JSON.stringify(fil),
   });
 
   try {
@@ -82,7 +82,11 @@ export async function saveDokumentkravFil(
   }
 }
 
-export async function saveDokumenkravFile(file: File, uuid: string, dokumentkravId: string) {
+export async function saveDokumenkravFileToMellomLagring(
+  file: File,
+  uuid: string,
+  dokumentkravId: string
+) {
   const requestData = new FormData();
   requestData.append("file", file);
   const url = api(`/documentation/${uuid}/${dokumentkravId}/upload`);
