@@ -31,10 +31,8 @@ npm run test
 
 ## Autentisering i dev
 
-1. Gå til https://www.dev.nav.no/person/dittnav/
-2. Logg inn (hvis det feiler; clear cookies og cache i browser)
-3. Gå til https://arbeid.dev.nav.no/arbeid/dagpenger/soknad
-4. Login complete - apiendepunkter skal da fungere
+1. Gå til https://arbeid.dev.nav.no/arbeid/dagpenger/soknad/oauth2/login
+2. Login complete - apiendepunkter skal da fungere
 
 ## Kode-konvensjoner
 
