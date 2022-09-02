@@ -22,11 +22,14 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
         },
       });
 
+      // eslint-disable-next-line no-console
+      console.log(response);
+
       if (!response.ok) {
         throw new Error(`unexpected response ${response.statusText}`);
       }
 
-      res.setHeader("Content-Type", "application/pdf");
+      // res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "attachment;");
       return res.status(200).send(response.blob());
     } catch (error: unknown) {
