@@ -11,6 +11,9 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
 
+  // eslint-disable-next-line no-console
+  console.log("Lagre fil til quiz");
+
   if (token && apiToken) {
     try {
       const onBehalfOfToken = await apiToken(audience);

@@ -59,6 +59,8 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
             fileResponse[0]
           );
 
+          // eslint-disable-next-line no-console
+          console.log(dokumentkravResponse);
           if (!dokumentkravResponse.ok) {
             // eslint-disable-next-line no-console
             console.error(dokumentkravResponse.statusText);
