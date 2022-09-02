@@ -51,6 +51,8 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
             throw new Error(fileResponse.statusText);
           }
 
+          setUploadedFiles(fileResponse[0]);
+
           const dokumentkravResponse = await saveDokumentkravFilToQuiz(
             uuid,
             dokumentkrav,
@@ -58,10 +60,10 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
           );
 
           if (!dokumentkravResponse.ok) {
-            throw new Error(dokumentkravResponse.statusText);
+            // eslint-disable-next-line no-console
+            console.error(dokumentkravResponse.statusText);
           }
           // Only save the first response, since we only save one file at a time
-          setUploadedFiles(fileResponse[0]);
         } catch (error) {
           setErrors((currentState) => [
             ...currentState,
