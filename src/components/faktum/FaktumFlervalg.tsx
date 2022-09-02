@@ -46,7 +46,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);
           return (
-            <Checkbox key={textId} value={textId}>
+            <Checkbox key={textId} id={textId} value={textId}>
               {svaralternativText ? svaralternativText.text : textId}
             </Checkbox>
           );

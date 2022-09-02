@@ -45,6 +45,9 @@ const soknadStateMockData: IQuizState = {
 };
 
 describe("FaktumBoolean", () => {
+  // Undo any answer after each test
+  beforeEach(() => (faktumMockData.svar = undefined));
+
   test("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>

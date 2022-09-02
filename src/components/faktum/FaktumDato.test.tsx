@@ -42,6 +42,9 @@ const soknadStateMockData: IQuizState = {
 };
 
 describe("FaktumDato", () => {
+  // Undo any answer after each test
+  beforeEach(() => (faktumMockData.svar = undefined));
+
   test("Should show faktum question and datepicker", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>

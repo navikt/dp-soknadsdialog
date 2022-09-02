@@ -47,6 +47,9 @@ const soknadStateMockData: IQuizState = {
 };
 
 describe("FaktumEnvalg", () => {
+  // Undo any answer after each test
+  beforeEach(() => (faktumMockData.svar = undefined));
+
   test("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
@@ -57,7 +60,6 @@ describe("FaktumEnvalg", () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[0])).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[1])).toBeInTheDocument();
