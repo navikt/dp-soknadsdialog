@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
-import { audienceMellomlagring } from "../../../../../api.utils";
+import { audienceMellomlagring } from "../../../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
 export const config = {
@@ -11,16 +11,30 @@ export const config = {
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
-  const filePath = req.query.filePath as string;
+  const uuid = req.query.uuid as string;
+  const dokumentId = req.query.dokumentId as string;
+  const fileId = req.query.filePath as string;
+
+  // eslint-disable-next-line no-console
+  console.log("Nextjs downloadHandler");
+  // eslint-disable-next-line no-console
+  console.log("uuid: ", uuid);
+  // eslint-disable-next-line no-console
+  console.log("dokumentId: ", dokumentId);
+  // eslint-disable-next-line no-console
+  console.log("fileId: ", fileId);
 
   if (token && apiToken) {
     try {
       const onBehalfOfToken = await apiToken(audienceMellomlagring);
-      const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/${filePath}`, {
-        headers: {
-          Authorization: `Bearer ${onBehalfOfToken}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${dokumentId}/${fileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${onBehalfOfToken}`,
+          },
+        }
+      );
 
       // eslint-disable-next-line no-console
       console.log(response);
