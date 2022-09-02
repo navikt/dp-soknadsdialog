@@ -45,7 +45,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
 
       // res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "attachment;");
-      return res.status(200).send(response);
+      return res.status(200).send(response.body);
     } catch (error: unknown) {
       return res.status(404);
     }
