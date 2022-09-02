@@ -54,7 +54,9 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
           const svaralternativText = getSvaralternativTextById(textId);
           return (
             <div key={textId}>
-              <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>
+              <Radio value={textId} id={textId}>
+                {svaralternativText ? svaralternativText.text : textId}
+              </Radio>
             </div>
           );
         })}
