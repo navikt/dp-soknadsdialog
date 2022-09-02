@@ -15,15 +15,6 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const dokumentId = req.query.dokumentId as string;
   const fileId = req.query.filePath as string;
 
-  // eslint-disable-next-line no-console
-  console.log("Nextjs downloadHandler");
-  // eslint-disable-next-line no-console
-  console.log("uuid: ", uuid);
-  // eslint-disable-next-line no-console
-  console.log("dokumentId: ", dokumentId);
-  // eslint-disable-next-line no-console
-  console.log("fileId: ", fileId);
-
   if (token && apiToken) {
     try {
       const onBehalfOfToken = await apiToken(audienceMellomlagring);
@@ -36,14 +27,10 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
         }
       );
 
-      // eslint-disable-next-line no-console
-      console.log(response);
-
       if (!response.ok) {
         throw new Error(`unexpected response ${response.statusText}`);
       }
 
-      // res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "attachment;");
       return res.status(200).send(response.body);
     } catch (error: unknown) {

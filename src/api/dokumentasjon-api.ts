@@ -19,8 +19,9 @@ export async function saveDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav
     } else {
       throw Error(res.statusText);
     }
-  } catch {
-    throw Error();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
   }
 }
 
@@ -38,17 +39,47 @@ export async function saveDokumentkravSvar(
   dokumentkrav: IDokumentkrav,
   svar: string
 ) {
-  const updatedDokumentkrav = { ...dokumentkrav, svar };
-  return saveDokumentkrav(uuid, updatedDokumentkrav);
+  const saveRequest = fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/svar`), {
+    method: "PUT",
+    body: JSON.stringify(svar),
+  });
+
+  try {
+    const res = await saveRequest;
+
+    if (!res.ok) {
+      throw Error(res.statusText);
+    }
+
+    return res.json();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
 }
 
-export async function saveDokumentkravFiler(
+export async function saveDokumentkravFil(
   uuid: string,
   dokumentkrav: IDokumentkrav,
   filer: IDokumentkravFil[]
 ) {
-  const updatedDokumentkrav = { ...dokumentkrav, filer };
-  return saveDokumentkrav(uuid, updatedDokumentkrav);
+  const saveRequest = fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/fil`), {
+    method: "PUT",
+    body: JSON.stringify(filer),
+  });
+
+  try {
+    const res = await saveRequest;
+
+    if (!res.ok) {
+      throw Error(res.statusText);
+    }
+
+    return res.json();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
 }
 
 export async function saveDokumenkravFile(file: File, uuid: string, dokumentkravId: string) {
@@ -70,6 +101,7 @@ export async function saveDokumenkravFile(file: File, uuid: string, dokumentkrav
 
     return response.json();
   } catch (error: unknown) {
+    // eslint-disable-next-line no-console
     console.error(error);
   }
 }

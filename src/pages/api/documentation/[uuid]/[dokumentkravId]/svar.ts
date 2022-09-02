@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
-async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
+async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(201).json({ status: "ok" });
   }
@@ -11,14 +11,14 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
-
   if (token && apiToken) {
     try {
       const onBehalfOfToken = await apiToken(audience);
       const response = await fetch(
-        `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}`,
+        `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/svar`,
         {
           method: "POST",
+          body: req.body,
           headers: {
             Authorization: `Bearer ${onBehalfOfToken}`,
           },
@@ -36,4 +36,4 @@ async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(uploadHandler);
+export default withSentry(saveSvarHandler);

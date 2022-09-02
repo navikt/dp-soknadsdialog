@@ -12,7 +12,11 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { saveDokumentkrav, saveDokumentkravBegrunnelse } from "../../api/dokumentasjon-api";
+import {
+  saveDokumentkravBegrunnelse,
+  saveDokumentkravFil,
+  saveDokumentkravSvar,
+} from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -40,20 +44,9 @@ export function Dokumentkrav(props: IProps) {
   )?.svar;
 
   useEffect(() => {
-    if (svar !== "") {
-      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
-    }
-  }, [svar]);
-
-  useEffect(() => {
     const save = async () => {
-      const updatedDokumentkrav = {
-        ...dokumentkrav,
-        svar: svar,
-        filer: uploadedFiles,
-      };
       try {
-        await saveDokumentkrav(uuid, updatedDokumentkrav);
+        await saveDokumentkravSvar(uuid, dokumentkrav, svar);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -63,7 +56,26 @@ export function Dokumentkrav(props: IProps) {
     if (!isFirstRender) {
       save();
     }
-  }, [svar, uploadedFiles]);
+
+    if (svar !== "") {
+      setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
+    }
+  }, [svar]);
+
+  useEffect(() => {
+    const save = async () => {
+      try {
+        await saveDokumentkravFil(uuid, dokumentkrav, uploadedFiles);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    };
+
+    if (!isFirstRender) {
+      save();
+    }
+  }, [uploadedFiles]);
 
   function handUploadedFiles(file: IDokumentkravFil) {
     setUploadedFiles((currentState) => [...currentState, file]);
