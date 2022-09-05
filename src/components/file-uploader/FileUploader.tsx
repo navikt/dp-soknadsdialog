@@ -1,118 +1,94 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "@navikt/ds-react";
-import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import api from "../../api.utils";
-import { IFileState, ErrorType, FileHandleState } from "../../types/documentation.types";
+import { Alert, Button } from "@navikt/ds-react";
+import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
+import { useRouter } from "next/router";
+import {
+  saveDokumenkravFileToMellomLagring,
+  saveDokumentkravFilToQuiz,
+} from "../../api/dokumentasjon-api";
 import styles from "./FileUploader.module.css";
-
-interface IProps {
-  dokumentkravId: string;
-  onHandle: (value: IFileState[]) => void;
-}
 
 const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
 const MAX_FILE_SIZE = 52428800; // 400mb
 
-export function FileUploader({ onHandle, dokumentkravId }: IProps) {
+interface IProps {
+  dokumentkrav: IDokumentkrav;
+  setUploadedFiles: (file: IDokumentkravFil) => void;
+}
+interface IFileError {
+  fileName: string;
+  error: "INVALID_FILE_FORMAT" | "INVALID_FILE_SIZE" | "SERVER_ERROR";
+}
+
+export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
   const router = useRouter();
-  const [handledFiles, setHandledFiles] = useState<IFileState[]>([]);
+  const uuid = router.query.uuid as string;
+  const [errors, setErrors] = useState<IFileError[]>([]);
 
-  useEffect(() => {
-    onHandle(handledFiles);
-
-    // Only do one upload per useEffect call
-    const uploadIndex = handledFiles.findIndex((fileObj) => {
-      return fileObj.state === FileHandleState.AwaitingUpload;
-    });
-
-    if (uploadIndex > -1) {
-      uploadFile(handledFiles[uploadIndex], uploadIndex);
-    }
-  }, [handledFiles]);
-
-  function addHandledFiles(fileArray: IFileState[]) {
-    setHandledFiles([...handledFiles, ...fileArray]);
-  }
-
-  function changeHandledFile(fileObj: IFileState, index: number) {
-    const copy = [...handledFiles];
-    copy[index] = fileObj;
-    setHandledFiles(copy);
-  }
-
-  async function uploadFile(fileObj: IFileState, index: number) {
-    if (!fileObj.file) {
-      return;
-    }
-
-    const requestData = new FormData();
-    requestData.append("file", fileObj.file);
-    const url = api(`/documentation/${router.query.uuid}/${dokumentkravId}/upload`);
-
-    // Do NOT specify content-type here, it gets browser generated with the correct boundary by default
-    const postRequest = fetch(url, {
-      method: "Post",
-      headers: {
-        accept: "application/json",
-      },
-      body: requestData,
-    }).then((res) => {
-      if (res.ok) {
-        return res.json();
+  const onDrop = useCallback((selectedFiles: File[]) => {
+    setErrors([]);
+    selectedFiles.forEach(async (file) => {
+      if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
+        setErrors((currentState) => [
+          ...currentState,
+          { fileName: file.name, error: "INVALID_FILE_FORMAT" },
+        ]);
+      } else if (file.size > MAX_FILE_SIZE) {
+        setErrors((currentState) => [
+          ...currentState,
+          { fileName: file.name, error: "INVALID_FILE_SIZE" },
+        ]);
       } else {
-        throw Error(res.statusText);
+        try {
+          const fileResponse = await saveDokumenkravFileToMellomLagring(
+            file,
+            uuid,
+            dokumentkrav.id
+          );
+
+          if (!fileResponse.ok) {
+            throw new Error(fileResponse.statusText);
+          }
+
+          setUploadedFiles(fileResponse[0]);
+
+          const dokumentkravResponse = await saveDokumentkravFilToQuiz(
+            uuid,
+            dokumentkrav,
+            fileResponse[0]
+          );
+
+          // eslint-disable-next-line no-console
+          console.log(dokumentkravResponse);
+          if (!dokumentkravResponse.ok) {
+            // eslint-disable-next-line no-console
+            console.error(dokumentkravResponse.statusText);
+          }
+          // Only save the first response, since we only save one file at a time
+        } catch (error) {
+          setErrors((currentState) => [
+            ...currentState,
+            { fileName: file.name, error: "SERVER_ERROR" },
+          ]);
+        }
       }
     });
+  }, []);
 
-    try {
-      const response = await postRequest;
-
-      fileObj.state = FileHandleState.Uploaded;
-      fileObj.urn = response.urn;
-
-      changeHandledFile(fileObj, index);
-    } catch {
-      fileObj.state = FileHandleState.Error;
-      fileObj.error = ErrorType.ServerError;
-
-      changeHandledFile(fileObj, index);
-    }
-  }
-
-  const onDrop = useCallback(
-    (selectedFiles: File[]) => {
-      const tempFileList: IFileState[] = [];
-
-      selectedFiles.forEach((file) => {
-        const id = `${new Date().getTime()}-${file.name}`;
-        const fileObj: IFileState = { id: id, file: file, name: file.name };
-
-        if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
-          fileObj.state = FileHandleState.Error;
-          fileObj.error = ErrorType.FileFormat;
-        } else if (file.size > MAX_FILE_SIZE) {
-          fileObj.state = FileHandleState.Error;
-          fileObj.error = ErrorType.FileSize;
-        } else {
-          fileObj.state = FileHandleState.AwaitingUpload;
-        }
-        tempFileList.push(fileObj);
-      });
-
-      addHandledFiles(tempFileList);
-    },
-    [handledFiles]
-  );
-
-  const { getRootProps, getInputProps, open } = useDropzone({
-    noClick: true,
-    noKeyboard: true,
-    onDrop,
-  });
-
+  const { getRootProps, getInputProps, open } = useDropzone({ onDrop });
   return (
     <>
+      {errors.length > 0 && (
+        <Alert variant={"error"}>
+          {errors.map((error, index) => (
+            <p key={index}>
+              <span>{error.error}: </span>
+              <span>{error.fileName}</span>
+            </p>
+          ))}
+        </Alert>
+      )}
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
         <>

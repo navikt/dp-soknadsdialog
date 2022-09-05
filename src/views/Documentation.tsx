@@ -1,24 +1,26 @@
+import React from "react";
 import { Alert, Button, Detail } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import React from "react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
-import { IDokumentkravListe } from "../types/documentation.types";
+import { IDokumentkravList } from "../types/documentation.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import styles from "./Dokumentasjonskrav.module.css";
-import soknadStyles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
+import soknadStyles from "./Soknad.module.css";
+import styles from "./Dokumentasjonskrav.module.css";
 
 interface IProps {
-  dokumentasjonskrav: IDokumentkravListe;
+  dokumentkravList: IDokumentkravList;
 }
 
-export function Dokumentasjonskrav(props: IProps) {
+export function Documentation(props: IProps) {
   const router = useRouter();
+  const { dokumentkravList } = props;
   const { getAppTekst, getInfosideText } = useSanity();
-  const { dokumentasjonskrav } = props;
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
+  const numberOfDokumentkravText = getAppTekst("dokumentkrav.nummer.av.krav");
+  const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   function goToSummary() {
     router.push(`/${router.query.uuid}/oppsummering`);
@@ -31,21 +33,22 @@ export function Dokumentasjonskrav(props: IProps) {
   return (
     <>
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
-      {dokumentasjonskrav.krav.map((krav, index) => {
-        const formattedCounter = `${index + 1} ${getAppTekst("dokumentkrav.nummer.av.krav")} ${
-          dokumentasjonskrav.krav.length
-        }`;
+      {dokumentkravList.krav.map((dokumentkrav, index) => {
+        const dokumentkravNumber = index + 1;
+
         return (
           <div className={styles.dokumentkravContainer} key={index}>
-            <Detail key={`${krav.id}-detail`}>{formattedCounter}</Detail>
-            <Dokumentkrav key={krav.id} dokumentkrav={krav} />
+            <Detail>{`${dokumentkravNumber} ${numberOfDokumentkravText} ${numberOfDokumentkrav}`}</Detail>
+            <Dokumentkrav key={dokumentkrav.id} dokumentkrav={dokumentkrav} />
           </div>
         );
       })}
 
-      <Alert variant="info" size="medium">
-        {getAppTekst("dokumentasjonskrav.ingen.krav.funnet")}
-      </Alert>
+      {dokumentkravList.krav.length === 0 && (
+        <Alert variant="info" size="medium">
+          {getAppTekst("dokumentasjonskrav.ingen.krav.funnet")}
+        </Alert>
+      )}
 
       <nav className={soknadStyles.navigation}>
         <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>

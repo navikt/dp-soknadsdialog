@@ -8,7 +8,7 @@ import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 
-describe("Dokumentkrav", () => {
+xdescribe("Dokumentkrav", () => {
   test("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
@@ -85,7 +85,7 @@ describe("Dokumentkrav", () => {
     });
   });
 
-  describe("Upload file", () => {
+  xdescribe("Upload file", () => {
     beforeEach(() => {
       fetch.enableMocks();
     });
@@ -114,7 +114,7 @@ describe("Dokumentkrav", () => {
       });
     }
 
-    describe("When user selects a valid file to upload", () => {
+    xdescribe("When user selects a valid file to upload", () => {
       beforeEach(() => {
         fetch.mockResponse(
           JSON.stringify({
@@ -153,7 +153,7 @@ describe("Dokumentkrav", () => {
       });
     });
 
-    it("Should show info on invalid files, and not upload anything", async () => {
+    xit("Should show info on invalid files, and not upload anything", async () => {
       const user = userEvent.setup();
 
       render(

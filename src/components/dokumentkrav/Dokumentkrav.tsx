@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react";
-import { IDokumentkrav, IFileState } from "../../types/documentation.types";
-import { FileUploader } from "../file-uploader/FileUploader";
-import { FileList } from "../file-uploader/FileList";
-import styles from "./Dokumentkrav.module.css";
+import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
@@ -14,34 +11,55 @@ import {
   DOKUMENTKRAV_SVAR_SEND_NAA,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
+import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
+import { saveDokumentkravBegrunnelse, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
+import { useRouter } from "next/router";
+import { FileUploader } from "../file-uploader/FileUploader";
+import { FileList } from "../file-list/FileList";
+import { useFirstRender } from "../../hooks/useFirstRender";
+import styles from "./Dokumentkrav.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
 export function Dokumentkrav(props: IProps) {
+  const router = useRouter();
+  const isFirstRender = useFirstRender();
   const { dokumentkrav } = props;
+
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || ""); //TODO: Fjern eslint-disable når vi tar variabelen begrunnelse i bruk
-  const [handledFiles, setHandlesFiles] = useState<IFileState[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
 
-  const uploadedFiles = dokumentkrav.filer || [];
+  const uuid = router.query.uuid as string;
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
   const employerName = dokumentkrav.fakta.find(
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
   )?.svar;
 
   useEffect(() => {
+    const save = async () => {
+      try {
+        await saveDokumentkravSvar(uuid, dokumentkrav, svar);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    };
+
+    if (!isFirstRender) {
+      save();
+    }
+
     if (svar !== "") {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar]);
 
-  function sendDocuments() {
-    alert("TODO: Send inn svar");
+  function handUploadedFiles(file: IDokumentkravFil) {
+    setUploadedFiles((currentState) => [...currentState, file]);
   }
 
   return (
@@ -80,27 +98,16 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <FileUploader dokumentkravId={dokumentkrav.id} onHandle={setHandlesFiles} />
-          <FileList previouslyUploaded={uploadedFiles} handledFiles={handledFiles} />
+          <FileUploader dokumentkrav={dokumentkrav} setUploadedFiles={handUploadedFiles} />
+          <FileList uploadedFiles={uploadedFiles} />
         </>
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-        <div className={styles.dokumentkravBegrunnelse}>
-          <TextField
-            defaultValue={dokumentkrav.begrunnelse}
-            label={getAppTekst("dokumentkrav.sender.ikke.begrunnelse")}
-            size="medium"
-            type="text"
-            onChange={(event) => setBegrunnelse(event?.currentTarget.value)}
-          />
-        </div>
-      )}
-
-      {svar && (
-        <div className={styles.dokumentkravSend}>
-          <Button onClick={sendDocuments}>Send inn</Button>
-        </div>
+        <DokumentkravBegrunnelse
+          begrunnelse={dokumentkrav.begrunnelse}
+          onChange={(value) => saveDokumentkravBegrunnelse(uuid, dokumentkrav, value)}
+        />
       )}
     </div>
   );

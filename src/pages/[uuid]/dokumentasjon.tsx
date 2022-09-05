@@ -1,5 +1,5 @@
 import React from "react";
-import { Dokumentasjonskrav } from "../../views/Dokumentasjonskrav";
+import { Documentation } from "../../views/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
@@ -12,12 +12,12 @@ import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
-import { IDokumentkravListe } from "../../types/documentation.types";
+import { IDokumentkravList } from "../../types/documentation.types";
 
 interface IProps {
   soknadState: IQuizState | undefined;
   sanityTexts: ISanityTexts;
-  documents: IDokumentkravListe | undefined;
+  documents: IDokumentkravList | undefined;
 }
 
 export async function getServerSideProps(
@@ -70,7 +70,7 @@ export default function DocumentPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Dokumentasjonskrav dokumentasjonskrav={props.documents} />
+        <Documentation dokumentkravList={props.documents} />
       </QuizProvider>
     </SanityProvider>
   );
