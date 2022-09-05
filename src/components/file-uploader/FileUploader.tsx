@@ -8,23 +8,23 @@ import {
   saveDokumentkravFilToQuiz,
 } from "../../api/dokumentasjon-api";
 import styles from "./FileUploader.module.css";
-
-const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
-const MAX_FILE_SIZE = 52428800; // 400mb
+import { ALLOWED_FILE_FORMATS } from "../../constants";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
   setUploadedFiles: (file: IDokumentkravFil) => void;
+  maxFileSize: number;
 }
 interface IFileError {
   fileName: string;
   error: "INVALID_FILE_FORMAT" | "INVALID_FILE_SIZE" | "SERVER_ERROR";
 }
 
-export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
+export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IProps) {
   const router = useRouter();
   const uuid = router.query.uuid as string;
   const [errors, setErrors] = useState<IFileError[]>([]);
+  const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
 
   const onDrop = useCallback((selectedFiles: File[]) => {
     setErrors([]);
@@ -34,7 +34,7 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
           ...currentState,
           { fileName: file.name, error: "INVALID_FILE_FORMAT" },
         ]);
-      } else if (file.size > MAX_FILE_SIZE) {
+      } else if (file.size > maxFileSize) {
         setErrors((currentState) => [
           ...currentState,
           { fileName: file.name, error: "INVALID_FILE_SIZE" },
@@ -79,16 +79,6 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
   const { getRootProps, getInputProps, open } = useDropzone({ onDrop });
   return (
     <>
-      {errors.length > 0 && (
-        <Alert variant={"error"}>
-          {errors.map((error, index) => (
-            <p key={index}>
-              <span>{error.error}: </span>
-              <span>{error.fileName}</span>
-            </p>
-          ))}
-        </Alert>
-      )}
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
         <>
@@ -96,6 +86,24 @@ export function FileUploader({ dokumentkrav, setUploadedFiles }: IProps) {
           <Button onClick={open}>Velg filer</Button>
         </>
       </div>
+
+      {errors.length > 0 && (
+        <div className={styles.uploadError}>
+          <Alert variant={"error"}>
+            Klarte ikke å laste opp følgende filer:
+            <ul>
+              {errors.map((error, index) => (
+                <li key={index}>{error.fileName}</li>
+              ))}
+            </ul>
+            {!hasServerError && (
+              <span>
+                Du kan kun laste opp filer av typen JPG, PNG og PDF. Maks 30MB per dokumentkrav.
+              </span>
+            )}
+          </Alert>
+        </div>
+      )}
     </>
   );
 }
