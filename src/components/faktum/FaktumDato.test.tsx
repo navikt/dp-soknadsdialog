@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumEnvalg } from "./FaktumEnvalg";
+import { FaktumDato } from "./FaktumDato";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
@@ -10,16 +10,11 @@ import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
-  id: "10001",
-  svar: "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
-  type: "envalg",
+  id: "8001",
+  svar: "2022-08-04",
+  type: "localdate",
   readOnly: false,
-  gyldigeValg: [
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.ja",
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
-  ],
-  beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
+  beskrivendeId: "faktum.dagpenger-soknadsdato",
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
@@ -46,44 +41,44 @@ const soknadStateMockData: IQuizState = {
   seksjoner: [sectionMockData],
 };
 
-describe("FaktumEnvalg", () => {
+describe("FaktumDato", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and answers", async () => {
+  test("Should show faktum question and datepicker", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <FaktumDato faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
 
+    const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId);
+
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
-      expect(screen.queryByText(faktumMockData.gyldigeValg[0])).toBeInTheDocument();
-      expect(screen.queryByText(faktumMockData.gyldigeValg[1])).toBeInTheDocument();
-      expect(screen.queryByText(faktumMockData.gyldigeValg[2])).toBeInTheDocument();
+      expect(datepicker).toBeInTheDocument();
     });
   });
 
   test("Should show preselected faktum answer if it's already selected", async () => {
-    const svar = faktumMockData.gyldigeValg[2];
+    const svar = "2022-08-04";
     faktumMockData.svar = svar;
 
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <FaktumDato faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
 
     // Casting it to access the value attribute
-    const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
+    const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
 
     await waitFor(() => {
-      expect(checkedRadio.value).toBe(svar);
+      expect(datepicker.value).toBe(svar);
     });
   });
 
@@ -103,24 +98,25 @@ describe("FaktumEnvalg", () => {
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
-      const svar = faktumMockData.gyldigeValg[0];
+      const svar = "2022-08-04";
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumEnvalg faktum={faktumMockData} />
+            <FaktumDato faktum={faktumMockData} />
           </QuizProvider>
         </SanityProvider>
       );
 
-      const firstRadio = screen.getByLabelText(svar);
+      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
 
-      user.click(firstRadio);
+      // To trigger correct behavior as explained here: https://github.com/testing-library/user-event/issues/399#issuecomment-815664027
+      await user.clear(datepicker);
+      await user.type(datepicker, svar);
 
       await waitFor(() => {
-        const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
-        expect(checkedRadio).toBeInTheDocument();
-        expect(checkedRadio.value).toEqual(svar);
+        expect((datepicker as HTMLInputElement).value).toEqual(svar);
+
         expect(fetch.mock.calls.length).toEqual(2);
 
         // Does the first call save the faktum with the right answer?

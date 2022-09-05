@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumEnvalg } from "./FaktumEnvalg";
+import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
@@ -10,16 +10,14 @@ import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
-  id: "10001",
-  svar: "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
-  type: "envalg",
+  id: "8007.1",
+  type: "boolean",
   readOnly: false,
   gyldigeValg: [
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.ja",
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
-    "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
+    "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja",
+    "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei",
   ],
-  beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
+  beskrivendeId: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
@@ -46,7 +44,7 @@ const soknadStateMockData: IQuizState = {
   seksjoner: [sectionMockData],
 };
 
-describe("FaktumEnvalg", () => {
+describe("FaktumBoolean", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
@@ -54,7 +52,7 @@ describe("FaktumEnvalg", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <FaktumBoolean faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
@@ -63,27 +61,27 @@ describe("FaktumEnvalg", () => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[0])).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[1])).toBeInTheDocument();
-      expect(screen.queryByText(faktumMockData.gyldigeValg[2])).toBeInTheDocument();
     });
   });
 
   test("Should show preselected faktum answer if it's already selected", async () => {
-    const svar = faktumMockData.gyldigeValg[2];
-    faktumMockData.svar = svar;
+    faktumMockData.svar = true;
 
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <FaktumBoolean faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
 
     // Casting it to access the value attribute
     const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
+    const svarLabel = booleanToTextId(faktumMockData);
 
     await waitFor(() => {
-      expect(checkedRadio.value).toBe(svar);
+      expect(checkedRadio.value).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
+      expect(svarLabel).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
     });
   });
 
@@ -103,19 +101,20 @@ describe("FaktumEnvalg", () => {
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
-      const svar = faktumMockData.gyldigeValg[0];
+      const svar = faktumMockData.gyldigeValg[1];
+      const booleanSvar = textIdToBoolean(svar);
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumEnvalg faktum={faktumMockData} />
+            <FaktumBoolean faktum={faktumMockData} />
           </QuizProvider>
         </SanityProvider>
       );
 
-      const firstRadio = screen.getByLabelText(svar);
+      const radioToClick = screen.getByLabelText(svar);
 
-      user.click(firstRadio);
+      user.click(radioToClick);
 
       await waitFor(() => {
         const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
@@ -128,7 +127,7 @@ describe("FaktumEnvalg", () => {
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar).toBe(svar);
+        expect(requestJson.svar).toBe(booleanSvar);
       });
     });
   });

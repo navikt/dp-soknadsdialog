@@ -1,175 +1,93 @@
 import { groq } from "next-sanity";
 
-function getSeksjonFields(usePlainText: boolean) {
-  return `{
+const seksjonFields = `{
   textId,
   title,
-  ${usePlainText ? '"description": pt::text(description)' : "description"},
+  description,
   helpText,
-  helpText != null => {
-    "helpText": {
-      ...helpText, ${usePlainText ? '"body": pt::text(helpText.body)' : '"body": helpText.body'}
-    }
-  },
 }`;
-}
 
-function getFaktumFields(usePlainText: boolean) {
-  return `{
+const faktumFields = `{
   textId,
   text,
-  ${usePlainText ? '"description": pt::text(description)' : "description"},
+  description,
   helpText,
-  helpText != null => {
-    "helpText": {
-      ...helpText, ${usePlainText ? '"body": pt::text(helpText.body)' : '"body": helpText.body'}
-    }
-  },
   unit
 }`;
-}
 
-function getSvaralternativFields(usePlainText: boolean) {
-  return `{
+const svaralternativFields = `{
   textId,
   text,
   alertText,
-  alertText != null => {
-    "alertText": {
-      ...alertText, ${usePlainText ? '"body": pt::text(alertText.body)' : '"body": alertText.body'}
-    }
-  },
 }`;
-}
 
-function getlandGruppeFields(usePlainText: boolean) {
-  return `{
+const landGruppeFields = `{
   textId,
   alertText,
-  alertText != null => {
-    "alertText": {
-      ...alertText, ${usePlainText ? '"body": pt::text(alertText.body)' : '"body": alertText.body'}
-    }
-  },
 }`;
-}
 
-function getAppTextsFields() {
-  return `{
+const appTextsFields = `{
   textId,
   valueText
 }`;
-}
 
-function getInfosideFields() {
-  return `{
+const infosideFields = `{
   "slug": slug.current,
   body
 }`;
-}
 
-function getDokumentkravFields(usePlainText: boolean) {
-  return `{
+const dokumentkravFields = `{
   textId,
   text,
-  ${usePlainText ? '"description": pt::text(description)' : "description"},
+  description,
   helpText,
-  helpText != null => {
-    "helpText": {
-      ...helpText, ${usePlainText ? '"body": pt::text(helpText.body)' : '"body": helpText.body'}
-    }
-  },
 }`;
-}
 
-function getDokumentkravSvarFields(usePlainText: boolean) {
-  return `{
+const dokumentkravSvarFields = `{
   textId,
   text,
   alertText,
-  alertText != null => {
-    "alertText": {
-      ...alertText, ${usePlainText ? '"body": pt::text(alertText.body)' : '"body": alertText.body'}
-    }
-  },
 }`;
-}
 
-function getSeksjonerGroq(usePlainText: boolean) {
-  return `* [_type=="seksjon" && __i18n_lang==$baseLang]{
-...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getSeksjonFields(
-    usePlainText
-  )}, ${getSeksjonFields(usePlainText)})
+const seksjonerGroq = `* [_type=="seksjon" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${seksjonFields}, ${seksjonFields})
 }`;
-}
 
-function getFaktaGroq(usePlainText: boolean) {
-  return `* [_type=="faktum" && __i18n_lang==$baseLang]{
-...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getFaktumFields(
-    usePlainText
-  )}, ${getFaktumFields(usePlainText)})
+const faktaGroq = `* [_type=="faktum" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${faktumFields}, ${faktumFields})
 }`;
-}
 
-function getSvaralternativerGroq(usePlainText: boolean) {
-  return `* [_type=="svaralternativ" && __i18n_lang==$baseLang]{
-...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getSvaralternativFields(
-    usePlainText
-  )}, ${getSvaralternativFields(usePlainText)})
+const svaralternativerGroq = `* [_type=="svaralternativ" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${svaralternativFields}, ${svaralternativFields})
 }`;
-}
 
-function getLandGrupperGroq(usePlainText: boolean) {
-  return `* [_type=="landgruppe" && __i18n_lang==$baseLang]{
-...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getlandGruppeFields(
-    usePlainText
-  )}, ${getlandGruppeFields(usePlainText)})
+const landGrupperGroq = `* [_type=="landgruppe" && __i18n_lang==$baseLang]{
+...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${landGruppeFields}, ${landGruppeFields})
 }`;
-}
 
-function getAppTextsGroq() {
-  return `* [_type=="apptekst" && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getAppTextsFields()}, ${getAppTextsFields()})
+const appTextsGroq = `* [_type=="apptekst" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${appTextsFields}, ${appTextsFields})
   }`;
-}
 
-function getInfosiderGroq() {
-  return `* [_type=="infopage"  && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getInfosideFields()}, ${getInfosideFields()})
+const infosiderGroq = `* [_type=="infopage"  && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${infosideFields}, ${infosideFields})
   }`;
-}
 
-function getDokumentkravGroq(usePlainText: boolean) {
-  return `* [_type=="dokumentkrav" && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
-    usePlainText
-  )}, ${getDokumentkravFields(usePlainText)})
+const dokumentkravGroq = `* [_type=="dokumentkrav" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${dokumentkravFields}, ${dokumentkravFields})
   }`;
-}
 
-function getDokumentkravSvarGroq(usePlainText: boolean) {
-  return `* [_type=="dokumentkravSvar" && __i18n_lang==$baseLang]{
-  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${getDokumentkravFields(
-    usePlainText
-  )}, ${getDokumentkravSvarFields(usePlainText)})
+const dokumentkravSvarGroq = `* [_type=="dokumentkravSvar" && __i18n_lang==$baseLang]{
+  ...coalesce(* [_id==^._id + "__i18n_" + $lang][0]${dokumentkravFields}, ${dokumentkravSvarFields})
   }`;
-}
 
 export const allTextsQuery = groq`{
-  "seksjoner": ${getSeksjonerGroq(false)},
-  "fakta": ${getFaktaGroq(false)},
-  "svaralternativer": ${getSvaralternativerGroq(false)},
-  "landgrupper": ${getLandGrupperGroq(false)},
-  "apptekster": ${getAppTextsGroq()},
-  "dokumentkrav": ${getDokumentkravGroq(false)},
-  "dokumentkravSvar": ${getDokumentkravSvarGroq(false)},
-  "infosider": ${getInfosiderGroq()}
-}`;
-
-export const allTextsPlainQuery = groq`{
-  "seksjoner": ${getSeksjonerGroq(true)},
-  "fakta": ${getFaktaGroq(true)},
-  "svaralternativer": ${getSvaralternativerGroq(true)},
-  "landgrupper": ${getLandGrupperGroq(true)},
-  "apptekster": ${getAppTextsGroq()}
+  "seksjoner": ${seksjonerGroq},
+  "fakta": ${faktaGroq},
+  "svaralternativer": ${svaralternativerGroq},
+  "landgrupper": ${landGrupperGroq},
+  "apptekster": ${appTextsGroq},
+  "dokumentkrav": ${dokumentkravGroq},
+  "dokumentkravSvar": ${dokumentkravSvarGroq},
+  "infosider": ${infosiderGroq}
 }`;

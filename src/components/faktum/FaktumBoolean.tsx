@@ -68,7 +68,9 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
           const svaralternativText = getSvaralternativTextById(textId);
           return (
             <div key={textId}>
-              <Radio value={textId}>{svaralternativText ? svaralternativText.text : textId}</Radio>
+              <Radio value={textId} id={textId}>
+                {svaralternativText ? svaralternativText.text : textId}
+              </Radio>
             </div>
           );
         })}
@@ -81,7 +83,7 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   );
 }
 
-function textIdToBoolean(textId: string): boolean | undefined {
+export function textIdToBoolean(textId: string): boolean | undefined {
   if (textId.match(".*.svar.ja")) {
     return true;
   }
