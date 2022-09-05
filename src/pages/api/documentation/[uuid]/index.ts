@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-import { getDocumentationList } from "../../../../server-side/documentation-api";
+import { getDocumentationList } from "../../../../api/server/documentation-api";
 import { withSentry } from "@sentry/nextjs";
 
 async function dokumentasjonskravHandler(req: NextApiRequest, res: NextApiResponse) {

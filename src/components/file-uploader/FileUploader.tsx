@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import {
   saveDokumenkravFileToMellomLagring,
   saveDokumentkravFilToQuiz,
-} from "../../api/dokumentasjon-api";
+} from "../../api/client/dokumentasjon-api";
 import styles from "./FileUploader.module.css";
 
 const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];

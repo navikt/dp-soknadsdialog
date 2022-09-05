@@ -5,11 +5,11 @@ import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
-import api from "../api.utils";
 import { useSanity } from "../context/sanity-context";
 import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
+import { getKvitteringApi } from "../api/client/getKvittering-api";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -30,11 +30,12 @@ export function Summary(props: IProps) {
   }
 
   function finishSoknad() {
-    return fetch(api(`/soknad/${router.query.uuid}/complete?locale=${router.locale}`))
-      .then(() => {
-        router.push(`/${router.query.uuid}/kvittering`);
-      })
-      .catch(() => setHasError(true));
+    try {
+      getKvitteringApi(router.query.uuid, router.locale);
+      router.push(`/${router.query.uuid}/kvittering`);
+    } catch (error) {
+      setHasError(true);
+    }
   }
 
   if (hasError) {

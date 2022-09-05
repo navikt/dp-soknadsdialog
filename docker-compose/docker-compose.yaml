@@ -110,7 +110,7 @@ services:
             "tokenCallbacks": [
                 {
                     "issuerId": "idporten",
-                    "tokenExpiry": 3600,
+                    "tokenExpiry": 36000,
                     "requestMappings": [
                         {
                             "requestParam": "grant_type",

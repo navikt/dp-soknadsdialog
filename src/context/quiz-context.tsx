@@ -1,9 +1,10 @@
-import React, { createContext, PropsWithChildren, useState } from "react";
-import { IQuizState } from "../localhost-data/quiz-state-response";
 import { useRouter } from "next/router";
-import api from "../api.utils";
-import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
+import React, { createContext, PropsWithChildren, useState } from "react";
+import { getNesteFaktum } from "../api/client/getNesteFaktum-api";
+import { saveFaktum } from "../api/client/saveFaktumToQuiz-api";
+import { IQuizState } from "../localhost-data/quiz-state-response";
 import { ErrorTypesEnum } from "../types/error.types";
+import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -32,13 +33,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     try {
       setIsError(false);
       setIsLoading(true);
-
-      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
-        method: "PUT",
-        body: JSON.stringify({ ...faktum, svar }),
-      }).then((res) => res.json());
-
-      await getNeste(sistBesvart);
+      const res = await saveFaktum(uuid, faktum, svar);
+      await getNeste(res.sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -53,13 +49,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     try {
       setIsError(false);
       setIsLoading(true);
-
-      const { sistBesvart } = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
-        method: "PUT",
-        body: JSON.stringify({ ...faktum, svar }),
-      }).then((res) => res.json());
-
-      await getNeste(sistBesvart);
+      const res = await saveFaktum(uuid, faktum, svar);
+      await getNeste(res.sistBesvart);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -72,8 +63,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
 
   async function getNeste(sistBesvart: string) {
     try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${sistBesvart}`));
-      const quizState: IQuizState = await nesteResponse.json();
+      const quizState: IQuizState = await getNesteFaktum(uuid, sistBesvart);
       setSoknadState(quizState);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console

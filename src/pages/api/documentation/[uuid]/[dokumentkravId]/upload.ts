@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceMellomlagring } from "../../../../../api.utils";
-import { postDocumentation } from "../../../../../server-side/mellomlagring-api";
+import { postDocumentation } from "../../../../../api/server/mellomlagring-api";
 import { mockMellomlagringLagreFil } from "../../../../../localhost-data/dokumentkrav-list";
 import { withSentry } from "@sentry/nextjs";
 

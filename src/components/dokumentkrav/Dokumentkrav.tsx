@@ -12,7 +12,10 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { saveDokumentkravBegrunnelse, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
+import {
+  saveDokumentkravBegrunnelse,
+  saveDokumentkravSvar,
+} from "../../api/client/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";

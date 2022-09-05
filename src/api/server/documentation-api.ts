@@ -1,6 +1,6 @@
-import { IDokumentkravList } from "../types/documentation.types";
+import { IDokumentkravList } from "../../types/documentation.types";
 import { headersWithToken } from "./quiz-api";
-import { mockDokumentkravList } from "../localhost-data/dokumentkrav-list";
+import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 
 export function getDocumentationList(
   uuid: string,

@@ -8,6 +8,7 @@ import { Timeline as timeline } from "../components/timeline/Timeline";
 import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
+import { getUuid } from "../api/client/getUuid-api";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -20,8 +21,7 @@ export function StartSoknad() {
   async function startSoknad() {
     try {
       setIsCreatingSoknadUUID(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad/get-uuid`);
-      const uuid = await response.text();
+      const uuid = await getUuid();
       router.push(`/${uuid}`);
     } catch (e) {
       setIsError(true);
