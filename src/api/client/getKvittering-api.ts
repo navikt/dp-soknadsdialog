@@ -1,6 +1,6 @@
 import api from "../../api.utils";
 
-export async function getKvitteringApi(
+export async function getKvittering(
   uuid: string | string[] | undefined,
   locale: string | undefined
 ) {
