@@ -7,12 +7,12 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audience } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
+import { getDocumentationList } from "../api/documentation/[uuid]";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../types/documentation.types";
-import { getDocumentationList } from "../api/documentation/[uuid]";
 
 interface IProps {
   soknadState: IQuizState | undefined;
