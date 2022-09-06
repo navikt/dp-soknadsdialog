@@ -1,7 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceMellomlagring } from "../../../../../api.utils";
-import { postDocumentation } from "../../../../../api/server/mellomlagring-api";
 import { mockMellomlagringLagreFil } from "../../../../../localhost-data/dokumentkrav-list";
 import { withSentry } from "@sentry/nextjs";
 
@@ -10,6 +9,32 @@ export const config = {
     bodyParser: false,
   },
 };
+
+export function postDocumentation(
+  uuid: string,
+  dokumentkravId: string,
+  files: Buffer,
+  onBehalfOfToken: string,
+  originalRequest: NextApiRequest
+) {
+  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${dokumentkravId}`;
+
+  return fetch(url, {
+    method: "Post",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+      "Content-Type": originalRequest.headers["content-type"] || "multipart/form-data",
+      "Content-Length": originalRequest.headers["content-length"] || "",
+      "User-Agent": originalRequest.headers["user-agent"] || "",
+      accept: "application/json",
+    },
+    body: files,
+  })
+    .then((response) => response.json())
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}
 
 async function uploadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {

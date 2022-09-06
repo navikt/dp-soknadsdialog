@@ -1,8 +1,30 @@
+import { mockDokumentkravList } from "./../../../../localhost-data/dokumentkrav-list";
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-import { getDocumentationList } from "../../../../api/server/documentation-api";
 import { withSentry } from "@sentry/nextjs";
+import { IDokumentkravList } from "../../../../types/documentation.types";
+import { headersWithToken } from "../../soknad/quiz-api";
+
+export function getDocumentationList(
+  uuid: string,
+  onBehalfOfToken: string
+): Promise<IDokumentkravList> {
+  const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`;
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return Promise.resolve(mockDokumentkravList);
+  }
+
+  return fetch(url, {
+    method: "Get",
+    headers: headersWithToken(onBehalfOfToken),
+  })
+    .then((response: Response) => response.json())
+    .catch((error) => {
+      return Promise.reject(error);
+    });
+}
 
 async function dokumentasjonskravHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });

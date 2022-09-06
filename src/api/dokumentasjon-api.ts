@@ -1,5 +1,5 @@
-import api from "../../api.utils";
-import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
+import api from "../api.utils";
+import { IDokumentkrav, IDokumentkravFil } from "../types/documentation.types";
 
 export async function saveDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav) {
   const url = api(`/documentation/${uuid}/${dokumentkrav.id}/save`);

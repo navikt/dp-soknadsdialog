@@ -3,11 +3,12 @@ import { useDropzone } from "react-dropzone";
 import { Alert, Button } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
-import {
-  saveDokumenkravFileToMellomLagring,
-  saveDokumentkravFilToQuiz,
-} from "../../api/client/dokumentasjon-api";
+
 import styles from "./FileUploader.module.css";
+import {
+  saveDokumentkravFilToQuiz,
+  saveDokumenkravFileToMellomLagring,
+} from "../../api/dokumentasjon-api";
 
 const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
 const MAX_FILE_SIZE = 52428800; // 400mb

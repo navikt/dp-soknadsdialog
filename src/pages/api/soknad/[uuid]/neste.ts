@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-import { getSoknadState } from "../../../../api/server/quiz-api";
+import { getSoknadState } from "../quiz-api";
 import { BARN_LISTE_REGISTER_FAKTUM_ID } from "../../../../constants";
 import { withSentry } from "@sentry/nextjs";
 

@@ -1,4 +1,4 @@
-import api from "../../api.utils";
+import api from "../api.utils";
 
 export async function getKvittering(
   uuid: string | string[] | undefined,

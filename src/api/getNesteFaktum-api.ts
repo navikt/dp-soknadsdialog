@@ -1,4 +1,4 @@
-import api from "../../api.utils";
+import api from "../api.utils";
 
 export async function getNesteFaktum(uuid: string | string[] | undefined, sistBesvart: string) {
   try {

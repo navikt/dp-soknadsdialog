@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
-import { completeSoknad } from "../../../../api/server/quiz-api";
+import { completeSoknad } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
 async function completeHandler(req: NextApiRequest, res: NextApiResponse) {

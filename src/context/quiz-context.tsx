@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { getNesteFaktum } from "../api/client/getNesteFaktum-api";
-import { saveFaktum } from "../api/client/saveFaktumToQuiz-api";
+import { getNesteFaktum } from "../api/getNesteFaktum-api";
+import { saveFaktum } from "../api/saveFaktumToQuiz-api";
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { ErrorTypesEnum } from "../types/error.types";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";

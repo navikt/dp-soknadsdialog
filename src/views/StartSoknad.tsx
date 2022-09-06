@@ -8,7 +8,7 @@ import { Timeline as timeline } from "../components/timeline/Timeline";
 import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { getUuid } from "../api/client/getUuid-api";
+import { getUuid } from "../api/getUuid-api";
 
 export function StartSoknad() {
   const router = useRouter();

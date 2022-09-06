@@ -9,7 +9,7 @@ import { useSanity } from "../context/sanity-context";
 import { ErrorModal } from "../components/error-modal/ErrorModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { getKvittering } from "../api/client/getKvittering-api";
+import { getKvittering } from "../api/getKvittering-api";
 
 interface IProps {
   sections: IQuizSeksjon[];

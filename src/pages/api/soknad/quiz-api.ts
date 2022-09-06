@@ -1,9 +1,9 @@
-import { quizMalResponse } from "../../localhost-data/quiz-mal-response";
-import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-response";
-import { sanityClient } from "../../../sanity-client";
-import { ISanityTexts } from "../../types/sanity.types";
-import { allTextsQuery } from "../../sanity/groq-queries";
-import { textStructureToHtml } from "../../sanity/textStructureToHtml";
+import { quizMalResponse } from "../../../localhost-data/quiz-mal-response";
+import { IQuizState, quizStateResponse } from "../../../localhost-data/quiz-state-response";
+import { sanityClient } from "../../../../sanity-client";
+import { ISanityTexts } from "../../../types/sanity.types";
+import { allTextsQuery } from "../../../sanity/groq-queries";
+import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
