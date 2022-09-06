@@ -9,3 +9,7 @@
   padding: 1rem;
   margin: 2rem 0 1rem 0;
 }
+
+.uploadError {
+  margin-bottom: var(--navds-spacing-4);
+}

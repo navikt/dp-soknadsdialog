@@ -10,6 +10,7 @@ import {
   ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID,
   DOKUMENTKRAV_SVAR_SEND_NAA,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  MAX_FILE_SIZE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { saveDokumentkravBegrunnelse, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
@@ -38,6 +39,13 @@ export function Dokumentkrav(props: IProps) {
   const employerName = dokumentkrav.fakta.find(
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
   )?.svar;
+
+  const totalUploadedFileSize = dokumentkrav.filer.map((fil) => fil.storrelse).reduce(sum, 0);
+  const remainingFileSize = MAX_FILE_SIZE - totalUploadedFileSize;
+
+  function sum(accumulator: number, value: number) {
+    return accumulator + value;
+  }
 
   useEffect(() => {
     const save = async () => {
@@ -101,7 +109,11 @@ export function Dokumentkrav(props: IProps) {
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
-          <FileUploader dokumentkrav={dokumentkrav} setUploadedFiles={handUploadedFiles} />
+          <FileUploader
+            dokumentkrav={dokumentkrav}
+            setUploadedFiles={handUploadedFiles}
+            maxFileSize={remainingFileSize}
+          />
           <FileList uploadedFiles={uploadedFiles} />
         </>
       )}
