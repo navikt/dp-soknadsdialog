@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { IDokumentkravList } from "../../../../types/documentation.types";
-import { headersWithToken } from "../../soknad/quiz-api";
+import { headersWithToken } from "../../quiz-api";
 
 export function getDocumentationList(
   uuid: string,

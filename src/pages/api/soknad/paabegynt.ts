@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audience } from "../../../api.utils";
-import { getPaabegynt } from "./quiz-api";
+import { getPaabegynt } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
 async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
