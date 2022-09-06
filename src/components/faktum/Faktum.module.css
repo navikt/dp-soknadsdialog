@@ -9,3 +9,13 @@
 .helpTextSpacing {
   margin: 20px 0;
 }
+
+.documentedBy {
+  display: flex;
+  margin-top: 0;
+}
+
+.documentedBy svg {
+  flex-shrink: 0;
+  margin-right: var(--navds-spacing-1);
+}

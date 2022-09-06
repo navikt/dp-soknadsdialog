@@ -16,6 +16,8 @@ import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEge
 import { FaktumLand } from "./FaktumLand";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumGenerator } from "./FaktumGenerator";
+import { FileContent } from "@navikt/ds-icons";
+import { useSanity } from "../../context/sanity-context";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -26,7 +28,10 @@ export interface IFaktum<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
+  const { getAppTekst, getDokumentkravTextById } = useSanity();
+
   const { faktum, readonly } = props;
+  const documentedBy = props.faktum.sannsynliggjøresAv?.map((item) => item.beskrivendeId);
 
   function renderFaktumType() {
     if (faktum.beskrivendeId === FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER) {
@@ -69,9 +74,25 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
     }
   }
 
+  function renderDokumentkrav() {
+    return documentedBy?.map((beskrivendeId) => {
+      const dokumentkravText = getDokumentkravTextById(beskrivendeId) || beskrivendeId;
+
+      return (
+        <p key={beskrivendeId} className={styles.documentedBy}>
+          <FileContent />
+          {getAppTekst("faktum.ma.dokumenteres.del1")}
+          {" " + dokumentkravText + ". "}
+          {getAppTekst("faktum.ma.dokumenteres.del2")}
+        </p>
+      );
+    });
+  }
+
   return (
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
+      {renderDokumentkrav()}
     </div>
   );
 }
