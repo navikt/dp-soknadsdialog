@@ -40,10 +40,12 @@ export function Dokumentkrav(props: IProps) {
     (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
   )?.svar;
 
-  const totalUploadedFileSize = dokumentkrav.filer
-    .map((fil) => fil.storrelse)
-    .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+  const totalUploadedFileSize = dokumentkrav.filer.map((fil) => fil.storrelse).reduce(sum, 0);
   const remainingFileSize = MAX_FILE_SIZE - totalUploadedFileSize;
+
+  function sum(accumulator: number, value: number) {
+    return accumulator + value;
+  }
 
   useEffect(() => {
     const save = async () => {

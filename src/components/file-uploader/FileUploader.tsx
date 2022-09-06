@@ -9,6 +9,7 @@ import {
 } from "../../api/dokumentasjon-api";
 import styles from "./FileUploader.module.css";
 import { ALLOWED_FILE_FORMATS } from "../../constants";
+import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -22,6 +23,7 @@ interface IFileError {
 
 export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IProps) {
   const router = useRouter();
+  const { getAppTekst } = useSanity();
   const uuid = router.query.uuid as string;
   const [errors, setErrors] = useState<IFileError[]>([]);
   const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
@@ -82,24 +84,22 @@ export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IP
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
         <>
-          <p>Dra filene hit eller</p>
-          <Button onClick={open}>Velg filer</Button>
+          <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
+          <Button onClick={open}>{getAppTekst("filopplaster.velg.filer")}</Button>
         </>
       </div>
 
       {errors.length > 0 && (
         <div className={styles.uploadError}>
           <Alert variant={"error"}>
-            Klarte ikke å laste opp følgende filer:
+            {getAppTekst("filopplaster.feil.beskrivelse")}
             <ul>
               {errors.map((error, index) => (
                 <li key={index}>{error.fileName}</li>
               ))}
             </ul>
             {!hasServerError && (
-              <span>
-                Du kan kun laste opp filer av typen JPG, PNG og PDF. Maks 30MB per dokumentkrav.
-              </span>
+              <span>{getAppTekst("filopplaster.feil.beskrivelse-format-storrelse")}</span>
             )}
           </Alert>
         </div>
