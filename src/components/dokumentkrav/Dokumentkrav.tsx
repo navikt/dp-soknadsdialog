@@ -89,7 +89,7 @@ export function Dokumentkrav(props: IProps) {
             // We need a custom ID since multiple dokumentkrav are shown on the same page.
             // The radio buttons as such need a more unique ID than the textId (used once per dokumentkrav).
             const id = `${dokumentkrav.id}-${textId}`;
-            const svaralternativText = getDokumentkravTextById(textId);
+            const svaralternativText = getDokumentkravSvarTextById(textId);
             return (
               <div key={textId}>
                 <Radio value={textId} id={id}>
