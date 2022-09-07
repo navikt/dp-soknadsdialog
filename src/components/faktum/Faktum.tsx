@@ -82,7 +82,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         <p key={dokumentkrav.beskrivendeId} className={styles.documentedBy}>
           <FileContent />
           {getAppTekst("faktum.ma.dokumenteres.del1")}
-          {" " + dokumentkravText + ". "}
+          {` ${dokumentkravText} . `}
           {getAppTekst("faktum.ma.dokumenteres.del2")}
         </p>
       );
