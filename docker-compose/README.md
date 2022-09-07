@@ -1,5 +1,5 @@
 # Quiz på boks
-Muliggjøre lokal kjøring av søknadsdialogen og Quiz lokalt.
+Muliggjør lokal kjøring av søknadsdialogen og Quiz lokalt.
 
 ## Forutsettninger 
 * Nødvendig programvare, kan legges inn vha `Brew`: 
