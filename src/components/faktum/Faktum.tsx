@@ -74,7 +74,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
 
-      {props.faktum.sannsynliggjøresAv?.map((dokumentkrav) => (
+      {props.faktum.sannsynliggjøresAv.map((dokumentkrav) => (
         <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
       ))}
     </div>

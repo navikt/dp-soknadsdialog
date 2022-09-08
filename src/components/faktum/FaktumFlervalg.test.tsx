@@ -20,6 +20,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "faktum.eget-gaardsbruk-type-gaardsbruk.svar.annet",
   ],
   beskrivendeId: "faktum.eget-gaardsbruk-type-gaardsbruk",
+  sannsynliggjøresAv: [],
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };

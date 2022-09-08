@@ -18,6 +18,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
   ],
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
+  sannsynliggjøresAv: [],
 };
 
 const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
@@ -30,6 +31,7 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
       "faktum.reist-tilbake-en-gang-eller-mer.svar.nei",
     ],
     beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
+    sannsynliggjøresAv: [],
   },
 ];
 

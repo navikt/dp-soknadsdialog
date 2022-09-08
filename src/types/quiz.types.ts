@@ -12,7 +12,7 @@ export interface IQuizBaseFaktum {
   id: string;
   beskrivendeId: string;
   readOnly: boolean;
-  sannsynliggjøresAv?: QuizFaktum[];
+  sannsynliggjøresAv: QuizFaktum[];
 }
 
 export interface IQuizFlervalgFaktum extends IQuizBaseFaktum {

@@ -14,6 +14,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "1016",
   type: "int",
   readOnly: false,
+  sannsynliggjøresAv: [],
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
