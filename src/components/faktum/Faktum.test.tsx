@@ -18,7 +18,22 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
   ],
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
+  sannsynliggjøresAv: [],
 };
+
+const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
+  {
+    id: "6005",
+    type: "boolean",
+    readOnly: false,
+    gyldigeValg: [
+      "faktum.reist-tilbake-en-gang-eller-mer.svar.ja",
+      "faktum.reist-tilbake-en-gang-eller-mer.svar.nei",
+    ],
+    beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
+    sannsynliggjøresAv: [],
+  },
+];
 
 const sectionStateMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
@@ -47,6 +62,22 @@ describe("Faktum", () => {
       expect(screen.queryByText(faktumMockData.gyldigeValg[0])).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[1])).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[2])).toBeInTheDocument();
+    });
+  });
+
+  test("Should show faktum dokumentation info if that's triggered by the answer", async () => {
+    render(
+      <SanityProvider initialState={sanityMocks}>
+        <QuizProvider initialState={mockSoknadState}>
+          <Faktum faktum={{ ...faktumMockData, sannsynliggjøresAv: dokumentasjonskravMockdata }} />
+        </QuizProvider>
+      </SanityProvider>
+    );
+
+    const dokumentationTitle = dokumentasjonskravMockdata[0].beskrivendeId;
+
+    await waitFor(() => {
+      expect(screen.queryByText(dokumentationTitle, { exact: false })).toBeInTheDocument();
     });
   });
 });

@@ -11,11 +11,13 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
       readOnly: false,
       svar: true,
       type: "boolean",
+      sannsynliggjøresAv: [],
     },
     {
       beskrivendeId: "faktum.barn-liste",
       id: "1001",
       readOnly: false,
+      sannsynliggjøresAv: [],
       svar: [
         [
           {
@@ -24,6 +26,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: false,
             beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+            sannsynliggjøresAv: [],
           },
         ],
       ],
@@ -32,36 +35,43 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
           beskrivendeId: "faktum.barn-fornavn-mellomnavn",
           id: "1002",
           type: "tekst",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-etternavn",
           id: "1003",
           type: "tekst",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-foedselsdato",
           id: "1004",
           type: "localdate",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-statsborgerskap",
           id: "1005",
           type: "land",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.forsoerger-du-barnet",
           id: "1006",
           type: "boolean",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
           id: "1007",
           type: "boolean",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-inntekt",
           id: "1008",
           type: "int",
+          sannsynliggjøresAv: [],
         },
       ],
       type: "generator",
@@ -78,6 +88,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1011.1",
@@ -85,6 +96,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-etternavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1012.1",
@@ -92,6 +104,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "localdate",
             readOnly: true,
             beskrivendeId: "faktum.barn-foedselsdato",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1013.1",
@@ -101,6 +114,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             readOnly: true,
             gyldigeLand,
             beskrivendeId: "faktum.barn-statsborgerskap",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1014.1",
@@ -111,6 +125,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
               "faktum.barn-forsoerger-du-barnet.svar.ja",
               "faktum.barn-forsoerger-du-barnet.svar.nei",
             ],
+            sannsynliggjøresAv: [],
           },
         ],
         [
@@ -120,6 +135,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1011.2",
@@ -127,6 +143,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-etternavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1012.2",
@@ -134,6 +151,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "localdate",
             readOnly: true,
             beskrivendeId: "faktum.barn-foedselsdato",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1013.2",
@@ -143,6 +161,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             readOnly: true,
             gyldigeLand,
             beskrivendeId: "faktum.barn-statsborgerskap",
+            sannsynliggjøresAv: [],
           },
         ],
         [
@@ -152,6 +171,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-fornavn-mellomnavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1011.3",
@@ -159,6 +179,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "tekst",
             readOnly: true,
             beskrivendeId: "faktum.barn-etternavn",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1012.3",
@@ -166,6 +187,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             type: "localdate",
             readOnly: true,
             beskrivendeId: "faktum.barn-foedselsdato",
+            sannsynliggjøresAv: [],
           },
           {
             id: "1013.3",
@@ -175,6 +197,7 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
             readOnly: true,
             gyldigeLand,
             beskrivendeId: "faktum.barn-statsborgerskap",
+            sannsynliggjøresAv: [],
           },
         ],
         [],
@@ -184,39 +207,47 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
           beskrivendeId: "faktum.barn-fornavn-mellomnavn",
           id: "1010",
           type: "tekst",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-etternavn",
           id: "1011",
           type: "tekst",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-foedselsdato",
           id: "1012",
           type: "localdate",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-statsborgerskap",
           id: "1013",
           type: "land",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.forsoerger-du-barnet",
           id: "1014",
           type: "boolean",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-aarsinntekt-over-1g",
           id: "1015",
           type: "boolean",
+          sannsynliggjøresAv: [],
         },
         {
           beskrivendeId: "faktum.barn-inntekt",
           id: "1016",
           type: "int",
+          sannsynliggjøresAv: [],
         },
       ],
       type: "generator",
+      sannsynliggjøresAv: [],
     },
   ],
   ferdig: false,

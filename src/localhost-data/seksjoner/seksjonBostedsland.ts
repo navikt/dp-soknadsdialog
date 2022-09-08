@@ -306,6 +306,20 @@ export const seksjonBostedsland: IQuizSeksjon = {
       readOnly: false,
       gyldigeLand,
       beskrivendeId: "faktum.hvilket-land-bor-du-i",
+      sannsynliggjøresAv: [
+        {
+          id: "10001",
+          type: "envalg",
+          readOnly: false,
+          gyldigeValg: [
+            "faktum.mottatt-dagpenger-siste-12-mnd.svar.ja",
+            "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
+            "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
+          ],
+          beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd-dokumentasjon",
+          sannsynliggjøresAv: [],
+        },
+      ],
     },
     {
       id: "6002",
@@ -317,6 +331,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
         "faktum.reist-tilbake-etter-arbeidsledig.svar.nei",
       ],
       beskrivendeId: "faktum.reist-tilbake-etter-arbeidsledig",
+      sannsynliggjøresAv: [],
     },
     {
       id: "6005",
@@ -328,6 +343,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
         "faktum.reist-tilbake-en-gang-eller-mer.svar.nei",
       ],
       beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
+      sannsynliggjøresAv: [],
     },
     {
       id: "6006",
@@ -339,6 +355,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
         "faktum.reist-i-takt-med-rotasjon.svar.nei",
       ],
       beskrivendeId: "faktum.reist-i-takt-med-rotasjon",
+      sannsynliggjøresAv: [],
     },
   ],
   beskrivendeId: "bostedsland",

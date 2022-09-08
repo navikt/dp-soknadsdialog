@@ -9,6 +9,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       type: "localdate",
       readOnly: false,
       beskrivendeId: "faktum.dagpenger-soknadsdato",
+      sannsynliggjøresAv: [],
     },
     {
       id: "8002",
@@ -22,6 +23,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
         "faktum.type-arbeidstid.svar.ingen-passer",
       ],
       beskrivendeId: "faktum.type-arbeidstid",
+      sannsynliggjøresAv: [],
     },
     {
       id: "8003",
@@ -33,6 +35,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "tekst",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8005.1",
@@ -42,6 +45,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8006.1",
@@ -59,6 +63,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.endret.svar.permittert",
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8007.1",
@@ -70,6 +75,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8048.1",
@@ -81,6 +87,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.har-tilleggsopplysninger.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.har-tilleggsopplysninger",
+            sannsynliggjøresAv: [],
           },
         ],
         [
@@ -90,6 +97,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "tekst",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8005.2",
@@ -99,6 +107,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8006.2",
@@ -116,6 +125,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.endret.svar.permittert",
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8016.2",
@@ -126,6 +136,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "periode",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.varighet",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8018.2",
@@ -137,6 +148,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8032.2",
@@ -148,6 +160,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8042.2",
@@ -160,6 +173,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato.svar.vet-ikke",
             ],
             beskrivendeId: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8044.2",
@@ -171,6 +185,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.skift-eller-turnus.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.skift-eller-turnus",
+            sannsynliggjøresAv: [],
           },
           {
             id: "8045.2",
@@ -182,6 +197,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.rotasjon.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.rotasjon",
+            sannsynliggjøresAv: [],
           },
         ],
       ],
@@ -189,6 +205,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       readOnly: false,
       templates: [],
       beskrivendeId: "faktum.arbeidsforhold",
+      sannsynliggjøresAv: [],
     },
   ],
   beskrivendeId: "arbeidsforhold",

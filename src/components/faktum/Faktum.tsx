@@ -16,6 +16,7 @@ import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEge
 import { FaktumLand } from "./FaktumLand";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumGenerator } from "./FaktumGenerator";
+import { FaktumDokumentkrav } from "./FaktumDokumentkrav";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -72,6 +73,10 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   return (
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
+
+      {props.faktum.sannsynliggjøresAv.map((dokumentkrav) => (
+        <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
+      ))}
     </div>
   );
 }

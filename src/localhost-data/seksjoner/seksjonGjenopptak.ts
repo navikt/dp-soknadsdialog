@@ -13,6 +13,7 @@ export const seksjonGjenopptak: IQuizSeksjon = {
         "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
       ],
       beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
+      sannsynliggjøresAv: [],
     },
   ],
   beskrivendeId: "gjenopptak",
