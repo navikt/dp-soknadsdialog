@@ -37,6 +37,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   return (
     <>
       <DatePicker
+        id={props.faktum.beskrivendeId}
         value={currentAnswer}
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}

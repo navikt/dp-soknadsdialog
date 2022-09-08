@@ -4,9 +4,9 @@ import { format, isValid } from "date-fns";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
-import { v4 as uuidv4 } from "uuid";
 
 interface IDatePicker {
+  id: string;
   label: string;
   description?: TypedObject | TypedObject[];
   placeholder?: string;
@@ -47,7 +47,7 @@ export function DatePicker(props: IDatePicker) {
   return (
     <div className={styles.datePicker}>
       {props.label && (
-        <label className="navds-form-field__label navds-label" htmlFor={`date-picker-${uuidv4()}`}>
+        <label className="navds-form-field__label navds-label" htmlFor={props.id}>
           {props.label}
         </label>
       )}
@@ -61,12 +61,13 @@ export function DatePicker(props: IDatePicker) {
           [styles.datePickerInputError]: !isValidDate,
         })}
         type="date"
-        id={`date-picker-${uuidv4()}`}
-        name={`date-picker-${uuidv4()}`}
+        id={props.id}
+        name={props.id}
         value={date ? format(date, "yyyy-MM-dd") : ""}
         pattern="\d{4}-\d{2}-\d{2}"
         onChange={(e) => onChangeDate(e)}
         onBlur={(e) => onLeaveDate(e)}
+        disabled={props.disabled}
       />
       {!isValidDate && (
         <div
