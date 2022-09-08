@@ -94,6 +94,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             disabled={!svar?.fom}
             onChange={onDateToSelection}
             value={svar?.tom}
+            min={svar?.fom}
           />
 
           {faktumTextsTil?.helpText && (

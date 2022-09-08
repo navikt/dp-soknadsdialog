@@ -13,13 +13,20 @@ interface IDatePicker {
   onChange: (value: Date) => void;
   disabled?: boolean;
   value?: string;
+  min?: string;
+  max?: string;
 }
+
+const DATEPICKER_MIN_DATE = "1900-01-01";
+const DATEPICKER_MAX_DATE = "2100-01-01";
 
 export function DatePicker(props: IDatePicker) {
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
   const [isValidDate, setIsValidDate] = useState(true);
+  const min = props.min || DATEPICKER_MIN_DATE;
+  const max = props.max || DATEPICKER_MAX_DATE;
 
   function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
@@ -68,6 +75,8 @@ export function DatePicker(props: IDatePicker) {
         onChange={(e) => onChangeDate(e)}
         onBlur={(e) => onLeaveDate(e)}
         disabled={props.disabled}
+        min={min}
+        max={max}
       />
       {!isValidDate && (
         <div
