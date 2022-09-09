@@ -14,18 +14,18 @@ import periodeStyles from "./FaktumPeriode.module.css";
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById } = useSanity();
+  const { getFaktumTextById, getAppTekst } = useSanity();
 
   const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const faktumTextsFra = getFaktumTextById(beskrivendeIdFra);
-  const faktumTextsTil = getFaktumTextById(beskrivendeIdTil);
+  const faktumTextsFra = getAppTekst(beskrivendeIdFra);
+  const faktumTextsTil = getAppTekst(beskrivendeIdTil);
 
   const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
 
-  function onDateFromSelection(value: Date) {
+  function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
     const period = { ...svar, fom: parsedFromDate };
     setSvar(period);
@@ -33,7 +33,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     onChange ? onChange(faktum, period) : saveFaktum(period);
   }
 
-  function onDateToSelection(value: Date) {
+  function onToDateSelection(value: Date) {
     if (!svar?.fom) {
       return;
     }
@@ -76,30 +76,20 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         <div className={periodeStyles.faktumPeriodeFra}>
           <DatePicker
             id={beskrivendeIdFra}
-            label={faktumTextsFra?.text || beskrivendeIdFra}
-            description={faktumTextsFra?.description}
-            onChange={onDateFromSelection}
+            label={faktumTextsFra}
+            onChange={onFromDateSelection}
             value={svar?.fom}
           />
-
-          {faktumTextsFra?.helpText && (
-            <HelpText className={styles.helpTextSpacing} helpText={faktumTextsFra.helpText} />
-          )}
         </div>
         <div>
           <DatePicker
             id={beskrivendeIdTil}
-            label={faktumTextsTil?.text || beskrivendeIdTil}
-            description={faktumTextsTil?.description}
+            label={faktumTextsTil}
             disabled={!svar?.fom}
-            onChange={onDateToSelection}
+            onChange={onToDateSelection}
             value={svar?.tom}
             min={svar?.fom}
           />
-
-          {faktumTextsTil?.helpText && (
-            <HelpText className={styles.helpTextSpacing} helpText={faktumTextsTil.helpText} />
-          )}
         </div>
       </Fieldset>
     </div>
