@@ -4,6 +4,7 @@ import { format, isValid } from "date-fns";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
+import { formatISO } from "date-fns";
 
 interface IDatePicker {
   id: string;
@@ -17,16 +18,23 @@ interface IDatePicker {
   max?: string;
 }
 
-const DATEPICKER_MIN_DATE = "1900-01-01";
-const DATEPICKER_MAX_DATE = "2100-01-01";
-
 export function DatePicker(props: IDatePicker) {
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
   const [isValidDate, setIsValidDate] = useState(true);
+
+  const DATEPICKER_MIN_DATE = calculateIsoDateFromNow(-100);
+  const DATEPICKER_MAX_DATE = calculateIsoDateFromNow(100);
+
   const min = props.min || DATEPICKER_MIN_DATE;
   const max = props.max || DATEPICKER_MAX_DATE;
+
+  function calculateIsoDateFromNow(years: number) {
+    const newDate = new Date().setFullYear(new Date().getFullYear() + years);
+
+    return formatISO(newDate, { representation: "date" });
+  }
 
   function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
