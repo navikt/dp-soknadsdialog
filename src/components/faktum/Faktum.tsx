@@ -70,13 +70,20 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
     }
   }
 
+  function renderDokumentkrav() {
+    if (faktum.readOnly || readonly) {
+      return;
+    }
+
+    return props.faktum.sannsynliggjøresAv.map((dokumentkrav) => (
+      <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
+    ));
+  }
+
   return (
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
-
-      {props.faktum.sannsynliggjøresAv.map((dokumentkrav) => (
-        <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
-      ))}
+      {renderDokumentkrav()}
     </div>
   );
 }
