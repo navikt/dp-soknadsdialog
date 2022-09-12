@@ -4,15 +4,18 @@ import { format, isValid } from "date-fns";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
-import { v4 as uuidv4 } from "uuid";
+import { formatISO } from "date-fns";
 
 interface IDatePicker {
+  id: string;
   label: string;
   description?: TypedObject | TypedObject[];
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
   value?: string;
+  min?: string;
+  max?: string;
 }
 
 export function DatePicker(props: IDatePicker) {
@@ -20,6 +23,18 @@ export function DatePicker(props: IDatePicker) {
     props.value ? new Date(props.value) : undefined
   );
   const [isValidDate, setIsValidDate] = useState(true);
+
+  const DATEPICKER_MIN_DATE = calculateIsoDateFromNow(-100);
+  const DATEPICKER_MAX_DATE = calculateIsoDateFromNow(100);
+
+  const min = props.min || DATEPICKER_MIN_DATE;
+  const max = props.max || DATEPICKER_MAX_DATE;
+
+  function calculateIsoDateFromNow(years: number) {
+    const newDate = new Date().setFullYear(new Date().getFullYear() + years);
+
+    return formatISO(newDate, { representation: "date" });
+  }
 
   function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
@@ -47,7 +62,7 @@ export function DatePicker(props: IDatePicker) {
   return (
     <div className={styles.datePicker}>
       {props.label && (
-        <label className="navds-form-field__label navds-label" htmlFor={`date-picker-${uuidv4()}`}>
+        <label className="navds-form-field__label navds-label" htmlFor={props.id}>
           {props.label}
         </label>
       )}
@@ -61,12 +76,15 @@ export function DatePicker(props: IDatePicker) {
           [styles.datePickerInputError]: !isValidDate,
         })}
         type="date"
-        id={`date-picker-${uuidv4()}`}
-        name={`date-picker-${uuidv4()}`}
+        id={props.id}
+        name={props.id}
         value={date ? format(date, "yyyy-MM-dd") : ""}
         pattern="\d{4}-\d{2}-\d{2}"
         onChange={(e) => onChangeDate(e)}
         onBlur={(e) => onLeaveDate(e)}
+        disabled={props.disabled}
+        min={min}
+        max={max}
       />
       {!isValidDate && (
         <div

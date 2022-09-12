@@ -1,0 +1,18 @@
+.faktumPeriode {
+  margin-bottom: var(--navds-spacing-10);
+  border-left: 4px solid var(--navds-global-color-lightblue-700);
+  padding: 0 var(--navds-spacing-3);
+}
+
+.readOnlyTittel {
+  display: block;
+  margin-bottom: var(--navds-spacing-1);
+}
+
+.faktumPeriodeDescription {
+  margin-bottom: var(--navds-spacing-2);
+}
+
+.faktumPeriodeFra {
+  margin-bottom: var(--navds-spacing-10);
+}

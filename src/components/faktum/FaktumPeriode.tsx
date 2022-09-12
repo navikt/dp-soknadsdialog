@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
@@ -6,71 +6,114 @@ import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/qu
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
-import { BodyShort, Label } from "@navikt/ds-react";
+import { BodyShort, Fieldset, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import periodeStyles from "./FaktumPeriode.module.css";
+import { DateTimeFormatOptions } from "next-intl";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
+  const { getFaktumTextById, getAppTekst } = useSanity();
 
-  const [fromDate, setFromDate] = useState<Date | undefined>(
-    faktum.svar?.fom ? new Date(faktum.svar?.fom) : undefined
-  );
-  const [toDate, setToDate] = useState<Date | undefined>(
-    faktum.svar?.tom ? new Date(faktum.svar?.tom) : undefined
-  );
+  const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
+  const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
 
-  useEffect(() => {
-    if (fromDate) {
-      const parsedFromDate = formatISO(fromDate, { representation: "date" });
-      const period = { ...faktum.svar, fom: parsedFromDate };
-      onChange ? onChange(faktum, period) : saveFaktum(period);
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
+  const faktumTextFra = getAppTekst(beskrivendeIdFra);
+  const faktumTextTil = getAppTekst(beskrivendeIdTil);
+
+  const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
+
+  function onFromDateSelection(value: Date) {
+    const parsedFromDate = formatISO(value, { representation: "date" });
+    const period = { ...svar, fom: parsedFromDate };
+    setSvar(period);
+
+    onChange ? onChange(faktum, period) : saveFaktum(period);
+  }
+
+  function onToDateSelection(value: Date) {
+    if (!svar?.fom) {
+      return;
     }
-  }, [fromDate]);
 
-  useEffect(() => {
-    if (toDate) {
-      const parsedToDate = formatISO(toDate, { representation: "date" });
-      // toDate is disabled until fromDate is answered. CurrentAnswer will always contain fromDate so it's safe to cast as QuizPeriodeFaktumAnswerType
-      const period = { ...faktum.svar, tom: parsedToDate } as IQuizPeriodeFaktumAnswerType;
-      onChange ? onChange(faktum, period) : saveFaktum(period);
-    }
-  }, [toDate]);
+    const parsedToDate = formatISO(value, { representation: "date" });
+    const period = { ...svar, tom: parsedToDate };
+    setSvar(period);
 
-  function saveFaktum(value: IQuizPeriodeFaktumAnswerType) {
-    saveFaktumToQuiz(faktum, value);
+    onChange ? onChange(faktum, period) : saveFaktum(period);
+  }
+
+  function saveFaktum(svar: IQuizPeriodeFaktumAnswerType) {
+    saveFaktumToQuiz(faktum, svar);
+  }
+
+  function parseDate(date: string) {
+    const options: DateTimeFormatOptions = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return new Date(date).toLocaleDateString("no-NB", options);
   }
 
   if (props.faktum.readOnly || props.readonly) {
     return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>
-          {fromDate?.toLocaleDateString()} – {toDate?.toLocaleDateString()}
-        </BodyShort>
-      </>
+      <div className={periodeStyles.faktumPeriode}>
+        <Label className={periodeStyles.readOnlyTittel}>
+          {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+        </Label>
+        {svar?.fom && (
+          <div className={periodeStyles.faktumPeriodeFra}>
+            <Label>{faktumTextFra}</Label>
+            <BodyShort>{parseDate(svar?.fom)}</BodyShort>
+          </div>
+        )}
+        {svar?.tom && (
+          <div>
+            <Label>{faktumTextTil}</Label>
+            <BodyShort>{parseDate(svar?.tom)}</BodyShort>
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-      <DatePicker
-        label={"Fra dato"}
-        onChange={setFromDate}
-        value={fromDate ? fromDate.toISOString() : undefined}
-      />
-      <DatePicker
-        label={"Til dato"}
-        disabled={!fromDate}
-        onChange={setToDate}
-        value={toDate ? toDate.toISOString() : undefined}
-      />
-      {faktumTexts?.helpText && (
-        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
-      )}
+    <div className={periodeStyles.faktumPeriode}>
+      <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
+        {faktumTexts?.description && (
+          <div className={periodeStyles.faktumPeriodeDescription}>
+            <PortableText value={faktumTexts.description} />
+          </div>
+        )}
+
+        {faktumTexts?.helpText && (
+          <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        )}
+
+        <div className={periodeStyles.faktumPeriodeFra}>
+          <DatePicker
+            id={beskrivendeIdFra}
+            label={faktumTextFra}
+            onChange={onFromDateSelection}
+            value={svar?.fom}
+          />
+        </div>
+        <div>
+          <DatePicker
+            id={beskrivendeIdTil}
+            label={faktumTextTil}
+            disabled={!svar?.fom}
+            onChange={onToDateSelection}
+            value={svar?.tom}
+            min={svar?.fom}
+          />
+        </div>
+      </Fieldset>
     </div>
   );
 }

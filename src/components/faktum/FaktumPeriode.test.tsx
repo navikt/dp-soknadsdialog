@@ -1,6 +1,6 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumDato } from "./FaktumDato";
+import { FaktumPeriode } from "./FaktumPeriode";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
@@ -11,7 +11,7 @@ import { sanityMocks } from "../../__mocks__/sanity.mocks";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
-  type: "localdate",
+  type: "periode",
   readOnly: false,
   beskrivendeId: "faktum.dagpenger-soknadsdato",
   sannsynliggjøresAv: [],
@@ -41,7 +41,7 @@ const soknadStateMockData: IQuizState = {
   seksjoner: [sectionMockData],
 };
 
-describe("FaktumDato", () => {
+describe("FaktumPeriode", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
@@ -49,36 +49,44 @@ describe("FaktumDato", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumDato faktum={faktumMockData} />
+          <FaktumPeriode faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
 
-    const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId);
+    const datepickerFom = screen.getByLabelText(faktumMockData.beskrivendeId + ".fra");
+    const datepickerTom = screen.getByLabelText(faktumMockData.beskrivendeId + ".til");
 
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
-      expect(datepicker).toBeInTheDocument();
+      expect(datepickerFom).toBeInTheDocument();
+      expect(datepickerTom).toBeInTheDocument();
     });
   });
 
   test("Should show preselected faktum answer if it's already selected", async () => {
-    const svar = "2022-08-04";
+    const svar = { fom: "2022-08-04", tom: "2022-08-06" };
     faktumMockData.svar = svar;
 
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumDato faktum={faktumMockData} />
+          <FaktumPeriode faktum={faktumMockData} />
         </QuizProvider>
       </SanityProvider>
     );
 
     // Casting it to access the value attribute
-    const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+    const datepickerFom = screen.getByLabelText(
+      faktumMockData.beskrivendeId + ".fra"
+    ) as HTMLInputElement;
+    const datepickerTom = screen.getByLabelText(
+      faktumMockData.beskrivendeId + ".til"
+    ) as HTMLInputElement;
 
     await waitFor(() => {
-      expect(datepicker.value).toBe(svar);
+      expect(datepickerFom.value).toBe(svar.fom);
+      expect(datepickerTom.value).toBe(svar.tom);
     });
   });
 
@@ -92,39 +100,49 @@ describe("FaktumDato", () => {
     });
 
     test("Should post the answer to the server", async () => {
-      // First save the answer
+      // First save the from date
+      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
+      // Then get next question (if any)
+      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+      // Then save the to date
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
-      const svar = "2022-08-04";
+      const svar = { fom: "2022-08-04", tom: "2022-08-06" };
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumDato faktum={faktumMockData} />
+            <FaktumPeriode faktum={faktumMockData} />
           </QuizProvider>
         </SanityProvider>
       );
 
-      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      const datepickerFom = screen.getByLabelText(faktumMockData.beskrivendeId + ".fra");
+      const datepickerTom = screen.getByLabelText(faktumMockData.beskrivendeId + ".til");
 
       // To trigger correct behavior as explained here: https://github.com/testing-library/user-event/issues/399#issuecomment-815664027
-      await user.clear(datepicker);
-      await user.type(datepicker, svar);
+      await user.clear(datepickerFom);
+      await user.type(datepickerFom, svar.fom);
+
+      await user.clear(datepickerTom);
+      await user.type(datepickerTom, svar.tom);
 
       await waitFor(() => {
-        expect((datepicker as HTMLInputElement).value).toEqual(svar);
+        expect((datepickerFom as HTMLInputElement).value).toEqual(svar.fom);
+        expect((datepickerTom as HTMLInputElement).value).toEqual(svar.tom);
 
-        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls.length).toEqual(4);
 
         // Does the first call save the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
+        const putRequestBody = fetch.mock.calls[2][1]?.body as string;
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar).toBe(svar);
+        expect(requestJson.svar.fom).toBe(svar.fom);
+        expect(requestJson.svar.tom).toBe(svar.tom);
       });
     });
   });
