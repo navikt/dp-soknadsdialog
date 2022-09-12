@@ -14,7 +14,7 @@ export function FaktumDokumentkrav(dokumentkrav: QuizFaktum) {
     <p className={styles.documentedBy}>
       <FileContent />
       {getAppTekst("faktum.ma.dokumenteres.del1")}
-      {` ${dokumentkravText} . `}
+      {` ${dokumentkravText}. `}
       {getAppTekst("faktum.ma.dokumenteres.del2")}
     </p>
   );
