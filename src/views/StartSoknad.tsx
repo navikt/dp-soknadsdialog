@@ -5,7 +5,7 @@ import { useSession } from "../session.utils";
 import { useSanity } from "../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { Timeline as timeline } from "../components/timeline/Timeline";
-import { ErrorModal } from "../components/error-modal/ErrorModal";
+import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { getUuid } from "../api/getUuid-api";
@@ -38,7 +38,7 @@ export function StartSoknad() {
   const portableTextComponents = { types: { timeline } };
 
   if (isError) {
-    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
+    return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
   return (

@@ -1,23 +1,16 @@
-.error {
+.errorRetryModal {
   background-color: var(--navds-global-color-orange-50);
   box-shadow: 0 0 0 1px var(--navds-global-color-orange-600);
   padding: 8px;
 }
 
-.error:focus {
+.errorRetryModal:focus {
   box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
 }
 
-.errorButtonContainer {
+.errorRetryModalButtonContainer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   margin-top: var(--navds-spacing-5);
-}
-
-.errorIconContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--navds-spacing-2);
-  margin-bottom: var(--navds-spacing-6);
 }

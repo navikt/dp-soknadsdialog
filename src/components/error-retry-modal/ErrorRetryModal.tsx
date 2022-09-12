@@ -1,16 +1,16 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
+import { Button, Heading, Modal, BodyLong } from "@navikt/ds-react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { ErrorTypesEnum } from "../../types/error.types";
-import styles from "./ErrorModal.module.css";
+import styles from "./ErrorRetryModal.module.css";
 
 interface IProps {
   errorType: ErrorTypesEnum;
 }
 
-export function ErrorModal(props: IProps) {
+export function ErrorRetryModal(props: IProps) {
   const { errorType } = props;
   const router = useRouter();
   const { getAppTekst } = useSanity();
@@ -70,8 +70,8 @@ export function ErrorModal(props: IProps) {
         <Heading size={"medium"} spacing>
           {getAppTekst("teknisk-feil.modal.tittel")}
         </Heading>
+        <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <div className={styles.errorModalButtonContainer}>
-          <p>{errorMessage}</p>
           <Button variant={"primary"} onClick={reload}>
             {getAppTekst("teknisk-feil.modal.knapp-tekst")}
           </Button>

@@ -1,0 +1,8 @@
+.body {
+  margin-top: var(--navds-spacing-5);
+}
+
+.actionButton {
+  margin-top: var(--navds-spacing-8);
+  margin-bottom: var(--navds-spacing-5);
+}

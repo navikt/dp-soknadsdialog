@@ -50,7 +50,7 @@ export default function Error(props: IProps) {
   return (
     <>
       <Modal
-        className={classNames("modal-container", [styles.errorModal])}
+        className={classNames("modal-container", [styles.error])}
         onClose={() => {
           return;
         }}
@@ -59,20 +59,15 @@ export default function Error(props: IProps) {
         shouldCloseOnOverlayClick={false}
       >
         <Modal.Content>
-          <div className={styles.iconContainer}>
+          <div className={styles.errorIconContainer}>
             <TechnicalError />
           </div>
           <Heading size={"medium"} spacing>
             {title}
           </Heading>
-          <div className={styles.errorModalButtonContainer}>
-            <p>{details}</p>
-            <Button
-              variant="primary"
-              size="medium"
-              onClick={() => gotoDittNav()}
-              className={styles.actionButton}
-            >
+          <BodyLong>{details}</BodyLong>
+          <div className={styles.errorButtonContainer}>
+            <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
               Gå til Ditt NAV
             </Button>
           </div>

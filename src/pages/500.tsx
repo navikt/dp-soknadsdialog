@@ -5,7 +5,7 @@ import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import * as SentryLogger from "../sentry.logger";
 import { ISanityTexts } from "../types/sanity.types";
-import styles from "./_error.module.css";
+import styles from "./500.module.css";
 
 const fallbackErrorText = {
   title: "Vi har tekniske problemer akkurat nå",
