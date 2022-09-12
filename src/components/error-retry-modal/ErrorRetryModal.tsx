@@ -58,7 +58,7 @@ export function ErrorRetryModal(props: IProps) {
 
   return (
     <Modal
-      className={classNames("modal-container", [styles.errorModal])}
+      className={classNames("modal-container", [styles.errorRetryModal])}
       onClose={() => {
         return;
       }}
@@ -71,7 +71,7 @@ export function ErrorRetryModal(props: IProps) {
           {getAppTekst("teknisk-feil.modal.tittel")}
         </Heading>
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
-        <div className={styles.errorModalButtonContainer}>
+        <div className={styles.errorRetryModalButtonContainer}>
           <Button variant={"primary"} onClick={reload}>
             {getAppTekst("teknisk-feil.modal.knapp-tekst")}
           </Button>
