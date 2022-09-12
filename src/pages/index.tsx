@@ -32,9 +32,8 @@ export default function Soknad(props: IProps) {
   if (!props.sanityTexts.apptekster) {
     return (
       <Error
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={500}
+        title="Vi har tekniske problemer"
+        details="Beklager, vi får ikke kontakt med systemene våre akkurat nå. Svarene dine er lagret og du kan prøve igjen om litt."
       />
     );
   }

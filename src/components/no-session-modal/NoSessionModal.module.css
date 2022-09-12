@@ -7,3 +7,15 @@
 .noSessionModal:focus {
   box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
 }
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--navds-spacing-2);
+  margin-bottom: var(--navds-spacing-6);
+}
+
+.actionButtonsContainer {
+  margin-top: var(--navds-spacing-6);
+  margin-bottom: var(--navds-spacing-4);
+}

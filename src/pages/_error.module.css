@@ -1,7 +1,31 @@
-.error {
-  margin-bottom: var(--navds-spacing-4);
+.errorModal {
+  background-color: var(--navds-global-color-orange-50);
+  box-shadow: 0 0 0 1px var(--navds-global-color-orange-600);
+  padding: 8px;
 }
 
-.statusCode {
-  margin-top: var(--navds-spacing-4);
+.errorModal:focus {
+  box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
+}
+
+.errorModalButtonContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.errorModalButtonContainer p {
+  margin-top: 0;
+  line-height: 1.55;
+}
+
+.errorModalButtonContainer > button {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--navds-spacing-2);
+  margin-bottom: var(--navds-spacing-6);
 }
