@@ -1,7 +1,6 @@
 import React from "react";
-import { Button } from "@navikt/ds-react";
+import { BodyLong, Button, Heading } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
-import { Alert, BodyShort, Detail } from "@navikt/ds-react";
 import styles from "./ErrorBoundary.module.css";
 
 interface IProps {
@@ -28,26 +27,31 @@ export default class ErrorBoundary extends Component<IProps, IState> {
     console.log({ error, errorInfo });
   }
 
+  gotoDittNav() {
+    this.setState({ hasError: false });
+    window.location.assign("https://www.nav.no/minside/");
+  }
+
   render() {
     if (this.state.hasError) {
       return (
-        <>
-          <Alert variant="error">
-            <BodyShort>Vi har tekniske problemer akkurat nå</BodyShort>
-            <Detail>
-              Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan
-              prøve igjen om litt.
-            </Detail>
-            <BodyShort className={styles.statusCode}>Statuskode 500</BodyShort>
-          </Alert>
+        <div className={styles.container}>
+          <Heading level="1" size="xlarge">
+            Vi har tekniske problemer akkurat nå
+          </Heading>
+          <BodyLong className={styles.body}>
+            Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve
+            igjen om litt.
+          </BodyLong>
           <Button
             variant="primary"
             size="medium"
-            onClick={() => this.setState({ hasError: false })}
+            onClick={() => this.gotoDittNav()}
+            className={styles.actionButton}
           >
-            Prøv igjen
+            Gå til Ditt NAV
           </Button>
-        </>
+        </div>
       );
     }
 

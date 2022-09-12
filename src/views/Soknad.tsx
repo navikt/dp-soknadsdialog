@@ -6,7 +6,7 @@ import { Left, Right } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import styles from "./Soknad.module.css";
 import { FetchIndicator } from "../components/FetchIndicator";
-import { ErrorModal } from "../components/error-modal/ErrorModal";
+import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
 import { useSanity } from "../context/sanity-context";
 import { FileSuccess } from "@navikt/ds-icons";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
@@ -122,7 +122,7 @@ export function Soknad() {
           {getAppTekst("auto-lagret.tekst")}
         </p>
       )}
-      {isError && <ErrorModal errorType={errorType} />}
+      {isError && <ErrorRetryModal errorType={errorType} />}
 
       <NoSessionModal />
     </main>

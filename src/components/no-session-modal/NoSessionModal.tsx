@@ -3,6 +3,7 @@ import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
+import { NoSessionError } from "../../svg-icons/NoSessionError";
 import { useSession } from "../../session.utils";
 import styles from "./NoSessionModal.module.css";
 
@@ -54,11 +55,14 @@ export function NoSessionModal() {
       shouldCloseOnOverlayClick={false}
     >
       <Modal.Content>
+        <div className={styles.iconContainer}>
+          <NoSessionError />
+        </div>
         <Heading size={"medium"} spacing>
           {getAppTekst("utlopt-sessjon.modal.tittel")}
         </Heading>
-        <div>
-          <p>{getAppTekst("utlopt-sessjon.modal.detaljer")}</p>
+        <p>{getAppTekst("utlopt-sessjon.modal.detaljer")}</p>
+        <div className={styles.actionButtonsContainer}>
           <Button variant={"primary"} onClick={login}>
             {getAppTekst("utlopt-sessjon.modal.login-knapp-tekst")}
           </Button>

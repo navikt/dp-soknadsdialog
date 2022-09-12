@@ -6,7 +6,7 @@ import { Left } from "@navikt/ds-icons";
 import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import { useSanity } from "../context/sanity-context";
-import { ErrorModal } from "../components/error-modal/ErrorModal";
+import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { getKvittering } from "../api/getKvittering-api";
@@ -39,7 +39,7 @@ export function Summary(props: IProps) {
   }
 
   if (hasError) {
-    return <ErrorModal errorType={ErrorTypesEnum.GenericError} />;
+    return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
   return (

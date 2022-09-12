@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { BodyLong, Heading, Button, Modal } from "@navikt/ds-react";
+import classNames from "classnames";
 import { NextPageContext } from "next";
-import { Alert, Heading, BodyShort, BodyLong } from "@navikt/ds-react";
+import { TechnicalError } from "../svg-icons/TechnicalError";
+import { useEffect } from "react";
 import styles from "./_error.module.css";
 
 interface IProps {
@@ -14,33 +16,64 @@ export default function Error(props: IProps) {
 
   useEffect(() => {
     if (statusCode === 404) {
-      window.location.href = "http://www.nav.no/404";
+      window.location.assign("https://www.nav.no/minside/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
     }
   }, []);
 
   if (statusCode === 404) {
     return (
-      <Alert variant="info">
-        <Heading size={"medium"} className={styles.error}>
+      <>
+        <div className={styles.iconContainer}>
+          <TechnicalError />
+        </div>
+        <Heading level="1" size="xlarge">
           Fant ikke siden
         </Heading>
         <BodyLong>
           Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
           deg hit.
         </BodyLong>
-        {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
-      </Alert>
+      </>
     );
   }
 
+  function gotoDittNav() {
+    window.location.assign("https://www.nav.no/no/ditt-nav");
+  }
+
   return (
-    <Alert variant="error">
-      <Heading size={"medium"} className={styles.error}>
-        {title}
-      </Heading>
-      <BodyLong>{details}</BodyLong>
-      {statusCode && <BodyShort className={styles.statusCode}>Statuskode {statusCode}</BodyShort>}
-    </Alert>
+    <>
+      <Modal
+        className={classNames("modal-container", [styles.error])}
+        onClose={() => {
+          return;
+        }}
+        open={true}
+        closeButton={false}
+        shouldCloseOnOverlayClick={false}
+      >
+        <Modal.Content>
+          <div className={styles.errorIconContainer}>
+            <TechnicalError />
+          </div>
+          <Heading size={"medium"} spacing>
+            {title}
+          </Heading>
+          <BodyLong>{details}</BodyLong>
+          <div className={styles.errorButtonContainer}>
+            <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
+              Gå til Ditt NAV
+            </Button>
+          </div>
+        </Modal.Content>
+      </Modal>
+    </>
   );
 }
 
