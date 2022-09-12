@@ -247,7 +247,6 @@ export const seksjonBarnetillegg: IQuizSeksjon = {
         },
       ],
       type: "generator",
-      sannsynliggjøresAv: [],
     },
   ],
   ferdig: false,

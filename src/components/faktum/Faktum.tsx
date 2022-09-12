@@ -75,7 +75,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
       return;
     }
 
-    return props.faktum.sannsynliggjøresAv.map((dokumentkrav) => (
+    return props.faktum.sannsynliggjøresAv?.map((dokumentkrav) => (
       <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
     ));
   }

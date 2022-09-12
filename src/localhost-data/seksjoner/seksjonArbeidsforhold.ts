@@ -205,7 +205,6 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       readOnly: false,
       templates: [],
       beskrivendeId: "faktum.arbeidsforhold",
-      sannsynliggjøresAv: [],
     },
   ],
   beskrivendeId: "arbeidsforhold",
