@@ -1,6 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../../api.utils";
+import { audienceDPSoknad } from "../../../../api.utils";
 import { getSoknadState } from "../../quiz-api";
 import { BARN_LISTE_REGISTER_FAKTUM_ID } from "../../../../constants";
 import { withSentry } from "@sentry/nextjs";
@@ -37,7 +37,7 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     const soknadState = await getSoknadState(uuid, onBehalfOfToken, sistLagret);
     return res.status(200).json(soknadState);
   }

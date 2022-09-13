@@ -4,7 +4,7 @@ import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
-import { audience } from "../../api.utils";
+import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
@@ -36,7 +36,7 @@ export async function getServerSideProps(
   }
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     soknadState = await getSoknadState(uuid, onBehalfOfToken);
   }
   return {

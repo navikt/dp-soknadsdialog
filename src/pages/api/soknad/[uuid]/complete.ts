@@ -1,6 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../../api.utils";
+import { audienceDPSoknad } from "../../../../api.utils";
 import { completeSoknad } from "../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
@@ -14,7 +14,7 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     try {
       await completeSoknad(uuid, locale, onBehalfOfToken);
       return res.status(201).end();

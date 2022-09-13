@@ -13,7 +13,7 @@ import {
   MAX_FILE_SIZE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { saveDokumentkravBegrunnelse, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
+import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -30,6 +30,7 @@ export function Dokumentkrav(props: IProps) {
   const { dokumentkrav } = props;
 
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
+  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
@@ -50,7 +51,12 @@ export function Dokumentkrav(props: IProps) {
   useEffect(() => {
     const save = async () => {
       try {
-        await saveDokumentkravSvar(uuid, dokumentkrav, svar);
+        const response = await saveDokumentkravSvar(uuid, dokumentkrav, { svar, begrunnelse });
+
+        if (!response.ok) {
+          // eslint-disable-next-line no-console
+          console.log("Feil ved lagring av dokumentkrav svar");
+        }
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -64,10 +70,18 @@ export function Dokumentkrav(props: IProps) {
     if (svar !== "") {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
-  }, [svar]);
+  }, [svar, begrunnelse]);
 
   function handUploadedFiles(file: IDokumentkravFil) {
-    setUploadedFiles((currentState) => [...currentState, file]);
+    const fileState = [...uploadedFiles];
+    const indexOfFile = fileState.findIndex((f) => f.filsti === file.filsti);
+
+    if (indexOfFile !== -1) {
+      fileState.splice(indexOfFile, 1);
+      setUploadedFiles(fileState);
+    } else {
+      setUploadedFiles((currentState) => [...currentState, file]);
+    }
   }
 
   return (
@@ -111,18 +125,19 @@ export function Dokumentkrav(props: IProps) {
         <>
           <FileUploader
             dokumentkrav={dokumentkrav}
-            setUploadedFiles={handUploadedFiles}
+            handleUploadedFiles={handUploadedFiles}
             maxFileSize={remainingFileSize}
           />
-          <FileList uploadedFiles={uploadedFiles} />
+          <FileList
+            dokumentkravId={dokumentkrav.id}
+            uploadedFiles={uploadedFiles}
+            handleUploadedFiles={handUploadedFiles}
+          />
         </>
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-        <DokumentkravBegrunnelse
-          begrunnelse={dokumentkrav.begrunnelse}
-          onChange={(value) => saveDokumentkravBegrunnelse(uuid, dokumentkrav, value)}
-        />
+        <DokumentkravBegrunnelse begrunnelse={begrunnelse} setBegrunnelse={setBegrunnelse} />
       )}
     </div>
   );

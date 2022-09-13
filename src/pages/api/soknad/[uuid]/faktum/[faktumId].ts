@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
-import { audience } from "../../../../../api.utils";
+import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,7 +16,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { token, apiToken } = await getSession({ req });
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     const response: Response = await fetch(
       `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktumId}`,
       {
@@ -28,6 +28,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         body,
       }
     );
+
     return res.status(response.status).json(await response.json());
   } else {
     return res.status(401).json({ status: "ikke innlogget" });

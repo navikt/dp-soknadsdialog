@@ -1,6 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../api.utils";
+import { audienceDPSoknad } from "../../../api.utils";
 import { getPaabegynt } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
@@ -12,7 +12,7 @@ async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   const { token, apiToken } = await getSession({ req });
   let paabegynt;
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     paabegynt = await getPaabegynt(onBehalfOfToken);
     return res.status(200).json(paabegynt);
   } else {

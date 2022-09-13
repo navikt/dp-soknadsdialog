@@ -1,6 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../api.utils";
+import { audienceDPSoknad } from "../../../api.utils";
 import { postSoknad, Prosesstype } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
@@ -14,7 +14,7 @@ async function getUuiddHandler(req: NextApiRequest, res: NextApiResponse) {
   let soknadId;
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     soknadId = await postSoknad(onBehalfOfToken, prosesstype);
     return res.status(200).send(soknadId);
   } else {

@@ -1,7 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { IPersonalia } from "../../../types/personalia.types";
 import { getSession } from "@navikt/dp-auth/server";
-import { audience } from "../../../api.utils";
+import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
 // As of https://tools.ietf.org/html/rfc7807
@@ -39,7 +39,7 @@ const personaliaHandler: NextApiHandler<IPersonalia | IHttpProblem> = async (
   try {
     const { token, apiToken } = await getSession({ req });
     if (token && apiToken) {
-      const onBehalfOfToken = await apiToken(audience);
+      const onBehalfOfToken = await apiToken(audienceDPSoknad);
       const personalia = await getPersonalia(onBehalfOfToken);
       return res.json(personalia);
     } else {

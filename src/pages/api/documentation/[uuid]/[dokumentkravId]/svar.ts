@@ -1,7 +1,8 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../../../api.utils";
+import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
+import { headersWithToken } from "../../../quiz-api";
 
 async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -13,15 +14,13 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   const dokumentkravId = req.query.dokumentkravId as string;
   if (token && apiToken) {
     try {
-      const onBehalfOfToken = await apiToken(audience);
+      const onBehalfOfToken = await apiToken(audienceDPSoknad);
       const response = await fetch(
         `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/svar`,
         {
-          method: "POST",
+          method: "PUT",
           body: req.body,
-          headers: {
-            Authorization: `Bearer ${onBehalfOfToken}`,
-          },
+          headers: headersWithToken(onBehalfOfToken),
         }
       );
 
@@ -31,7 +30,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
 
       return res.status(200).send(response.body);
     } catch (error: unknown) {
-      return res.status(404);
+      return res.status(404).end();
     }
   }
 }

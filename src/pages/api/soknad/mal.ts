@@ -1,6 +1,6 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../api.utils";
+import { audienceDPSoknad } from "../../../api.utils";
 import { getSoknadMal } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
@@ -14,7 +14,7 @@ async function getMal(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     soknadMal = await getSoknadMal(onBehalfOfToken);
     return res.status(200).json(soknadMal);
   } else {

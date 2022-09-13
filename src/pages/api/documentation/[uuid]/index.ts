@@ -1,7 +1,7 @@
-import { mockDokumentkravList } from "./../../../../localhost-data/dokumentkrav-list";
+import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audience } from "../../../../api.utils";
+import { audienceDPSoknad } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { IDokumentkravList } from "../../../../types/documentation.types";
 import { headersWithToken } from "../../quiz-api";
@@ -31,7 +31,7 @@ async function dokumentasjonskravHandler(req: NextApiRequest, res: NextApiRespon
   const uuid = req.query.uuid as string;
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     try {
       const documentationStatus = await getDocumentationList(uuid, onBehalfOfToken);
       return res.status(200).json(documentationStatus);

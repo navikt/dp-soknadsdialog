@@ -3,17 +3,14 @@ import { useDropzone } from "react-dropzone";
 import { Alert, Button } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
-import {
-  saveDokumenkravFileToMellomLagring,
-  saveDokumentkravFilToQuiz,
-} from "../../api/dokumentasjon-api";
+import { saveDokumenkravFile } from "../../api/dokumentasjon-api";
 import styles from "./FileUploader.module.css";
 import { ALLOWED_FILE_FORMATS } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
-  setUploadedFiles: (file: IDokumentkravFil) => void;
+  handleUploadedFiles: (file: IDokumentkravFil) => void;
   maxFileSize: number;
 }
 interface IFileError {
@@ -21,7 +18,7 @@ interface IFileError {
   error: "INVALID_FILE_FORMAT" | "INVALID_FILE_SIZE" | "SERVER_ERROR";
 }
 
-export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IProps) {
+export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }: IProps) {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const uuid = router.query.uuid as string;
@@ -30,6 +27,7 @@ export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IP
 
   const onDrop = useCallback((selectedFiles: File[]) => {
     setErrors([]);
+
     selectedFiles.forEach(async (file) => {
       if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
         setErrors((currentState) => [
@@ -43,31 +41,12 @@ export function FileUploader({ dokumentkrav, setUploadedFiles, maxFileSize }: IP
         ]);
       } else {
         try {
-          const fileResponse = await saveDokumenkravFileToMellomLagring(
-            file,
-            uuid,
-            dokumentkrav.id
-          );
+          const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkrav.id);
 
-          if (!fileResponse.ok) {
-            throw new Error(fileResponse.statusText);
+          if (fileResponse.ok) {
+            const savedDokumentkravFile = await fileResponse.json();
+            handleUploadedFiles(savedDokumentkravFile);
           }
-
-          setUploadedFiles(fileResponse[0]);
-
-          const dokumentkravResponse = await saveDokumentkravFilToQuiz(
-            uuid,
-            dokumentkrav,
-            fileResponse[0]
-          );
-
-          // eslint-disable-next-line no-console
-          console.log(dokumentkravResponse);
-          if (!dokumentkravResponse.ok) {
-            // eslint-disable-next-line no-console
-            console.error(dokumentkravResponse.statusText);
-          }
-          // Only save the first response, since we only save one file at a time
         } catch (error) {
           setErrors((currentState) => [
             ...currentState,

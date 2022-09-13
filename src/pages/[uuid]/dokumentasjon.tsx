@@ -5,7 +5,7 @@ import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
-import { audience } from "../../api.utils";
+import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
 import { getDocumentationList } from "../api/documentation/[uuid]";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
@@ -41,7 +41,7 @@ export async function getServerSideProps(
   }
 
   if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audience);
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
     soknadState = await getSoknadState(uuid, onBehalfOfToken);
     documents = await getDocumentationList(uuid, onBehalfOfToken);
   }

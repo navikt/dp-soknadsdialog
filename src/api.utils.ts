@@ -1,5 +1,5 @@
 export const host = process.env.SELF_URL;
-export const audience = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
+export const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
 export const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
 
 export default function api(endpoint: string): string {
