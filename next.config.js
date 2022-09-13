@@ -28,4 +28,7 @@ const config = {
 
 module.exports = withSentryConfig(config, {
   silent: true,
+  errorHandler: (err, invokeErr, compilation) => {
+    compilation.warnings.push("Sentry CLI Plugin: " + err.message);
+  },
 });
