@@ -15,7 +15,7 @@ export function FormattedDate(props: IProps) {
   const options: DateTimeFormatOptions = {
     year: "numeric",
     month: props.short ? "2-digit" : "long",
-    day: "numeric",
+    day: props.short ? "2-digit" : "numeric",
   };
 
   const formattedDate = new Date(props.date).toLocaleDateString(locale, options);
