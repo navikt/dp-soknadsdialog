@@ -46,6 +46,8 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
           if (fileResponse.ok) {
             const savedDokumentkravFile = await fileResponse.json();
             handleUploadedFiles(savedDokumentkravFile);
+          } else {
+            throw Error(fileResponse.statusText);
           }
         } catch (error) {
           setErrors((currentState) => [
