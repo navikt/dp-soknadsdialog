@@ -10,7 +10,7 @@ import { BodyShort, Fieldset, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
-import { parseDateFromIso } from "../../date.utils";
+import { FormattedDate } from "../FormattedDate";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
@@ -59,13 +59,17 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         {svar?.fom && (
           <div className={periodeStyles.faktumPeriodeFra}>
             <Label>{faktumTextFra}</Label>
-            <BodyShort>{parseDateFromIso(svar?.fom)}</BodyShort>
+            <BodyShort>
+              <FormattedDate date={svar?.fom} />
+            </BodyShort>
           </div>
         )}
         {svar?.tom && (
           <div>
             <Label>{faktumTextTil}</Label>
-            <BodyShort>{parseDateFromIso(svar?.tom)}</BodyShort>
+            <BodyShort>
+              <FormattedDate date={svar?.tom} />
+            </BodyShort>
           </div>
         )}
       </div>

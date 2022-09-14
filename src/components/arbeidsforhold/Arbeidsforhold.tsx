@@ -14,7 +14,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import { PortableText } from "@portabletext/react";
 import { ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID } from "../../constants";
-import { parseDateFromIso } from "../../date.utils";
+import { FormattedDate } from "../FormattedDate";
 
 export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
@@ -122,14 +122,23 @@ export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
   );
 }
 
-export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]): string {
+export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
     (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet"
   )?.svar as IQuizPeriodeFaktumAnswerType;
   if (!varighetFaktum) return "Fant ikke periode";
-  const parsedFom = parseDateFromIso(varighetFaktum.fom);
-  const parsedTom = varighetFaktum.tom ? `- ${parseDateFromIso(varighetFaktum.tom)}` : "";
-  return `${parsedFom} ${parsedTom}`;
+
+  return (
+    <>
+      <FormattedDate date={varighetFaktum.fom} />
+      {varighetFaktum.tom && (
+        <>
+          {`- `}
+          <FormattedDate date={varighetFaktum.tom} />
+        </>
+      )}
+    </>
+  );
 }
 
 export function getArbeidsforholdEndret(arbeidsforhold: QuizFaktum[]): string {

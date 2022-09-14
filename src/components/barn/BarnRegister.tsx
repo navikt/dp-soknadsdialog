@@ -5,7 +5,7 @@ import { QuizFaktum, IQuizGeneratorFaktum } from "../../types/quiz.types";
 import { useRouter } from "next/router";
 import { getCountryName } from "../../country.utils";
 import { GeneratorFaktumCardWithFakta } from "../generator-faktum-card/GeneratorFaktumCardWithFakta";
-import { parseDateFromIso } from "../../date.utils";
+import { FormattedDate } from "../FormattedDate";
 
 export function BarnRegister(props: IFaktum<IQuizGeneratorFaktum>) {
   const { locale } = useRouter();
@@ -35,7 +35,7 @@ export function getChildBirthDate(barnetillegg: QuizFaktum[]) {
     return;
   }
 
-  return parseDateFromIso(date as string);
+  return <FormattedDate date={date as string} />;
 }
 
 export function getChildName(barnetillegg: QuizFaktum[]): string {
