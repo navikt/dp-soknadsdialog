@@ -8,6 +8,7 @@ import { useSanity } from "../../context/sanity-context";
 import { BodyShort, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import { FormattedDate } from "../FormattedDate";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
@@ -29,7 +30,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     return (
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{currentAnswer}</BodyShort>
+        <BodyShort>{currentAnswer ? <FormattedDate date={currentAnswer} /> : ""}</BodyShort>
       </>
     );
   }

@@ -10,7 +10,7 @@ import { BodyShort, Fieldset, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
-import { DateTimeFormatOptions } from "next-intl";
+import { FormattedDate } from "../FormattedDate";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
@@ -50,16 +50,6 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     saveFaktumToQuiz(faktum, svar);
   }
 
-  function parseDate(date: string) {
-    const options: DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-    return new Date(date).toLocaleDateString("no-NB", options);
-  }
-
   if (props.faktum.readOnly || props.readonly) {
     return (
       <div className={periodeStyles.faktumPeriode}>
@@ -69,13 +59,17 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         {svar?.fom && (
           <div className={periodeStyles.faktumPeriodeFra}>
             <Label>{faktumTextFra}</Label>
-            <BodyShort>{parseDate(svar?.fom)}</BodyShort>
+            <BodyShort>
+              <FormattedDate date={svar?.fom} />
+            </BodyShort>
           </div>
         )}
         {svar?.tom && (
           <div>
             <Label>{faktumTextTil}</Label>
-            <BodyShort>{parseDate(svar?.tom)}</BodyShort>
+            <BodyShort>
+              <FormattedDate date={svar?.tom} />
+            </BodyShort>
           </div>
         )}
       </div>
