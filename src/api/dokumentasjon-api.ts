@@ -45,10 +45,14 @@ export async function deleteDokumentkravFile(
   });
 }
 
-export async function bundleDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav) {
+export async function bundleDokumentkrav(
+  uuid: string,
+  dokumentkrav: IDokumentkrav,
+  filer: IDokumentkravFil[]
+) {
   const body = {
     soknadId: uuid,
-    filer: dokumentkrav.filer.map((file) => {
+    filer: filer.map((file) => {
       return { urn: file.urn };
     }),
     bundleNavn: dokumentkrav.id,

@@ -85,7 +85,7 @@ export function Dokumentkrav(props: IProps) {
   }
 
   async function bundle() {
-    const res = await bundleDokumentkrav(uuid, dokumentkrav);
+    const res = await bundleDokumentkrav(uuid, dokumentkrav, uploadedFiles);
     // eslint-disable-next-line no-console
     console.log("Vi bundler!", res);
   }
