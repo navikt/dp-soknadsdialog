@@ -50,9 +50,11 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   return (
     <>
       {props.faktum?.svar?.map((fakta, svarIndex) => {
+        const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
+              allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
             >
