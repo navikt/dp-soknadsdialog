@@ -49,7 +49,7 @@ export async function bundleDokumentkrav(uuid: string, dokumentkrav: IDokumentkr
   const body = {
     soknadId: uuid,
     filer: dokumentkrav.filer.map((file) => {
-      return file.urn;
+      return { urn: file.urn };
     }),
     bundleNavn: dokumentkrav.id,
   };
