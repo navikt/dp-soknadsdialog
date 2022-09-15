@@ -1,3 +1,14 @@
 .fileItem {
+  display: flex;
   margin-bottom: var(--navds-spacing-5);
+}
+
+.deleteButton {
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: start;
+}
+
+.uploadedText {
+  width: 100%;
 }
