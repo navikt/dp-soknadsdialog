@@ -44,3 +44,21 @@ export async function deleteDokumentkravFile(
     body: JSON.stringify(file),
   });
 }
+
+export async function bundleDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav) {
+  const body = {
+    soknadId: uuid,
+    filer: dokumentkrav.filer.map((file) => {
+      return file.urn;
+    }),
+    bundleNavn: dokumentkrav.id,
+  };
+
+  return fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/bundle`), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+}
