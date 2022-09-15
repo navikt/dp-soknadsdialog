@@ -12,7 +12,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const uuid = req.query.uuid as string;
-  const dokumentkravId = req.query.doku as string;
+  const dokumentkravId = req.query.dokumentkravId as string;
   const body = req.body;
   const DPSoknadToken = await apiToken(audienceDPSoknad);
   const mellomlagringToken = await apiToken(audienceMellomlagring);
