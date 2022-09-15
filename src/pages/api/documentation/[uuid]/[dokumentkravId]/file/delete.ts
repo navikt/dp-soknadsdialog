@@ -66,7 +66,7 @@ async function deleteFileFromMellomlagring(
   mellomlagringToken: string,
   filsti: string
 ) {
-  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${filsti}`;
+  const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${filsti}`;
   return fetch(url, {
     method: "DELETE",
     headers: headersWithToken(mellomlagringToken),

@@ -19,7 +19,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     try {
       const onBehalfOfToken = await apiToken(audienceMellomlagring);
       const response = await fetch(
-        `${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${dokumentId}/${fileId}`,
+        `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentId}/${fileId}`,
         {
           headers: {
             Authorization: `Bearer ${onBehalfOfToken}`,
