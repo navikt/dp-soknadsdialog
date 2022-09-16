@@ -1,3 +1,19 @@
 .fileItem {
+  display: flex;
   margin-bottom: var(--navds-spacing-5);
+}
+
+.deleteButton {
+  margin-left: auto;
+  flex-shrink: 0;
+  align-self: start;
+}
+
+.deleteButton svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.uploadedText {
+  width: 100%;
 }

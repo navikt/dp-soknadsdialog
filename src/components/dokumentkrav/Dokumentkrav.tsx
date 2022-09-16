@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -13,7 +13,7 @@ import {
   MAX_FILE_SIZE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
+import { bundleDokumentkrav, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -84,6 +84,12 @@ export function Dokumentkrav(props: IProps) {
     }
   }
 
+  async function bundle() {
+    const res = await bundleDokumentkrav(uuid, dokumentkrav, uploadedFiles);
+    // eslint-disable-next-line no-console
+    console.log("Vi bundler!", res);
+  }
+
   return (
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
@@ -135,6 +141,8 @@ export function Dokumentkrav(props: IProps) {
           />
         </>
       )}
+
+      <Button onClick={bundle}>Bundle test</Button>
 
       {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
         <DokumentkravBegrunnelse begrunnelse={begrunnelse} setBegrunnelse={setBegrunnelse} />

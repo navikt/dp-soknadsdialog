@@ -5,6 +5,7 @@ import styles from "./FileListItem.module.css";
 import api from "../../api.utils";
 import { useRouter } from "next/router";
 import { deleteDokumentkravFile } from "../../api/dokumentasjon-api";
+import { Delete } from "@navikt/ds-icons";
 
 interface IProps {
   file: IDokumentkravFil;
@@ -32,13 +33,18 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
 
   return (
     <li className={styles.fileItem}>
-      <Link href={api(`/documentation/${file.filsti}/download`)} download={file.filnavn}>
-        <BodyShort size="medium">{file.filnavn}</BodyShort>
-      </Link>
-      <Link href={api(`/documentation/file/${file.filsti}/download`)} download={file.filnavn}>
-        Gammel download
-      </Link>
-      <Button onClick={handleDeleteFile}>Slett fil</Button>
+      <div>
+        <Link href={api(`/documentation/${file.filsti}/download`)} download={file.filnavn}>
+          <BodyShort size="medium">{file.filnavn}</BodyShort>
+        </Link>
+        <BodyShort className={styles.uploadedText} size="small">
+          Lastet opp
+        </BodyShort>
+      </div>
+      <Button className={styles.deleteButton} variant="tertiary" onClick={handleDeleteFile}>
+        <Delete />
+        Slett fil
+      </Button>
     </li>
   );
 }

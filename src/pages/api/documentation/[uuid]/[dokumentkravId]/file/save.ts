@@ -75,7 +75,7 @@ async function saveFileToMellomlagring(
       });
   });
 
-  const url = `${process.env.MELLOMLAGRING_BASE_URL}/${uuid}/${dokumentkravId}`;
+  const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
   return fetch(url, {
     method: "POST",
     headers: {
