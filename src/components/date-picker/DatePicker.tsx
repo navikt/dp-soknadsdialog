@@ -5,6 +5,7 @@ import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
+import { isFutureDate, isValidSoknadDate } from "../../utils/validations";
 
 interface IDatePicker {
   id: string;
@@ -43,7 +44,7 @@ export function DatePicker(props: IDatePicker) {
     if (!selectedDate) {
       setDate(undefined);
     } else if (isValid(formattedDate)) {
-      setIsValidDate(true);
+      validateInput();
       setDate(formattedDate);
       props.onChange(formattedDate);
     } else {
@@ -56,6 +57,37 @@ export function DatePicker(props: IDatePicker) {
 
     if (!selectedDate) {
       setIsValidDate(false);
+    }
+  }
+
+  function validateInput() {
+    if (date) {
+      switch (props.id) {
+        case "faktum.dagpenger-soknadsdato": {
+          const validSoknadDate = isValidSoknadDate(date);
+          setIsValidDate(validSoknadDate);
+          break;
+        }
+        case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
+          const validArbeidsforholdTimer = !isFutureDate(date);
+          setIsValidDate(validArbeidsforholdTimer);
+          break;
+        }
+        case "faktum.arbeidsforhold.varighet.fra": {
+          const validArbeidsforholdFrom = !isFutureDate(date);
+          setIsValidDate(validArbeidsforholdFrom);
+          break;
+        }
+        case "faktum.arbeidsforhold.varighet.til": {
+          const validArbeidsforholdTo = !isFutureDate(date);
+          setIsValidDate(validArbeidsforholdTo);
+          break;
+        }
+        default: {
+          setIsValidDate(true);
+          break;
+        }
+      }
     }
   }
 

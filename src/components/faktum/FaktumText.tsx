@@ -8,6 +8,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import { isValidTextLength } from "../../utils/validations";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
@@ -15,6 +16,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
+  const [isValid, setIsValid] = useState(true);
+
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
@@ -24,7 +27,11 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    validateInput();
+
+    if (isValid) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -34,6 +41,11 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         <BodyShort>{debouncedText}</BodyShort>
       </>
     );
+  }
+
+  function validateInput() {
+    const isValid = isValidTextLength(debouncedText);
+    setIsValid(isValid);
   }
 
   return (
@@ -50,6 +62,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+      {!isValid && <p>Svaret kan ikke være mer en 500 bokstaver</p>}
     </>
   );
 }

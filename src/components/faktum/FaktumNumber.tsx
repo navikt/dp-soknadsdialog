@@ -8,6 +8,11 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import {
+  isPositiveNumber,
+  isValidArbeidstimer,
+  isValidPermitteringsPercent,
+} from "../../utils/validations";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -16,6 +21,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
+  const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
     if (debouncedValue && debouncedValue !== props.faktum.svar) {
@@ -48,8 +54,33 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
   }
 
+  function validateInput() {
+    if (debouncedValue) {
+      switch (faktum.beskrivendeId) {
+        case "faktum.arbeidsforhold.permittert-prosent": {
+          const positiveNumber = isValidPermitteringsPercent(debouncedValue);
+          setIsValid(positiveNumber);
+          break;
+        }
+        case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
+          const validArbeidstimer = isValidArbeidstimer(debouncedValue);
+          setIsValid(validArbeidstimer);
+          break;
+        }
+        default: {
+          const isValid = isPositiveNumber(debouncedValue);
+          setIsValid(isValid);
+          break;
+        }
+      }
+    }
+  }
+
   function saveFaktum(value: number) {
-    saveFaktumToQuiz(faktum, value);
+    validateInput();
+    if (!isValid) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -76,6 +107,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+      {!isValid && <p>Tallet kan ikke negativt, permitterings prosent kan ikke være mer enn 100</p>}
     </>
   );
 }
