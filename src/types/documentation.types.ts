@@ -13,6 +13,7 @@ export interface IDokumentkrav {
   gyldigeValg: string[];
   svar?: string;
   begrunnelse?: string;
+  bundle?: string;
 }
 
 export interface IDokumentkravFil {
