@@ -9,6 +9,11 @@
   align-self: start;
 }
 
+.deleteButton svg {
+  display: block;
+  margin: 0 auto;
+}
+
 .uploadedText {
   width: 100%;
 }
