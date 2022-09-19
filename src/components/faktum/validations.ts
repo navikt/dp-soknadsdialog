@@ -1,4 +1,4 @@
-import { addWeeks } from "date-fns";
+import { addWeeks, isFuture } from "date-fns";
 
 export function isPositiveNumber(value: number | string): boolean {
   const positiveNumber = /^\+?(0|[1-9]\d*)$/;
@@ -16,7 +16,7 @@ export function isValidArbeidstimer(value: number): boolean {
 }
 
 export function isFutureDate(date: Date): boolean {
-  return date.getTime() > Date.now();
+  return isFuture(date);
 }
 
 export function isValidPermitteringsPercent(value: number): boolean {
@@ -25,5 +25,5 @@ export function isValidPermitteringsPercent(value: number): boolean {
 }
 
 export function isValidSoknadDate(date: Date): boolean {
-  return date < addWeeks(Date.now(), 2);
+  return date <= addWeeks(Date.now(), 2);
 }

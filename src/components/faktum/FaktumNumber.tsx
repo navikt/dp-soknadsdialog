@@ -8,11 +8,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import {
-  isPositiveNumber,
-  isValidArbeidstimer,
-  isValidPermitteringsPercent,
-} from "../../utils/validations";
+import { isPositiveNumber, isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -58,13 +54,13 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     if (debouncedValue) {
       switch (faktum.beskrivendeId) {
         case "faktum.arbeidsforhold.permittert-prosent": {
-          const positiveNumber = isValidPermitteringsPercent(debouncedValue);
-          setIsValid(positiveNumber);
+          const isValid = isValidPermitteringsPercent(debouncedValue);
+          setIsValid(isValid);
           break;
         }
         case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
-          const validArbeidstimer = isValidArbeidstimer(debouncedValue);
-          setIsValid(validArbeidstimer);
+          const isValid = isValidArbeidstimer(debouncedValue);
+          setIsValid(isValid);
           break;
         }
         default: {
