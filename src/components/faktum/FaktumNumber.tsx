@@ -76,7 +76,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   function saveFaktum(value: number) {
     validateInput();
-    if (!isValid) {
+    if (isValid) {
       saveFaktumToQuiz(faktum, value);
     }
   }
