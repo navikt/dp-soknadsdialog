@@ -6,11 +6,13 @@ import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { isFutureDate, isValidSoknadDate } from "../faktum/validations";
+import { useSanity } from "../../context/sanity-context";
 
 interface IDatePicker {
   id: string;
   label: string;
   description?: TypedObject | TypedObject[];
+  errorMessage?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
@@ -20,10 +22,12 @@ interface IDatePicker {
 }
 
 export function DatePicker(props: IDatePicker) {
+  const { getAppTekst } = useSanity();
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
   const [isValid, setIsValid] = useState(true);
+  const [isEmptyDate, setIsEmptyDate] = useState(false);
 
   const DATEPICKER_MIN_DATE = calculateIsoDateFromNow(-100);
   const DATEPICKER_MAX_DATE = calculateIsoDateFromNow(100);
@@ -40,15 +44,17 @@ export function DatePicker(props: IDatePicker) {
   function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
     const formattedDate = new Date(selectedDate);
+    setIsEmptyDate(false);
 
     if (!selectedDate) {
+      setIsEmptyDate(true);
       setDate(undefined);
     } else if (isValidDate(formattedDate)) {
-      validateInput();
       setDate(formattedDate);
+      validateInput(formattedDate);
       props.onChange(formattedDate);
     } else {
-      setIsValid(false);
+      setIsValid(true);
     }
   }
 
@@ -56,37 +62,36 @@ export function DatePicker(props: IDatePicker) {
     const selectedDate = event.target.value;
 
     if (!selectedDate) {
+      setIsEmptyDate(true);
       setIsValid(false);
     }
   }
 
-  function validateInput() {
-    if (date) {
-      switch (props.id) {
-        case "faktum.dagpenger-soknadsdato": {
-          const validSoknadDate = isValidSoknadDate(date);
-          setIsValid(validSoknadDate);
-          break;
-        }
-        case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
-          const validArbeidsforholdTimer = !isFutureDate(date);
-          setIsValid(validArbeidsforholdTimer);
-          break;
-        }
-        case "faktum.arbeidsforhold.varighet.fra": {
-          const validArbeidsforholdFrom = !isFutureDate(date);
-          setIsValid(validArbeidsforholdFrom);
-          break;
-        }
-        case "faktum.arbeidsforhold.varighet.til": {
-          const validArbeidsforholdTo = !isFutureDate(date);
-          setIsValid(validArbeidsforholdTo);
-          break;
-        }
-        default: {
-          setIsValid(true);
-          break;
-        }
+  function validateInput(date: Date) {
+    switch (props.id) {
+      case "faktum.dagpenger-soknadsdato": {
+        const validSoknadDate = isValidSoknadDate(date);
+        setIsValid(validSoknadDate);
+        break;
+      }
+      case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
+        const validArbeidsforholdTimer = !isFutureDate(date);
+        setIsValid(validArbeidsforholdTimer);
+        break;
+      }
+      case "faktum.arbeidsforhold.varighet.fra": {
+        const validArbeidsforholdFrom = !isFutureDate(date);
+        setIsValid(validArbeidsforholdFrom);
+        break;
+      }
+      case "faktum.arbeidsforhold.varighet.til": {
+        const validArbeidsforholdTo = !isFutureDate(date);
+        setIsValid(validArbeidsforholdTo);
+        break;
+      }
+      default: {
+        setIsValid(true);
+        break;
       }
     }
   }
@@ -125,7 +130,7 @@ export function DatePicker(props: IDatePicker) {
             "navds-error-message navds-label"
           )}
         >
-          Ugyldig dato
+          {isEmptyDate ? getAppTekst("validering.ugyldig-dato") : props.errorMessage}
         </div>
       )}
     </div>

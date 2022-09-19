@@ -13,6 +13,7 @@ import { isValidTextLength } from "./validations";
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
@@ -48,6 +49,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     setIsValid(isValid);
   }
 
+  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
+
   return (
     <>
       <TextField
@@ -58,11 +61,11 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}
         onBlur={debouncedChange.flush}
+        error={!isValid ? errorText : false}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {!isValid && <p>Svaret kan ikke være mer en 500 bokstaver</p>}
     </>
   );
 }

@@ -13,6 +13,8 @@ import { isPositiveNumber, isValidArbeidstimer, isValidPermitteringsPercent } fr
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { getAppTekst } = useSanity();
+
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
@@ -88,6 +90,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     );
   }
 
+  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.ikke-negativt-tall");
+
   return (
     <>
       <TextField
@@ -99,11 +103,11 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         type="number"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
+        error={!isValid ? errorText : undefined}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {!isValid && <p>Tallet kan ikke negativt, permitterings prosent kan ikke være mer enn 100</p>}
     </>
   );
 }

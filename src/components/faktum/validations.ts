@@ -25,5 +25,5 @@ export function isValidPermitteringsPercent(value: number): boolean {
 }
 
 export function isValidSoknadDate(date: Date): boolean {
-  return date <= addWeeks(Date.now(), 2);
+  return date <= addWeeks(new Date(), 2);
 }
