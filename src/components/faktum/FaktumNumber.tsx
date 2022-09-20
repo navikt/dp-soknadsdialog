@@ -31,19 +31,25 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   //TODO Add som validation for different int vs float
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     let number;
+
     if (!event.target.value) {
       setDebouncedValue(undefined);
       return;
     }
     switch (faktum.type) {
-      case "int":
+      case "int": {
         number = parseInt(event.target.value);
+        validateInput(number);
         debouncedChange(number);
         break;
-      case "double":
+      }
+      case "double": {
         number = parseFloat(event.target.value);
+        validateInput(number);
         debouncedChange(number);
         break;
+      }
+
       default:
         // TODO sentry
         // eslint-disable-next-line no-console
@@ -52,30 +58,27 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
   }
 
-  function validateInput() {
-    if (debouncedValue) {
-      switch (faktum.beskrivendeId) {
-        case "faktum.arbeidsforhold.permittert-prosent": {
-          const isValid = isValidPermitteringsPercent(debouncedValue);
-          setIsValid(isValid);
-          break;
-        }
-        case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
-          const isValid = isValidArbeidstimer(debouncedValue);
-          setIsValid(isValid);
-          break;
-        }
-        default: {
-          const isValid = isPositiveNumber(debouncedValue);
-          setIsValid(isValid);
-          break;
-        }
+  function validateInput(value: number) {
+    switch (faktum.beskrivendeId) {
+      case "faktum.arbeidsforhold.permittert-prosent": {
+        const isValid = isValidPermitteringsPercent(value);
+        setIsValid(isValid);
+        break;
+      }
+      case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
+        const isValid = isValidArbeidstimer(value);
+        setIsValid(isValid);
+        break;
+      }
+      default: {
+        const isValid = isPositiveNumber(value);
+        setIsValid(isValid);
+        break;
       }
     }
   }
 
   function saveFaktum(value: number) {
-    validateInput();
     if (isValid) {
       saveFaktumToQuiz(faktum, value);
     }

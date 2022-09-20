@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { format, isValid as isValidDate } from "date-fns";
+import { format, isValid as isValidDate, isFuture } from "date-fns";
 import styles from "./DatePicker.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { isFutureDate, isValidSoknadDate } from "../faktum/validations";
+import { isValidSoknadDate } from "../faktum/validations";
 import { useSanity } from "../../context/sanity-context";
 
 interface IDatePicker {
@@ -75,17 +75,17 @@ export function DatePicker(props: IDatePicker) {
         break;
       }
       case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
-        const validArbeidsforholdTimer = !isFutureDate(date);
+        const validArbeidsforholdTimer = !isFuture(date);
         setIsValid(validArbeidsforholdTimer);
         break;
       }
       case "faktum.arbeidsforhold.varighet.fra": {
-        const validArbeidsforholdFrom = !isFutureDate(date);
+        const validArbeidsforholdFrom = !isFuture(date);
         setIsValid(validArbeidsforholdFrom);
         break;
       }
       case "faktum.arbeidsforhold.varighet.til": {
-        const validArbeidsforholdTo = !isFutureDate(date);
+        const validArbeidsforholdTo = !isFuture(date);
         setIsValid(validArbeidsforholdTo);
         break;
       }
