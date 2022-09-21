@@ -1,10 +1,11 @@
-import { addMonths, addWeeks } from "date-fns";
+import { addMonths, addWeeks, addYears } from "date-fns";
 import {
   isPositiveNumber,
   isValidArbeidstimer,
   isValidPermitteringsPercent,
   isValidSoknadDate,
   isValidTextLength,
+  isValidYearRange,
 } from "./validations";
 
 const validTextLengthMock =
@@ -16,6 +17,8 @@ describe("Input validation", () => {
   test("Validate positive number", async () => {
     expect(isPositiveNumber(30)).toBe(true);
     expect(isPositiveNumber(-20)).toBe(false);
+    expect(isPositiveNumber(37.5)).toBe(true);
+    expect(isPositiveNumber(-37.5)).toBe(false);
   });
 
   test("Validate text length", async () => {
@@ -49,5 +52,19 @@ describe("Input validation", () => {
     expect(isValidSoknadDate(lastWeek)).toBe(true);
     expect(isValidSoknadDate(nextMonth)).toBe(false);
     expect(isValidSoknadDate(lastMonth)).toBe(true);
+  });
+
+  test("Validate valid year range", async () => {
+    const today = new Date();
+    const about200years = addYears(new Date(), 200);
+    const last200years = addYears(new Date(), -200);
+    const nextMonth = addMonths(new Date(), 1);
+    const lastMonth = addMonths(new Date(), -1);
+
+    expect(isValidYearRange(today)).toBe(true);
+    expect(isValidYearRange(about200years)).toBe(false);
+    expect(isValidYearRange(last200years)).toBe(false);
+    expect(isValidYearRange(nextMonth)).toBe(true);
+    expect(isValidYearRange(lastMonth)).toBe(true);
   });
 });

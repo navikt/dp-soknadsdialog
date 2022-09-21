@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import classNames from "classnames";
-import { format, isValid as isValidDate, isFuture } from "date-fns";
-import styles from "./DatePicker.module.css";
-import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
-import { formatISO } from "date-fns";
-import { isValidSoknadDate } from "../faktum/validations";
+import { TypedObject } from "@portabletext/types";
+import classNames from "classnames";
+import { format, formatISO, isValid as isValidDate } from "date-fns";
+import React, { useState } from "react";
 import { useSanity } from "../../context/sanity-context";
+import styles from "./DatePicker.module.css";
 
 interface IDatePicker {
   id: string;
   label: string;
   description?: TypedObject | TypedObject[];
+  hasError?: boolean;
   errorMessage?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
@@ -26,7 +25,6 @@ export function DatePicker(props: IDatePicker) {
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
-  const [isValid, setIsValid] = useState(true);
   const [isEmptyDate, setIsEmptyDate] = useState(false);
 
   const DATEPICKER_MIN_DATE = calculateIsoDateFromNow(-100);
@@ -47,14 +45,12 @@ export function DatePicker(props: IDatePicker) {
     setIsEmptyDate(false);
 
     if (!selectedDate) {
-      setIsEmptyDate(true);
       setDate(undefined);
     } else if (isValidDate(formattedDate)) {
       setDate(formattedDate);
-      validateInput(formattedDate);
       props.onChange(formattedDate);
     } else {
-      setIsValid(true);
+      setIsEmptyDate(false);
     }
   }
 
@@ -63,36 +59,7 @@ export function DatePicker(props: IDatePicker) {
 
     if (!selectedDate) {
       setIsEmptyDate(true);
-      setIsValid(false);
-    }
-  }
-
-  function validateInput(date: Date) {
-    switch (props.id) {
-      case "faktum.dagpenger-soknadsdato": {
-        const validSoknadDate = isValidSoknadDate(date);
-        setIsValid(validSoknadDate);
-        break;
-      }
-      case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
-        const validArbeidsforholdTimer = !isFuture(date);
-        setIsValid(validArbeidsforholdTimer);
-        break;
-      }
-      case "faktum.arbeidsforhold.varighet.fra": {
-        const validArbeidsforholdFrom = !isFuture(date);
-        setIsValid(validArbeidsforholdFrom);
-        break;
-      }
-      case "faktum.arbeidsforhold.varighet.til": {
-        const validArbeidsforholdTo = !isFuture(date);
-        setIsValid(validArbeidsforholdTo);
-        break;
-      }
-      default: {
-        setIsValid(true);
-        break;
-      }
+      setDate(undefined);
     }
   }
 
@@ -110,7 +77,7 @@ export function DatePicker(props: IDatePicker) {
       )}
       <input
         className={classNames(styles.datePickerInput, {
-          [styles.datePickerInputError]: !isValid,
+          [styles.datePickerInputError]: props.hasError || isEmptyDate,
         })}
         type="date"
         id={props.id}
@@ -123,7 +90,7 @@ export function DatePicker(props: IDatePicker) {
         min={min}
         max={max}
       />
-      {!isValid && (
+      {(props.hasError || isEmptyDate) && (
         <div
           className={classNames(
             styles.datePickerInputErrorLabel,

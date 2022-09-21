@@ -7,12 +7,15 @@ import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
 import { BodyShort, Label } from "@navikt/ds-react";
 import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
 import { FormattedDate } from "../FormattedDate";
+import { isFuture } from "date-fns";
+import { isValidSoknadDate, isValidYearRange } from "../faktum/validations";
+import styles from "./Faktum.module.css";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const [isValid, setIsValid] = useState(true);
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
@@ -23,7 +26,11 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    validateInput(new Date(value));
+
+    if (isValid) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -35,6 +42,26 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     );
   }
 
+  function validateInput(date: Date) {
+    switch (props.faktum.beskrivendeId) {
+      case "faktum.dagpenger-soknadsdato": {
+        const isValid = isValidSoknadDate(date);
+        setIsValid(isValid);
+        break;
+      }
+      case "faktum.barn-foedselsdato": {
+        const isValid = isValidYearRange(date) && !isFuture(date);
+        setIsValid(isValid);
+        break;
+      }
+      default: {
+        const isValid = isValidYearRange(date);
+        setIsValid(isValid);
+        break;
+      }
+    }
+  }
+
   return (
     <>
       <DatePicker
@@ -43,7 +70,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description}
-        errorMessage={faktumTexts?.errorMessage}
+        hasError={!isValid}
+        errorMessage={faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

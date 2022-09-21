@@ -3,6 +3,7 @@ import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
+import { isFuture } from "date-fns";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
 import { useSanity } from "../../context/sanity-context";
@@ -11,11 +12,14 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
+import { isValidYearRange } from "./validations";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppTekst } = useSanity();
+  const [isValidFom, setIsValidFom] = useState(true);
+  const [isValidTom, setIsValidTom] = useState(true);
 
   const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
@@ -47,7 +51,11 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(svar: IQuizPeriodeFaktumAnswerType) {
-    saveFaktumToQuiz(faktum, svar);
+    validateInput(svar);
+
+    if (isValidFom && isValidTom) {
+      saveFaktumToQuiz(faktum, svar);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -76,6 +84,23 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     );
   }
 
+  function validateInput(svar: IQuizPeriodeFaktumAnswerType) {
+    const { fom, tom } = svar;
+
+    const from = beskrivendeIdFra === "faktum.arbeidsforhold.varighet.fra";
+    const to = beskrivendeIdTil === "faktum.arbeidsforhold.varighet.til";
+
+    if (from || to) {
+      const isValidFom = !isFuture(new Date(fom)) && isValidYearRange(new Date(fom));
+      const isValidTom = tom ? !isFuture(new Date(tom)) && isValidYearRange(new Date(tom)) : true;
+      setIsValidFom(isValidFom);
+      setIsValidTom(isValidTom);
+    } else {
+      setIsValidFom(true);
+      setIsValidTom(true);
+    }
+  }
+
   return (
     <div className={periodeStyles.faktumPeriode}>
       <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
@@ -95,6 +120,10 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
+            hasError={!isValidFom}
+            errorMessage={
+              faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId
+            }
           />
         </div>
         <div>
@@ -105,6 +134,10 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             onChange={onToDateSelection}
             value={svar?.tom}
             min={svar?.fom}
+            hasError={!isValidTom}
+            errorMessage={
+              faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId
+            }
           />
         </div>
       </Fieldset>

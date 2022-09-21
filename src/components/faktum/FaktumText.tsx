@@ -28,10 +28,11 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    validateInput();
-
-    if (isValid) {
+    if (isValidTextLength(value)) {
+      setIsValid(true);
       saveFaktumToQuiz(faktum, value);
+    } else {
+      setIsValid(false);
     }
   }
 
@@ -42,11 +43,6 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         <BodyShort>{debouncedText}</BodyShort>
       </>
     );
-  }
-
-  function validateInput() {
-    const isValid = isValidTextLength(debouncedText);
-    setIsValid(isValid);
   }
 
   const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
