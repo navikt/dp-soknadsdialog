@@ -36,7 +36,10 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
     console.timeEnd("putFaktumSvar");
 
-    return res.status(response.status).json(await response.json());
+    console.time("data");
+    const data = await response.json();
+    console.timeEnd("data");
+    return res.status(response.status).json(data);
   } else {
     return res.status(401).json({ status: "ikke innlogget" });
   }
