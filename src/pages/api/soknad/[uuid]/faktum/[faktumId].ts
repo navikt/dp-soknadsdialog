@@ -5,6 +5,7 @@ import { withSentry } from "@sentry/nextjs";
 
 /* eslint-disable no-console */
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.time("saveFaktumHandler");
   const {
     query: { uuid, faktumId },
     body,
@@ -39,6 +40,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.time("data");
     const data = await response.json();
     console.timeEnd("data");
+    console.timeEnd("saveFaktumHandler");
     return res.status(response.status).json(data);
   } else {
     return res.status(401).json({ status: "ikke innlogget" });
