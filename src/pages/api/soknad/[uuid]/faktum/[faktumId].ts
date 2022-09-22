@@ -2,10 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
+import crypto from "crypto";
 
 /* eslint-disable no-console */
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.time("saveFaktumHandler");
+  const requestId = crypto.randomUUID();
+  console.time(`saveFaktumHandler ${requestId}`);
   const {
     query: { uuid, faktumId },
     body,
@@ -31,6 +33,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${onBehalfOfToken}`,
+          "X-Request-ID": requestId,
         },
         body,
       }
@@ -40,7 +43,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.time("data");
     const data = await response.json();
     console.timeEnd("data");
-    console.timeEnd("saveFaktumHandler");
+    console.time(`saveFaktumHandler ${requestId}`);
     return res.status(response.status).json(data);
   } else {
     return res.status(401).json({ status: "ikke innlogget" });
