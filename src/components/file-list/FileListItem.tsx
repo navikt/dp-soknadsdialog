@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BodyShort, Button, Link } from "@navikt/ds-react";
 import { IDokumentkravFil } from "../../types/documentation.types";
 import styles from "./FileListItem.module.css";
@@ -6,6 +6,8 @@ import api from "../../api.utils";
 import { useRouter } from "next/router";
 import { deleteDokumentkravFile } from "../../api/dokumentasjon-api";
 import { Delete } from "@navikt/ds-icons";
+import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 interface IProps {
   file: IDokumentkravFil;
@@ -17,17 +19,19 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
   const router = useRouter();
   const uuid = router.query.uuid as string;
 
+  const [hasError, setHasError] = useState(false);
+
   async function handleDeleteFile() {
     try {
       const response = await deleteDokumentkravFile(uuid, dokumentkravId, file);
 
-      handleUploadedFiles(file);
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
 
-      // eslint-disable-next-line no-console
-      console.log(response);
+      handleUploadedFiles(file);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      setHasError(true);
     }
   }
 
@@ -45,6 +49,7 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
         <Delete />
         Slett fil
       </Button>
+      {hasError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
     </li>
   );
 }
