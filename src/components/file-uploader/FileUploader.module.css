@@ -13,3 +13,8 @@
 .uploadError {
   margin-bottom: var(--navds-spacing-4);
 }
+
+.loadingIndicator {
+  text-align: center;
+  margin: var(--navds-spacing-4) 0;
+}

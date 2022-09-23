@@ -3,15 +3,15 @@ import { IDokumentkrav, IDokumentkravFil } from "../types/documentation.types";
 
 interface IDokumentkravSvar {
   svar: string;
-  begrunnelse: string;
+  begrunnelse: string | undefined;
 }
 
 export async function saveDokumentkravSvar(
   uuid: string,
-  dokumentkrav: IDokumentkrav,
+  dokumentkravId: string,
   payload: IDokumentkravSvar
 ) {
-  return fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/svar`), {
+  return fetch(api(`/documentation/${uuid}/${dokumentkravId}/svar`), {
     method: "PUT",
     body: JSON.stringify(payload),
   });
@@ -45,14 +45,10 @@ export async function deleteDokumentkravFile(
   });
 }
 
-export async function bundleDokumentkrav(
-  uuid: string,
-  dokumentkrav: IDokumentkrav,
-  filer: IDokumentkravFil[]
-) {
+export async function bundleDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav) {
   const body = {
     soknadId: uuid,
-    filer: filer.map((file) => {
+    filer: dokumentkrav.filer.map((file) => {
       return { urn: file.urn };
     }),
     bundleNavn: dokumentkrav.id,

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Alert, Button } from "@navikt/ds-react";
+import { Alert, Button, Loader } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
 import { saveDokumenkravFile } from "../../api/dokumentasjon-api";
@@ -24,11 +24,13 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
   const uuid = router.query.uuid as string;
   const [errors, setErrors] = useState<IFileError[]>([]);
   const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
+  const [isLoading, setIsLoading] = useState(false);
 
   const onDrop = useCallback((selectedFiles: File[]) => {
     setErrors([]);
+    setIsLoading(true);
 
-    selectedFiles.forEach(async (file) => {
+    selectedFiles.forEach(async (file, index) => {
       if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
         setErrors((currentState) => [
           ...currentState,
@@ -56,6 +58,10 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
           ]);
         }
       }
+
+      if (index === selectedFiles.length - 1) {
+        setIsLoading(false);
+      }
     });
   }, []);
 
@@ -65,10 +71,18 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
         <>
-          <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
-          <Button onClick={open}>{getAppTekst("filopplaster.velg.filer")}</Button>
+          <>
+            <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
+            <Button onClick={open}>{getAppTekst("filopplaster.velg.filer")}</Button>
+          </>
         </>
       </div>
+
+      {isLoading && (
+        <div className={styles.loadingIndicator}>
+          <Loader size="large" />
+        </div>
+      )}
 
       {errors.length > 0 && (
         <div className={styles.uploadError}>

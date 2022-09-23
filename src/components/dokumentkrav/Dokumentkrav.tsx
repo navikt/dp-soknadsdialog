@@ -1,76 +1,89 @@
 import React, { useEffect, useState } from "react";
-import { Button, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
+import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
+import {
+  IDokumentkrav,
+  IDokumentkravChanges,
+  IDokumentkravFil,
+} from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
 import {
-  ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID,
   DOKUMENTKRAV_SVAR_SEND_NAA,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
   MAX_FILE_SIZE,
 } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
-import { bundleDokumentkrav, saveDokumentkravSvar } from "../../api/dokumentasjon-api";
-import { useRouter } from "next/router";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import styles from "./Dokumentkrav.module.css";
+import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
+import { useRouter } from "next/router";
+import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import { ErrorTypesEnum } from "../../types/error.types";
+import { DokumentkravTitle } from "./DokumentkravTitle";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
+  onChange: (dokumentkrav: IDokumentkrav, changes: IDokumentkravChanges) => void;
+  bundleError?: boolean;
+  validationError?: boolean;
 }
 
 export function Dokumentkrav(props: IProps) {
+  const { dokumentkrav, onChange, bundleError, validationError } = props;
+
   const router = useRouter();
+  const { uuid } = router.query;
   const isFirstRender = useFirstRender();
-  const { dokumentkrav } = props;
 
   const [svar, setSvar] = useState(dokumentkrav.svar || "");
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
-  const [alertText, setAlertText] = useState<ISanityAlertText>();
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
+  const [hasError, setHasError] = useState(false);
+
+  const [alertText, setAlertText] = useState<ISanityAlertText>();
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
-
-  const uuid = router.query.uuid as string;
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-  const employerName = dokumentkrav.fakta.find(
-    (faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID
-  )?.svar;
 
-  const totalUploadedFileSize = dokumentkrav.filer.map((fil) => fil.storrelse).reduce(sum, 0);
-  const remainingFileSize = MAX_FILE_SIZE - totalUploadedFileSize;
-
-  function sum(accumulator: number, value: number) {
-    return accumulator + value;
-  }
+  const remainingFileSize = findRemainingFileSize();
 
   useEffect(() => {
-    const save = async () => {
-      try {
-        const response = await saveDokumentkravSvar(uuid, dokumentkrav, { svar, begrunnelse });
-
-        if (!response.ok) {
-          // eslint-disable-next-line no-console
-          console.log("Feil ved lagring av dokumentkrav svar");
-        }
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    };
-
     if (!isFirstRender) {
-      save();
+      setHasError(false);
+
+      const shouldTriggerSave =
+        dokumentkrav.svar !== svar || dokumentkrav.begrunnelse !== begrunnelse;
+
+      if (shouldTriggerSave) {
+        save();
+      }
+
+      onChange(dokumentkrav, { svar, begrunnelse, filer: uploadedFiles });
     }
 
     if (svar !== "") {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
-  }, [svar, begrunnelse]);
+  }, [svar, begrunnelse, uploadedFiles]);
+
+  async function save() {
+    try {
+      const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+        svar,
+        begrunnelse,
+      });
+
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+    } catch (error) {
+      setHasError(true);
+    }
+  }
 
   function handUploadedFiles(file: IDokumentkravFil) {
     const fileState = [...uploadedFiles];
@@ -84,17 +97,20 @@ export function Dokumentkrav(props: IProps) {
     }
   }
 
-  async function bundle() {
-    const res = await bundleDokumentkrav(uuid, dokumentkrav, uploadedFiles);
-    // eslint-disable-next-line no-console
-    console.log("Vi bundler!", res);
+  function findRemainingFileSize() {
+    const totalUploadedFileSize = dokumentkrav.filer.map((fil) => fil.storrelse).reduce(sum, 0);
+
+    function sum(accumulator: number, value: number) {
+      return accumulator + value;
+    }
+
+    return MAX_FILE_SIZE - totalUploadedFileSize;
   }
 
   return (
     <div className={styles.dokumentkrav}>
       <Heading size="small" level="3" spacing>
-        {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}
-        {employerName && ` (${employerName})`}
+        <DokumentkravTitle dokumentkrav={dokumentkrav} />
       </Heading>
 
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
@@ -127,6 +143,10 @@ export function Dokumentkrav(props: IProps) {
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
       )}
 
+      {validationError && !svar && (
+        <Alert variant="error">Du må svare på dokumentkravet før du kan gå videre</Alert>
+      )}
+
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
         <>
           <FileUploader
@@ -139,14 +159,20 @@ export function Dokumentkrav(props: IProps) {
             uploadedFiles={uploadedFiles}
             handleUploadedFiles={handUploadedFiles}
           />
+
+          {bundleError && <Alert variant="error">Feil med bundling</Alert>}
+
+          {validationError && uploadedFiles.length === 0 && (
+            <Alert variant="error">Du må laste opp filer før du kan gå videre</Alert>
+          )}
         </>
       )}
-
-      <Button onClick={bundle}>Bundle test</Button>
 
       {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
         <DokumentkravBegrunnelse begrunnelse={begrunnelse} setBegrunnelse={setBegrunnelse} />
       )}
+
+      {hasError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
     </div>
   );
 }

@@ -12,7 +12,7 @@ xdescribe("Dokumentkrav", () => {
   test("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
       </SanityProvider>
     );
 
@@ -26,7 +26,7 @@ xdescribe("Dokumentkrav", () => {
   test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
       </SanityProvider>
     );
 
@@ -41,7 +41,7 @@ xdescribe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
       </SanityProvider>
     );
 
@@ -57,7 +57,7 @@ xdescribe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
       </SanityProvider>
     );
 
@@ -74,7 +74,7 @@ xdescribe("Dokumentkrav", () => {
 
     render(
       <SanityProvider initialState={sanityMocks}>
-        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+        <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
       </SanityProvider>
     );
 
@@ -130,7 +130,7 @@ xdescribe("Dokumentkrav", () => {
 
         render(
           <SanityProvider initialState={sanityMocks}>
-            <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+            <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
           </SanityProvider>
         );
 
@@ -158,7 +158,7 @@ xdescribe("Dokumentkrav", () => {
 
       render(
         <SanityProvider initialState={sanityMocks}>
-          <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} />
+          <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
         </SanityProvider>
       );
 

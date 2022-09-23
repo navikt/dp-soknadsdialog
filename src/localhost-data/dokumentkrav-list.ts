@@ -85,7 +85,6 @@ export const mockDokumentkravList: IDokumentkravList = {
         "dokumentkrav.svar.sendt.inn.tidligere",
         "dokumentkrav.svar.sender.ikke",
       ],
-      svar: "",
       begrunnelse: "",
     },
   ],

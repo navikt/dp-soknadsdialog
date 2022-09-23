@@ -45,3 +45,9 @@ export enum ErrorType {
   FileSize,
   ServerError,
 }
+
+export interface IDokumentkravChanges {
+  svar?: string;
+  begrunnelse?: string;
+  filer?: IDokumentkravFil[];
+}
