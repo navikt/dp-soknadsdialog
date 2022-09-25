@@ -8,7 +8,7 @@ import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 
-xdescribe("Dokumentkrav", () => {
+describe("Dokumentkrav", () => {
   test("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
@@ -48,7 +48,7 @@ xdescribe("Dokumentkrav", () => {
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
     await waitFor(() => {
-      expect(screen.queryByText("Dra filene hit eller")).toBeInTheDocument();
+      expect(screen.queryByText("filopplaster.dra.filene.hit")).toBeInTheDocument();
     });
   });
 
@@ -85,7 +85,7 @@ xdescribe("Dokumentkrav", () => {
     });
   });
 
-  xdescribe("Upload file", () => {
+  describe("Upload file", () => {
     beforeEach(() => {
       fetch.enableMocks();
     });
@@ -110,17 +110,17 @@ xdescribe("Dokumentkrav", () => {
       await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
       await waitFor(() => {
-        expect(screen.queryByText("Dra filene hit eller")).toBeInTheDocument();
+        expect(screen.queryByText("filopplaster.dra.filene.hit")).toBeInTheDocument();
       });
     }
 
-    xdescribe("When user selects a valid file to upload", () => {
+    describe("When user selects a valid file to upload", () => {
       beforeEach(() => {
         fetch.mockResponse(
           JSON.stringify({
             ok: true,
             urn: "1234",
-            filnavn: "image.png",
+            filnavn: "image.jpg",
           })
         );
       });
@@ -144,16 +144,13 @@ xdescribe("Dokumentkrav", () => {
 
         expect(await screen.findByText(file.name)).toBeInTheDocument();
 
-        const fileContainer = screen.getByText(file.name).closest("li");
-
         await waitFor(() => {
-          expect(fileContainer?.innerHTML).toContain("Ferdig opplastet");
           expect(fetch.mock.calls.length).toEqual(1);
         });
       });
     });
 
-    xit("Should show info on invalid files, and not upload anything", async () => {
+    it("Should show info on invalid files, and not upload anything", async () => {
       const user = userEvent.setup();
 
       render(
@@ -171,13 +168,11 @@ xdescribe("Dokumentkrav", () => {
       simulateFileUpload(screen, [file]);
 
       expect(await screen.findByText(file.name)).toBeInTheDocument();
+      expect(
+        await screen.findByText("filopplaster.feil.beskrivelse-format-storrelse")
+      ).toBeInTheDocument();
 
-      const fileContainer = screen.getByText(file.name).closest("li");
-
-      await waitFor(() => {
-        expect(fileContainer?.innerHTML).toContain("Feil format - ikke lastet opp");
-        expect(fetch.mock.calls.length).toEqual(0);
-      });
+      expect(fetch.mock.calls.length).toEqual(0);
     });
   });
 });
