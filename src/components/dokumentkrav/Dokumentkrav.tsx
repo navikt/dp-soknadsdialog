@@ -120,6 +120,9 @@ export function Dokumentkrav(props: IProps) {
           legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
           onChange={setSvar}
           value={svar}
+          error={
+            validationError && !svar && getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
+          }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
             // We need a custom ID since multiple dokumentkrav are shown on the same page.
@@ -141,10 +144,6 @@ export function Dokumentkrav(props: IProps) {
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
-      )}
-
-      {validationError && !svar && (
-        <Alert variant="error">Du må svare på dokumentkravet før du kan gå videre</Alert>
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
