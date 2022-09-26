@@ -10,4 +10,4 @@ export const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "ap
 export const MAX_FILE_SIZE = 31457280; // 30mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
-export const MAX_YEAR_RANGE = 100;
+export const YEAR_RANGE = 100;

@@ -1,3 +1,4 @@
+import { Alert } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
 import classNames from "classnames";
@@ -12,6 +13,8 @@ interface IDatePicker {
   description?: TypedObject | TypedObject[];
   hasError?: boolean;
   errorMessage?: string;
+  hasWarning?: boolean;
+  warningMessage?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
@@ -99,6 +102,11 @@ export function DatePicker(props: IDatePicker) {
         >
           {isEmptyDate ? getAppTekst("validering.ugyldig-dato") : props.errorMessage}
         </div>
+      )}
+      {props.hasWarning && props.warningMessage && (
+        <Alert variant="warning" className={styles.datePickerWarning}>
+          {props.warningMessage}
+        </Alert>
       )}
     </div>
   );

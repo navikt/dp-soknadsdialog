@@ -1,9 +1,9 @@
-import { addMonths, addWeeks, addYears } from "date-fns";
+import { addMonths, addYears } from "date-fns";
 import {
   isPositiveNumber,
   isValidArbeidstimer,
   isValidPermitteringsPercent,
-  isValidSoknadDate,
+  // isValidSoknadDate,
   isValidTextLength,
   isValidYearRange,
 } from "./validations";
@@ -38,21 +38,21 @@ describe("Input validation", () => {
     expect(isValidPermitteringsPercent(-10)).toBe(false);
   });
 
-  test("Validate soknad date", async () => {
-    const today = new Date();
-    const nextThreeWeeks = addWeeks(new Date(), 3);
-    const nextTwoWeeks = addWeeks(new Date(), 2);
-    const lastWeek = addWeeks(new Date(), -1);
-    const nextMonth = addMonths(new Date(), 1);
-    const lastMonth = addMonths(new Date(), -1);
+  // test("Validate soknad date", async () => {
+  //   const today = new Date();
+  //   const nextThreeWeeks = addWeeks(new Date(), 3);
+  //   const nextTwoWeeks = addWeeks(new Date(), 2);
+  //   const lastWeek = addWeeks(new Date(), -1);
+  //   const nextMonth = addMonths(new Date(), 1);
+  //   const lastMonth = addMonths(new Date(), -1);
 
-    expect(isValidSoknadDate(today)).toBe(true);
-    expect(isValidSoknadDate(nextThreeWeeks)).toBe(false);
-    expect(isValidSoknadDate(nextTwoWeeks)).toBe(true);
-    expect(isValidSoknadDate(lastWeek)).toBe(true);
-    expect(isValidSoknadDate(nextMonth)).toBe(false);
-    expect(isValidSoknadDate(lastMonth)).toBe(true);
-  });
+  //   expect(isValidSoknadDate(today)).toBe(true);
+  //   expect(isValidSoknadDate(nextThreeWeeks)).toBe(false);
+  //   expect(isValidSoknadDate(nextTwoWeeks)).toBe(true);
+  //   expect(isValidSoknadDate(lastWeek)).toBe(true);
+  //   expect(isValidSoknadDate(nextMonth)).toBe(false);
+  //   expect(isValidSoknadDate(lastMonth)).toBe(true);
+  // });
 
   test("Validate valid year range", async () => {
     const today = new Date();

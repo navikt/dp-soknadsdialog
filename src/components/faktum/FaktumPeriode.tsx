@@ -35,6 +35,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     const period = { ...svar, fom: parsedFromDate };
     setSvar(period);
 
+    validateInput(period);
     onChange ? onChange(faktum, period) : saveFaktum(period);
   }
 
@@ -51,8 +52,6 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(svar: IQuizPeriodeFaktumAnswerType) {
-    validateInput(svar);
-
     if (isValidFom && isValidTom) {
       saveFaktumToQuiz(faktum, svar);
     }

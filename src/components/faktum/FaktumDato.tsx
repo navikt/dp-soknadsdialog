@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import { IFaktum } from "./Faktum";
-import { formatISO } from "date-fns";
-import { IQuizDatoFaktum } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { DatePicker } from "../date-picker/DatePicker";
-import { useSanity } from "../../context/sanity-context";
+import React from "react";
 import { BodyShort, Label } from "@navikt/ds-react";
-import { HelpText } from "../HelpText";
+import { formatISO, isFuture } from "date-fns";
+import { useState } from "react";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { IQuizDatoFaktum } from "../../types/quiz.types";
+import { DatePicker } from "../date-picker/DatePicker";
+import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "../faktum/validations";
 import { FormattedDate } from "../FormattedDate";
-import { isFuture } from "date-fns";
-import { isValidSoknadDate, isValidYearRange } from "../faktum/validations";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { getAppTekst, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
-  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
+  const [hasWarning, setHasWarnining] = useState(false);
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
   const onDateSelection = (value: Date) => {
@@ -26,9 +28,9 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    validateInput(new Date(value));
+    const inputValid = validateInput(new Date(value));
 
-    if (isValid) {
+    if (inputValid) {
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -45,19 +47,21 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   function validateInput(date: Date) {
     switch (props.faktum.beskrivendeId) {
       case "faktum.dagpenger-soknadsdato": {
-        const isValid = isValidSoknadDate(date);
+        const isValid = isValidDateYear(date);
+        const hasWarning = isOverTwoWeeks(date);
         setIsValid(isValid);
-        break;
+        setHasWarnining(hasWarning);
+        return isValid;
       }
       case "faktum.barn-foedselsdato": {
-        const isValid = isValidYearRange(date) && !isFuture(date);
+        const isValid = isValidDateYear(date) && !isFuture(date);
         setIsValid(isValid);
-        break;
+        return isValid;
       }
       default: {
         const isValid = isValidYearRange(date);
         setIsValid(isValid);
-        break;
+        return isValid;
       }
     }
   }
@@ -72,6 +76,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         description={faktumTexts?.description}
         hasError={!isValid}
         errorMessage={faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId}
+        hasWarning={hasWarning}
+        warningMessage={getAppTekst("warning-text.dagpenger-soknadsdato")}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
