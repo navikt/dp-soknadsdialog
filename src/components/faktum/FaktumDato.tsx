@@ -77,7 +77,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         hasError={!isValid}
         errorMessage={faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId}
         hasWarning={hasWarning}
-        warningMessage={getAppTekst("warning-text.dagpenger-soknadsdato")}
+        warningMessage={getAppTekst("validering.varsel-tekst.dagpenger-soknadsdato")}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

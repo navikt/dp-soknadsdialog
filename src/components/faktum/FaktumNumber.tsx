@@ -13,9 +13,9 @@ import { isPositiveNumber, isValidArbeidstimer, isValidPermitteringsPercent } fr
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { getAppTekst } = useSanity();
+  const { getAppTekst, getFaktumTextById } = useSanity();
 
-  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
