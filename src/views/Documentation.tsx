@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert, Button, Detail } from "@navikt/ds-react";
+import React, { useEffect, useState } from "react";
+import { Alert, BodyLong, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
@@ -9,7 +9,7 @@ import { Left } from "@navikt/ds-icons";
 import soknadStyles from "./Soknad.module.css";
 import styles from "./Dokumentasjonskrav.module.css";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../constants";
-import { bundleDokumentkrav } from "../api/dokumentasjon-api";
+import { bundleDokumentkrav, saveDokumentkravSvar } from "../api/dokumentasjon-api";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
@@ -17,6 +17,8 @@ import {
 } from "../types/documentation.types";
 import { DokumentkravTitle } from "../components/dokumentkrav/DokumentkravTitle";
 import { ErrorList, ErrorListItem } from "../components/error-list/ErrorList";
+import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
+import { ErrorTypesEnum } from "../types/error.types";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -31,7 +33,10 @@ export function Documentation(props: IProps) {
   );
   const [isBundling, setIsBundling] = useState(false);
   const [showBundleError, setShowBundleError] = useState(false);
-  const [hasBundleError, setHasBundleError] = useState<IDokumentkrav[]>([]);
+  const [bundleErrors, setBundleErrors] = useState<IDokumentkrav[]>([]);
+
+  const [isSavingFallback, setIsSavingFallback] = useState(false);
+  const [savingFallbackError, setSavingFallbackError] = useState(false);
 
   const [showValidationError, setShowValidationError] = useState(false);
   const [hasValidationError, setHasValidationError] = useState<IDokumentkrav[]>([]);
@@ -40,6 +45,12 @@ export function Documentation(props: IProps) {
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
   const numberOfDokumentkravText = getAppTekst("dokumentkrav.nummer.av.krav");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   function updateDokumentkrav(dokumentkrav: IDokumentkrav, updatedFields: IDokumentkravChanges) {
     const tempList = { ...dokumentkravList };
@@ -73,7 +84,7 @@ export function Documentation(props: IProps) {
 
   async function bundle() {
     setShowBundleError(false);
-    setHasBundleError([]);
+    setBundleErrors([]);
 
     const tempErrorList: IDokumentkrav[] = [];
 
@@ -105,7 +116,7 @@ export function Documentation(props: IProps) {
     setIsBundling(false);
 
     if (tempErrorList.length > 0) {
-      setHasBundleError(tempErrorList);
+      setBundleErrors(tempErrorList);
       throw new Error();
     } else {
       return;
@@ -131,6 +142,34 @@ export function Documentation(props: IProps) {
     }
   }
 
+  async function sendDocumentsLater() {
+    setIsSavingFallback(true);
+
+    try {
+      await Promise.all(
+        bundleErrors.map(async (dokumentkrav) => {
+          try {
+            const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+              svar: "dokumentkrav.svar.send.senere",
+              begrunnelse: "Teknisk feil på innsending av filer",
+            });
+
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+          } catch (error) {
+            setSavingFallbackError(true);
+          }
+        })
+      );
+
+      router.push(`/${router.query.uuid}/oppsummering`);
+    } catch {
+      setIsSavingFallback(false);
+      setSavingFallbackError(true);
+    }
+  }
+
   function goToSoknad() {
     router.push(`/${router.query.uuid}`);
   }
@@ -141,7 +180,7 @@ export function Documentation(props: IProps) {
         heading={getAppTekst("dokumentasjonskrav.feilmelding.bundling.header")}
         showWhen={showBundleError}
       >
-        {hasBundleError.map((item) => {
+        {bundleErrors.map((item) => {
           return (
             <ErrorListItem id={item.id} key={item.id}>
               <DokumentkravTitle dokumentkrav={item} />
@@ -168,7 +207,7 @@ export function Documentation(props: IProps) {
         const dokumentkravNumber = index + 1;
         const bundleError =
           showBundleError &&
-          hasBundleError.findIndex((item) => {
+          bundleErrors.findIndex((item) => {
             return item.id === dokumentkrav.id;
           }) > -1;
 
@@ -206,6 +245,41 @@ export function Documentation(props: IProps) {
           {getAppTekst("soknad.til-oppsummering")}
         </Button>
       </nav>
+
+      <Modal
+        className="modal-container"
+        onClose={() => setShowBundleError(false)}
+        open={showBundleError}
+        shouldCloseOnOverlayClick={false}
+      >
+        <Modal.Content>
+          <Heading size={"medium"} spacing>
+            {getAppTekst("dokumentasjonskrav.feilmelding.bundling.header")}
+          </Heading>
+          <BodyLong>{getAppTekst("dokumentasjonskrav.feilmelding.bundling.beskrivelse")}</BodyLong>
+
+          <ul>
+            {bundleErrors.map((item) => {
+              return (
+                <li id={item.id} key={item.id}>
+                  <DokumentkravTitle dokumentkrav={item} />
+                </li>
+              );
+            })}
+          </ul>
+
+          <nav className={soknadStyles.navigation}>
+            <Button variant={"secondary"} onClick={() => setShowBundleError(false)}>
+              Avbryt
+            </Button>
+            <Button variant={"primary"} onClick={sendDocumentsLater} loading={isSavingFallback}>
+              Send inn dokumenter senere
+            </Button>
+          </nav>
+        </Modal.Content>
+      </Modal>
+
+      {savingFallbackError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
 
       <NoSessionModal />
     </>
