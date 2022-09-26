@@ -38,8 +38,7 @@ export function Documentation(props: IProps) {
   const [isSavingFallback, setIsSavingFallback] = useState(false);
   const [savingFallbackError, setSavingFallbackError] = useState(false);
 
-  const [showValidationError, setShowValidationError] = useState(false);
-  const [hasValidationError, setHasValidationError] = useState<IDokumentkrav[]>([]);
+  const [unansweredDokumentkrav, setUnansweredDokumentkrav] = useState<IDokumentkrav[]>([]);
 
   const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
@@ -62,12 +61,18 @@ export function Documentation(props: IProps) {
     }
   }
 
-  function validate() {
-    setShowValidationError(false);
-    setHasValidationError([]);
+  function isAllDokumentkravAnswered(): boolean {
+    setUnansweredDokumentkrav([]);
 
     const unAnswered = dokumentkravList.krav.filter((dokumentkrav) => {
-      return !dokumentkrav.svar;
+      const requiresBegrunnelse = dokumentkrav.svar !== DOKUMENTKRAV_SVAR_SEND_NAA;
+
+      if (!dokumentkrav.svar) {
+        return true;
+      } else if (requiresBegrunnelse && !dokumentkrav.begrunnelse) {
+        return true;
+      }
+      return false;
     });
 
     const lackingFiles = dokumentkravList.krav.filter((dokumentkrav) => {
@@ -75,22 +80,22 @@ export function Documentation(props: IProps) {
     });
 
     if (unAnswered.length > 0 || lackingFiles.length > 0) {
-      setShowValidationError(true);
-      setHasValidationError([...unAnswered, ...lackingFiles]);
+      setUnansweredDokumentkrav([...unAnswered, ...lackingFiles]);
 
-      throw new Error();
+      return false;
     }
+    return true;
   }
 
-  async function bundle() {
+  async function bundleDokumentasjonskrav() {
     setShowBundleError(false);
     setBundleErrors([]);
 
     const tempErrorList: IDokumentkrav[] = [];
-
-    const dokumentkravToBundle = dokumentkravList.krav.filter((dokumentkrav) => {
-      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
-    });
+    const dokumentkravToBundle = dokumentkravList.krav.filter(
+      (dokumentkrav) =>
+        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0
+    );
 
     if (dokumentkravToBundle.length === 0) {
       return;
@@ -100,15 +105,13 @@ export function Documentation(props: IProps) {
 
     await Promise.all(
       dokumentkravToBundle.map(async (dokumentkrav) => {
-        if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
-          try {
-            const response = await bundleDokumentkrav(uuid as string, dokumentkrav);
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-          } catch {
-            tempErrorList.push(dokumentkrav);
+        try {
+          const response = await bundleDokumentkrav(uuid as string, dokumentkrav);
+          if (!response.ok) {
+            throw Error(response.statusText);
           }
+        } catch {
+          tempErrorList.push(dokumentkrav);
         }
       })
     );
@@ -118,24 +121,18 @@ export function Documentation(props: IProps) {
     if (tempErrorList.length > 0) {
       setBundleErrors(tempErrorList);
       throw new Error();
-    } else {
-      return;
     }
   }
 
   async function bundleAndSummary() {
-    setShowValidationError(false);
     setShowBundleError(false);
 
-    try {
-      validate();
-    } catch {
-      setShowValidationError(true);
+    if (!isAllDokumentkravAnswered()) {
       return;
     }
 
     try {
-      await bundle();
+      await bundleDokumentasjonskrav();
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setShowBundleError(true);
@@ -148,17 +145,13 @@ export function Documentation(props: IProps) {
     try {
       await Promise.all(
         bundleErrors.map(async (dokumentkrav) => {
-          try {
-            const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
-              svar: "dokumentkrav.svar.send.senere",
-              begrunnelse: "Teknisk feil på innsending av filer",
-            });
+          const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+            svar: "dokumentkrav.svar.send.senere",
+            begrunnelse: "Teknisk feil på innsending av filer",
+          });
 
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-          } catch (error) {
-            setSavingFallbackError(true);
+          if (!response.ok) {
+            throw Error(response.statusText);
           }
         })
       );
@@ -191,15 +184,13 @@ export function Documentation(props: IProps) {
 
       <ErrorList
         heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
-        showWhen={showValidationError}
+        showWhen={unansweredDokumentkrav.length > 0}
       >
-        {hasValidationError.map((item) => {
-          return (
-            <ErrorListItem id={item.id} key={item.id}>
-              <DokumentkravTitle dokumentkrav={item} />
-            </ErrorListItem>
-          );
-        })}
+        {unansweredDokumentkrav.map((item) => (
+          <ErrorListItem id={item.id} key={item.id}>
+            <DokumentkravTitle dokumentkrav={item} />
+          </ErrorListItem>
+        ))}
       </ErrorList>
 
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
@@ -212,7 +203,7 @@ export function Documentation(props: IProps) {
           }) > -1;
 
         const validationError =
-          hasValidationError.findIndex((item) => {
+          unansweredDokumentkrav.findIndex((item) => {
             return item.id === dokumentkrav.id;
           }) > -1;
 
