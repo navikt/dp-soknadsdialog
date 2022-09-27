@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { formatISO } from "date-fns";
+import { formatISO, isFuture } from "date-fns";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
@@ -16,6 +16,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppTekst } = useSanity();
+  const [isValidFom, setIsValidFom] = useState(true);
+  const [isValidTom, setIsValidTom] = useState(true);
 
   const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
@@ -47,7 +49,11 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(svar: IQuizPeriodeFaktumAnswerType) {
-    saveFaktumToQuiz(faktum, svar);
+    const isValidPeriode = validateInput(svar);
+
+    if (isValidPeriode) {
+      saveFaktumToQuiz(faktum, svar);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -76,6 +82,33 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     );
   }
 
+  function validateInput(svar: IQuizPeriodeFaktumAnswerType) {
+    const { fom, tom } = svar;
+    let validPeriode = true;
+
+    if (fom) {
+      const validFom = !isFuture(new Date(fom));
+      setIsValidFom(validFom);
+      validPeriode = validFom;
+    }
+
+    if (tom) {
+      const validTom = new Date(tom).getTime() >= new Date(fom).getTime();
+      setIsValidTom(validTom);
+      validPeriode = validTom;
+    }
+
+    return validPeriode;
+  }
+
+  function getFomErrorMessage() {
+    if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
+      return getAppTekst("ugyldig.arbeidsforhold.varighet.fra");
+    } else {
+      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
+    }
+  }
+
   return (
     <div className={periodeStyles.faktumPeriode}>
       <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
@@ -95,6 +128,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
+            hasError={!isValidFom}
+            errorMessage={getFomErrorMessage()}
           />
         </div>
         <div>
@@ -105,6 +140,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             onChange={onToDateSelection}
             value={svar?.tom}
             min={svar?.fom}
+            hasError={!isValidTom}
+            errorMessage={getAppTekst("ugyldig.arbeidsforhold.varighet.til")}
           />
         </div>
       </Fieldset>

@@ -8,13 +8,17 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import { isValidTextLength } from "./validations";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
+  const [isValid, setIsValid] = useState(true);
+
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
@@ -24,7 +28,12 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }, [debouncedText]);
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    if (isValidTextLength(value)) {
+      setIsValid(true);
+      saveFaktumToQuiz(faktum, value);
+    } else {
+      setIsValid(false);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -36,6 +45,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     );
   }
 
+  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
+
   return (
     <>
       <TextField
@@ -46,6 +57,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}
         onBlur={debouncedChange.flush}
+        error={!isValid ? errorText : false}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

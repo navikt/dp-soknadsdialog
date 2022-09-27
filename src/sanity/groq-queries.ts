@@ -12,6 +12,7 @@ const faktumFields = `{
   text,
   description,
   helpText,
+  errorMessage,
   unit
 }`;
 

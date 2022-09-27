@@ -30,3 +30,7 @@
 .datePickerInputErrorLabel:before {
   content: "•";
 }
+
+.datePickerWarning {
+  margin-top: var(--navds-spacing-2);
+}

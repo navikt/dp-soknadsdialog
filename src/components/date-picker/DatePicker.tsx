@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import classNames from "classnames";
-import { format, isValid } from "date-fns";
-import styles from "./DatePicker.module.css";
-import { TypedObject } from "@portabletext/types";
+import { Alert } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { formatISO } from "date-fns";
+import { TypedObject } from "@portabletext/types";
+import classNames from "classnames";
+import { format, formatISO, isValid as isValidDate } from "date-fns";
+import React, { useState } from "react";
+import { useSanity } from "../../context/sanity-context";
+import styles from "./DatePicker.module.css";
 
 interface IDatePicker {
   id: string;
   label: string;
   description?: TypedObject | TypedObject[];
+  hasError?: boolean;
+  errorMessage?: string;
+  hasWarning?: boolean;
+  warningMessage?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
@@ -19,10 +24,11 @@ interface IDatePicker {
 }
 
 export function DatePicker(props: IDatePicker) {
+  const { getAppTekst } = useSanity();
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
-  const [isValidDate, setIsValidDate] = useState(true);
+  const [isEmptyDate, setIsEmptyDate] = useState(false);
 
   const DATEPICKER_MIN_DATE = calculateIsoDateFromNow(-100);
   const DATEPICKER_MAX_DATE = calculateIsoDateFromNow(100);
@@ -39,15 +45,15 @@ export function DatePicker(props: IDatePicker) {
   function onChangeDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
     const formattedDate = new Date(selectedDate);
+    setIsEmptyDate(false);
 
     if (!selectedDate) {
       setDate(undefined);
-    } else if (isValid(formattedDate)) {
-      setIsValidDate(true);
+    } else if (isValidDate(formattedDate)) {
       setDate(formattedDate);
       props.onChange(formattedDate);
     } else {
-      setIsValidDate(false);
+      setIsEmptyDate(false);
     }
   }
 
@@ -55,7 +61,8 @@ export function DatePicker(props: IDatePicker) {
     const selectedDate = event.target.value;
 
     if (!selectedDate) {
-      setIsValidDate(false);
+      setIsEmptyDate(true);
+      setDate(undefined);
     }
   }
 
@@ -73,7 +80,7 @@ export function DatePicker(props: IDatePicker) {
       )}
       <input
         className={classNames(styles.datePickerInput, {
-          [styles.datePickerInputError]: !isValidDate,
+          [styles.datePickerInputError]: props.hasError || isEmptyDate,
         })}
         type="date"
         id={props.id}
@@ -86,15 +93,20 @@ export function DatePicker(props: IDatePicker) {
         min={min}
         max={max}
       />
-      {!isValidDate && (
+      {(props.hasError || isEmptyDate) && (
         <div
           className={classNames(
             styles.datePickerInputErrorLabel,
             "navds-error-message navds-label"
           )}
         >
-          Ugyldig dato
+          {isEmptyDate ? getAppTekst("validering.ugyldig-dato") : props.errorMessage}
         </div>
+      )}
+      {props.hasWarning && props.warningMessage && (
+        <Alert variant="warning" className={styles.datePickerWarning}>
+          {props.warningMessage}
+        </Alert>
       )}
     </div>
   );

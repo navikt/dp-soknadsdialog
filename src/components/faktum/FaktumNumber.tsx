@@ -8,14 +8,18 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
+import { isValidNumber, isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
+  const { getAppTekst, getFaktumTextById } = useSanity();
+
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
+  const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
     if (debouncedValue && debouncedValue !== props.faktum.svar) {
@@ -27,19 +31,25 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   //TODO Add som validation for different int vs float
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     let number;
+
     if (!event.target.value) {
       setDebouncedValue(undefined);
       return;
     }
     switch (faktum.type) {
-      case "int":
+      case "int": {
         number = parseInt(event.target.value);
+        validateInput(number);
         debouncedChange(number);
         break;
-      case "double":
+      }
+      case "double": {
         number = parseFloat(event.target.value);
+        validateInput(number);
         debouncedChange(number);
         break;
+      }
+
       default:
         // TODO sentry
         // eslint-disable-next-line no-console
@@ -48,8 +58,30 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
   }
 
+  function validateInput(value: number) {
+    switch (faktum.beskrivendeId) {
+      case "faktum.arbeidsforhold.permittert-prosent": {
+        const isValid = isValidPermitteringsPercent(value);
+        setIsValid(isValid);
+        break;
+      }
+      case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
+        const isValid = isValidArbeidstimer(value);
+        setIsValid(isValid);
+        break;
+      }
+      default: {
+        const isValid = isValidNumber(value);
+        setIsValid(isValid);
+        break;
+      }
+    }
+  }
+
   function saveFaktum(value: number) {
-    saveFaktumToQuiz(faktum, value);
+    if (isValid) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   if (props.faktum.readOnly || props.readonly) {
@@ -60,6 +92,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
       </>
     );
   }
+
+  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.ikke-negativt-tall");
 
   return (
     <>
@@ -72,6 +106,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         type="number"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
+        error={!isValid ? errorText : undefined}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

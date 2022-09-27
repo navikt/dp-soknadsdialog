@@ -8,3 +8,6 @@ export const DOKUMENTKRAV_SVAR_SENDER_IKKE = "dokumentkrav.svar.sender.ikke";
 
 export const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
 export const MAX_FILE_SIZE = 31457280; // 30mb in bytes
+
+export const MAX_TEXT_LENGTH = 500;
+export const YEAR_RANGE = 100;
