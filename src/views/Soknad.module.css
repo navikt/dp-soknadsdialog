@@ -6,13 +6,6 @@
   margin-bottom: var(--navds-spacing-5);
 }
 
-.navigation {
-  display: flex;
-  margin-top: var(--navds-spacing-9);
-
-  gap: var(--navds-spacing-6);
-}
-
 .autoSaveText {
   display: flex;
   align-items: center;

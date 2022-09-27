@@ -90,7 +90,7 @@ export function Soknad() {
         </Alert>
       )}
 
-      <nav className={styles.navigation}>
+      <nav className="navigation-container">
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
             {getAppTekst("knapp.avbryt")}

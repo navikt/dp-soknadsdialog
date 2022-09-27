@@ -155,10 +155,14 @@ export function Dokumentkrav(props: IProps) {
             handleUploadedFiles={handUploadedFiles}
           />
 
-          {bundleError && <Alert variant="error">Feil med bundling</Alert>}
+          {bundleError && (
+            <Alert variant="error">
+              {getAppTekst("dokumentkrav.feilmelding.klarte-ikke-bundle")}
+            </Alert>
+          )}
 
           {validationError && uploadedFiles.length === 0 && (
-            <Alert variant="error">Du må laste opp filer før du kan gå videre</Alert>
+            <Alert variant="info">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
           )}
         </>
       )}

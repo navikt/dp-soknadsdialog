@@ -5,20 +5,24 @@ import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ErrorTypesEnum } from "../../types/error.types";
-import soknadStyles from "../../views/Soknad.module.css";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { DokumentkravTitle } from "./DokumentkravTitle";
 
 interface IProps {
   dokumentkravList: IDokumentkrav[];
+  isOpen: boolean;
+  toggleVisibility: (val: boolean) => void;
 }
 
-export function DokumentkravBundleErrorModal({ dokumentkravList }: IProps) {
+export function DokumentkravBundleErrorModal({
+  dokumentkravList,
+  isOpen,
+  toggleVisibility,
+}: IProps) {
   const router = useRouter();
   const { uuid } = router.query;
   const { getAppTekst } = useSanity();
 
-  const [showModal, setShowModal] = useState(true);
   const [isSavingSvar, setIsSavingSvar] = useState(false);
   const [savingSvarError, setSavingSvarError] = useState(false);
 
@@ -52,7 +56,7 @@ export function DokumentkravBundleErrorModal({ dokumentkravList }: IProps) {
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setIsSavingSvar(false);
-      setShowModal(false);
+      toggleVisibility(false);
       setSavingSvarError(true);
     }
   }
@@ -62,15 +66,15 @@ export function DokumentkravBundleErrorModal({ dokumentkravList }: IProps) {
       <Modal
         className="modal-container modal-container--error"
         closeButton={false}
-        onClose={() => undefined}
-        open={showModal}
+        onClose={() => toggleVisibility(false)}
+        open={isOpen}
         shouldCloseOnOverlayClick={false}
       >
         <Modal.Content>
           <Heading size={"medium"} spacing>
-            {getAppTekst("dokumentasjonskrav.feilmelding.bundling.header")}
+            {getAppTekst("dokumentkrav.bundle-error.tittel")}
           </Heading>
-          <BodyLong>{getAppTekst("dokumentasjonskrav.feilmelding.bundling.beskrivelse")}</BodyLong>
+          <BodyLong>{getAppTekst("dokumentkrav.bundle-error.beskrivelse")}</BodyLong>
 
           <ul>
             {dokumentkravList.map((item) => {
@@ -82,12 +86,12 @@ export function DokumentkravBundleErrorModal({ dokumentkravList }: IProps) {
             })}
           </ul>
 
-          <nav className={soknadStyles.navigation}>
-            <Button variant={"secondary"} onClick={() => setShowModal(false)}>
-              Avbryt
+          <nav className="navigation-container">
+            <Button variant={"secondary"} onClick={() => toggleVisibility(false)}>
+              {getAppTekst("dokumentkrav.bundle-error.avbryt")}
             </Button>
             <Button variant={"primary"} onClick={sendDocumentsLater} loading={isSavingSvar}>
-              Send inn dokumenter senere
+              {getAppTekst("dokumentkrav.bundle-error.send.senere")}
             </Button>
           </nav>
         </Modal.Content>
