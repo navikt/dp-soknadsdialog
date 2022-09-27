@@ -1,12 +1,12 @@
 import { addMonths, addYears, addWeeks } from "date-fns";
 import {
-  isPositiveNumber,
   isValidArbeidstimer,
   isValidPermitteringsPercent,
   isOverTwoWeeks,
   isValidTextLength,
   isValidYearRange,
   isValidDateYear,
+  isValidNumber,
 } from "./validations";
 
 const validTextLengthMock =
@@ -15,16 +15,16 @@ const inValidTextLengthMock =
   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like.";
 
 describe("Input validation", () => {
-  test("Validate positive number", async () => {
-    expect(isPositiveNumber(30)).toBe(true);
-    expect(isPositiveNumber(-20)).toBe(false);
-    expect(isPositiveNumber(37.5)).toBe(true);
-    expect(isPositiveNumber(-37.5)).toBe(false);
+  test("Validate number", async () => {
+    expect(isValidNumber(30)).toBe(true);
+    expect(isValidNumber(-20)).toBe(false);
+    expect(isValidNumber(parseFloat("30,5"))).toBe(true);
+    expect(isValidNumber(-37.5)).toBe(false);
   });
 
   test("Validate text length", async () => {
     expect(isValidTextLength(validTextLengthMock)).toBe(true);
-    expect(isPositiveNumber(inValidTextLengthMock)).toBe(false);
+    expect(isValidTextLength(inValidTextLengthMock)).toBe(false);
   });
 
   test("Validate arbeidstimer", async () => {
@@ -42,14 +42,12 @@ describe("Input validation", () => {
   test("Validate soknad date", async () => {
     const today = new Date();
     const nextThreeWeeks = addWeeks(new Date(), 3);
-    const nextTwoWeeks = addWeeks(new Date(), 2);
     const lastWeek = addWeeks(new Date(), -1);
     const nextMonth = addMonths(new Date(), 1);
     const lastMonth = addMonths(new Date(), -1);
 
     expect(isOverTwoWeeks(today)).toBe(false);
     expect(isOverTwoWeeks(nextThreeWeeks)).toBe(true);
-    expect(isOverTwoWeeks(nextTwoWeeks)).toBe(true);
     expect(isOverTwoWeeks(lastWeek)).toBe(false);
     expect(isOverTwoWeeks(nextMonth)).toBe(true);
     expect(isOverTwoWeeks(lastMonth)).toBe(false);

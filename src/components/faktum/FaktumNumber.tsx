@@ -8,7 +8,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import { isPositiveNumber, isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
+import { isValidNumber, isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -71,7 +71,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         break;
       }
       default: {
-        const isValid = isPositiveNumber(value);
+        const isValid = isValidNumber(value);
         setIsValid(isValid);
         break;
       }

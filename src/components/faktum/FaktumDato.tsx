@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { BodyShort, Label } from "@navikt/ds-react";
 import { formatISO, isFuture } from "date-fns";
-import { useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
