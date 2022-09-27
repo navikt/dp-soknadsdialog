@@ -66,7 +66,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
             <Modal
               closeButton={false}
               shouldCloseOnOverlayClick={false}
-              className={"modal-container"}
+              className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >

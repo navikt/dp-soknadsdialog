@@ -60,8 +60,9 @@ export function DokumentkravBundleErrorModal({ dokumentkravList }: IProps) {
   return (
     <>
       <Modal
-        className="modal-container"
-        onClose={() => setShowModal(false)}
+        className="modal-container modal-container--error"
+        closeButton={false}
+        onClose={() => undefined}
         open={showModal}
         shouldCloseOnOverlayClick={false}
       >
