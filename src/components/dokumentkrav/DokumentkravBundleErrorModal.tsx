@@ -38,17 +38,13 @@ export function DokumentkravBundleErrorModal({
     try {
       await Promise.all(
         dokumentkravList.map(async (dokumentkrav) => {
-          try {
-            const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
-              svar: "dokumentkrav.svar.send.senere",
-              begrunnelse: "Teknisk feil på innsending av filer",
-            });
+          const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+            svar: "dokumentkrav.svar.send.senere",
+            begrunnelse: "Teknisk feil på innsending av filer",
+          });
 
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-          } catch (error) {
-            setSavingSvarError(true);
+          if (!response.ok) {
+            throw Error(response.statusText);
           }
         })
       );
