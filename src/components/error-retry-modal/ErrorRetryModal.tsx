@@ -1,5 +1,4 @@
 import { Button, Heading, Modal, BodyLong } from "@navikt/ds-react";
-import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
@@ -58,7 +57,7 @@ export function ErrorRetryModal(props: IProps) {
 
   return (
     <Modal
-      className={classNames("modal-container", [styles.errorRetryModal])}
+      className="modal-container modal-container--error"
       onClose={() => {
         return;
       }}

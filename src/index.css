@@ -15,8 +15,21 @@
 
 .modal-container {
   width: 100%;
-  padding: var(--navds-spacing-4);
   max-width: var(--app-max-width);
+  padding: var(--navds-spacing-2);
+}
+
+.modal-container--generator {
+  padding: var(--navds-spacing-4);
+}
+
+.modal-container--error {
+  background-color: var(--navds-global-color-orange-50);
+  box-shadow: 0 0 0 1px var(--navds-global-color-orange-600);
+}
+
+.modal-container--error:focus {
+  box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
 }
 
 .modal-container__button-container button:first-child {

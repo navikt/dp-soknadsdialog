@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Alert, BodyLong, Button, Detail, Heading, Modal } from "@navikt/ds-react";
+import React, { useState } from "react";
+import { Alert, Button, Detail } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../context/sanity-context";
@@ -9,7 +9,7 @@ import { Left } from "@navikt/ds-icons";
 import soknadStyles from "./Soknad.module.css";
 import styles from "./Dokumentasjonskrav.module.css";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../constants";
-import { bundleDokumentkrav, saveDokumentkravSvar } from "../api/dokumentasjon-api";
+import { bundleDokumentkrav } from "../api/dokumentasjon-api";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
@@ -17,8 +17,7 @@ import {
 } from "../types/documentation.types";
 import { DokumentkravTitle } from "../components/dokumentkrav/DokumentkravTitle";
 import { ErrorList, ErrorListItem } from "../components/error-list/ErrorList";
-import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../types/error.types";
+import { DokumentkravBundleErrorModal } from "../components/dokumentkrav/DokumentkravBundleErrorModal";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -35,21 +34,13 @@ export function Documentation(props: IProps) {
   const [showBundleError, setShowBundleError] = useState(false);
   const [bundleErrors, setBundleErrors] = useState<IDokumentkrav[]>([]);
 
-  const [isSavingFallback, setIsSavingFallback] = useState(false);
-  const [savingFallbackError, setSavingFallbackError] = useState(false);
-
-  const [unansweredDokumentkrav, setUnansweredDokumentkrav] = useState<IDokumentkrav[]>([]);
+  const [showValidationError, setShowValidationError] = useState(false);
+  const [hasValidationError, setHasValidationError] = useState<IDokumentkrav[]>([]);
 
   const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
   const numberOfDokumentkravText = getAppTekst("dokumentkrav.nummer.av.krav");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   function updateDokumentkrav(dokumentkrav: IDokumentkrav, updatedFields: IDokumentkravChanges) {
     const tempList = { ...dokumentkravList };
@@ -61,18 +52,12 @@ export function Documentation(props: IProps) {
     }
   }
 
-  function isAllDokumentkravAnswered(): boolean {
-    setUnansweredDokumentkrav([]);
+  function validate() {
+    setShowValidationError(false);
+    setHasValidationError([]);
 
     const unAnswered = dokumentkravList.krav.filter((dokumentkrav) => {
-      const requiresBegrunnelse = dokumentkrav.svar !== DOKUMENTKRAV_SVAR_SEND_NAA;
-
-      if (!dokumentkrav.svar) {
-        return true;
-      } else if (requiresBegrunnelse && !dokumentkrav.begrunnelse) {
-        return true;
-      }
-      return false;
+      return !dokumentkrav.svar;
     });
 
     const lackingFiles = dokumentkravList.krav.filter((dokumentkrav) => {
@@ -80,22 +65,22 @@ export function Documentation(props: IProps) {
     });
 
     if (unAnswered.length > 0 || lackingFiles.length > 0) {
-      setUnansweredDokumentkrav([...unAnswered, ...lackingFiles]);
+      setShowValidationError(true);
+      setHasValidationError([...unAnswered, ...lackingFiles]);
 
-      return false;
+      throw new Error();
     }
-    return true;
   }
 
-  async function bundleDokumentasjonskrav() {
+  async function bundle() {
     setShowBundleError(false);
     setBundleErrors([]);
 
     const tempErrorList: IDokumentkrav[] = [];
-    const dokumentkravToBundle = dokumentkravList.krav.filter(
-      (dokumentkrav) =>
-        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0
-    );
+
+    const dokumentkravToBundle = dokumentkravList.krav.filter((dokumentkrav) => {
+      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
+    });
 
     if (dokumentkravToBundle.length === 0) {
       return;
@@ -105,13 +90,15 @@ export function Documentation(props: IProps) {
 
     await Promise.all(
       dokumentkravToBundle.map(async (dokumentkrav) => {
-        try {
-          const response = await bundleDokumentkrav(uuid as string, dokumentkrav);
-          if (!response.ok) {
-            throw Error(response.statusText);
+        if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
+          try {
+            const response = await bundleDokumentkrav(uuid as string, dokumentkrav);
+            if (!response.ok) {
+              throw Error(response.statusText);
+            }
+          } catch {
+            tempErrorList.push(dokumentkrav);
           }
-        } catch {
-          tempErrorList.push(dokumentkrav);
         }
       })
     );
@@ -121,45 +108,27 @@ export function Documentation(props: IProps) {
     if (tempErrorList.length > 0) {
       setBundleErrors(tempErrorList);
       throw new Error();
+    } else {
+      return;
     }
   }
 
   async function bundleAndSummary() {
+    setShowValidationError(false);
     setShowBundleError(false);
 
-    if (!isAllDokumentkravAnswered()) {
+    try {
+      validate();
+    } catch {
+      setShowValidationError(true);
       return;
     }
 
     try {
-      await bundleDokumentasjonskrav();
+      await bundle();
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setShowBundleError(true);
-    }
-  }
-
-  async function sendDocumentsLater() {
-    setIsSavingFallback(true);
-
-    try {
-      await Promise.all(
-        bundleErrors.map(async (dokumentkrav) => {
-          const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
-            svar: "dokumentkrav.svar.send.senere",
-            begrunnelse: "Teknisk feil på innsending av filer",
-          });
-
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-        })
-      );
-
-      router.push(`/${router.query.uuid}/oppsummering`);
-    } catch {
-      setIsSavingFallback(false);
-      setSavingFallbackError(true);
     }
   }
 
@@ -184,13 +153,15 @@ export function Documentation(props: IProps) {
 
       <ErrorList
         heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
-        showWhen={unansweredDokumentkrav.length > 0}
+        showWhen={showValidationError}
       >
-        {unansweredDokumentkrav.map((item) => (
-          <ErrorListItem id={item.id} key={item.id}>
-            <DokumentkravTitle dokumentkrav={item} />
-          </ErrorListItem>
-        ))}
+        {hasValidationError.map((item) => {
+          return (
+            <ErrorListItem id={item.id} key={item.id}>
+              <DokumentkravTitle dokumentkrav={item} />
+            </ErrorListItem>
+          );
+        })}
       </ErrorList>
 
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
@@ -203,7 +174,7 @@ export function Documentation(props: IProps) {
           }) > -1;
 
         const validationError =
-          unansweredDokumentkrav.findIndex((item) => {
+          hasValidationError.findIndex((item) => {
             return item.id === dokumentkrav.id;
           }) > -1;
 
@@ -237,41 +208,7 @@ export function Documentation(props: IProps) {
         </Button>
       </nav>
 
-      <Modal
-        className="modal-container"
-        onClose={() => setShowBundleError(false)}
-        open={showBundleError}
-        shouldCloseOnOverlayClick={false}
-      >
-        <Modal.Content>
-          <Heading size={"medium"} spacing>
-            {getAppTekst("dokumentasjonskrav.feilmelding.bundling.header")}
-          </Heading>
-          <BodyLong>{getAppTekst("dokumentasjonskrav.feilmelding.bundling.beskrivelse")}</BodyLong>
-
-          <ul>
-            {bundleErrors.map((item) => {
-              return (
-                <li id={item.id} key={item.id}>
-                  <DokumentkravTitle dokumentkrav={item} />
-                </li>
-              );
-            })}
-          </ul>
-
-          <nav className={soknadStyles.navigation}>
-            <Button variant={"secondary"} onClick={() => setShowBundleError(false)}>
-              Avbryt
-            </Button>
-            <Button variant={"primary"} onClick={sendDocumentsLater} loading={isSavingFallback}>
-              Send inn dokumenter senere
-            </Button>
-          </nav>
-        </Modal.Content>
-      </Modal>
-
-      {savingFallbackError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
-
+      {showBundleError && <DokumentkravBundleErrorModal dokumentkravList={bundleErrors} />}
       <NoSessionModal />
     </>
   );
