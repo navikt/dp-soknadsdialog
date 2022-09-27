@@ -81,7 +81,7 @@ describe("Dokumentkrav", () => {
     await user.click(screen.getByLabelText("dokumentkrav.svar.sender.ikke"));
 
     await waitFor(() => {
-      expect(screen.getByLabelText("dokumentkrav.sender.ikke.begrunnelse")).toBeInTheDocument();
+      expect(screen.getByLabelText("dokumentkrav.sender.ikke.naa.begrunnelse")).toBeInTheDocument();
     });
   });
 
