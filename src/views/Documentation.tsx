@@ -6,7 +6,6 @@ import { useSanity } from "../context/sanity-context";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
-import soknadStyles from "./Soknad.module.css";
 import styles from "./Dokumentasjonskrav.module.css";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../constants";
 import { bundleDokumentkrav } from "../api/dokumentasjon-api";
@@ -32,6 +31,7 @@ export function Documentation(props: IProps) {
   );
   const [isBundling, setIsBundling] = useState(false);
   const [showBundleError, setShowBundleError] = useState(false);
+  const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [bundleErrors, setBundleErrors] = useState<IDokumentkrav[]>([]);
 
   const [showValidationError, setShowValidationError] = useState(false);
@@ -129,6 +129,7 @@ export function Documentation(props: IProps) {
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setShowBundleError(true);
+      setShowBundleErrorModal(true);
     }
   }
 
@@ -138,19 +139,6 @@ export function Documentation(props: IProps) {
 
   return (
     <>
-      <ErrorList
-        heading={getAppTekst("dokumentasjonskrav.feilmelding.bundling.header")}
-        showWhen={showBundleError}
-      >
-        {bundleErrors.map((item) => {
-          return (
-            <ErrorListItem id={item.id} key={item.id}>
-              <DokumentkravTitle dokumentkrav={item} />
-            </ErrorListItem>
-          );
-        })}
-      </ErrorList>
-
       <ErrorList
         heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
         showWhen={showValidationError}
@@ -198,7 +186,7 @@ export function Documentation(props: IProps) {
         </Alert>
       )}
 
-      <nav className={soknadStyles.navigation}>
+      <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
           {getAppTekst("knapp.forrige")}
         </Button>
@@ -208,7 +196,11 @@ export function Documentation(props: IProps) {
         </Button>
       </nav>
 
-      {showBundleError && <DokumentkravBundleErrorModal dokumentkravList={bundleErrors} />}
+      <DokumentkravBundleErrorModal
+        dokumentkravList={bundleErrors}
+        isOpen={showBundleErrorModal}
+        toggleVisibility={setShowBundleErrorModal}
+      />
       <NoSessionModal />
     </>
   );
