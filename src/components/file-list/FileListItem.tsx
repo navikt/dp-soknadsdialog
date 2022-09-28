@@ -53,7 +53,7 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
         className={styles.deleteButton}
         variant="tertiary"
         onClick={handleDeleteFile}
-        aria-labelledby={file.filsti}
+        aria-describedby={file.filsti}
       >
         <Delete />
         Slett fil
