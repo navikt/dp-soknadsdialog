@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Dokumentasjonskrav.module.css";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../constants";
-import { bundleDokumentkrav } from "../api/dokumentasjon-api";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
@@ -17,6 +16,7 @@ import {
 import { DokumentkravTitle } from "../components/dokumentkrav/DokumentkravTitle";
 import { ErrorList, ErrorListItem } from "../components/error-list/ErrorList";
 import { DokumentkravBundleErrorModal } from "../components/dokumentkrav/DokumentkravBundleErrorModal";
+import { useDokumentkravBundler } from "../hooks/dokumentkrav/useDokumentkravBundler";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -24,15 +24,15 @@ interface IProps {
 
 export function Documentation(props: IProps) {
   const router = useRouter();
-  const { uuid } = router.query;
 
   const [dokumentkravList, setDokumentkravList] = useState<IDokumentkravList>(
     props.dokumentkravList
   );
-  const [isBundling, setIsBundling] = useState(false);
+
+  const { bundle, isBundling, bundleErrors } = useDokumentkravBundler();
+
   const [showBundleError, setShowBundleError] = useState(false);
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
-  const [bundleErrors, setBundleErrors] = useState<IDokumentkrav[]>([]);
 
   const [showValidationError, setShowValidationError] = useState(false);
   const [hasValidationError, setHasValidationError] = useState<IDokumentkrav[]>([]);
@@ -72,47 +72,6 @@ export function Documentation(props: IProps) {
     }
   }
 
-  async function bundle() {
-    setShowBundleError(false);
-    setBundleErrors([]);
-
-    const tempErrorList: IDokumentkrav[] = [];
-
-    const dokumentkravToBundle = dokumentkravList.krav.filter((dokumentkrav) => {
-      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
-    });
-
-    if (dokumentkravToBundle.length === 0) {
-      return;
-    }
-
-    setIsBundling(true);
-
-    await Promise.all(
-      dokumentkravToBundle.map(async (dokumentkrav) => {
-        if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
-          try {
-            const response = await bundleDokumentkrav(uuid as string, dokumentkrav);
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-          } catch {
-            tempErrorList.push(dokumentkrav);
-          }
-        }
-      })
-    );
-
-    setIsBundling(false);
-
-    if (tempErrorList.length > 0) {
-      setBundleErrors(tempErrorList);
-      throw new Error();
-    } else {
-      return;
-    }
-  }
-
   async function bundleAndSummary() {
     setShowValidationError(false);
     setShowBundleError(false);
@@ -125,7 +84,7 @@ export function Documentation(props: IProps) {
     }
 
     try {
-      await bundle();
+      await bundle(dokumentkravList.krav);
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setShowBundleError(true);
