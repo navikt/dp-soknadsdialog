@@ -50,7 +50,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         break;
       }
       case "double": {
-        validateInput(parseInt(value));
+        debouncedChange(parseInt(value));
         break;
       }
 
