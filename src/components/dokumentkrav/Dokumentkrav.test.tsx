@@ -1,5 +1,11 @@
 import React from "react";
-import { render, waitFor, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  waitFor,
+  screen,
+  fireEvent,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Dokumentkrav } from "./Dokumentkrav";
 import { SanityProvider } from "../../context/sanity-context";
@@ -173,6 +179,51 @@ describe("Dokumentkrav", () => {
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toEqual(0);
+    });
+  });
+  describe("Delete uploaded file", () => {
+    beforeEach(() => {
+      fetch.enableMocks();
+    });
+
+    afterEach(() => {
+      fetch.mockReset();
+    });
+
+    it("Should delete an uploaded file and remove it from the view", async () => {
+      const fileToTest = mockDokumentkravList.krav[0].filer[0];
+
+      // Request to delete file
+      fetch.mockResponseOnce(
+        JSON.stringify({
+          ok: true,
+        })
+      );
+
+      const user = userEvent.setup();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
+        </SanityProvider>
+      );
+
+      expect(await screen.findByText(fileToTest.filnavn)).toBeInTheDocument();
+
+      const deleteButton = screen.getByRole("button", { description: fileToTest.filnavn });
+
+      user.click(deleteButton);
+
+      await waitForElementToBeRemoved(deleteButton);
+
+      const deleteRequestBody = fetch.mock.calls[0][1]?.body as string;
+      const requestJson = JSON.parse(deleteRequestBody);
+
+      expect(fetch.mock.calls.length).toEqual(1);
+      expect(fetch.mock.calls[0][1]?.method).toEqual("DELETE");
+
+      expect(requestJson.filnavn).toBe(fileToTest.filnavn);
+      expect(requestJson.filsti).toBe(fileToTest.filsti);
     });
   });
 });
