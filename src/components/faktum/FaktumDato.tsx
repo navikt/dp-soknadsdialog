@@ -22,7 +22,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   useEffect(() => {
     if (props.faktum.svar) {
-      const hasWarning = validateInput(new Date(props.faktum.svar));
+      const hasWarning = !validateInput(new Date(props.faktum.svar));
       setHasWarnining(hasWarning);
     }
   }, []);
