@@ -127,6 +127,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={isValid !== true ? getErrorMessage() : undefined}
+        className={styles.faktumNumber}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
