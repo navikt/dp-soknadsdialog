@@ -23,7 +23,6 @@ export function Soknad() {
 
   const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
-  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
@@ -103,13 +102,13 @@ export function Soknad() {
           </Button>
         )}
 
-        {!isLastSection && (
+        {!soknadState.ferdig && (
           <Button onClick={() => goNext()} icon={<Right />} iconPosition={"right"}>
             {getAppTekst("knapp.neste")}
           </Button>
         )}
 
-        {isLastSection && soknadState.ferdig && (
+        {soknadState.ferdig && (
           <Button onClick={() => goToDocumentation()}>
             {getAppTekst("soknad.til-dokumentasjon")}
           </Button>
