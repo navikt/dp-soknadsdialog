@@ -29,7 +29,7 @@ export function Documentation(props: IProps) {
     props.dokumentkravList
   );
 
-  const { bundle, isBundling, bundleErrors } = useDokumentkravBundler();
+  const { bundleFiles, isBundling, bundleErrors } = useDokumentkravBundler();
 
   const [showBundleError, setShowBundleError] = useState(false);
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
@@ -84,7 +84,7 @@ export function Documentation(props: IProps) {
     }
 
     try {
-      await bundle(dokumentkravList.krav);
+      await bundleFiles(dokumentkravList.krav);
       router.push(`/${router.query.uuid}/oppsummering`);
     } catch {
       setShowBundleError(true);
