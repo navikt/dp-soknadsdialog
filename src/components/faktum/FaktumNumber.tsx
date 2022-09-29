@@ -38,7 +38,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     const { value } = event.target;
 
     if (!value) {
-      setDebouncedValue(undefined);
+      debouncedChange(undefined);
       setIsValid(ValidationErrorTypes.EmptyValue);
 
       return;
@@ -50,7 +50,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         break;
       }
       case "double": {
-        debouncedChange(parseInt(value));
+        debouncedChange(parseFloat(value));
         break;
       }
 
