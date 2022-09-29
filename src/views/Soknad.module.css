@@ -6,20 +6,6 @@
   margin-bottom: var(--navds-spacing-5);
 }
 
-.navigation {
-  display: flex;
-  margin-top: var(--navds-spacing-9);
-}
-
-.navigation button {
-  margin-bottom: var(--navds-spacing-6);
-  margin-right: var(--navds-spacing-6);
-}
-
-.navigation button:last-child {
-  margin-right: 0;
-}
-
 .autoSaveText {
   display: flex;
   align-items: center;

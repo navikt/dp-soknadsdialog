@@ -8,13 +8,19 @@ import styles from "./AlertText.module.css";
 interface IProps {
   alertText: ISanityAlertText;
   spacingTop?: boolean;
+  spacingBottom?: boolean;
 }
 
 export function AlertText(props: IProps) {
   const { type, title, body } = props.alertText;
 
   return (
-    <div className={classNames(styles.alertText, { [styles.spacingTop]: props.spacingTop })}>
+    <div
+      className={classNames(styles.alertText, {
+        [styles.spacingTop]: props.spacingTop,
+        [styles.spacingBottom]: props.spacingBottom,
+      })}
+    >
       <Alert variant={type}>
         {title && (
           <Heading size={"small"} className={styles.alertTextHeading}>

@@ -38,14 +38,23 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
   return (
     <li className={styles.fileItem}>
       <div>
-        <Link href={api(`/documentation/${file.filsti}/download`)} download={file.filnavn}>
+        <Link
+          href={api(`/documentation/${file.filsti}/download`)}
+          download={file.filnavn}
+          id={file.filsti}
+        >
           <BodyShort size="medium">{file.filnavn}</BodyShort>
         </Link>
         <BodyShort className={styles.uploadedText} size="small">
           Lastet opp
         </BodyShort>
       </div>
-      <Button className={styles.deleteButton} variant="tertiary" onClick={handleDeleteFile}>
+      <Button
+        className={styles.deleteButton}
+        variant="tertiary"
+        onClick={handleDeleteFile}
+        aria-describedby={file.filsti}
+      >
         <Delete />
         Slett fil
       </Button>

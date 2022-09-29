@@ -13,3 +13,7 @@
 .spacingTop {
   margin-top: var(--navds-spacing-4);
 }
+
+.spacingBottom {
+  margin-bottom: var(--navds-spacing-4);
+}

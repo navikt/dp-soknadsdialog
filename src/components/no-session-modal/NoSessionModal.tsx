@@ -1,5 +1,4 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import classNames from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
@@ -46,7 +45,7 @@ export function NoSessionModal() {
 
   return (
     <Modal
-      className={classNames("modal-container", [styles.noSessionModal])}
+      className="modal-container modal-container--error"
       onClose={() => {
         return;
       }}

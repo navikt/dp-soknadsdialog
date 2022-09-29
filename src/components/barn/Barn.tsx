@@ -60,7 +60,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
             </GeneratorFaktumCard>
 
             <Modal
-              className={"modal-container"}
+              className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
               shouldCloseOnOverlayClick={false}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}

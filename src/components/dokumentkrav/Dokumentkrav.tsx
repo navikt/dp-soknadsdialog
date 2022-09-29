@@ -10,11 +10,7 @@ import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
-import {
-  DOKUMENTKRAV_SVAR_SEND_NAA,
-  DOKUMENTKRAV_SVAR_SENDER_IKKE,
-  MAX_FILE_SIZE,
-} from "../../constants";
+import { DOKUMENTKRAV_SVAR_SEND_NAA, MAX_FILE_SIZE } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -120,6 +116,9 @@ export function Dokumentkrav(props: IProps) {
           legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
           onChange={setSvar}
           value={svar}
+          error={
+            validationError && !svar && getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
+          }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
             // We need a custom ID since multiple dokumentkrav are shown on the same page.
@@ -137,14 +136,10 @@ export function Dokumentkrav(props: IProps) {
         </RadioGroup>
       </div>
 
-      {alertText && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingBottom />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
-      )}
-
-      {validationError && !svar && (
-        <Alert variant="error">Du må svare på dokumentkravet før du kan gå videre</Alert>
       )}
 
       {svar === DOKUMENTKRAV_SVAR_SEND_NAA && (
@@ -160,16 +155,24 @@ export function Dokumentkrav(props: IProps) {
             handleUploadedFiles={handUploadedFiles}
           />
 
-          {bundleError && <Alert variant="error">Feil med bundling</Alert>}
+          {bundleError && (
+            <Alert variant="error">
+              {getAppTekst("dokumentkrav.feilmelding.klarte-ikke-bundle")}
+            </Alert>
+          )}
 
           {validationError && uploadedFiles.length === 0 && (
-            <Alert variant="error">Du må laste opp filer før du kan gå videre</Alert>
+            <Alert variant="info">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
           )}
         </>
       )}
 
-      {svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-        <DokumentkravBegrunnelse begrunnelse={begrunnelse} setBegrunnelse={setBegrunnelse} />
+      {svar && svar !== DOKUMENTKRAV_SVAR_SEND_NAA && (
+        <DokumentkravBegrunnelse
+          begrunnelse={begrunnelse}
+          setBegrunnelse={setBegrunnelse}
+          validationError={validationError}
+        />
       )}
 
       {hasError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
