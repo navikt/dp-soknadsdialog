@@ -12,9 +12,9 @@ export function NoSessionModal() {
 
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const [modalOpen, setModalOpen] = useState(false);
   const { session } = useSession({ enforceLogin: !isLocalhost });
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (Modal.setAppElement) {

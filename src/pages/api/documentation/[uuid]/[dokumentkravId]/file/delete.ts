@@ -37,13 +37,11 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     if (!mellomlagringResponse.ok) {
       // TODO Should be logged to sentry, but it does not effect user so we do not throw error here
       // eslint-disable-next-line no-console
-      console.log("Feil ved sletting av fil i dp-mellomlagring");
+      console.error("Feil ved sletting av fil i dp-mellomlagring");
     }
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log("CATCH ERROR delteFile(): ", error);
     return res.status(500).json(error);
   }
 }

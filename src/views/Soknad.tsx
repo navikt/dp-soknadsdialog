@@ -20,7 +20,6 @@ export function Soknad() {
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-
   const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
@@ -43,7 +42,7 @@ export function Soknad() {
     }
   }, [soknadState]);
 
-  function goNext() {
+  function navigateToNextSection() {
     if (currentSection.ferdig) {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
@@ -52,12 +51,12 @@ export function Soknad() {
     }
   }
 
-  function goPrevious() {
+  function navigateToPreviousSection() {
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
-  function goToDocumentation() {
+  function navigateToDocumentation() {
     router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
@@ -98,19 +97,19 @@ export function Soknad() {
         )}
 
         {!isFirstSection && (
-          <Button variant={"secondary"} onClick={() => goPrevious()} icon={<Left />}>
+          <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
             {getAppTekst("knapp.forrige")}
           </Button>
         )}
 
         {!isLastSection && (
-          <Button onClick={() => goNext()} icon={<Right />} iconPosition={"right"}>
+          <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
             {getAppTekst("knapp.neste")}
           </Button>
         )}
 
         {isLastSection && soknadState.ferdig && (
-          <Button onClick={() => goToDocumentation()}>
+          <Button onClick={() => navigateToDocumentation()}>
             {getAppTekst("soknad.til-dokumentasjon")}
           </Button>
         )}

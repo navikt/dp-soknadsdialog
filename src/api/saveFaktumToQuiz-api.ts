@@ -6,23 +6,13 @@ export async function saveFaktum(
   faktum: QuizFaktum | IQuizGeneratorFaktum,
   svar: QuizFaktumSvarType | QuizFaktum[][]
 ) {
-  const url = api(`/soknad/${uuid}/faktum/${faktum.id}`);
-
-  const saveFaktumToQuiz = await fetch(url, {
+  const res = await fetch(api(`/soknad/${uuid}/faktum/${faktum.id}`), {
     method: "PUT",
     body: JSON.stringify({ ...faktum, svar }),
   });
 
-  try {
-    const res = await saveFaktumToQuiz;
-
-    if (res.ok) {
-      return res.json();
-    } else {
-      throw Error(res.statusText);
-    }
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
+  if (!res.ok) {
+    throw new Error(res.statusText);
   }
+  return res.json();
 }
