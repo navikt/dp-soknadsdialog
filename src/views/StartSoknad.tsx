@@ -66,9 +66,9 @@ export function StartSoknad() {
           setShowConsentValidation(!showConsentValidation);
         }}
         error={
-          showConsentValidation
+          showConsentValidation && !consentGiven
             ? getAppTekst("start-soknad.samtykke-innhenting-data.validering-tekst")
-            : false
+            : undefined
         }
       />
 
