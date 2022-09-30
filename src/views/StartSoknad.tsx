@@ -15,10 +15,16 @@ export function StartSoknad() {
   const { session } = useSession({ enforceLogin: false });
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [isError, setIsError] = useState(false);
   const { getAppTekst, getInfosideText } = useSanity();
 
   async function startSoknad() {
+    if (!consentGiven) {
+      setShowConsentValidation(true);
+      return;
+    }
+
     try {
       setIsCreatingSoknadUUID(true);
       const uuid = await getUuid();
@@ -55,23 +61,23 @@ export function StartSoknad() {
         className="confirmation-panel"
         checked={consentGiven}
         label={getAppTekst("start-soknad.samtykke-innhenting-data.checkbox-label")}
-        onChange={() => setConsentGiven(!consentGiven)}
-      >
-        {getAppTekst("start-soknad.samtykke-innhenting-data.tekst")}
-      </ConfirmationPanel>
+        onChange={() => {
+          setConsentGiven(!consentGiven);
+          setShowConsentValidation(!showConsentValidation);
+        }}
+        error={
+          showConsentValidation
+            ? getAppTekst("start-soknad.samtykke-innhenting-data.validering-tekst")
+            : false
+        }
+      />
 
       {session === undefined && (
         <Button variant="primary" size="medium" onClick={login}>
           logg inn først!
         </Button>
       )}
-      <Button
-        variant="primary"
-        size="medium"
-        onClick={startSoknad}
-        loading={isCreatingSoknadUUID}
-        disabled={!consentGiven}
-      >
+      <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
         {getAppTekst("start-soknad.start-knapp")}
       </Button>
 
