@@ -5,7 +5,7 @@ import { StartSoknad } from "../views/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
-import Error from "./_error";
+import ErrorPage from "./_error";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -31,7 +31,7 @@ export async function getServerSideProps(
 export default function Soknad(props: IProps) {
   if (!props.sanityTexts.apptekster) {
     return (
-      <Error
+      <ErrorPage
         title="Vi har tekniske problemer"
         details="Beklager, vi får ikke kontakt med systemene våre akkurat nå. Svarene dine er lagret og du kan prøve igjen om litt."
       />

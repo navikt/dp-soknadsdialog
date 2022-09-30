@@ -11,14 +11,8 @@ interface IProps {
   statusCode?: number;
 }
 
-export default function Error(props: IProps) {
+export default function ErrorPage(props: IProps) {
   const { statusCode, title, details } = props;
-
-  useEffect(() => {
-    if (statusCode === 404) {
-      window.location.assign("https://www.nav.no/minside/");
-    }
-  }, []);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -39,6 +33,10 @@ export default function Error(props: IProps) {
           Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
           deg hit.
         </BodyLong>
+
+        <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
+          Gå til Ditt NAV
+        </Button>
       </>
     );
   }
@@ -77,7 +75,7 @@ export default function Error(props: IProps) {
   );
 }
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
+ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };

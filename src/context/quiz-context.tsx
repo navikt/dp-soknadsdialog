@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { getNesteFaktum } from "../api/getNesteFaktum-api";
+import { useRouter } from "next/router";
 import { saveFaktum } from "../api/saveFaktumToQuiz-api";
 import { IQuizState } from "../localhost-data/quiz-state-response";
 import { ErrorTypesEnum } from "../types/error.types";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
+import api from "../api.utils";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -61,9 +61,15 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     }
   }
 
-  async function getNeste(sistBesvart: string) {
+  async function getNeste(lastAnswered: string) {
     try {
-      const quizState: IQuizState = await getNesteFaktum(uuid, sistBesvart);
+      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${lastAnswered}`));
+
+      if (!nesteResponse.ok) {
+        throw new Error(nesteResponse.statusText);
+      }
+
+      const quizState = await nesteResponse.json();
       setSoknadState(quizState);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console

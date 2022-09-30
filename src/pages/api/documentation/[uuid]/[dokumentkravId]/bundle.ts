@@ -34,8 +34,9 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
+    // TODO SENTRY LOG
     // eslint-disable-next-line no-console
-    console.log("CATCH ERROR bundleDokumentkrav(): ", error);
+    console.error("CATCH ERROR bundleDokumentkrav(): ", error);
     return res.status(500).json(error);
   }
 }

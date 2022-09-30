@@ -8,16 +8,16 @@ import { useSanity } from "../context/sanity-context";
 import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { getKvittering } from "../api/getKvittering-api";
+import api from "../api.utils";
 
 interface IProps {
   sections: IQuizSeksjon[];
 }
 
 export function Summary(props: IProps) {
+  const router = useRouter();
   const [hasError, setHasError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const router = useRouter();
   const { getAppTekst, getSeksjonTextById } = useSanity();
 
   function goToDocumentation() {
@@ -28,9 +28,13 @@ export function Summary(props: IProps) {
     router.push(`/`);
   }
 
-  function finishSoknad() {
+  async function finishSoknad() {
     try {
-      getKvittering(router.query.uuid, router.locale);
+      const res = await fetch(api(`/soknad/${router.query.uuid}/complete?locale=${router.locale}`));
+
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
       router.push(`/${router.query.uuid}/kvittering`);
     } catch (error) {
       setHasError(true);

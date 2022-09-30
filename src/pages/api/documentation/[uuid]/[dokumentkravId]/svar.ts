@@ -35,7 +35,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
 
     return res.status(200).send(response.body);
   } catch (error: unknown) {
-    return res.status(404).end();
+    return res.status(500).send(error);
   }
 }
 

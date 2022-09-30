@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getPaabegynt } from "../quiz-api";
+import { headersWithToken } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
 async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,13 +10,24 @@ async function getPaabegyntHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { token, apiToken } = await getSession({ req });
-  let paabegynt;
-  if (token && apiToken) {
+  if (!token || !apiToken) {
+    return res.status(401).end();
+  }
+
+  try {
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
-    paabegynt = await getPaabegynt(onBehalfOfToken);
-    return res.status(200).json(paabegynt);
-  } else {
-    return res.status(401).send({});
+    const paabegyntResponse = await fetch(`${process.env.API_BASE_URL}/soknad/paabegynt`, {
+      method: "Get",
+      headers: headersWithToken(onBehalfOfToken),
+    });
+
+    if (!paabegyntResponse.ok) {
+      throw new Error(paabegyntResponse.statusText);
+    }
+    const data = paabegyntResponse.json();
+    return res.status(paabegyntResponse.status).send(data);
+  } catch (error) {
+    return res.status(500).send(error);
   }
 }
 

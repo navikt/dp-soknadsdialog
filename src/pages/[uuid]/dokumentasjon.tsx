@@ -7,23 +7,24 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
-import { getDocumentationList } from "../api/documentation/[uuid]";
-import { IQuizState } from "../../localhost-data/quiz-state-response";
+import { getDokumentkrav } from "../api/documentation/[uuid]";
+import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../types/documentation.types";
+import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 
 interface IProps {
-  soknadState: IQuizState | undefined;
+  errorCode: number | null;
   sanityTexts: ISanityTexts;
-  documents: IDokumentkravList | undefined;
+  soknadState: IQuizState | null;
+  dokumentkrav: IDokumentkravList | null;
 }
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<IProps>> {
-  const { token, apiToken } = await getSession(context);
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
@@ -32,24 +33,53 @@ export async function getServerSideProps(
     lang: locale,
   });
 
-  let soknadState;
-  let documents;
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    soknadState = await getSoknadState(uuid, "", null, { summary: true });
-    documents = await getDocumentationList(uuid, "1234");
+    return {
+      props: {
+        sanityTexts,
+        soknadState: quizStateResponse,
+        dokumentkrav: mockDokumentkravList,
+        errorCode: null,
+      },
+    };
   }
 
-  if (token && apiToken) {
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
-    soknadState = await getSoknadState(uuid, onBehalfOfToken);
-    documents = await getDocumentationList(uuid, onBehalfOfToken);
+  const { token, apiToken } = await getSession(context);
+  if (!token || !apiToken) {
+    // TODO Redirect til hvilken login?
+    return {
+      redirect: {
+        destination: "/TODO-redoratoren-login",
+        permanent: false,
+      },
+    };
   }
+
+  let errorCode = null;
+  let soknadState = null;
+  let dokumentkrav = null;
+  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+
+  if (!soknadStateResponse.ok) {
+    errorCode = soknadStateResponse.status;
+  } else {
+    soknadState = await soknadStateResponse.json();
+  }
+
+  if (!dokumentkravResponse.ok) {
+    errorCode = dokumentkravResponse.status;
+  } else {
+    dokumentkrav = await dokumentkravResponse.json();
+  }
+
   return {
     props: {
-      soknadState,
       sanityTexts,
-      documents,
+      soknadState,
+      dokumentkrav,
+      errorCode,
     },
   };
 }
@@ -63,14 +93,14 @@ export default function DocumentPage(props: IProps) {
     return <Alert variant="error">Quiz er ducked</Alert>;
   }
 
-  if (!props.documents) {
+  if (!props.dokumentkrav) {
     return <Alert variant="info">Ingen dokumentasjonskrav tilgjengelig på søknaden</Alert>;
   }
 
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Documentation dokumentkravList={props.documents} />
+        <Documentation dokumentkravList={props.dokumentkrav} />
       </QuizProvider>
     </SanityProvider>
   );
