@@ -12,7 +12,7 @@ export function BarnRegister(props: IFaktum<IQuizGeneratorFaktum>) {
   return (
     <>
       {props.faktum.svar?.map((fakta, index) => (
-        <GeneratorFaktumCardWithFakta key={index} fakta={fakta}>
+        <GeneratorFaktumCardWithFakta key={index} fakta={fakta} readOnly={props.readonly}>
           <Heading level={"3"} size={"small"}>
             {getChildName(fakta)}
           </Heading>

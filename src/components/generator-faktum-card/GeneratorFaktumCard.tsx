@@ -7,6 +7,7 @@ interface IProps {
   editFaktum?: () => void;
   deleteFaktum?: () => void;
   allFaktumAnswered?: boolean;
+  readOnly?: boolean;
 }
 
 export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
@@ -15,7 +16,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
       {props.children}
 
       <div className={styles.buttonContainer}>
-        {props.editFaktum && props.allFaktumAnswered && (
+        {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
           <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
             Endre svar
           </Button>

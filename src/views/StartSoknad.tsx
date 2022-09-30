@@ -71,13 +71,7 @@ export function StartSoknad() {
         }
       />
 
-      <Button
-        variant="primary"
-        size="medium"
-        onClick={startSoknad}
-        loading={isCreatingSoknadUUID}
-        disabled={!consentGiven}
-      >
+      <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
         {getAppTekst("start-soknad.start-knapp")}
       </Button>
 
