@@ -5,6 +5,7 @@ import styles from "./GeneratorFaktumCard.module.css";
 
 interface IProps {
   fakta: QuizFaktum[];
+  readOnly?: boolean;
 }
 
 export function GeneratorFaktumCardWithFakta(props: PropsWithChildren<IProps>) {
@@ -16,7 +17,11 @@ export function GeneratorFaktumCardWithFakta(props: PropsWithChildren<IProps>) {
         {props.fakta.map(
           (faktum) =>
             !faktum.readOnly && (
-              <Faktum key={faktum.id} faktum={faktum} readonly={faktum.readOnly} />
+              <Faktum
+                key={faktum.id}
+                faktum={faktum}
+                readonly={props.readOnly || faktum.readOnly}
+              />
             )
         )}
       </div>

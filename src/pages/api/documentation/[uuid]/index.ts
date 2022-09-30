@@ -12,7 +12,7 @@ export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   });
 }
 
-async function dokumentravHandler(req: NextApiRequest, res: NextApiResponse) {
+async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return Promise.resolve(mockDokumentkravList);
   }
@@ -39,4 +39,4 @@ async function dokumentravHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(dokumentravHandler);
+export default withSentry(dokumentkravHandler);

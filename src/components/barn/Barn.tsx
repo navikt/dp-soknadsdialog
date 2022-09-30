@@ -47,6 +47,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
+              readOnly={props.readonly}
             >
               <Heading level={"3"} size={"small"}>
                 {getChildName(fakta)}
