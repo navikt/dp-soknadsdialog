@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Alert, Button, Loader } from "@navikt/ds-react";
+import { Alert, Button } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
 import { saveDokumenkravFile } from "../../api/dokumentasjon-api";
@@ -73,16 +73,12 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
         <>
           <>
             <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
-            <Button onClick={open}>{getAppTekst("filopplaster.velg.filer")}</Button>
+            <Button onClick={open} loading={isLoading}>
+              {getAppTekst("filopplaster.velg.filer")}
+            </Button>
           </>
         </>
       </div>
-
-      {isLoading && (
-        <div className={styles.loadingIndicator}>
-          <Loader size="large" />
-        </div>
-      )}
 
       {errors.length > 0 && (
         <div className={styles.uploadError}>

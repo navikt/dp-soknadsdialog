@@ -11,13 +11,19 @@ import api from "../api.utils";
 
 export function StartSoknad() {
   const router = useRouter();
-  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [isError, setIsError] = useState(false);
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
+  const [showConsentValidation, setShowConsentValidation] = useState(false);
   const { getAppTekst, getInfosideText } = useSanity();
   const startSideText = getInfosideText("startside");
 
   async function startSoknad() {
+    if (!consentGiven) {
+      setShowConsentValidation(true);
+      return;
+    }
+
     try {
       setIsCreatingSoknadUUID(true);
       const uuidResponse = await fetch(api("soknad/get-uuid"));
@@ -54,10 +60,16 @@ export function StartSoknad() {
         className="confirmation-panel"
         checked={consentGiven}
         label={getAppTekst("start-soknad.samtykke-innhenting-data.checkbox-label")}
-        onChange={() => setConsentGiven(!consentGiven)}
-      >
-        {getAppTekst("start-soknad.samtykke-innhenting-data.tekst")}
-      </ConfirmationPanel>
+        onChange={() => {
+          setConsentGiven(!consentGiven);
+          setShowConsentValidation(!showConsentValidation);
+        }}
+        error={
+          showConsentValidation && !consentGiven
+            ? getAppTekst("start-soknad.samtykke-innhenting-data.validering-tekst")
+            : undefined
+        }
+      />
 
       <Button
         variant="primary"

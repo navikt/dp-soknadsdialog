@@ -3,7 +3,6 @@ import { IQuizSeksjon } from "../types/quiz.types";
 import { Accordion, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
-import styles from "./Soknad.module.css";
 import { useRouter } from "next/router";
 import { useSanity } from "../context/sanity-context";
 import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
@@ -85,7 +84,7 @@ export function Summary(props: IProps) {
         {getAppTekst("oppsummering.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
 
-      <nav className={styles.navigation}>
+      <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
           {getAppTekst("knapp.forrige")}
         </Button>

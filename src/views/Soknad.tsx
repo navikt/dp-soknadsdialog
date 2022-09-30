@@ -22,7 +22,6 @@ export function Soknad() {
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
-  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
@@ -89,7 +88,7 @@ export function Soknad() {
         </Alert>
       )}
 
-      <nav className={styles.navigation}>
+      <nav className="navigation-container">
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
             {getAppTekst("knapp.avbryt")}
@@ -102,13 +101,13 @@ export function Soknad() {
           </Button>
         )}
 
-        {!isLastSection && (
+        {!soknadState.ferdig && (
           <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
             {getAppTekst("knapp.neste")}
           </Button>
         )}
 
-        {isLastSection && soknadState.ferdig && (
+        {soknadState.ferdig && (
           <Button onClick={() => navigateToDocumentation()}>
             {getAppTekst("soknad.til-dokumentasjon")}
           </Button>

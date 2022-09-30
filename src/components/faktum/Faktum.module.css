@@ -9,3 +9,7 @@
 .helpTextSpacing {
   margin: 20px 0;
 }
+
+.faktumNumber input {
+  width: 50%;
+}

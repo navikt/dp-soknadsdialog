@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BodyShort, Label } from "@navikt/ds-react";
 import { formatISO, isFuture } from "date-fns";
 import { useQuiz } from "../../context/quiz-context";
@@ -19,6 +19,13 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const [hasWarning, setHasWarnining] = useState(false);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
+
+  useEffect(() => {
+    if (props.faktum.svar) {
+      const hasWarning = !validateInput(new Date(props.faktum.svar));
+      setHasWarnining(hasWarning);
+    }
+  }, []);
 
   const onDateSelection = (value: Date) => {
     const date = formatISO(value, { representation: "date" });

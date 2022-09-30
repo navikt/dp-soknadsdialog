@@ -8,7 +8,13 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import { isValidNumber, isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
+import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
+
+enum ValidationErrorTypes {
+  EmptyValue,
+  NegativeValue,
+  InvalidValue,
+}
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -16,10 +22,9 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { getAppTekst, getFaktumTextById } = useSanity();
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState<ValidationErrorTypes | boolean>(true);
 
   useEffect(() => {
     if (debouncedValue && debouncedValue !== props.faktum.svar) {
@@ -30,23 +35,22 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   // Tmp conversion to int/float for saving to quiz
   //TODO Add som validation for different int vs float
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
-    let number;
+    const { value } = event.target;
 
-    if (!event.target.value) {
-      setDebouncedValue(undefined);
+    if (!value) {
+      debouncedChange(undefined);
+      setIsValid(ValidationErrorTypes.EmptyValue);
+
       return;
     }
+
     switch (faktum.type) {
       case "int": {
-        number = parseInt(event.target.value);
-        validateInput(number);
-        debouncedChange(number);
+        debouncedChange(parseInt(value));
         break;
       }
       case "double": {
-        number = parseFloat(event.target.value);
-        validateInput(number);
-        debouncedChange(number);
+        debouncedChange(parseFloat(value));
         break;
       }
 
@@ -59,27 +63,32 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   function validateInput(value: number) {
+    if (value < 0) {
+      setIsValid(ValidationErrorTypes.NegativeValue);
+      return false;
+    }
+
     switch (faktum.beskrivendeId) {
       case "faktum.arbeidsforhold.permittert-prosent": {
         const isValid = isValidPermitteringsPercent(value);
-        setIsValid(isValid);
-        break;
+        setIsValid(isValid ? true : ValidationErrorTypes.InvalidValue);
+        return isValid;
       }
       case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
         const isValid = isValidArbeidstimer(value);
-        setIsValid(isValid);
-        break;
+        setIsValid(isValid ? true : ValidationErrorTypes.InvalidValue);
+        return isValid;
       }
       default: {
-        const isValid = isValidNumber(value);
-        setIsValid(isValid);
-        break;
+        setIsValid(true);
+        return true;
       }
     }
   }
 
   function saveFaktum(value: number) {
-    if (isValid) {
+    const isValidInput = validateInput(value);
+    if (isValidInput) {
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -93,7 +102,18 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     );
   }
 
-  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.ikke-negativt-tall");
+  function getErrorMessage() {
+    switch (isValid) {
+      case ValidationErrorTypes.EmptyValue:
+        return getAppTekst("validering.ugyldig.tom-eller-spesiell-tegn");
+      case ValidationErrorTypes.NegativeValue:
+        return getAppTekst("validering.ikke-negativt-tall");
+      case ValidationErrorTypes.InvalidValue:
+        return faktumTexts?.errorMessage ?? getAppTekst("validering.ugyldig.nummer");
+      default:
+        return faktumTexts?.errorMessage ?? getAppTekst("validering.ugyldig.nummer");
+    }
+  }
 
   return (
     <>
@@ -106,7 +126,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         type="number"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
-        error={!isValid ? errorText : undefined}
+        error={isValid !== true ? getErrorMessage() : undefined}
+        className={styles.faktumNumber}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
