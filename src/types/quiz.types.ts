@@ -12,6 +12,7 @@ export interface IQuizBaseFaktum {
   id: string;
   beskrivendeId: string;
   readOnly: boolean;
+  roller?: string[];
   sannsynliggjøresAv?: QuizFaktum[];
 }
 

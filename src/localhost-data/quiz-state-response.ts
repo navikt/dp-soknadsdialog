@@ -7,9 +7,11 @@ import { seksjonBarnetillegg } from "./seksjoner/seksjonBarnetillegg";
 export interface IQuizState {
   ferdig: boolean;
   seksjoner: IQuizSeksjon[];
+  roller?: string[];
 }
 
 export const quizStateResponse: IQuizState = {
   ferdig: false,
   seksjoner: [seksjonBostedsland, seksjonGjenopptak, seksjonArbeidsforhold, seksjonBarnetillegg],
+  roller: [],
 };

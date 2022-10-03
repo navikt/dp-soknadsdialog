@@ -36,7 +36,7 @@ export function Dokumentkrav(props: IProps) {
   const { uuid } = router.query;
   const isFirstRender = useFirstRender();
 
-  const [svar, setSvar] = useState(dokumentkrav.svar || "");
+  const [svar, setSvar] = useState(dokumentkrav.svar);
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
   const [hasError, setHasError] = useState(false);
@@ -61,13 +61,17 @@ export function Dokumentkrav(props: IProps) {
       onChange(dokumentkrav, { svar, begrunnelse, filer: uploadedFiles });
     }
 
-    if (svar !== "") {
+    if (svar) {
       setAlertText(getDokumentkravSvarTextById(svar)?.alertText);
     }
   }, [svar, begrunnelse, uploadedFiles]);
 
   async function save() {
     try {
+      if (!svar) {
+        throw new Error("Mangler svar");
+      }
+
       const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
         svar,
         begrunnelse,

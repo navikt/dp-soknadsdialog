@@ -1,17 +1,31 @@
 import { QuizFaktum } from "./quiz.types";
+import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
+} from "../constants";
 
 export interface IDokumentkravList {
   soknad_uuid: string;
   krav: IDokumentkrav[];
 }
 
+export type IDokumentkravSvar =
+  | typeof DOKUMENTKRAV_SVAR_SEND_NAA
+  | typeof DOKUMENTKRAV_SVAR_SENDER_SENERE
+  | typeof DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
+  | typeof DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
+  | typeof DOKUMENTKRAV_SVAR_SENDER_IKKE;
+
 export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
   fakta: QuizFaktum[];
   filer: IDokumentkravFil[];
-  gyldigeValg: string[];
-  svar?: string;
+  gyldigeValg: IDokumentkravSvar[];
+  svar?: IDokumentkravSvar;
   begrunnelse?: string;
   bundle?: string;
 }
@@ -47,7 +61,7 @@ export enum ErrorType {
 }
 
 export interface IDokumentkravChanges {
-  svar?: string;
+  svar?: IDokumentkravSvar;
   begrunnelse?: string;
   filer?: IDokumentkravFil[];
 }

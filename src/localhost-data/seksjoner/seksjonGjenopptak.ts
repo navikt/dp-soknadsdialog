@@ -14,6 +14,7 @@ export const seksjonGjenopptak: IQuizSeksjon = {
       ],
       beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
       sannsynliggjøresAv: [],
+      roller: [],
     },
   ],
   beskrivendeId: "gjenopptak",

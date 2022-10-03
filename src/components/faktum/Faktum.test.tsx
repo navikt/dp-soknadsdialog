@@ -19,6 +19,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   ],
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
   sannsynliggjøresAv: [],
+  roller: [],
 };
 
 const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
@@ -32,6 +33,7 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
     ],
     beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
     sannsynliggjøresAv: [],
+    roller: [],
   },
 ];
 
@@ -44,6 +46,7 @@ const sectionStateMockData: IQuizSeksjon = {
 const mockSoknadState: IQuizState = {
   ferdig: false,
   seksjoner: [sectionStateMockData],
+  roller: [],
 };
 
 describe("Faktum", () => {

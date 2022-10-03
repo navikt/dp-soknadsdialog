@@ -1,5 +1,5 @@
 import React from "react";
-import { render, waitFor, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SanityProvider } from "../../context/sanity-context";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
@@ -7,6 +7,7 @@ import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { Modal } from "@navikt/ds-react";
+import { IDokumentkrav } from "../../types/documentation.types";
 
 describe("DokumentkravBundleErrorModal", () => {
   beforeAll(() => {
@@ -28,7 +29,7 @@ describe("DokumentkravBundleErrorModal", () => {
   });
 
   test("Should show which dokumentkrav has bundle errors", async () => {
-    const bundleErrorList = [mockDokumentkravList.krav[0]];
+    const bundleErrorList: IDokumentkrav[] = [mockDokumentkravList.krav[0]];
 
     render(
       <SanityProvider initialState={sanityMocks}>

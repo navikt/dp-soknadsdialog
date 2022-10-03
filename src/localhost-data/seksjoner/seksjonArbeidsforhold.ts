@@ -10,6 +10,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       readOnly: false,
       beskrivendeId: "faktum.dagpenger-soknadsdato",
       sannsynliggjøresAv: [],
+      roller: [],
     },
     {
       id: "8002",
@@ -24,6 +25,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       ],
       beskrivendeId: "faktum.type-arbeidstid",
       sannsynliggjøresAv: [],
+      roller: [],
     },
     {
       id: "8003",
@@ -36,6 +38,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8005.1",
@@ -46,6 +49,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8006.1",
@@ -64,6 +68,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8007.1",
@@ -76,6 +81,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8048.1",
@@ -88,6 +94,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.har-tilleggsopplysninger",
             sannsynliggjøresAv: [],
+            roller: [],
           },
         ],
         [
@@ -98,6 +105,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8005.2",
@@ -108,6 +116,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8006.2",
@@ -126,6 +135,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8016.2",
@@ -137,6 +147,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.varighet",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8018.2",
@@ -149,6 +160,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8032.2",
@@ -161,6 +173,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8042.2",
@@ -174,6 +187,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8044.2",
@@ -186,6 +200,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.skift-eller-turnus",
             sannsynliggjøresAv: [],
+            roller: [],
           },
           {
             id: "8045.2",
@@ -198,6 +213,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             ],
             beskrivendeId: "faktum.arbeidsforhold.rotasjon",
             sannsynliggjøresAv: [],
+            roller: [],
           },
         ],
       ],
@@ -205,6 +221,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       readOnly: false,
       templates: [],
       beskrivendeId: "faktum.arbeidsforhold",
+      roller: [],
     },
   ],
   beskrivendeId: "arbeidsforhold",

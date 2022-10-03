@@ -38,7 +38,7 @@ export async function getServerSideProps(
       props: {
         sanityTexts,
         soknadState: quizStateResponse,
-        dokumentkrav: mockDokumentkravList,
+        dokumentkrav: mockDokumentkravList as IDokumentkravList,
         errorCode: null,
       },
     };

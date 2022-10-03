@@ -6,16 +6,21 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
-import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-response";
+import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Receipt } from "../../views/Receipt";
 import ErrorPage from "../_error";
+import { getDokumentkrav } from "../api/documentation/[uuid]";
+import { IDokumentkravList } from "../../types/documentation.types";
+import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../localhost-data/mock-neste";
 
 interface IProps {
+  errorCode: number | null;
   sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
-  errorCode: number | null;
+  dokumentkrav: IDokumentkravList | null;
 }
 
 export async function getServerSideProps(
@@ -33,7 +38,8 @@ export async function getServerSideProps(
     return {
       props: {
         sanityTexts,
-        soknadState: quizStateResponse,
+        soknadState: mockNeste as unknown as IQuizState,
+        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         errorCode: null,
       },
     };
@@ -52,8 +58,10 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let dokumentkrav = null;
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
@@ -61,10 +69,17 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
+  if (!dokumentkravResponse.ok) {
+    errorCode = dokumentkravResponse.status;
+  } else {
+    dokumentkrav = await dokumentkravResponse.json();
+  }
+
   return {
     props: {
       sanityTexts,
       soknadState,
+      dokumentkrav,
       errorCode,
     },
   };
@@ -81,6 +96,16 @@ export default function ReceiptPage(props: IProps) {
     );
   }
 
+  if (!props.dokumentkrav) {
+    return (
+      <ErrorPage
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
+        statusCode={props.errorCode || 500}
+      />
+    );
+  }
+
   if (!props.sanityTexts.seksjoner) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
@@ -88,7 +113,7 @@ export default function ReceiptPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Receipt />
+        <Receipt dokumentkravList={props.dokumentkrav} />
       </QuizProvider>
     </SanityProvider>
   );

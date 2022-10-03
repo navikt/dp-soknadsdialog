@@ -318,8 +318,10 @@ export const seksjonBostedsland: IQuizSeksjon = {
           ],
           beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd-dokumentasjon",
           sannsynliggjøresAv: [],
+          roller: [],
         },
       ],
+      roller: [],
     },
     {
       id: "6002",
@@ -332,6 +334,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
       ],
       beskrivendeId: "faktum.reist-tilbake-etter-arbeidsledig",
       sannsynliggjøresAv: [],
+      roller: [],
     },
     {
       id: "6005",
@@ -344,6 +347,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
       ],
       beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
       sannsynliggjøresAv: [],
+      roller: [],
     },
     {
       id: "6006",
@@ -356,6 +360,7 @@ export const seksjonBostedsland: IQuizSeksjon = {
       ],
       beskrivendeId: "faktum.reist-i-takt-med-rotasjon",
       sannsynliggjøresAv: [],
+      roller: [],
     },
   ],
   beskrivendeId: "bostedsland",

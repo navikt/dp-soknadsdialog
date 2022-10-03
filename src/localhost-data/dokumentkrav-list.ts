@@ -1,5 +1,4 @@
 import { IDokumentkravList } from "../types/documentation.types";
-
 export const mockDokumentkravList: IDokumentkravList = {
   soknad_uuid: "12345",
   krav: [
@@ -42,7 +41,7 @@ export const mockDokumentkravList: IDokumentkravList = {
       gyldigeValg: [
         "dokumentkrav.svar.send.naa",
         "dokumentkrav.svar.send.senere",
-        "dokumentkrav.svar.send.noen_andre",
+        "dokumentkrav.svar.andre.sender",
         "dokumentkrav.svar.sendt.tidligere",
         "dokumentkrav.svar.sender.ikke",
       ],
@@ -66,8 +65,8 @@ export const mockDokumentkravList: IDokumentkravList = {
       gyldigeValg: [
         "dokumentkrav.svar.send.naa",
         "dokumentkrav.svar.send.senere",
-        "dokumentkrav.svar.send.noen_andre",
-        "dokumentkrav.svar.sendt.inn.tidligere",
+        "dokumentkrav.svar.andre.sender",
+        "dokumentkrav.svar.sendt.tidligere",
         "dokumentkrav.svar.sender.ikke",
       ],
       svar: "dokumentkrav.svar.sender.ikke",
@@ -81,8 +80,8 @@ export const mockDokumentkravList: IDokumentkravList = {
       gyldigeValg: [
         "dokumentkrav.svar.send.naa",
         "dokumentkrav.svar.send.senere",
-        "dokumentkrav.svar.send.noen_andre",
-        "dokumentkrav.svar.sendt.inn.tidligere",
+        "dokumentkrav.svar.andre.sender",
+        "dokumentkrav.svar.sendt.tidligere",
         "dokumentkrav.svar.sender.ikke",
       ],
       begrunnelse: "",
