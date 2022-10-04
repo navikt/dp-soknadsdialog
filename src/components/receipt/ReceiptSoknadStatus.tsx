@@ -1,5 +1,6 @@
 import React from "react";
+import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 
-export function ReceiptSoknadStatus() {
-  return <div>Status på søknad</div>;
+export function ReceiptSoknadTilstand(props: ISoknadStatus) {
+  return <div>Status på søknad: {props.tilstand}</div>;
 }

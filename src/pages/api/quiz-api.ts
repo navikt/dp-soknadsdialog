@@ -51,3 +51,17 @@ export function getSoknadState(uuid: string, onBehalfOfToken: string, lastSaved?
     headers: headersWithToken(onBehalfOfToken),
   });
 }
+
+export function getSoknadStatus(uuid: string, onBehalfOfToken: string) {
+  return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/status`, {
+    method: "Get",
+    headers: headersWithToken(onBehalfOfToken),
+  });
+}
+
+export function getArbeidssokerStatus(uuid: string, onBehalfOfToken: string) {
+  return fetch(`${process.env.API_BASE_URL}/arbeidssoker`, {
+    method: "Get",
+    headers: headersWithToken(onBehalfOfToken),
+  });
+}

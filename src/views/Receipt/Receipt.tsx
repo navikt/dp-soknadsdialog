@@ -8,15 +8,19 @@ import {
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
 } from "../../constants";
 import { ReceiptDocumentsMissing } from "../../components/receipt/ReceiptDocumentsMissing";
-import { ReceiptSoknadStatus } from "../../components/receipt/ReceiptSoknadStatus";
+import { ReceiptSoknadTilstand } from "../../components/receipt/ReceiptSoknadStatus";
 import { ArbeidssokerStatus } from "../../components/receipt/ReceiptArbeidssokerStatus";
 import { ReceiptDocumentsNotSending } from "../../components/receipt/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt/ReceiptDocumentsUploaded";
 import { ReceiptDocumentsOther } from "../../components/receipt/ReceiptDocumentsOther";
 import styles from "./Receipts.module.css";
+import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
+import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 
 interface IProps {
+  soknadStatus: ISoknadStatus;
   dokumentkravList: IDokumentkravList;
+  arbeidssokerStatus: IArbeidssokerStatus;
 }
 
 export function Receipt(props: IProps) {
@@ -37,8 +41,8 @@ export function Receipt(props: IProps) {
 
   return (
     <>
-      <ReceiptSoknadStatus />
-      <ArbeidssokerStatus />
+      <ReceiptSoknadTilstand {...props.soknadStatus} />
+      <ArbeidssokerStatus {...props.arbeidssokerStatus} />
       <div className={styles.documentList}>
         <ReceiptDocumentsMissing documents={missingDocuments} />
         <ReceiptDocumentsOther />

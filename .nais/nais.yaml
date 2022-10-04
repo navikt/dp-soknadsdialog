@@ -1,4 +1,4 @@
-apiVersion: nais.io/v1alpha1
+@apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
   name: dp-soknadsdialog
@@ -52,6 +52,8 @@ spec:
       value: {{loginservice.wellKnown}}
     - name: NEXT_PUBLIC_SENTRY_STAGE
       value: {{sentry_stage}}
+    - name: VEILARBPROXY_URL
+      value: {{veilarbproxyUrl}}
   idporten:
     enabled: true
     sidecar:
