@@ -140,15 +140,15 @@ export default function ReceiptPage(props: IProps) {
     );
   }
 
-  if (!props.arbeidssokerStatus) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler arbeidssokerstatus"
-        statusCode={props.errorCode || 500}
-      />
-    );
-  }
+  // if (!props.arbeidssokerStatus) {
+  //   return (
+  //     <ErrorPage
+  //       title="Det har skjedd en teknisk feil"
+  //       details="Beklager, vi mistet kontakten med systemene våre. Mangler arbeidssokerstatus"
+  //       statusCode={props.errorCode || 500}
+  //     />
+  //   );
+  // }
 
   if (!props.sanityTexts.seksjoner) {
     return <div>Noe gikk galt ved henting av texter fra sanity</div>;
@@ -160,7 +160,7 @@ export default function ReceiptPage(props: IProps) {
         <Receipt
           dokumentkravList={props.dokumentkrav}
           soknadStatus={props.soknadStatus}
-          arbeidssokerStatus={props.arbeidssokerStatus}
+          arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
         />
       </QuizProvider>
     </SanityProvider>
