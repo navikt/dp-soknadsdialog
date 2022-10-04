@@ -22,22 +22,18 @@ export default function ErrorPage(props: IProps) {
 
   if (statusCode === 404) {
     return (
-      <>
-        <div className={styles.iconContainer}>
-          <TechnicalError />
-        </div>
-        <Heading level="1" size="xlarge">
-          Fant ikke siden
+      <div className={styles.notFoundPageContainer}>
+        <Heading level="1" size="large">
+          Fant ikke siden, Statuskode 404
         </Heading>
-        <BodyLong>
+        <BodyLong className={styles.pageNotFoundDescription}>
           Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
           deg hit.
         </BodyLong>
-
         <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
           Gå til Ditt NAV
         </Button>
-      </>
+      </div>
     );
   }
 
@@ -46,32 +42,30 @@ export default function ErrorPage(props: IProps) {
   }
 
   return (
-    <>
-      <Modal
-        className={classNames("modal-container", [styles.error])}
-        onClose={() => {
-          return;
-        }}
-        open={true}
-        closeButton={false}
-        shouldCloseOnOverlayClick={false}
-      >
-        <Modal.Content>
-          <div className={styles.errorIconContainer}>
-            <TechnicalError />
-          </div>
-          <Heading size={"medium"} spacing>
-            {title}
-          </Heading>
-          <BodyLong>{details}</BodyLong>
-          <div className={styles.errorButtonContainer}>
-            <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
-              Gå til Ditt NAV
-            </Button>
-          </div>
-        </Modal.Content>
-      </Modal>
-    </>
+    <Modal
+      className={classNames("modal-container", [styles.error])}
+      onClose={() => {
+        return;
+      }}
+      open={true}
+      closeButton={false}
+      shouldCloseOnOverlayClick={false}
+    >
+      <Modal.Content>
+        <div className={styles.errorIconContainer}>
+          <TechnicalError />
+        </div>
+        <Heading size={"medium"} spacing>
+          {title}
+        </Heading>
+        <BodyLong>{details}</BodyLong>
+        <div className={styles.errorButtonContainer}>
+          <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
+            Gå til Ditt NAV
+          </Button>
+        </div>
+      </Modal.Content>
+    </Modal>
   );
 }
 
