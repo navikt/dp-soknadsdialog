@@ -15,9 +15,11 @@
   margin-top: var(--navds-spacing-5);
 }
 
-.errorIconContainer {
-  display: flex;
-  justify-content: center;
+.notFoundPageContainer {
+  margin-bottom: var(--navds-spacing-8);
+}
+
+.pageNotFoundDescription {
   margin-top: var(--navds-spacing-2);
-  margin-bottom: var(--navds-spacing-6);
+  margin-bottom: var(--navds-spacing-8);
 }
