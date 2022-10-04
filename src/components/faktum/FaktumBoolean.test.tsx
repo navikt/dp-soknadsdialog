@@ -18,7 +18,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei",
   ],
   beskrivendeId: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
-  sannsynliggjøresAv: [],
+  sannsynliggjoresAv: [],
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };

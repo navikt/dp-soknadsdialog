@@ -9,7 +9,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
       type: "localdate",
       readOnly: false,
       beskrivendeId: "faktum.dagpenger-soknadsdato",
-      sannsynliggjøresAv: [],
+      sannsynliggjoresAv: [],
       roller: [],
     },
     {
@@ -24,7 +24,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
         "faktum.type-arbeidstid.svar.ingen-passer",
       ],
       beskrivendeId: "faktum.type-arbeidstid",
-      sannsynliggjøresAv: [],
+      sannsynliggjoresAv: [],
       roller: [],
     },
     {
@@ -37,7 +37,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "tekst",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -48,7 +48,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -67,7 +67,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.endret.svar.permittert",
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -80,7 +80,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.kjent-antall-timer-jobbet",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -93,7 +93,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.har-tilleggsopplysninger.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.har-tilleggsopplysninger",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
         ],
@@ -104,7 +104,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "tekst",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -115,7 +115,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             readOnly: false,
             gyldigeLand: gyldigeLand,
             beskrivendeId: "faktum.arbeidsforhold.land",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -134,7 +134,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.endret.svar.permittert",
             ],
             beskrivendeId: "faktum.arbeidsforhold.endret",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -146,7 +146,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
             type: "periode",
             readOnly: false,
             beskrivendeId: "faktum.arbeidsforhold.varighet",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -159,7 +159,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.vet-du-antall-timer-foer-konkurs",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -172,7 +172,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.soke-forskudd-lonnsgarantimidler",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -186,7 +186,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato.svar.vet-ikke",
             ],
             beskrivendeId: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -199,7 +199,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.skift-eller-turnus.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.skift-eller-turnus",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
           {
@@ -212,7 +212,7 @@ export const seksjonArbeidsforhold: IQuizSeksjon = {
               "faktum.arbeidsforhold.rotasjon.svar.nei",
             ],
             beskrivendeId: "faktum.arbeidsforhold.rotasjon",
-            sannsynliggjøresAv: [],
+            sannsynliggjoresAv: [],
             roller: [],
           },
         ],

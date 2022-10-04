@@ -64,7 +64,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "GBR",
   ],
   beskrivendeId: "faktum.hvilket-land-bor-du-i",
-  sannsynliggjøresAv: [],
+  sannsynliggjoresAv: [],
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };

@@ -18,7 +18,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
   ],
   beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
-  sannsynliggjøresAv: [],
+  sannsynliggjoresAv: [],
   roller: [],
 };
 
@@ -32,7 +32,7 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
       "faktum.reist-tilbake-en-gang-eller-mer.svar.nei",
     ],
     beskrivendeId: "faktum.reist-tilbake-en-gang-eller-mer",
-    sannsynliggjøresAv: [],
+    sannsynliggjoresAv: [],
     roller: [],
   },
 ];
@@ -72,7 +72,7 @@ describe("Faktum", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
-          <Faktum faktum={{ ...faktumMockData, sannsynliggjøresAv: dokumentasjonskravMockdata }} />
+          <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
         </QuizProvider>
       </SanityProvider>
     );

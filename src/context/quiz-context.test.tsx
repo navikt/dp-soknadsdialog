@@ -17,7 +17,7 @@ const faktum: IQuizBooleanFaktum = {
   id: "1",
   readOnly: false,
   type: "boolean",
-  sannsynliggjøresAv: [],
+  sannsynliggjoresAv: [],
 };
 
 beforeEach(() => {

@@ -12,7 +12,7 @@ export const mockDokumentkravList: IDokumentkravList = {
           type: "tekst",
           readOnly: false,
           beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       filer: [
@@ -58,7 +58,7 @@ export const mockDokumentkravList: IDokumentkravList = {
           type: "tekst",
           readOnly: false,
           beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       filer: [],

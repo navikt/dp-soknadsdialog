@@ -14,7 +14,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   type: "periode",
   readOnly: false,
   beskrivendeId: "faktum.dagpenger-soknadsdato",
-  sannsynliggjøresAv: [],
+  sannsynliggjoresAv: [],
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };

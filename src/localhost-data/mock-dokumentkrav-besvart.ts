@@ -22,14 +22,14 @@ export const mockDokumentkravBesvart = {
             "faktum.arbeidsforhold.endret.svar.permittert",
           ],
           beskrivendeId: "faktum.arbeidsforhold.endret",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "8060.2",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-permitteringsvarsel",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -61,14 +61,14 @@ export const mockDokumentkravBesvart = {
             "faktum.arbeidsforhold.rotasjon.svar.nei",
           ],
           beskrivendeId: "faktum.arbeidsforhold.rotasjon",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "8057.2",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-timelister",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -100,7 +100,7 @@ export const mockDokumentkravBesvart = {
             "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd.svar.nei",
           ],
           beskrivendeId: "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "7002",
               type: "dokument",
@@ -108,7 +108,7 @@ export const mockDokumentkravBesvart = {
               readOnly: true,
               beskrivendeId:
                 "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd-dokumentasjon",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -140,14 +140,14 @@ export const mockDokumentkravBesvart = {
             "faktum.driver-du-egen-naering.svar.nei",
           ],
           beskrivendeId: "faktum.driver-du-egen-naering",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "3016",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokumentasjon-oversikt-over-arbeidstimer",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -161,14 +161,14 @@ export const mockDokumentkravBesvart = {
             "faktum.driver-du-eget-gaardsbruk.svar.nei",
           ],
           beskrivendeId: "faktum.driver-du-eget-gaardsbruk",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "3016",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokumentasjon-oversikt-over-arbeidstimer",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -196,7 +196,7 @@ export const mockDokumentkravBesvart = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.barn-fornavn-mellomnavn",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "1014.1",
               type: "dokument",
@@ -204,7 +204,7 @@ export const mockDokumentkravBesvart = {
               readOnly: true,
               beskrivendeId:
                 "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -215,7 +215,7 @@ export const mockDokumentkravBesvart = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.barn-etternavn",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "1014.1",
               type: "dokument",
@@ -223,7 +223,7 @@ export const mockDokumentkravBesvart = {
               readOnly: true,
               beskrivendeId:
                 "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -234,7 +234,7 @@ export const mockDokumentkravBesvart = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.barn-foedselsdato",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "1014.1",
               type: "dokument",
@@ -242,7 +242,7 @@ export const mockDokumentkravBesvart = {
               readOnly: true,
               beskrivendeId:
                 "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -505,7 +505,7 @@ export const mockDokumentkravBesvart = {
             "ALA",
           ],
           beskrivendeId: "faktum.barn-statsborgerskap",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "1014.1",
               type: "dokument",
@@ -513,7 +513,7 @@ export const mockDokumentkravBesvart = {
               readOnly: true,
               beskrivendeId:
                 "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -551,14 +551,14 @@ export const mockDokumentkravBesvart = {
             "faktum.arbeidsforhold.endret.svar.permittert",
           ],
           beskrivendeId: "faktum.arbeidsforhold.endret",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "8055.1",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-arbeidsavtale",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
             {
               id: "8056.1",
@@ -566,7 +566,7 @@ export const mockDokumentkravBesvart = {
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-dokumentasjon-av-arbeidsforhold",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -604,14 +604,14 @@ export const mockDokumentkravBesvart = {
             "faktum.arbeidsforhold.endret.svar.permittert",
           ],
           beskrivendeId: "faktum.arbeidsforhold.endret",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "8055.1",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-arbeidsavtale",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
             {
               id: "8056.1",
@@ -619,7 +619,7 @@ export const mockDokumentkravBesvart = {
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokument-dokumentasjon-av-arbeidsforhold",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },

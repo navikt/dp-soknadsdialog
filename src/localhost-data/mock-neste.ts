@@ -307,7 +307,7 @@ export const mockNeste = {
             "ALA",
           ],
           beskrivendeId: "faktum.hvilket-land-bor-du-i",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -327,7 +327,7 @@ export const mockNeste = {
             "faktum.mottatt-dagpenger-siste-12-mnd.svar.vet-ikke",
           ],
           beskrivendeId: "faktum.mottatt-dagpenger-siste-12-mnd",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -346,7 +346,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-fornavn-mellomnavn",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1010.1",
@@ -355,7 +355,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-etternavn",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1011.1",
@@ -364,7 +364,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-foedselsdato",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1012.1",
@@ -625,7 +625,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.barn-statsborgerskap",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1013.1",
@@ -638,7 +638,7 @@ export const mockNeste = {
                   "faktum.forsoerger-du-barnet.svar.nei",
                 ],
                 beskrivendeId: "faktum.forsoerger-du-barnet",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
             [
@@ -649,7 +649,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-fornavn-mellomnavn",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1010.2",
@@ -658,7 +658,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-etternavn",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1011.2",
@@ -667,7 +667,7 @@ export const mockNeste = {
                 roller: ["nav"],
                 readOnly: true,
                 beskrivendeId: "faktum.barn-foedselsdato",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1012.2",
@@ -928,7 +928,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.barn-statsborgerskap",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "1013.2",
@@ -941,7 +941,7 @@ export const mockNeste = {
                   "faktum.forsoerger-du-barnet.svar.nei",
                 ],
                 beskrivendeId: "faktum.forsoerger-du-barnet",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
           ],
@@ -993,7 +993,7 @@ export const mockNeste = {
             "faktum.legge-til-egne-barn.svar.nei",
           ],
           beskrivendeId: "faktum.legge-til-egne-barn",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "1001",
@@ -1006,7 +1006,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.barn-fornavn-mellomnavn",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "1014.1",
                     type: "dokument",
@@ -1014,7 +1014,7 @@ export const mockNeste = {
                     readOnly: true,
                     beskrivendeId:
                       "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -1025,7 +1025,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.barn-etternavn",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "1014.1",
                     type: "dokument",
@@ -1033,7 +1033,7 @@ export const mockNeste = {
                     readOnly: true,
                     beskrivendeId:
                       "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -1044,7 +1044,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.barn-foedselsdato",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "1014.1",
                     type: "dokument",
@@ -1052,7 +1052,7 @@ export const mockNeste = {
                     readOnly: true,
                     beskrivendeId:
                       "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -1315,7 +1315,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.barn-statsborgerskap",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "1014.1",
                     type: "dokument",
@@ -1323,7 +1323,7 @@ export const mockNeste = {
                     readOnly: true,
                     beskrivendeId:
                       "faktum.dokumentasjon-foedselsattest-bostedsbevis-for-barn-under-18aar",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -1338,7 +1338,7 @@ export const mockNeste = {
                   "faktum.forsoerger-du-barnet.svar.nei",
                 ],
                 beskrivendeId: "faktum.forsoerger-du-barnet",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
           ],
@@ -1399,7 +1399,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "8002",
@@ -1414,7 +1414,7 @@ export const mockNeste = {
             "faktum.type-arbeidstid.svar.ingen-passer",
           ],
           beskrivendeId: "faktum.type-arbeidstid",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "8003",
@@ -1427,7 +1427,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8005.1",
@@ -1688,7 +1688,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.land",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8006.1",
@@ -1707,14 +1707,14 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.endret.svar.permittert",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.endret",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "8055.1",
                     type: "dokument",
                     roller: ["søker"],
                     readOnly: true,
                     beskrivendeId: "faktum.dokument-arbeidsavtale",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                   {
                     id: "8056.1",
@@ -1722,7 +1722,7 @@ export const mockNeste = {
                     roller: ["søker"],
                     readOnly: true,
                     beskrivendeId: "faktum.dokument-dokumentasjon-av-arbeidsforhold",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -1737,7 +1737,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.vet-du-antall-timer-foer-mistet-jobb",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8023.1",
@@ -1746,7 +1746,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8039.1",
@@ -1755,7 +1755,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.hva-er-aarsak-til-avskjediget",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
             [
@@ -1766,7 +1766,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8005.2",
@@ -2027,7 +2027,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.land",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8006.2",
@@ -2046,14 +2046,14 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.endret.svar.permittert",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.endret",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "8060.2",
                     type: "dokument",
                     roller: ["søker"],
                     readOnly: true,
                     beskrivendeId: "faktum.dokument-permitteringsvarsel",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -2069,7 +2069,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato.svar.vet-ikke",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.midlertidig-med-kontraktfestet-sluttdato",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8013.2",
@@ -2078,7 +2078,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.kontraktfestet-sluttdato",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8014.2",
@@ -2087,7 +2087,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-oppstartsdato",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8015.2",
@@ -2100,7 +2100,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.permittertert-fra-fiskeri-naering",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8022.2",
@@ -2113,7 +2113,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.vet-du-antall-timer-foer-permittert",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8024.2",
@@ -2125,7 +2125,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.permittert-periode",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8025.2",
@@ -2134,7 +2134,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.permittert-prosent",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8026.2",
@@ -2147,7 +2147,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.vet-du-lonnsplikt-periode.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.vet-du-lonnsplikt-periode",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8044.2",
@@ -2160,7 +2160,7 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.skift-eller-turnus.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.skift-eller-turnus",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8045.2",
@@ -2173,14 +2173,14 @@ export const mockNeste = {
                   "faktum.arbeidsforhold.rotasjon.svar.nei",
                 ],
                 beskrivendeId: "faktum.arbeidsforhold.rotasjon",
-                sannsynliggjøresAv: [
+                sannsynliggjoresAv: [
                   {
                     id: "8057.2",
                     type: "dokument",
                     roller: ["søker"],
                     readOnly: true,
                     beskrivendeId: "faktum.dokument-timelister",
-                    sannsynliggjøresAv: [],
+                    sannsynliggjoresAv: [],
                   },
                 ],
               },
@@ -2191,7 +2191,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.arbeidsdager-siste-rotasjon",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "8047.2",
@@ -2200,7 +2200,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.arbeidsforhold.fridager-siste-rotasjon",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
           ],
@@ -2572,7 +2572,7 @@ export const mockNeste = {
             "faktum.eos-arbeid-siste-36-mnd.svar.nei",
           ],
           beskrivendeId: "faktum.eos-arbeid-siste-36-mnd",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "9002",
@@ -2585,7 +2585,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.eos-arbeidsforhold.arbeidsgivernavn",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "9004.1",
@@ -2882,7 +2882,7 @@ export const mockNeste = {
                   "ALA",
                 ],
                 beskrivendeId: "faktum.eos-arbeidsforhold.land",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "9005.1",
@@ -2891,7 +2891,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.eos-arbeidsforhold.personnummer",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
               {
                 id: "9006.1",
@@ -2903,7 +2903,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.eos-arbeidsforhold.varighet",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
           ],
@@ -2955,14 +2955,14 @@ export const mockNeste = {
             "faktum.driver-du-egen-naering.svar.nei",
           ],
           beskrivendeId: "faktum.driver-du-egen-naering",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "3016",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokumentasjon-oversikt-over-arbeidstimer",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -2977,7 +2977,7 @@ export const mockNeste = {
                 roller: ["søker"],
                 readOnly: false,
                 beskrivendeId: "faktum.egen-naering-organisasjonsnummer",
-                sannsynliggjøresAv: [],
+                sannsynliggjoresAv: [],
               },
             ],
           ],
@@ -3001,7 +3001,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.egen-naering-arbeidstimer-naa",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3004",
@@ -3010,7 +3010,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.egen-naering-arbeidstimer-for",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3006",
@@ -3023,14 +3023,14 @@ export const mockNeste = {
             "faktum.driver-du-eget-gaardsbruk.svar.nei",
           ],
           beskrivendeId: "faktum.driver-du-eget-gaardsbruk",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "3016",
               type: "dokument",
               roller: ["søker"],
               readOnly: true,
               beskrivendeId: "faktum.dokumentasjon-oversikt-over-arbeidstimer",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -3041,7 +3041,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.eget-gaardsbruk-organisasjonsnummer",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3008",
@@ -3061,7 +3061,7 @@ export const mockNeste = {
             "faktum.eget-gaardsbruk-type-gaardsbruk.svar.annet",
           ],
           beskrivendeId: "faktum.eget-gaardsbruk-type-gaardsbruk",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3009",
@@ -3075,7 +3075,7 @@ export const mockNeste = {
             "faktum.eget-gaardsbruk-hvem-eier.svar.andre",
           ],
           beskrivendeId: "faktum.eget-gaardsbruk-hvem-eier",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3010",
@@ -3084,7 +3084,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.eget-gaardsbruk-jeg-andel-inntekt",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3014",
@@ -3093,7 +3093,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.eget-gaardsbruk-arbeidsaar-for-timer",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3013",
@@ -3102,7 +3102,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.eget-gaardsbruk-arbeidstimer-aar",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "3015",
@@ -3111,7 +3111,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.eget-gaardsbruk-arbeidstimer-beregning",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -3130,7 +3130,7 @@ export const mockNeste = {
             "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd.svar.nei",
           ],
           beskrivendeId: "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd",
-          sannsynliggjøresAv: [
+          sannsynliggjoresAv: [
             {
               id: "7002",
               type: "dokument",
@@ -3138,7 +3138,7 @@ export const mockNeste = {
               readOnly: true,
               beskrivendeId:
                 "faktum.avtjent-militaer-sivilforsvar-tjeneste-siste-12-mnd-dokumentasjon",
-              sannsynliggjøresAv: [],
+              sannsynliggjoresAv: [],
             },
           ],
         },
@@ -3159,7 +3159,7 @@ export const mockNeste = {
             "faktum.andre-ytelser-mottatt-eller-sokt.svar.nei",
           ],
           beskrivendeId: "faktum.andre-ytelser-mottatt-eller-sokt",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "5012",
@@ -3172,7 +3172,7 @@ export const mockNeste = {
             "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver.svar.nei",
           ],
           beskrivendeId: "faktum.utbetaling-eller-okonomisk-gode-tidligere-arbeidsgiver",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -3188,7 +3188,7 @@ export const mockNeste = {
           readOnly: false,
           gyldigeValg: ["faktum.tar-du-utdanning.svar.ja", "faktum.tar-du-utdanning.svar.nei"],
           beskrivendeId: "faktum.tar-du-utdanning",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -3204,7 +3204,7 @@ export const mockNeste = {
           readOnly: false,
           gyldigeValg: ["faktum.jobbe-hel-deltid.svar.ja", "faktum.jobbe-hel-deltid.svar.nei"],
           beskrivendeId: "faktum.jobbe-hel-deltid",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "5",
@@ -3214,7 +3214,7 @@ export const mockNeste = {
           readOnly: false,
           gyldigeValg: ["faktum.jobbe-hele-norge.svar.ja", "faktum.jobbe-hele-norge.svar.nei"],
           beskrivendeId: "faktum.jobbe-hele-norge",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "8",
@@ -3224,7 +3224,7 @@ export const mockNeste = {
           readOnly: false,
           gyldigeValg: ["faktum.alle-typer-arbeid.svar.ja", "faktum.alle-typer-arbeid.svar.nei"],
           beskrivendeId: "faktum.alle-typer-arbeid",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "9",
@@ -3237,7 +3237,7 @@ export const mockNeste = {
             "faktum.bytte-yrke-ned-i-lonn.svar.nei",
           ],
           beskrivendeId: "faktum.bytte-yrke-ned-i-lonn",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
@@ -3256,7 +3256,7 @@ export const mockNeste = {
             "faktum.tilleggsopplysninger.har-tilleggsopplysninger.svar.nei",
           ],
           beskrivendeId: "faktum.tilleggsopplysninger.har-tilleggsopplysninger",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
         {
           id: "4001",
@@ -3265,7 +3265,7 @@ export const mockNeste = {
           roller: ["søker"],
           readOnly: false,
           beskrivendeId: "faktum.tilleggsopplysninger",
-          sannsynliggjøresAv: [],
+          sannsynliggjoresAv: [],
         },
       ],
       ferdig: true,
