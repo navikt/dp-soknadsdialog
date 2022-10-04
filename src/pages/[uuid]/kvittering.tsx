@@ -114,7 +114,7 @@ export default function ReceiptPage(props: IProps) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        details="Beklager, vi mistet kontakten med systemene våre. Mangler søknad state"
         statusCode={props.errorCode || 500}
       />
     );
@@ -124,7 +124,7 @@ export default function ReceiptPage(props: IProps) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        details="Beklager, vi mistet kontakten med systemene våre. Mangler dokumentkrav"
         statusCode={props.errorCode || 500}
       />
     );
@@ -134,7 +134,7 @@ export default function ReceiptPage(props: IProps) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        details="Beklager, vi mistet kontakten med systemene våre. Mangler soknadstatus"
         statusCode={props.errorCode || 500}
       />
     );
@@ -144,7 +144,7 @@ export default function ReceiptPage(props: IProps) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        details="Beklager, vi mistet kontakten med systemene våre. Mangler arbeidssokerstatus"
         statusCode={props.errorCode || 500}
       />
     );
