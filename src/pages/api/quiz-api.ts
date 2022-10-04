@@ -14,7 +14,7 @@ export function getSoknadMal(onBehalfOfToken: string) {
   }
 
   return fetch(url, {
-    method: "Get",
+    method: "GET",
     headers: headersWithToken(onBehalfOfToken),
   })
     .then((response: Response) => response.json())
@@ -47,21 +47,21 @@ export function getSoknadState(uuid: string, onBehalfOfToken: string, lastSaved?
   }
 
   return fetch(url, {
-    method: "Get",
+    method: "GET",
     headers: headersWithToken(onBehalfOfToken),
   });
 }
 
-export function getSoknadStatus(uuid: string, onBehalfOfToken: string) {
-  return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/status`, {
-    method: "Get",
+export function getSoknadTilstand(uuid: string, onBehalfOfToken: string) {
+  return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/tilstand`, {
+    method: "GET",
     headers: headersWithToken(onBehalfOfToken),
   });
 }
 
 export function getArbeidssokerStatus(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/arbeidssoker`, {
-    method: "Get",
+    method: "GET",
     headers: headersWithToken(onBehalfOfToken),
   });
 }

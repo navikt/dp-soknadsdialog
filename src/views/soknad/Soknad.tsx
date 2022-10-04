@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Button, Alert } from "@navikt/ds-react";
-import { useQuiz } from "../../context/quiz-context";
-import { Section } from "../../components/section/Section";
-import { Left, Right } from "@navikt/ds-icons";
+import { FileSuccess, Left, Right } from "@navikt/ds-icons";
+import { Alert, Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import styles from "./Soknad.module.css";
-import { FetchIndicator } from "../../components/FetchIndicator";
+import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
-import { useSanity } from "../../context/sanity-context";
-import { FileSuccess } from "@navikt/ds-icons";
+import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { Section } from "../../components/section/Section";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import styles from "./Soknad.module.css";
 
 export function Soknad() {
   const router = useRouter();

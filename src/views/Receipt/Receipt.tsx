@@ -8,7 +8,7 @@ import {
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
 } from "../../constants";
 import { ReceiptDocumentsMissing } from "../../components/receipt/ReceiptDocumentsMissing";
-import { ReceiptSoknadTilstand } from "../../components/receipt/ReceiptSoknadStatus";
+import { ReceiptSoknadTilstand } from "../../components/receipt/ReceiptSoknadtilstand";
 import { ArbeidssokerStatus } from "../../components/receipt/ReceiptArbeidssokerStatus";
 import { ReceiptDocumentsNotSending } from "../../components/receipt/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt/ReceiptDocumentsUploaded";

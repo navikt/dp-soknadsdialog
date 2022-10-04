@@ -1,17 +1,22 @@
 import React from "react";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
-import { Alert } from "@navikt/ds-react";
+import { Alert, BodyShort } from "@navikt/ds-react";
+import styles from "./ReceiptArbeidssokerStatus.module.css";
+import { useSanity } from "../../context/sanity-context";
 
 export function ArbeidssokerStatus(props: IArbeidssokerStatus) {
-  return props.isRegistered ? (
-    <div>
-      Du må huske å sende meldekort innen fristen, også mens du venter på svar på søknaden din.
-    </div>
-  ) : (
-    <Alert variant={"warning"}>
-      Du er ikke registrert som arbeidssøker. Etter du er registrert må du sende hvert meldekort
-      innen fristen, også når du venter på svar på søknaden din, ellers blir du avregistrert. Hvis
-      du ikke sender meldekort kan du miste retten til dagpenger.
-    </Alert>
+  const { getAppTekst } = useSanity();
+
+  if (!props.isRegistered) {
+    return (
+      <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
+        {getAppTekst("kvittering.arbeidsokerstatus.warning-tekst")}
+      </Alert>
+    );
+  }
+  return (
+    <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
+      {getAppTekst("kvittering.arbeidsokerstatus.info-tekst")}
+    </BodyShort>
   );
 }

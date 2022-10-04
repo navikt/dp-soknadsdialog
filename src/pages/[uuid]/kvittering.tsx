@@ -5,7 +5,7 @@ import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
-import { getArbeidssokerStatus, getSoknadState, getSoknadStatus } from "../api/quiz-api";
+import { getArbeidssokerStatus, getSoknadState, getSoknadTilstand } from "../api/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
@@ -69,7 +69,7 @@ export async function getServerSideProps(
   let arbeidssokerStatus = null;
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerStatus(uuid, onBehalfOfToken);
 
@@ -79,10 +79,10 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
-  if (!soknadStatusResponse.ok) {
-    errorCode = soknadStatusResponse.status;
+  if (!soknadTilstandResponse.ok) {
+    errorCode = soknadTilstandResponse.status;
   } else {
-    soknadStatus = await soknadStatusResponse.json();
+    soknadStatus = await soknadTilstandResponse.json();
   }
 
   if (!dokumentkravResponse.ok) {
