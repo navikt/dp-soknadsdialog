@@ -4,6 +4,7 @@ import { TextField } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { PortableText } from "@portabletext/react";
 
 interface IProps {
   begrunnelse: string | undefined;
@@ -43,6 +44,9 @@ export function DokumentkravBegrunnelse({
         size="medium"
         defaultValue={begrunnelse}
         label={begrunnelseText ? begrunnelseText.text : textId}
+        description={
+          begrunnelseText?.description && <PortableText value={begrunnelseText.description} />
+        }
         onChange={(event) => debouncedBegrunnelse(event.currentTarget.value)}
         error={
           !begrunnelse &&
