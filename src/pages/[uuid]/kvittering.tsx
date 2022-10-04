@@ -110,7 +110,7 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  if (props.errorCode || !props.soknadState) {
+  if (!props.soknadState) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
