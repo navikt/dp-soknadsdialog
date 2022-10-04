@@ -9,7 +9,7 @@ import { getSoknadState } from "../api/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import { Receipt } from "../../views/Receipt";
+import { Receipt } from "../../views/Receipt/Receipt";
 import ErrorPage from "../_error";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../types/documentation.types";

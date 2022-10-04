@@ -7,6 +7,7 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
 } from "../../constants";
 import { PortableText } from "@portabletext/react";
+import styles from "./ReceiptDocumentsMissing.module.css";
 
 interface IProps {
   documents: IDokumentkrav[];
@@ -16,17 +17,19 @@ export function ReceiptDocumentsMissing(props: IProps) {
   const { getAppTekst, getDokumentkravTextById } = useSanity();
   return (
     <div>
-      <Heading level={"2"} size="medium">
-        {getAppTekst("kvittering.heading.mangler.dokumenter")}
-      </Heading>
-      <Tag variant="warning">
-        {props.documents?.length} {getAppTekst("kvittering.text.antall-mangler")}
-      </Tag>
+      <div className={styles.headingContainer}>
+        <Heading level={"2"} size="medium">
+          {getAppTekst("kvittering.heading.mangler.dokumenter")}
+        </Heading>
+        <Tag variant="warning">
+          {props.documents?.length} {getAppTekst("kvittering.text.antall-mangler")}
+        </Tag>
+      </div>
 
       {props.documents.map((dokumentkrav) => {
         const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
         return (
-          <div key={dokumentkrav.beskrivendeId} style={{ marginBottom: "50px" }}>
+          <div key={dokumentkrav.beskrivendeId} className={styles.dokumentkrav}>
             <Heading level="3" size="small">
               {dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}
             </Heading>

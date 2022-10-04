@@ -1,5 +1,5 @@
 import React from "react";
-import { Documentation } from "../../views/Documentation";
+import { Documentation } from "../../views/documentation/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";

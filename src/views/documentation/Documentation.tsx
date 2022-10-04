@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { Alert, Button, Detail } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { Dokumentkrav } from "../components/dokumentkrav/Dokumentkrav";
-import { useSanity } from "../context/sanity-context";
-import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
+import { Dokumentkrav } from "../../components/dokumentkrav/Dokumentkrav";
+import { useSanity } from "../../context/sanity-context";
+import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
-import styles from "./Dokumentasjonskrav.module.css";
-import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../constants";
+import styles from "./Documentation.module.css";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
   IDokumentkravList,
-} from "../types/documentation.types";
-import { DokumentkravTitle } from "../components/dokumentkrav/DokumentkravTitle";
-import { ErrorList, ErrorListItem } from "../components/error-list/ErrorList";
-import { DokumentkravBundleErrorModal } from "../components/dokumentkrav/DokumentkravBundleErrorModal";
-import { useDokumentkravBundler } from "../hooks/dokumentkrav/useDokumentkravBundler";
+} from "../../types/documentation.types";
+import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList";
+import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
+import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;

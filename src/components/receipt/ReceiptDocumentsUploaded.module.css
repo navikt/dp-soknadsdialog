@@ -1,0 +1,11 @@
+.headingContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--navds-spacing-4);
+}
+
+.documentItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--navds-spacing-6);
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Soknad } from "../../views/Soknad";
+import { Soknad } from "../../views/soknad/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";

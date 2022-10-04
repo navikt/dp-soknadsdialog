@@ -1,0 +1,9 @@
+.headingContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dokumentkrav {
+  margin-top: var(--navds-spacing-4);
+  margin-bottom: var(--navds-spacing-8);
+}
