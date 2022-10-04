@@ -174,6 +174,7 @@ export function Dokumentkrav(props: IProps) {
       {svar && svar !== DOKUMENTKRAV_SVAR_SEND_NAA && (
         <DokumentkravBegrunnelse
           begrunnelse={begrunnelse}
+          svar={svar}
           setBegrunnelse={setBegrunnelse}
           validationError={validationError}
         />
