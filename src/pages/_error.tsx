@@ -33,6 +33,7 @@ export default function ErrorPage(props: IProps) {
         <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
           Gå til Ditt NAV
         </Button>
+        {props.details}
       </div>
     );
   }
