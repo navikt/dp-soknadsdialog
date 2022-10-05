@@ -110,48 +110,30 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  if (!props.soknadState) {
+  if (
+    !props.soknadState ||
+    !props.dokumentkrav ||
+    !props.soknadStatus ||
+    // !props.arbeidssokerStatus ||
+    !props.sanityTexts.seksjoner
+  ) {
+    // eslint-disable-next-line no-console
+    !props.soknadState && console.error("Mangler soknadstate");
+    // eslint-disable-next-line no-console
+    !props.dokumentkrav && console.error("Mangler dokumentkrav");
+    // eslint-disable-next-line no-console
+    !props.soknadStatus && console.error("Mangler soknadStatus");
+    // eslint-disable-next-line no-console
+    // !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
+    // eslint-disable-next-line no-console
+    !props.sanityTexts.seksjoner && console.error("Mangler sanity tekster");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler søknad state"
+        details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={props.errorCode || 500}
       />
     );
-  }
-
-  if (!props.dokumentkrav) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler dokumentkrav"
-        statusCode={props.errorCode || 500}
-      />
-    );
-  }
-
-  if (!props.soknadStatus) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler soknadstatus"
-        statusCode={props.errorCode || 500}
-      />
-    );
-  }
-
-  // if (!props.arbeidssokerStatus) {
-  //   return (
-  //     <ErrorPage
-  //       title="Det har skjedd en teknisk feil"
-  //       details="Beklager, vi mistet kontakten med systemene våre. Mangler arbeidssokerstatus"
-  //       statusCode={props.errorCode || 500}
-  //     />
-  //   );
-  // }
-
-  if (!props.sanityTexts.seksjoner) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
 
   return (
