@@ -73,6 +73,10 @@ export async function getServerSideProps(
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerStatus(uuid, onBehalfOfToken);
 
+  // eslint-disable-next-line no-console
+  console.log("arbeidssokerStatusResponse.status: ", arbeidssokerStatusResponse.status);
+  // eslint-disable-next-line no-console
+  console.log("arbeidssokerStatusResponse.statusText: ", arbeidssokerStatusResponse.statusText);
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
