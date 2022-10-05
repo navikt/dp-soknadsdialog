@@ -6,7 +6,7 @@ import { formatISO } from "date-fns";
 export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) {
   const today = formatISO(new Date(), { representation: "date" });
 
-  const { payload } = await getSession({ req });
+  const { payload, token } = await getSession({ req });
   const idtoken = req.cookies["selvbetjening-idtoken"];
 
   const callId = uuid();
@@ -16,10 +16,12 @@ export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) 
   console.log("getArbeidssokerStatus() URL: ", url);
   // eslint-disable-next-line no-console
   console.log("idtoken: ", idtoken);
+  // eslint-disable-next-line no-console
+  console.log("token: ", token);
 
   return await fetch(url, {
     headers: {
-      Authorization: `Bearer ${idtoken}`,
+      Authorization: `Bearer ${token}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",
       "Nav-Call-Id": callId,
     },
