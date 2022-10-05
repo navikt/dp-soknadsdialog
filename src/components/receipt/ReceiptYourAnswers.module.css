@@ -2,6 +2,14 @@
   margin-bottom: var(--navds-spacing-8);
 }
 
-.receiptYourAnswersHeader {
-  margin-bottom: var(--navds-spacing-2);
+.receiptYourAnswersHeader span {
+  font-size: var(--navds-font-size-heading-medium);
+}
+
+.receiptYourAnswersAccordion {
+  padding: 0;
+}
+
+.receiptYourAnswersAccordion:last-of-type {
+  border-bottom: 0;
 }
