@@ -14,6 +14,8 @@ export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) 
 
   // eslint-disable-next-line no-console
   console.log("getArbeidssokerStatus() URL: ", url);
+  // eslint-disable-next-line no-console
+  console.log("idtoken: ", idtoken);
 
   return await fetch(url, {
     headers: {
