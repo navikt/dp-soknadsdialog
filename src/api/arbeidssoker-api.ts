@@ -15,16 +15,11 @@ export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) 
   // eslint-disable-next-line no-console
   console.log("getArbeidssokerStatus() URL: ", url);
 
-  const response = await fetch(url, {
+  return await fetch(url, {
     headers: {
       cookie: `selvbetjening-idtoken=${idtoken}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",
       "Nav-Call-Id": callId,
     },
   });
-
-  // eslint-disable-next-line no-console
-  console.log("Response: ", response);
-
-  return response;
 }
