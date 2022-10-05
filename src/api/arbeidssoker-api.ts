@@ -19,7 +19,7 @@ export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) 
 
   return await fetch(url, {
     headers: {
-      cookie: `selvbetjening-idtoken=${idtoken}`,
+      Authorization: `Bearer ${idtoken}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",
       "Nav-Call-Id": callId,
     },
