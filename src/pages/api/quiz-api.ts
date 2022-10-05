@@ -58,10 +58,3 @@ export function getSoknadTilstand(uuid: string, onBehalfOfToken: string) {
     headers: headersWithToken(onBehalfOfToken),
   });
 }
-
-export function getArbeidssokerStatus(uuid: string, onBehalfOfToken: string) {
-  return fetch(`${process.env.API_BASE_URL}/arbeidssoker`, {
-    method: "GET",
-    headers: headersWithToken(onBehalfOfToken),
-  });
-}

@@ -5,7 +5,7 @@ import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
-import { getArbeidssokerStatus, getSoknadState, getSoknadTilstand } from "../api/quiz-api";
+import { getSoknadState, getSoknadTilstand } from "../api/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
@@ -17,6 +17,7 @@ import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-
 import { mockNeste } from "../../localhost-data/mock-neste";
 import { ISoknadStatus } from "../api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../api/arbeidssoker";
+import { getArbeidssokerStatus } from "../../api/arbeidssoker-api";
 
 interface IProps {
   errorCode: number | null;
@@ -71,7 +72,7 @@ export async function getServerSideProps(
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerStatus(uuid, onBehalfOfToken);
+  const arbeidssokerStatusResponse = await getArbeidssokerStatus(context);
 
   // eslint-disable-next-line no-console
   console.log("arbeidssokerStatusResponse.status: ", arbeidssokerStatusResponse.status);
