@@ -4,6 +4,7 @@ import {
   IDokumentkrav,
   IDokumentkravChanges,
   IDokumentkravFil,
+  IDokumentkravValidationError,
 } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -26,7 +27,7 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
   onChange: (dokumentkrav: IDokumentkrav, changes: IDokumentkravChanges) => void;
   bundleError?: boolean;
-  validationError?: boolean;
+  validationError?: IDokumentkravValidationError;
 }
 
 export function Dokumentkrav(props: IProps) {
@@ -121,7 +122,9 @@ export function Dokumentkrav(props: IProps) {
           onChange={setSvar}
           value={svar}
           error={
-            validationError && !svar && getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
+            validationError?.errorType === "svar" &&
+            !svar &&
+            getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
           }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
@@ -165,8 +168,8 @@ export function Dokumentkrav(props: IProps) {
             </Alert>
           )}
 
-          {validationError && uploadedFiles.length === 0 && (
-            <Alert variant="info">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
+          {validationError?.errorType === "filer" && uploadedFiles.length === 0 && (
+            <Alert variant="error">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
           )}
         </>
       )}

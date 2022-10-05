@@ -2,7 +2,7 @@ import { ErrorSummary } from "@navikt/ds-react";
 import React, { PropsWithChildren, useEffect, useRef } from "react";
 
 interface IProps {
-  showWhen: boolean;
+  scrollWhen: boolean;
   heading: string;
 }
 
@@ -11,23 +11,21 @@ interface IErrorListItem {
 }
 
 export function ErrorList(props: PropsWithChildren<IProps>) {
-  const { showWhen, heading, children } = props;
+  const { heading, children, scrollWhen } = props;
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (showWhen) {
+    if (scrollWhen) {
       errorSummaryRef.current?.focus();
       errorSummaryRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, [showWhen]);
+  }, [scrollWhen]);
 
   return (
     <>
-      {showWhen && (
-        <ErrorSummary size="medium" heading={heading} ref={errorSummaryRef}>
-          {children}
-        </ErrorSummary>
-      )}
+      <ErrorSummary size="medium" heading={heading} ref={errorSummaryRef}>
+        {children}
+      </ErrorSummary>
     </>
   );
 }

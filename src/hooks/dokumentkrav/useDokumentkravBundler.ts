@@ -8,6 +8,7 @@ interface IUseDokumentkravBundler {
   bundleFiles: (list: IDokumentkrav[]) => void;
   isBundling: boolean;
   bundleErrors: IDokumentkrav[];
+  hasBundleError: (dokumentkrav: IDokumentkrav) => boolean;
 }
 
 export function useDokumentkravBundler(): IUseDokumentkravBundler {
@@ -57,9 +58,18 @@ export function useDokumentkravBundler(): IUseDokumentkravBundler {
     }
   }
 
+  function hasBundleError(dokumentkrav: IDokumentkrav) {
+    return (
+      bundleErrors.findIndex((item) => {
+        return item.id === dokumentkrav.id;
+      }) > -1
+    );
+  }
+
   return {
     bundleFiles,
     isBundling,
     bundleErrors,
+    hasBundleError,
   };
 }

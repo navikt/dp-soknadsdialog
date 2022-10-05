@@ -7,7 +7,6 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import { useRouter } from "next/router";
 import { Left } from "@navikt/ds-icons";
 import styles from "./Documentation.module.css";
-import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
@@ -17,6 +16,8 @@ import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTit
 import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList";
 import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
+import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
+import { useForceTrigger } from "../../hooks/useForceTrigger";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -29,13 +30,11 @@ export function Documentation(props: IProps) {
     props.dokumentkravList
   );
 
-  const { bundleFiles, isBundling, bundleErrors } = useDokumentkravBundler();
+  const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
+  const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
+  const { forceTrigger: triggerScroll, trigger: scroll } = useForceTrigger();
 
-  const [showBundleError, setShowBundleError] = useState(false);
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
-
-  const [showValidationError, setShowValidationError] = useState(false);
-  const [hasValidationError, setHasValidationError] = useState<IDokumentkrav[]>([]);
 
   const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
@@ -52,43 +51,16 @@ export function Documentation(props: IProps) {
     }
   }
 
-  function validate() {
-    setShowValidationError(false);
-    setHasValidationError([]);
-
-    const unAnswered = dokumentkravList.krav.filter((dokumentkrav) => {
-      return !dokumentkrav.svar;
-    });
-
-    const lackingFiles = dokumentkravList.krav.filter((dokumentkrav) => {
-      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length === 0;
-    });
-
-    if (unAnswered.length > 0 || lackingFiles.length > 0) {
-      setShowValidationError(true);
-      setHasValidationError([...unAnswered, ...lackingFiles]);
-
-      throw new Error();
-    }
-  }
-
   async function bundleAndSummary() {
-    setShowValidationError(false);
-    setShowBundleError(false);
-
-    try {
-      validate();
-    } catch {
-      setShowValidationError(true);
-      return;
-    }
-
-    try {
-      await bundleFiles(dokumentkravList.krav);
-      router.push(`/${router.query.uuid}/oppsummering`);
-    } catch {
-      setShowBundleError(true);
-      setShowBundleErrorModal(true);
+    if (isValid(dokumentkravList.krav)) {
+      try {
+        await bundleFiles(dokumentkravList.krav);
+        router.push(`/${router.query.uuid}/oppsummering`);
+      } catch {
+        setShowBundleErrorModal(true);
+      }
+    } else {
+      triggerScroll();
     }
   }
 
@@ -98,32 +70,26 @@ export function Documentation(props: IProps) {
 
   return (
     <>
-      <ErrorList
-        heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
-        showWhen={showValidationError}
-      >
-        {hasValidationError.map((item) => {
-          return (
-            <ErrorListItem id={item.id} key={item.id}>
-              <DokumentkravTitle dokumentkrav={item} />
-            </ErrorListItem>
-          );
-        })}
-      </ErrorList>
+      {validationErrors.length > 0 && (
+        <ErrorList
+          heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
+          scrollWhen={scroll}
+        >
+          {validationErrors.map((item) => {
+            return (
+              <ErrorListItem id={item.dokumentkrav.id} key={item.dokumentkrav.id}>
+                <DokumentkravTitle dokumentkrav={item.dokumentkrav} />
+              </ErrorListItem>
+            );
+          })}
+        </ErrorList>
+      )}
 
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
       {dokumentkravList.krav.map((dokumentkrav, index) => {
         const dokumentkravNumber = index + 1;
-        const bundleError =
-          showBundleError &&
-          bundleErrors.findIndex((item) => {
-            return item.id === dokumentkrav.id;
-          }) > -1;
-
-        const validationError =
-          hasValidationError.findIndex((item) => {
-            return item.id === dokumentkrav.id;
-          }) > -1;
+        const validationError = getValidationError(dokumentkrav);
+        const bundleError = hasBundleError(dokumentkrav);
 
         return (
           <div className={styles.dokumentkravContainer} key={index} id={dokumentkrav.id}>
