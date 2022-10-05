@@ -1,4 +1,3 @@
-import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
@@ -148,6 +147,7 @@ export default function ReceiptPage(props: IProps) {
           dokumentkravList={props.dokumentkrav}
           soknadStatus={props.soknadStatus}
           arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
+          sections={props.soknadState.seksjoner}
         />
       </QuizProvider>
     </SanityProvider>

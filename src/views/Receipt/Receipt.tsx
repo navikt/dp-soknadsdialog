@@ -1,4 +1,3 @@
-import React from "react";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import {
@@ -16,11 +15,14 @@ import { ReceiptDocumentsOther } from "../../components/receipt/ReceiptDocuments
 import styles from "./Receipts.module.css";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
+import { ReceiptYourAnswers } from "../../components/receipt/ReceiptYourAnswers";
+import { IQuizSeksjon } from "../../types/quiz.types";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
   dokumentkravList: IDokumentkravList;
   arbeidssokerStatus: IArbeidssokerStatus;
+  sections: IQuizSeksjon[];
 }
 
 export function Receipt(props: IProps) {
@@ -49,6 +51,7 @@ export function Receipt(props: IProps) {
         <ReceiptDocumentsUploaded documents={uploadedDocuments} />
         <ReceiptDocumentsNotSending documents={notSendingDocuments} />
       </div>
+      <ReceiptYourAnswers sections={props.sections} />
       <NoSessionModal />
     </>
   );

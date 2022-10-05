@@ -1,5 +1,4 @@
 import { BodyLong, Heading, Tag } from "@navikt/ds-react";
-import React from "react";
 import { useSanity } from "../../context/sanity-context";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import styles from "./ReceiptSoknadTilstand.module.css";
