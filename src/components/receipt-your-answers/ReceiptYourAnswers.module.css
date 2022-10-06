@@ -2,19 +2,6 @@
   margin-bottom: var(--navds-spacing-8);
 }
 
-.receiptYourAnswersHeader span {
+.receiptYourAnswersHeader button {
   font-size: var(--navds-font-size-heading-medium);
-  border-bottom: 0;
-}
-
-.receiptYourAnswersHeader {
-  border-bottom: 0;
-}
-
-.receiptYourAnswersAccordion {
-  padding: 0;
-}
-
-.receiptYourAnswersAccordion:last-of-type {
-  border-bottom: 0;
 }
