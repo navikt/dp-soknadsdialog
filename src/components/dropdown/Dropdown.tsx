@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ReactNode } from "react";
-import { Select } from "@navikt/ds-react";
+import { Select, Label, BodyShort } from "@navikt/ds-react";
 
 interface IProps {
   label: string;
@@ -8,6 +8,7 @@ interface IProps {
   currentValue: string;
   placeHolderText?: string;
   description?: ReactNode;
+  readOnly?: boolean;
 }
 
 export interface IDropdownOption {
@@ -16,6 +17,15 @@ export interface IDropdownOption {
 }
 
 export function Dropdown(props: IProps) {
+  if (props.readOnly) {
+    return (
+      <>
+        <Label>{props.label}</Label>
+        <BodyShort>{props.currentValue}</BodyShort>
+      </>
+    );
+  }
+
   return (
     <Select
       label={props.label}

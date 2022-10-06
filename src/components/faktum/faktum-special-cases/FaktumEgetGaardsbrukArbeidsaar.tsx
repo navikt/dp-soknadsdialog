@@ -14,7 +14,7 @@ for (let i = 0; i <= 4; i++) {
 }
 
 export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
-  const { faktum } = props;
+  const { faktum, readonly } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
@@ -36,6 +36,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       options={years}
       currentValue={currentAnswer?.toString() || ""}
       placeHolderText={"Velg et år"}
+      readOnly={readonly}
     />
   );
 }
