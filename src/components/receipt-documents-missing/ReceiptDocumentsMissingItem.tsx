@@ -7,30 +7,20 @@ import {
 } from "../../constants";
 import { PortableText } from "@portabletext/react";
 import { UploadFilesModal } from "../receipt-upload-modal/ReceiptUploadModal";
-import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
+import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
+import { useFileUploader } from "../../hooks/useFileUploader";
+import { FileList } from "../file-list/FileList";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
-  const { getAppTekst, getDokumentkravTextById } = useSanity();
-  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>([]);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const { getAppTekst, getDokumentkravTextById } = useSanity();
+  const { uploadedFiles, handleUploadedFiles } = useFileUploader();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   function toggleModal() {
     setUploadModalOpen((state) => !state);
-  }
-
-  function handUploadedFiles(file: IDokumentkravFil) {
-    const fileState = [...uploadedFiles];
-    const indexOfFile = fileState.findIndex((f) => f.filsti === file.filsti);
-
-    if (indexOfFile !== -1) {
-      fileState.splice(indexOfFile, 1);
-      setUploadedFiles(fileState);
-    } else {
-      setUploadedFiles((currentState) => [...currentState, file]);
-    }
   }
 
   return (
@@ -64,8 +54,14 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <UploadFilesModal
         modalOpen={uploadModalOpen}
         dokumentkrav={dokumentkrav}
-        handleUploadedFiles={handUploadedFiles}
+        handleUploadedFiles={handleUploadedFiles}
         closeModal={() => setUploadModalOpen(false)}
+      />
+
+      <FileList
+        uploadedFiles={uploadedFiles}
+        dokumentkravId={dokumentkrav.beskrivendeId}
+        handleUploadedFiles={handleUploadedFiles}
       />
     </div>
   );
