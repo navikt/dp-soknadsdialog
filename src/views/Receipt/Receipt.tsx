@@ -17,6 +17,8 @@ import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
 import { IQuizSeksjon } from "../../types/quiz.types";
+import { Button } from "@navikt/ds-react";
+import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -26,6 +28,8 @@ interface IProps {
 }
 
 export function Receipt(props: IProps) {
+  const { getAppTekst } = useSanity();
+
   const missingDocuments: IDokumentkrav[] = props.dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
@@ -41,6 +45,10 @@ export function Receipt(props: IProps) {
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
   );
 
+  function navigateToMineDagpener() {
+    window.location.assign("https://arbeid.dev.nav.no/arbeid/dagpenger/mine-dagpenger");
+  }
+
   return (
     <>
       <ReceiptSoknadTilstand {...props.soknadStatus} />
@@ -52,6 +60,13 @@ export function Receipt(props: IProps) {
         <ReceiptDocumentsNotSending documents={notSendingDocuments} />
       </div>
       <ReceiptYourAnswers sections={props.sections} />
+      <Button
+        variant="primary"
+        className={styles.nagivateToMineDagpengerButton}
+        onClick={navigateToMineDagpener}
+      >
+        {getAppTekst("kvittering.mine-dagpenger.knapp")}
+      </Button>
       <NoSessionModal />
     </>
   );

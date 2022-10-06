@@ -4,6 +4,11 @@
 
 .receiptYourAnswersHeader span {
   font-size: var(--navds-font-size-heading-medium);
+  border-bottom: 0;
+}
+
+.receiptYourAnswersHeader {
+  border-bottom: 0;
 }
 
 .receiptYourAnswersAccordion {
