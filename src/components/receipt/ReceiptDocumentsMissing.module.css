@@ -1,9 +1,17 @@
 .headingContainer {
   display: flex;
   justify-content: space-between;
+  margin-bottom: var(--navds-spacing-3);
 }
 
 .dokumentkrav {
-  margin-top: var(--navds-spacing-4);
-  margin-bottom: var(--navds-spacing-8);
+  margin-bottom: var(--navds-spacing-11);
+}
+
+.readmoreContainer {
+  margin-bottom: var(--navds-spacing-3);
+}
+
+.uploadButton {
+  margin-top: var(--navds-spacing-3);
 }

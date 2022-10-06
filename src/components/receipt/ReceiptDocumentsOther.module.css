@@ -1,7 +1,5 @@
-.headingContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--navds-spacing-3);
+.uploadButton {
+  margin-top: var(--navds-spacing-3);
 }
 
 .documentItem {

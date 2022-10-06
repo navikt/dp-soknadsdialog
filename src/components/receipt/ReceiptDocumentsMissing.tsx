@@ -18,7 +18,7 @@ export function ReceiptDocumentsMissing(props: IProps) {
   return (
     <div>
       <div className={styles.headingContainer}>
-        <Heading level={"2"} size="medium">
+        <Heading level={"2"} size="small">
           {getAppTekst("kvittering.heading.mangler.dokumenter")}
         </Heading>
         <Tag variant="warning">
@@ -30,7 +30,7 @@ export function ReceiptDocumentsMissing(props: IProps) {
         const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
         return (
           <div key={dokumentkrav.beskrivendeId} className={styles.dokumentkrav}>
-            <Heading level="3" size="small">
+            <Heading level="3" size="xsmall">
               {dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}
             </Heading>
             <BodyShort>
@@ -52,7 +52,7 @@ export function ReceiptDocumentsMissing(props: IProps) {
               </ReadMore>
             )}
 
-            <Button> Last opp</Button>
+            <Button className={styles.uploadButton}> Last opp</Button>
           </div>
         );
       })}
