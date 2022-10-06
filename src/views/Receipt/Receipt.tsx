@@ -6,16 +6,16 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
 } from "../../constants";
-import { ReceiptDocumentsMissing } from "../../components/receipt/ReceiptDocumentsMissing";
-import { ReceiptSoknadTilstand } from "../../components/receipt/ReceiptSoknadtilstand";
-import { ArbeidssokerStatus } from "../../components/receipt/ReceiptArbeidssokerStatus";
-import { ReceiptDocumentsNotSending } from "../../components/receipt/ReceiptDocumentsNotSending";
-import { ReceiptDocumentsUploaded } from "../../components/receipt/ReceiptDocumentsUploaded";
-import { ReceiptDocumentsOther } from "../../components/receipt/ReceiptDocumentsOther";
+import { ReceiptDocumentsMissing } from "../../components/receipt-documents-missing/ReceiptDocumentsMissing";
+import { ReceiptSoknadTilstand } from "../../components/receipt-soknad-tilstand/ReceiptSoknadTilstand";
+import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
+import { ReceiptDocumentsNotSending } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSending";
+import { ReceiptDocumentsUploaded } from "../../components/receipt-documents-uploaded/ReceiptDocumentsUploaded";
+import { ReceiptDocumentsOther } from "../../components/receipt-documents-other/ReceiptDocumentsOther";
 import styles from "./Receipts.module.css";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
-import { ReceiptYourAnswers } from "../../components/receipt/ReceiptYourAnswers";
+import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
 import { IQuizSeksjon } from "../../types/quiz.types";
 import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
