@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { IDokumentkravFil } from "../types/documentation.types";
 
-export function useFileUploader() {
-  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>([]);
+export function useFileUploader(files?: IDokumentkravFil[]) {
+  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(files || []);
 
   function handleUploadedFiles(file: IDokumentkravFil) {
     const fileState = [...uploadedFiles];

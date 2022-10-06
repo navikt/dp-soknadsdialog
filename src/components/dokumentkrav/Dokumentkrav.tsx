@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import {
-  IDokumentkrav,
-  IDokumentkravChanges,
-  IDokumentkravFil,
-} from "../../types/documentation.types";
+import { IDokumentkrav, IDokumentkravChanges } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
@@ -21,6 +17,7 @@ import { useRouter } from "next/router";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { DokumentkravTitle } from "./DokumentkravTitle";
+import { useFileUploader } from "../../hooks/useFileUploader";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -29,23 +26,22 @@ interface IProps {
   validationError?: boolean;
 }
 
-export function Dokumentkrav(props: IProps) {
-  const { dokumentkrav, onChange, bundleError, validationError } = props;
-
+export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationError }: IProps) {
   const router = useRouter();
   const { uuid } = router.query;
   const isFirstRender = useFirstRender();
 
   const [svar, setSvar] = useState(dokumentkrav.svar);
-  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
-  const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(props.dokumentkrav.filer);
   const [hasError, setHasError] = useState(false);
-
   const [alertText, setAlertText] = useState<ISanityAlertText>();
+  const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
+  const { uploadedFiles, handleUploadedFiles } = useFileUploader(dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
-  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
-  const remainingFileSize = findRemainingFileSize();
+  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
+  const totalUploadedFileSize = dokumentkrav.filer
+    .map((fil) => fil.storrelse)
+    .reduce((accumulator: number, value: number) => accumulator + value, 0);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -83,28 +79,6 @@ export function Dokumentkrav(props: IProps) {
     } catch (error) {
       setHasError(true);
     }
-  }
-
-  function handUploadedFiles(file: IDokumentkravFil) {
-    const fileState = [...uploadedFiles];
-    const indexOfFile = fileState.findIndex((f) => f.filsti === file.filsti);
-
-    if (indexOfFile !== -1) {
-      fileState.splice(indexOfFile, 1);
-      setUploadedFiles(fileState);
-    } else {
-      setUploadedFiles((currentState) => [...currentState, file]);
-    }
-  }
-
-  function findRemainingFileSize() {
-    const totalUploadedFileSize = dokumentkrav.filer.map((fil) => fil.storrelse).reduce(sum, 0);
-
-    function sum(accumulator: number, value: number) {
-      return accumulator + value;
-    }
-
-    return MAX_FILE_SIZE - totalUploadedFileSize;
   }
 
   return (
@@ -150,13 +124,13 @@ export function Dokumentkrav(props: IProps) {
         <>
           <FileUploader
             dokumentkrav={dokumentkrav}
-            handleUploadedFiles={handUploadedFiles}
-            maxFileSize={remainingFileSize}
+            handleUploadedFiles={handleUploadedFiles}
+            maxFileSize={MAX_FILE_SIZE - totalUploadedFileSize}
           />
           <FileList
             dokumentkravId={dokumentkrav.id}
             uploadedFiles={uploadedFiles}
-            handleUploadedFiles={handUploadedFiles}
+            handleUploadedFiles={handleUploadedFiles}
           />
 
           {bundleError && (
