@@ -22,7 +22,7 @@ export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) 
   return await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      "Downstream-Authorization": `Bearer ${idtoken}`,
+      "Downstream-Authorization": `Bearer ${token}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",
       "Nav-Call-Id": callId,
     },
