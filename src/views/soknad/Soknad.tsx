@@ -1,7 +1,7 @@
 import { FileSuccess, Left, Right } from "@navikt/ds-icons";
-import { Alert, Button } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
@@ -13,8 +13,14 @@ import styles from "./Soknad.module.css";
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const { soknadState, isError, isLoading, errorType } = useQuiz();
-  const [showNotFinishedError, setShowNotFinishedError] = useState(false);
+  const {
+    soknadState,
+    isError,
+    isLoading,
+    errorType,
+    setUnansweredFaktumBeskrivendeId,
+    unansweredFaktumBeskrivendeId,
+  } = useQuiz();
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -24,6 +30,10 @@ export function Soknad() {
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
+
+  const firstUnansweredFaktumBeskrivendeId = currentSection?.fakta?.find(
+    (faktum) => faktum?.svar === undefined
+  )?.beskrivendeId;
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
@@ -35,8 +45,8 @@ export function Soknad() {
   }, []);
 
   useEffect(() => {
-    if (showNotFinishedError) {
-      setShowNotFinishedError(false);
+    if (unansweredFaktumBeskrivendeId) {
+      setUnansweredFaktumBeskrivendeId(undefined);
     }
   }, [soknadState]);
 
@@ -45,11 +55,12 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      setShowNotFinishedError(true);
+      setUnansweredFaktumBeskrivendeId(firstUnansweredFaktumBeskrivendeId);
     }
   }
 
   function navigateToPreviousSection() {
+    setUnansweredFaktumBeskrivendeId(undefined);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
@@ -80,12 +91,6 @@ export function Soknad() {
       <div className={styles.loaderContainer}>
         <FetchIndicator isLoading={isLoading} />
       </div>
-
-      {showNotFinishedError && (
-        <Alert variant="error" size="medium" inline>
-          Du må svare på alle spørsmålene
-        </Alert>
-      )}
 
       <nav className="navigation-container">
         {isFirstSection && (

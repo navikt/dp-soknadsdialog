@@ -13,6 +13,8 @@ export interface IQuizContext {
   isLoading: boolean;
   isError: boolean;
   errorType: ErrorTypesEnum;
+  unansweredFaktumBeskrivendeId?: string;
+  setUnansweredFaktumBeskrivendeId: (beskrivendeId: string | undefined) => void;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -28,6 +30,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
+  const [unansweredFaktumId, setUnansweredFaktumId] = useState<string | undefined>(undefined);
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
     try {
@@ -36,6 +39,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       const res = await saveFaktum(uuid, faktum, svar);
       await getNeste(res.sistBesvart);
       setIsLoading(false);
+      setUnansweredFaktumId(undefined);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
@@ -45,6 +49,10 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     }
   }
 
+  function setUnansweredFaktumBeskrivendeId(beskrivendeId: string | undefined) {
+    setUnansweredFaktumId(beskrivendeId);
+  }
+
   async function saveGeneratorFaktumToQuiz(faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) {
     try {
       setIsError(false);
@@ -52,6 +60,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       const res = await saveFaktum(uuid, faktum, svar);
       await getNeste(res.sistBesvart);
       setIsLoading(false);
+      setUnansweredFaktumId(undefined);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
@@ -88,6 +97,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         isLoading,
         isError,
         errorType,
+        unansweredFaktumBeskrivendeId: unansweredFaktumId,
+        setUnansweredFaktumBeskrivendeId,
       }}
     >
       {props.children}
