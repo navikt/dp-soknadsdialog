@@ -6,7 +6,7 @@ import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../AlertText";
-import { DOKUMENTKRAV_SVAR_SEND_NAA, MAX_FILE_SIZE } from "../../constants";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
@@ -18,6 +18,7 @@ import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { DokumentkravTitle } from "./DokumentkravTitle";
 import { useFileUploader } from "../../hooks/useFileUploader";
+import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -35,13 +36,11 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
   const [hasError, setHasError] = useState(false);
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
+  const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-  const totalUploadedFileSize = dokumentkrav.filer
-    .map((fil) => fil.storrelse)
-    .reduce((accumulator: number, value: number) => accumulator + value, 0);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -125,7 +124,7 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
           <FileUploader
             dokumentkrav={dokumentkrav}
             handleUploadedFiles={handleUploadedFiles}
-            maxFileSize={MAX_FILE_SIZE - totalUploadedFileSize}
+            maxFileSize={remainingFilesize}
           />
           <FileList
             dokumentkravId={dokumentkrav.id}

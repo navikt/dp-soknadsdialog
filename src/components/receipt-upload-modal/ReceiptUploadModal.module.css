@@ -1,0 +1,9 @@
+.modalContainer {
+  max-width: 560px;
+  width: 100%;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+}

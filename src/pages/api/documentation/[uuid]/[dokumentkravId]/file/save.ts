@@ -13,6 +13,16 @@ export const config = {
 };
 
 async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).json({
+      filsti: "path-to-file",
+      filnavn: "filnavn",
+      urn: "urn-til-fil",
+      tidspunkt: "30.09.2022",
+      storrelse: 654654,
+    });
+  }
+
   const { token, apiToken } = await getSession({ req });
 
   if (!token || !apiToken) {

@@ -1,8 +1,10 @@
+import React, { useEffect } from "react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import React, { useEffect } from "react";
-import { BodyLong, Heading, Modal } from "@navikt/ds-react";
+import { Button, BodyLong, Heading, Modal } from "@navikt/ds-react";
 import { FileUploader } from "../file-uploader/FileUploader";
+import styles from "./ReceiptUploadModal.module.css";
+import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 
 interface IProps {
   modalOpen: boolean;
@@ -13,6 +15,7 @@ interface IProps {
 
 export function UploadFilesModal(props: IProps) {
   const { getDokumentkravTextById } = useSanity();
+  const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
 
   useEffect(() => {
@@ -23,7 +26,7 @@ export function UploadFilesModal(props: IProps) {
 
   return (
     <>
-      <Modal open={props.modalOpen} onClose={props.closeModal}>
+      <Modal open={props.modalOpen} onClose={props.closeModal} className={styles.modalContainer}>
         <Modal.Content>
           <Heading spacing level="1" size="medium" id="modal-heading">
             Last opp filer
@@ -42,8 +45,15 @@ export function UploadFilesModal(props: IProps) {
           <FileUploader
             dokumentkrav={props.dokumentkrav}
             handleUploadedFiles={props.handleUploadedFiles}
-            maxFileSize={10000}
+            maxFileSize={remainingFilesize}
           />
+
+          <nav className="navigation-container">
+            <Button variant="danger" onClick={props.closeModal}>
+              Avbryt
+            </Button>
+            <Button variant="primary">Send inn dokumenter</Button>
+          </nav>
         </Modal.Content>
       </Modal>
     </>
