@@ -55,6 +55,8 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
+      // eslint-disable-next-line no-console
+      console.log(firstUnansweredFaktumBeskrivendeId);
       setUnansweredFaktumBeskrivendeId(firstUnansweredFaktumBeskrivendeId);
     }
   }

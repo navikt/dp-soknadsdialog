@@ -39,7 +39,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       const res = await saveFaktum(uuid, faktum, svar);
       await getNeste(res.sistBesvart);
       setIsLoading(false);
-      setUnansweredFaktumId(undefined);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
@@ -60,7 +59,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       const res = await saveFaktum(uuid, faktum, svar);
       await getNeste(res.sistBesvart);
       setIsLoading(false);
-      setUnansweredFaktumId(undefined);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
       console.error("Lagre faktum error: ", error);
