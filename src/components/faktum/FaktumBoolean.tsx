@@ -56,6 +56,13 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
     );
   }
 
+  // eslint-disable-next-line no-console
+  console.log("error id", unansweredFaktumBeskrivendeId);
+  // eslint-disable-next-line no-console
+  console.log("current faktumId ", faktum.beskrivendeId);
+  // eslint-disable-next-line no-console
+  console.log("should error", unansweredFaktumBeskrivendeId === faktum.beskrivendeId);
+
   return (
     <>
       <RadioGroup
