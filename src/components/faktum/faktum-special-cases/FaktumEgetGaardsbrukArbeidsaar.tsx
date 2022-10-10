@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
-import { IFaktum } from "../Faktum";
-import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
-import { IQuizNumberFaktum } from "../../../types/quiz.types";
+import { ChangeEvent, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
+import { IQuizNumberFaktum } from "../../../types/quiz.types";
+import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
+import { IFaktum } from "../Faktum";
 
 const years: IDropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -15,7 +15,8 @@ for (let i = 0; i <= 4; i++) {
 
 export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, readonly } = props;
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
 
@@ -37,6 +38,11 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       currentValue={currentAnswer?.toString() || ""}
       placeHolderText={"Velg et år"}
       readOnly={readonly}
+      error={
+        unansweredFaktumBeskrivendeId === faktum.beskrivendeId
+          ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+          : undefined
+      }
     />
   );
 }

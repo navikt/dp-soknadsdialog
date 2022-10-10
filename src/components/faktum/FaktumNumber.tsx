@@ -116,7 +116,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   function getValidationMessage() {
-    if (unansweredFaktumBeskrivendeId && unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (isValid !== true) {
       getErrorMessage();

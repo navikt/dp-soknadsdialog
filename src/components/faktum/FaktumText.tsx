@@ -46,12 +46,12 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }
 
   function getErrorMessage() {
-    if (unansweredFaktumBeskrivendeId && unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
     } else {
-      return false;
+      return undefined;
     }
   }
 

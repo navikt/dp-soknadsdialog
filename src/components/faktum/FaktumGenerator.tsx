@@ -5,7 +5,7 @@ import {
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
 import React, { useEffect } from "react";
-import { Button, Heading, Modal } from "@navikt/ds-react";
+import { Button, ErrorMessage, Heading, Modal } from "@navikt/ds-react";
 import { Faktum, IFaktum } from "./Faktum";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
@@ -15,6 +15,7 @@ import { BarnRegister } from "../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
+import styles from "./Faktum.module.css";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -32,7 +33,7 @@ export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
 function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const { isLoading } = useQuiz();
+  const { isLoading, unansweredFaktumBeskrivendeId } = useQuiz();
   const { getAppTekst } = useSanity();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
@@ -91,6 +92,11 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
           {getAppTekst("generator.legg-til")}
         </Button>
+      )}
+      {unansweredFaktumBeskrivendeId === props.faktum.beskrivendeId && (
+        <ErrorMessage className={styles.faktumGeneratorUnansweredError}>
+          {getAppTekst("validering.ubesvart-faktum.varsel-tekst")}
+        </ErrorMessage>
       )}
     </>
   );
