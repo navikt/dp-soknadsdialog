@@ -12,7 +12,7 @@ import { isValidTextLength } from "./validations";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
   const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
@@ -45,7 +45,15 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     );
   }
 
-  const errorText = faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
+  function getErrorMessage() {
+    if (unansweredFaktumBeskrivendeId && unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
+      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+    } else if (!isValid) {
+      return faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
+    } else {
+      return false;
+    }
+  }
 
   return (
     <>
@@ -57,7 +65,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         type="text"
         onChange={(event) => debouncedChange(event.currentTarget.value)}
         onBlur={debouncedChange.flush}
-        error={!isValid ? errorText : false}
+        error={getErrorMessage()}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

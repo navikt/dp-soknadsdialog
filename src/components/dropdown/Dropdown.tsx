@@ -9,6 +9,7 @@ interface IProps {
   placeHolderText?: string;
   description?: ReactNode;
   readOnly?: boolean;
+  error?: string;
 }
 
 export interface IDropdownOption {
@@ -33,6 +34,7 @@ export function Dropdown(props: IProps) {
       onChange={props.onChange}
       value={props.currentValue}
       description={props.description && props.description}
+      error={props.error}
     >
       {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (

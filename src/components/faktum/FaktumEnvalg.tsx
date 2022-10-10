@@ -12,8 +12,8 @@ import { ISanityAlertText } from "../../types/sanity.types";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -49,6 +49,11 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
+        error={
+          unansweredFaktumBeskrivendeId === faktum.beskrivendeId
+            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+            : undefined
+        }
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

@@ -16,8 +16,8 @@ import { HelpText } from "../HelpText";
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { getFaktumTextById, getLandGruppeTextById } = useSanity();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { getFaktumTextById, getLandGruppeTextById, getAppTekst } = useSanity();
+  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
 
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
   const [currentLandGruppeText, setCurrentLandGruppeText] = useState<
@@ -72,6 +72,11 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         options={options}
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
+        error={
+          unansweredFaktumBeskrivendeId === faktum.beskrivendeId
+            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+            : undefined
+        }
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
