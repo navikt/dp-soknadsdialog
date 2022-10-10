@@ -65,3 +65,8 @@ export interface IDokumentkravChanges {
   begrunnelse?: string;
   filer?: IDokumentkravFil[];
 }
+
+export interface IDokumentkravValidationError {
+  errorType: string;
+  dokumentkrav: IDokumentkrav;
+}
