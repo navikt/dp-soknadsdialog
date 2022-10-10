@@ -20,7 +20,7 @@ export function useDokumentkravValidation(): IUseDokumentkravValidation {
       })
       .map((dokumentkrav) => ({ errorType: "svar", dokumentkrav }));
 
-    const lackingBegrunnelse = dokumentkravList
+    const missingBegrunnelse = dokumentkravList
       .filter((dokumentkrav) => {
         const requiresBegrunnelse =
           dokumentkrav.svar && dokumentkrav.svar !== DOKUMENTKRAV_SVAR_SEND_NAA;
@@ -28,14 +28,14 @@ export function useDokumentkravValidation(): IUseDokumentkravValidation {
       })
       ?.map((dokumentkrav) => ({ errorType: "begrunnelse", dokumentkrav }));
 
-    const lackingFiles = dokumentkravList
+    const missingFiles = dokumentkravList
       .filter((dokumentkrav) => {
         return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length === 0;
       })
       .map((dokumentkrav) => ({ errorType: "filer", dokumentkrav }));
 
-    if (unAnswered.length > 0 || lackingBegrunnelse.length > 0 || lackingFiles.length > 0) {
-      setValidationErrors([...unAnswered, ...lackingBegrunnelse, ...lackingFiles]);
+    if (unAnswered.length > 0 || missingBegrunnelse.length > 0 || missingFiles.length > 0) {
+      setValidationErrors([...unAnswered, ...missingBegrunnelse, ...missingFiles]);
 
       return false;
     }
