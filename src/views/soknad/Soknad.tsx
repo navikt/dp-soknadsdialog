@@ -31,9 +31,17 @@ export function Soknad() {
     (faktum) => faktum?.svar === undefined
   );
 
-  const firstUnansweredFaktumBeskrivendeId = currentSection?.fakta?.find(
-    (faktum) => faktum?.svar === undefined
-  )?.beskrivendeId;
+  function getFirstUnansweredFaktumBeskrivendeId() {
+    const firstUnansweredGenerator = currentSection?.fakta
+      .filter((faktum) => faktum.type === "generator")
+      .find((svar) => svar.svar === undefined);
+
+    if (firstUnansweredGenerator) {
+      return firstUnansweredGenerator.beskrivendeId;
+    } else {
+      return currentSection?.fakta?.find((faktum) => faktum?.svar === undefined)?.beskrivendeId;
+    }
+  }
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
@@ -55,7 +63,8 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      setUnansweredFaktumBeskrivendeId(firstUnansweredFaktumBeskrivendeId);
+      const unansweredBeskrivendeId = getFirstUnansweredFaktumBeskrivendeId();
+      setUnansweredFaktumBeskrivendeId(unansweredBeskrivendeId);
     }
   }
 

@@ -17,6 +17,7 @@
 .faktumGeneratorUnansweredError {
   display: flex;
   gap: var(--navds-spacing-2);
+  margin-top: var(--navds-spacing-2);
 }
 
 .faktumGeneratorUnansweredError:before {
