@@ -1,11 +1,10 @@
-import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
-import { getArbeidssokerStatus, getSoknadState, getSoknadTilstand } from "../api/quiz-api";
+import { getSoknadState, getSoknadTilstand } from "../api/quiz-api";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
@@ -17,6 +16,7 @@ import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-
 import { mockNeste } from "../../localhost-data/mock-neste";
 import { ISoknadStatus } from "../api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../api/arbeidssoker";
+import { getArbeidssokerStatus } from "../../api/arbeidssoker-api";
 
 interface IProps {
   errorCode: number | null;
@@ -71,8 +71,12 @@ export async function getServerSideProps(
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerStatus(uuid, onBehalfOfToken);
+  const arbeidssokerStatusResponse = await getArbeidssokerStatus(context);
 
+  // eslint-disable-next-line no-console
+  console.log("arbeidssokerStatusResponse.status: ", arbeidssokerStatusResponse.status);
+  // eslint-disable-next-line no-console
+  console.log("arbeidssokerStatusResponse.statusText: ", arbeidssokerStatusResponse.statusText);
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
@@ -110,48 +114,30 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  if (!props.soknadState) {
+  if (
+    !props.soknadState ||
+    !props.dokumentkrav ||
+    !props.soknadStatus ||
+    // !props.arbeidssokerStatus ||
+    !props.sanityTexts.seksjoner
+  ) {
+    // eslint-disable-next-line no-console
+    !props.soknadState && console.error("Mangler soknadstate");
+    // eslint-disable-next-line no-console
+    !props.dokumentkrav && console.error("Mangler dokumentkrav");
+    // eslint-disable-next-line no-console
+    !props.soknadStatus && console.error("Mangler soknadStatus");
+    // eslint-disable-next-line no-console
+    // !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
+    // eslint-disable-next-line no-console
+    !props.sanityTexts.seksjoner && console.error("Mangler sanity tekster");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler søknad state"
+        details="Beklager, vi mistet kontakten med systemene våre."
         statusCode={props.errorCode || 500}
       />
     );
-  }
-
-  if (!props.dokumentkrav) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler dokumentkrav"
-        statusCode={props.errorCode || 500}
-      />
-    );
-  }
-
-  if (!props.soknadStatus) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre. Mangler soknadstatus"
-        statusCode={props.errorCode || 500}
-      />
-    );
-  }
-
-  // if (!props.arbeidssokerStatus) {
-  //   return (
-  //     <ErrorPage
-  //       title="Det har skjedd en teknisk feil"
-  //       details="Beklager, vi mistet kontakten med systemene våre. Mangler arbeidssokerstatus"
-  //       statusCode={props.errorCode || 500}
-  //     />
-  //   );
-  // }
-
-  if (!props.sanityTexts.seksjoner) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
   }
 
   return (
@@ -161,6 +147,7 @@ export default function ReceiptPage(props: IProps) {
           dokumentkravList={props.dokumentkrav}
           soknadStatus={props.soknadStatus}
           arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
+          sections={props.soknadState.seksjoner}
         />
       </QuizProvider>
     </SanityProvider>

@@ -21,12 +21,13 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   console.log(formaterDato(new Date()));
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).json({ isArbeidssoker: false });
-    // { isArbeidssoker: false | true }
   }
 
   const { token, payload } = await getSession({ req });
   const idtoken = req.cookies["selvbetjening-idtoken"];
   if (!token || !idtoken || !payload?.pid) {
+    // eslint-disable-next-line no-console
+    console.log("Mangler token");
     return res.status(401).end();
   }
 

@@ -35,6 +35,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         <FaktumEgetGaardsbrukArbeidsaar
           faktum={faktum as IQuizNumberFaktum}
           onChange={props.onChange}
+          readonly={readonly}
         />
       );
     }

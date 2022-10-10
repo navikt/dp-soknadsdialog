@@ -33,8 +33,9 @@ export function ReceiptDocumentsUploaded(props: IProps) {
               <b>{dokumentkrav.beskrivendeId}</b>
             </BodyShort>
             <BodyShort>
-              {getAppTekst("kvittering.heading.text.sendt-av")}
-              {dokumentkrav.filer[0]?.tidspunkt || "30.09.2022"}
+              {`${getAppTekst("kvittering.heading.text.sendt-av")} ${
+                dokumentkrav.filer[0]?.tidspunkt || "30.09.2022"
+              }`}
             </BodyShort>
           </div>
           <Button variant="tertiary" onClick={() => handleOpenFile(dokumentkrav.bundle as string)}>

@@ -4,9 +4,9 @@ import { Alert, Button } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
 import { saveDokumenkravFile } from "../../api/dokumentasjon-api";
-import styles from "./FileUploader.module.css";
 import { ALLOWED_FILE_FORMATS } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
+import styles from "./FileUploader.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -70,14 +70,11 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     <>
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
-        <>
-          <>
-            <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
-            <Button onClick={open} loading={isLoading}>
-              {getAppTekst("filopplaster.velg.filer")}
-            </Button>
-          </>
-        </>
+
+        <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
+        <Button onClick={open} loading={isLoading}>
+          {getAppTekst("filopplaster.velg.filer")}
+        </Button>
       </div>
 
       {errors.length > 0 && (

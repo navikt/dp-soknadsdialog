@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest --passWithNoTests",
-    "test-coverage": "jest --passWithNoTests --collect-coverage",
+    "test": "jest",
+    "test-coverage": "jest --collect-coverage",
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install"

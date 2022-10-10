@@ -1,0 +1,7 @@
+.receiptYourAnswersContainer {
+  margin-bottom: var(--navds-spacing-8);
+}
+
+.receiptYourAnswersHeader button {
+  font-size: var(--navds-font-size-heading-medium);
+}

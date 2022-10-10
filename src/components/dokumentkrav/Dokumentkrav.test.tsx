@@ -129,6 +129,7 @@ describe("Dokumentkrav", () => {
             ok: true,
             urn: "1234",
             filnavn: "image.jpg",
+            filsti: "1234/5678",
           })
         );
       });

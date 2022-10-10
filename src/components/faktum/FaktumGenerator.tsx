@@ -57,6 +57,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+              readOnly={!!props.faktum}
             >
               <Heading level={"3"} size={"small"}>
                 {getStandardTitle(fakta, svarIndex)}
