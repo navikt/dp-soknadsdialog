@@ -15,9 +15,7 @@ export function useDokumentkravValidation(): IUseDokumentkravValidation {
     setValidationErrors([]);
 
     const unAnswered = dokumentkravList
-      .filter((dokumentkrav) => {
-        return !dokumentkrav.svar;
-      })
+      .filter((dokumentkrav) => !dokumentkrav.svar)
       .map((dokumentkrav) => ({ errorType: "svar", dokumentkrav }));
 
     const missingBegrunnelse = dokumentkravList
@@ -29,9 +27,10 @@ export function useDokumentkravValidation(): IUseDokumentkravValidation {
       ?.map((dokumentkrav) => ({ errorType: "begrunnelse", dokumentkrav }));
 
     const missingFiles = dokumentkravList
-      .filter((dokumentkrav) => {
-        return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length === 0;
-      })
+      .filter(
+        (dokumentkrav) =>
+          dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length === 0
+      )
       .map((dokumentkrav) => ({ errorType: "filer", dokumentkrav }));
 
     if (unAnswered.length > 0 || missingBegrunnelse.length > 0 || missingFiles.length > 0) {
