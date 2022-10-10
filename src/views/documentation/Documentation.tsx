@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Alert, Button, Detail } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { Dokumentkrav } from "../../components/dokumentkrav/Dokumentkrav";
@@ -17,7 +17,7 @@ import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList"
 import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
-import { useForceTrigger } from "../../hooks/useForceTrigger";
+import { useScrollTo } from "../../hooks/dokumentkrav/useScrollTo";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -32,14 +32,22 @@ export function Documentation(props: IProps) {
 
   const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
   const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
-  const { forceTrigger: triggerScroll, trigger: scroll } = useForceTrigger();
+  const { scrollTo } = useScrollTo();
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
 
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
 
   const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
   const numberOfDokumentkravText = getAppTekst("dokumentkrav.nummer.av.krav");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
+
+  useEffect(() => {
+    if (showValidationErrors) {
+      scrollTo(errorSummaryRef);
+    }
+  }, [showValidationErrors]);
 
   function updateDokumentkrav(dokumentkrav: IDokumentkrav, updatedFields: IDokumentkravChanges) {
     const tempList = { ...dokumentkravList };
@@ -60,7 +68,13 @@ export function Documentation(props: IProps) {
         setShowBundleErrorModal(true);
       }
     } else {
-      triggerScroll();
+      setShowValidationErrors(true);
+
+      // If showValidationErrors is false, the async useEffect will trigger
+      // a scroll as soon as the state is set (and the validation error element is in view)
+      if (showValidationErrors) {
+        scrollTo(errorSummaryRef);
+      }
     }
   }
 
@@ -70,10 +84,10 @@ export function Documentation(props: IProps) {
 
   return (
     <>
-      {validationErrors.length > 0 && (
+      {showValidationErrors && (
         <ErrorList
           heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
-          scrollWhen={scroll}
+          ref={errorSummaryRef}
         >
           {validationErrors.map((item) => {
             return (
