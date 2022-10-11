@@ -41,7 +41,9 @@ export function UploadFilesModal(props: IProps) {
       setHasError(false);
       setIsFilesUploaded(false);
 
-      const response = await bundleDokumentkravFiles(uuid, props.dokumentkrav);
+      const dokumentkravWithUploadedFiles = { ...props.dokumentkrav, files: props.uploadedFiles };
+      const response = await bundleDokumentkravFiles(uuid, dokumentkravWithUploadedFiles);
+
       if (!response.ok) {
         setIsSaving(false);
         setHasError(true);
