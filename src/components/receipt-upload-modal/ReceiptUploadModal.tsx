@@ -44,7 +44,10 @@ export function UploadFilesModal(props: IProps) {
       setHasError(false);
       setIsFilesUploaded(false);
 
-      const dokumentkravWithUploadedFiles = { ...props.dokumentkrav, files: props.uploadedFiles };
+      const dokumentkravWithUploadedFiles: IDokumentkrav = {
+        ...props.dokumentkrav,
+        filer: props.uploadedFiles,
+      };
 
       // eslint-disable-next-line no-console
       console.log("bundleAndSaveDokumentkravFiles(): ", dokumentkravWithUploadedFiles);
