@@ -1,5 +1,5 @@
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
-import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
+import { IDokumentkrav } from "../../types/documentation.types";
 import {
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
@@ -12,34 +12,35 @@ import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status
 import { ReceiptDocumentsNotSending } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt-documents-uploaded/ReceiptDocumentsUploaded";
 import { ReceiptDocumentsOther } from "../../components/receipt-documents-other/ReceiptDocumentsOther";
-import styles from "./Receipts.module.css";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
 import { IQuizSeksjon } from "../../types/quiz.types";
 import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import styles from "./Receipts.module.css";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
-  dokumentkravList: IDokumentkravList;
   arbeidssokerStatus: IArbeidssokerStatus;
   sections: IQuizSeksjon[];
 }
 
 export function Receipt(props: IProps) {
   const { getAppTekst } = useSanity();
+  const { dokumentkravList } = useDokumentkrav();
 
-  const missingDocuments: IDokumentkrav[] = props.dokumentkravList.krav.filter(
+  const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
   );
-  const uploadedDocuments: IDokumentkrav[] = props.dokumentkravList.krav.filter(
+  const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) => dokumentkrav.bundle
   );
 
-  const notSendingDocuments: IDokumentkrav[] = props.dokumentkravList.krav.filter(
+  const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE ||
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE

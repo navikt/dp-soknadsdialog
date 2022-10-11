@@ -14,7 +14,7 @@ export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
 
 async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return Promise.resolve(mockDokumentkravList);
+    return res.status(200).json(mockDokumentkravList);
   }
 
   const { token, apiToken } = await getSession({ req });

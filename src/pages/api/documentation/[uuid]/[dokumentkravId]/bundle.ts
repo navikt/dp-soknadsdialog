@@ -5,8 +5,11 @@ import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../api.utils";
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, apiToken } = await getSession({ req });
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(201).json({ status: "ok" });
+  }
 
+  const { token, apiToken } = await getSession({ req });
   if (!token || !apiToken) {
     return res.status(401).end();
   }
