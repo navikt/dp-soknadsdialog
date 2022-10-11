@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import { Loader, Button, BodyLong, Heading, Modal } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Loader, Modal } from "@navikt/ds-react";
 import { FileUploader } from "../file-uploader/FileUploader";
 import styles from "./ReceiptUploadModal.module.css";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { FileList } from "../file-list/FileList";
 import { bundleDokumentkravFiles } from "../../api/dokumentasjon-api";
-import { SuccessColored, ErrorColored } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 
@@ -24,7 +23,7 @@ export function UploadFilesModal(props: IProps) {
   const uuid = router.query.uuid as string;
   const [isSaving, setIsSaving] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isFilesUploaded, setIsFilesUploaded] = useState(false);
   const { getDokumentkravTextById } = useSanity();
   const { getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
@@ -40,7 +39,7 @@ export function UploadFilesModal(props: IProps) {
     try {
       setIsSaving(true);
       setHasError(false);
-      setIsSuccess(false);
+      setIsFilesUploaded(false);
 
       const response = await bundleDokumentkravFiles(uuid, props.dokumentkrav);
       if (!response.ok) {
@@ -50,7 +49,7 @@ export function UploadFilesModal(props: IProps) {
         console.log("bundleDokumentkravFiles respone ikke OK!");
       } else {
         setIsSaving(false);
-        setIsSuccess(true);
+        setIsFilesUploaded(true);
       }
       // eslint-disable-next-line no-console
       console.log(response.status);
@@ -62,9 +61,16 @@ export function UploadFilesModal(props: IProps) {
     }
   }
 
+  function toggleModal() {
+    if (isFilesUploaded) {
+      getDokumentkravList();
+    }
+    props.closeModal();
+  }
+
   return (
     <>
-      <Modal open={props.modalOpen} onClose={props.closeModal} className={styles.modalContainer}>
+      <Modal open={props.modalOpen} onClose={toggleModal} className={styles.modalContainer}>
         <Modal.Content>
           <Heading spacing level="1" size="medium" id="modal-heading">
             Last opp filer
@@ -80,43 +86,54 @@ export function UploadFilesModal(props: IProps) {
             </>
           </BodyLong>
 
-          <FileUploader
-            dokumentkrav={props.dokumentkrav}
-            handleUploadedFiles={props.handleUploadedFiles}
-            maxFileSize={remainingFilesize}
-          />
+          {!isFilesUploaded && (
+            <>
+              <FileUploader
+                dokumentkrav={props.dokumentkrav}
+                handleUploadedFiles={props.handleUploadedFiles}
+                maxFileSize={remainingFilesize}
+              />
 
-          <FileList
-            uploadedFiles={props.uploadedFiles}
-            dokumentkravId={props.dokumentkrav.beskrivendeId}
-            handleUploadedFiles={props.handleUploadedFiles}
-          />
+              <FileList
+                uploadedFiles={props.uploadedFiles}
+                dokumentkravId={props.dokumentkrav.beskrivendeId}
+                handleUploadedFiles={props.handleUploadedFiles}
+              />
 
-          <div>
-            {isSuccess && <SuccessColored />}
-            {isSaving && <Loader />}
-            {hasError && (
               <div>
-                Det gikk i dass
-                <ErrorColored />
+                {isSaving && <Loader />}
+                {hasError && <Alert variant="error">Det gikk i dass.</Alert>}
               </div>
-            )}
-          </div>
 
-          <nav className="navigation-container">
-            <Button variant="danger" onClick={props.closeModal}>
-              Lukk
-            </Button>
-            {!isSuccess && (
-              <Button variant="primary" onClick={bundleAndSaveDokumentkravFiles}>
-                Send inn dokumenter
+              <nav className="navigation-container">
+                <>
+                  <Button variant="primary" onClick={bundleAndSaveDokumentkravFiles}>
+                    Send inn dokumenter
+                  </Button>
+                  <Button variant="secondary" onClick={props.closeModal}>
+                    Avbryt
+                  </Button>
+                </>
+              </nav>
+            </>
+          )}
+
+          {isFilesUploaded && (
+            <>
+              <Alert variant="success">
+                Filene dine er lagret
+                <ul>
+                  {props.uploadedFiles.map((file) => (
+                    <li key={file.filsti}>{file.filnavn}</li>
+                  ))}
+                </ul>
+              </Alert>
+
+              <Button variant="primary" onClick={toggleModal}>
+                Lukk
               </Button>
-            )}
-
-            <Button variant="primary" onClick={getDokumentkravList}>
-              TEST
-            </Button>
-          </nav>
+            </>
+          )}
         </Modal.Content>
       </Modal>
     </>
