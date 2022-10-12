@@ -8,19 +8,21 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import styles from "./Soknad.module.css";
+
+interface IUnansweredFaktum {
+  parentFaktumBeskrivendeId?: string;
+  beskrivendeId?: string;
+  svarIndex?: number;
+}
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const {
-    soknadState,
-    isError,
-    isLoading,
-    errorType,
-    setUnansweredFaktumBeskrivendeId,
-    unansweredFaktumBeskrivendeId,
-  } = useQuiz();
+  const { soknadState, isError, isLoading, errorType } = useQuiz();
+  const { unansweredFaktum, setUnansweredFaktum } = useValidation();
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -31,16 +33,46 @@ export function Soknad() {
     (faktum) => faktum?.svar === undefined
   );
 
-  function getFirstUnansweredFaktumBeskrivendeId() {
-    const firstUnansweredGenerator = currentSection?.fakta
-      .filter((faktum) => faktum.type === "generator")
-      .find((svar) => svar.svar === undefined);
+  function getUnansweredGeneratorFaktum(
+    GeneratorFaktum: IQuizGeneratorFaktum
+  ): IUnansweredFaktum | undefined {
+    if (GeneratorFaktum.svar) {
+      for (const generatorFaktumSvar of GeneratorFaktum.svar) {
+        const ubesvartFaktum = generatorFaktumSvar.find(
+          (faktum: QuizFaktum) => faktum.svar === undefined
+        );
 
-    if (firstUnansweredGenerator) {
-      return firstUnansweredGenerator.beskrivendeId;
-    } else {
-      return currentSection?.fakta?.find((faktum) => faktum?.svar === undefined)?.beskrivendeId;
+        const ubesvartFaktumIndex = generatorFaktumSvar?.findIndex(
+          (faktum: QuizFaktum) => faktum.svar === undefined
+        );
+
+        if (ubesvartFaktum) {
+          return {
+            beskrivendeId: ubesvartFaktum.beskrivendeId,
+            parentFaktumBeskrivendeId: GeneratorFaktum.beskrivendeId,
+            svarIndex: ubesvartFaktumIndex,
+          };
+        }
+      }
     }
+  }
+
+  function getUnansweredFaktum(): IUnansweredFaktum | undefined {
+    let unanseredFaktum: IUnansweredFaktum | undefined = {};
+
+    for (const fakta of currentSection.fakta) {
+      if (fakta.type !== "generator") {
+        if (fakta.svar === undefined) {
+          unanseredFaktum.beskrivendeId = fakta.beskrivendeId;
+          break;
+        }
+      } else {
+        unanseredFaktum = getUnansweredGeneratorFaktum(fakta);
+        break;
+      }
+    }
+
+    return unanseredFaktum;
   }
 
   useEffect(() => {
@@ -53,8 +85,8 @@ export function Soknad() {
   }, []);
 
   useEffect(() => {
-    if (unansweredFaktumBeskrivendeId) {
-      setUnansweredFaktumBeskrivendeId(undefined);
+    if (unansweredFaktum) {
+      setUnansweredFaktum(undefined);
     }
   }, [soknadState]);
 
@@ -63,13 +95,13 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      const unansweredBeskrivendeId = getFirstUnansweredFaktumBeskrivendeId();
-      setUnansweredFaktumBeskrivendeId(unansweredBeskrivendeId);
+      const ubesvartFaktum = getUnansweredFaktum();
+      setUnansweredFaktum(ubesvartFaktum);
     }
   }
 
   function navigateToPreviousSection() {
-    setUnansweredFaktumBeskrivendeId(undefined);
+    setUnansweredFaktum(undefined);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }

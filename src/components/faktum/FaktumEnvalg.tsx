@@ -9,10 +9,12 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktum } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
@@ -50,7 +52,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktumBeskrivendeId === faktum.beskrivendeId
+          unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
             ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
             : undefined
         }

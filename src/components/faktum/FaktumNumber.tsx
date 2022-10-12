@@ -1,12 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
 import { BodyShort, Label, TextField } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { IQuizNumberFaktum } from "../../types/quiz.types";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
+import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
 
@@ -18,7 +19,8 @@ enum ValidationErrorTypes {
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktum } = useValidation();
   const { getAppTekst, getFaktumTextById } = useSanity();
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
@@ -116,7 +118,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   function getValidationMessage() {
-    if (unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (isValid !== true) {
       getErrorMessage();

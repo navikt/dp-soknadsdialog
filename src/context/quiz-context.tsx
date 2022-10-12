@@ -13,8 +13,6 @@ export interface IQuizContext {
   isLoading: boolean;
   isError: boolean;
   errorType: ErrorTypesEnum;
-  unansweredFaktumBeskrivendeId?: string;
-  setUnansweredFaktumBeskrivendeId: (beskrivendeId: string | undefined) => void;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -30,7 +28,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
-  const [unansweredFaktumId, setUnansweredFaktumId] = useState<string | undefined>(undefined);
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
     try {
@@ -46,10 +43,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsError(true);
       setErrorType(ErrorTypesEnum.SaveFaktumError);
     }
-  }
-
-  function setUnansweredFaktumBeskrivendeId(beskrivendeId: string | undefined) {
-    setUnansweredFaktumId(beskrivendeId);
   }
 
   async function saveGeneratorFaktumToQuiz(faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) {
@@ -95,8 +88,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         isLoading,
         isError,
         errorType,
-        unansweredFaktumBeskrivendeId: unansweredFaktumId,
-        setUnansweredFaktumBeskrivendeId,
       }}
     >
       {props.children}

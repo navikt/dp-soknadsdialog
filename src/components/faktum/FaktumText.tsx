@@ -9,10 +9,12 @@ import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { isValidTextLength } from "./validations";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktum } = useValidation();
   const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
@@ -46,7 +48,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }
 
   function getErrorMessage() {
-    if (unansweredFaktumBeskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");

@@ -16,6 +16,7 @@ import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCar
 import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import styles from "./Faktum.module.css";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -33,7 +34,8 @@ export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
 function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const { isLoading, unansweredFaktumBeskrivendeId } = useQuiz();
+  const { isLoading } = useQuiz();
+  const { unansweredFaktum } = useValidation();
   const { getAppTekst } = useSanity();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
@@ -87,13 +89,12 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
           </div>
         );
       })}
-
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
           {getAppTekst("generator.legg-til")}
         </Button>
       )}
-      {unansweredFaktumBeskrivendeId === props.faktum.beskrivendeId && (
+      {unansweredFaktum?.beskrivendeId === props.faktum.beskrivendeId && (
         <ErrorMessage className={styles.faktumGeneratorUnansweredError}>
           {getAppTekst("validering.ubesvart-faktum.varsel-tekst")}
         </ErrorMessage>
