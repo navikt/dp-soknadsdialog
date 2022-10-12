@@ -40,7 +40,7 @@ export function ReceiptDocumentsUploaded(props: IProps) {
 
           <Link
             href={api(`/documentation/${dokumentkrav.bundleFilsti}/download`)}
-            download={dokumentkrav.bundleFilsti}
+            download={`${dokumentkrav.bundleFilsti}.pdf`}
             id={dokumentkrav.bundleFilsti}
           >
             Last ned {dokumentkrav.bundleFilsti}
