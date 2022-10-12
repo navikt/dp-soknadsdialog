@@ -28,6 +28,7 @@ export interface IDokumentkrav {
   svar?: IDokumentkravSvar;
   begrunnelse?: string;
   bundle?: string;
+  bundleFilsti?: string;
 }
 
 export interface IDokumentkravFil {
