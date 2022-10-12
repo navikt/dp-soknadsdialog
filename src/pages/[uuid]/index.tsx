@@ -11,10 +11,14 @@ import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-r
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import ErrorPage from "../_error";
+import { IPersonalia } from "../../types/personalia.types";
+import { mockPersonalia } from "../../localhost-data/personalia";
+import { getPersonalia } from "../../api/personalia-api";
 
 interface IProps {
   sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
+  personalia: IPersonalia;
   errorCode: number | null;
 }
 
@@ -34,6 +38,7 @@ export async function getServerSideProps(
       props: {
         sanityTexts,
         soknadState: quizStateResponse,
+        personalia: mockPersonalia,
         errorCode: null,
       },
     };
@@ -52,6 +57,8 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let personalia;
+
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
 
@@ -61,10 +68,19 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
+  const personaliaResponse = await getPersonalia();
+
+  if (!personaliaResponse.ok) {
+    errorCode = personaliaResponse.status;
+  } else {
+    personalia = await personaliaResponse.json();
+  }
+
   return {
     props: {
       sanityTexts,
       soknadState,
+      personalia,
       errorCode,
     },
   };
@@ -94,7 +110,7 @@ export default function SoknadPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Soknad />
+        <Soknad personalia={props.personalia} />
       </QuizProvider>
     </SanityProvider>
   );

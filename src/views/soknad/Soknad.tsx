@@ -5,12 +5,18 @@ import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { Personalia } from "../../components/personalia/Personalia";
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 
-export function Soknad() {
+interface IProps {
+  personalia: IPersonalia;
+}
+
+export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
@@ -65,6 +71,12 @@ export function Soknad() {
   return (
     <main>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
+
+      {isFirstSection && (
+        <div className={styles.seksjonContainer}>
+          <Personalia personalia={props.personalia} />
+        </div>
+      )}
 
       <div className={styles.seksjonContainer}>
         <Section

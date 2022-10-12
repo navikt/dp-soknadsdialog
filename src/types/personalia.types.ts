@@ -2,10 +2,10 @@ export interface IPersonalia {
   forNavn: string;
   mellomNavn: string;
   etterNavn: string;
-  fødselsDato: Date;
+  fødselsDato: string; // TODO: På skissene vises fødselsnummer, mens det ikke kommer med fra backenden. Er det noe som skal være med?
   postAdresse?: IAdresse;
   folkeregistrertAdresse?: IAdresse;
-  kontonummer: string;
+  kontonummer?: string;
   banknavn?: string;
   bankLandkode?: string;
 }
@@ -14,8 +14,9 @@ export interface IAdresse {
   adresselinje1: string;
   adresselinje2: string;
   adresselinje3: string;
-  byEllerStedsnavn: string;
+  byEllerStedsnavn?: string; // TODO: Finne ut om denne skal være med, feltes ble ikke med i respons fra dev
   landkode: string;
   land: string;
-  postkode: string;
+  postnummer: string;
+  poststed: string;
 }

@@ -3,6 +3,7 @@ import { IPersonalia } from "../../../types/personalia.types";
 import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 
 // As of https://tools.ietf.org/html/rfc7807
 export interface IHttpProblem {
@@ -36,19 +37,20 @@ const personaliaHandler: NextApiHandler<IPersonalia | IHttpProblem> = async (
   req: NextApiRequest,
   res: NextApiResponse<IPersonalia | IHttpProblem>
 ) => {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).json(mockPersonalia);
+  }
+
   try {
     const { token, apiToken } = await getSession({ req });
-    if (token && apiToken) {
-      const onBehalfOfToken = await apiToken(audienceDPSoknad);
-      const personalia = await getPersonalia(onBehalfOfToken);
-      return res.json(personalia);
-    } else {
-      return res.status(401).json({
-        status: 401,
-        title: "Ikke innlogget",
-        type: new URL("urn:oppslag:personalia"),
-      });
+
+    if (!token || !apiToken) {
+      return res.status(401).end();
     }
+
+    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const personalia = await getPersonalia(onBehalfOfToken);
+    return res.json(personalia);
   } catch (error) {
     if (isHttpProblem(error)) {
       const httpProblem: IHttpProblem = <IHttpProblem>error;

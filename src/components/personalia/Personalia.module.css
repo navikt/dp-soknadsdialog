@@ -1,0 +1,7 @@
+.personaliaFaktum {
+  margin-bottom: var(--navds-spacing-5);
+}
+
+.personaliaFaktum:last-child {
+  margin-bottom: 0;
+}
