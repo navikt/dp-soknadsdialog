@@ -10,7 +10,6 @@ import { UploadFilesModal } from "../receipt-upload-modal/ReceiptUploadModal";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { useFileUploader } from "../../hooks/useFileUploader";
-import { FileList } from "../file-list/FileList";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -54,14 +53,9 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <UploadFilesModal
         modalOpen={uploadModalOpen}
         dokumentkrav={dokumentkrav}
+        uploadedFiles={uploadedFiles}
         handleUploadedFiles={handleUploadedFiles}
         closeModal={() => setUploadModalOpen(false)}
-      />
-
-      <FileList
-        uploadedFiles={uploadedFiles}
-        dokumentkravId={dokumentkrav.beskrivendeId}
-        handleUploadedFiles={handleUploadedFiles}
       />
     </div>
   );

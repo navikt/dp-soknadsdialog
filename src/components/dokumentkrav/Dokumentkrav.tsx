@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Heading, Radio, RadioGroup } from "@navikt/ds-react";
-import { IDokumentkrav, IDokumentkravChanges } from "../../types/documentation.types";
+import {
+  IDokumentkrav,
+  IDokumentkravChanges,
+  IDokumentkravValidationError,
+} from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
@@ -24,7 +28,7 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
   onChange: (dokumentkrav: IDokumentkrav, changes: IDokumentkravChanges) => void;
   bundleError?: boolean;
-  validationError?: boolean;
+  validationError?: IDokumentkravValidationError;
 }
 
 export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationError }: IProps) {
@@ -94,7 +98,9 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
           onChange={setSvar}
           value={svar}
           error={
-            validationError && !svar && getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
+            validationError?.errorType === "svar" &&
+            !svar &&
+            getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
           }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
@@ -138,8 +144,8 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
             </Alert>
           )}
 
-          {validationError && uploadedFiles.length === 0 && (
-            <Alert variant="info">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
+          {validationError?.errorType === "filer" && uploadedFiles.length === 0 && (
+            <Alert variant="error">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
           )}
         </>
       )}

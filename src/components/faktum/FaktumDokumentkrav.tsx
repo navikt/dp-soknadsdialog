@@ -6,15 +6,13 @@ import styles from "./FaktumDokumentkrav.module.css";
 
 export function FaktumDokumentkrav(dokumentkrav: QuizFaktum) {
   const { getAppTekst, getDokumentkravTextById } = useSanity();
-
-  const dokumentkravText =
-    getDokumentkravTextById(dokumentkrav.beskrivendeId) || dokumentkrav.beskrivendeId;
+  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   return (
     <p className={styles.documentedBy}>
       <FileContent />
       {getAppTekst("faktum.ma.dokumenteres.del1")}
-      {` ${dokumentkravText}. `}
+      {` ${dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}. `}
       {getAppTekst("faktum.ma.dokumenteres.del2")}
     </p>
   );

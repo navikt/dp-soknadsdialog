@@ -17,6 +17,7 @@ import { mockNeste } from "../../localhost-data/mock-neste";
 import { ISoknadStatus } from "../api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../api/arbeidssoker";
 import { getArbeidssokerStatus } from "../../api/arbeidssoker-api";
+import { DokumentkravProvider } from "../../context/dokumentkrav-context";
 
 interface IProps {
   errorCode: number | null;
@@ -117,7 +118,7 @@ export default function ReceiptPage(props: IProps) {
   if (
     !props.soknadState ||
     !props.dokumentkrav ||
-    !props.soknadStatus ||
+    // !props.soknadStatus ||
     // !props.arbeidssokerStatus ||
     !props.sanityTexts.seksjoner
   ) {
@@ -128,7 +129,7 @@ export default function ReceiptPage(props: IProps) {
     // eslint-disable-next-line no-console
     !props.soknadStatus && console.error("Mangler soknadStatus");
     // eslint-disable-next-line no-console
-    // !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
+    !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
     // eslint-disable-next-line no-console
     !props.sanityTexts.seksjoner && console.error("Mangler sanity tekster");
     return (
@@ -143,12 +144,13 @@ export default function ReceiptPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Receipt
-          dokumentkravList={props.dokumentkrav}
-          soknadStatus={props.soknadStatus}
-          arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
-          sections={props.soknadState.seksjoner}
-        />
+        <DokumentkravProvider initialState={props.dokumentkrav}>
+          <Receipt
+            soknadStatus={props.soknadStatus || { tilstand: "Innsendt" }}
+            arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
+            sections={props.soknadState.seksjoner}
+          />
+        </DokumentkravProvider>
       </QuizProvider>
     </SanityProvider>
   );

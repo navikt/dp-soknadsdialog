@@ -5,12 +5,13 @@ import { useSanity } from "../../context/sanity-context";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { PortableText } from "@portabletext/react";
+import { IDokumentkravValidationError } from "../../types/documentation.types";
 
 interface IProps {
-  begrunnelse: string | undefined;
+  begrunnelse: string;
   svar: string | undefined;
   setBegrunnelse: (value: string) => void;
-  validationError?: boolean;
+  validationError?: IDokumentkravValidationError;
 }
 
 export function DokumentkravBegrunnelse({
@@ -49,8 +50,8 @@ export function DokumentkravBegrunnelse({
         }
         onChange={(event) => debouncedBegrunnelse(event.currentTarget.value)}
         error={
+          validationError?.errorType === "begrunnelse" &&
           !begrunnelse &&
-          validationError &&
           getAppTekst("dokumentkrav.feilmelding.trenger.begrunnelse")
         }
       />

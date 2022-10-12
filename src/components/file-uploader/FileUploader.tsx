@@ -21,10 +21,11 @@ interface IFileError {
 export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }: IProps) {
   const router = useRouter();
   const { getAppTekst } = useSanity();
-  const uuid = router.query.uuid as string;
   const [errors, setErrors] = useState<IFileError[]>([]);
-  const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
   const [isLoading, setIsLoading] = useState(false);
+
+  const uuid = router.query.uuid as string;
+  const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
 
   const onDrop = useCallback((selectedFiles: File[]) => {
     setErrors([]);

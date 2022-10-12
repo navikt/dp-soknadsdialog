@@ -1,19 +1,15 @@
 import React from "react";
 import { IDokumentkrav } from "../../types/documentation.types";
-import { Heading, Tag, BodyShort, Button } from "@navikt/ds-react";
+import { BodyShort, Heading, Link, Tag } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptDocumentsUploaded.module.css";
+import api from "../../api.utils";
 
 interface IProps {
   documents: IDokumentkrav[];
 }
 
 export function ReceiptDocumentsUploaded(props: IProps) {
-  function handleOpenFile(urn: string) {
-    // eslint-disable-next-line no-console
-    console.log(urn);
-  }
-
   const { getAppTekst } = useSanity();
   return (
     <div>
@@ -38,9 +34,25 @@ export function ReceiptDocumentsUploaded(props: IProps) {
               }`}
             </BodyShort>
           </div>
-          <Button variant="tertiary" onClick={() => handleOpenFile(dokumentkrav.bundle as string)}>
-            Åpne
-          </Button>
+          {/*<Button variant="tertiary" onClick={() => handleOpenFile(dokumentkrav.bundleFilsti as string)}>*/}
+          {/*  Åpne*/}
+          {/*</Button>*/}
+
+          <Link
+            href={api(`/documentation/${dokumentkrav.bundleFilsti}/download`)}
+            download={`${dokumentkrav.bundleFilsti}.pdf`}
+            id={dokumentkrav.bundleFilsti}
+          >
+            Last ned {dokumentkrav.bundleFilsti}
+          </Link>
+
+          <Link
+            href={api(`/documentation/${dokumentkrav.bundleFilsti}/download`)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Åpne {dokumentkrav.bundleFilsti}
+          </Link>
         </div>
       ))}
     </div>

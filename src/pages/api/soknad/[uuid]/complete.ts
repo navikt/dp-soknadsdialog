@@ -39,7 +39,7 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!ferdigstillResponse.ok) {
-      throw new Error(ferdigstillResponse.statusText);
+      return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }
     return res.status(ferdigstillResponse.status).end();
   } catch (error: unknown) {
