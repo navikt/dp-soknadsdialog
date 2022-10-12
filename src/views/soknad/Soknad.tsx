@@ -51,8 +51,11 @@ export function Soknad() {
           break;
         }
       } else {
-        unanseredFaktum = getUnansweredGeneratorFaktumId(fakta);
-        break;
+        const hasUnansweredFaktum = getUnansweredGeneratorFaktumId(fakta);
+        if (hasUnansweredFaktum) {
+          unanseredFaktum = hasUnansweredFaktum;
+          break;
+        }
       }
     }
 
