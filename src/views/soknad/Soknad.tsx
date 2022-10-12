@@ -27,39 +27,31 @@ export function Soknad() {
     (faktum) => faktum?.svar === undefined
   );
 
-  function getUnansweredGeneratorFaktumId(GeneratorFaktum: IQuizGeneratorFaktum) {
-    if (GeneratorFaktum.svar) {
-      for (const generatorFaktumSvar of GeneratorFaktum.svar) {
-        const ubesvartFaktum = generatorFaktumSvar.find(
-          (faktum: QuizFaktum) => faktum.svar === undefined
-        );
+  function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
+    for (const generatorFaktumSvar of generatorFaktum.svar ?? []) {
+      const ubesvartFaktum = generatorFaktumSvar.find(
+        (faktum: QuizFaktum) => faktum.svar === undefined
+      );
 
-        if (ubesvartFaktum) {
-          return ubesvartFaktum.id;
-        }
+      if (ubesvartFaktum) {
+        return ubesvartFaktum.id;
       }
     }
   }
 
   function getUnansweredFaktumId() {
-    let unanseredFaktum: string | undefined = undefined;
-
     for (const fakta of currentSection.fakta) {
       if (fakta.type !== "generator") {
         if (fakta.svar === undefined) {
-          unanseredFaktum = fakta.id;
-          break;
+          return fakta.id;
         }
       } else {
-        const hasUnansweredFaktum = getUnansweredGeneratorFaktumId(fakta);
-        if (hasUnansweredFaktum) {
-          unanseredFaktum = hasUnansweredFaktum;
-          break;
+        const hasUnansweredFaktumId = getUnansweredGeneratorFaktumId(fakta);
+        if (hasUnansweredFaktumId) {
+          return hasUnansweredFaktumId;
         }
       }
     }
-
-    return unanseredFaktum;
   }
 
   useEffect(() => {
