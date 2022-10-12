@@ -14,7 +14,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
@@ -48,7 +48,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }
 
   function getErrorMessage() {
-    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumId === faktum.id) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");

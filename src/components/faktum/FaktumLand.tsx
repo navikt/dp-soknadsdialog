@@ -19,7 +19,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const { faktum, onChange } = props;
   const { getFaktumTextById, getLandGruppeTextById, getAppTekst } = useSanity();
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
 
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
   const [currentLandGruppeText, setCurrentLandGruppeText] = useState<
@@ -75,7 +75,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
         error={
-          unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
+          unansweredFaktumId === faktum.id
             ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
             : undefined
         }

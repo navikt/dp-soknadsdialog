@@ -1,32 +1,26 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
 
-interface IUnansweredFaktum {
-  parentFaktumBeskrivendeId?: string;
-  beskrivendeId?: string;
-  svarIndex?: number;
-}
-
 export interface IValidationContext {
-  unansweredFaktum?: IUnansweredFaktum;
-  setUnansweredFaktum: (unansweredFaktum: IUnansweredFaktum | undefined) => void;
+  unansweredFaktumId?: string | undefined;
+  setUnansweredFaktumId: (unansweredFaktumId: string | undefined) => void;
 }
 
 export const ValidationContext = createContext<IValidationContext | undefined>(undefined);
 
 function ValidationProvider(props: PropsWithChildren) {
-  const [unansweredFaktum, setContextUnansweredFaktum] = useState<IUnansweredFaktum | undefined>(
+  const [unansweredFaktumId, setContextUnansweredFaktumId] = useState<string | undefined>(
     undefined
   );
 
-  function setUnansweredFaktum(unansweredFaktum: IUnansweredFaktum | undefined) {
-    setContextUnansweredFaktum(unansweredFaktum);
+  function setUnansweredFaktumId(unansweredFaktumId: string | undefined) {
+    setContextUnansweredFaktumId(unansweredFaktumId);
   }
 
   return (
     <ValidationContext.Provider
       value={{
-        unansweredFaktum,
-        setUnansweredFaktum,
+        unansweredFaktumId,
+        setUnansweredFaktumId,
       }}
     >
       {props.children}

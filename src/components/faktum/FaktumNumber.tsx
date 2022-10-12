@@ -20,7 +20,7 @@ enum ValidationErrorTypes {
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst, getFaktumTextById } = useSanity();
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
@@ -118,7 +118,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   function getValidationMessage() {
-    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumId === faktum.id) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (isValid !== true) {
       getErrorMessage();

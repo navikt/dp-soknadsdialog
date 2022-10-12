@@ -35,7 +35,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const { isLoading } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst } = useSanity();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
@@ -94,7 +94,8 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
           {getAppTekst("generator.legg-til")}
         </Button>
       )}
-      {unansweredFaktum?.beskrivendeId === props.faktum.beskrivendeId && (
+
+      {unansweredFaktumId === props.faktum.id && (
         <ErrorMessage className={styles.faktumGeneratorUnansweredError}>
           {getAppTekst("validering.ubesvart-faktum.varsel-tekst")}
         </ErrorMessage>

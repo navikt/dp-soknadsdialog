@@ -17,7 +17,7 @@ for (let i = 0; i <= 4; i++) {
 export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, readonly } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
@@ -41,7 +41,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       placeHolderText={"Velg et år"}
       readOnly={readonly}
       error={
-        unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
+        unansweredFaktumId === faktum.id
           ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
           : undefined
       }

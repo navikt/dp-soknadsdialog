@@ -16,7 +16,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
@@ -66,7 +66,7 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
+          unansweredFaktumId === faktum.id
             ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
             : undefined
         }

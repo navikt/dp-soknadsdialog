@@ -17,7 +17,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppTekst } = useSanity();
   const [isValidFom, setIsValidFom] = useState(true);
   const [isValidTom, setIsValidTom] = useState(true);
@@ -115,7 +115,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function getValidationMessage() {
-    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumId === faktum.id) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (!isValidFom) {
       return getFomErrorMessage();
@@ -143,7 +143,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
-            hasError={!isValidFom || unansweredFaktum?.beskrivendeId === faktum.beskrivendeId}
+            hasError={!isValidFom || unansweredFaktumId === faktum.id}
             errorMessage={getValidationMessage()}
           />
         </div>

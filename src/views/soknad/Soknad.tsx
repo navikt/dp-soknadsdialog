@@ -12,17 +12,11 @@ import { useValidation } from "../../context/validation-context";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import styles from "./Soknad.module.css";
 
-interface IUnansweredFaktum {
-  parentFaktumBeskrivendeId?: string;
-  beskrivendeId?: string;
-  svarIndex?: number;
-}
-
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
-  const { unansweredFaktum, setUnansweredFaktum } = useValidation();
+  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -33,41 +27,31 @@ export function Soknad() {
     (faktum) => faktum?.svar === undefined
   );
 
-  function getUnansweredGeneratorFaktum(
-    GeneratorFaktum: IQuizGeneratorFaktum
-  ): IUnansweredFaktum | undefined {
+  function getUnansweredGeneratorFaktumId(GeneratorFaktum: IQuizGeneratorFaktum) {
     if (GeneratorFaktum.svar) {
       for (const generatorFaktumSvar of GeneratorFaktum.svar) {
         const ubesvartFaktum = generatorFaktumSvar.find(
           (faktum: QuizFaktum) => faktum.svar === undefined
         );
 
-        const ubesvartFaktumIndex = generatorFaktumSvar?.findIndex(
-          (faktum: QuizFaktum) => faktum.svar === undefined
-        );
-
         if (ubesvartFaktum) {
-          return {
-            beskrivendeId: ubesvartFaktum.beskrivendeId,
-            parentFaktumBeskrivendeId: GeneratorFaktum.beskrivendeId,
-            svarIndex: ubesvartFaktumIndex,
-          };
+          return ubesvartFaktum.id;
         }
       }
     }
   }
 
-  function getUnansweredFaktum(): IUnansweredFaktum | undefined {
-    let unanseredFaktum: IUnansweredFaktum | undefined = {};
+  function getUnansweredFaktumId() {
+    let unanseredFaktum: string | undefined = undefined;
 
     for (const fakta of currentSection.fakta) {
       if (fakta.type !== "generator") {
         if (fakta.svar === undefined) {
-          unanseredFaktum.beskrivendeId = fakta.beskrivendeId;
+          unanseredFaktum = fakta.id;
           break;
         }
       } else {
-        unanseredFaktum = getUnansweredGeneratorFaktum(fakta);
+        unanseredFaktum = getUnansweredGeneratorFaktumId(fakta);
         break;
       }
     }
@@ -85,8 +69,8 @@ export function Soknad() {
   }, []);
 
   useEffect(() => {
-    if (unansweredFaktum) {
-      setUnansweredFaktum(undefined);
+    if (unansweredFaktumId) {
+      setUnansweredFaktumId(undefined);
     }
   }, [soknadState]);
 
@@ -95,13 +79,13 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      const ubesvartFaktum = getUnansweredFaktum();
-      setUnansweredFaktum(ubesvartFaktum);
+      const ubesvartFaktum = getUnansweredFaktumId();
+      setUnansweredFaktumId(ubesvartFaktum);
     }
   }
 
   function navigateToPreviousSection() {
-    setUnansweredFaktum(undefined);
+    setUnansweredFaktumId(undefined);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }

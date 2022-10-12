@@ -14,7 +14,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
@@ -52,7 +52,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
+          unansweredFaktumId === faktum.id
             ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
             : undefined
         }

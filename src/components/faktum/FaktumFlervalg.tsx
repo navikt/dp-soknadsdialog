@@ -12,7 +12,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
@@ -45,7 +45,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktum?.beskrivendeId === faktum.beskrivendeId
+          unansweredFaktumId === faktum.id
             ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
             : undefined
         }

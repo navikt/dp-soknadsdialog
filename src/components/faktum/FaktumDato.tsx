@@ -15,7 +15,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktum } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
   const [hasWarning, setHasWarnining] = useState(false);
@@ -75,7 +75,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   }
 
   function getValidationMessage() {
-    if (unansweredFaktum?.beskrivendeId === faktum.beskrivendeId) {
+    if (unansweredFaktumId === faktum.id) {
       return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
@@ -92,7 +92,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description}
-        hasError={!isValid || unansweredFaktum?.beskrivendeId === faktum.beskrivendeId}
+        hasError={!isValid || unansweredFaktumId === faktum.id}
         errorMessage={getValidationMessage()}
         hasWarning={hasWarning}
         warningMessage={getAppTekst("validering.varsel-tekst.dagpenger-soknadsdato")}
