@@ -9,6 +9,7 @@ import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { getCountryName } from "../../country.utils";
+import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",
@@ -99,7 +100,9 @@ describe("FaktumLand", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumLand faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumLand faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -123,7 +126,9 @@ describe("FaktumLand", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumLand faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumLand faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -159,7 +164,9 @@ describe("FaktumLand", () => {
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumLand faktum={faktumMockData} />
+            <ValidationProvider>
+              <FaktumLand faktum={faktumMockData} />
+            </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
       );

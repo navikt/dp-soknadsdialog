@@ -8,6 +8,7 @@ import { IQuizState } from "../../localhost-data/quiz-state-response";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "3008",
@@ -55,7 +56,9 @@ describe("FaktumFlervalg", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumFlervalg faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumFlervalg faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -78,7 +81,9 @@ describe("FaktumFlervalg", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumFlervalg faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumFlervalg faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -113,7 +118,9 @@ describe("FaktumFlervalg", () => {
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumFlervalg faktum={faktumMockData} />
+            <ValidationProvider>
+              <FaktumFlervalg faktum={faktumMockData} />
+            </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
       );
@@ -156,7 +163,9 @@ describe("FaktumFlervalg", () => {
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumFlervalg faktum={faktumMockData} />
+            <ValidationProvider>
+              <FaktumFlervalg faktum={faktumMockData} />
+            </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
       );

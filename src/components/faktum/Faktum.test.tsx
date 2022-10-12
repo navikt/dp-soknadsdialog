@@ -6,6 +6,7 @@ import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz
 import { QuizProvider } from "../../context/quiz-context";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -54,7 +55,9 @@ describe("Faktum", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
-          <Faktum faktum={faktumMockData} />
+          <ValidationProvider>
+            <Faktum faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -72,7 +75,11 @@ describe("Faktum", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
-          <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
+          <ValidationProvider>
+            <Faktum
+              faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }}
+            />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );

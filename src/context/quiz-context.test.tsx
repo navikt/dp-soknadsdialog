@@ -9,6 +9,7 @@ import fetch from "jest-fetch-mock";
 
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../__mocks__/sanity.mocks";
+import { ValidationProvider } from "./validation-context";
 
 const initialState: IQuizState = { ferdig: false, seksjoner: [] };
 const faktum: IQuizBooleanFaktum = {
@@ -47,8 +48,10 @@ test("Vi henter sistLagret hver gang vi lagrer et faktum", async () => {
   render(
     <SanityProvider initialState={sanityMocks}>
       <QuizProvider initialState={initialState}>
-        <FaktumBoolean faktum={faktum} />
-        <ContextSpion></ContextSpion>
+        <ValidationProvider>
+          <FaktumBoolean faktum={faktum} />
+          <ContextSpion></ContextSpion>
+        </ValidationProvider>
       </QuizProvider>
     </SanityProvider>
   );
