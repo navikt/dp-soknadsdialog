@@ -8,28 +8,26 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useSectionManager } from "../../hooks/soknad/useSectionManager";
 import styles from "./Soknad.module.css";
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
+  const {
+    isValidSection,
+    currentSection,
+    isFirstSection,
+    nextSectionParam,
+    previousSectionParam,
+    nextUnansweredFaktumIndex,
+  } = useSectionManager(soknadState);
   const [showNotFinishedError, setShowNotFinishedError] = useState(false);
-  const sectionParam = router.query.seksjon as string;
-
-  // Vis første seksjon hvis ingenting annet er spesifisert
-  const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const currentSection = soknadState.seksjoner[sectionIndex];
-  const isFirstSection = sectionIndex === 0;
-  const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
-    (faktum) => faktum?.svar === undefined
-  );
 
   useEffect(() => {
-    const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
-
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
-    if (!validSection) {
+    if (!isValidSection) {
       router.push(`/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
     }
   }, []);
@@ -42,16 +40,18 @@ export function Soknad() {
 
   function navigateToNextSection() {
     if (currentSection.ferdig) {
-      const nextIndex = sectionParam && parseInt(sectionParam) + 1;
-      router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+      router.push(`/${router.query.uuid}?seksjon=${nextSectionParam}`, undefined, {
+        shallow: true,
+      });
     } else {
       setShowNotFinishedError(true);
     }
   }
 
   function navigateToPreviousSection() {
-    const nextIndex = sectionParam && parseInt(sectionParam) - 1;
-    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    router.push(`/${router.query.uuid}?seksjon=${previousSectionParam}`, undefined, {
+      shallow: true,
+    });
   }
 
   function navigateToDocumentation() {
@@ -67,14 +67,7 @@ export function Soknad() {
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
 
       <div className={styles.seksjonContainer}>
-        <Section
-          section={currentSection}
-          firstUnansweredFaktumIndex={
-            firstUnansweredFaktumIndex === -1
-              ? currentSection.fakta.length
-              : firstUnansweredFaktumIndex
-          }
-        />
+        <Section section={currentSection} firstUnansweredFaktumIndex={nextUnansweredFaktumIndex} />
       </div>
 
       <div className={styles.loaderContainer}>
