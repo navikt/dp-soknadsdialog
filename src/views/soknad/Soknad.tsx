@@ -29,12 +29,12 @@ export function Soknad() {
 
   function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
     for (const generatorFaktumSvar of generatorFaktum.svar ?? []) {
-      const ubesvartFaktum = generatorFaktumSvar.find(
+      const unansweredGeneratorFaktum = generatorFaktumSvar.find(
         (faktum: QuizFaktum) => faktum.svar === undefined
       );
 
-      if (ubesvartFaktum) {
-        return ubesvartFaktum.id;
+      if (unansweredGeneratorFaktum) {
+        return unansweredGeneratorFaktum.id;
       }
     }
   }
@@ -46,9 +46,9 @@ export function Soknad() {
           return fakta.id;
         }
       } else {
-        const hasUnansweredFaktumId = getUnansweredGeneratorFaktumId(fakta);
-        if (hasUnansweredFaktumId) {
-          return hasUnansweredFaktumId;
+        const unansweredGeneratorFaktumId = getUnansweredGeneratorFaktumId(fakta);
+        if (unansweredGeneratorFaktumId) {
+          return unansweredGeneratorFaktumId;
         }
       }
     }
@@ -74,8 +74,8 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      const ubesvartFaktum = getUnansweredFaktumId();
-      setUnansweredFaktumId(ubesvartFaktum);
+      const unansweredFaktumId = getUnansweredFaktumId();
+      setUnansweredFaktumId(unansweredFaktumId);
     }
   }
 
