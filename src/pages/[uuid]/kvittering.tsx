@@ -18,6 +18,7 @@ import { ISoknadStatus } from "../api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../api/arbeidssoker";
 import { getArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { DokumentkravProvider } from "../../context/dokumentkrav-context";
+import { ValidationProvider } from "../../context/validation-context";
 
 interface IProps {
   errorCode: number | null;
@@ -145,11 +146,13 @@ export default function ReceiptPage(props: IProps) {
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
         <DokumentkravProvider initialState={props.dokumentkrav}>
-          <Receipt
-            soknadStatus={props.soknadStatus || { tilstand: "Innsendt" }}
-            arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
-            sections={props.soknadState.seksjoner}
-          />
+          <ValidationProvider>
+            <Receipt
+              soknadStatus={props.soknadStatus || { tilstand: "Innsendt" }}
+              arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
+              sections={props.soknadState.seksjoner}
+            />
+          </ValidationProvider>
         </DokumentkravProvider>
       </QuizProvider>
     </SanityProvider>

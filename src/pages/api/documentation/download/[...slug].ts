@@ -2,6 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring } from "../../../../api.utils";
+import fs from "fs";
+import path from "path";
+
+const filePath = path.resolve("src/localhost-data/sample.pdf");
+const imageBuffer = fs.readFileSync(filePath);
 
 export const config = {
   api: {
@@ -10,6 +15,10 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.send(imageBuffer);
+  }
+
   const { slug } = req.query;
   const { token, apiToken } = await getSession({ req });
 

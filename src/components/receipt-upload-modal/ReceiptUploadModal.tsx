@@ -29,9 +29,6 @@ export function UploadFilesModal(props: IProps) {
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
 
-  // eslint-disable-next-line no-console
-  console.log("props.uploadedFiles: ", props.uploadedFiles);
-
   useEffect(() => {
     if (Modal.setAppElement) {
       Modal.setAppElement("#__next");

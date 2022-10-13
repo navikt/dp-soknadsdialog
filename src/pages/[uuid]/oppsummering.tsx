@@ -11,6 +11,7 @@ import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-r
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import ErrorPage from "../_error";
+import { ValidationProvider } from "../../context/validation-context";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -94,7 +95,9 @@ export default function SummaryPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Summary sections={props.soknadState.seksjoner} />
+        <ValidationProvider>
+          <Summary sections={props.soknadState.seksjoner} />
+        </ValidationProvider>
       </QuizProvider>
     </SanityProvider>
   );
