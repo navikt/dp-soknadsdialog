@@ -1,7 +1,7 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
 
 export interface IValidationContext {
-  unansweredFaktumId?: string | undefined;
+  unansweredFaktumId?: string;
   setUnansweredFaktumId: (unansweredFaktumId: string | undefined) => void;
 }
 
