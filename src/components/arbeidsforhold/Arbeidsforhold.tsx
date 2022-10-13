@@ -15,10 +15,13 @@ import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import { PortableText } from "@portabletext/react";
 import { FormattedDate } from "../FormattedDate";
 import { findEmployerName } from "../../faktum.utils";
+import { useValidation } from "../../context/validation-context";
+import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 
 export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { isLoading } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst, getSvaralternativTextById, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -49,6 +52,9 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
 
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
+        const shouldShowValidationMessage = fakta.some(
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+        );
 
         return (
           <div key={svarIndex}>
@@ -57,6 +63,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
               readOnly={props.readonly}
+              showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"} spacing>
                 {getArbeidsforholdName(fakta)}
@@ -103,14 +110,19 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
       })}
 
       {!props.readonly && (
-        <Button
-          variant="secondary"
-          className={"generator-faktum__add-button"}
-          onClick={() => addNewGeneratorAnswer(faktum)}
-          icon={<BriefcaseAdd />}
-        >
-          {getAppTekst("arbeidsforhold.legg-til")}
-        </Button>
+        <>
+          <Button
+            variant="secondary"
+            className={"generator-faktum__add-button"}
+            onClick={() => addNewGeneratorAnswer(faktum)}
+            icon={<BriefcaseAdd />}
+          >
+            {getAppTekst("arbeidsforhold.legg-til")}
+          </Button>
+          {unansweredFaktumId === faktum.id && (
+            <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
+          )}
+        </>
       )}
     </>
   );

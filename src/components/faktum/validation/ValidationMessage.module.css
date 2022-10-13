@@ -1,0 +1,9 @@
+.faktumValidationMessage {
+  display: flex;
+  gap: var(--navds-spacing-2);
+  margin-top: var(--navds-spacing-2);
+}
+
+.faktumValidationMessage:before {
+  content: "•";
+}

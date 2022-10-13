@@ -9,7 +9,7 @@ import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
+import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validation/validations.utils";
 
 enum ValidationErrorTypes {
   EmptyValue,

@@ -5,7 +5,7 @@ import {
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
 import React, { useEffect } from "react";
-import { Button, ErrorMessage, Heading, Modal } from "@navikt/ds-react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import { Faktum, IFaktum } from "./Faktum";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
@@ -15,8 +15,8 @@ import { BarnRegister } from "../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
-import styles from "./Faktum.module.css";
 import { useValidation } from "../../context/validation-context";
+import { ValidationMessage } from "./validation/ValidationMessage";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -54,6 +54,10 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
     <>
       {props.faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
+        const shouldShowValidationMessage = fakta.some(
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+        );
+
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
@@ -61,6 +65,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
               readOnly={!!props.faktum}
+              showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
                 {getStandardTitle(fakta, svarIndex)}
@@ -96,9 +101,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
       )}
 
       {unansweredFaktumId === props.faktum.id && (
-        <ErrorMessage className={styles.faktumGeneratorUnansweredError}>
-          {getAppTekst("validering.ubesvart-faktum.varsel-tekst")}
-        </ErrorMessage>
+        <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
       )}
     </>
   );

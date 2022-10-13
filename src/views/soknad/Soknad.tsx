@@ -3,13 +3,13 @@ import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import styles from "./Soknad.module.css";
 
 export function Soknad() {
@@ -26,33 +26,6 @@ export function Soknad() {
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
-
-  function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
-    for (const generatorFaktumSvar of generatorFaktum.svar ?? []) {
-      const unansweredGeneratorFaktum = generatorFaktumSvar.find(
-        (faktum: QuizFaktum) => faktum.svar === undefined
-      );
-
-      if (unansweredGeneratorFaktum) {
-        return unansweredGeneratorFaktum.id;
-      }
-    }
-  }
-
-  function getUnansweredFaktumId() {
-    for (const fakta of currentSection.fakta) {
-      if (fakta.type !== "generator") {
-        if (fakta.svar === undefined) {
-          return fakta.id;
-        }
-      } else {
-        const unansweredGeneratorFaktumId = getUnansweredGeneratorFaktumId(fakta);
-        if (unansweredGeneratorFaktumId) {
-          return unansweredGeneratorFaktumId;
-        }
-      }
-    }
-  }
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
@@ -74,7 +47,7 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      const unansweredFaktumId = getUnansweredFaktumId();
+      const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
       setUnansweredFaktumId(unansweredFaktumId);
     }
   }

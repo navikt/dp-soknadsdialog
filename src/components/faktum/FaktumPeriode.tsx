@@ -11,7 +11,7 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
-import { isValidDateYear } from "./validations";
+import { isValidDateYear } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {

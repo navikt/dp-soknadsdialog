@@ -8,7 +8,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import { isValidTextLength } from "./validations";
+import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {

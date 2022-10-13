@@ -5,7 +5,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { DatePicker } from "../date-picker/DatePicker";
-import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "../faktum/validations";
+import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "./validation/validations.utils";
 import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
