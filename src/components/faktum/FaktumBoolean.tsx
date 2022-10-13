@@ -11,11 +11,13 @@ import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const { unansweredFaktumId } = useValidation();
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -63,6 +65,11 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
+        error={
+          unansweredFaktumId === faktum.id
+            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+            : undefined
+        }
       >
         {faktum.gyldigeValg?.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

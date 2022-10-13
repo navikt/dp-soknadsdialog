@@ -1,14 +1,15 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
 import { BodyShort, Label, TextField } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { IQuizNumberFaktum } from "../../types/quiz.types";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
+import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validations";
+import { isValidArbeidstimer, isValidPermitteringsPercent } from "./validation/validations.utils";
 
 enum ValidationErrorTypes {
   EmptyValue,
@@ -19,6 +20,7 @@ enum ValidationErrorTypes {
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst, getFaktumTextById } = useSanity();
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
@@ -111,13 +113,24 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
       case ValidationErrorTypes.InvalidValue:
         return faktumTexts?.errorMessage ?? getAppTekst("validering.ugyldig.nummer");
       default:
-        return faktumTexts?.errorMessage ?? getAppTekst("validering.ugyldig.nummer");
+        return undefined;
+    }
+  }
+
+  function getValidationMessage() {
+    if (unansweredFaktumId === faktum.id) {
+      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+    } else if (isValid !== true) {
+      getErrorMessage();
+    } else {
+      undefined;
     }
   }
 
   return (
     <>
       <TextField
+        className={styles.faktumNumber}
         defaultValue={debouncedValue?.toString()}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -126,8 +139,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         type="number"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
-        error={isValid !== true ? getErrorMessage() : undefined}
-        className={styles.faktumNumber}
+        error={getValidationMessage()}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

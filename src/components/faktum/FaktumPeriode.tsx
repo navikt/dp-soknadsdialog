@@ -11,11 +11,13 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
-import { isValidDateYear } from "./validations";
+import { isValidDateYear } from "./validation/validations.utils";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppTekst } = useSanity();
   const [isValidFom, setIsValidFom] = useState(true);
   const [isValidTom, setIsValidTom] = useState(true);
@@ -112,6 +114,16 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     }
   }
 
+  function getValidationMessage() {
+    if (unansweredFaktumId === faktum.id) {
+      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+    } else if (!isValidFom) {
+      return getFomErrorMessage();
+    } else {
+      return undefined;
+    }
+  }
+
   return (
     <div className={periodeStyles.faktumPeriode}>
       <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
@@ -131,8 +143,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
-            hasError={!isValidFom}
-            errorMessage={getFomErrorMessage()}
+            hasError={!isValidFom || unansweredFaktumId === faktum.id}
+            errorMessage={getValidationMessage()}
           />
         </div>
         <div>

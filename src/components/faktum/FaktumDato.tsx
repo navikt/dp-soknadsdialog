@@ -5,15 +5,17 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { DatePicker } from "../date-picker/DatePicker";
-import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "../faktum/validations";
+import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "./validation/validations.utils";
 import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
   const [hasWarning, setHasWarnining] = useState(false);
@@ -72,6 +74,16 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     }
   }
 
+  function getValidationMessage() {
+    if (unansweredFaktumId === faktum.id) {
+      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+    } else if (!isValid) {
+      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
+    } else {
+      return undefined;
+    }
+  }
+
   return (
     <>
       <DatePicker
@@ -80,8 +92,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description}
-        hasError={!isValid}
-        errorMessage={faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId}
+        hasError={!isValid || unansweredFaktumId === faktum.id}
+        errorMessage={getValidationMessage()}
         hasWarning={hasWarning}
         warningMessage={getAppTekst("validering.varsel-tekst.dagpenger-soknadsdato")}
       />

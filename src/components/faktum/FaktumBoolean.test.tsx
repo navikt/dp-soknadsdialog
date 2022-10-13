@@ -1,5 +1,5 @@
-import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
+import React from "react";
 import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
@@ -8,6 +8,7 @@ import { IQuizState } from "../../localhost-data/quiz-state-response";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",
@@ -53,7 +54,9 @@ describe("FaktumBoolean", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumBoolean faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumBoolean faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -71,7 +74,9 @@ describe("FaktumBoolean", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumBoolean faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumBoolean faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -108,7 +113,9 @@ describe("FaktumBoolean", () => {
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumBoolean faktum={faktumMockData} />
+            <ValidationProvider>
+              <FaktumBoolean faktum={faktumMockData} />
+            </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
       );

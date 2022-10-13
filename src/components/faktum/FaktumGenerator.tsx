@@ -15,6 +15,8 @@ import { BarnRegister } from "../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
+import { useValidation } from "../../context/validation-context";
+import { ValidationMessage } from "./validation/ValidationMessage";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -33,6 +35,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const { isLoading } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
   const { getAppTekst } = useSanity();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
@@ -51,6 +54,10 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
     <>
       {props.faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
+        const shouldShowValidationMessage = fakta.some(
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+        );
+
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
@@ -58,6 +65,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
               readOnly={!!props.faktum}
+              showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
                 {getStandardTitle(fakta, svarIndex)}
@@ -86,11 +94,14 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
           </div>
         );
       })}
-
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
           {getAppTekst("generator.legg-til")}
         </Button>
+      )}
+
+      {unansweredFaktumId === props.faktum.id && (
+        <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
       )}
     </>
   );

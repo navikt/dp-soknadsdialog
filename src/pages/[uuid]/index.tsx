@@ -4,6 +4,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { sanityClient } from "../../../sanity-client";
 import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
+import { ValidationProvider } from "../../context/validation-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
@@ -94,7 +95,9 @@ export default function SoknadPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <QuizProvider initialState={props.soknadState}>
-        <Soknad />
+        <ValidationProvider>
+          <Soknad />
+        </ValidationProvider>
       </QuizProvider>
     </SanityProvider>
   );

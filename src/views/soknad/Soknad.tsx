@@ -1,20 +1,22 @@
 import { FileSuccess, Left, Right } from "@navikt/ds-icons";
-import { Alert, Button } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import styles from "./Soknad.module.css";
 
 export function Soknad() {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
-  const [showNotFinishedError, setShowNotFinishedError] = useState(false);
+  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -35,8 +37,8 @@ export function Soknad() {
   }, []);
 
   useEffect(() => {
-    if (showNotFinishedError) {
-      setShowNotFinishedError(false);
+    if (unansweredFaktumId) {
+      setUnansweredFaktumId(undefined);
     }
   }, [soknadState]);
 
@@ -45,11 +47,13 @@ export function Soknad() {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
     } else {
-      setShowNotFinishedError(true);
+      const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
+      setUnansweredFaktumId(unansweredFaktumId);
     }
   }
 
   function navigateToPreviousSection() {
+    setUnansweredFaktumId(undefined);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
@@ -80,12 +84,6 @@ export function Soknad() {
       <div className={styles.loaderContainer}>
         <FetchIndicator isLoading={isLoading} />
       </div>
-
-      {showNotFinishedError && (
-        <Alert variant="error" size="medium" inline>
-          Du må svare på alle spørsmålene
-        </Alert>
-      )}
 
       <nav className="navigation-container">
         {isFirstSection && (

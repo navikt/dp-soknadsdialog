@@ -6,6 +6,7 @@ import { IQuizSeksjon } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { ValidationProvider } from "../../context/validation-context";
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [
@@ -37,7 +38,9 @@ describe("Section", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
-          <Section section={sectionMockData} firstUnansweredFaktumIndex={0} />
+          <ValidationProvider>
+            <Section section={sectionMockData} firstUnansweredFaktumIndex={0} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );

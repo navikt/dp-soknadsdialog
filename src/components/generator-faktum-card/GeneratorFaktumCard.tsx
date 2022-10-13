@@ -2,15 +2,20 @@ import React, { PropsWithChildren } from "react";
 import styles from "./GeneratorFaktumCard.module.css";
 import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
+import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
   editFaktum?: () => void;
   deleteFaktum?: () => void;
   allFaktumAnswered?: boolean;
   readOnly?: boolean;
+  showValidationMessage: boolean;
 }
 
 export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
+  const { getAppTekst } = useSanity();
+
   return (
     <div className={styles.card}>
       {props.children}
@@ -35,6 +40,11 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
           </>
         )}
       </div>
+      {props.showValidationMessage && (
+        <ValidationMessage
+          message={getAppTekst("validering.delvis-ubesvart-faktum.varsel-tekst")}
+        />
+      )}
     </div>
   );
 }

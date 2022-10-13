@@ -9,11 +9,13 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const { unansweredFaktumId } = useValidation();
+  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -49,6 +51,11 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
+        error={
+          unansweredFaktumId === faktum.id
+            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+            : undefined
+        }
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

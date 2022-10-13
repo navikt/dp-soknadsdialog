@@ -8,6 +8,7 @@ import { IQuizState } from "../../localhost-data/quiz-state-response";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
+import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -55,7 +56,9 @@ describe("FaktumEnvalg", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumEnvalg faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -75,7 +78,9 @@ describe("FaktumEnvalg", () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
-          <FaktumEnvalg faktum={faktumMockData} />
+          <ValidationProvider>
+            <FaktumEnvalg faktum={faktumMockData} />
+          </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
     );
@@ -109,7 +114,9 @@ describe("FaktumEnvalg", () => {
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
-            <FaktumEnvalg faktum={faktumMockData} />
+            <ValidationProvider>
+              <FaktumEnvalg faktum={faktumMockData} />
+            </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
       );

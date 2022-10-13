@@ -12,12 +12,14 @@ import { BodyShort, Label } from "@navikt/ds-react";
 import styles from "./Faktum.module.css";
 import { getCountryName } from "../../country.utils";
 import { HelpText } from "../HelpText";
+import { useValidation } from "../../context/validation-context";
 
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { getFaktumTextById, getLandGruppeTextById } = useSanity();
+  const { getFaktumTextById, getLandGruppeTextById, getAppTekst } = useSanity();
   const { saveFaktumToQuiz } = useQuiz();
+  const { unansweredFaktumId } = useValidation();
 
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
   const [currentLandGruppeText, setCurrentLandGruppeText] = useState<
@@ -72,6 +74,11 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         options={options}
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
+        error={
+          unansweredFaktumId === faktum.id
+            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
+            : undefined
+        }
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
