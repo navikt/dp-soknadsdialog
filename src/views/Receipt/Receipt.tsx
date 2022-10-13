@@ -36,6 +36,7 @@ export function Receipt(props: IProps) {
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
   );
+
   const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) => dokumentkrav.bundle
   );

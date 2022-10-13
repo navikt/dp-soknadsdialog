@@ -39,7 +39,7 @@ export function ReceiptDocumentsUploaded(props: IProps) {
           {/*</Button>*/}
 
           <Link
-            href={api(`/documentation/${dokumentkrav.bundleFilsti}/download`)}
+            href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
             download={`${dokumentkrav.bundleFilsti}.pdf`}
             id={dokumentkrav.bundleFilsti}
           >
@@ -47,7 +47,7 @@ export function ReceiptDocumentsUploaded(props: IProps) {
           </Link>
 
           <Link
-            href={api(`/documentation/${dokumentkrav.bundleFilsti}/download`)}
+            href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
             target="_blank"
             rel="noreferrer"
           >
