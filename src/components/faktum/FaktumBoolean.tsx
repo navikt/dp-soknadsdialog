@@ -83,7 +83,7 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingTop />}
     </>
   );
 }

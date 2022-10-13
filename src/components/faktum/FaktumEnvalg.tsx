@@ -69,7 +69,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {alertText && alertText.active && <AlertText alertText={alertText} spacingTop />}
+      {alertText && <AlertText alertText={alertText} spacingTop />}
     </>
   );
 }

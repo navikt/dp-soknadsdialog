@@ -9,7 +9,6 @@ export interface ISanityAlertText {
   title?: string;
   type: "info" | "warning" | "error" | "success";
   body: TypedObject | TypedObject[];
-  active: boolean | undefined;
 }
 
 export interface ISanityFaktum {
