@@ -7,3 +7,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.alertContainer {
+  margin: var(--navds-spacing-5) 0;
+}
+
+.uploadedFileList {
+  margin: 0 0 0 var(--navds-spacing-4);
+  padding: 0;
+}

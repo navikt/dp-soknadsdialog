@@ -128,9 +128,9 @@ export function UploadFilesModal(props: IProps) {
 
           {isFilesUploaded && (
             <>
-              <Alert variant="success">
+              <Alert variant="success" className={styles.alertContainer}>
                 Filene dine er lagret
-                <ul>
+                <ul className={styles.uploadedFileList}>
                   {props.uploadedFiles.map((file) => (
                     <li key={file.filsti}>{file.filnavn}</li>
                   ))}
