@@ -82,49 +82,29 @@ jobs:
           environment: development
           version: ${{ github.sha }}
           set_commits: skip
-#  deploy-prod:
-#    name: Deploy to Production
-#    needs: [deploy-dev]
-#    if: github.ref == 'refs/heads/main'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Fetch NAIS yaml
-#        uses: actions/download-artifact@v1
-#        with:
-#          name: nais-yaml
-#          path: nais
-#
-#      - uses: nais/deploy/actions/deploy@v1
-#        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-#          CLUSTER: prod-gcp
-#          RESOURCE: nais/nais.yaml
-#          VARS: nais/prod.yaml
-#          PRINT_PAYLOAD: true
 
-#      - name: Lag deployment i Sentry
-#        uses: getsentry/action-release@v1
-#        env:
-#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-#          SENTRY_URL: https://sentry.gc.nav.no
-#          SENTRY_ORG: nav
-#          SENTRY_PROJECT: dp-soknadsdialog
-#        with:
-#          environment: production
-#          version: ${{ github.sha }}
-#          set_commits: skip
+  deploy-prod:
+    needs: [test, build]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/vars-prod.yaml
+          PRINT_PAYLOAD: true
 
-#  reportFailure:
-#    name: Report build failure to Slack
-#    needs: [ test, build ]
-#    if: ${{ failure() }}
-#    runs-on: ubuntu-latest
-#    steps:
-#      - run: |
-#          curl -X POST --data-urlencode "payload={\"channel\": \"$CHANNEL\", \"username\": \"$USERNAME\", \"text\": \"$MESSAGE\", \"icon_emoji\": \":neutral_face:\"}" $WEBHOOK_URL
-#        env:
-#          USERNAME: "Github Actions"
-#          MESSAGE: "The build is broken!"
-#          CHANNEL: "#team-dagpenger-quiz"
-#          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-#
+      - name: Lag deployment i Sentry
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_URL: https://sentry.gc.nav.no
+          SENTRY_ORG: nav
+          SENTRY_PROJECT: dp-soknadsdialog
+        with:
+          environment: production
+          version: ${{ github.sha }}
+          set_commits: skip
