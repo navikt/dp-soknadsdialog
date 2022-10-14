@@ -46,6 +46,8 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     // eslint-disable-next-line no-console
     console.log("Mellomlagring headers: ", response.headers);
     const mellomlagringContentType = response.headers.get("Content-Type");
+    // eslint-disable-next-line no-console
+    console.log("mellomlagringContentType: ", mellomlagringContentType);
     if (mellomlagringContentType) {
       res.setHeader("Content-Type", mellomlagringContentType);
     }
