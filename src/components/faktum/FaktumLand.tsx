@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
 import { IFaktum } from "./Faktum";
 import { IQuizLandFaktum } from "../../types/quiz.types";
@@ -26,10 +26,16 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     ISanityLandGruppe | undefined
   >();
 
+  const shouldPreSelectNorway =
+    !currentAnswer &&
+    (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+      faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
     return optionA.label > optionB.label ? 1 : -1;
   };
+
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const options = faktum.gyldigeLand
     .map((code) => ({
@@ -37,6 +43,12 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       label: getCountryName(code, router.locale),
     }))
     .sort(sortByLabel);
+
+  useEffect(() => {
+    if (shouldPreSelectNorway) {
+      setCurrentAnswer("NOR");
+    }
+  }, []);
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
     onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
