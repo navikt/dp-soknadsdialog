@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import { Alert, BodyLong, Button, Heading, Loader, Modal } from "@navikt/ds-react";
+import { Alert, BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
 import { FileUploader } from "../file-uploader/FileUploader";
 import styles from "./ReceiptUploadModal.module.css";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
@@ -108,14 +108,19 @@ export function UploadFilesModal(props: IProps) {
                 handleUploadedFiles={props.handleUploadedFiles}
               />
 
-              <div>
-                {isSaving && <Loader />}
-                {hasError && <Alert variant="error">Det gikk i dass.</Alert>}
-              </div>
+              {hasError && (
+                <Alert variant="error" className={styles.alertContainer}>
+                  Det gikk i dass.
+                </Alert>
+              )}
 
               <nav className="navigation-container">
                 <>
-                  <Button variant="primary" onClick={bundleAndSaveDokumentkravFiles}>
+                  <Button
+                    variant="primary"
+                    loading={isSaving}
+                    onClick={bundleAndSaveDokumentkravFiles}
+                  >
                     Send inn dokumenter
                   </Button>
                   <Button variant="secondary" onClick={props.closeModal}>
@@ -130,7 +135,7 @@ export function UploadFilesModal(props: IProps) {
             <>
               <Alert variant="success" className={styles.alertContainer}>
                 Filene dine er lagret
-                <ul className={styles.uploadedFileList}>
+                <ul className={styles.uploadedFilesList}>
                   {props.uploadedFiles.map((file) => (
                     <li key={file.filsti}>{file.filnavn}</li>
                   ))}
