@@ -43,6 +43,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
+    res.setHeader("Content-Type", "application/pdf;");
     res.setHeader("Content-Disposition", "inline;");
     return res.status(200).send(response.body);
   } catch (error) {
