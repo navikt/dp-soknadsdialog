@@ -8,6 +8,7 @@ export interface IPersonalia {
   kontonummer?: string;
   banknavn?: string;
   bankLandkode?: string;
+  ident: string;
 }
 
 export interface IAdresse {

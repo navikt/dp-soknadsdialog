@@ -1,4 +1,4 @@
-import { IPersonalia } from "./types/personalia.types";
+import { IPersonalia } from "../../types/personalia.types";
 
 export function getAge(date: string) {
   // Using a year of 365.25 days (because leap years)
@@ -19,18 +19,35 @@ export function joinStrings(values: (string | undefined)[], separator: string) {
 }
 
 export function getFormattedPersonalia(personalia: IPersonalia) {
-  const { forNavn, mellomNavn, etterNavn, folkeregistrertAdresse: adresse } = personalia;
+  const {
+    forNavn,
+    mellomNavn,
+    etterNavn,
+    folkeregistrertAdresse: adresse,
+    ident,
+    kontonummer,
+  } = personalia;
 
   const navn = joinStrings([forNavn, mellomNavn, etterNavn], " ");
+
   const adresselinjer = joinStrings(
     [adresse?.adresselinje1, adresse?.adresselinje2, adresse?.adresselinje3],
     ", "
   );
-  const postadresse = joinStrings([adresse?.postnummer, adresse?.poststed], ", ");
+
+  const postadresse = joinStrings([adresse?.postnummer, adresse?.poststed], " ");
+
+  const obscuredIdent = ident.slice(0, -5) + " *****";
+
+  const formattedKontonummer =
+    kontonummer &&
+    `${kontonummer.slice(0, 4)} ${kontonummer.slice(4, 6)} ${kontonummer.slice(6, 12)}`;
 
   return {
     navn,
     adresselinjer,
     postadresse,
+    obscuredIdent,
+    formattedKontonummer,
   };
 }
