@@ -5,7 +5,7 @@ on: [push]
 env:
   IMAGE: ghcr.io/${{ github.repository }}/dp-soknadsdialog:${{ github.sha }}
   LATEST_IMAGE: ghcr.io/${{ github.repository }}/dp-soknadsdialog:latest
-  BASE_PATH: /arbeid/dagpenger/soknad
+  BASE_PATH: /dagpenger/soknad
 
 jobs:
   test:
