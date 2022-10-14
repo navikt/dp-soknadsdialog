@@ -43,7 +43,11 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
-    res.setHeader("Content-Type", "application/pdf;");
+    const mellomlagringContentType = response.headers.get("Content-Type");
+    if (mellomlagringContentType) {
+      res.setHeader("Content-Type", mellomlagringContentType);
+    }
+
     res.setHeader("Content-Disposition", "inline;");
     return res.status(200).send(response.body);
   } catch (error) {
