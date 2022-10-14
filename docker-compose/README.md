@@ -25,7 +25,7 @@ Muliggjør lokal kjøring av søknadsdialogen og Quiz lokalt.
 1. `docker-compose pull` --> henter inn eventuelle nye versjoner av backendene, mao om det har kommet en ny versjon av med `latest`-taggen.
 2. `docker-compose build` --> bygger det tilnærmet statiske docker-laget for frontenden, som inneholder `node_modules`.
 3. `docker-compose up -d` --> starter alle containerene i bakgrunnen.
-4. Gå til http://localhost:4000/arbeid/dagpenger/soknad/en
+4. Gå til http://localhost:4000/dagpenger/soknad/en
 5. Du er nå innlogget som den fiktive brukeren `12345678901`
 
 

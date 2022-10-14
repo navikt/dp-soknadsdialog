@@ -1,5 +1,5 @@
-ingress: https://arbeid.dev.nav.no/arbeid/dagpenger/soknad
-base_path: "/arbeid/dagpenger/soknad"
+ingress: https://arbeid.dev.nav.no/dagpenger/soknad
+base_path: "/dagpenger/soknad"
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev

@@ -161,10 +161,10 @@ services:
     env_file: .env
     environment:
       PORT: 3001
-      SELF_URL: http://localhost:3001/arbeid/dagpenger/soknad
-      NEXT_PUBLIC_BASE_PATH: "/arbeid/dagpenger/soknad"
+      SELF_URL: http://localhost:3001/dagpenger/soknad
+      NEXT_PUBLIC_BASE_PATH: "/dagpenger/soknad"
       DEKORATOR_ENV: "dev"
-      API_BASE_URL: http://soknad:8080/arbeid/dagpenger/soknadapi
+      API_BASE_URL: http://soknad:8080/dagpenger/soknadapi
       IDPORTEN_WELL_KNOWN_URL: http://host.docker.internal:8080/idporten/.well-known/openid-configuration
       NAIS_CLUSTER_NAME: "localhost"
       TOKEN_X_CLIENT_ID: "localhost:teamdagpenger:dp-soknadsdialog"

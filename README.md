@@ -29,11 +29,6 @@ Interne henvendelser kan sendes via Slack i kanalen #team-dagpenger-dev.
 npm run test
 ```
 
-## Autentisering i dev
-
-1. Gå til https://arbeid.dev.nav.no/arbeid/dagpenger/soknad/oauth2/login
-2. Login complete - apiendepunkter skal da fungere
-
 ## Kode-konvensjoner
 
 - Bruk engelsk for alt unntatt domenespesifikke termer (eks: faktum, seksjon).
