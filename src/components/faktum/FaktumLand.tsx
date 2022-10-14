@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
 import { IFaktum } from "./Faktum";
 import { IQuizLandFaktum } from "../../types/quiz.types";
@@ -46,15 +46,15 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
 
   useEffect(() => {
     if (shouldPreSelectNorway) {
-      setCurrentAnswer("NOR");
+      onSelect("NOR");
     }
   }, []);
 
-  function onSelect(event: ChangeEvent<HTMLSelectElement>) {
-    onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
-    setCurrentAnswer(event.target.value);
+  function onSelect(value: string) {
+    onChange ? onChange(faktum, value) : saveFaktum(value);
+    setCurrentAnswer(value);
 
-    const landGruppeId = getLandGruppeIdByAlpha3Code(event.target.value);
+    const landGruppeId = getLandGruppeIdByAlpha3Code(value);
     setCurrentLandGruppeText(getLandGruppeTextById(landGruppeId));
   }
 
@@ -82,7 +82,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        onChange={onSelect}
+        onChange={(e) => onSelect(e.target.value)}
         options={options}
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
