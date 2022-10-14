@@ -6,7 +6,7 @@ import { audienceDPSoknad, audienceMellomlagring } from "../../../../../api.util
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(500).json({ status: "ok" });
+    return res.status(200).json({ status: "ok" });
   }
 
   const { token, apiToken } = await getSession({ req });
