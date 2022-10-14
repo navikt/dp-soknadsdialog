@@ -124,7 +124,7 @@ export default function ReceiptPage(props: IProps) {
     !props.soknadState ||
     !props.dokumentkrav ||
     // !props.soknadStatus ||
-    // !props.arbeidssokerStatus ||
+    !props.arbeidssokerStatus ||
     !props.sanityTexts.seksjoner
   ) {
     // eslint-disable-next-line no-console
@@ -153,7 +153,7 @@ export default function ReceiptPage(props: IProps) {
           <ValidationProvider>
             <Receipt
               soknadStatus={props.soknadStatus || { tilstand: "Innsendt" }}
-              arbeidssokerStatus={props.arbeidssokerStatus || { isRegistered: false }}
+              arbeidssokerStatus={props.arbeidssokerStatus}
               sections={props.soknadState.seksjoner}
             />
           </ValidationProvider>
