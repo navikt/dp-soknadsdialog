@@ -13,7 +13,7 @@ import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 
 interface IProps {
-  personalia: IPersonalia;
+  personalia: IPersonalia | null;
 }
 
 export function Soknad(props: IProps) {
@@ -72,7 +72,7 @@ export function Soknad(props: IProps) {
     <main>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
 
-      {isFirstSection && (
+      {isFirstSection && props.personalia && (
         <div className={styles.seksjonContainer}>
           <Personalia personalia={props.personalia} />
         </div>
