@@ -3,7 +3,7 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import styles from "./ReceiptDocumentsUploaded.module.css";
-import { BodyShort, Button } from "@navikt/ds-react";
+import { Link, BodyShort, Button } from "@navikt/ds-react";
 import api from "../../api.utils";
 import { UploadFilesModal } from "../receipt-upload-modal/ReceiptUploadModal";
 
@@ -20,32 +20,36 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
     setUploadModalOpen((state) => !state);
   }
 
-  async function openFile() {
-    try {
-      const res = await fetch(api(`/documentation/download/${dokumentkrav.bundleFilsti}`));
-
-      if (res.ok) {
-        const blob = await res.blob();
-        const file = new Blob([blob], { type: "application/pdf" });
-        const fileURL = URL.createObjectURL(file);
-
-        const pdfWindow = window.open();
-        if (pdfWindow) {
-          pdfWindow.location.href = fileURL;
-        }
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  }
+  // async function openFile() {
+  //   try {
+  //     const res = await fetch(api(`/documentation/download/${dokumentkrav.bundleFilsti}`));
+  //
+  //     if (res.ok) {
+  //       const blob = await res.blob();
+  //       const file = new Blob([blob], { type: "application/pdf" });
+  //       const fileURL = URL.createObjectURL(file);
+  //
+  //       const pdfWindow = window.open();
+  //       if (pdfWindow) {
+  //         pdfWindow.location.href = fileURL;
+  //       }
+  //     }
+  //   } catch (error) {
+  //     // eslint-disable-next-line no-console
+  //     console.log(error);
+  //   }
+  // }
 
   return (
     <div className={styles.documentItem}>
       <div>
-        <BodyShort>
-          <b> {dokumentkrav.beskrivendeId}</b>
-        </BodyShort>
+        <Link
+          href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
+          target={"_blank"}
+          rel="noreferrer"
+        >
+          {dokumentkrav.beskrivendeId}
+        </Link>
         <BodyShort>
           {`${getAppTekst("kvittering.heading.text.sendt-av")} ${
             dokumentkrav.filer[0]?.tidspunkt || "30.09.2022"
@@ -53,19 +57,10 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
         </BodyShort>
       </div>
 
-      <Button onClick={openFile}>Åpne</Button>
+      {/*<Button onClick={openFile}>Åpne</Button>*/}
       <Button className={styles.uploadButton} onClick={toggleModal}>
-        Last opp
+        Last opp igjen
       </Button>
-
-      <a
-        href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
-        target={"_blank"}
-        rel="noreferrer"
-      >
-        TEST target blank
-      </a>
-      <a href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}>TEST NEDLASTING</a>
 
       <UploadFilesModal
         modalOpen={uploadModalOpen}

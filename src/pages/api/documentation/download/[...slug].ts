@@ -16,7 +16,7 @@ export const config = {
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    res.setHeader("Content-Disposition", "inline;");
+    res.setHeader("Content-Type", "application/pdf");
     return res.send(imageBuffer);
   }
 
