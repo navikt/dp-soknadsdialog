@@ -16,7 +16,7 @@ import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-
 import { mockNeste } from "../../localhost-data/mock-neste";
 import { ISoknadStatus } from "../api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../api/arbeidssoker";
-import { getArbeidssokerStatus } from "../../api/arbeidssoker-api";
+import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
 import { DokumentkravProvider } from "../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../context/validation-context";
 
@@ -73,7 +73,7 @@ export async function getServerSideProps(
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerStatus(context);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   // eslint-disable-next-line no-console
   console.log("arbeidssokerStatusResponse.status: ", arbeidssokerStatusResponse.status);
@@ -100,7 +100,11 @@ export async function getServerSideProps(
   if (!arbeidssokerStatusResponse.ok) {
     errorCode = arbeidssokerStatusResponse.status;
   } else {
-    arbeidssokerStatus = await arbeidssokerStatusResponse.json();
+    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
+    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
+      (periode) => periode.tilOgMedDato === null
+    );
+    arbeidssokerStatus = { isRegistered: currentArbeidssokerperiodeIndex !== -1 };
   }
 
   return {

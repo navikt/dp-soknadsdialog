@@ -3,7 +3,16 @@ import { getSession } from "@navikt/dp-auth/server";
 import { GetServerSidePropsContext } from "next/types";
 import { formatISO } from "date-fns";
 
-export async function getArbeidssokerStatus({ req }: GetServerSidePropsContext) {
+export interface IArbeidssokerperioder {
+  arbeidssokerperioder: [
+    {
+      fraOgMedDato: string;
+      tilOgMedDato: string | null;
+    }
+  ];
+}
+
+export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
   const today = formatISO(new Date(), { representation: "date" });
   const { payload, token } = await getSession({ req });
 
