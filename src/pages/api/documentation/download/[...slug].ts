@@ -16,6 +16,7 @@ export const config = {
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    res.setHeader("Content-Disposition", "inline;");
     return res.send(imageBuffer);
   }
 
@@ -42,7 +43,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
-    res.setHeader("Content-Disposition", "attachment;");
+    res.setHeader("Content-Disposition", "inline;");
     return res.status(200).send(response.body);
   } catch (error) {
     return res.status(404).send(error);
