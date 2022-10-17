@@ -54,7 +54,7 @@ describe("Dokumentkrav", () => {
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
     await waitFor(() => {
-      expect(screen.queryByText("dokumentkrav.bundle-error-modal.tittel")).toBeInTheDocument();
+      expect(screen.queryByText("filopplaster.dra-filene-hit")).toBeInTheDocument();
     });
   });
 
