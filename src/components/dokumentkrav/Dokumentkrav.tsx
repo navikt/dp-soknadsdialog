@@ -94,13 +94,13 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
 
       <div className={styles.dokumentkravSvar}>
         <RadioGroup
-          legend={getAppTekst("dokumentkrav.velg.svaralternativ")}
+          legend={getAppTekst("dokumentkrav.velg-svaralternativ")}
           onChange={setSvar}
           value={svar}
           error={
             validationError?.errorType === "svar" &&
             !svar &&
-            getAppTekst("dokumentkrav.feilmelding.velg.svaralternativ")
+            getAppTekst("dokumentkrav.feilmelding.mangler-svaralternativ")
           }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
@@ -145,7 +145,7 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
           )}
 
           {validationError?.errorType === "filer" && uploadedFiles.length === 0 && (
-            <Alert variant="error">{getAppTekst("dokumentkrav.feilmelding.maa-velge-filer")}</Alert>
+            <Alert variant="error">{getAppTekst("dokumentkrav.feilmelding.mangler-filer")}</Alert>
           )}
         </>
       )}

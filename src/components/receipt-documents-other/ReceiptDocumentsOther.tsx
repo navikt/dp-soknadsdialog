@@ -8,7 +8,7 @@ export function ReceiptDocumentsOther() {
   return (
     <div>
       <Heading level={"2"} size="small">
-        {getAppTekst("kvittering.heading.andre.dokumenter")}
+        {getAppTekst("kvittering.heading.andre-dokumenter")}
       </Heading>
       <BodyShort>
         Hvis du har noe annet du ønsker å legge ved, kan du laste opp dette her. Dette er helt

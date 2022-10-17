@@ -3,7 +3,7 @@ import { textStructureToHtml } from "./textStructureToHtml";
 const sanityTexts = {
   apptekster: [
     {
-      textId: "barn.legg-til",
+      textId: "barn.knapp.legg-til",
       valueText: "Legg til barn",
     },
   ],

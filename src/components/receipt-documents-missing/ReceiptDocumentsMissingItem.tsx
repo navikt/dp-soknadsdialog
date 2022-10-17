@@ -30,10 +30,10 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <BodyShort>
         <>
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-            <>{getAppTekst("kvittering.text.skal-sendes-av.noen-andre")}</>
+            <>{getAppTekst("kvittering.tekst.skal-sendes-av.noen-andre")}</>
           )}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE && (
-            <>{getAppTekst("kvittering.text.skal-sendes-av.deg")}</>
+            <>{getAppTekst("kvittering.tekst.skal-sendes-av.deg")}</>
           )}
         </>
       </BodyShort>

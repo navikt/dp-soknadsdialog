@@ -75,9 +75,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
         error={
-          unansweredFaktumId === faktum.id
-            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
-            : undefined
+          unansweredFaktumId === faktum.id ? getAppTekst("validering.faktum.ubesvart") : undefined
         }
       />
       {faktumTexts?.helpText && (

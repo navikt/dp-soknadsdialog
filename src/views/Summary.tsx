@@ -65,7 +65,7 @@ export function Summary(props: IProps) {
                       variant="secondary"
                       onClick={() => router.push(`/${router.query.uuid}?seksjon=${index + 1}`)}
                     >
-                      {getAppTekst("oppsummering.endre-svar")}
+                      {getAppTekst("oppsummering.knapp.endre-svar")}
                     </Button>
                   </>
                 </Accordion.Content>
@@ -78,23 +78,23 @@ export function Summary(props: IProps) {
       <ConfirmationPanel
         className="confirmation-panel"
         checked={consentGiven}
-        label={getAppTekst("oppsummering.samtykke-riktige-opplysninger.checkbox-label")}
+        label={getAppTekst("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
         onChange={() => setConsentGiven(!consentGiven)}
       >
-        {getAppTekst("oppsummering.samtykke-riktige-opplysninger.tekst")}
+        {getAppTekst("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
-          {getAppTekst("knapp.forrige")}
+          {getAppTekst("soknad.soknad.knapp.forrige-steg")}
         </Button>
 
         <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
-          {getAppTekst("oppsummering.send-soknad")}
+          {getAppTekst("oppsummering.knapp.send-soknad")}
         </Button>
 
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-          {getAppTekst("oppsummering.slett-soknad")}
+          {getAppTekst("oppsummering.knapp.slett-soknad")}
         </Button>
 
         <NoSessionModal />

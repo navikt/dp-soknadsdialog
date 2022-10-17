@@ -10,7 +10,7 @@ export function ArbeidssokerStatus(props: IArbeidssokerStatus) {
   if (!props.isRegistered) {
     return (
       <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-        {getAppTekst("kvittering.arbeidsokerstatus.warning-tekst")}
+        {getAppTekst("kvittering.arbeidsokerstatus.ikke-registrert")}
       </Alert>
     );
   }

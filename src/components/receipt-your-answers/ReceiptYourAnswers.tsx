@@ -15,7 +15,7 @@ export function ReceiptYourAnswers(props: IProps) {
     <div className={styles.receiptYourAnswersContainer}>
       <ReadMore
         className={styles.receiptYourAnswersHeader}
-        header={getAppTekst("kvittering.dine-svar")}
+        header={getAppTekst("kvittering.dine-svar.header")}
       >
         {props.sections?.map((section) => {
           return (

@@ -16,10 +16,10 @@ export function ReceiptDocumentsUploaded(props: IProps) {
     <div>
       <div className={styles.headingContainer}>
         <Heading level={"2"} size="medium">
-          {getAppTekst("kvittering.heading.mottatt.dokumenter")}
+          {getAppTekst("kvittering.heading.mottatte-dokumenter")}
         </Heading>
         <Tag variant="success">
-          {props.documents?.length} {getAppTekst("kvittering.text.antall-sendt")}
+          {props.documents?.length} {getAppTekst("kvittering.tekst.antall-sendt")}
         </Tag>
       </div>
       {props.documents.map((dokumentkrav) => (

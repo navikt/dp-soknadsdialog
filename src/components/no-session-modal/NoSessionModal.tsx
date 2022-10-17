@@ -63,10 +63,10 @@ export function NoSessionModal() {
         <p>{getAppTekst("utlopt-sessjon.modal.detaljer")}</p>
         <div className={styles.actionButtonsContainer}>
           <Button variant={"primary"} onClick={login}>
-            {getAppTekst("utlopt-sessjon.modal.login-knapp-tekst")}
+            {getAppTekst("utlopt-sessjon.modal.knapp.logg-inn")}
           </Button>
           <Button variant={"tertiary"} onClick={() => router.push("https://nav.no/")}>
-            {getAppTekst("utlopt-sessjon.modal.tilbake-knapp-tekst")}
+            {getAppTekst("utlopt-sessjon.modal.knapp.tilbake")}
           </Button>
         </div>
       </Modal.Content>

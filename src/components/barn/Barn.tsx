@@ -104,10 +104,10 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
             onClick={() => addNewGeneratorAnswer(faktum)}
             icon={<ChildAdd />}
           >
-            {getAppTekst("barn.legg-til")}
+            {getAppTekst("barn.knapp.legg-til")}
           </Button>
           {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
+            <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
           )}
         </>
       )}
