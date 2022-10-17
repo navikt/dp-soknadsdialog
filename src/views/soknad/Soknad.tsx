@@ -31,6 +31,8 @@ export function Soknad(props: IProps) {
     (faktum) => faktum?.svar === undefined
   );
 
+  const showPersonalia = isFirstSection && soknadState.versjon_navn === "Dagpenger";
+
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
 
@@ -72,7 +74,7 @@ export function Soknad(props: IProps) {
     <main>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
 
-      {isFirstSection && props.personalia && (
+      {showPersonalia && props.personalia && (
         <div className={styles.seksjonContainer}>
           <Personalia personalia={props.personalia} />
         </div>
