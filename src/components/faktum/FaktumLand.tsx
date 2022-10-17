@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import React, { ChangeEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
 import { IFaktum } from "./Faktum";
 import { IQuizLandFaktum } from "../../types/quiz.types";
@@ -26,10 +26,16 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     ISanityLandGruppe | undefined
   >();
 
+  const shouldPreSelectNorway =
+    !currentAnswer &&
+    (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+      faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
     return optionA.label > optionB.label ? 1 : -1;
   };
+
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const options = faktum.gyldigeLand
     .map((code) => ({
@@ -38,11 +44,17 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     }))
     .sort(sortByLabel);
 
-  function onSelect(event: ChangeEvent<HTMLSelectElement>) {
-    onChange ? onChange(faktum, event.target.value) : saveFaktum(event.target.value);
-    setCurrentAnswer(event.target.value);
+  useEffect(() => {
+    if (shouldPreSelectNorway) {
+      onSelect("NOR");
+    }
+  }, []);
 
-    const landGruppeId = getLandGruppeIdByAlpha3Code(event.target.value);
+  function onSelect(value: string) {
+    onChange ? onChange(faktum, value) : saveFaktum(value);
+    setCurrentAnswer(value);
+
+    const landGruppeId = getLandGruppeIdByAlpha3Code(value);
     setCurrentLandGruppeText(getLandGruppeTextById(landGruppeId));
   }
 
@@ -70,7 +82,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        onChange={onSelect}
+        onChange={(e) => onSelect(e.target.value)}
         options={options}
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
