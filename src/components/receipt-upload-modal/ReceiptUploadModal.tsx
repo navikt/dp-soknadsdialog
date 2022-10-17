@@ -43,7 +43,7 @@ export function UploadFilesModal(props: IProps) {
 
       const dokumentkravWithUploadedFiles: IDokumentkrav = {
         ...props.dokumentkrav,
-        filer: props.uploadedFiles,
+        filer: [...props.dokumentkrav.filer, ...props.uploadedFiles],
       };
 
       // eslint-disable-next-line no-console

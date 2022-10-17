@@ -20,33 +20,13 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
     setUploadModalOpen((state) => !state);
   }
 
-  // async function openFile() {
-  //   try {
-  //     const res = await fetch(api(`/documentation/download/${dokumentkrav.bundleFilsti}`));
-  //
-  //     if (res.ok) {
-  //       const blob = await res.blob();
-  //       const file = new Blob([blob], { type: "application/pdf" });
-  //       const fileURL = URL.createObjectURL(file);
-  //
-  //       const pdfWindow = window.open();
-  //       if (pdfWindow) {
-  //         pdfWindow.location.href = fileURL;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     // eslint-disable-next-line no-console
-  //     console.log(error);
-  //   }
-  // }
-
   return (
     <div className={styles.documentItem}>
       <div>
         <Link
           href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
-          target={"_blank"}
           rel="noreferrer"
+          target="_blank"
         >
           {dokumentkrav.beskrivendeId}
         </Link>
@@ -57,7 +37,6 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
         )}
       </div>
 
-      {/*<Button onClick={openFile}>Åpne</Button>*/}
       <Button className={styles.uploadButton} onClick={toggleModal}>
         Last opp igjen
       </Button>
