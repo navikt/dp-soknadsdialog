@@ -52,9 +52,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktumId === faktum.id
-            ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
-            : undefined
+          unansweredFaktumId === faktum.id ? getAppTekst("validering.faktum.ubesvart") : undefined
         }
       >
         {faktum.gyldigeValg.map((textId) => {

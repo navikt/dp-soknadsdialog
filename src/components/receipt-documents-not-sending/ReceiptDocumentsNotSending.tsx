@@ -14,7 +14,7 @@ export function ReceiptDocumentsNotSending(props: IProps) {
   return (
     <div>
       <Heading level={"2"} size="medium">
-        {getAppTekst("kvittering.heading.mottatt.dokumenter")}
+        {getAppTekst("kvittering.heading.sender-ikke-dokumenter")}
       </Heading>
 
       {props.documents.map((dokumentkrav) => {

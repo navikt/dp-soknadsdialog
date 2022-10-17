@@ -50,9 +50,9 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   function getErrorMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+      return getAppTekst("validering.faktum.ubesvart");
     } else if (!isValid) {
-      return faktumTexts?.errorMessage ?? getAppTekst("validering.text-too-long");
+      return faktumTexts?.errorMessage ?? getAppTekst("validering.text-faktum.for-lang-tekst");
     } else {
       return undefined;
     }

@@ -37,7 +37,9 @@ export function FetchIndicator({ isLoading = false }) {
               <div className={classNames(styles.dot, styles.dot3)}></div>
             </div>
           </div>
-          {showText && <BodyShort tabIndex={0}>{getAppTekst("laster-sporsmal.tittel")}</BodyShort>}
+          {showText && (
+            <BodyShort tabIndex={0}>{getAppTekst("soknad.loader.laster-neste")}</BodyShort>
+          )}
         </>
       )}
     </div>

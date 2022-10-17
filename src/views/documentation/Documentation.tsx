@@ -40,7 +40,7 @@ export function Documentation(props: IProps) {
 
   const { getAppTekst, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
-  const numberOfDokumentkravText = getAppTekst("dokumentkrav.nummer.av.krav");
+  const numberOfDokumentkravText = getAppTekst("dokumentkrav.antall-krav-av");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
@@ -127,11 +127,11 @@ export function Documentation(props: IProps) {
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
-          {getAppTekst("knapp.forrige")}
+          {getAppTekst("soknad.soknad.knapp.forrige-steg")}
         </Button>
 
         <Button onClick={() => bundleAndSummary()} loading={isBundling}>
-          {getAppTekst("soknad.til-oppsummering")}
+          {getAppTekst("soknad.knapp.til-oppsummering")}
         </Button>
       </nav>
 

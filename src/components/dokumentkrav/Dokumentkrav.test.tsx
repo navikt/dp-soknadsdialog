@@ -54,7 +54,7 @@ describe("Dokumentkrav", () => {
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
     await waitFor(() => {
-      expect(screen.queryByText("filopplaster.dra.filene.hit")).toBeInTheDocument();
+      expect(screen.queryByText("dokumentkrav.bundle-error-modal.tittel")).toBeInTheDocument();
     });
   });
 
@@ -118,7 +118,7 @@ describe("Dokumentkrav", () => {
       await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
       await waitFor(() => {
-        expect(screen.queryByText("filopplaster.dra.filene.hit")).toBeInTheDocument();
+        expect(screen.queryByText("filopplaster.dra-filene-hit")).toBeInTheDocument();
       });
     }
 
@@ -178,7 +178,7 @@ describe("Dokumentkrav", () => {
 
       expect(await screen.findByText(file.name)).toBeInTheDocument();
       expect(
-        await screen.findByText("filopplaster.feil.beskrivelse-format-storrelse")
+        await screen.findByText("filopplaster.feilmelding.format-storrelse-beskrivelse")
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toEqual(0);

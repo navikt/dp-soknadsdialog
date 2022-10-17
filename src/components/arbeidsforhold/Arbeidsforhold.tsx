@@ -84,7 +84,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
             >
               <Modal.Content>
                 <Heading size={"large"} spacing>
-                  {getAppTekst("arbeidsforhold.legg-til")}{" "}
+                  {getAppTekst("arbeidsforhold.knapp.legg-til")}{" "}
                 </Heading>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
@@ -117,10 +117,10 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
             onClick={() => addNewGeneratorAnswer(faktum)}
             icon={<BriefcaseAdd />}
           >
-            {getAppTekst("arbeidsforhold.legg-til")}
+            {getAppTekst("arbeidsforhold.knapp.legg-til")}
           </Button>
           {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
+            <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
           )}
         </>
       )}

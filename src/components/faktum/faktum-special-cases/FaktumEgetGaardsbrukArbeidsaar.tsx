@@ -41,9 +41,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       placeHolderText={"Velg et år"}
       readOnly={readonly}
       error={
-        unansweredFaktumId === faktum.id
-          ? getAppTekst("validering.ubesvart-faktum.varsel-tekst")
-          : undefined
+        unansweredFaktumId === faktum.id ? getAppTekst("validering.faktum.ubesvart") : undefined
       }
     />
   );

@@ -72,23 +72,23 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <p>{getAppTekst("filopplaster.dra.filene.hit")}</p>
+        <p>{getAppTekst("filopplaster.dra-filene-hit")}</p>
         <Button onClick={open} loading={isLoading}>
-          {getAppTekst("filopplaster.velg.filer")}
+          {getAppTekst("filopplaster.knapp.velg-filer")}
         </Button>
       </div>
 
       {errors.length > 0 && (
         <div className={styles.uploadError}>
           <Alert variant={"error"}>
-            {getAppTekst("filopplaster.feil.beskrivelse")}
+            {getAppTekst("filopplaster.feilmelding.beskrivelse")}
             <ul>
               {errors.map((error, index) => (
                 <li key={index}>{error.fileName}</li>
               ))}
             </ul>
             {!hasServerError && (
-              <span>{getAppTekst("filopplaster.feil.beskrivelse-format-storrelse")}</span>
+              <span>{getAppTekst("filopplaster.feilmelding.format-storrelse-beskrivelse")}</span>
             )}
           </Alert>
         </div>

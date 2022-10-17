@@ -88,25 +88,25 @@ export function Soknad() {
       <nav className="navigation-container">
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-            {getAppTekst("knapp.avbryt")}
+            {getAppTekst("soknad.knapp.avbryt")}
           </Button>
         )}
 
         {!isFirstSection && (
           <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
-            {getAppTekst("knapp.forrige")}
+            {getAppTekst("soknad.soknad.knapp.forrige-steg")}
           </Button>
         )}
 
         {!soknadState.ferdig && (
           <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
-            {getAppTekst("knapp.neste")}
+            {getAppTekst("soknad.knapp.neste-steg")}
           </Button>
         )}
 
         {soknadState.ferdig && (
           <Button onClick={() => navigateToDocumentation()}>
-            {getAppTekst("soknad.til-dokumentasjon")}
+            {getAppTekst("soknad.knapp.til-dokumentasjon")}
           </Button>
         )}
       </nav>
@@ -114,7 +114,7 @@ export function Soknad() {
       {!isError && (
         <p className={styles.autoSaveText}>
           <FileSuccess />
-          {getAppTekst("auto-lagret.tekst")}
+          {getAppTekst("soknad.auto-lagret.tekst")}
         </p>
       )}
       {isError && <ErrorRetryModal errorType={errorType} />}

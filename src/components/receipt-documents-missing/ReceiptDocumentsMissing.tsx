@@ -16,7 +16,7 @@ export function ReceiptDocumentsMissing(props: IProps) {
     <div>
       <div className={styles.headingContainer}>
         <Heading level={"2"} size="small">
-          {getAppTekst("kvittering.heading.mangler.dokumenter")}
+          {getAppTekst("kvittering.heading.mangler-dokumenter")}
         </Heading>
         <Tag variant="warning">
           {props.documents?.length} {getAppTekst("kvittering.text.antall-mangler")}

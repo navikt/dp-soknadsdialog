@@ -59,20 +59,20 @@ export function StartSoknad() {
       <ConfirmationPanel
         className="confirmation-panel"
         checked={consentGiven}
-        label={getAppTekst("start-soknad.samtykke-innhenting-data.checkbox-label")}
+        label={getAppTekst("start-soknad.checkbox.samtykke-riktige-opplysninger.label")}
         onChange={() => {
           setConsentGiven(!consentGiven);
           setShowConsentValidation(!showConsentValidation);
         }}
         error={
           showConsentValidation && !consentGiven
-            ? getAppTekst("start-soknad.samtykke-innhenting-data.validering-tekst")
+            ? getAppTekst("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
             : undefined
         }
       />
 
       <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
-        {getAppTekst("start-soknad.start-knapp")}
+        {getAppTekst("start-soknad.knapp.start")}
       </Button>
 
       <NoSessionModal />

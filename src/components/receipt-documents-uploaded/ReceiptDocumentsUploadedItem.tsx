@@ -50,11 +50,11 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
         >
           {dokumentkrav.beskrivendeId}
         </Link>
-        <BodyShort>
-          {`${getAppTekst("kvittering.heading.text.sendt-av")} ${
-            dokumentkrav.filer[0]?.tidspunkt || "30.09.2022"
-          }`}
-        </BodyShort>
+        {dokumentkrav.filer[0]?.tidspunkt && (
+          <BodyShort>
+            {`${getAppTekst("kvittering.tekst.sendt-av")} ${dokumentkrav.filer[0].tidspunkt}`}
+          </BodyShort>
+        )}
       </div>
 
       {/*<Button onClick={openFile}>Åpne</Button>*/}

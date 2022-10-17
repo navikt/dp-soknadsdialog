@@ -107,11 +107,11 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   function getErrorMessage() {
     switch (isValid) {
       case ValidationErrorTypes.EmptyValue:
-        return getAppTekst("validering.ugyldig.tom-eller-spesiell-tegn");
+        return getAppTekst("validering.number-faktum.tom-eller-spesielle-tegn");
       case ValidationErrorTypes.NegativeValue:
-        return getAppTekst("validering.ikke-negativt-tall");
+        return getAppTekst("validering.number-faktum.ikke-negativt-tall");
       case ValidationErrorTypes.InvalidValue:
-        return faktumTexts?.errorMessage ?? getAppTekst("validering.ugyldig.nummer");
+        return faktumTexts?.errorMessage ?? getAppTekst("validering.number-faktum.ugyldig");
       default:
         return undefined;
     }
@@ -119,7 +119,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+      return getAppTekst("validering.faktum.ubesvart");
     } else if (isValid !== true) {
       getErrorMessage();
     } else {

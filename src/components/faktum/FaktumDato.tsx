@@ -76,7 +76,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+      return getAppTekst("validering.faktum.ubesvart");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     } else {
@@ -95,7 +95,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         hasError={!isValid || unansweredFaktumId === faktum.id}
         errorMessage={getValidationMessage()}
         hasWarning={hasWarning}
-        warningMessage={getAppTekst("validering.varsel-tekst.dagpenger-soknadsdato")}
+        warningMessage={getAppTekst("validering.dato-faktum.soknadsdato-varsel")}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

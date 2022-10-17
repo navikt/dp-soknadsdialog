@@ -71,7 +71,7 @@ describe("DokumentkravBundleErrorModal", () => {
       </SanityProvider>
     );
 
-    await user.click(screen.getByText("dokumentkrav.bundle-error.send.senere"));
+    await user.click(screen.getByText("dokumentkrav.bundle-error-modal.knapp.send-senere"));
 
     const deleteRequestBody = fetch.mock.calls[0][1]?.body as string;
     const requestJson = JSON.parse(deleteRequestBody);

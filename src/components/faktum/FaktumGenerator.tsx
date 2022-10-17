@@ -96,12 +96,12 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
       })}
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          {getAppTekst("generator.legg-til")}
+          {getAppTekst("soknad.generator-faktum.knapp.legg-til")}
         </Button>
       )}
 
       {unansweredFaktumId === props.faktum.id && (
-        <ValidationMessage message={getAppTekst("validering.ubesvart-faktum.varsel-tekst")} />
+        <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
       )}
     </>
   );

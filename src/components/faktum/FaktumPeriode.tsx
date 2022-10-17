@@ -108,7 +108,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   function getFomErrorMessage() {
     if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return getAppTekst("ugyldig.arbeidsforhold.varighet.fra");
+      return getAppTekst("validering.arbeidsforhold.varighet-fra");
     } else {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     }
@@ -116,7 +116,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.ubesvart-faktum.varsel-tekst");
+      return getAppTekst("validering.faktum.ubesvart");
     } else if (!isValidFom) {
       return getFomErrorMessage();
     } else {
@@ -156,7 +156,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             value={svar?.tom}
             min={svar?.fom}
             hasError={!isValidTom}
-            errorMessage={getAppTekst("ugyldig.arbeidsforhold.varighet.til")}
+            errorMessage={getAppTekst("validering.arbeidsforhold.varighet-til")}
           />
         </div>
       </Fieldset>

@@ -34,7 +34,7 @@ export function ErrorRetryModal(props: IProps) {
   function getErrorMessageByType() {
     switch (errorType) {
       case ErrorTypesEnum.GenericError:
-        return getAppTekst("teknisk-feil.modal.detaljer.generell");
+        return getAppTekst("teknisk-feil.modal.detaljer.generell-feil");
       case ErrorTypesEnum.GetNesteError:
         return getAppTekst("teknisk-feil.modal.detaljer.hent-neste");
       case ErrorTypesEnum.SaveFaktumError:
@@ -42,7 +42,7 @@ export function ErrorRetryModal(props: IProps) {
       case ErrorTypesEnum.SendSoknadError:
         return getAppTekst("teknisk-feil.modal.detaljer.send-soknad");
       default:
-        return getAppTekst("teknisk-feil.modal.detaljer.generell");
+        return getAppTekst("teknisk-feil.modal.detaljer.generell-feil");
     }
   }
 
@@ -72,7 +72,7 @@ export function ErrorRetryModal(props: IProps) {
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <div className={styles.errorRetryModalButtonContainer}>
           <Button variant={"primary"} onClick={reload}>
-            {getAppTekst("teknisk-feil.modal.knapp-tekst")}
+            {getAppTekst("teknisk-feil.modal.knapp.prov-paa-nytt")}
           </Button>
         </div>
       </Modal.Content>

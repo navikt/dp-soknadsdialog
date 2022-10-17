@@ -41,9 +41,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         )}
       </div>
       {props.showValidationMessage && (
-        <ValidationMessage
-          message={getAppTekst("validering.delvis-ubesvart-faktum.varsel-tekst")}
-        />
+        <ValidationMessage message={getAppTekst("validering.generator-faktum.delvis-besvart")} />
       )}
     </div>
   );
