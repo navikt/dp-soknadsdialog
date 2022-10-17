@@ -13,7 +13,6 @@ import { ValidationProvider } from "../../context/validation-context";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",
-  svar: "BEL",
   type: "land",
   grupper: [
     {
@@ -143,7 +142,7 @@ describe("FaktumLand", () => {
     });
   });
 
-  describe("When user selects an answer", () => {
+  describe("When is Bodstedsland or Arbeidsforhold and unanwered ", () => {
     beforeEach(() => {
       fetch.enableMocks();
     });
@@ -152,14 +151,14 @@ describe("FaktumLand", () => {
       fetch.mockReset();
     });
 
-    test("Should post the answer to the server", async () => {
+    test("Should post `NOR` to server", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
-      const svar = faktumMockData.gyldigeLand[0];
+      const svar = faktumMockData.gyldigeLand[14];
 
       render(
         <SanityProvider initialState={sanityMocks}>
@@ -178,7 +177,8 @@ describe("FaktumLand", () => {
       await waitFor(() => {
         const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
         expect(selectedOption.value).toEqual(svar);
-        expect(fetch.mock.calls.length).toEqual(2);
+
+        expect(fetch.mock.calls.length).toEqual(3);
 
         // Does the first call save the faktum with the right answer?
         const putRequestBody = fetch.mock.calls[0][1]?.body as string;
