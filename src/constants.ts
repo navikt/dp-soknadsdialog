@@ -14,3 +14,17 @@ export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 31457280; // 30mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
 export const YEAR_RANGE = 100;
+
+export const TEXTAREA_FAKTUM_IDS = [
+  "faktum.reist-tilbake-periode",
+  "faktum.arbeidsforhold.tilleggsopplysninger",
+  "faktum.arbeidsforhold.vet-du-aarsak-til-sagt-opp-av-arbeidsgiver",
+  "faktum.arbeidsforhold.vet-du-aarsak-til-redusert-arbeidstid",
+  "faktum.arbeidsforhold.aarsak-til-du-sa-opp",
+  "faktum.arbeidsforhold.aarsak-til-ikke-akseptert-tilbud",
+  "faktum.arbeidsforhold.hva-er-aarsak-til-avskjediget",
+  "faktum.eget-gaardsbruk-arbeidstimer-beregning",
+  "faktum.kort-om-hvorfor-kun-deltid",
+  "faktum.kort-om-hvorfor-ikke-jobbe-hele-norge",
+  "faktum.tilleggsopplysninger",
+];

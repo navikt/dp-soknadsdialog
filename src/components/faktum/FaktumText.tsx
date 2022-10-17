@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BodyShort, Label, TextField } from "@navikt/ds-react";
+import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
@@ -7,9 +7,10 @@ import { IQuizTekstFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
 import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
+import { TEXTAREA_FAKTUM_IDS } from "../../constants";
+import styles from "./Faktum.module.css";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
@@ -59,16 +60,27 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   return (
     <>
-      <TextField
-        defaultValue={faktum?.svar}
-        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
-        description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        size="medium"
-        type="text"
-        onChange={(event) => debouncedChange(event.currentTarget.value)}
-        onBlur={debouncedChange.flush}
-        error={getErrorMessage()}
-      />
+      {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
+        <Textarea
+          defaultValue={faktum?.svar}
+          label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+          description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+          onChange={(event) => debouncedChange(event.currentTarget.value)}
+          onBlur={debouncedChange.flush}
+          error={getErrorMessage()}
+        />
+      ) : (
+        <TextField
+          defaultValue={faktum?.svar}
+          label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+          description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+          size="medium"
+          type="text"
+          onChange={(event) => debouncedChange(event.currentTarget.value)}
+          onBlur={debouncedChange.flush}
+          error={getErrorMessage()}
+        />
+      )}
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}

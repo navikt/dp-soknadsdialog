@@ -86,7 +86,7 @@ export function Documentation(props: IProps) {
     <>
       {showValidationErrors && (
         <ErrorList
-          heading={getAppTekst("dokumentasjonskrav.feilmelding.validering.header")}
+          heading={getAppTekst("dokumentkrav.feilmelding.validering.header")}
           ref={errorSummaryRef}
         >
           {validationErrors.map((item) => {
