@@ -5,8 +5,8 @@ import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
 import { IQuizState } from "../../localhost-data/quiz-state-response";
-// import fetch from "jest-fetch-mock";
-// import userEvent from "@testing-library/user-event";
+import fetch from "jest-fetch-mock";
+import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { getCountryName } from "../../country.utils";
 import { ValidationProvider } from "../../context/validation-context";
@@ -67,18 +67,18 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-// const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
+const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
 
-// const nesteMockData = {
-//   ferdig: false,
-//   seksjoner: [
-//     {
-//       fakta: [faktumMockData],
-//       beskrivendeId: "gjenopptak",
-//       ferdig: true,
-//     },
-//   ],
-// };
+const nesteMockData = {
+  ferdig: false,
+  seksjoner: [
+    {
+      fakta: [faktumMockData],
+      beskrivendeId: "gjenopptak",
+      ferdig: true,
+    },
+  ],
+};
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
@@ -142,51 +142,51 @@ describe("FaktumLand", () => {
     });
   });
 
-  // describe("When is Bodstedsland or Arbeidsforhold and unanwered ", () => {
-  //   beforeEach(() => {
-  //     fetch.enableMocks();
-  //   });
+  describe("When is Bodstedsland or Arbeidsforhold and unanwered ", () => {
+    beforeEach(() => {
+      fetch.enableMocks();
+    });
 
-  //   afterEach(() => {
-  //     fetch.mockReset();
-  //   });
+    afterEach(() => {
+      fetch.mockReset();
+    });
 
-  //   test("Should post `NOR` to server", async () => {
-  //     // First save the answer
-  //     fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-  //     // Then get next question (if any)
-  //     fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+    test("Should post `NOR` to server", async () => {
+      // First save the answer
+      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
+      // Then get next question (if any)
+      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
-  //     const user = userEvent.setup();
-  //     const svar = faktumMockData.gyldigeLand[14];
+      const user = userEvent.setup();
+      const svar = faktumMockData.gyldigeLand[14];
 
-  //     render(
-  //       <SanityProvider initialState={sanityMocks}>
-  //         <QuizProvider initialState={soknadStateMockData}>
-  //           <ValidationProvider>
-  //             <FaktumLand faktum={faktumMockData} />
-  //           </ValidationProvider>
-  //         </QuizProvider>
-  //       </SanityProvider>
-  //     );
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumLand faktum={faktumMockData} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
 
-  //     const selectedOptionText = getCountryName(svar, "no");
+      const selectedOptionText = getCountryName(svar, "no");
 
-  //     user.selectOptions(screen.getByLabelText(faktumMockData.beskrivendeId), selectedOptionText);
+      user.selectOptions(screen.getByLabelText(faktumMockData.beskrivendeId), selectedOptionText);
 
-  //     await waitFor(() => {
-  //       const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
-  //       expect(selectedOption.value).toEqual(svar);
+      await waitFor(() => {
+        const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
+        expect(selectedOption.value).toEqual(svar);
 
-  //       expect(fetch.mock.calls.length).toEqual(3);
+        expect(fetch.mock.calls.length).toEqual(3);
 
-  //       // Does the first call save the faktum with the right answer?
-  //       const putRequestBody = fetch.mock.calls[0][1]?.body as string;
-  //       const requestJson = JSON.parse(putRequestBody);
+        // Does the first call save the faktum with the right answer?
+        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
+        const requestJson = JSON.parse(putRequestBody);
 
-  //       expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-  //       expect(requestJson.svar).toBe(svar);
-  //     });
-  //   });
-  // });
+        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
+        expect(requestJson.svar).toBe(svar);
+      });
+    });
+  });
 });
