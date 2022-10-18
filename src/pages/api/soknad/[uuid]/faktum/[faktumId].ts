@@ -3,6 +3,7 @@ import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import crypto from "crypto";
+import metrics from "../../../../../metrics";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -21,6 +22,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
   const response: Response = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktumId}`,
     {
@@ -33,6 +35,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       body,
     }
   );
+  stopTimer();
 
   const data = await response.json();
   return res.status(response.status).json(data);

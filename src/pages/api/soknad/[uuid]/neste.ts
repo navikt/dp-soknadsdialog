@@ -4,6 +4,7 @@ import { audienceDPSoknad } from "../../../../api.utils";
 import { getSoknadState } from "../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { quizStateResponse } from "../../../../localhost-data/quiz-state-response";
+import metrics from "../../../../metrics";
 
 async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -20,7 +21,9 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "neste" });
     const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistLagret);
+    stopTimer();
     if (!soknadStateResponse.ok) {
       // TODO Should be logged to sentry, but it does not effect user so we do not throw error here
       // eslint-disable-next-line no-console
