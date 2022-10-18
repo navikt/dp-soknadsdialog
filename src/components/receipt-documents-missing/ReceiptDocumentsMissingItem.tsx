@@ -6,15 +6,13 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
 } from "../../constants";
 import { PortableText } from "@portabletext/react";
-import { UploadFilesModal } from "../receipt-upload-modal/ReceiptUploadModal";
+import { UploadFilesModal } from "../upload-modal/UploadModal";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import { useFileUploader } from "../../hooks/useFileUploader";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const { getAppTekst, getDokumentkravTextById } = useSanity();
-  const { uploadedFiles, handleUploadedFiles } = useFileUploader();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
@@ -53,8 +51,6 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <UploadFilesModal
         modalOpen={uploadModalOpen}
         dokumentkrav={dokumentkrav}
-        uploadedFiles={uploadedFiles}
-        handleUploadedFiles={handleUploadedFiles}
         closeModal={() => setUploadModalOpen(false)}
       />
     </div>
