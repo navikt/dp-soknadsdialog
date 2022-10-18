@@ -7,6 +7,7 @@ import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { Personalia } from "../../components/personalia/Personalia";
 import { Section } from "../../components/section/Section";
+import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { IPersonalia } from "../../types/personalia.types";
@@ -31,7 +32,8 @@ export function Soknad(props: IProps) {
     (faktum) => faktum?.svar === undefined
   );
 
-  const showPersonalia = isFirstSection && soknadState.versjon_navn === "Dagpenger";
+  const showPersonalia =
+    isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];

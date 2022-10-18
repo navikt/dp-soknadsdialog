@@ -8,7 +8,7 @@ export interface IQuizState {
   ferdig: boolean;
   seksjoner: IQuizSeksjon[];
   roller?: string[];
-  versjon_navn?: string;
+  versjon_navn?: "Dagpenger" | "Innsending";
 }
 
 export const quizStateResponse: IQuizState = {

@@ -14,3 +14,5 @@ export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 31457280; // 30mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
 export const YEAR_RANGE = 100;
+
+export const QUIZ_SOKNADSTYPE_DAGPENGESOKNAD = "Dagpenger";

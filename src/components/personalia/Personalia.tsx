@@ -38,19 +38,19 @@ export function Personalia({ personalia }: IProps) {
 
       {navn && (
         <div className={styles.personaliaFaktum}>
-          <Label as="p">{getAppTekst("personalia.faktum.navn")}</Label>
+          <Label as="p">{getAppTekst("personalia.navn")}</Label>
           <BodyShort>{navn}</BodyShort>
         </div>
       )}
 
       <div className={styles.personaliaFaktum}>
-        <Label as="p">{getAppTekst("personalia.faktum.fodselsnummer")}</Label>
+        <Label as="p">{getAppTekst("personalia.fodselsnummer")}</Label>
         <BodyShort>{obscuredIdent}</BodyShort>
       </div>
 
       {fødselsDato && (
         <div className={styles.personaliaFaktum}>
-          <Label as="p">{getAppTekst("personalia.faktum.alder")}</Label>
+          <Label as="p">{getAppTekst("personalia.alder")}</Label>
           <BodyShort>{getAge(fødselsDato)}</BodyShort>
         </div>
       )}
@@ -58,7 +58,7 @@ export function Personalia({ personalia }: IProps) {
       {adresse && (
         <div className={styles.personaliaFaktum}>
           <>
-            <Label as="p">{getAppTekst("personalia.faktum.folkeregistert-adresse")}</Label>
+            <Label as="p">{getAppTekst("personalia.folkeregistert-adresse")}</Label>
             {adresselinjer && <BodyShort>{adresselinjer}</BodyShort>}
             {postadresse && <BodyShort>{postadresse}</BodyShort>}
           </>
@@ -66,7 +66,7 @@ export function Personalia({ personalia }: IProps) {
       )}
 
       <div className={styles.personaliaFaktum}>
-        <Label as="p">{getAppTekst("personalia.faktum.kontonummer")}</Label>
+        <Label as="p">{getAppTekst("personalia.kontonummer")}</Label>
 
         {kontonummer && <BodyShort>{formattedKontonummer}</BodyShort>}
 
@@ -78,9 +78,7 @@ export function Personalia({ personalia }: IProps) {
           </BodyShort>
         )}
 
-        {!kontonummer && (
-          <BodyShort>{getAppTekst("personalia.faktum.kontonummer.finnes-ikke")}</BodyShort>
-        )}
+        {!kontonummer && <BodyShort>{getAppTekst("personalia.kontonummer.finnes-ikke")}</BodyShort>}
       </div>
     </>
   );
