@@ -5,6 +5,7 @@ import { StartSoknad } from "../views/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
+import { getSession } from "@navikt/dp-auth/server";
 import ErrorPage from "./_error";
 
 interface IProps {
@@ -15,6 +16,16 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
+  const { token, apiToken } = await getSession(context);
+
+  if (!token || !apiToken) {
+    return {
+      redirect: {
+        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
+        permanent: false,
+      },
+    };
+  }
 
   const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
     baseLang: "nb",

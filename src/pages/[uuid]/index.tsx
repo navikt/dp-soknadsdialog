@@ -47,10 +47,9 @@ export async function getServerSideProps(
 
   const { token, apiToken } = await getSession(context);
   if (!token || !apiToken) {
-    // TODO Redirect til hvilken login?
     return {
       redirect: {
-        destination: "/TODO-redoratoren-login",
+        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
         permanent: false,
       },
     };
