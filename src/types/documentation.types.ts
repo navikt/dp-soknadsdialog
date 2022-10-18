@@ -22,6 +22,7 @@ export type IDokumentkravSvar =
 export interface IDokumentkrav {
   id: string;
   beskrivendeId: string;
+  beskrivelse?: string;
   fakta: QuizFaktum[];
   filer: IDokumentkravFil[];
   gyldigeValg: IDokumentkravSvar[];

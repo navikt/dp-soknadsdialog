@@ -37,7 +37,7 @@ describe("Dokumentkrav", () => {
     );
 
     await waitFor(() => {
-      const dokumentkravTitle = `${mockDokumentkravList.krav[0].beskrivendeId} (${mockDokumentkravList.krav[0].fakta[0].svar})`;
+      const dokumentkravTitle = `${mockDokumentkravList.krav[0].beskrivendeId} (${mockDokumentkravList.krav[0].beskrivelse})`;
       expect(screen.getByRole("heading")).toHaveTextContent(dokumentkravTitle);
     });
   });

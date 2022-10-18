@@ -1,20 +1,13 @@
 import { IDokumentkravList } from "../types/documentation.types";
+
 export const mockDokumentkravList: IDokumentkravList = {
   soknad_uuid: "12345",
   krav: [
     {
       id: "5678",
       beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
-      fakta: [
-        {
-          id: "8004.1",
-          svar: "Rema 1000",
-          type: "tekst",
-          readOnly: false,
-          beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-          sannsynliggjoresAv: [],
-        },
-      ],
+      beskrivelse: "Rema 1000",
+      fakta: [],
       filer: [
         {
           filnavn: "hei på du1.jpg",
@@ -51,16 +44,8 @@ export const mockDokumentkravList: IDokumentkravList = {
     {
       id: "6678",
       beskrivendeId: "dokumentasjonskrav.krav.arbeidsforhold",
-      fakta: [
-        {
-          id: "8004.1",
-          svar: "Rema 1000",
-          type: "tekst",
-          readOnly: false,
-          beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
-          sannsynliggjoresAv: [],
-        },
-      ],
+      beskrivelse: "Rema 1000",
+      fakta: [],
       filer: [],
       gyldigeValg: [
         "dokumentkrav.svar.send.naa",
