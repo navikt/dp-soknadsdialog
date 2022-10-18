@@ -6,13 +6,20 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { Personalia } from "../../components/personalia/Personalia";
 import { Section } from "../../components/section/Section";
+import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
+import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 
-export function Soknad() {
+interface IProps {
+  personalia: IPersonalia | null;
+}
+
+export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppTekst } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
@@ -26,6 +33,9 @@ export function Soknad() {
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
+
+  const showPersonalia =
+    isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
@@ -69,6 +79,12 @@ export function Soknad() {
   return (
     <main>
       {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
+
+      {showPersonalia && props.personalia && (
+        <div className={styles.seksjonContainer}>
+          <Personalia personalia={props.personalia} />
+        </div>
+      )}
 
       <div className={styles.seksjonContainer}>
         <Section

@@ -2,20 +2,22 @@ export interface IPersonalia {
   forNavn: string;
   mellomNavn: string;
   etterNavn: string;
-  fødselsDato: Date;
+  fødselsDato: string;
   postAdresse?: IAdresse;
   folkeregistrertAdresse?: IAdresse;
-  kontonummer: string;
+  kontonummer?: string;
   banknavn?: string;
   bankLandkode?: string;
+  ident: string;
 }
 
 export interface IAdresse {
   adresselinje1: string;
   adresselinje2: string;
   adresselinje3: string;
-  byEllerStedsnavn: string;
+  byEllerStedsnavn?: string;
   landkode: string;
   land: string;
-  postkode: string;
+  postnummer: string;
+  poststed: string;
 }

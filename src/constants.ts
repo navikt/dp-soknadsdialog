@@ -28,3 +28,5 @@ export const TEXTAREA_FAKTUM_IDS = [
   "faktum.kort-om-hvorfor-ikke-jobbe-hele-norge",
   "faktum.tilleggsopplysninger",
 ];
+
+export const QUIZ_SOKNADSTYPE_DAGPENGESOKNAD = "Dagpenger";
