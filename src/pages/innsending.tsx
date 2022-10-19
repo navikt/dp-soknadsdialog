@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import ErrorPage from "./_error";
-import { startSoknad } from "./api/quiz-api";
+import { startInnsending } from "./api/quiz-api";
 import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../api.utils";
 
@@ -27,15 +27,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
-  const soknadResponse = await startSoknad(onBehalfOfToken, "Innsending");
+  const innsendingResponse = await startInnsending(onBehalfOfToken);
 
-  if (soknadResponse.ok) {
-    const soknadId = await soknadResponse.text();
+  if (innsendingResponse.ok) {
+    const innsendingId = await innsendingResponse.text();
 
-    if (soknadId) {
+    if (innsendingId) {
       return {
         redirect: {
-          destination: `./${soknadId}/`,
+          destination: `./${innsendingId}/`,
           permanent: false,
         },
       };
