@@ -23,7 +23,7 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
   return (
     <div className={styles.dokumentkrav}>
       <Heading level="3" size="xsmall">
-        {dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}
+        {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
       </Heading>
       <BodyShort>
         <>
