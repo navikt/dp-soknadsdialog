@@ -23,8 +23,8 @@ export function getSoknadMal(onBehalfOfToken: string) {
     });
 }
 
-export function startSoknad(onBehalfOfToken: string) {
-  const url = new URL(`${process.env.API_BASE_URL}/soknad`);
+export function createSoknadUuid(onBehalfOfToken: string) {
+  const url = `${process.env.API_BASE_URL}/soknad`;
 
   return fetch(url, {
     method: "Post",
@@ -34,8 +34,8 @@ export function startSoknad(onBehalfOfToken: string) {
   });
 }
 
-export function startInnsending(onBehalfOfToken: string) {
-  const url = new URL(`${process.env.API_BASE_URL}/soknad?prosesstype=Innsending`);
+export function createInnsendingUuid(onBehalfOfToken: string) {
+  const url = `${process.env.API_BASE_URL}/soknad?prosesstype=Innsending`;
 
   return fetch(url, {
     method: "Post",
