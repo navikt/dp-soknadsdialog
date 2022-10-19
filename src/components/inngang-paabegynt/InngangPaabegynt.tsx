@@ -9,39 +9,46 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
   const router = useRouter();
 
   const [isNavigatingToSoknad, setIsNavigatingToSoknad] = useState(false);
-  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
-  // const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
+  const [hasDeleteSoknadError, SetHasDeleteSoknadError] = useState(false);
 
   function navigateToSoknad() {
     setIsNavigatingToSoknad(true);
     router.push(`/${paabegynt.uuid}`);
   }
 
-  async function deleteAndCreateNewSoknad() {
+  async function deleteAndCreateSoknad() {
+    setIsLoading(true);
     const deleteSoknadResponse = await deleteSoknad(paabegynt.uuid);
     if (deleteSoknadResponse.ok) {
       createNewSoknad();
     } else {
+      setIsLoading(true);
+      SetHasDeleteSoknadError(true);
       throw new Error(deleteSoknadResponse.statusText);
     }
   }
 
   async function createNewSoknad() {
     try {
-      setIsCreatingSoknadUUID(true);
+      setIsLoading(true);
       const uuidResponse = await fetch(api("soknad/get-uuid"));
 
       if (uuidResponse.ok) {
         const uuid = await uuidResponse.text();
         router.push(`/${uuid}`);
       } else {
+        setIsLoading(false);
         throw new Error(uuidResponse.statusText);
       }
     } catch (error) {
       // TODO Sentry log
       // eslint-disable-next-line no-console
       console.error(error);
-      // SetHasCreateNewSoknadError(true);
+      setIsLoading(false);
+      SetHasCreateNewSoknadError(true);
     }
   }
 
@@ -52,9 +59,11 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
       <Button variant="primary" onClick={navigateToSoknad} loading={isNavigatingToSoknad}>
         Fortsett
       </Button>
-      <Button variant="secondary" onClick={deleteAndCreateNewSoknad} loading={isCreatingSoknadUUID}>
+      <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
         Slett og start på nytt
       </Button>
+      {hasDeleteSoknadError && <p>Feil ved sletting av soknad</p>}
+      {hasCreateNewSoknadError && <p>Ved ved oppretting av ny soknad</p>}
     </>
   );
 }
