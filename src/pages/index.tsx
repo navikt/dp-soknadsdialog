@@ -16,8 +16,21 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
-  const { token, apiToken } = await getSession(context);
 
+  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
+    baseLang: "nb",
+    lang: locale,
+  });
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {
+        sanityTexts,
+      },
+    };
+  }
+
+  const { token, apiToken } = await getSession(context);
   if (!token || !apiToken) {
     return {
       redirect: {
@@ -26,11 +39,6 @@ export async function getServerSideProps(
       },
     };
   }
-
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
 
   return {
     props: {
