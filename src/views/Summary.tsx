@@ -18,7 +18,7 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const [hasError, setHasError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const { getAppTekst, getSeksjonTextById } = useSanity();
+  const { getAppText, getSeksjonTextById } = useSanity();
 
   function goToDocumentation() {
     router.push(`/${router.query.uuid}/dokumentasjon`);
@@ -65,7 +65,7 @@ export function Summary(props: IProps) {
                       variant="secondary"
                       onClick={() => router.push(`/${router.query.uuid}?seksjon=${index + 1}`)}
                     >
-                      {getAppTekst("oppsummering.knapp.endre-svar")}
+                      {getAppText("oppsummering.knapp.endre-svar")}
                     </Button>
                   </>
                 </Accordion.Content>
@@ -78,23 +78,23 @@ export function Summary(props: IProps) {
       <ConfirmationPanel
         className="confirmation-panel"
         checked={consentGiven}
-        label={getAppTekst("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
+        label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
         onChange={() => setConsentGiven(!consentGiven)}
       >
-        {getAppTekst("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
+        {getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
-          {getAppTekst("soknad.soknad.knapp.forrige-steg")}
+          {getAppText("soknad.soknad.knapp.forrige-steg")}
         </Button>
 
         <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
-          {getAppTekst("oppsummering.knapp.send-soknad")}
+          {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
 
         <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-          {getAppTekst("oppsummering.knapp.slett-soknad")}
+          {getAppText("oppsummering.knapp.slett-soknad")}
         </Button>
 
         <NoSessionModal />

@@ -12,7 +12,7 @@ interface IProps {
 export function ErrorRetryModal(props: IProps) {
   const { errorType } = props;
   const router = useRouter();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const [errorMessage, setErrorMessage] = useState("");
   const [errorsCount, setErrorsCount] = useState(1);
 
@@ -34,15 +34,15 @@ export function ErrorRetryModal(props: IProps) {
   function getErrorMessageByType() {
     switch (errorType) {
       case ErrorTypesEnum.GenericError:
-        return getAppTekst("teknisk-feil.modal.detaljer.generell-feil");
+        return getAppText("teknisk-feil.modal.detaljer.generell-feil");
       case ErrorTypesEnum.GetNesteError:
-        return getAppTekst("teknisk-feil.modal.detaljer.hent-neste");
+        return getAppText("teknisk-feil.modal.detaljer.hent-neste");
       case ErrorTypesEnum.SaveFaktumError:
-        return getAppTekst("teknisk-feil.modal.detaljer.lagre-faktum");
+        return getAppText("teknisk-feil.modal.detaljer.lagre-faktum");
       case ErrorTypesEnum.SendSoknadError:
-        return getAppTekst("teknisk-feil.modal.detaljer.send-soknad");
+        return getAppText("teknisk-feil.modal.detaljer.send-soknad");
       default:
-        return getAppTekst("teknisk-feil.modal.detaljer.generell-feil");
+        return getAppText("teknisk-feil.modal.detaljer.generell-feil");
     }
   }
 
@@ -67,12 +67,12 @@ export function ErrorRetryModal(props: IProps) {
     >
       <Modal.Content>
         <Heading size={"medium"} spacing>
-          {getAppTekst("teknisk-feil.modal.tittel")}
+          {getAppText("teknisk-feil.modal.tittel")}
         </Heading>
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <div className={styles.errorRetryModalButtonContainer}>
           <Button variant={"primary"} onClick={reload}>
-            {getAppTekst("teknisk-feil.modal.knapp.prov-paa-nytt")}
+            {getAppText("teknisk-feil.modal.knapp.prov-paa-nytt")}
           </Button>
         </div>
       </Modal.Content>

@@ -18,7 +18,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getFaktumTextById, getAppTekst } = useSanity();
+  const { getFaktumTextById, getAppText } = useSanity();
   const [isValidFom, setIsValidFom] = useState(true);
   const [isValidTom, setIsValidTom] = useState(true);
 
@@ -26,8 +26,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const faktumTextFra = getAppTekst(beskrivendeIdFra);
-  const faktumTextTil = getAppTekst(beskrivendeIdTil);
+  const faktumTextFra = getAppText(beskrivendeIdFra);
+  const faktumTextTil = getAppText(beskrivendeIdTil);
 
   const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
 
@@ -108,7 +108,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   function getFomErrorMessage() {
     if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return getAppTekst("validering.arbeidsforhold.varighet-fra");
+      return getAppText("validering.arbeidsforhold.varighet-fra");
     } else {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     }
@@ -116,7 +116,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.faktum.ubesvart");
+      return getAppText("validering.faktum.ubesvart");
     } else if (!isValidFom) {
       return getFomErrorMessage();
     } else {
@@ -156,7 +156,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             value={svar?.tom}
             min={svar?.fom}
             hasError={!isValidTom}
-            errorMessage={getAppTekst("validering.arbeidsforhold.varighet-til")}
+            errorMessage={getAppText("validering.arbeidsforhold.varighet-til")}
           />
         </div>
       </Fieldset>

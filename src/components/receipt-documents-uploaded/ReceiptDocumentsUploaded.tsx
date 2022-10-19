@@ -10,16 +10,16 @@ interface IProps {
 }
 
 export function ReceiptDocumentsUploaded(props: IProps) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   return (
     <div>
       <div className={styles.headingContainer}>
         <Heading level={"2"} size="medium">
-          {getAppTekst("kvittering.heading.mottatte-dokumenter")}
+          {getAppText("kvittering.heading.mottatte-dokumenter")}
         </Heading>
         <Tag variant="success">
-          {props.documents?.length} {getAppTekst("kvittering.tekst.antall-sendt")}
+          {props.documents?.length} {getAppText("kvittering.tekst.antall-sendt")}
         </Tag>
       </div>
       {props.documents.map((dokumentkrav) => (

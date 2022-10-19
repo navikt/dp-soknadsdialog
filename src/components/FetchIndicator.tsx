@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { BodyShort } from "@navikt/ds-react";
 
 export function FetchIndicator({ isLoading = false }) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const [showText, setShowText] = useState(false);
   const [isLoadingInternal, setIsLoadingInternal] = useState(isLoading);
   const textDisplayDelayMs = 1500;
@@ -38,7 +38,7 @@ export function FetchIndicator({ isLoading = false }) {
             </div>
           </div>
           {showText && (
-            <BodyShort tabIndex={0}>{getAppTekst("soknad.loader.laster-neste")}</BodyShort>
+            <BodyShort tabIndex={0}>{getAppText("soknad.loader.laster-neste")}</BodyShort>
           )}
         </>
       )}

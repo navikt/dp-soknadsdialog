@@ -16,7 +16,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
   const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
@@ -50,9 +50,9 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   function getErrorMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.faktum.ubesvart");
+      return getAppText("validering.faktum.ubesvart");
     } else if (!isValid) {
-      return faktumTexts?.errorMessage ?? getAppTekst("validering.text-faktum.for-lang-tekst");
+      return faktumTexts?.errorMessage ?? getAppText("validering.text-faktum.for-lang-tekst");
     } else {
       return undefined;
     }

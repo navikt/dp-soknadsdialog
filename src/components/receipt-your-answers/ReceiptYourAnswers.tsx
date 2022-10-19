@@ -9,13 +9,13 @@ interface IProps {
 }
 
 export function ReceiptYourAnswers(props: IProps) {
-  const { getAppTekst, getSeksjonTextById } = useSanity();
+  const { getAppText, getSeksjonTextById } = useSanity();
 
   return (
     <div className={styles.receiptYourAnswersContainer}>
       <ReadMore
         className={styles.receiptYourAnswersHeader}
-        header={getAppTekst("kvittering.dine-svar.header")}
+        header={getAppText("kvittering.dine-svar.header")}
       >
         {props.sections?.map((section) => {
           return (

@@ -23,7 +23,7 @@ export function Personalia({ personalia }: IProps) {
 
   const router = useRouter();
 
-  const { getSeksjonTextById, getAppTekst } = useSanity();
+  const { getSeksjonTextById, getAppText } = useSanity();
   const textId = "personalia";
   const personaliaTexts = getSeksjonTextById(textId);
 
@@ -38,19 +38,19 @@ export function Personalia({ personalia }: IProps) {
 
       {navn && (
         <div className={styles.personaliaFaktum}>
-          <Label as="p">{getAppTekst("personalia.navn")}</Label>
+          <Label as="p">{getAppText("personalia.navn")}</Label>
           <BodyShort>{navn}</BodyShort>
         </div>
       )}
 
       <div className={styles.personaliaFaktum}>
-        <Label as="p">{getAppTekst("personalia.fodselsnummer")}</Label>
+        <Label as="p">{getAppText("personalia.fodselsnummer")}</Label>
         <BodyShort>{obscuredIdent}</BodyShort>
       </div>
 
       {fødselsDato && (
         <div className={styles.personaliaFaktum}>
-          <Label as="p">{getAppTekst("personalia.alder")}</Label>
+          <Label as="p">{getAppText("personalia.alder")}</Label>
           <BodyShort>{getAge(fødselsDato)}</BodyShort>
         </div>
       )}
@@ -58,7 +58,7 @@ export function Personalia({ personalia }: IProps) {
       {adresse && (
         <div className={styles.personaliaFaktum}>
           <>
-            <Label as="p">{getAppTekst("personalia.folkeregistert-adresse")}</Label>
+            <Label as="p">{getAppText("personalia.folkeregistert-adresse")}</Label>
             {adresselinjer && <BodyShort>{adresselinjer}</BodyShort>}
             {postadresse && <BodyShort>{postadresse}</BodyShort>}
           </>
@@ -66,7 +66,7 @@ export function Personalia({ personalia }: IProps) {
       )}
 
       <div className={styles.personaliaFaktum}>
-        <Label as="p">{getAppTekst("personalia.kontonummer")}</Label>
+        <Label as="p">{getAppText("personalia.kontonummer")}</Label>
 
         {kontonummer && <BodyShort>{formattedKontonummer}</BodyShort>}
 
@@ -78,7 +78,7 @@ export function Personalia({ personalia }: IProps) {
           </BodyShort>
         )}
 
-        {!kontonummer && <BodyShort>{getAppTekst("personalia.kontonummer.finnes-ikke")}</BodyShort>}
+        {!kontonummer && <BodyShort>{getAppText("personalia.kontonummer.finnes-ikke")}</BodyShort>}
       </div>
     </>
   );

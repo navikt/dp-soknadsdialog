@@ -20,7 +20,7 @@ interface IFileError {
 
 export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }: IProps) {
   const router = useRouter();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const [errors, setErrors] = useState<IFileError[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,23 +72,23 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <p>{getAppTekst("filopplaster.dra-filene-hit")}</p>
+        <p>{getAppText("filopplaster.dra-filene-hit")}</p>
         <Button onClick={open} loading={isLoading}>
-          {getAppTekst("filopplaster.knapp.velg-filer")}
+          {getAppText("filopplaster.knapp.velg-filer")}
         </Button>
       </div>
 
       {errors.length > 0 && (
         <div className={styles.uploadError}>
           <Alert variant={"error"}>
-            {getAppTekst("filopplaster.feilmelding.beskrivelse")}
+            {getAppText("filopplaster.feilmelding.beskrivelse")}
             <ul>
               {errors.map((error, index) => (
                 <li key={index}>{error.fileName}</li>
               ))}
             </ul>
             {!hasServerError && (
-              <span>{getAppTekst("filopplaster.feilmelding.format-storrelse-beskrivelse")}</span>
+              <span>{getAppText("filopplaster.feilmelding.format-storrelse-beskrivelse")}</span>
             )}
           </Alert>
         </div>

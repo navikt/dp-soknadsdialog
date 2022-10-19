@@ -16,7 +16,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppTekst, getFaktumTextById } = useSanity();
+  const { getAppText, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
   const [hasWarning, setHasWarnining] = useState(false);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
@@ -76,7 +76,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.faktum.ubesvart");
+      return getAppText("validering.faktum.ubesvart");
     } else if (!isValid) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     } else {
@@ -95,7 +95,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         hasError={!isValid || unansweredFaktumId === faktum.id}
         errorMessage={getValidationMessage()}
         hasWarning={hasWarning}
-        warningMessage={getAppTekst("validering.dato-faktum.soknadsdato-varsel")}
+        warningMessage={getAppText("validering.dato-faktum.soknadsdato-varsel")}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

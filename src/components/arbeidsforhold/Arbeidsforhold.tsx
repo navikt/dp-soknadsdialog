@@ -22,7 +22,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { isLoading } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppTekst, getSvaralternativTextById, getFaktumTextById } = useSanity();
+  const { getAppText, getSvaralternativTextById, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -84,7 +84,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
             >
               <Modal.Content>
                 <Heading size={"large"} spacing>
-                  {getAppTekst("arbeidsforhold.knapp.legg-til")}{" "}
+                  {getAppText("arbeidsforhold.knapp.legg-til")}{" "}
                 </Heading>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
@@ -117,10 +117,10 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
             onClick={() => addNewGeneratorAnswer(faktum)}
             icon={<BriefcaseAdd />}
           >
-            {getAppTekst("arbeidsforhold.knapp.legg-til")}
+            {getAppText("arbeidsforhold.knapp.legg-til")}
           </Button>
           {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
+            <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
           )}
         </>
       )}

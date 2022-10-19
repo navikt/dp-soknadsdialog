@@ -10,7 +10,7 @@ export function NoSessionModal() {
   const isLocalhost = process.env.NEXT_PUBLIC_LOCALHOST;
 
   const router = useRouter();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const { session } = useSession({ enforceLogin: !isLocalhost });
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
   const [modalOpen, setModalOpen] = useState(false);
@@ -58,15 +58,15 @@ export function NoSessionModal() {
           <NoSessionError />
         </div>
         <Heading size={"medium"} spacing>
-          {getAppTekst("utlopt-sessjon.modal.tittel")}
+          {getAppText("utlopt-sessjon.modal.tittel")}
         </Heading>
-        <p>{getAppTekst("utlopt-sessjon.modal.detaljer")}</p>
+        <p>{getAppText("utlopt-sessjon.modal.detaljer")}</p>
         <div className={styles.actionButtonsContainer}>
           <Button variant={"primary"} onClick={login}>
-            {getAppTekst("utlopt-sessjon.modal.knapp.logg-inn")}
+            {getAppText("utlopt-sessjon.modal.knapp.logg-inn")}
           </Button>
           <Button variant={"tertiary"} onClick={() => router.push("https://nav.no/")}>
-            {getAppTekst("utlopt-sessjon.modal.knapp.tilbake")}
+            {getAppText("utlopt-sessjon.modal.knapp.tilbake")}
           </Button>
         </div>
       </Modal.Content>

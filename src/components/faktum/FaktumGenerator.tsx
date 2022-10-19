@@ -36,7 +36,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
     useGeneratorUtils();
   const { isLoading } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
   useEffect(() => {
@@ -96,12 +96,12 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
       })}
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          {getAppTekst("soknad.generator-faktum.knapp.legg-til")}
+          {getAppText("soknad.generator-faktum.knapp.legg-til")}
         </Button>
       )}
 
       {unansweredFaktumId === props.faktum.id && (
-        <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
+        <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
     </>
   );

@@ -17,7 +17,7 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getFaktumTextById, getSvaralternativTextById, getAppTekst } = useSanity();
+  const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -66,7 +66,7 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
         onChange={onSelection}
         value={currentAnswer}
         error={
-          unansweredFaktumId === faktum.id ? getAppTekst("validering.faktum.ubesvart") : undefined
+          unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
       >
         {faktum.gyldigeValg?.map((textId) => {
