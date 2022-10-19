@@ -52,7 +52,7 @@ describe("FaktumFlervalg", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test.skip("Should show faktum question and answers", async () => {
+  test("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -72,7 +72,7 @@ describe("FaktumFlervalg", () => {
     });
   });
 
-  test.skip("Should show preselected faktum answer if it's already selected", async () => {
+  test("Should show preselected faktum answer if it's already selected", async () => {
     const svar: string[] = [];
     svar.push(faktumMockData.gyldigeValg[1]);
     svar.push(faktumMockData.gyldigeValg[2]);
@@ -106,7 +106,7 @@ describe("FaktumFlervalg", () => {
       fetch.mockReset();
     });
 
-    test.skip("Should post the answer to the server", async () => {
+    test("Should post the answer to the server", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
@@ -147,7 +147,7 @@ describe("FaktumFlervalg", () => {
       });
     });
 
-    test.skip("Can select multiple answers", async () => {
+    test("Can select multiple answers", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
