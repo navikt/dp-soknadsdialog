@@ -6,6 +6,8 @@ import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../api.utils";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const { locale } = context;
+
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       redirect: {
@@ -19,7 +21,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (!token || !apiToken) {
     return {
       redirect: {
-        destination: "/oauth2/login",
+        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
         permanent: false,
       },
     };
