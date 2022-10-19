@@ -63,7 +63,7 @@ function useSanity() {
     return text;
   }
 
-  function getAppTekst(textId: string): string {
+  function getAppText(textId: string): string {
     const text =
       context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
     if (!text) {
@@ -91,7 +91,7 @@ function useSanity() {
     getFaktumTextById,
     getLandGruppeTextById,
     getSvaralternativTextById,
-    getAppTekst,
+    getAppText,
     getDokumentkravTextById,
     getDokumentkravSvarTextById,
     getInfosideText,

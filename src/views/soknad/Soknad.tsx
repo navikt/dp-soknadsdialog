@@ -21,7 +21,7 @@ interface IProps {
 
 export function Soknad(props: IProps) {
   const router = useRouter();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
@@ -104,25 +104,25 @@ export function Soknad(props: IProps) {
       <nav className="navigation-container">
         {isFirstSection && (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-            {getAppTekst("soknad.knapp.avbryt")}
+            {getAppText("soknad.knapp.avbryt")}
           </Button>
         )}
 
         {!isFirstSection && (
           <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
-            {getAppTekst("soknad.soknad.knapp.forrige-steg")}
+            {getAppText("soknad.soknad.knapp.forrige-steg")}
           </Button>
         )}
 
         {!soknadState.ferdig && (
           <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
-            {getAppTekst("soknad.knapp.neste-steg")}
+            {getAppText("soknad.knapp.neste-steg")}
           </Button>
         )}
 
         {soknadState.ferdig && (
           <Button onClick={() => navigateToDocumentation()}>
-            {getAppTekst("soknad.knapp.til-dokumentasjon")}
+            {getAppText("soknad.knapp.til-dokumentasjon")}
           </Button>
         )}
       </nav>
@@ -130,7 +130,7 @@ export function Soknad(props: IProps) {
       {!isError && (
         <p className={styles.autoSaveText}>
           <FileSuccess />
-          {getAppTekst("soknad.auto-lagret.tekst")}
+          {getAppText("soknad.auto-lagret.tekst")}
         </p>
       )}
       {isError && <ErrorRetryModal errorType={errorType} />}

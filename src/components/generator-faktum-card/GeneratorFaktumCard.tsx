@@ -14,7 +14,7 @@ interface IProps {
 }
 
 export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   return (
     <div className={styles.card}>
@@ -41,7 +41,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         )}
       </div>
       {props.showValidationMessage && (
-        <ValidationMessage message={getAppTekst("validering.generator-faktum.delvis-besvart")} />
+        <ValidationMessage message={getAppText("validering.generator-faktum.delvis-besvart")} />
       )}
     </div>
   );

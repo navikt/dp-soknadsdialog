@@ -5,15 +5,15 @@ import { QuizFaktum } from "../../types/quiz.types";
 import styles from "./FaktumDokumentkrav.module.css";
 
 export function FaktumDokumentkrav(dokumentkrav: QuizFaktum) {
-  const { getAppTekst, getDokumentkravTextById } = useSanity();
+  const { getAppText, getDokumentkravTextById } = useSanity();
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   return (
     <p className={styles.documentedBy}>
       <FileContent />
-      {getAppTekst("soknad.faktum-maa-dokumenteres.del-1")}
-      {` ${dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}. `}
-      {getAppTekst("soknad.faktum-maa-dokumenteres.del-2")}
+      {getAppText("soknad.faktum-maa-dokumenteres.del-1")}
+      {` ${dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}. `}
+      {getAppText("soknad.faktum-maa-dokumenteres.del-2")}
     </p>
   );
 }

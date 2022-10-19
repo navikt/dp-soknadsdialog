@@ -38,9 +38,9 @@ export function Documentation(props: IProps) {
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const errorSummaryRef = useRef<HTMLDivElement>(null);
 
-  const { getAppTekst, getInfosideText } = useSanity();
+  const { getAppText, getInfosideText } = useSanity();
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
-  const numberOfDokumentkravText = getAppTekst("dokumentkrav.antall-krav-av");
+  const numberOfDokumentkravText = getAppText("dokumentkrav.antall-krav-av");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export function Documentation(props: IProps) {
     <>
       {showValidationErrors && (
         <ErrorList
-          heading={getAppTekst("dokumentkrav.feilmelding.validering.header")}
+          heading={getAppText("dokumentkrav.feilmelding.validering.header")}
           ref={errorSummaryRef}
         >
           {validationErrors.map((item) => {
@@ -121,17 +121,17 @@ export function Documentation(props: IProps) {
 
       {dokumentkravList.krav.length === 0 && (
         <Alert variant="info" size="medium">
-          {getAppTekst("dokumentasjonskrav.ingen.krav.funnet")}
+          {getAppText("dokumentasjonskrav.ingen.krav.funnet")}
         </Alert>
       )}
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
-          {getAppTekst("soknad.soknad.knapp.forrige-steg")}
+          {getAppText("soknad.soknad.knapp.forrige-steg")}
         </Button>
 
         <Button onClick={() => bundleAndSummary()} loading={isBundling}>
-          {getAppTekst("soknad.knapp.til-oppsummering")}
+          {getAppText("soknad.knapp.til-oppsummering")}
         </Button>
       </nav>
 

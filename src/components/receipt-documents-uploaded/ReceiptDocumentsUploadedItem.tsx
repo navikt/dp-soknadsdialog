@@ -11,8 +11,9 @@ interface IProps {
 }
 
 export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
-  const { getAppTekst } = useSanity();
+  const { getAppText, getDokumentkravTextById } = useSanity();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   function toggleModal() {
     setUploadModalOpen((state) => !state);
@@ -26,11 +27,11 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
           rel="noreferrer"
           target="_blank"
         >
-          {dokumentkrav.beskrivendeId}
+          {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
         </Link>
         {dokumentkrav.filer[0]?.tidspunkt && (
           <BodyShort>
-            {`${getAppTekst("kvittering.tekst.sendt-av")} ${dokumentkrav.filer[0].tidspunkt}`}
+            {`${getAppText("kvittering.tekst.sendt-av-deg")} ${dokumentkrav.filer[0].tidspunkt}`}
           </BodyShort>
         )}
       </div>

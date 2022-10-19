@@ -21,7 +21,7 @@ export function DokumentkravBundleErrorModal({
 }: IProps) {
   const router = useRouter();
   const { uuid } = router.query;
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   const [isSavingSvar, setIsSavingSvar] = useState(false);
   const [savingSvarError, setSavingSvarError] = useState(false);
@@ -68,9 +68,9 @@ export function DokumentkravBundleErrorModal({
       >
         <Modal.Content>
           <Heading size={"medium"} spacing>
-            {getAppTekst("dokumentkrav.bundle-error-modal.tittel")}
+            {getAppText("dokumentkrav.bundle-error-modal.tittel")}
           </Heading>
-          <BodyLong>{getAppTekst("dokumentkrav.bundle-error-modal.beskrivelse")}</BodyLong>
+          <BodyLong>{getAppText("dokumentkrav.bundle-error-modal.beskrivelse")}</BodyLong>
 
           <ul>
             {dokumentkravList.map((item) => (
@@ -82,10 +82,10 @@ export function DokumentkravBundleErrorModal({
 
           <nav className="navigation-container">
             <Button variant={"secondary"} onClick={() => toggleVisibility(false)}>
-              {getAppTekst("dokumentkrav.bundle-error-modal.knapp.avbryt")}
+              {getAppText("dokumentkrav.bundle-error-modal.knapp.avbryt")}
             </Button>
             <Button variant={"primary"} onClick={sendDocumentsLater} loading={isSavingSvar}>
-              {getAppTekst("dokumentkrav.bundle-error-modal.knapp.send-senere")}
+              {getAppText("dokumentkrav.bundle-error-modal.knapp.send-senere")}
             </Button>
           </nav>
         </Modal.Content>

@@ -16,7 +16,7 @@ export function DokumentkravTitle(props: IProps) {
 
   return (
     <>
-      {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}
+      {dokumentkravText ? dokumentkravText.title : dokumentkrav.beskrivendeId}
       {beskrivelse && ` (${beskrivelse})`}
     </>
   );

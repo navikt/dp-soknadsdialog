@@ -31,15 +31,15 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
         "BGR",
         "BEL",
       ],
-      gruppeId: "faktum.hvilket-land-bor-du-i.gruppe.eøs",
+      gruppeId: "faktum.hvilket-land-bor-barnet-ditt-i.gruppe.eøs",
     },
     {
       land: ["SJM", "NOR"],
-      gruppeId: "faktum.hvilket-land-bor-du-i.gruppe.norge-jan-mayen",
+      gruppeId: "faktum.hvilket-land-bor-barnet-ditt-i.gruppe.norge-jan-mayen",
     },
     {
       land: ["IMN", "JEY", "GBR"],
-      gruppeId: "faktum.hvilket-land-bor-du-i.gruppe.storbritannia",
+      gruppeId: "faktum.hvilket-land-bor-barnet-ditt-i.gruppe.storbritannia",
     },
   ],
   readOnly: false,
@@ -63,8 +63,13 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
     "JEY",
     "GBR",
   ],
-  beskrivendeId: "faktum.hvilket-land-bor-du-i",
+  beskrivendeId: "faktum.hvilket-land-bor-barnet-ditt-i",
   sannsynliggjoresAv: [],
+};
+
+const faktumMockDataBostedsland = {
+  ...faktumMockData,
+  beskrivendeId: "faktum.hvilket-land-bor-du-i",
 };
 
 const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
@@ -142,7 +147,7 @@ describe("FaktumLand", () => {
     });
   });
 
-  describe("When is Bodstedsland or Arbeidsforhold and unanwered ", () => {
+  describe("When user selects an answer ", () => {
     beforeEach(() => {
       fetch.enableMocks();
     });
@@ -151,14 +156,14 @@ describe("FaktumLand", () => {
       fetch.mockReset();
     });
 
-    test("Should post `NOR` to server", async () => {
+    test("Should post it to the server", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
-      const svar = faktumMockData.gyldigeLand[14];
+      const svar = faktumMockDataBostedsland.gyldigeLand[14];
 
       render(
         <SanityProvider initialState={sanityMocks}>
@@ -178,13 +183,56 @@ describe("FaktumLand", () => {
         const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
         expect(selectedOption.value).toEqual(svar);
 
-        expect(fetch.mock.calls.length).toEqual(3);
+        expect(fetch.mock.calls.length).toEqual(2);
 
         // Does the first call save the faktum with the right answer?
         const putRequestBody = fetch.mock.calls[0][1]?.body as string;
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
+        expect(requestJson.svar).toBe(svar);
+      });
+    });
+  });
+
+  describe("When is Bodstedsland or Arbeidsforhold and faktum is unanswered", () => {
+    beforeEach(() => {
+      fetch.enableMocks();
+    });
+
+    afterEach(() => {
+      fetch.mockReset();
+    });
+
+    test("Should post `NOR` to server", async () => {
+      // First save the answer
+      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
+      // Then get next question (if any)
+      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+
+      const svar = "NOR";
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumLand faktum={faktumMockDataBostedsland} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      await waitFor(() => {
+        const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
+        expect(selectedOption.value).toEqual(svar);
+
+        expect(fetch.mock.calls.length).toEqual(2);
+
+        // Does the first call save the faktum with the right answer?
+        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
+        const requestJson = JSON.parse(putRequestBody);
+
+        expect(requestJson.beskrivendeId).toBe(faktumMockDataBostedsland.beskrivendeId);
         expect(requestJson.svar).toBe(svar);
       });
     });

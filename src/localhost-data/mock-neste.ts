@@ -1,3 +1,5 @@
+import { IQuizState } from "./quiz-state-response";
+
 export const mockNeste = {
   "@id": "03e6cfa5-de02-4921-98e3-54555aa61db0",
   ferdig: true,
@@ -3299,4 +3301,4 @@ export const mockNeste = {
       instance: "dp-soknad-67dc4444bc-c5hs5",
     },
   ],
-};
+} as IQuizState;

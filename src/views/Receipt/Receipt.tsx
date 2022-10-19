@@ -28,7 +28,7 @@ interface IProps {
 }
 
 export function Receipt(props: IProps) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
 
   const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
@@ -67,7 +67,7 @@ export function Receipt(props: IProps) {
         className={styles.nagivateToMineDagpengerButton}
         onClick={navigateToMineDagpener}
       >
-        {getAppTekst("kvittering.mine-dagpenger.knapp")}
+        {getAppText("kvittering.mine-dagpenger.knapp")}
       </Button>
       <NoSessionModal />
     </>

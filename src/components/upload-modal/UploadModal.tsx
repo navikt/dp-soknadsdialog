@@ -106,7 +106,7 @@ export function UploadFilesModal(props: IProps) {
             Last opp filer
           </Heading>
           <Heading spacing level="2" size="small">
-            {dokumentkravText?.text ? dokumentkravText.text : props.dokumentkrav.beskrivendeId}
+            {dokumentkravText?.title ? dokumentkravText.title : props.dokumentkrav.beskrivendeId}
           </Heading>
           <BodyLong>
             <>

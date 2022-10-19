@@ -21,7 +21,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppTekst, getFaktumTextById } = useSanity();
+  const { getAppText, getFaktumTextById } = useSanity();
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [debouncedValue, setDebouncedValue] = useState(props.faktum.svar);
@@ -107,11 +107,11 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   function getErrorMessage() {
     switch (isValid) {
       case ValidationErrorTypes.EmptyValue:
-        return getAppTekst("validering.number-faktum.tom-eller-spesielle-tegn");
+        return getAppText("validering.number-faktum.tom-eller-spesielle-tegn");
       case ValidationErrorTypes.NegativeValue:
-        return getAppTekst("validering.number-faktum.ikke-negativt-tall");
+        return getAppText("validering.number-faktum.ikke-negativt-tall");
       case ValidationErrorTypes.InvalidValue:
-        return faktumTexts?.errorMessage ?? getAppTekst("validering.number-faktum.ugyldig");
+        return faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig");
       default:
         return undefined;
     }
@@ -119,7 +119,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   function getValidationMessage() {
     if (unansweredFaktumId === faktum.id) {
-      return getAppTekst("validering.faktum.ubesvart");
+      return getAppText("validering.faktum.ubesvart");
     } else if (isValid !== true) {
       getErrorMessage();
     } else {

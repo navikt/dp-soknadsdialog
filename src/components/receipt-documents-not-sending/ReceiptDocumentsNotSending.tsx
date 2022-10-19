@@ -10,11 +10,11 @@ interface IProps {
 }
 
 export function ReceiptDocumentsNotSending(props: IProps) {
-  const { getAppTekst, getDokumentkravTextById } = useSanity();
+  const { getAppText, getDokumentkravTextById } = useSanity();
   return (
     <div>
       <Heading level={"2"} size="medium">
-        {getAppTekst("kvittering.heading.sender-ikke-dokumenter")}
+        {getAppText("kvittering.heading.sender-ikke-dokumenter")}
       </Heading>
 
       {props.documents.map((dokumentkrav) => {
@@ -22,15 +22,15 @@ export function ReceiptDocumentsNotSending(props: IProps) {
         return (
           <div key={dokumentkrav.beskrivendeId} className={styles.documentItem}>
             <Heading level="3" size="xsmall">
-              {dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}
+              {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
             </Heading>
             <BodyShort>
               <>
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-                  <>{getAppTekst("kvittering.text.sendt-tidligere")}</>
+                  <>{getAppText("kvittering.tekst.sendt-tidligere")}</>
                 )}
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-                  <>{getAppTekst("kvittering.text.sender-ikke")}</>
+                  <>{getAppText("kvittering.tekst.sender-ikke")}</>
                 )}
               </>
             </BodyShort>
