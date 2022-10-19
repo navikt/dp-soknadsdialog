@@ -8,9 +8,8 @@ import { IPaabegyntSoknad } from "../../types/quiz.types";
 export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
   const router = useRouter();
 
-  const [isNavigatingToSoknad, setIsNavigatingToSoknad] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [isNavigatingToSoknad, setIsNavigatingToSoknad] = useState(false);
   const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
   const [hasDeleteSoknadError, SetHasDeleteSoknadError] = useState(false);
 
@@ -22,10 +21,11 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
   async function deleteAndCreateSoknad() {
     setIsLoading(true);
     const deleteSoknadResponse = await deleteSoknad(paabegynt.uuid);
+
     if (deleteSoknadResponse.ok) {
       createNewSoknad();
     } else {
-      setIsLoading(true);
+      setIsLoading(false);
       SetHasDeleteSoknadError(true);
       throw new Error(deleteSoknadResponse.statusText);
     }
