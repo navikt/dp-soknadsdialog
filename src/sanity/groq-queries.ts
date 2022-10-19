@@ -39,7 +39,7 @@ const infosideFields = `{
 
 const dokumentkravFields = `{
   textId,
-  text,
+  title,
   description,
   helpText,
 }`;

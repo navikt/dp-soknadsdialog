@@ -20,7 +20,7 @@ export function DokumentkravBegrunnelse({
   setBegrunnelse,
   validationError,
 }: IProps) {
-  const { getAppTekst, getDokumentkravTextById } = useSanity();
+  const { getAppText, getDokumentkravTextById } = useSanity();
   const debouncedBegrunnelse = useDebouncedCallback(setBegrunnelse, 500);
   const isFirstRender = useFirstRender();
 
@@ -52,7 +52,7 @@ export function DokumentkravBegrunnelse({
         error={
           validationError?.errorType === "begrunnelse" &&
           !begrunnelse &&
-          getAppTekst("dokumentkrav.feilmelding.trenger.begrunnelse")
+          getAppText("dokumentkrav.feilmelding.trenger.begrunnelse")
         }
       />
     </div>

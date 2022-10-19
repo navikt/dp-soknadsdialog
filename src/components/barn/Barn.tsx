@@ -17,7 +17,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { locale } = useRouter();
   const { isLoading } = useQuiz();
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -104,10 +104,10 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
             onClick={() => addNewGeneratorAnswer(faktum)}
             icon={<ChildAdd />}
           >
-            {getAppTekst("barn.knapp.legg-til")}
+            {getAppText("barn.knapp.legg-til")}
           </Button>
           {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppTekst("validering.faktum.ubesvart")} />
+            <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
           )}
         </>
       )}

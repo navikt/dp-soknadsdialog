@@ -17,7 +17,7 @@ import { useValidation } from "../../context/validation-context";
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { getFaktumTextById, getLandGruppeTextById, getAppTekst } = useSanity();
+  const { getFaktumTextById, getLandGruppeTextById, getAppText } = useSanity();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
 
@@ -87,7 +87,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         currentValue={currentAnswer || "Velg et land"}
         placeHolderText={"Velg et land"}
         error={
-          unansweredFaktumId === faktum.id ? getAppTekst("validering.faktum.ubesvart") : undefined
+          unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
       />
       {faktumTexts?.helpText && (

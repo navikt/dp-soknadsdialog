@@ -12,7 +12,7 @@ import { useSanity } from "../../context/sanity-context";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
-  const { getAppTekst, getDokumentkravTextById } = useSanity();
+  const { getAppText, getDokumentkravTextById } = useSanity();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
@@ -28,10 +28,10 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <BodyShort>
         <>
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-            <>{getAppTekst("kvittering.tekst.skal-sendes-av.noen-andre")}</>
+            <>{getAppText("kvittering.tekst.skal-sendes-av.noen-andre")}</>
           )}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE && (
-            <>{getAppTekst("kvittering.tekst.skal-sendes-av.deg")}</>
+            <>{getAppText("kvittering.tekst.skal-sendes-av.deg")}</>
           )}
         </>
       </BodyShort>

@@ -24,7 +24,7 @@ interface IDatePicker {
 }
 
 export function DatePicker(props: IDatePicker) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   const [date, setDate] = useState<Date | undefined>(
     props.value ? new Date(props.value) : undefined
   );
@@ -100,7 +100,7 @@ export function DatePicker(props: IDatePicker) {
             "navds-error-message navds-label"
           )}
         >
-          {isEmptyDate ? getAppTekst("validering.ugyldig-dato") : props.errorMessage}
+          {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.errorMessage}
         </div>
       )}
       {props.hasWarning && props.warningMessage && (

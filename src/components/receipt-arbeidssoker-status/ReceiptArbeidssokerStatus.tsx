@@ -5,18 +5,18 @@ import styles from "./ReceiptArbeidssokerStatus.module.css";
 import { useSanity } from "../../context/sanity-context";
 
 export function ArbeidssokerStatus(props: IArbeidssokerStatus) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   if (!props.isRegistered) {
     return (
       <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-        {getAppTekst("kvittering.arbeidsokerstatus.ikke-registrert")}
+        {getAppText("kvittering.arbeidsokerstatus.ikke-registrert")}
       </Alert>
     );
   }
   return (
     <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
-      {getAppTekst("kvittering.arbeidsokerstatus.info-tekst")}
+      {getAppText("kvittering.arbeidsokerstatus.info-tekst")}
     </BodyShort>
   );
 }

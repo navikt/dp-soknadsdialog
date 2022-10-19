@@ -42,7 +42,7 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
   const [begrunnelse, setBegrunnelse] = useState(dokumentkrav.begrunnelse || "");
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(dokumentkrav.filer);
-  const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppTekst } = useSanity();
+  const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppText } = useSanity();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
@@ -94,13 +94,13 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
 
       <div className={styles.dokumentkravSvar}>
         <RadioGroup
-          legend={getAppTekst("dokumentkrav.velg-svaralternativ")}
+          legend={getAppText("dokumentkrav.velg-svaralternativ")}
           onChange={setSvar}
           value={svar}
           error={
             validationError?.errorType === "svar" &&
             !svar &&
-            getAppTekst("dokumentkrav.feilmelding.mangler-svaralternativ")
+            getAppText("dokumentkrav.feilmelding.mangler-svaralternativ")
           }
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
@@ -140,12 +140,12 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
 
           {bundleError && (
             <Alert variant="error">
-              {getAppTekst("dokumentkrav.feilmelding.klarte-ikke-bundle")}
+              {getAppText("dokumentkrav.feilmelding.klarte-ikke-bundle")}
             </Alert>
           )}
 
           {validationError?.errorType === "filer" && uploadedFiles.length === 0 && (
-            <Alert variant="error">{getAppTekst("dokumentkrav.feilmelding.mangler-filer")}</Alert>
+            <Alert variant="error">{getAppText("dokumentkrav.feilmelding.mangler-filer")}</Alert>
           )}
         </>
       )}

@@ -4,7 +4,7 @@ import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import styles from "./ReceiptSoknadTilstand.module.css";
 
 export function ReceiptSoknadTilstand(props: ISoknadStatus) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
   return (
     <>
       <div className={styles.receiptSoknadTilstandHeader}>
@@ -14,7 +14,7 @@ export function ReceiptSoknadTilstand(props: ISoknadStatus) {
         <Tag variant="success">{props.tilstand}</Tag>
       </div>
       <BodyLong className={styles.receiptSoknadTilstandDescription}>
-        {getAppTekst("kvittering.arbeidsokerstatus.info-tekst")}
+        {getAppText("kvittering.arbeidsokerstatus.info-tekst")}
       </BodyLong>
     </>
   );

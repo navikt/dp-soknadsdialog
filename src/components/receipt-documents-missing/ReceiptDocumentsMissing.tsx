@@ -10,16 +10,16 @@ interface IProps {
 }
 
 export function ReceiptDocumentsMissing(props: IProps) {
-  const { getAppTekst } = useSanity();
+  const { getAppText } = useSanity();
 
   return (
     <div>
       <div className={styles.headingContainer}>
         <Heading level={"2"} size="small">
-          {getAppTekst("kvittering.heading.mangler-dokumenter")}
+          {getAppText("kvittering.heading.mangler-dokumenter")}
         </Heading>
         <Tag variant="warning">
-          {props.documents?.length} {getAppTekst("kvittering.text.antall-mangler")}
+          {props.documents?.length} {getAppText("kvittering.tekst.antall-mangler")}
         </Tag>
       </div>
 
