@@ -90,3 +90,18 @@ export type QuizFaktumSvarType =
   | number
   | IQuizPeriodeFaktumAnswerType
   | undefined;
+
+export interface IPaabegyntSoknad {
+  uuid: string;
+  startDato: string;
+}
+
+export interface IInnsentSoknad {
+  uuid: string;
+  forstInnsendt: string;
+}
+
+export interface IMineSoknader {
+  paabegynt?: IPaabegyntSoknad;
+  innsendte?: IInnsentSoknad[];
+}
