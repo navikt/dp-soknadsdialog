@@ -20,7 +20,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     // TODO Redirect til hvilken login?
     return {
       redirect: {
-        destination: "/TODO-redoratoren-login",
+        destination: "/oauth2/login",
         permanent: false,
       },
     };
