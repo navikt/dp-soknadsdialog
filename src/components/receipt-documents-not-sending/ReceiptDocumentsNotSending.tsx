@@ -22,7 +22,7 @@ export function ReceiptDocumentsNotSending(props: IProps) {
         return (
           <div key={dokumentkrav.beskrivendeId} className={styles.documentItem}>
             <Heading level="3" size="xsmall">
-              {dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}
+              {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
             </Heading>
             <BodyShort>
               <>

@@ -50,7 +50,7 @@ export interface ISanityInfoside {
 
 export interface ISanityDokumentkrav {
   textId: string;
-  text: string;
+  title: string;
   description?: TypedObject | TypedObject[];
   helpText?: ISanityHelpText;
 }

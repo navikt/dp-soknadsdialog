@@ -12,7 +12,7 @@ export function FaktumDokumentkrav(dokumentkrav: QuizFaktum) {
     <p className={styles.documentedBy}>
       <FileContent />
       {getAppTekst("soknad.faktum-maa-dokumenteres.del-1")}
-      {` ${dokumentkravText?.text ? dokumentkravText.text : dokumentkrav.beskrivendeId}. `}
+      {` ${dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}. `}
       {getAppTekst("soknad.faktum-maa-dokumenteres.del-2")}
     </p>
   );

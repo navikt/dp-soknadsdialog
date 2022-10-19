@@ -44,7 +44,7 @@ export function DokumentkravBegrunnelse({
         type="text"
         size="medium"
         defaultValue={begrunnelse}
-        label={begrunnelseText ? begrunnelseText.text : textId}
+        label={begrunnelseText?.title ? begrunnelseText.title : textId}
         description={
           begrunnelseText?.description && <PortableText value={begrunnelseText.description} />
         }
