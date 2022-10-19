@@ -17,7 +17,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const { token, apiToken } = await getSession(context);
   if (!token || !apiToken) {
-    // TODO Redirect til hvilken login?
     return {
       redirect: {
         destination: "/oauth2/login",
