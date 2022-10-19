@@ -23,13 +23,19 @@ export function getSoknadMal(onBehalfOfToken: string) {
     });
 }
 
-export type Prosesstype = "Søknad" | "Innsending";
+export function createSoknadUuid(onBehalfOfToken: string) {
+  const url = `${process.env.API_BASE_URL}/soknad`;
 
-export function startSoknad(onBehalfOfToken: string, prosesstype?: Prosesstype) {
-  const url = new URL(`${process.env.API_BASE_URL}/soknad`);
-  if (prosesstype) {
-    url.searchParams.append("prosesstype", prosesstype);
-  }
+  return fetch(url, {
+    method: "Post",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
+export function createInnsendingUuid(onBehalfOfToken: string) {
+  const url = `${process.env.API_BASE_URL}/soknad?prosesstype=Innsending`;
 
   return fetch(url, {
     method: "Post",

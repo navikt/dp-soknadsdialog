@@ -1,7 +1,7 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
-import { startSoknad, Prosesstype } from "../quiz-api";
+import { createSoknadUuid } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 
 async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +10,6 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { token, apiToken } = await getSession({ req });
-  const prosesstype = req.query.type as Prosesstype;
 
   if (!token || !apiToken) {
     return res.status(401).end();
@@ -18,13 +17,13 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   try {
-    const soknadResponse = await startSoknad(onBehalfOfToken, prosesstype);
-    if (!soknadResponse.ok) {
-      throw new Error(soknadResponse.statusText);
+    const soknadUuidResponse = await createSoknadUuid(onBehalfOfToken);
+    if (!soknadUuidResponse.ok) {
+      throw new Error(soknadUuidResponse.statusText);
     }
 
-    const soknadId = await soknadResponse.text();
-    return res.status(soknadResponse.status).send(soknadId);
+    const soknadId = await soknadUuidResponse.text();
+    return res.status(soknadUuidResponse.status).send(soknadId);
   } catch (error) {
     return res.status(500).send(error);
   }
