@@ -27,10 +27,10 @@ export function ReceiptDocumentsNotSending(props: IProps) {
             <BodyShort>
               <>
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-                  <>{getAppText("kvittering.text.sendt-tidligere")}</>
+                  <>{getAppText("kvittering.tekst.sendt-tidligere")}</>
                 )}
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-                  <>{getAppText("kvittering.text.sender-ikke")}</>
+                  <>{getAppText("kvittering.tekst.sender-ikke")}</>
                 )}
               </>
             </BodyShort>
