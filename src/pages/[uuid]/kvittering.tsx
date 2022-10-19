@@ -57,7 +57,7 @@ export async function getServerSideProps(
   if (!token || !apiToken) {
     return {
       redirect: {
-        destination: "/oauth2/login",
+        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
         permanent: false,
       },
     };

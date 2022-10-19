@@ -1,7 +1,6 @@
 import React from "react";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import { findEmployerName } from "../../faktum.utils";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -13,12 +12,12 @@ export function DokumentkravTitle(props: IProps) {
   const { getDokumentkravTextById } = useSanity();
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
-  const employerName = findEmployerName(dokumentkrav.fakta);
+  const beskrivelse = dokumentkrav.beskrivelse;
 
   return (
     <>
-      {dokumentkravText ? dokumentkravText.text : dokumentkrav.beskrivendeId}
-      {employerName && ` (${employerName})`}
+      {dokumentkravText ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+      {beskrivelse && ` (${beskrivelse})`}
     </>
   );
 }

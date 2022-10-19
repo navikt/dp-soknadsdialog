@@ -1,20 +1,18 @@
 import React, { useState } from "react";
+import { BodyShort, Button, Link } from "@navikt/ds-react";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
-import { useFileUploader } from "../../hooks/useFileUploader";
-import styles from "./ReceiptDocumentsUploaded.module.css";
-import { Link, BodyShort, Button } from "@navikt/ds-react";
+import { UploadFilesModal } from "../upload-modal/UploadModal";
 import api from "../../api.utils";
-import { UploadFilesModal } from "../receipt-upload-modal/ReceiptUploadModal";
+import styles from "./ReceiptDocumentsUploaded.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
 export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const { getAppTekst } = useSanity();
-  const { uploadedFiles, handleUploadedFiles } = useFileUploader();
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   function toggleModal() {
     setUploadModalOpen((state) => !state);
@@ -44,8 +42,6 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
       <UploadFilesModal
         modalOpen={uploadModalOpen}
         dokumentkrav={dokumentkrav}
-        uploadedFiles={uploadedFiles}
-        handleUploadedFiles={handleUploadedFiles}
         closeModal={() => setUploadModalOpen(false)}
       />
     </div>

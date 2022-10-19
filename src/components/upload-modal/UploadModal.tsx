@@ -1,32 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
-import { useSanity } from "../../context/sanity-context";
 import { Alert, BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
+import { IDokumentkrav } from "../../types/documentation.types";
+import { useSanity } from "../../context/sanity-context";
 import { FileUploader } from "../file-uploader/FileUploader";
-import styles from "./ReceiptUploadModal.module.css";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { FileList } from "../file-list/FileList";
 import { bundleDokumentkravFiles } from "../../api/dokumentasjon-api";
 import { useRouter } from "next/router";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { useFileUploader } from "../../hooks/useFileUploader";
+import styles from "./UploadModal.module.css";
 
 interface IProps {
   modalOpen: boolean;
   closeModal: () => void;
   dokumentkrav: IDokumentkrav;
-  uploadedFiles: IDokumentkravFil[];
-  handleUploadedFiles: (file: IDokumentkravFil) => void;
 }
+
+type IErrorState = "MISSING_FILES" | "BUNDLE_ERROR";
 
 export function UploadFilesModal(props: IProps) {
   const router = useRouter();
   const uuid = router.query.uuid as string;
+  const [error, setError] = useState<IErrorState | undefined>();
   const [isSaving, setIsSaving] = useState(false);
-  const [hasError, setHasError] = useState(false);
-  const [isFilesUploaded, setIsFilesUploaded] = useState(false);
+  const [bundleFilesSuccess, setBundleFilesSuccess] = useState(false);
+
   const { getDokumentkravTextById } = useSanity();
   const { getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
+  const { uploadedFiles, handleUploadedFiles, resetUploadFiles } = useFileUploader();
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
 
   useEffect(() => {
@@ -35,15 +38,26 @@ export function UploadFilesModal(props: IProps) {
     }
   }, []);
 
+  useEffect(() => {
+    if (error === "MISSING_FILES" && uploadedFiles.length > 0) {
+      setError(undefined);
+    }
+  }, [uploadedFiles.length]);
+
   async function bundleAndSaveDokumentkravFiles() {
+    if (uploadedFiles.length === 0) {
+      setError("MISSING_FILES");
+      return;
+    }
+
     try {
       setIsSaving(true);
-      setHasError(false);
-      setIsFilesUploaded(false);
+      setError(undefined);
+      setBundleFilesSuccess(false);
 
       const dokumentkravWithUploadedFiles: IDokumentkrav = {
         ...props.dokumentkrav,
-        filer: [...props.dokumentkrav.filer, ...props.uploadedFiles],
+        filer: [...props.dokumentkrav.filer, ...uploadedFiles],
       };
 
       // eslint-disable-next-line no-console
@@ -52,27 +66,35 @@ export function UploadFilesModal(props: IProps) {
 
       if (!response.ok) {
         setIsSaving(false);
-        setHasError(true);
+        setError("BUNDLE_ERROR");
         // eslint-disable-next-line no-console
         console.log("bundleDokumentkravFiles respone ikke OK!");
       } else {
         setIsSaving(false);
-        setIsFilesUploaded(true);
+        setBundleFilesSuccess(true);
       }
       // eslint-disable-next-line no-console
       console.log(response.status);
     } catch (error) {
       setIsSaving(false);
-      setHasError(true);
+      setError("BUNDLE_ERROR");
       // eslint-disable-next-line no-console
       console.log(error);
     }
   }
 
   function toggleModal() {
-    if (isFilesUploaded) {
+    if (bundleFilesSuccess) {
+      resetUploadFiles();
       getDokumentkravList();
+      setBundleFilesSuccess(false);
     }
+
+    if (error) {
+      resetUploadFiles();
+      setError(undefined);
+    }
+
     props.closeModal();
   }
 
@@ -84,7 +106,7 @@ export function UploadFilesModal(props: IProps) {
             Last opp filer
           </Heading>
           <Heading spacing level="2" size="small">
-            {dokumentkravText?.text ? dokumentkravText.text : props.dokumentkrav.beskrivendeId}
+            {dokumentkravText?.title ? dokumentkravText.title : props.dokumentkrav.beskrivendeId}
           </Heading>
           <BodyLong>
             <>
@@ -94,23 +116,29 @@ export function UploadFilesModal(props: IProps) {
             </>
           </BodyLong>
 
-          {!isFilesUploaded && (
+          {!bundleFilesSuccess && (
             <>
               <FileUploader
                 dokumentkrav={props.dokumentkrav}
-                handleUploadedFiles={props.handleUploadedFiles}
+                handleUploadedFiles={handleUploadedFiles}
                 maxFileSize={remainingFilesize}
               />
 
               <FileList
-                uploadedFiles={props.uploadedFiles}
+                uploadedFiles={uploadedFiles}
                 dokumentkravId={props.dokumentkrav.beskrivendeId}
-                handleUploadedFiles={props.handleUploadedFiles}
+                handleUploadedFiles={handleUploadedFiles}
               />
 
-              {hasError && (
+              {error === "BUNDLE_ERROR" && (
                 <Alert variant="error" className={styles.alertContainer}>
-                  Det gikk i dass.
+                  Klarte ikke bundle filer
+                </Alert>
+              )}
+
+              {error === "MISSING_FILES" && (
+                <Alert variant="error" className={styles.alertContainer}>
+                  Du må laste opp filer
                 </Alert>
               )}
 
@@ -123,7 +151,7 @@ export function UploadFilesModal(props: IProps) {
                   >
                     Send inn dokumenter
                   </Button>
-                  <Button variant="secondary" onClick={props.closeModal}>
+                  <Button variant="secondary" onClick={toggleModal}>
                     Avbryt
                   </Button>
                 </>
@@ -131,12 +159,12 @@ export function UploadFilesModal(props: IProps) {
             </>
           )}
 
-          {isFilesUploaded && (
+          {bundleFilesSuccess && (
             <>
               <Alert variant="success" className={styles.alertContainer}>
                 Filene dine er lagret
                 <ul className={styles.uploadedFilesList}>
-                  {props.uploadedFiles.map((file) => (
+                  {uploadedFiles.map((file) => (
                     <li key={file.filsti}>{file.filnavn}</li>
                   ))}
                 </ul>
