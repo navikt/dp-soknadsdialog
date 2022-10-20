@@ -1,17 +1,17 @@
 import { getSession } from "@navikt/dp-auth/server";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../sanity-client";
+// import { sanityClient } from "../../sanity-client";
 import { audienceDPSoknad } from "../api.utils";
-import { SanityProvider } from "../context/sanity-context";
-import { allTextsQuery } from "../sanity/groq-queries";
-import { ISanityTexts } from "../types/sanity.types";
+// import { SanityProvider } from "../context/sanity-context";
+// import { allTextsQuery } from "../sanity/groq-queries";
+// import { ISanityTexts } from "../types/sanity.types";
 import { IMineSoknader } from "../types/quiz.types";
 import { Inngang } from "../views/Inngang";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 
 interface IProps {
-  sanityTexts: ISanityTexts;
+  // sanityTexts: ISanityTexts;
   mineSoknader: IMineSoknader | null;
   errorCode: number | null;
 }
@@ -21,15 +21,15 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
+  // const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
+  //   baseLang: "nb",
+  //   lang: locale,
+  // });
 
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
+        // sanityTexts,
         mineSoknader: {
           paabegynt: { uuid: "localhost-uuid-paabegynt", startDato: "2021-10-03" },
           innsendte: [
@@ -66,7 +66,7 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
+      // sanityTexts,
       mineSoknader,
       errorCode,
     },
@@ -84,19 +84,19 @@ export default function InngangPage(props: IProps) {
     );
   }
 
-  if (!props.sanityTexts.seksjoner) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={500}
-      />
-    );
-  }
+  // if (!props.sanityTexts.seksjoner) {
+  //   return (
+  //     <ErrorPage
+  //       title="Det har skjedd en teknisk feil"
+  //       details="Beklager, vi mistet kontakten med systemene våre."
+  //       statusCode={500}
+  //     />
+  //   );
+  // }
 
   return (
-    <SanityProvider initialState={props.sanityTexts}>
-      <Inngang {...props.mineSoknader} />
-    </SanityProvider>
+    // <SanityProvider initialState={props.sanityTexts}>
+    <Inngang {...props.mineSoknader} />
+    // </SanityProvider>
   );
 }
