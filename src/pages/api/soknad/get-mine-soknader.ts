@@ -15,8 +15,7 @@ function formaterDato(date: Date) {
 }
 
 export function getMineSoknader(onBehalfOfToken: string) {
-  // Todo
-  // Finn ut hvor dager tilbake i tid vi skal ha
+  // Finn ut hvor mange dager tilbake i tid vi skal ha
   const soknadFomDate = subDays(Date.now(), 7);
 
   const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formaterDato(soknadFomDate)}`;
