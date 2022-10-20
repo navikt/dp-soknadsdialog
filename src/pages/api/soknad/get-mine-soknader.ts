@@ -2,9 +2,14 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
+import { subDays } from "date-fns";
 
 export function getMineSoknader(onBehalfOfToken: string) {
-  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader`;
+  // Todo
+  // Finn ut hvor dager tilbake i tid vi skal ha
+  const soknadFom = subDays(Date.now(), 3);
+
+  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${soknadFom}`;
   return fetch(url, {
     method: "GET",
     headers: {
