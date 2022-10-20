@@ -112,7 +112,7 @@ export function Soknad(props: IProps) {
           </Button>
         )}
 
-        {isLastSection ? (
+        {isLastSection && soknadState.ferdig ? (
           <Button onClick={() => navigateToDocumentation()}>
             {getAppText("soknad.knapp.til-dokumentasjon")}
           </Button>
