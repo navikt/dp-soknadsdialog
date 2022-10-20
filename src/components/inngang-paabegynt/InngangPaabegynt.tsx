@@ -10,14 +10,8 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isNavigatingToSoknad, setIsNavigatingToSoknad] = useState(false);
   const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
   const [hasDeleteSoknadError, SetHasDeleteSoknadError] = useState(false);
-
-  function navigateToSoknad() {
-    setIsNavigatingToSoknad(true);
-    router.push(`/${paabegynt.uuid}`);
-  }
 
   async function deleteAndCreateSoknad() {
     setIsLoading(true);
@@ -57,8 +51,8 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
     <>
       Påbegynt soknad : {paabegynt.startDato}
       <br />
-      <Link href="#" passHref>
-        <Button variant="primary" onClick={navigateToSoknad} loading={isNavigatingToSoknad} as="a">
+      <Link href={paabegynt.uuid} passHref>
+        <Button variant="primary" as="a">
           Fortsett
         </Button>
       </Link>
