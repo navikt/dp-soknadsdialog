@@ -9,7 +9,6 @@ import { fetcher } from "../api.utils";
 import { SWRConfig } from "swr";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
-import Cookies from "js-cookie";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -19,10 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
     return <SoknadHeader />;
   };
 
-  onLanguageSelect(({ locale }) => {
-    Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expiresIn: 30 });
-    router.push(router.asPath, router.asPath, { locale });
-  });
+  onLanguageSelect(({ locale }) => router.push(router.asPath, router.asPath, { locale }));
 
   return (
     <ErrorBoundary>
