@@ -7,7 +7,7 @@ import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState, getSoknadTilstand } from "../api/quiz-api";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
-import { Receipt } from "../../views/Receipt/Receipt";
+import { Receipt } from "../../views/receipt/Receipt";
 import ErrorPage from "../_error";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../types/documentation.types";
