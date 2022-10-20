@@ -70,4 +70,3 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
     </>
   );
 }
-1;
