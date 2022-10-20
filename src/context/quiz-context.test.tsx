@@ -2,8 +2,7 @@ import React from "react";
 import { QuizProvider, useQuiz } from "./quiz-context";
 import { FaktumBoolean } from "../components/faktum/FaktumBoolean";
 import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
-import { IQuizState } from "../localhost-data/quiz-state-response";
-import { IQuizBooleanFaktum } from "../types/quiz.types";
+import { IQuizBooleanFaktum, IQuizState } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";
 import fetch from "jest-fetch-mock";
 

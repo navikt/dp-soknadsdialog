@@ -1,9 +1,13 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
 import { useRouter } from "next/router";
 import { saveFaktum } from "../api/saveFaktumToQuiz-api";
-import { IQuizState } from "../localhost-data/quiz-state-response";
 import { ErrorTypesEnum } from "../types/error.types";
-import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../types/quiz.types";
+import {
+  IQuizGeneratorFaktum,
+  IQuizState,
+  QuizFaktum,
+  QuizFaktumSvarType,
+} from "../types/quiz.types";
 import api from "../api.utils";
 
 export interface IQuizContext {

@@ -2,9 +2,8 @@ import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Faktum } from "./Faktum";
 import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
-import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
 

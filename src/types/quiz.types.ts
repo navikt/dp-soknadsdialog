@@ -8,6 +8,13 @@ export type QuizFaktum =
   | IQuizNumberFaktum
   | IQuizLandFaktum;
 
+export interface IQuizState {
+  ferdig: boolean;
+  seksjoner: IQuizSeksjon[];
+  roller?: string[];
+  versjon_navn?: "Dagpenger" | "Innsending";
+}
+
 export interface IQuizBaseFaktum {
   id: string;
   beskrivendeId: string;

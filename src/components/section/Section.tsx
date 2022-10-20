@@ -1,7 +1,6 @@
 import React from "react";
 import { Faktum } from "../faktum/Faktum";
 import { IQuizSeksjon } from "../../types/quiz.types";
-import styles from "./Section.module.css";
 import { useSanity } from "../../context/sanity-context";
 import { SectionHeading } from "./SectionHeading";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
@@ -21,7 +20,7 @@ export function Section(props: IProps) {
   }
 
   return (
-    <div className={styles.faktum}>
+    <>
       <SectionHeading text={sectionTexts} fallback={props.section.beskrivendeId} />
 
       {props.section?.fakta?.map((faktum, index) => {
@@ -29,6 +28,6 @@ export function Section(props: IProps) {
           return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
         }
       })}
-    </div>
+    </>
   );
 }
