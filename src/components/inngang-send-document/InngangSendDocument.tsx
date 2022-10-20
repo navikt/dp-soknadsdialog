@@ -2,6 +2,7 @@ import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { IMineSoknader } from "../../types/quiz.types";
+import Link from "next/link";
 
 export function InngangSendDocument({ innsendte }: IMineSoknader) {
   const router = useRouter();
@@ -18,12 +19,15 @@ export function InngangSendDocument({ innsendte }: IMineSoknader) {
         return (
           <div key={soknad.uuid}>
             Innsendt soknad : først innsendt {soknad.forstInnsendt}
-            <Button
-              onClick={() => navigateToReceiptPage(soknad.uuid)}
-              loading={soknad.uuid === navigateToRepeiptPageUuuid}
-            >
-              Send inn dokumenter
-            </Button>
+            <Link href="#" passHref>
+              <Button
+                as="a"
+                onClick={() => navigateToReceiptPage(soknad.uuid)}
+                loading={soknad.uuid === navigateToRepeiptPageUuuid}
+              >
+                Send inn dokumenter
+              </Button>
+            </Link>
           </div>
         );
       })}

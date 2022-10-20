@@ -1,4 +1,5 @@
 import { Button } from "@navikt/ds-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import api from "../../api.utils";
@@ -56,9 +57,11 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
     <>
       Påbegynt soknad : {paabegynt.startDato}
       <br />
-      <Button variant="primary" onClick={navigateToSoknad} loading={isNavigatingToSoknad}>
-        Fortsett
-      </Button>
+      <Link href="#" passHref>
+        <Button variant="primary" onClick={navigateToSoknad} loading={isNavigatingToSoknad} as="a">
+          Fortsett
+        </Button>
+      </Link>
       <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
         Slett og start på nytt
       </Button>
