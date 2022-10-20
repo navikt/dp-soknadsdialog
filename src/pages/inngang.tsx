@@ -7,7 +7,7 @@ import { allTextsQuery } from "../sanity/groq-queries";
 import { ISanityTexts } from "../types/sanity.types";
 import { IMineSoknader } from "../types/quiz.types";
 import { Inngang } from "../views/Inngang";
-import { getMineSoknader } from "./api/mine-dagpenger";
+import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 
 interface IProps {
