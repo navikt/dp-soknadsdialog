@@ -20,10 +20,14 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    const measureTokenExchange = metrics.tokenExchangeDurationHistogram.startTimer();
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
-    const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "neste" });
+    measureTokenExchange();
+
+    const measureNeste = metrics.backendApiDurationHistogram.startTimer({ path: "neste" });
     const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistLagret);
-    stopTimer();
+    measureNeste();
+
     if (!soknadStateResponse.ok) {
       // TODO Should be logged to sentry, but it does not effect user so we do not throw error here
       // eslint-disable-next-line no-console

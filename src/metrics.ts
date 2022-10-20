@@ -10,6 +10,10 @@ export class AppMetrics {
     collectDefaultMetrics();
   }
 
+  public tokenExchangeDurationHistogram = new Histogram({
+    name: "dp_soknadsdialog_token_exchange_duration_seconds",
+    help: "Time spent doing token exchange against tokenX",
+  });
   public backendApiDurationHistogram = new Histogram({
     name: "dp_soknadsdialog_requests_duration_seconds",
     help: "Load time for API call to dp-soknad",
