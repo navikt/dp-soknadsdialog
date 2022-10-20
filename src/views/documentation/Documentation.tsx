@@ -1,12 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Alert, Button, Detail } from "@navikt/ds-react";
+import { Left } from "@navikt/ds-icons";
 import { PortableText } from "@portabletext/react";
 import { Dokumentkrav } from "../../components/dokumentkrav/Dokumentkrav";
 import { useSanity } from "../../context/sanity-context";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { useRouter } from "next/router";
-import { Left } from "@navikt/ds-icons";
-import styles from "./Documentation.module.css";
 import {
   IDokumentkrav,
   IDokumentkravChanges,
@@ -18,6 +17,9 @@ import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/Doku
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
 import { useScrollTo } from "../../hooks/dokumentkrav/useScrollTo";
+import { ProgressBar } from "../../components/ProgressBar";
+import { useQuiz } from "../../context/quiz-context";
+import styles from "./Documentation.module.css";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -26,19 +28,19 @@ interface IProps {
 export function Documentation(props: IProps) {
   const router = useRouter();
 
+  const [showValidationErrors, setShowValidationErrors] = useState(false);
+  const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [dokumentkravList, setDokumentkravList] = useState<IDokumentkravList>(
     props.dokumentkravList
   );
 
-  const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
-  const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
   const { scrollTo } = useScrollTo();
-  const [showValidationErrors, setShowValidationErrors] = useState(false);
-
-  const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
-  const errorSummaryRef = useRef<HTMLDivElement>(null);
-
+  const { soknadState } = useQuiz();
   const { getAppText, getInfosideText } = useSanity();
+  const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
+  const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
+
+  const errorSummaryRef = useRef<HTMLDivElement>(null);
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
   const numberOfDokumentkravText = getAppText("dokumentkrav.antall-krav-av");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
@@ -78,12 +80,14 @@ export function Documentation(props: IProps) {
     }
   }
 
-  function goToSoknad() {
-    router.push(`/${router.query.uuid}`);
+  function navigateToSoknad() {
+    const lastSectionIndex = soknadState.seksjoner.length;
+    router.push(`/${router.query.uuid}?seksjon=${lastSectionIndex}`);
   }
 
   return (
     <>
+      <ProgressBar currentStep={12} />
       {showValidationErrors && (
         <ErrorList
           heading={getAppText("dokumentkrav.feilmelding.validering.header")}
@@ -126,7 +130,7 @@ export function Documentation(props: IProps) {
       )}
 
       <nav className="navigation-container">
-        <Button variant={"secondary"} onClick={() => goToSoknad()} icon={<Left />}>
+        <Button variant={"secondary"} onClick={() => navigateToSoknad()} icon={<Left />}>
           {getAppText("soknad.soknad.knapp.forrige-steg")}
         </Button>
 

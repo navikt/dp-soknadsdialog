@@ -13,7 +13,7 @@ import { Barn } from "../barn/Barn";
 import { useSanity } from "../../context/sanity-context";
 import { BarnRegister } from "../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../FetchIndicator";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "./validation/ValidationMessage";

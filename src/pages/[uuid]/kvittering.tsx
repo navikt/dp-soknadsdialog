@@ -5,7 +5,6 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState, getSoknadTilstand } from "../api/quiz-api";
-import { IQuizState } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Receipt } from "../../views/receipt/Receipt";
@@ -19,6 +18,7 @@ import { IArbeidssokerStatus } from "../api/arbeidssoker";
 import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
 import { DokumentkravProvider } from "../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../context/validation-context";
+import { IQuizState } from "../../types/quiz.types";
 
 interface IProps {
   errorCode: number | null;
@@ -44,7 +44,7 @@ export async function getServerSideProps(
     return {
       props: {
         sanityTexts,
-        soknadState: mockNeste as unknown as IQuizState,
+        soknadState: mockNeste,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         soknadStatus: { tilstand: "Paabegynt" },
         arbeidssokerStatus: { isRegistered: false },

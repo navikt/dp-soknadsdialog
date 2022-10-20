@@ -8,12 +8,13 @@ import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
-import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
+import { mockNeste } from "../../localhost-data/mock-neste";
+import { IQuizState } from "../../types/quiz.types";
 
 interface IProps {
   errorCode: number | null;
@@ -37,7 +38,7 @@ export async function getServerSideProps(
     return {
       props: {
         sanityTexts,
-        soknadState: quizStateResponse,
+        soknadState: mockNeste,
         dokumentkrav: mockDokumentkravList as IDokumentkravList,
         errorCode: null,
       },

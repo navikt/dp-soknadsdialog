@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
-import { FetchIndicator } from "../../components/FetchIndicator";
+import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { Personalia } from "../../components/personalia/Personalia";
 import { Section } from "../../components/section/Section";
@@ -13,6 +13,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IPersonalia } from "../../types/personalia.types";
+import { ProgressBar } from "../../components/ProgressBar";
 import styles from "./Soknad.module.css";
 
 interface IProps {
@@ -28,8 +29,9 @@ export function Soknad(props: IProps) {
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const currentSection = soknadState.seksjoner[sectionIndex];
   const isFirstSection = sectionIndex === 0;
+  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
+  const currentSection = soknadState.seksjoner[sectionIndex];
   const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
     (faktum) => faktum?.svar === undefined
   );
@@ -78,7 +80,7 @@ export function Soknad(props: IProps) {
 
   return (
     <main>
-      {/*<ProgressBar currentStep={currentSectionIndex + 1} totalSteps={sectionsCount} />*/}
+      <ProgressBar currentStep={sectionIndex + 1} />
 
       {showPersonalia && props.personalia && (
         <div className={styles.seksjonContainer}>
@@ -86,43 +88,37 @@ export function Soknad(props: IProps) {
         </div>
       )}
 
-      <div className={styles.seksjonContainer}>
-        <Section
-          section={currentSection}
-          firstUnansweredFaktumIndex={
-            firstUnansweredFaktumIndex === -1
-              ? currentSection.fakta.length
-              : firstUnansweredFaktumIndex
-          }
-        />
-      </div>
+      <Section
+        section={currentSection}
+        firstUnansweredFaktumIndex={
+          firstUnansweredFaktumIndex === -1
+            ? currentSection.fakta.length
+            : firstUnansweredFaktumIndex
+        }
+      />
 
       <div className={styles.loaderContainer}>
         <FetchIndicator isLoading={isLoading} />
       </div>
 
       <nav className="navigation-container">
-        {isFirstSection && (
+        {isFirstSection ? (
           <Button variant={"secondary"} onClick={() => cancelSoknad()}>
             {getAppText("soknad.knapp.avbryt")}
           </Button>
-        )}
-
-        {!isFirstSection && (
+        ) : (
           <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
             {getAppText("soknad.soknad.knapp.forrige-steg")}
           </Button>
         )}
 
-        {!soknadState.ferdig && (
-          <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
-            {getAppText("soknad.knapp.neste-steg")}
-          </Button>
-        )}
-
-        {soknadState.ferdig && (
+        {isLastSection ? (
           <Button onClick={() => navigateToDocumentation()}>
             {getAppText("soknad.knapp.til-dokumentasjon")}
+          </Button>
+        ) : (
+          <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
+            {getAppText("soknad.knapp.neste-steg")}
           </Button>
         )}
       </nav>

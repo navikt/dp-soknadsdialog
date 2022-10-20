@@ -8,6 +8,7 @@ import { useSanity } from "../context/sanity-context";
 import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
+import { ProgressBar } from "../components/ProgressBar";
 import api from "../api.utils";
 
 interface IProps {
@@ -47,6 +48,7 @@ export function Summary(props: IProps) {
 
   return (
     <>
+      <ProgressBar currentStep={13} />
       <Accordion>
         {props.sections?.map((section, index) => {
           return (

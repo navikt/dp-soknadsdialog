@@ -7,11 +7,12 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
-import { IQuizState, quizStateResponse } from "../../localhost-data/quiz-state-response";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import ErrorPage from "../_error";
 import { ValidationProvider } from "../../context/validation-context";
+import { mockNeste } from "../../localhost-data/mock-neste";
+import { IQuizState } from "../../types/quiz.types";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -34,7 +35,7 @@ export async function getServerSideProps(
     return {
       props: {
         sanityTexts,
-        soknadState: quizStateResponse,
+        soknadState: mockNeste,
         errorCode: null,
       },
     };

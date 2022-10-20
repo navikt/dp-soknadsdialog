@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styles from "./FetchIndicator.module.css";
-import { useSanity } from "../context/sanity-context";
 import classNames from "classnames";
+import { useSanity } from "../../context/sanity-context";
 import { BodyShort } from "@navikt/ds-react";
+import styles from "./FetchIndicator.module.css";
 
 export function FetchIndicator({ isLoading = false }) {
   const { getAppText } = useSanity();
   const [showText, setShowText] = useState(false);
   const [isLoadingInternal, setIsLoadingInternal] = useState(isLoading);
-  const textDisplayDelayMs = 1500;
+  const textDisplayDelayMs = 4500;
 
   useEffect(() => {
     if (isLoading) {
