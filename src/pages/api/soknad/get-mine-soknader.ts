@@ -4,7 +4,7 @@ import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 
 export function getMineSoknader(onBehalfOfToken: string) {
-  const url = `${process.env.API_BASE_URL}/mine-soknader`;
+  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader`;
   return fetch(url, {
     method: "GET",
     headers: {
