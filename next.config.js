@@ -2,7 +2,7 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
 // TODO: Denne bør deles med _document.tsx
-const supportedLocales = ["nb", "nn", "en"];
+const supportedLocales = ["nb", "en"];
 
 const config = {
   reactStrictMode: true,
