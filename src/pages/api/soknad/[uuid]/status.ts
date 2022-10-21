@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 
-export type ISoknadTilstand = "Paabegynt" | "UnderBehandling" | "FerdigBehandlet" | "Ukjent";
+export type ISoknadStatuser = "Paabegynt" | "UnderBehandling" | "FerdigBehandlet" | "Ukjent";
 
 export interface ISoknadStatus {
-  tilstand: ISoknadTilstand;
+  status: ISoknadStatuser;
+  opprettet: string;
+  innsendt: string;
 }
 
 async function statusHandler(req: NextApiRequest, res: NextApiResponse) {

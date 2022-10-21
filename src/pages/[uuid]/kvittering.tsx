@@ -46,7 +46,11 @@ export async function getServerSideProps(
         sanityTexts,
         soknadState: mockNeste,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
-        soknadStatus: { tilstand: "Paabegynt" },
+        soknadStatus: {
+          status: "Ukjent",
+          opprettet: "2022-10-21T09:42:37.291157",
+          innsendt: "2022-10-21T09:47:29",
+        },
         arbeidssokerStatus: { isRegistered: false },
         errorCode: null,
       },
