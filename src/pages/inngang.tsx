@@ -81,6 +81,9 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
+  // eslint-disable-next-line no-console
+  console.log(props);
+
   if (props.errorCode || !props.mineSoknader) {
     return (
       <ErrorPage
