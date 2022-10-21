@@ -8,7 +8,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { IMineSoknader } from "../types/quiz.types";
 import { Inngang } from "../views/Inngang";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
-// import ErrorPage from "./_error";
+import ErrorPage from "./_error";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -75,28 +75,31 @@ export async function getServerSideProps(
 
 export default function InngangPage(props: IProps) {
   // if (props.errorCode || !props.mineSoknader) {
-  //   return (
-  //     <ErrorPage
-  //       title="Det har skjedd en teknisk feil"
-  //       details="Beklager, vi mistet kontakten med systemene våre."
-  //       statusCode={props.errorCode || 500}
-  //     />
-  //   );
-  // }
+  if (props.errorCode) {
+    return (
+      <ErrorPage
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
+        statusCode={props.errorCode}
+      />
+    );
+  }
 
-  // if (!props.sanityTexts.seksjoner) {
-  //   return (
-  //     <ErrorPage
-  //       title="Det har skjedd en teknisk feil"
-  //       details="Beklager, vi mistet kontakten med systemene våre."
-  //       statusCode={500}
-  //     />
-  //   );
-  // }
+  if (!props.sanityTexts.seksjoner) {
+    return (
+      <ErrorPage
+        title="Det har skjedd en teknisk feil"
+        details="Beklager, vi mistet kontakten med systemene våre."
+        statusCode={500}
+      />
+    );
+  }
 
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <Inngang {...props.mineSoknader} />
+      {!props.mineSoknader && <p>Feil med henting av mine soknader</p>}
+      {props.mineSoknader && <Inngang {...props.mineSoknader} />}
     </SanityProvider>
   );
 }
