@@ -2,23 +2,14 @@ import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
-import { subDays } from "date-fns";
-
-const periodeFormatter = new Intl.DateTimeFormat("no", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
-
-function formaterDato(date: Date) {
-  return periodeFormatter.format(date).split(".").reverse().join("-");
-}
+import { formatISO, subDays } from "date-fns";
 
 export function getMineSoknader(onBehalfOfToken: string) {
   // Finn ut hvor mange dager tilbake i tid vi skal ha
-  const soknadFomDate = subDays(Date.now(), 7);
+  const fromDate = subDays(Date.now(), 7);
+  const formattedDate = formatISO(fromDate, { representation: "date" });
 
-  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formaterDato(soknadFomDate)}`;
+  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formattedDate}`;
   return fetch(url, {
     method: "GET",
     headers: {
@@ -40,12 +31,17 @@ async function getMineSoknaderHandler(req: NextApiRequest, res: NextApiResponse)
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
     const response = await getMineSoknader(onBehalfOfToken);
 
+    // eslint-disable-next-line no-console
+    console.log(response);
+
     if (!response.ok) {
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
     return res.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
     return res.status(500).send(error);
   }
 }

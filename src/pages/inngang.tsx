@@ -58,6 +58,9 @@ export async function getServerSideProps(
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 
+  // eslint-disable-next-line no-console
+  console.log("mine søknader response: ", mineSoknaderResponse);
+
   if (!mineSoknaderResponse.ok) {
     errorCode = mineSoknaderResponse.status;
   } else {
@@ -74,13 +77,12 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
-  // if (props.errorCode || !props.mineSoknader) {
-  if (props.errorCode) {
+  if (props.errorCode || !props.mineSoknader) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
         details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={props.errorCode}
+        statusCode={props.errorCode || 500}
       />
     );
   }
@@ -98,8 +100,6 @@ export default function InngangPage(props: IProps) {
   return (
     <SanityProvider initialState={props.sanityTexts}>
       <Inngang {...props.mineSoknader} />
-      {!props.mineSoknader && <p>Feil med henting av mine soknader</p>}
-      {props.mineSoknader && <Inngang {...props.mineSoknader} />}
     </SanityProvider>
   );
 }
