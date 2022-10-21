@@ -7,9 +7,9 @@ export function InngangSendDocument({ innsendte }: IMineSoknader) {
     <>
       {innsendte?.map((soknad) => {
         return (
-          <div key={soknad.uuid}>
+          <div key={soknad.soknadUuid}>
             Innsendt soknad : først innsendt {soknad.forstInnsendt}
-            <Link href={`/${soknad.uuid}/kvittering`} passHref>
+            <Link href={`/${soknad.soknadUuid}/kvittering`} passHref>
               <Button as="a">Send inn dokumenter</Button>
             </Link>
           </div>

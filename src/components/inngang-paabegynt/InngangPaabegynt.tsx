@@ -15,7 +15,7 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
 
   async function deleteAndCreateSoknad() {
     setIsLoading(true);
-    const deleteSoknadResponse = await deleteSoknad(paabegynt.uuid);
+    const deleteSoknadResponse = await deleteSoknad(paabegynt.soknadUuid);
 
     if (deleteSoknadResponse.ok) {
       createNewSoknad();
@@ -49,9 +49,9 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
 
   return (
     <>
-      Påbegynt soknad : {paabegynt.startDato}
+      Påbegynt soknad : {paabegynt.opprettet}
       <br />
-      <Link href={paabegynt.uuid} passHref>
+      <Link href={paabegynt.soknadUuid} passHref>
         <Button variant="primary" as="a">
           Fortsett
         </Button>

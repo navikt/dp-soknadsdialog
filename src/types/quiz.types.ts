@@ -99,12 +99,12 @@ export type QuizFaktumSvarType =
   | undefined;
 
 export interface IPaabegyntSoknad {
-  uuid: string;
-  startDato: string;
+  soknadUuid: string;
+  opprettet: string;
 }
 
 export interface IInnsentSoknad {
-  uuid: string;
+  soknadUuid: string;
   forstInnsendt: string;
 }
 

@@ -31,10 +31,10 @@ export async function getServerSideProps(
       props: {
         sanityTexts,
         mineSoknader: {
-          paabegynt: { uuid: "localhost-uuid-paabegynt", startDato: "2021-10-03" },
+          paabegynt: { soknadUuid: "localhost-uuid-paabegynt", opprettet: "2021-10-03" },
           innsendte: [
-            { uuid: "localhost-uuid-innsendt-1", forstInnsendt: "2021-10-00" },
-            { uuid: "localhost-uuid-innsent-2", forstInnsendt: "2021-11-11" },
+            { soknadUuid: "localhost-uuid-innsendt-1", forstInnsendt: "2021-10-00" },
+            { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2021-11-11" },
           ],
         },
         errorCode: null,
@@ -61,14 +61,7 @@ export async function getServerSideProps(
   if (!mineSoknaderResponse.ok) {
     errorCode = mineSoknaderResponse.status;
   } else {
-    // eslint-disable-next-line no-console
-    console.log("mine søknader response statuas: ", mineSoknaderResponse.status);
-    // eslint-disable-next-line no-console
-    console.log("mine søknader response status text: ", mineSoknaderResponse.statusText);
-
     mineSoknader = await mineSoknaderResponse.json();
-    // eslint-disable-next-line no-console
-    console.log("mine søknader soknader props: ", mineSoknader);
   }
 
   return {
@@ -81,9 +74,6 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
-  // eslint-disable-next-line no-console
-  console.log(props);
-
   if (props.errorCode || !props.mineSoknader) {
     return (
       <ErrorPage
