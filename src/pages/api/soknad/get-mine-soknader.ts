@@ -31,9 +31,6 @@ async function getMineSoknaderHandler(req: NextApiRequest, res: NextApiResponse)
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
     const response = await getMineSoknader(onBehalfOfToken);
 
-    // eslint-disable-next-line no-console
-    console.log(response);
-
     if (!response.ok) {
       throw new Error(`unexpected response ${response.statusText}`);
     }

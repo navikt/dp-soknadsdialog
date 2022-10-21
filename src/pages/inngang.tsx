@@ -58,13 +58,17 @@ export async function getServerSideProps(
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 
-  // eslint-disable-next-line no-console
-  console.log("mine søknader response: ", mineSoknaderResponse);
-
   if (!mineSoknaderResponse.ok) {
     errorCode = mineSoknaderResponse.status;
   } else {
+    // eslint-disable-next-line no-console
+    console.log("mine søknader response statuas: ", mineSoknaderResponse.status);
+    // eslint-disable-next-line no-console
+    console.log("mine søknader response status text: ", mineSoknaderResponse.statusText);
+
     mineSoknader = await mineSoknaderResponse.json();
+    // eslint-disable-next-line no-console
+    console.log("mine søknader soknader props: ", mineSoknader);
   }
 
   return {
