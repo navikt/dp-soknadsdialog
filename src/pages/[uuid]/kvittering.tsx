@@ -68,6 +68,7 @@ export async function getServerSideProps(
   let soknadStatus = null;
   let dokumentkrav = null;
   let arbeidssokerStatus = null;
+
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
@@ -122,7 +123,7 @@ export default function ReceiptPage(props: IProps) {
   if (
     !props.soknadState ||
     !props.dokumentkrav ||
-    // !props.soknadStatus ||
+    !props.soknadStatus ||
     !props.arbeidssokerStatus ||
     !props.sanityTexts.seksjoner
   ) {
@@ -151,7 +152,7 @@ export default function ReceiptPage(props: IProps) {
         <DokumentkravProvider initialState={props.dokumentkrav}>
           <ValidationProvider>
             <Receipt
-              soknadStatus={props.soknadStatus || { tilstand: "Innsendt" }}
+              soknadStatus={props.soknadStatus}
               arbeidssokerStatus={props.arbeidssokerStatus}
               sections={props.soknadState.seksjoner}
             />
