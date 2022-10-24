@@ -1,5 +1,4 @@
 import { getSession } from "@navikt/dp-auth/server";
-import { useRouter } from "next/router";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../sanity-client";
 import { audienceDPSoknad } from "../api.utils";
@@ -96,7 +95,6 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
-  const router = useRouter();
   const { errorCode, mineSoknader, arbeidssokerStatus, sanityTexts } = props;
 
   if (errorCode) {
@@ -117,15 +115,6 @@ export default function InngangPage(props: IProps) {
         statusCode={500}
       />
     );
-  }
-
-  // To conditions under for å håndtere oppretting av ny soknad feiler etter at man har slettet en soknad
-  if (!mineSoknader?.innsendte && !mineSoknader?.paabegynt && arbeidssokerStatus === "REGISTERED") {
-    router.push("/");
-  }
-
-  if (!mineSoknader?.innsendte && !mineSoknader?.paabegynt && arbeidssokerStatus !== "REGISTERED") {
-    router.push("/arbeidssoker");
   }
 
   return (

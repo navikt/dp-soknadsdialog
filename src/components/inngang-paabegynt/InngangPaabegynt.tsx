@@ -3,7 +3,6 @@ import { format, parseISO } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import api from "../../api.utils";
 import { deleteSoknad } from "../../api/deleteSoknad-api";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
@@ -21,40 +20,18 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const { getAppText } = useSanity();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
-  const [hasDeleteSoknadError, SetHasDeleteSoknadError] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   async function deleteAndCreateSoknad() {
     setIsLoading(true);
     const deleteSoknadResponse = await deleteSoknad(paabegynt.soknadUuid);
 
     if (deleteSoknadResponse.ok) {
-      createNewSoknad();
+      router.push("/");
     } else {
       setIsLoading(false);
-      SetHasDeleteSoknadError(true);
+      setHasError(true);
       throw new Error(deleteSoknadResponse.statusText);
-    }
-  }
-
-  async function createNewSoknad() {
-    try {
-      setIsLoading(true);
-      const uuidResponse = await fetch(api("soknad/get-uuid"));
-
-      if (uuidResponse.ok) {
-        const uuid = await uuidResponse.text();
-        router.push(`/${uuid}`);
-      } else {
-        setIsLoading(false);
-        throw new Error(uuidResponse.statusText);
-      }
-    } catch (error) {
-      // TODO Sentry log
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setIsLoading(false);
-      SetHasCreateNewSoknadError(true);
     }
   }
 
@@ -83,9 +60,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
           </Button>
         </Link>
       )}
-      {(hasDeleteSoknadError || hasCreateNewSoknadError) && (
-        <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />
-      )}
+      {hasError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
     </div>
   );
 }
