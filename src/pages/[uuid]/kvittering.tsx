@@ -25,8 +25,8 @@ interface IProps {
   sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
   dokumentkrav: IDokumentkravList | null;
-  soknadStatus: ISoknadStatus | null;
-  arbeidssokerStatus: IArbeidssokerStatus | null;
+  soknadStatus: ISoknadStatus;
+  arbeidssokerStatus: IArbeidssokerStatus;
 }
 
 export async function getServerSideProps(
@@ -51,7 +51,7 @@ export async function getServerSideProps(
           opprettet: "2022-10-21T09:42:37.291157",
           innsendt: "2022-10-21T09:47:29",
         },
-        arbeidssokerStatus: { isRegistered: false },
+        arbeidssokerStatus: "UNREGISTERED",
         errorCode: null,
       },
     };
@@ -69,9 +69,9 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
-  let soknadStatus = null;
   let dokumentkrav = null;
-  let arbeidssokerStatus = null;
+  let soknadStatus: ISoknadStatus;
+  let arbeidssokerStatus: IArbeidssokerStatus;
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
@@ -79,30 +79,33 @@ export async function getServerSideProps(
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
-  if (!soknadStateResponse.ok) {
-    errorCode = soknadStateResponse.status;
-  } else {
+  if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
+  } else {
+    errorCode = soknadStateResponse.status;
+  }
+
+  if (dokumentkravResponse.ok) {
+    dokumentkrav = await dokumentkravResponse.json();
+  } else {
+    errorCode = dokumentkravResponse.status;
   }
 
   if (soknadStatusResponse.ok) {
     soknadStatus = await soknadStatusResponse.json();
+  } else {
+    soknadStatus = { status: "Ukjent" };
   }
 
-  if (!dokumentkravResponse.ok) {
-    errorCode = dokumentkravResponse.status;
-  } else {
-    dokumentkrav = await dokumentkravResponse.json();
-  }
-
-  if (!arbeidssokerStatusResponse.ok) {
-    errorCode = arbeidssokerStatusResponse.status;
-  } else {
+  if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
     const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
       (periode) => periode.tilOgMedDato === null
     );
-    arbeidssokerStatus = { isRegistered: currentArbeidssokerperiodeIndex !== -1 };
+
+    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
+  } else {
+    arbeidssokerStatus = "UNKNOWN";
   }
 
   return {
@@ -149,7 +152,7 @@ export default function ReceiptPage(props: IProps) {
         <DokumentkravProvider initialState={props.dokumentkrav}>
           <ValidationProvider>
             <Receipt
-              soknadStatus={props.soknadStatus || { status: "Ukjent" }}
+              soknadStatus={props.soknadStatus}
               arbeidssokerStatus={props.arbeidssokerStatus}
               sections={props.soknadState.seksjoner}
             />

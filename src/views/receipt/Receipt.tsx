@@ -54,7 +54,7 @@ export function Receipt(props: IProps) {
   return (
     <>
       <ReceiptSoknadTilstand {...props.soknadStatus} />
-      <ArbeidssokerStatus {...props.arbeidssokerStatus} />
+      <ArbeidssokerStatus status={props.arbeidssokerStatus} />
       <div className={styles.documentList}>
         <ReceiptDocumentsMissing documents={missingDocuments} />
         <ReceiptDocumentsOther />

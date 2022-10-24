@@ -12,9 +12,7 @@ function formaterDato(date: Date) {
   return periodeFormatter.format(date).split(".").reverse().join("-");
 }
 
-export interface IArbeidssokerStatus {
-  isRegistered: boolean;
-}
+export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 
 async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiResponse) {
   // eslint-disable-next-line no-console
