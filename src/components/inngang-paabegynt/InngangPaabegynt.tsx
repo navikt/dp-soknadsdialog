@@ -22,7 +22,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  async function deleteAndCreateSoknad() {
+  async function deleteSoknadAndNavigateToFrontPage() {
     setIsLoading(true);
     const deleteSoknadResponse = await deleteSoknad(paabegynt.soknadUuid);
 
@@ -49,7 +49,11 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         </Button>
       </Link>
       {arbeidssokerStatus === "REGISTERED" && (
-        <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
+        <Button
+          variant="secondary"
+          onClick={deleteSoknadAndNavigateToFrontPage}
+          loading={isLoading}
+        >
           {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
         </Button>
       )}
