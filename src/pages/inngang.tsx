@@ -1,4 +1,5 @@
 import { getSession } from "@navikt/dp-auth/server";
+import { useRouter } from "next/router";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../sanity-client";
 import { audienceDPSoknad } from "../api.utils";
@@ -14,7 +15,7 @@ import ErrorPage from "./_error";
 
 interface IProps {
   sanityTexts: ISanityTexts;
-  mineSoknader: IMineSoknader | null;
+  mineSoknader: IMineSoknader;
   arbeidssokerStatus: IArbeidssokerStatus;
   errorCode: number | null;
 }
@@ -95,9 +96,10 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
+  const router = useRouter();
   const { errorCode, mineSoknader, arbeidssokerStatus, sanityTexts } = props;
 
-  if (errorCode || !mineSoknader || !arbeidssokerStatus) {
+  if (errorCode) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -117,11 +119,20 @@ export default function InngangPage(props: IProps) {
     );
   }
 
+  // To conditions under for å håndtere oppretting av ny soknad feiler etter at man har slettet en soknad
+  if (!mineSoknader?.innsendte && !mineSoknader?.paabegynt && arbeidssokerStatus === "REGISTERED") {
+    router.push("/");
+  }
+
+  if (!mineSoknader?.innsendte && !mineSoknader?.paabegynt && arbeidssokerStatus !== "REGISTERED") {
+    router.push("/arbeidssoker");
+  }
+
   return (
     <SanityProvider initialState={sanityTexts}>
       <Inngang
-        paabegynt={mineSoknader.paabegynt}
-        innsendte={mineSoknader.innsendte}
+        paabegynt={mineSoknader?.paabegynt}
+        innsendte={mineSoknader?.innsendte}
         arbeidssokerStatus={arbeidssokerStatus}
       />
     </SanityProvider>

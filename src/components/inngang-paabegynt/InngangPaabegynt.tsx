@@ -77,7 +77,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         </Button>
       )}
       {arbeidssokerStatus !== "REGISTERED" && (
-        <Link href="arbeidssoker" passHref>
+        <Link href="/arbeidssoker" passHref>
           <Button variant="secondary" as="a">
             {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
           </Button>
