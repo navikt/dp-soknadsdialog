@@ -27,7 +27,7 @@ export function AlertText(props: IProps) {
             {title}
           </Heading>
         )}
-        <PortableText value={body} />
+        {body && <PortableText value={body} />}
       </Alert>
     </div>
   );

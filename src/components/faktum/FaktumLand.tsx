@@ -93,7 +93,8 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {currentLandGruppeText?.alertText && (
+
+      {(currentLandGruppeText?.alertText?.title || currentLandGruppeText?.alertText?.body) && (
         <AlertText alertText={currentLandGruppeText.alertText} />
       )}
     </>

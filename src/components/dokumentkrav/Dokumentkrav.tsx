@@ -119,7 +119,7 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
         </RadioGroup>
       </div>
 
-      {alertText && <AlertText alertText={alertText} spacingBottom />}
+      {(alertText?.title || alertText?.body) && <AlertText alertText={alertText} spacingBottom />}
 
       {dokumentkravText?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={dokumentkravText.helpText} />
