@@ -43,7 +43,7 @@ export async function getServerSideProps(
             { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
           ],
         },
-        arbeidssokerStatus: "REGISTERED",
+        arbeidssokerStatus: "UNREGISTERED",
         errorCode: null,
       },
     };

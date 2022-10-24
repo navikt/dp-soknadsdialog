@@ -19,7 +19,7 @@ export function Arbeidssoker() {
           </Button>
         </Link>
         <Link href={`https://www.nav.no/no/ditt-nav`} passHref>
-          <Button variant="secondary">{getAppText("arbeidssoker.avbrytt-knapp")}</Button>
+          <Button variant="secondary">{getAppText("arbeidssoker.avbryt-knapp")}</Button>
         </Link>
       </div>
       <BodyLong>
