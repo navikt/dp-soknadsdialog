@@ -58,7 +58,7 @@ export function getSoknadState(uuid: string, onBehalfOfToken: string, lastSaved?
   });
 }
 
-export function getSoknadTilstand(uuid: string, onBehalfOfToken: string) {
+export function getSoknadStatus(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/status`, {
     method: "GET",
     headers: headersWithToken(onBehalfOfToken),

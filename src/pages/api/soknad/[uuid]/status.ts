@@ -5,8 +5,8 @@ export type ISoknadStatuser = "Paabegynt" | "UnderBehandling" | "FerdigBehandlet
 
 export interface ISoknadStatus {
   status: ISoknadStatuser;
-  opprettet: string;
-  innsendt: string;
+  opprettet?: string;
+  innsendt?: string;
 }
 
 async function statusHandler(req: NextApiRequest, res: NextApiResponse) {

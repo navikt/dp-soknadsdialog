@@ -4,7 +4,7 @@ import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
-import { getSoknadState, getSoknadTilstand } from "../api/quiz-api";
+import { getSoknadState, getSoknadStatus } from "../api/quiz-api";
 import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Receipt } from "../../views/receipt/Receipt";
@@ -75,24 +75,18 @@ export async function getServerSideProps(
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const soknadTilstandResponse = await getSoknadTilstand(uuid, onBehalfOfToken);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
-  // eslint-disable-next-line no-console
-  console.log("arbeidssokerStatusResponse.status: ", arbeidssokerStatusResponse.status);
-  // eslint-disable-next-line no-console
-  console.log("arbeidssokerStatusResponse.statusText: ", arbeidssokerStatusResponse.statusText);
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
   }
 
-  if (!soknadTilstandResponse.ok) {
-    errorCode = soknadTilstandResponse.status;
-  } else {
-    soknadStatus = await soknadTilstandResponse.json();
+  if (soknadStatusResponse.ok) {
+    soknadStatus = await soknadStatusResponse.json();
   }
 
   if (!dokumentkravResponse.ok) {
@@ -127,7 +121,6 @@ export default function ReceiptPage(props: IProps) {
   if (
     !props.soknadState ||
     !props.dokumentkrav ||
-    !props.soknadStatus ||
     !props.arbeidssokerStatus ||
     !props.sanityTexts.seksjoner
   ) {
@@ -156,7 +149,7 @@ export default function ReceiptPage(props: IProps) {
         <DokumentkravProvider initialState={props.dokumentkrav}>
           <ValidationProvider>
             <Receipt
-              soknadStatus={props.soknadStatus}
+              soknadStatus={props.soknadStatus || { status: "Ukjent" }}
               arbeidssokerStatus={props.arbeidssokerStatus}
               sections={props.soknadState.seksjoner}
             />
