@@ -1,22 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "@navikt/dp-auth/server";
 import { v4 as uuid } from "uuid";
-
-const periodeFormatter = new Intl.DateTimeFormat("no", {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-});
-
-function formaterDato(date: Date) {
-  return periodeFormatter.format(date).split(".").reverse().join("-");
-}
+import { formatISO } from "date-fns";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 
 async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiResponse) {
-  // eslint-disable-next-line no-console
-  console.log(formaterDato(new Date()));
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).json({ isArbeidssoker: false });
   }
@@ -30,9 +19,9 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   }
 
   const callId = uuid();
-  const url = `${process.env.VEILARBPROXY_URL}?fnr=${payload.pid}&fraOgMed=${formaterDato(
-    new Date()
-  )}`;
+  const formattedDate = formatISO(new Date(), { representation: "date" });
+
+  const url = `${process.env.VEILARBPROXY_URL}?fnr=${payload.pid}&fraOgMed=${formattedDate}`;
 
   try {
     const response = await fetch(url.toString(), {

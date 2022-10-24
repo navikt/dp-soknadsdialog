@@ -1,0 +1,5 @@
+.arbeidssokerButtonContainer {
+  display: inline-flex;
+  gap: var(--navds-spacing-4);
+  margin: var(--navds-spacing-8) 0;
+}

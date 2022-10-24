@@ -1,13 +1,24 @@
-import { Button } from "@navikt/ds-react";
+import { BodyLong, Button } from "@navikt/ds-react";
+import { format, parseISO } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import api from "../../api.utils";
 import { deleteSoknad } from "../../api/deleteSoknad-api";
+import { useSanity } from "../../context/sanity-context";
+import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
+import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
+import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import styles from "./inngangPaabegynt.module.css";
 
-export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
+interface IProps {
+  paabegynt: IPaabegyntSoknad;
+  arbeidssokerStatus?: IArbeidssokerStatus;
+}
+export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
+  const { getAppText } = useSanity();
 
   const [isLoading, setIsLoading] = useState(false);
   const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
@@ -47,20 +58,34 @@ export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
     }
   }
 
+  const formattedSoknadDate = format(parseISO(paabegynt.opprettet), "dd. MMMM yyyy");
+
   return (
-    <>
-      Påbegynt soknad : {paabegynt.opprettet}
-      <br />
+    <div className={styles.inngangPaabegyntContainer}>
+      <BodyLong>
+        {getAppText("inngang.paabegyntsoknad.header.du-har-en-paabegynt")} {formattedSoknadDate}.{" "}
+        {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
+      </BodyLong>
       <Link href={paabegynt.soknadUuid} passHref>
         <Button variant="primary" as="a">
-          Fortsett
+          {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>
-      <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
-        Slett og start på nytt
-      </Button>
-      {hasDeleteSoknadError && <p>Feil ved sletting av soknad</p>}
-      {hasCreateNewSoknadError && <p>Ved ved oppretting av ny soknad</p>}
-    </>
+      {arbeidssokerStatus === "REGISTERED" && (
+        <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
+          {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
+        </Button>
+      )}
+      {arbeidssokerStatus !== "REGISTERED" && (
+        <Link href="arbeidssoker" passHref>
+          <Button variant="secondary" as="a">
+            {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
+          </Button>
+        </Link>
+      )}
+      {(hasDeleteSoknadError || hasCreateNewSoknadError) && (
+        <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />
+      )}
+    </div>
   );
 }

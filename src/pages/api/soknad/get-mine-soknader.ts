@@ -6,7 +6,7 @@ import { formatISO, subDays } from "date-fns";
 
 export function getMineSoknader(onBehalfOfToken: string) {
   // Finn ut hvor mange dager tilbake i tid vi skal ha
-  const fromDate = subDays(Date.now(), 7);
+  const fromDate = subDays(Date.now(), 3);
   const formattedDate = formatISO(fromDate, { representation: "date" });
 
   const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formattedDate}`;
