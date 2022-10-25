@@ -1,5 +1,4 @@
 import { BodyLong, Button } from "@navikt/ds-react";
-import { format, parseISO } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -9,6 +8,7 @@ import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import { FormattedDate } from "../FormattedDate";
 import styles from "./inngangPaabegynt.module.css";
 
 interface IProps {
@@ -35,12 +35,11 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
     }
   }
 
-  const formattedSoknadDate = format(parseISO(paabegynt.opprettet), "dd. MMMM yyyy");
-
   return (
     <div className={styles.inngangPaabegyntContainer}>
       <BodyLong>
-        {getAppText("inngang.paabegyntsoknad.header.du-har-en-paabegynt")} {formattedSoknadDate}.{" "}
+        {getAppText("inngang.paabegyntsoknad.header.du-har-en-paabegynt")}{" "}
+        <FormattedDate date={paabegynt.opprettet} />.{" "}
         {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
       </BodyLong>
       <Link href={paabegynt.soknadUuid} passHref>

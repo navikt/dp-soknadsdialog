@@ -14,7 +14,7 @@ import ErrorPage from "./_error";
 
 interface IProps {
   sanityTexts: ISanityTexts;
-  mineSoknader: IMineSoknader;
+  mineSoknader: IMineSoknader | null;
   arbeidssokerStatus: IArbeidssokerStatus;
   errorCode: number | null;
 }

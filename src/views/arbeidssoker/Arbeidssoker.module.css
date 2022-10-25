@@ -1,9 +1,3 @@
-.arbeidssokerButtonContainer {
-  display: block;
-  gap: var(--navds-spacing-4);
-  margin: var(--navds-spacing-8) 0 var(--navds-spacing-4);
-}
-
-.arbeidssokerButtonContainer > :first-child {
-  margin: 0 var(--navds-spacing-4) var(--navds-spacing-4) 0;
+.arbeidssokerLinkContainer {
+  margin-top: var(--navds-spacing-6);
 }
