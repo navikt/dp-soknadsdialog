@@ -1,0 +1,6 @@
+.inngangPaabegyntContainer {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--navds-spacing-4);
+}

@@ -1,12 +1,21 @@
 import { InngangPaabegynt } from "../components/inngang-paabegynt/InngangPaabegynt";
 import { InngangSendDocument } from "../components/inngang-send-document/InngangSendDocument";
-import { IMineSoknader } from "../types/quiz.types";
+import { IArbeidssokerStatus } from "../pages/api/arbeidssoker";
+import { IInnsentSoknad, IPaabegyntSoknad } from "../types/quiz.types";
 
-export function Inngang({ paabegynt, innsendte }: IMineSoknader) {
+interface IProps {
+  paabegynt?: IPaabegyntSoknad;
+  innsendte?: IInnsentSoknad[];
+  arbeidssokerStatus?: IArbeidssokerStatus;
+}
+
+export function Inngang({ paabegynt, innsendte, arbeidssokerStatus }: IProps) {
   return (
-    <main>
-      {paabegynt && <InngangPaabegynt {...paabegynt} />}
+    <>
       {innsendte && <InngangSendDocument innsendte={innsendte} />}
-    </main>
+      {paabegynt && (
+        <InngangPaabegynt paabegynt={paabegynt} arbeidssokerStatus={arbeidssokerStatus} />
+      )}
+    </>
   );
 }

@@ -1,66 +1,69 @@
-import { Button } from "@navikt/ds-react";
+import { BodyLong, Button } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import api from "../../api.utils";
 import { deleteSoknad } from "../../api/deleteSoknad-api";
+import { useSanity } from "../../context/sanity-context";
+import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
+import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
+import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import { FormattedDate } from "../FormattedDate";
+import styles from "./inngangPaabegynt.module.css";
 
-export function InngangPaabegynt(paabegynt: IPaabegyntSoknad) {
+interface IProps {
+  paabegynt: IPaabegyntSoknad;
+  arbeidssokerStatus?: IArbeidssokerStatus;
+}
+export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
+  const { getAppText } = useSanity();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [hasCreateNewSoknadError, SetHasCreateNewSoknadError] = useState(false);
-  const [hasDeleteSoknadError, SetHasDeleteSoknadError] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  async function deleteAndCreateSoknad() {
+  async function deleteSoknadAndNavigateToFrontPage() {
     setIsLoading(true);
     const deleteSoknadResponse = await deleteSoknad(paabegynt.soknadUuid);
 
     if (deleteSoknadResponse.ok) {
-      createNewSoknad();
+      router.push("/");
     } else {
       setIsLoading(false);
-      SetHasDeleteSoknadError(true);
+      setHasError(true);
       throw new Error(deleteSoknadResponse.statusText);
     }
   }
 
-  async function createNewSoknad() {
-    try {
-      setIsLoading(true);
-      const uuidResponse = await fetch(api("soknad/get-uuid"));
-
-      if (uuidResponse.ok) {
-        const uuid = await uuidResponse.text();
-        router.push(`/${uuid}`);
-      } else {
-        setIsLoading(false);
-        throw new Error(uuidResponse.statusText);
-      }
-    } catch (error) {
-      // TODO Sentry log
-      // eslint-disable-next-line no-console
-      console.error(error);
-      setIsLoading(false);
-      SetHasCreateNewSoknadError(true);
-    }
-  }
-
   return (
-    <>
-      Påbegynt soknad : {paabegynt.opprettet}
-      <br />
+    <div className={styles.inngangPaabegyntContainer}>
+      <BodyLong>
+        {getAppText("inngang.paabegyntsoknad.header.du-har-en-paabegynt")}{" "}
+        <FormattedDate date={paabegynt.opprettet} />.{" "}
+        {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
+      </BodyLong>
       <Link href={paabegynt.soknadUuid} passHref>
         <Button variant="primary" as="a">
-          Fortsett
+          {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>
-      <Button variant="secondary" onClick={deleteAndCreateSoknad} loading={isLoading}>
-        Slett og start på nytt
-      </Button>
-      {hasDeleteSoknadError && <p>Feil ved sletting av soknad</p>}
-      {hasCreateNewSoknadError && <p>Ved ved oppretting av ny soknad</p>}
-    </>
+      {arbeidssokerStatus === "REGISTERED" && (
+        <Button
+          variant="secondary"
+          onClick={deleteSoknadAndNavigateToFrontPage}
+          loading={isLoading}
+        >
+          {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
+        </Button>
+      )}
+      {arbeidssokerStatus !== "REGISTERED" && (
+        <Link href="/arbeidssoker" passHref>
+          <Button variant="secondary" as="a">
+            {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
+          </Button>
+        </Link>
+      )}
+      {hasError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
+    </div>
   );
 }

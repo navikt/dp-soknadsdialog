@@ -1,0 +1,7 @@
+.inngangSendDocumentContainer {
+  margin-bottom: var(--navds-spacing-8);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--navds-spacing-4);
+}
