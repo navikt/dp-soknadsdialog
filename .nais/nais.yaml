@@ -62,7 +62,7 @@ spec:
       level: Level4
       autoLogin: true
       autoLoginIgnorePaths:
-        - /api/*
+        - /api/auth/*
   tokenx:
     enabled: true
   accessPolicy:
