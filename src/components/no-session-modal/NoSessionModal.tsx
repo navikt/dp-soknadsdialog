@@ -9,7 +9,7 @@ import { useSession } from "../../session.utils";
 export function NoSessionModal() {
   const router = useRouter();
   const { getAppText } = useSanity();
-  const { session, isError } = useSession();
+  const { session, isLoading, isError } = useSession();
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -18,13 +18,16 @@ export function NoSessionModal() {
       Modal.setAppElement("#__next");
     }
 
+    if (isLoading) return;
+
     if (!session || isError) {
       setTimeLeft(1);
+      setModalOpen(true);
     }
     if (session?.expiresIn) {
       setTimeLeft(session?.expiresIn);
     }
-  }, [session, isError]);
+  }, [session, isLoading, isError]);
 
   useEffect(() => {
     if (!timeLeft) return;
