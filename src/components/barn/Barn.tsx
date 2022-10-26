@@ -44,6 +44,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
       if (lastGeneratorAnswer && !lastGeneratorAnswer[0].svar) {
         // eslint-disable-next-line no-console
         console.log("toggleActiveGeneratorAnswer: ", lastGeneratorAnswerIndex);
+        toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
   }, [faktum?.svar?.length]);
