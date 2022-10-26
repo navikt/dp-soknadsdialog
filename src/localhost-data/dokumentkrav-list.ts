@@ -15,6 +15,7 @@ export const mockDokumentkravList: IDokumentkravList = {
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id-1",
+          bundlet: true,
         },
         {
           filnavn: "hei på du2.jpg",
@@ -22,6 +23,7 @@ export const mockDokumentkravList: IDokumentkravList = {
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id-2",
+          bundlet: true,
         },
         {
           filnavn: "hei på du3.jpg",
@@ -29,6 +31,7 @@ export const mockDokumentkravList: IDokumentkravList = {
           tidspunkt: "1660571365067",
           storrelse: 12345,
           filsti: "soknad-uuid/faktumId/file-id-3",
+          bundlet: true,
         },
       ],
       gyldigeValg: [

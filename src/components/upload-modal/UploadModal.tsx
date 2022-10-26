@@ -30,7 +30,9 @@ export function UploadFilesModal(props: IProps) {
   const { getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const { uploadedFiles, handleUploadedFiles, resetUploadFiles } = useFileUploader();
+
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
+  const unbundledFiles = props.dokumentkrav.filer.filter((file) => !file.bundlet);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -45,7 +47,7 @@ export function UploadFilesModal(props: IProps) {
   }, [uploadedFiles.length]);
 
   async function bundleAndSaveDokumentkravFiles() {
-    if (uploadedFiles.length === 0) {
+    if (unbundledFiles.length === 0 && uploadedFiles.length === 0) {
       setError("MISSING_FILES");
       return;
     }
@@ -57,11 +59,9 @@ export function UploadFilesModal(props: IProps) {
 
       const dokumentkravWithUploadedFiles: IDokumentkrav = {
         ...props.dokumentkrav,
-        filer: [...props.dokumentkrav.filer, ...uploadedFiles],
+        filer: [...unbundledFiles, ...uploadedFiles],
       };
 
-      // eslint-disable-next-line no-console
-      console.log("bundleAndSaveDokumentkravFiles(): ", dokumentkravWithUploadedFiles);
       const response = await bundleDokumentkravFiles(uuid, dokumentkravWithUploadedFiles);
 
       if (!response.ok) {
@@ -125,7 +125,7 @@ export function UploadFilesModal(props: IProps) {
               />
 
               <FileList
-                uploadedFiles={uploadedFiles}
+                uploadedFiles={[...unbundledFiles, ...uploadedFiles]}
                 dokumentkravId={props.dokumentkrav.beskrivendeId}
                 handleUploadedFiles={handleUploadedFiles}
               />

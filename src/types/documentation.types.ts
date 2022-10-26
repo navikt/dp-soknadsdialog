@@ -38,6 +38,7 @@ export interface IDokumentkravFil {
   urn: string;
   tidspunkt: string;
   storrelse: number;
+  bundlet: boolean;
 }
 
 export interface IFileState {
