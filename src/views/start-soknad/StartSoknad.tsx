@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Button, ConfirmationPanel, Heading } from "@navikt/ds-react";
-import { useRouter } from "next/router";
-import { useSanity } from "../context/sanity-context";
+import { Alert, Button, ConfirmationPanel, Heading, Link } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { Timeline as timeline } from "../components/timeline/Timeline";
-import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../types/error.types";
-import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import api from "../api.utils";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import api from "../../api.utils";
+import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { Timeline as timeline } from "../../components/timeline/Timeline";
+import { useSanity } from "../../context/sanity-context";
+import { ErrorTypesEnum } from "../../types/error.types";
+import styles from "./StartSoknad.module.css";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -51,6 +52,14 @@ export function StartSoknad() {
       <Heading spacing size="xlarge" level="1">
         {getAppText("start-soknad.tittel")}
       </Heading>
+
+      <Alert variant="info" className={styles.newSoknadAlertText}>
+        {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
+        <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder">
+          {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
+        </Link>{" "}
+        {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
+      </Alert>
 
       {startSideText?.body && (
         <PortableText value={startSideText.body} components={{ types: { timeline } }} />

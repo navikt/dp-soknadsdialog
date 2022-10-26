@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import React from "react";
 import { ISanityTexts } from "../types/sanity.types";
-import { StartSoknad } from "../views/StartSoknad";
+import { StartSoknad } from "../views/start-soknad/StartSoknad";
 import { sanityClient } from "../../sanity-client";
 import { allTextsQuery } from "../sanity/groq-queries";
 import { SanityProvider } from "../context/sanity-context";
