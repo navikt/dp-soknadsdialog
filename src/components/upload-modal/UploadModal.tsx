@@ -59,7 +59,7 @@ export function UploadFilesModal(props: IProps) {
 
       const dokumentkravWithUploadedFiles: IDokumentkrav = {
         ...props.dokumentkrav,
-        filer: [...unbundledFiles, ...uploadedFiles],
+        filer: [...props.dokumentkrav.filer, ...uploadedFiles],
       };
 
       const response = await bundleDokumentkravFiles(uuid, dokumentkravWithUploadedFiles);
