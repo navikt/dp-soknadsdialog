@@ -13,14 +13,7 @@ export function useGeneratorUtils(): IGeneratorUtils {
   const { saveGeneratorFaktumToQuiz } = useQuiz();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
-  function toggleActiveGeneratorAnswer(index: number) {
-    // eslint-disable-next-line no-console
-    console.log("toggleActiveGeneratorAnswer");
-    // eslint-disable-next-line no-console
-    console.log("new index: ", index);
-    // eslint-disable-next-line no-console
-    console.log("current index: ", activeIndex);
-
+  function toggleActiveGeneratorAnswer(index: number | undefined) {
     if (index === activeIndex) {
       setActiveIndex(undefined);
     } else {
@@ -38,6 +31,7 @@ export function useGeneratorUtils(): IGeneratorUtils {
     const svar = faktum.svar || [];
     svar.splice(answerIndex, 1);
     saveGeneratorFaktumToQuiz(faktum, svar);
+    toggleActiveGeneratorAnswer(undefined);
   }
 
   return {
