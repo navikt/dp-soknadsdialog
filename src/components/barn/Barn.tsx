@@ -30,11 +30,18 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
 
   // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log(`useEffect for ${faktum.beskrivendeId}. Lengde på svar: ${faktum?.svar?.length}`);
     if (faktum?.svar) {
       const lastGeneratorAnswerIndex = faktum.svar.length - 1;
       const lastGeneratorAnswer = faktum.svar[lastGeneratorAnswerIndex];
 
-      if (lastGeneratorAnswer?.length === 1 && !lastGeneratorAnswer[0].svar) {
+      // eslint-disable-next-line no-console
+      console.log(`${faktum.beskrivendeId} lastGeneratorAnswerIndex: ${lastGeneratorAnswerIndex}`);
+      // eslint-disable-next-line no-console
+      console.log(`${faktum.beskrivendeId} lastGeneratorAnswer: ${lastGeneratorAnswer}`);
+
+      if (!lastGeneratorAnswer[0].svar) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
