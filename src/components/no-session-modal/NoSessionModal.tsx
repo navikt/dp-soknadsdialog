@@ -19,7 +19,7 @@ export function NoSessionModal() {
     }
 
     if (!session || isError) {
-      setTimeLeft(0);
+      setTimeLeft(1);
     }
     if (session?.expiresIn) {
       setTimeLeft(session?.expiresIn);
@@ -29,7 +29,7 @@ export function NoSessionModal() {
   useEffect(() => {
     if (!timeLeft) return;
 
-    if (timeLeft <= 1) {
+    if (timeLeft === 1) {
       setModalOpen(true);
     }
 
