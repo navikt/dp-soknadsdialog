@@ -11,6 +11,7 @@ interface ITimelineItem {
   iconName: string;
   title: string;
   body: TypedObject | TypedObject[];
+  _key: string;
 }
 
 export function Timeline(props: PortableTextComponentProps<{ elements: ITimelineItem[] }>) {
@@ -21,7 +22,7 @@ function TimelineItem(props: ITimelineItem) {
   // @ts-ignore
   const Icon: typeof React.Component = AllIcons[props.iconName];
   return (
-    <div key={props.title} className={styles.timelineItem}>
+    <div key={props._key} className={styles.timelineItem}>
       <div className={styles.iconWrapper}>{Icon && <Icon className={styles.icon} />}</div>
       <div>
         <Label size={"medium"}>{props.title}</Label>
