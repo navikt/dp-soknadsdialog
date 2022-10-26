@@ -38,7 +38,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
         toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
       }
     }
-  }, [faktum?.svar]);
+  }, [faktum?.svar?.length]);
 
   return (
     <>
