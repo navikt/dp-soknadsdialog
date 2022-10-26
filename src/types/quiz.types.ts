@@ -101,6 +101,7 @@ export type QuizFaktumSvarType =
 export interface IPaabegyntSoknad {
   soknadUuid: string;
   opprettet: string;
+  sistEndretAvbruker?: string;
 }
 
 export interface IInnsentSoknad {
