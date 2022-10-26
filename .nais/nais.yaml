@@ -72,3 +72,5 @@ spec:
       rules:
         - application: dp-soknad
         - application: dp-mellomlagring
+        - application: veilarbregistrering
+          namespace: paw
