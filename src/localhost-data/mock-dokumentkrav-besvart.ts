@@ -40,6 +40,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/12/36af8e4a-1775-441b-b862-3410c6a4467a",
           storrelse: 53072,
           tidspunkt: "2022-10-14T13:22:12.003266+02:00",
+          bundlet: true,
         },
         {
           filnavn: "test.jpeg",
@@ -47,6 +48,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/12/0fc48208-b4fa-4dbd-8aac-7891a13d456f",
           storrelse: 525924,
           tidspunkt: "2022-10-14T13:22:12.377083+02:00",
+          bundlet: false,
         },
         {
           filnavn: "this-is-not-fine.jpeg",
@@ -54,6 +56,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/12/b958f84b-3844-4e86-890a-94f3790d1566",
           storrelse: 325892,
           tidspunkt: "2022-10-14T16:17:48.447438+02:00",
+          bundlet: false,
         },
         {
           filnavn: "FDV - 2-pol jordfeilautomat.pdf",
@@ -61,6 +64,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/12/8d1abad0-c81b-45aa-a1c0-8723b63280b3",
           storrelse: 38311,
           tidspunkt: "2022-10-14T16:20:18.07299+02:00",
+          bundlet: false,
         },
       ],
       gyldigeValg: [
@@ -412,6 +416,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/1014.3/06eecb58-4599-4e6f-945b-5d67085b6c67",
           storrelse: 325892,
           tidspunkt: "2022-10-14T16:17:09.515001+02:00",
+          bundlet: false,
         },
         {
           filnavn: "test.jpeg",
@@ -420,6 +425,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/1014.3/d6f19754-d412-4371-9dfc-a4107b96c418",
           storrelse: 525924,
           tidspunkt: "2022-10-14T16:17:09.809281+02:00",
+          bundlet: false,
         },
       ],
       gyldigeValg: [
@@ -465,6 +471,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/10/749d5ee1-eae7-40f6-a461-496fe5f57e1c",
           storrelse: 53072,
           tidspunkt: "2022-10-14T15:33:26.308012+02:00",
+          bundlet: false,
         },
         {
           filnavn: "test.jpeg",
@@ -472,6 +479,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/10/d673aaf6-c1c7-491d-adb6-5dced09aaf58",
           storrelse: 525924,
           tidspunkt: "2022-10-14T15:33:27.176111+02:00",
+          bundlet: false,
         },
         {
           filnavn: "this-is-not-fine.jpeg",
@@ -479,6 +487,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/10/6c21d069-1715-4133-93a3-0a1ab48c1582",
           storrelse: 325892,
           tidspunkt: "2022-10-14T16:16:33.548132+02:00",
+          bundlet: false,
         },
       ],
       gyldigeValg: [
