@@ -14,6 +14,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IPersonalia } from "../../types/personalia.types";
 import { ProgressBar } from "../../components/ProgressBar";
+import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import styles from "./Soknad.module.css";
 
 interface IProps {
@@ -108,7 +109,7 @@ export function Soknad(props: IProps) {
           </Button>
         ) : (
           <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
-            {getAppText("soknad.soknad.knapp.forrige-steg")}
+            {getAppText("soknad.knapp.forrige-steg")}
           </Button>
         )}
 
@@ -131,6 +132,7 @@ export function Soknad(props: IProps) {
       )}
       {isError && <ErrorRetryModal errorType={errorType} />}
 
+      <ExitSoknad />
       <NoSessionModal />
     </main>
   );

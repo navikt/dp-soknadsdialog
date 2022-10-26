@@ -88,7 +88,7 @@ export function Summary(props: IProps) {
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
-          {getAppText("soknad.soknad.knapp.forrige-steg")}
+          {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
         <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
