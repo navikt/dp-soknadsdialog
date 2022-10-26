@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { headersWithToken } from "../../../../quiz-api";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
-import { getSession } from "@navikt/dp-auth/server";
 import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
+import { getSession } from "../../../../../../auth.utils";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -23,7 +23,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   if (!token || !apiToken) {
     return res.status(401).end();

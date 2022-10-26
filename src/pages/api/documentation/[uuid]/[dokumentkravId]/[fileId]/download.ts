@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring } from "../../../../../../api.utils";
+import { getSession } from "../../../../../../auth.utils";
 
 export const config = {
   api: {
@@ -10,7 +10,7 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   if (!token || !apiToken) {
     return res.status(401).end();

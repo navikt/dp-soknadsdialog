@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import crypto from "crypto";
 import metrics from "../../../../../metrics";
+import { getSession } from "../../../../../auth.utils";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
   const requestId = crypto.randomUUID();
   const {
     query: { uuid, faktumId },

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
+import { getSession } from "../../../auth.utils";
 
 export function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;
@@ -17,7 +17,7 @@ export function getPersonalia(onBehalfOfToken: string) {
 
 const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { token, apiToken } = await getSession({ req });
+    const { token, apiToken } = await getSession(req);
 
     if (!token || !apiToken) {
       return res.status(401).end();
