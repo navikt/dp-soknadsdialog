@@ -29,11 +29,7 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
         >
           {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
         </Link>
-        {dokumentkrav.filer[0]?.tidspunkt && (
-          <BodyShort>
-            {`${getAppText("kvittering.tekst.sendt-av-deg")} ${dokumentkrav.filer[0].tidspunkt}`}
-          </BodyShort>
-        )}
+        <BodyShort>{getAppText("kvittering.tekst.sendt-av-deg")}</BodyShort>
       </div>
 
       <Button className={styles.uploadButton} onClick={toggleModal}>
