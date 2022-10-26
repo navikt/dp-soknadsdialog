@@ -41,7 +41,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
       // eslint-disable-next-line no-console
       console.log(`${faktum.beskrivendeId} lastGeneratorAnswer: `, lastGeneratorAnswer);
 
-      if (!lastGeneratorAnswer[0].svar) {
+      if (lastGeneratorAnswer && !lastGeneratorAnswer[0].svar) {
         // eslint-disable-next-line no-console
         console.log("toggleActiveGeneratorAnswer: ", lastGeneratorAnswerIndex);
       }
