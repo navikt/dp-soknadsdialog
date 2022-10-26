@@ -1,9 +1,9 @@
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
-import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { headersWithToken } from "../../quiz-api";
+import { getSession } from "../../../../auth.utils";
 
 export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`, {
@@ -17,7 +17,7 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(mockDokumentkravList);
   }
 
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   if (!token || !apiToken) {
     return res.status(401).end();

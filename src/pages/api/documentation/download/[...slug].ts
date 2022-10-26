@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring } from "../../../../api.utils";
 import fs from "fs";
 import path from "path";
+import { getSession } from "../../../../auth.utils";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -21,7 +21,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { slug } = req.query;
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   if (!token || !apiToken) {
     return res.status(401).end();

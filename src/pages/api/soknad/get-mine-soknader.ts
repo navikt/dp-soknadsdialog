@@ -1,8 +1,8 @@
-import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { formatISO, subDays } from "date-fns";
+import { getSession } from "../../../auth.utils";
 
 export function getMineSoknader(onBehalfOfToken: string) {
   // Finn ut hvor mange dager tilbake i tid vi skal ha
@@ -22,7 +22,7 @@ export function getMineSoknader(onBehalfOfToken: string) {
 
 async function getMineSoknaderHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { token, apiToken } = await getSession({ req });
+    const { token, apiToken } = await getSession(req);
 
     if (!token || !apiToken) {
       return res.status(401).end();

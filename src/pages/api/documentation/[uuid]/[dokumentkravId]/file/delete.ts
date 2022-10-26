@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { headersWithToken } from "../../../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
+import { getSession } from "../../../../../../auth.utils";
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   if (!token || !apiToken) {
     return res.status(401).end();

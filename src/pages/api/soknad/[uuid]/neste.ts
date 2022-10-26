@@ -1,17 +1,17 @@
-import { getSession } from "@navikt/dp-auth/server";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../api.utils";
 import { getSoknadState } from "../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { mockNeste } from "../../../../localhost-data/mock-neste";
 import metrics from "../../../../metrics";
+import { getSession } from "../../../../auth.utils";
 
 async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).json(mockNeste);
   }
 
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
   const uuid = req.query.uuid as string;
   const sistLagret = req.query.sistLagret as string | undefined;
 

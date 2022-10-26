@@ -3,15 +3,13 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { NoSessionError } from "../../svg-icons/NoSessionError";
-import { useSession } from "../../session.utils";
 import styles from "./NoSessionModal.module.css";
+import { useSession } from "../../session.utils";
 
 export function NoSessionModal() {
-  const isLocalhost = process.env.NEXT_PUBLIC_LOCALHOST;
-
   const router = useRouter();
   const { getAppText } = useSanity();
-  const { session } = useSession({ enforceLogin: !isLocalhost });
+  const { session } = useSession();
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -20,8 +18,8 @@ export function NoSessionModal() {
       Modal.setAppElement("#__next");
     }
 
-    if (session?.expires_in) {
-      setTimeLeft(session.expires_in);
+    if (session?.expiresIn) {
+      setTimeLeft(session?.expiresIn);
     }
   }, [session]);
 

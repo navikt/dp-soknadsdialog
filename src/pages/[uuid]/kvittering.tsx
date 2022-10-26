@@ -5,7 +5,6 @@ import { QuizProvider } from "../../context/quiz-context";
 import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState, getSoknadStatus } from "../api/quiz-api";
-import { getSession } from "@navikt/dp-auth/server";
 import { SanityProvider } from "../../context/sanity-context";
 import { Receipt } from "../../views/receipt/Receipt";
 import ErrorPage from "../_error";
@@ -19,6 +18,7 @@ import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeid
 import { DokumentkravProvider } from "../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../context/validation-context";
 import { IQuizState } from "../../types/quiz.types";
+import { getSession } from "../../auth.utils";
 
 interface IProps {
   errorCode: number | null;
@@ -57,7 +57,7 @@ export async function getServerSideProps(
     };
   }
 
-  const { token, apiToken } = await getSession(context);
+  const { token, apiToken } = await getSession(context.req);
   if (!token || !apiToken) {
     return {
       redirect: {

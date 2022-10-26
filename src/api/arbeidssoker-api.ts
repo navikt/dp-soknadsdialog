@@ -1,7 +1,8 @@
 import { v4 as uuid } from "uuid";
-import { getSession } from "@navikt/dp-auth/server";
 import { GetServerSidePropsContext } from "next/types";
 import { formatISO } from "date-fns";
+import { decodeJwt } from "@navikt/dp-auth";
+import { getSession } from "../auth.utils";
 
 export interface IArbeidssokerperioder {
   arbeidssokerperioder: [
@@ -14,7 +15,8 @@ export interface IArbeidssokerperioder {
 
 export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
   const today = formatISO(new Date(), { representation: "date" });
-  const { payload, token } = await getSession({ req });
+  const { token } = await getSession(req);
+  const payload = decodeJwt(token);
 
   const callId = uuid();
   const url = `${process.env.VEILARBPROXY_URL}?fnr=${payload?.pid}&fraOgMed=${today}`;

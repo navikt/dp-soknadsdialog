@@ -1,15 +1,15 @@
-import { getSession } from "@navikt/dp-auth/server";
 import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { headersWithToken } from "../quiz-api";
+import { getSession } from "../../../auth.utils";
 
 async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).json("slettet");
   }
 
-  const { token, apiToken } = await getSession({ req });
+  const { token, apiToken } = await getSession(req);
 
   const {
     query: { uuid },

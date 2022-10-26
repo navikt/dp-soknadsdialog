@@ -1,4 +1,3 @@
-import { getSession } from "@navikt/dp-auth/server";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { sanityClient } from "../../sanity-client";
 import { SanityProvider } from "../context/sanity-context";
@@ -6,6 +5,7 @@ import { allTextsQuery } from "../sanity/groq-queries";
 import { ISanityTexts } from "../types/sanity.types";
 import { Arbeidssoker } from "../views/arbeidssoker/Arbeidssoker";
 import ErrorPage from "./_error";
+import { getSession } from "../auth.utils";
 
 interface IProps {
   sanityTexts: ISanityTexts;
@@ -29,7 +29,7 @@ export async function getServerSideProps(
     };
   }
 
-  const { token, apiToken } = await getSession(context);
+  const { token, apiToken } = await getSession(context.req);
   if (!token || !apiToken) {
     return {
       redirect: {

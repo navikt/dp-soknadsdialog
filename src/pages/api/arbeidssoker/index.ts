@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "@navikt/dp-auth/server";
 import { v4 as uuid } from "uuid";
 import { formatISO } from "date-fns";
+import { decodeJwt } from "@navikt/dp-auth";
+import { getSession } from "../../../auth.utils";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 
@@ -10,7 +11,8 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
     return res.status(200).json({ isArbeidssoker: false });
   }
 
-  const { token, payload } = await getSession({ req });
+  const { token } = await getSession(req);
+  const payload = decodeJwt(token);
   const idtoken = req.cookies["selvbetjening-idtoken"];
   if (!token || !idtoken || !payload?.pid) {
     // eslint-disable-next-line no-console
