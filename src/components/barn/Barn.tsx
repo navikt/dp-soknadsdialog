@@ -39,10 +39,11 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
       // eslint-disable-next-line no-console
       console.log(`${faktum.beskrivendeId} lastGeneratorAnswerIndex: ${lastGeneratorAnswerIndex}`);
       // eslint-disable-next-line no-console
-      console.log(`${faktum.beskrivendeId} lastGeneratorAnswer: ${lastGeneratorAnswer}`);
+      console.log(`${faktum.beskrivendeId} lastGeneratorAnswer: `, lastGeneratorAnswer);
 
       if (!lastGeneratorAnswer[0].svar) {
-        toggleActiveGeneratorAnswer(lastGeneratorAnswerIndex);
+        // eslint-disable-next-line no-console
+        console.log("toggleActiveGeneratorAnswer: ", lastGeneratorAnswerIndex);
       }
     }
   }, [faktum?.svar?.length]);

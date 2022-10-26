@@ -14,6 +14,13 @@ export function useGeneratorUtils(): IGeneratorUtils {
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
   function toggleActiveGeneratorAnswer(index: number) {
+    // eslint-disable-next-line no-console
+    console.log("toggleActiveGeneratorAnswer");
+    // eslint-disable-next-line no-console
+    console.log("new index: ", index);
+    // eslint-disable-next-line no-console
+    console.log("current index: ", activeIndex);
+
     if (index === activeIndex) {
       setActiveIndex(undefined);
     } else {
