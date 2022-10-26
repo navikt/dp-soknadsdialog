@@ -44,7 +44,7 @@ export function NoSessionModal() {
   }, [timeLeft]);
 
   function login() {
-    window.location.assign(`${router.basePath}/oauth2/login`);
+    window.location.reload();
   }
 
   return (
