@@ -64,7 +64,7 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
