@@ -11,17 +11,17 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(mockNeste);
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
   const uuid = req.query.uuid as string;
   const sistLagret = req.query.sistLagret as string | undefined;
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
   try {
     const measureTokenExchange = metrics.tokenExchangeDurationHistogram.startTimer();
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
     measureTokenExchange();
 
     const measureNeste = metrics.backendApiDurationHistogram.startTimer({ path: "neste" });

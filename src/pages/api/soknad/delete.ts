@@ -9,18 +9,18 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json("slettet");
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
   const {
     query: { uuid },
   } = req;
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
   try {
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
 
     const deleteSoknadResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}`, {
       method: "DELETE",

@@ -5,16 +5,16 @@ import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.u
 import { getSession } from "../../../../../../auth.utils";
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
-  const DPSoknadToken = await apiToken(audienceDPSoknad);
-  const mellomlagringToken = await apiToken(audienceMellomlagring);
+  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
+  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(

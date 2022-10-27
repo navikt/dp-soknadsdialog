@@ -10,18 +10,18 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(200).json({ status: "ok" });
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
   const requestId = crypto.randomUUID();
   const {
     query: { uuid, faktumId },
     body,
   } = req;
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).json({ status: "ikke innlogget" });
   }
 
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
   const response: Response = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktumId}`,

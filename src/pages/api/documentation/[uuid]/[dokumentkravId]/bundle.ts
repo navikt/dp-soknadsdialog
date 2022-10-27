@@ -9,16 +9,16 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const { token, apiToken } = await getSession(req);
-  if (!token || !apiToken) {
+  const session = await getSession(req);
+  if (!session) {
     return res.status(401).end();
   }
 
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
   const body = req.body;
-  const DPSoknadToken = await apiToken(audienceDPSoknad);
-  const mellomlagringToken = await apiToken(audienceMellomlagring);
+  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
+  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
   try {
     const mellomlagringResponse = await bundleFilesMellomlagring(body, mellomlagringToken);

@@ -10,9 +10,9 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
@@ -21,7 +21,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const fileId = req.query.fileId as string;
 
   try {
-    const onBehalfOfToken = await apiToken(audienceMellomlagring);
+    const onBehalfOfToken = await session.apiToken(audienceMellomlagring);
     const response = await fetch(
       `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}/${fileId}`,
       {

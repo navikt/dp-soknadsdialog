@@ -13,16 +13,16 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json("Mock content");
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
   const uuid = req.query.uuid as string;
   const locale = req.query.locale as string;
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
   try {
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
     const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
       baseLang: "nb",
       lang: locale,

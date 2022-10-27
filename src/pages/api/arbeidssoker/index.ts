@@ -11,10 +11,12 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
     return res.status(200).json({ isArbeidssoker: false });
   }
 
-  const { token } = await getSession(req);
-  const payload = decodeJwt(token);
+  const session = await getSession(req);
+  if (!session) return res.status(401).end();
+
+  const payload = decodeJwt(session.token);
   const idtoken = req.cookies["selvbetjening-idtoken"];
-  if (!token || !idtoken || !payload?.pid) {
+  if (!idtoken || !payload?.pid) {
     // eslint-disable-next-line no-console
     console.log("Mangler token");
     return res.status(401).end();

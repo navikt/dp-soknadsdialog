@@ -17,13 +17,13 @@ export function getPersonalia(onBehalfOfToken: string) {
 
 const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { token, apiToken } = await getSession(req);
+    const session = await getSession(req);
 
-    if (!token || !apiToken) {
+    if (!session) {
       return res.status(401).end();
     }
 
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
