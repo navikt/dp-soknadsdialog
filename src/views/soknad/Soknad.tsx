@@ -37,8 +37,8 @@ export function Soknad(props: IProps) {
     (faktum) => faktum?.svar === undefined
   );
 
-  const hasUnfinishedSection = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
-  const unfinishedSectionParam = hasUnfinishedSection + 1;
+  const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
+  const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
   const showPersonalia =
     isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
@@ -46,8 +46,8 @@ export function Soknad(props: IProps) {
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
 
-    if (!soknadState.ferdig && hasUnfinishedSection) {
-      router.push(`/${router.query.uuid}?seksjon=${unfinishedSectionParam}`);
+    if (!soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+      router.push(`/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
