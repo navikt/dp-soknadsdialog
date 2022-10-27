@@ -1,6 +1,6 @@
 import React from "react";
 import { Label } from "@navikt/ds-react";
-import * as AllIcons from "@navikt/ds-icons";
+import { Applicant, Bag, DirectionSign } from "@navikt/ds-icons";
 
 import styles from "./Timeline.module.css";
 import { TypedObject } from "@portabletext/types";
@@ -18,9 +18,11 @@ export function Timeline(props: PortableTextComponentProps<{ elements: ITimeline
   return <>{props.value.elements.map(TimelineItem)}</>;
 }
 
+const SupportedIcons = { Applicant, DirectionSign, Bag };
+
 function TimelineItem(props: ITimelineItem) {
   // @ts-ignore
-  const Icon: typeof React.Component = AllIcons[props.iconName];
+  const Icon: typeof React.Component = SupportedIcons[props.iconName];
   return (
     <div key={props._key} className={styles.timelineItem}>
       <div className={styles.iconWrapper}>{Icon && <Icon className={styles.icon} />}</div>
