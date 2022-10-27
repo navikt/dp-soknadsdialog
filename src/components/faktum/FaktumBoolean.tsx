@@ -50,10 +50,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   }
 
   if (props.faktum.readOnly || props.readonly) {
-    if (currentAnswer !== "") {
-      // eslint-disable-next-line no-console
-      console.error(`Viser read-only faktum uten svar. Faktum=${JSON.stringify(props.faktum)}`);
-    }
     return (
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
