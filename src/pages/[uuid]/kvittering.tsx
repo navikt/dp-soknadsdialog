@@ -1,11 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../../sanity-client";
-import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
-import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState, getSoknadStatus } from "../api/quiz-api";
-import { SanityProvider } from "../../context/sanity-context";
 import { Receipt } from "../../views/receipt/Receipt";
 import ErrorPage from "../_error";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
@@ -22,7 +18,6 @@ import { getSession } from "../../auth.utils";
 
 interface IProps {
   errorCode: number | null;
-  sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
   dokumentkrav: IDokumentkravList | null;
   soknadStatus: ISoknadStatus;
@@ -35,15 +30,9 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
         soknadState: mockNeste,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         soknadStatus: {
@@ -110,7 +99,6 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
       soknadState,
       dokumentkrav,
       soknadStatus,
@@ -121,12 +109,7 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  if (
-    !props.soknadState ||
-    !props.dokumentkrav ||
-    !props.arbeidssokerStatus ||
-    !props.sanityTexts.seksjoner
-  ) {
+  if (!props.soknadState || !props.dokumentkrav || !props.arbeidssokerStatus) {
     // eslint-disable-next-line no-console
     !props.soknadState && console.error("Mangler soknadstate");
     // eslint-disable-next-line no-console
@@ -135,8 +118,6 @@ export default function ReceiptPage(props: IProps) {
     !props.soknadStatus && console.error("Mangler soknadStatus");
     // eslint-disable-next-line no-console
     !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
-    // eslint-disable-next-line no-console
-    !props.sanityTexts.seksjoner && console.error("Mangler sanity tekster");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -147,18 +128,16 @@ export default function ReceiptPage(props: IProps) {
   }
 
   return (
-    <SanityProvider initialState={props.sanityTexts}>
-      <QuizProvider initialState={props.soknadState}>
-        <DokumentkravProvider initialState={props.dokumentkrav}>
-          <ValidationProvider>
-            <Receipt
-              soknadStatus={props.soknadStatus}
-              arbeidssokerStatus={props.arbeidssokerStatus}
-              sections={props.soknadState.seksjoner}
-            />
-          </ValidationProvider>
-        </DokumentkravProvider>
-      </QuizProvider>
-    </SanityProvider>
+    <QuizProvider initialState={props.soknadState}>
+      <DokumentkravProvider initialState={props.dokumentkrav}>
+        <ValidationProvider>
+          <Receipt
+            soknadStatus={props.soknadStatus}
+            arbeidssokerStatus={props.arbeidssokerStatus}
+            sections={props.soknadState.seksjoner}
+          />
+        </ValidationProvider>
+      </DokumentkravProvider>
+    </QuizProvider>
   );
 }

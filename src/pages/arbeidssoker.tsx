@@ -1,11 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../sanity-client";
 import { audienceDPSoknad } from "../api.utils";
 import { getArbeidssokerperioder, IArbeidssokerperioder } from "../api/arbeidssoker-api";
-import { SanityProvider } from "../context/sanity-context";
-import { allTextsQuery } from "../sanity/groq-queries";
 import { IMineSoknader } from "../types/quiz.types";
-import { ISanityTexts } from "../types/sanity.types";
 import { Arbeidssoker } from "../views/arbeidssoker/Arbeidssoker";
 import { IArbeidssokerStatus } from "./api/arbeidssoker";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
@@ -13,7 +9,6 @@ import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
 
 interface IProps {
-  sanityTexts: ISanityTexts;
   mineSoknader: IMineSoknader | null;
   arbeidssokerStatus: IArbeidssokerStatus;
   errorCode: number | null;
@@ -24,15 +19,9 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
         mineSoknader: {
           paabegynt: {
             soknadUuid: "localhost-uuid-paabegynt",
@@ -87,7 +76,6 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
       mineSoknader,
       arbeidssokerStatus,
       errorCode,
@@ -95,7 +83,7 @@ export async function getServerSideProps(
   };
 }
 
-export default function InngangPage({ sanityTexts, arbeidssokerStatus, mineSoknader }: IProps) {
+export default function InngangPage({ arbeidssokerStatus, mineSoknader }: IProps) {
   const soknadUuid = mineSoknader?.paabegynt?.soknadUuid;
 
   if (!soknadUuid) {
@@ -108,19 +96,5 @@ export default function InngangPage({ sanityTexts, arbeidssokerStatus, mineSokna
     );
   }
 
-  if (!sanityTexts.seksjoner) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={500}
-      />
-    );
-  }
-
-  return (
-    <SanityProvider initialState={sanityTexts}>
-      <Arbeidssoker soknadUuid={soknadUuid} arbeidssokerStatus={arbeidssokerStatus} />
-    </SanityProvider>
-  );
+  return <Arbeidssoker soknadUuid={soknadUuid} arbeidssokerStatus={arbeidssokerStatus} />;
 }

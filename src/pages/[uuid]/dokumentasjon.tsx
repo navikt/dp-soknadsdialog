@@ -1,14 +1,10 @@
 import React from "react";
 import { Documentation } from "../../views/documentation/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../../sanity-client";
-import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
-import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
-import { SanityProvider } from "../../context/sanity-context";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
@@ -18,7 +14,6 @@ import { getSession } from "../../auth.utils";
 
 interface IProps {
   errorCode: number | null;
-  sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
   dokumentkrav: IDokumentkravList | null;
 }
@@ -29,15 +24,9 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
         soknadState: mockNeste,
         dokumentkrav: mockDokumentkravList as IDokumentkravList,
         errorCode: null,
@@ -76,7 +65,6 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
       soknadState,
       dokumentkrav,
       errorCode,
@@ -85,10 +73,6 @@ export async function getServerSideProps(
 }
 
 export default function DocumentPage(props: IProps) {
-  if (!props.sanityTexts.seksjoner) {
-    return <div>Noe gikk galt ved henting av texter fra sanity</div>;
-  }
-
   if (!props.soknadState) {
     return <Alert variant="error">Quiz er ducked</Alert>;
   }
@@ -98,10 +82,8 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <SanityProvider initialState={props.sanityTexts}>
-      <QuizProvider initialState={props.soknadState}>
-        <Documentation dokumentkravList={props.dokumentkrav} />
-      </QuizProvider>
-    </SanityProvider>
+    <QuizProvider initialState={props.soknadState}>
+      <Documentation dokumentkravList={props.dokumentkrav} />
+    </QuizProvider>
   );
 }

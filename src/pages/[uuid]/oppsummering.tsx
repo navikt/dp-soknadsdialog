@@ -1,13 +1,9 @@
 import React from "react";
 import { Summary } from "../../views/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../../sanity-client";
-import { allTextsQuery } from "../../sanity/groq-queries";
 import { QuizProvider } from "../../context/quiz-context";
-import { ISanityTexts } from "../../types/sanity.types";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSoknadState } from "../api/quiz-api";
-import { SanityProvider } from "../../context/sanity-context";
 import ErrorPage from "../_error";
 import { ValidationProvider } from "../../context/validation-context";
 import { mockNeste } from "../../localhost-data/mock-neste";
@@ -15,7 +11,6 @@ import { IQuizState } from "../../types/quiz.types";
 import { getSession } from "../../auth.utils";
 
 interface IProps {
-  sanityTexts: ISanityTexts;
   soknadState: IQuizState | null;
   errorCode: number | null;
 }
@@ -26,15 +21,9 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
         soknadState: mockNeste,
         errorCode: null,
       },
@@ -64,7 +53,6 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
       soknadState,
       errorCode,
     },
@@ -81,24 +69,11 @@ export default function SummaryPage(props: IProps) {
       />
     );
   }
-
-  if (!props.sanityTexts.seksjoner) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={500}
-      />
-    );
-  }
-
   return (
-    <SanityProvider initialState={props.sanityTexts}>
-      <QuizProvider initialState={props.soknadState}>
-        <ValidationProvider>
-          <Summary sections={props.soknadState.seksjoner} />
-        </ValidationProvider>
-      </QuizProvider>
-    </SanityProvider>
+    <QuizProvider initialState={props.soknadState}>
+      <ValidationProvider>
+        <Summary sections={props.soknadState.seksjoner} />
+      </ValidationProvider>
+    </QuizProvider>
   );
 }

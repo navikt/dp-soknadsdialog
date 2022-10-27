@@ -1,17 +1,12 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { sanityClient } from "../../sanity-client";
 import { audienceDPSoknad } from "../api.utils";
-import { SanityProvider } from "../context/sanity-context";
-import { allTextsQuery } from "../sanity/groq-queries";
 import { IMineSoknader } from "../types/quiz.types";
-import { ISanityTexts } from "../types/sanity.types";
 import { Inngang } from "../views/Inngang";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
 
 interface IProps {
-  sanityTexts: ISanityTexts;
   mineSoknader: IMineSoknader | null;
   errorCode: number | null;
 }
@@ -21,15 +16,9 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        sanityTexts,
         mineSoknader: {
           paabegynt: {
             soknadUuid: "localhost-uuid-paabegynt",
@@ -70,7 +59,6 @@ export async function getServerSideProps(
 
   return {
     props: {
-      sanityTexts,
       mineSoknader,
       errorCode,
     },
@@ -78,7 +66,7 @@ export async function getServerSideProps(
 }
 
 export default function InngangPage(props: IProps) {
-  const { errorCode, mineSoknader, sanityTexts } = props;
+  const { errorCode, mineSoknader } = props;
 
   if (errorCode) {
     return (
@@ -90,19 +78,5 @@ export default function InngangPage(props: IProps) {
     );
   }
 
-  if (!sanityTexts.seksjoner) {
-    return (
-      <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={500}
-      />
-    );
-  }
-
-  return (
-    <SanityProvider initialState={sanityTexts}>
-      <Inngang paabegynt={mineSoknader?.paabegynt} innsendte={mineSoknader?.innsendte} />
-    </SanityProvider>
-  );
+  return <Inngang paabegynt={mineSoknader?.paabegynt} innsendte={mineSoknader?.innsendte} />;
 }
