@@ -1,4 +1,4 @@
-import { render, waitFor, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
 import { SanityProvider } from "../../context/sanity-context";
@@ -8,6 +8,10 @@ import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
+
+import * as SentryLogger from "../../sentry.logger";
+
+//jest.mock("../../sentry.logger");
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",
@@ -59,7 +63,6 @@ describe("FaktumBoolean", () => {
         </QuizProvider>
       </SanityProvider>
     );
-
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
       expect(screen.queryByText(faktumMockData.gyldigeValg[0])).toBeInTheDocument();
@@ -88,6 +91,24 @@ describe("FaktumBoolean", () => {
       expect(checkedRadio.value).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
       expect(svarLabel).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
     });
+  });
+
+  xtest("Should not look for empty textId when rendering unanswered readOnly", async () => {
+    const spy = jest.spyOn(SentryLogger, "logMissingSanityText");
+    faktumMockData.svar = undefined;
+    faktumMockData.readOnly = true;
+
+    render(
+      <SanityProvider initialState={sanityMocks}>
+        <QuizProvider initialState={soknadStateMockData}>
+          <ValidationProvider>
+            <FaktumBoolean faktum={faktumMockData} />
+          </ValidationProvider>
+        </QuizProvider>
+      </SanityProvider>
+    );
+
+    expect(spy).not.toHaveBeenCalledWith("");
   });
 
   describe("When user selects an answer", () => {

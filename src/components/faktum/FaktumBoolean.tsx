@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -50,6 +50,10 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   }
 
   if (props.faktum.readOnly || props.readonly) {
+    if (currentAnswer !== "") {
+      // eslint-disable-next-line no-console
+      console.error(`Viser read-only faktum uten svar. Faktum=${JSON.stringify(props.faktum)}`);
+    }
     return (
       <>
         <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
