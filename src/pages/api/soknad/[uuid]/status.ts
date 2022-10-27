@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 
-export type ISoknadStatuser = "Paabegynt" | "UnderBehandling" | "FerdigBehandlet" | "Ukjent";
+export type ISoknadStatuser =
+  | "Paabegynt"
+  | "UnderBehandling"
+  | "FerdigBehandlet"
+  | "ManglerDokumenter"
+  | "Ukjent";
 
 export interface ISoknadStatus {
   status: ISoknadStatuser;

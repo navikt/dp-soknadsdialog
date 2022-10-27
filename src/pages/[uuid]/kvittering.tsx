@@ -19,6 +19,10 @@ import { DokumentkravProvider } from "../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../context/validation-context";
 import { IQuizState } from "../../types/quiz.types";
 import { getSession } from "../../auth.utils";
+import {
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+} from "../../constants";
 
 interface IProps {
   errorCode: number | null;
@@ -47,7 +51,7 @@ export async function getServerSideProps(
         soknadState: mockNeste,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         soknadStatus: {
-          status: "Ukjent",
+          status: "UnderBehandling",
           opprettet: "2022-10-21T09:42:37.291157",
           innsendt: "2022-10-21T09:47:29",
         },
@@ -69,9 +73,9 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
-  let dokumentkrav = null;
-  let soknadStatus: ISoknadStatus;
   let arbeidssokerStatus: IArbeidssokerStatus;
+  let dokumentkrav: IDokumentkravList | null = null;
+  let soknadStatus: ISoknadStatus = { status: "Ukjent" };
 
   const onBehalfOfToken = await apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
@@ -87,14 +91,21 @@ export async function getServerSideProps(
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
+    const missingDocuments = dokumentkrav?.krav.filter(
+      (dokumentkrav) =>
+        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
+        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
+    );
+
+    if (missingDocuments && missingDocuments.length > 0) {
+      soknadStatus = { status: "ManglerDokumenter" };
+    }
   } else {
     errorCode = dokumentkravResponse.status;
   }
 
-  if (soknadStatusResponse.ok) {
+  if (soknadStatusResponse.ok && soknadStatus.status !== "ManglerDokumenter") {
     soknadStatus = await soknadStatusResponse.json();
-  } else {
-    soknadStatus = { status: "Ukjent" };
   }
 
   if (arbeidssokerStatusResponse.ok) {
