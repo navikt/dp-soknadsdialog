@@ -17,14 +17,14 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(mockDokumentkravList);
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
   const uuid = req.query.uuid as string;
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
 
   try {
     const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);

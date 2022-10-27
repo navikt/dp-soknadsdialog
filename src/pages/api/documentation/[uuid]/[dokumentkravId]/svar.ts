@@ -9,9 +9,9 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json({ status: "ok" });
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
@@ -19,7 +19,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   const dokumentkravId = req.query.dokumentkravId as string;
 
   try {
-    const onBehalfOfToken = await apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
     const response = await fetch(
       `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/svar`,
       {

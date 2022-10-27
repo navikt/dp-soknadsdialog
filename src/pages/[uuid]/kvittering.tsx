@@ -57,8 +57,8 @@ export async function getServerSideProps(
     };
   }
 
-  const { token, apiToken } = await getSession(context.req);
-  if (!token || !apiToken) {
+  const session = await getSession(context.req);
+  if (!session) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -73,7 +73,7 @@ export async function getServerSideProps(
   let soknadStatus: ISoknadStatus;
   let arbeidssokerStatus: IArbeidssokerStatus;
 
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);

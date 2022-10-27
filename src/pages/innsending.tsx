@@ -17,8 +17,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const { token, apiToken } = await getSession(context.req);
-  if (!token || !apiToken) {
+  const session = await getSession(context.req);
+  if (!session) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -27,7 +27,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
 
   if (innsendingUuidResponse.ok) {
