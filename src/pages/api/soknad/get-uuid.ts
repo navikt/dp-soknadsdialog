@@ -9,13 +9,13 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).send("localhost-uuid");
   }
 
-  const { token, apiToken } = await getSession(req);
+  const session = await getSession(req);
 
-  if (!token || !apiToken) {
+  if (!session) {
     return res.status(401).end();
   }
 
-  const onBehalfOfToken = await apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   try {
     const soknadUuidResponse = await createSoknadUuid(onBehalfOfToken);
     if (!soknadUuidResponse.ok) {
