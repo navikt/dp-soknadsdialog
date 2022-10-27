@@ -22,7 +22,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const onBehalfOfToken = await apiToken(audienceDPSoknad);
 
-    const deleteSoknadResponse = await fetch(`${process.env.API_BASE_URL}/${uuid}`, {
+    const deleteSoknadResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}`, {
       method: "DELETE",
       headers: headersWithToken(onBehalfOfToken),
     });
