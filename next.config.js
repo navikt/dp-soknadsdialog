@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { withSentryConfig } = require("@sentry/nextjs");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
 
 // TODO: Denne bør deles med _document.tsx
 const supportedLocales = ["nb", "en"];
@@ -26,9 +29,11 @@ const config = {
   },
 };
 
-module.exports = withSentryConfig(config, {
-  silent: true,
-  errorHandler: (err, invokeErr, compilation) => {
-    compilation.warnings.push("Sentry CLI Plugin: " + err.message);
-  },
-});
+module.exports = withBundleAnalyzer(
+  withSentryConfig(config, {
+    silent: true,
+    errorHandler: (err, invokeErr, compilation) => {
+      compilation.warnings.push("Sentry CLI Plugin: " + err.message);
+    },
+  })
+);
