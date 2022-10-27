@@ -62,7 +62,9 @@ spec:
       level: Level4
       autoLogin: true
       autoLoginIgnorePaths:
-        - "{{base_path}}/api/auth/*"
+        - "{{base_path}}/api/*"
+        - "{{base_path}}/api/*/*"
+        - "{{base_path}}/api/*/*/*"
   tokenx:
     enabled: true
   accessPolicy:
