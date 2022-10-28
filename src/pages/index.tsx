@@ -1,34 +1,12 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import React from "react";
-import { ISanityTexts } from "../types/sanity.types";
 import { StartSoknad } from "../views/start-soknad/StartSoknad";
-import { sanityClient } from "../../sanity-client";
-import { allTextsQuery } from "../sanity/groq-queries";
-import { SanityProvider } from "../context/sanity-context";
-import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
-
-interface IProps {
-  sanityTexts: ISanityTexts;
-}
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<IProps>> {
+): Promise<GetServerSidePropsResult<object>> {
   const { locale } = context;
-
-  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
-  });
-
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        sanityTexts,
-      },
-    };
-  }
 
   const session = await getSession(context.req);
   if (!session) {
@@ -41,25 +19,10 @@ export async function getServerSideProps(
   }
 
   return {
-    props: {
-      sanityTexts,
-    },
+    props: {},
   };
 }
 
-export default function Soknad(props: IProps) {
-  if (!props.sanityTexts.apptekster) {
-    return (
-      <ErrorPage
-        title="Vi har tekniske problemer"
-        details="Beklager, vi får ikke kontakt med systemene våre akkurat nå. Svarene dine er lagret og du kan prøve igjen om litt."
-      />
-    );
-  }
-
-  return (
-    <SanityProvider initialState={props.sanityTexts}>
-      <StartSoknad />
-    </SanityProvider>
-  );
+export default function Soknad() {
+  return <StartSoknad />;
 }

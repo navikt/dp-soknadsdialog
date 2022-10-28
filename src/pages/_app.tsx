@@ -10,8 +10,17 @@ import { SWRConfig } from "swr";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
 import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
 import Cookies from "js-cookie";
+import { SanityProvider } from "../context/sanity-context";
+import { sanityClient } from "../../sanity-client";
+import { ISanityTexts } from "../types/sanity.types";
+import { allTextsQuery } from "../sanity/groq-queries";
+import ErrorPage from "./_error";
 
-export default function App({ Component, pageProps }: AppProps) {
+type AppPropsSanityTexts = AppProps & {
+  sanityTexts: ISanityTexts;
+};
+
+export default function App({ Component, pageProps, sanityTexts }: AppPropsSanityTexts) {
   const router = useRouter();
 
   const renderHeader = () => {
@@ -24,18 +33,43 @@ export default function App({ Component, pageProps }: AppProps) {
     router.push(router.asPath, router.asPath, { locale });
   });
 
+  if (!sanityTexts.apptekster) {
+    return (
+      <ErrorPage
+        title="Vi har tekniske problemer"
+        details="Beklager, vi får ikke kontakt med systemene våre akkurat nå. Svarene dine er lagret og du kan prøve igjen om litt."
+      />
+    );
+  }
+
   return (
     <ErrorBoundary>
       <SWRConfig value={{ fetcher }}>
-        {renderHeader()}
-        <div className={styles.app}>
-          <Component {...pageProps} />
-        </div>
+        <SanityProvider initialState={sanityTexts}>
+          {renderHeader()}
+          <div className={styles.app}>
+            <Component {...pageProps} />
+          </div>
+        </SanityProvider>
       </SWRConfig>
     </ErrorBoundary>
   );
 }
 
 App.getInitialProps = async function getInitialProps(context: AppContext) {
-  return NextApp.getInitialProps(context);
+  const { locale, defaultLocale } = context.router;
+
+  if (!locale && !defaultLocale) {
+    // Unngår at "alle" feil framstår som manglende locale
+    return NextApp.getInitialProps(context);
+  }
+
+  const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
+    baseLang: "nb",
+    lang: locale,
+  });
+  return {
+    ...(await NextApp.getInitialProps(context)),
+    sanityTexts,
+  };
 };
