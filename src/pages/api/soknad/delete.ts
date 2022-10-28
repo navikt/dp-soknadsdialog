@@ -29,8 +29,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("Feil ved sletting av soknad fra dp-soknad");
     }
 
-    const deleteSoknadState = await deleteSoknadResponse.json();
-    return res.status(deleteSoknadResponse.status).send(deleteSoknadState);
+    return res.json(deleteSoknadResponse);
   } catch (error) {
     return res.status(500).send(error);
   }
