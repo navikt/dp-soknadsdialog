@@ -12,7 +12,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession(req);
 
   const {
-    query: { uuid },
+    body: { uuid },
   } = req;
 
   if (!session) {
