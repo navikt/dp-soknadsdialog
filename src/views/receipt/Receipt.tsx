@@ -7,7 +7,7 @@ import {
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
 } from "../../constants";
 import { ReceiptDocumentsMissing } from "../../components/receipt-documents-missing/ReceiptDocumentsMissing";
-import { ReceiptSoknadTilstand } from "../../components/receipt-soknad-tilstand/ReceiptSoknadTilstand";
+import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
 import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
 import { ReceiptDocumentsNotSending } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt-documents-uploaded/ReceiptDocumentsUploaded";
@@ -53,7 +53,7 @@ export function Receipt(props: IProps) {
 
   return (
     <>
-      <ReceiptSoknadTilstand {...props.soknadStatus} />
+      <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />
       <div className={styles.documentList}>
         <ReceiptDocumentsMissing documents={missingDocuments} />
