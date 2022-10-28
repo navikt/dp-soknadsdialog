@@ -1,11 +1,10 @@
 import React from "react";
 import { Label } from "@navikt/ds-react";
-import { Applicant, Bag, DirectionSign } from "@navikt/ds-icons";
-
-import styles from "./Timeline.module.css";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponentProps } from "@portabletext/react/src/types";
+import { useSvgIcon } from "../../hooks/useSvgIcon";
+import styles from "./Timeline.module.css";
 
 interface ITimelineItem {
   iconName: string;
@@ -18,14 +17,12 @@ export function Timeline(props: PortableTextComponentProps<{ elements: ITimeline
   return <>{props.value.elements.map(TimelineItem)}</>;
 }
 
-const SupportedIcons = { Applicant, DirectionSign, Bag };
-
 function TimelineItem(props: ITimelineItem) {
-  // @ts-ignore
-  const Icon: typeof React.Component = SupportedIcons[props.iconName];
+  const { svg } = useSvgIcon(props.iconName);
+
   return (
     <div key={props._key} className={styles.timelineItem}>
-      <div className={styles.iconWrapper}>{Icon && <Icon className={styles.icon} />}</div>
+      <div className={styles.iconWrapper}>{svg && <span className={styles.icon}>{svg}</span>}</div>
       <div>
         <Label size={"medium"}>{props.title}</Label>
         <PortableText value={props.body} />
