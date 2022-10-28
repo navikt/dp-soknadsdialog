@@ -1,3 +1,7 @@
 .arbeidssokerStatusErrorWarning {
   margin-top: var(--navds-spacing-2);
 }
+
+.arbeidssokerSokDagpengerLikevel {
+  margin-top: var(--navds-spacing-8);
+}

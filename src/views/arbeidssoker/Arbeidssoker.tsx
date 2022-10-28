@@ -53,6 +53,10 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
               <Button variant="secondary">{getAppText("arbeidssoker.avbryt-knapp")}</Button>
             </Link>
           </div>
+          <BodyLong className={styles.arbeidssokerSokDagpengerLikevel}>
+            <Link href="/">{getAppText("arbeidssoker.sok-dagpenger-likevel.lenke-tekst")}</Link>
+            {getAppText("arbeidssoker.sok-dagpenger-likevel.beskrivelse-tekst")}
+          </BodyLong>
         </>
       )}
       {arbeidssokerStatus === "UNKNOWN" && (
