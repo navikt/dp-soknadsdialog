@@ -3,18 +3,18 @@ import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { Personalia } from "../../components/personalia/Personalia";
+import { ProgressBar } from "../../components/ProgressBar";
 import { Section } from "../../components/section/Section";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IPersonalia } from "../../types/personalia.types";
-import { ProgressBar } from "../../components/ProgressBar";
-import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import styles from "./Soknad.module.css";
 
 interface IProps {
@@ -37,11 +37,18 @@ export function Soknad(props: IProps) {
     (faktum) => faktum?.svar === undefined
   );
 
+  const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
+  const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
+
   const showPersonalia =
     isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
+
+    if (!soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+      router.push(`/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
+    }
 
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
     if (!validSection) {
