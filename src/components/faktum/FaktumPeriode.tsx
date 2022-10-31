@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
 import { formatISO, isFuture } from "date-fns";
@@ -21,6 +21,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { getFaktumTextById, getAppText } = useSanity();
   const [isValidFom, setIsValidFom] = useState(true);
   const [isValidTom, setIsValidTom] = useState(true);
+  const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
 
   const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
@@ -29,7 +30,11 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextFra = getAppText(beskrivendeIdFra);
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
-  const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
+  useEffect(() => {
+    return () => {
+      setSvar(undefined);
+    };
+  }, []);
 
   function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
