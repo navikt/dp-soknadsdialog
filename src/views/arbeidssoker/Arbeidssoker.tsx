@@ -39,8 +39,8 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
   return (
     <>
       <PageMeta
-        title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
-        description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
+        title={getAppText("arbeidssoker.side-metadata.tittel")}
+        description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}
       />
       {arbeidssokerStatus === "UNREGISTERED" && (
         <>
