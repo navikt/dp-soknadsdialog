@@ -73,7 +73,6 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
             </GeneratorFaktumCard>
 
             <Modal
-              closeButton={false}
               shouldCloseOnOverlayClick={false}
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
@@ -86,9 +85,17 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
 
                 <FetchIndicator isLoading={isLoading} />
 
-                <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                  Lagre og lukk
-                </Button>
+                <div className={"modal-container__button-container"}>
+                  <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                    {getAppText("soknad.generator.lagre-og-lukk-knapp")}
+                  </Button>
+                  <Button
+                    variant={"secondary"}
+                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
+                  >
+                    {getAppText("soknad.generator.slett-knapp")}
+                  </Button>
+                </div>
               </Modal.Content>
             </Modal>
           </div>

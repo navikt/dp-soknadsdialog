@@ -94,13 +94,13 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
 
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                    Lagre og lukk
+                    {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                   <Button
                     variant={"secondary"}
                     onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
                   >
-                    Slett
+                    {getAppText("soknad.generator.slett-knapp")}
                   </Button>
                 </div>
               </Modal.Content>
