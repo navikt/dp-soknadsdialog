@@ -56,10 +56,12 @@ export function Receipt(props: IProps) {
       <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />
       <div className={styles.documentList}>
-        <ReceiptDocumentsMissing documents={missingDocuments} />
+        {missingDocuments.length > 0 && <ReceiptDocumentsMissing documents={missingDocuments} />}
         <ReceiptDocumentsOther />
-        <ReceiptDocumentsUploaded documents={uploadedDocuments} />
-        <ReceiptDocumentsNotSending documents={notSendingDocuments} />
+        {uploadedDocuments.length > 0 && <ReceiptDocumentsUploaded documents={uploadedDocuments} />}
+        {notSendingDocuments.length > 0 && (
+          <ReceiptDocumentsNotSending documents={notSendingDocuments} />
+        )}
       </div>
       <ReceiptYourAnswers sections={props.sections} />
       <Button
