@@ -37,7 +37,7 @@ export function DatePicker(props: IDatePicker) {
   const max = props.max || DATEPICKER_MAX_DATE;
 
   // eslint-disable-next-line no-console
-  console.log("DatePicker: ", date);
+  console.log(`DatePicker ${props.id}: ${date}`);
 
   useEffect(() => {
     // eslint-disable-next-line no-console
@@ -94,7 +94,7 @@ export function DatePicker(props: IDatePicker) {
         type="date"
         id={props.id}
         name={props.id}
-        value={date ? format(date, "yyyy-MM-dd") : undefined}
+        value={date ? format(date, "yyyy-MM-dd") : ""}
         pattern="\d{4}-\d{2}-\d{2}"
         onChange={(e) => onChangeDate(e)}
         onBlur={(e) => onLeaveDate(e)}
