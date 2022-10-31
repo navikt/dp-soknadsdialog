@@ -31,10 +31,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
   useEffect(() => {
+    setSvar(props.faktum.svar);
+
     return () => {
       setSvar(undefined);
     };
-  }, []);
+  }, [props.faktum.svar]);
 
   function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
