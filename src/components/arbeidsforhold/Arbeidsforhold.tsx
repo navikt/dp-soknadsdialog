@@ -136,7 +136,7 @@ export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
     (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet"
   )?.svar as IQuizPeriodeFaktumAnswerType;
-  if (!varighetFaktum) return "Fant ikke periode";
+  if (!varighetFaktum) return <></>;
 
   return (
     <>
