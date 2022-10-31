@@ -36,7 +36,12 @@ export function DatePicker(props: IDatePicker) {
   const min = props.min || DATEPICKER_MIN_DATE;
   const max = props.max || DATEPICKER_MAX_DATE;
 
+  // eslint-disable-next-line no-console
+  console.log("DatePicker: ", date);
+
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log("useEffect DatePicker props.value: ", props.value);
     setDate(props.value ? new Date(props.value) : undefined);
   }, [props.value]);
 
