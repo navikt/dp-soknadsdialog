@@ -28,7 +28,7 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
     const deleteSoknadResponse = await deleteSoknad(soknadUuid);
 
     if (deleteSoknadResponse.ok) {
-      router.push("/");
+      router.push("/start-soknad");
     } else {
       setHasDeleteSoknadError(true);
       throw new Error(deleteSoknadResponse.statusText);
@@ -54,7 +54,9 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
             </Link>
           </div>
           <BodyLong className={styles.arbeidssokerSokDagpengerLikevel}>
-            <Link href="/">{getAppText("arbeidssoker.sok-dagpenger-likevel.lenke-tekst")}</Link>
+            <Link href="/start-soknad">
+              {getAppText("arbeidssoker.sok-dagpenger-likevel.lenke-tekst")}
+            </Link>
             {getAppText("arbeidssoker.sok-dagpenger-likevel.beskrivelse-tekst")}
           </BodyLong>
         </>
@@ -68,7 +70,7 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
             {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
           </Alert>
           <div className="navigation-container">
-            <Link href="/" passHref>
+            <Link href="/start-soknad" passHref>
               <Button variant="primary" as="a">
                 {getAppText("arbeidssoker.sok-dagpenger.knapp")}
               </Button>
