@@ -30,22 +30,9 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextFra = getAppText(beskrivendeIdFra);
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
-  // eslint-disable-next-line no-console
-  console.log("FaktumPeriode med id: ", faktum.beskrivendeId);
-  // eslint-disable-next-line no-console
-  console.log("useState svar: ", svar);
-
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log("useEffect(): ", faktum);
     setSvar(props.faktum.svar ? props.faktum.svar : undefined);
-
-    return () => {
-      // eslint-disable-next-line no-console
-      console.log("useEffect() cleanup: ", faktum);
-      setSvar(undefined);
-    };
-  }, [props.faktum]);
+  }, [props.faktum.svar]);
 
   function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
