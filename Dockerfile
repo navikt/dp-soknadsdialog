@@ -31,6 +31,8 @@ COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/.next/standalone ./
 COPY --from=builder /usr/src/app/.next/static ./.next/static
 
+COPY --from=builder /user/src/app/public ./public
+
 EXPOSE 3000
 USER node
 
