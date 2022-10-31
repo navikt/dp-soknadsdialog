@@ -36,7 +36,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     return () => {
       setSvar(undefined);
     };
-  }, [props.faktum.svar]);
+  }, [props.faktum]);
 
   function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
