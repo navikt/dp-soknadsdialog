@@ -51,7 +51,7 @@ export function Summary(props: IProps) {
     <>
       <PageMeta
         title={getAppText("oppsummering.side-metadata.tittel")}
-        metaDescription={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
+        description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
       <ProgressBar currentStep={13} />
       <Accordion>

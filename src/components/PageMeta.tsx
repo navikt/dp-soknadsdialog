@@ -2,16 +2,16 @@ import Head from "next/head";
 
 interface IProps {
   title: string;
-  metaDescription: string;
+  description: string;
 }
 
 export function PageMeta(props: IProps) {
-  const { title, metaDescription } = props;
+  const { title, description } = props;
 
   return (
     <Head>
       <title>{title}</title>
-      <meta property="og:title" content={metaDescription} key="title" />
+      <meta property="og:title" content={description} key="title" />
     </Head>
   );
 }

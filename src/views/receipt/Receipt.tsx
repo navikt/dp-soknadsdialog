@@ -56,7 +56,7 @@ export function Receipt(props: IProps) {
     <>
       <PageMeta
         title={getAppText("kvittering.side-metadata.tittel")}
-        metaDescription={getAppText("kvittering.side-metadata.meta-beskrivelse")}
+        description={getAppText("kvittering.side-metadata.meta-beskrivelse")}
       />
       <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />

@@ -16,7 +16,7 @@ export function Inngang({ paabegynt, innsendte }: IProps) {
     <>
       <PageMeta
         title={getAppText("inngang.side-metadata.tittel")}
-        metaDescription={getAppText("inngang.side-metadata.meta-beskrivelse")}
+        description={getAppText("inngang.side-metadata.meta-beskrivelse")}
       />
       {innsendte && <InngangSendDocument innsendte={innsendte} />}
       {paabegynt && <InngangPaabegynt paabegynt={paabegynt} />}

@@ -90,7 +90,7 @@ export function Documentation(props: IProps) {
     <>
       <PageMeta
         title={getAppText("dokumentkrav.side-metadata.tittel")}
-        metaDescription={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
+        description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
       />
       <ProgressBar currentStep={12} />
       {showValidationErrors && (

@@ -91,7 +91,7 @@ export function Soknad(props: IProps) {
     <>
       <PageMeta
         title={getAppText("soknad.side-metadata.tittel")}
-        metaDescription={getAppText("soknad.side-metadata.meta-beskrivelse")}
+        description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <main>
         <ProgressBar currentStep={sectionIndex + 1} />

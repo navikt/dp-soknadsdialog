@@ -52,7 +52,7 @@ export function StartSoknad() {
     <>
       <PageMeta
         title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
-        metaDescription={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
+        description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
       <main>
         <Heading spacing size="xlarge" level="1">
