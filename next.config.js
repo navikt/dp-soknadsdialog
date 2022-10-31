@@ -5,7 +5,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 // TODO: Denne bør deles med _document.tsx
-const supportedLocales = ["nb", "en"];
+// TODO: Legg til "en" når vi får alle tekster inn i Sanity;
+const supportedLocales = ["nb"];
 
 const config = {
   reactStrictMode: true,
