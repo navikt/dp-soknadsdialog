@@ -7,6 +7,7 @@ import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/ProgressBar";
 import { Section } from "../../components/section/Section";
@@ -87,60 +88,70 @@ export function Soknad(props: IProps) {
   }
 
   return (
-    <main>
-      <ProgressBar currentStep={sectionIndex + 1} />
-
-      {showPersonalia && props.personalia && (
-        <div className={styles.seksjonContainer}>
-          <Personalia personalia={props.personalia} />
-        </div>
-      )}
-
-      <Section
-        section={currentSection}
-        firstUnansweredFaktumIndex={
-          firstUnansweredFaktumIndex === -1
-            ? currentSection.fakta.length
-            : firstUnansweredFaktumIndex
-        }
+    <>
+      <PageMeta
+        title={getAppText("soknad.side-metadata.tittel")}
+        description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
+      <main>
+        <ProgressBar currentStep={sectionIndex + 1} />
 
-      <div className={styles.loaderContainer}>
-        <FetchIndicator isLoading={isLoading} />
-      </div>
-
-      <nav className="navigation-container">
-        {isFirstSection ? (
-          <Button variant={"secondary"} onClick={() => cancelSoknad()}>
-            {getAppText("soknad.knapp.avbryt")}
-          </Button>
-        ) : (
-          <Button variant={"secondary"} onClick={() => navigateToPreviousSection()} icon={<Left />}>
-            {getAppText("soknad.knapp.forrige-steg")}
-          </Button>
+        {showPersonalia && props.personalia && (
+          <div className={styles.seksjonContainer}>
+            <Personalia personalia={props.personalia} />
+          </div>
         )}
 
-        {isLastSection && soknadState.ferdig ? (
-          <Button onClick={() => navigateToDocumentation()}>
-            {getAppText("soknad.knapp.til-dokumentasjon")}
-          </Button>
-        ) : (
-          <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
-            {getAppText("soknad.knapp.neste-steg")}
-          </Button>
+        <Section
+          section={currentSection}
+          firstUnansweredFaktumIndex={
+            firstUnansweredFaktumIndex === -1
+              ? currentSection.fakta.length
+              : firstUnansweredFaktumIndex
+          }
+        />
+
+        <div className={styles.loaderContainer}>
+          <FetchIndicator isLoading={isLoading} />
+        </div>
+
+        <nav className="navigation-container">
+          {isFirstSection ? (
+            <Button variant={"secondary"} onClick={() => cancelSoknad()}>
+              {getAppText("soknad.knapp.avbryt")}
+            </Button>
+          ) : (
+            <Button
+              variant={"secondary"}
+              onClick={() => navigateToPreviousSection()}
+              icon={<Left />}
+            >
+              {getAppText("soknad.knapp.forrige-steg")}
+            </Button>
+          )}
+
+          {isLastSection && soknadState.ferdig ? (
+            <Button onClick={() => navigateToDocumentation()}>
+              {getAppText("soknad.knapp.til-dokumentasjon")}
+            </Button>
+          ) : (
+            <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
+              {getAppText("soknad.knapp.neste-steg")}
+            </Button>
+          )}
+        </nav>
+
+        {!isError && (
+          <p className={styles.autoSaveText}>
+            <FileSuccess />
+            {getAppText("soknad.auto-lagret.tekst")}
+          </p>
         )}
-      </nav>
+        {isError && <ErrorRetryModal errorType={errorType} />}
 
-      {!isError && (
-        <p className={styles.autoSaveText}>
-          <FileSuccess />
-          {getAppText("soknad.auto-lagret.tekst")}
-        </p>
-      )}
-      {isError && <ErrorRetryModal errorType={errorType} />}
-
-      <ExitSoknad />
-      <NoSessionModal />
-    </main>
+        <ExitSoknad />
+        <NoSessionModal />
+      </main>
+    </>
   );
 }

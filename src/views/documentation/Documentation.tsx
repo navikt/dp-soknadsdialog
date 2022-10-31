@@ -20,6 +20,7 @@ import { useScrollTo } from "../../hooks/dokumentkrav/useScrollTo";
 import { ProgressBar } from "../../components/ProgressBar";
 import { useQuiz } from "../../context/quiz-context";
 import styles from "./Documentation.module.css";
+import { PageMeta } from "../../components/PageMeta";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -87,6 +88,10 @@ export function Documentation(props: IProps) {
 
   return (
     <>
+      <PageMeta
+        title={getAppText("dokumentkrav.side-metadata.tittel")}
+        description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
+      />
       <ProgressBar currentStep={12} />
       {showValidationErrors && (
         <ErrorList
@@ -102,7 +107,6 @@ export function Documentation(props: IProps) {
           })}
         </ErrorList>
       )}
-
       {dokumentasjonskravText?.body && <PortableText value={dokumentasjonskravText.body} />}
       {dokumentkravList.krav.map((dokumentkrav, index) => {
         const dokumentkravNumber = index + 1;
@@ -122,13 +126,11 @@ export function Documentation(props: IProps) {
           </div>
         );
       })}
-
       {dokumentkravList.krav.length === 0 && (
         <Alert variant="info" size="medium">
           {getAppText("dokumentasjonskrav.ingen.krav.funnet")}
         </Alert>
       )}
-
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => navigateToSoknad()} icon={<Left />}>
           {getAppText("soknad.knapp.forrige-steg")}
@@ -138,7 +140,6 @@ export function Documentation(props: IProps) {
           {getAppText("soknad.knapp.til-oppsummering")}
         </Button>
       </nav>
-
       <DokumentkravBundleErrorModal
         dokumentkravList={bundleErrors}
         isOpen={showBundleErrorModal}

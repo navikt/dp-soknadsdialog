@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { deleteSoknad } from "../../api/deleteSoknad-api";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ErrorTypesEnum } from "../../types/error.types";
@@ -37,6 +38,10 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
 
   return (
     <>
+      <PageMeta
+        title={getAppText("arbeidssoker.side-metadata.tittel")}
+        description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}
+      />
       {arbeidssokerStatus === "UNREGISTERED" && (
         <>
           <Heading level="2" size="small">
