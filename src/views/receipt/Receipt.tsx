@@ -20,6 +20,7 @@ import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import styles from "./Receipts.module.css";
+import { PageMeta } from "../../components/PageMeta";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -53,6 +54,10 @@ export function Receipt(props: IProps) {
 
   return (
     <>
+      <PageMeta
+        title={getAppText("kvittering.side-metadata.tittel")}
+        metaDescription={getAppText("kvittering.side-metadata.meta-beskrivelse")}
+      />
       <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />
       <div className={styles.documentList}>

@@ -10,6 +10,7 @@ import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { ProgressBar } from "../components/ProgressBar";
 import api from "../api.utils";
+import { PageMeta } from "../components/PageMeta";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -48,6 +49,10 @@ export function Summary(props: IProps) {
 
   return (
     <>
+      <PageMeta
+        title={getAppText("oppsummering.side-metadata.tittel")}
+        metaDescription={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
+      />
       <ProgressBar currentStep={13} />
       <Accordion>
         {props.sections?.map((section, index) => {

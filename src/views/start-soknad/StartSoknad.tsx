@@ -5,6 +5,7 @@ import { useState } from "react";
 import api from "../../api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { PageMeta } from "../../components/PageMeta";
 import { Timeline as timeline } from "../../components/timeline/Timeline";
 import { useSanity } from "../../context/sanity-context";
 import { ErrorTypesEnum } from "../../types/error.types";
@@ -48,43 +49,53 @@ export function StartSoknad() {
   }
 
   return (
-    <main>
-      <Heading spacing size="xlarge" level="1">
-        {getAppText("start-soknad.tittel")}
-      </Heading>
-
-      <Alert variant="info" className={styles.newSoknadAlertText}>
-        {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
-        <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
-          {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
-        </Link>{" "}
-        {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
-      </Alert>
-
-      {startSideText?.body && (
-        <PortableText value={startSideText.body} components={{ types: { timeline } }} />
-      )}
-
-      <ConfirmationPanel
-        className="confirmation-panel"
-        checked={consentGiven}
-        label={getAppText("start-soknad.checkbox.samtykke-riktige-opplysninger.label")}
-        onChange={() => {
-          setConsentGiven(!consentGiven);
-          setShowConsentValidation(!showConsentValidation);
-        }}
-        error={
-          showConsentValidation && !consentGiven
-            ? getAppText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
-            : undefined
-        }
+    <>
+      <PageMeta
+        title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
+        metaDescription={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
+      <main>
+        <Heading spacing size="xlarge" level="1">
+          {getAppText("start-soknad.tittel")}
+        </Heading>
 
-      <Button variant="primary" size="medium" onClick={startSoknad} loading={isCreatingSoknadUUID}>
-        {getAppText("start-soknad.knapp.start")}
-      </Button>
+        <Alert variant="info" className={styles.newSoknadAlertText}>
+          {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
+          <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
+            {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
+          </Link>{" "}
+          {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
+        </Alert>
 
-      <NoSessionModal />
-    </main>
+        {startSideText?.body && (
+          <PortableText value={startSideText.body} components={{ types: { timeline } }} />
+        )}
+
+        <ConfirmationPanel
+          className="confirmation-panel"
+          checked={consentGiven}
+          label={getAppText("start-soknad.checkbox.samtykke-riktige-opplysninger.label")}
+          onChange={() => {
+            setConsentGiven(!consentGiven);
+            setShowConsentValidation(!showConsentValidation);
+          }}
+          error={
+            showConsentValidation && !consentGiven
+              ? getAppText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
+              : undefined
+          }
+        />
+        <Button
+          variant="primary"
+          size="medium"
+          onClick={startSoknad}
+          loading={isCreatingSoknadUUID}
+        >
+          {getAppText("start-soknad.knapp.start")}
+        </Button>
+
+        <NoSessionModal />
+      </main>
+    </>
   );
 }
