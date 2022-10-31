@@ -80,21 +80,31 @@ export async function getServerSideProps(
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
-    const missingDocuments = dokumentkrav?.krav.filter(
-      (dokumentkrav) =>
-        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
-        dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
-    );
-
-    if (missingDocuments && missingDocuments.length > 0) {
-      soknadStatus = { status: "ManglerDokumenter" };
-    }
   } else {
     errorCode = dokumentkravResponse.status;
   }
 
-  if (soknadStatusResponse.ok && soknadStatus.status !== "ManglerDokumenter") {
+  if (soknadStatusResponse.ok) {
     soknadStatus = await soknadStatusResponse.json();
+  }
+
+  if (soknadStatus.status === "Paabegynt") {
+    return {
+      redirect: {
+        destination: `/${uuid}`,
+        permanent: false,
+      },
+    };
+  }
+
+  const missingDocuments = dokumentkrav?.krav.filter(
+    (dokumentkrav) =>
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
+  );
+
+  if (missingDocuments && missingDocuments.length > 0) {
+    soknadStatus = { status: "ManglerDokumenter" };
   }
 
   if (arbeidssokerStatusResponse.ok) {
@@ -120,15 +130,16 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  if (!props.soknadState || !props.dokumentkrav || !props.arbeidssokerStatus) {
+  // eslint-disable-next-line no-console
+  !props.soknadStatus && console.error("Mangler soknadStatus");
+  // eslint-disable-next-line no-console
+  !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
+
+  if (!props.soknadState || !props.dokumentkrav) {
     // eslint-disable-next-line no-console
     !props.soknadState && console.error("Mangler soknadstate");
     // eslint-disable-next-line no-console
     !props.dokumentkrav && console.error("Mangler dokumentkrav");
-    // eslint-disable-next-line no-console
-    !props.soknadStatus && console.error("Mangler soknadStatus");
-    // eslint-disable-next-line no-console
-    !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"

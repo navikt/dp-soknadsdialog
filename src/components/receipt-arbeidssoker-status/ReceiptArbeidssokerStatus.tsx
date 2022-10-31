@@ -5,7 +5,6 @@ import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptArbeidssokerStatus.module.css";
 import {
   KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT,
-  KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UKJENT,
   KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UREGISTRERT,
 } from "../../text-constants";
 
@@ -34,7 +33,7 @@ export function ArbeidssokerStatus(props: IProps) {
     case "UNKNOWN":
       return (
         <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText(KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UKJENT)}
+          {getAppText(KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT)}
         </BodyShort>
       );
   }
