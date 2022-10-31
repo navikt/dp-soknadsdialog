@@ -32,11 +32,13 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   // eslint-disable-next-line no-console
   console.log("FaktumPeriode med id: ", faktum.beskrivendeId);
+  // eslint-disable-next-line no-console
+  console.log("useState svar: ", svar);
 
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.log("useEffect(): ", faktum);
-    setSvar(props.faktum.svar);
+    setSvar(props.faktum.svar ? props.faktum.svar : undefined);
 
     return () => {
       // eslint-disable-next-line no-console
