@@ -30,10 +30,17 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextFra = getAppText(beskrivendeIdFra);
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
+  // eslint-disable-next-line no-console
+  console.log("FaktumPeriode med id: ", faktum.beskrivendeId);
+
   useEffect(() => {
+    // eslint-disable-next-line no-console
+    console.log("useEffect(): ", faktum);
     setSvar(props.faktum.svar);
 
     return () => {
+      // eslint-disable-next-line no-console
+      console.log("useEffect() cleanup: ", faktum);
       setSvar(undefined);
     };
   }, [props.faktum]);
