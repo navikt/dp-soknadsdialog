@@ -1,4 +1,4 @@
-import { BodyShort, Label } from "@navikt/ds-react";
+import { Alert, BodyShort, Label } from "@navikt/ds-react";
 import React from "react";
 import { getAge, getFormattedPersonalia } from "./personalia.utils";
 import { IPersonalia } from "../../types/personalia.types";
@@ -7,6 +7,7 @@ import { SectionHeading } from "../section/SectionHeading";
 import styles from "./Personalia.module.css";
 import { useRouter } from "next/router";
 import { getCountryName } from "../../country.utils";
+import Link from "next/link";
 
 interface IProps {
   personalia: IPersonalia;
@@ -27,10 +28,12 @@ export function Personalia({ personalia }: IProps) {
   const textId = "personalia";
   const personaliaTexts = getSeksjonTextById(textId);
 
-  const { navn, adresselinjer, postadresse, obscuredIdent, formattedKontonummer } =
+  const { navn, adresselinjer, postadresse, formattedKontonummer, fnr } =
     getFormattedPersonalia(personalia);
 
   const isForeignBank = kontonummer && bankLandkode && bankLandkode !== "NO";
+
+  const alder = getAge(fødselsDato);
 
   return (
     <>
@@ -45,14 +48,27 @@ export function Personalia({ personalia }: IProps) {
 
       <div className={styles.personaliaFaktum}>
         <Label as="p">{getAppText("personalia.fodselsnummer")}</Label>
-        <BodyShort>{obscuredIdent}</BodyShort>
+        <BodyShort>{fnr}</BodyShort>
       </div>
 
       {fødselsDato && (
         <div className={styles.personaliaFaktum}>
           <Label as="p">{getAppText("personalia.alder")}</Label>
-          <BodyShort>{getAge(fødselsDato)}</BodyShort>
+          <BodyShort>{alder}</BodyShort>
         </div>
+      )}
+
+      {alder && alder >= 67 && (
+        <Alert variant="warning" className={styles.over67Warning}>
+          <Label as="p">{getAppText("personalia.over-67.tittel")}</Label>
+          <p>
+            {getAppText("personalia.over-67.beskrivelse")}{" "}
+            <Link href="https://www.nav.no/soknader/nb/person/pensjon">
+              {getAppText("personalia.over-67.lenketekst")}
+            </Link>
+            .
+          </p>
+        </Alert>
       )}
 
       {adresse && (

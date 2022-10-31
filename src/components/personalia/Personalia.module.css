@@ -5,3 +5,7 @@
 .personaliaFaktum:last-child {
   margin-bottom: 0;
 }
+
+.over67Warning {
+  margin-bottom: var(--navds-spacing-5);
+}

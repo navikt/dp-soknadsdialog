@@ -28,6 +28,8 @@ export function getFormattedPersonalia(personalia: IPersonalia) {
     kontonummer,
   } = personalia;
 
+  const fnr = `${ident.slice(0, 6)} ${ident.slice(6, 11)}`;
+
   const navn = joinStrings([forNavn, mellomNavn, etterNavn], " ");
 
   const adresselinjer = joinStrings(
@@ -37,17 +39,15 @@ export function getFormattedPersonalia(personalia: IPersonalia) {
 
   const postadresse = joinStrings([adresse?.postnummer, adresse?.poststed], " ");
 
-  const obscuredIdent = ident.slice(0, -5) + " *****";
-
   const formattedKontonummer =
     kontonummer &&
     `${kontonummer.slice(0, 4)} ${kontonummer.slice(4, 6)} ${kontonummer.slice(6, 12)}`;
 
   return {
+    fnr,
     navn,
     adresselinjer,
     postadresse,
-    obscuredIdent,
     formattedKontonummer,
   };
 }
