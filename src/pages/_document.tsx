@@ -65,6 +65,9 @@ export default class MyDocument extends Document<DecoratorComponents> {
     return (
       <Html lang={locale}>
         <Head>
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+          <link rel="shortcut icon" href="/favicon/favicon.ico" />
           <Styles />
         </Head>
         <body>
