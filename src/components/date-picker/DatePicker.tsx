@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
 import classNames from "classnames";
 import { format, formatISO, isValid as isValidDate } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./DatePicker.module.css";
 
@@ -35,6 +35,10 @@ export function DatePicker(props: IDatePicker) {
 
   const min = props.min || DATEPICKER_MIN_DATE;
   const max = props.max || DATEPICKER_MAX_DATE;
+
+  useEffect(() => {
+    setDate(props.value ? new Date(props.value) : undefined);
+  }, [props.value]);
 
   function calculateIsoDateFromNow(years: number) {
     const newDate = new Date().setFullYear(new Date().getFullYear() + years);
@@ -85,7 +89,7 @@ export function DatePicker(props: IDatePicker) {
         type="date"
         id={props.id}
         name={props.id}
-        value={date ? format(date, "yyyy-MM-dd") : ""}
+        value={date ? format(date, "yyyy-MM-dd") : undefined}
         pattern="\d{4}-\d{2}-\d{2}"
         onChange={(e) => onChangeDate(e)}
         onBlur={(e) => onLeaveDate(e)}
