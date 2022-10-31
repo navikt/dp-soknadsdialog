@@ -137,6 +137,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         step={faktum.type === "double" ? "0.1" : "1"}
         size="medium"
         type="number"
+        onWheel={() => (document.activeElement as HTMLElement).blur()}
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={getValidationMessage()}
