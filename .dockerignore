@@ -1,7 +1,7 @@
 **
 
 !src/**
-!public
+!public/**
 !next*
 !jest*
 !cypress/testData/**
