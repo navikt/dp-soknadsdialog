@@ -1,9 +1,4 @@
-.uploadButton {
-  margin-top: var(--navds-spacing-3);
-}
-
-.documentItem {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--navds-spacing-5);
+.documentItem a{
+  display: inline-block;
+  margin-top: var(--navds-spacing-5);
 }

@@ -12,3 +12,11 @@ export const KVITTERING_SOKNAD_STATUS_TAG__MANGLER_DOKUMENTER =  "kvittering.sok
 
 export const KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT = "kvittering.arbeidssokerstatus.info-tekst.registrert"
 export const KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UREGISTRERT = "kvittering.arbeidssokerstatus.info-tekst.uregistrert"
+
+export const KVITTERING_ANDRE_DOKUMENTER_HEADING = "kvittering.andre-dokumenter.heading";
+export const KVITTERING_ANDRE_DOKUMENTER_TEKST = "kvittering.andre-dokumenter.tekst"
+export const KVITTERING_ANDRE_DOKUMENTER_lenke = "kvittering.andre-dokumenter.lenke"
+
+export const KVITTERING_INNSENDTE_DOKUMENTER_KNAPP_LAST_OPP = "kvittering.innsendte-dokumenter.knapp.last-opp"
+
+export const KVITTERING_TEKST_SENDT_AV_DEG = "kvittering.tekst.sendt-av-deg"
