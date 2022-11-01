@@ -6,9 +6,10 @@ import { IArbeidssokerStatus } from "./api/arbeidssoker";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
-import { deleteSoknad } from "../api/deleteSoknad-api";
+import { IMineSoknader } from "../types/quiz.types";
 
 interface IProps {
+  mineSoknader: IMineSoknader | null;
   arbeidssokerStatus: IArbeidssokerStatus;
   errorCode: number | null;
 }
@@ -21,6 +22,17 @@ export async function getServerSideProps(
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
+        mineSoknader: {
+          paabegynt: {
+            soknadUuid: "localhost-uuid-paabegynt",
+            opprettet: "2022-10-20T15:15:06.913514",
+            sistEndretAvbruker: "2022-11-20T15:15:06.913514",
+          },
+          innsendte: [
+            { soknadUuid: "localhost-uuid-innsendt-1", forstInnsendt: "2022-10-21T09:47:29" },
+            { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
+          ],
+        },
         arbeidssokerStatus: "REGISTERED",
         errorCode: null,
       },
@@ -51,64 +63,30 @@ export async function getServerSideProps(
     mineSoknader = await mineSoknaderResponse.json();
   }
 
-  if (!arbeidssokerStatusResponse.ok) {
-    arbeidssokerStatus = "UNKNOWN";
-  } else {
+  if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
     const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
       (periode) => periode.tilOgMedDato === null
     );
+
     arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
-  }
-
-  if (arbeidssokerStatusResponse.ok && mineSoknaderResponse.ok) {
-    // Hvis brukeren er registert som arbeidssøker, men IKKE har en påbegynt søknad.
-    // Redirect vi brukeren til /start-soknad.
-    const paabegyntSoknadUuid = mineSoknader?.paabegynt?.soknadUuid;
-    if (arbeidssokerStatus === "REGISTERED" && !paabegyntSoknadUuid) {
-      return {
-        redirect: {
-          destination: "/start-soknad",
-          permanent: false,
-        },
-      };
-    }
-
-    // Hvis brukeren er registert som arbeidssøker og HAR en påbegynt søknad.
-    // (brukeren har trykket på Slett og start ny søknad fra /index.tsx og kom hit)
-    // Slett søknad og redirect til /start-soknad.
-    if (arbeidssokerStatus === "REGISTERED" && paabegyntSoknadUuid) {
-      deleteSoknadAndRedirect(paabegyntSoknadUuid);
-    }
-  }
-
-  async function deleteSoknadAndRedirect(uuid: string) {
-    // eslint-disable-next-line no-console
-    console.log("Sletter søknad med uuid: " + uuid);
-    const deleteSoknadResponse = await deleteSoknad(uuid);
-
-    if (deleteSoknadResponse.ok) {
-      return {
-        redirect: {
-          destination: "/start-soknad",
-          permanent: false,
-        },
-      };
-    } else {
-      errorCode = deleteSoknadResponse.status;
-    }
+  } else {
+    arbeidssokerStatus = "UNKNOWN";
   }
 
   return {
     props: {
+      mineSoknader,
       arbeidssokerStatus,
       errorCode,
     },
   };
 }
 
-export default function InngangPage({ arbeidssokerStatus, errorCode }: IProps) {
-  if (errorCode) {
+export default function InngangPage({ arbeidssokerStatus, mineSoknader }: IProps) {
+  const soknadUuid = mineSoknader?.paabegynt?.soknadUuid;
+
+  if (!soknadUuid) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -118,5 +96,5 @@ export default function InngangPage({ arbeidssokerStatus, errorCode }: IProps) {
     );
   }
 
-  return <Arbeidssoker arbeidssokerStatus={arbeidssokerStatus} />;
+  return <Arbeidssoker soknadUuid={soknadUuid} arbeidssokerStatus={arbeidssokerStatus} />;
 }
