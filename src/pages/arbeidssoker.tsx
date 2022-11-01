@@ -46,15 +46,6 @@ export async function getServerSideProps(
     arbeidssokerStatus = "UNKNOWN";
   }
 
-  if (arbeidssokerStatus === "REGISTERED") {
-    return {
-      redirect: {
-        destination: "/start-soknad",
-        permanent: false,
-      },
-    };
-  }
-
   return {
     props: {
       arbeidssokerStatus,
