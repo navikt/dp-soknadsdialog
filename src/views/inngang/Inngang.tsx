@@ -13,7 +13,7 @@ interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 
-export function Inngang({ paabegynt, innsendte, arbeidssokerStatus }: IProps) {
+export function Inngang(props: IProps) {
   const { getAppText } = useSanity();
 
   return (
@@ -25,8 +25,11 @@ export function Inngang({ paabegynt, innsendte, arbeidssokerStatus }: IProps) {
       <Heading level="1" size="xlarge" className={styles.inngangPageHeader}>
         {getAppText("inngang.tittel")}
       </Heading>
-      {innsendte && <InngangSendDocument innsendte={innsendte} />}
-      <InngangPaabegynt paabegynt={paabegynt ?? null} arbeidssokerStatus={arbeidssokerStatus} />
+      {props.innsendte && <InngangSendDocument innsendte={props.innsendte} />}
+      <InngangPaabegynt
+        paabegynt={props.paabegynt ?? null}
+        arbeidssokerStatus={props.arbeidssokerStatus}
+      />
     </>
   );
 }

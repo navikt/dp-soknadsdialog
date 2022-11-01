@@ -8,7 +8,7 @@ interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 
-export function Arbeidssoker({ arbeidssokerStatus }: IProps) {
+export function Arbeidssoker(props: IProps) {
   const { getAppText } = useSanity();
 
   return (
@@ -17,7 +17,7 @@ export function Arbeidssoker({ arbeidssokerStatus }: IProps) {
         title={getAppText("arbeidssoker.side-metadata.tittel")}
         description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}
       />
-      {arbeidssokerStatus === "UNREGISTERED" && (
+      {props.arbeidssokerStatus === "UNREGISTERED" && (
         <>
           <Heading level="2" size="small">
             {getAppText("arbeidssoker.header")}
@@ -41,7 +41,7 @@ export function Arbeidssoker({ arbeidssokerStatus }: IProps) {
           </BodyLong>
         </>
       )}
-      {arbeidssokerStatus === "UNKNOWN" && (
+      {props.arbeidssokerStatus === "UNKNOWN" && (
         <>
           <Heading level="2" size="small">
             {getAppText("arbeidssoker.header")}

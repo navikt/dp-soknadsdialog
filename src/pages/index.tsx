@@ -77,7 +77,7 @@ export async function getServerSideProps(
   if (Object.keys(mineSoknader).length === 0) {
     return {
       redirect: {
-        destination: arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "arbeidssoker",
+        destination: arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker",
         permanent: false,
       },
     };
