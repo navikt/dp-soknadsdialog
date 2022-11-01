@@ -60,7 +60,7 @@ export async function getServerSideProps(
   if (Object.keys(mineSoknader).length === 0) {
     return {
       redirect: {
-        destination: `/arbeidssoker`,
+        destination: "/arbeidssoker",
         permanent: false,
       },
     };
