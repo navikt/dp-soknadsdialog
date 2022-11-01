@@ -75,6 +75,8 @@ export async function getServerSideProps(
     arbeidssokerStatus = "UNKNOWN";
   }
 
+  // Hvis brukeren er registert som arbeidssøker, men IKKE har en påbegynt søknad
+  // Redirect vi brukeren til /start-soknad
   const paabegyntSoknadUuid = mineSoknader?.paabegynt?.soknadUuid;
   if (arbeidssokerStatus === "REGISTERED" && !paabegyntSoknadUuid) {
     return {
@@ -85,6 +87,9 @@ export async function getServerSideProps(
     };
   }
 
+  // Hvis brukeren er registert som arbeidssøker og HAR en påbegynt søknad (brukeren...
+  // har trykke på Slett og start ny søknad fra /index.tsx)
+  // Slett søknad og redirect til /start-soknad
   if (arbeidssokerStatus === "REGISTERED" && paabegyntSoknadUuid) {
     const deleteSoknadResponse = await deleteSoknad(paabegyntSoknadUuid);
 
