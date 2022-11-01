@@ -57,6 +57,15 @@ export async function getServerSideProps(
     mineSoknader = await mineSoknaderResponse.json();
   }
 
+  if (Object.keys(mineSoknader).length === 0) {
+    return {
+      redirect: {
+        destination: `/arbeidssoker`,
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {
       mineSoknader,

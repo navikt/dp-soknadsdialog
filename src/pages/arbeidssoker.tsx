@@ -7,6 +7,7 @@ import { IArbeidssokerStatus } from "./api/arbeidssoker";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
+import { deleteSoknad } from "../api/deleteSoknad-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -74,6 +75,31 @@ export async function getServerSideProps(
     arbeidssokerStatus = "UNKNOWN";
   }
 
+  const paabegyntSoknadUuid = mineSoknader?.paabegynt?.soknadUuid;
+  if (arbeidssokerStatus === "REGISTERED" && !paabegyntSoknadUuid) {
+    return {
+      redirect: {
+        destination: `/start-soknad"`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (arbeidssokerStatus === "REGISTERED" && paabegyntSoknadUuid) {
+    const deleteSoknadResponse = await deleteSoknad(paabegyntSoknadUuid);
+
+    if (deleteSoknadResponse.ok) {
+      return {
+        redirect: {
+          destination: `/start-soknad"`,
+          permanent: false,
+        },
+      };
+    } else {
+      errorCode = deleteSoknadResponse.status;
+    }
+  }
+
   return {
     props: {
       mineSoknader,
@@ -83,10 +109,8 @@ export async function getServerSideProps(
   };
 }
 
-export default function InngangPage({ arbeidssokerStatus, mineSoknader }: IProps) {
-  const soknadUuid = mineSoknader?.paabegynt?.soknadUuid;
-
-  if (!soknadUuid) {
+export default function InngangPage({ arbeidssokerStatus, errorCode }: IProps) {
+  if (errorCode) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -96,5 +120,5 @@ export default function InngangPage({ arbeidssokerStatus, mineSoknader }: IProps
     );
   }
 
-  return <Arbeidssoker soknadUuid={soknadUuid} arbeidssokerStatus={arbeidssokerStatus} />;
+  return <Arbeidssoker arbeidssokerStatus={arbeidssokerStatus} />;
 }

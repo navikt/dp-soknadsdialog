@@ -1,40 +1,15 @@
 import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { deleteSoknad } from "../../api/deleteSoknad-api";
-import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
-import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./Arbeidssoker.module.css";
 interface IProps {
-  soknadUuid: string;
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 
-export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
+export function Arbeidssoker({ arbeidssokerStatus }: IProps) {
   const { getAppText } = useSanity();
-  const router = useRouter();
-  const [hasDeleteSoknadError, setHasDeleteSoknadError] = useState(false);
-
-  useEffect(() => {
-    if (arbeidssokerStatus === "REGISTERED") {
-      deleteSoknadAndNavigateToFrontPage();
-    }
-  }, []);
-
-  async function deleteSoknadAndNavigateToFrontPage() {
-    const deleteSoknadResponse = await deleteSoknad(soknadUuid);
-
-    if (deleteSoknadResponse.ok) {
-      router.push("/start-soknad");
-    } else {
-      setHasDeleteSoknadError(true);
-      throw new Error(deleteSoknadResponse.statusText);
-    }
-  }
 
   return (
     <>
@@ -86,7 +61,6 @@ export function Arbeidssoker({ soknadUuid, arbeidssokerStatus }: IProps) {
           </div>
         </>
       )}
-      {hasDeleteSoknadError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
     </>
   );
 }
