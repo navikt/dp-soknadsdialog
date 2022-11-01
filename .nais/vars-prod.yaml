@@ -7,4 +7,4 @@ loginservice:
   url: https://loginservice.nav.no/login
   wellKnown: https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
 sentry_stage: production
-veilarbproxyUrl: https://paw-proxy.prod-fss-pub.nais.io/veilarbregistrering/api/arbeidssoker/perioder
+veilarbproxyUrl: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder
