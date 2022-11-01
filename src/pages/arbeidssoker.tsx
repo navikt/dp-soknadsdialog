@@ -78,18 +78,24 @@ export async function getServerSideProps(
     // (brukeren har trykket på Slett og start ny søknad fra /index.tsx og kom hit)
     // Slett søknad og redirect til /start-soknad.
     if (arbeidssokerStatus === "REGISTERED" && paabegyntSoknadUuid) {
-      const deleteSoknadResponse = await deleteSoknad(paabegyntSoknadUuid);
+      deleteSoknadAndRedirect(paabegyntSoknadUuid);
+    }
+  }
 
-      if (deleteSoknadResponse.ok) {
-        return {
-          redirect: {
-            destination: "/start-soknad",
-            permanent: false,
-          },
-        };
-      } else {
-        errorCode = deleteSoknadResponse.status;
-      }
+  async function deleteSoknadAndRedirect(uuid: string) {
+    // eslint-disable-next-line no-console
+    console.log("Sletter søknad med uuid: " + uuid);
+    const deleteSoknadResponse = await deleteSoknad(uuid);
+
+    if (deleteSoknadResponse.ok) {
+      return {
+        redirect: {
+          destination: "/start-soknad",
+          permanent: false,
+        },
+      };
+    } else {
+      errorCode = deleteSoknadResponse.status;
     }
   }
 
