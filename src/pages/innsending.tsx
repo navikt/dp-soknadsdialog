@@ -11,7 +11,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       redirect: {
-        destination: `./uuid-innsending/`,
+        destination: `/uuid-innsending/`,
         permanent: false,
       },
     };
@@ -36,7 +36,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (innsendingUuid) {
       return {
         redirect: {
-          destination: `./${innsendingUuid}/`,
+          destination: `/${innsendingUuid}/`,
           permanent: false,
         },
       };
