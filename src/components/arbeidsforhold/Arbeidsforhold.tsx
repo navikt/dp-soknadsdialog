@@ -9,6 +9,7 @@ import {
 import { Faktum, IFaktum } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
@@ -17,15 +18,20 @@ import { FormattedDate } from "../FormattedDate";
 import { findEmployerName } from "../../faktum.utils";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { useRouter } from "next/router";
 
 export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
+  const router = useRouter();
   const { faktum } = props;
-  const { isLoading } = useQuiz();
-  const { unansweredFaktumId } = useValidation();
+  const { isLoading, soknadState } = useQuiz();
+  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getSvaralternativTextById, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+  const sectionParam = router.query.seksjon as string;
+  const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
+  const currentSection = soknadState.seksjoner[sectionIndex];
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -44,6 +50,16 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
       }
     }
   }, [faktum?.svar?.length]);
+
+  function addMoreArbeidsforhold(faktum: IQuizGeneratorFaktum) {
+    const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
+
+    if (hasUnansweredFaktumId) {
+      setUnansweredFaktumId(hasUnansweredFaktumId);
+    } else {
+      addNewGeneratorAnswer(faktum);
+    }
+  }
 
   return (
     <>
@@ -114,7 +130,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
           <Button
             variant="secondary"
             className={"generator-faktum__add-button"}
-            onClick={() => addNewGeneratorAnswer(faktum)}
+            onClick={() => addMoreArbeidsforhold(faktum)}
             icon={<BriefcaseAdd />}
           >
             {getAppText("arbeidsforhold.knapp.legg-til")}
