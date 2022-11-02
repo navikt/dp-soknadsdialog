@@ -21,6 +21,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import styles from "./Receipts.module.css";
 import { PageMeta } from "../../components/PageMeta";
+import { PortableText } from "@portabletext/react";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -29,8 +30,9 @@ interface IProps {
 }
 
 export function Receipt(props: IProps) {
-  const { getAppText } = useSanity();
+  const { getAppText, getInfosideText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
+  const dokumentasjonsText = getInfosideText("kvittering.dokumentasjon");
 
   const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
@@ -60,6 +62,13 @@ export function Receipt(props: IProps) {
       />
       <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />
+
+      {dokumentasjonsText && (
+        <div className={styles.dokumentasjonsTextContainer}>
+          <PortableText value={dokumentasjonsText.body} />
+        </div>
+      )}
+
       <div className={styles.documentList}>
         {missingDocuments.length > 0 && <ReceiptDocumentsMissing documents={missingDocuments} />}
         <ReceiptDocumentsOther />
