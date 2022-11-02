@@ -8,6 +8,7 @@ import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
+import { mockNeste } from "../../localhost-data/mock-neste";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
@@ -15,19 +16,6 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   readOnly: false,
   beskrivendeId: "faktum.dagpenger-soknadsdato",
   sannsynliggjoresAv: [],
-};
-
-const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
-
-const nesteMockData = {
-  ferdig: false,
-  seksjoner: [
-    {
-      fakta: [faktumMockData],
-      beskrivendeId: "gjenopptak",
-      ferdig: true,
-    },
-  ],
 };
 
 const sectionMockData: IQuizSeksjon = {
@@ -105,13 +93,9 @@ describe("FaktumPeriode", () => {
 
     test("Should post the answer to the server", async () => {
       // First save the from date
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+      fetch.mockResponseOnce(JSON.stringify(mockNeste));
       // Then save the to date
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
+      fetch.mockResponseOnce(JSON.stringify(mockNeste));
 
       const user = userEvent.setup();
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
@@ -140,10 +124,10 @@ describe("FaktumPeriode", () => {
         expect((datepickerFom as HTMLInputElement).value).toEqual(svar.fom);
         expect((datepickerTom as HTMLInputElement).value).toEqual(svar.tom);
 
-        expect(fetch.mock.calls.length).toEqual(4);
+        expect(fetch.mock.calls.length).toEqual(2);
 
         // Does the first call save the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[2][1]?.body as string;
+        const putRequestBody = fetch.mock.calls[1][1]?.body as string;
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);

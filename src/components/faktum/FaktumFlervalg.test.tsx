@@ -151,10 +151,6 @@ describe("FaktumFlervalg", () => {
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
-      // Save the answer again (second checkbox checked)
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
 
       const user = userEvent.setup();
       const svar = [faktumMockData.gyldigeValg[1], faktumMockData.gyldigeValg[2]];
@@ -185,10 +181,10 @@ describe("FaktumFlervalg", () => {
         expect(checkedCheckboxes[1]).toBeInTheDocument();
         expect(checkedCheckboxes[1].value).toEqual(svar[1]);
 
-        expect(fetch.mock.calls.length).toEqual(4);
+        expect(fetch.mock.calls.length).toEqual(2);
 
         // Does the second save request update the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[2][1]?.body as string;
+        const putRequestBody = fetch.mock.calls[1][1]?.body as string;
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
