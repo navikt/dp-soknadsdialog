@@ -134,7 +134,7 @@ describe("FaktumFlervalg", () => {
         }) as HTMLInputElement;
         expect(checkedCheckbox).toBeInTheDocument();
         expect(checkedCheckbox.value).toEqual(svar[0]);
-        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls.length).toEqual(1);
 
         // Does the first call save the faktum with the right answer?
         const putRequestBody = fetch.mock.calls[0][1]?.body as string;
