@@ -12,7 +12,7 @@ import { FormattedDate } from "../FormattedDate";
 import styles from "./inngangPaabegynt.module.css";
 
 interface IProps {
-  paabegynt: IPaabegyntSoknad | null;
+  paabegynt: IPaabegyntSoknad;
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
@@ -23,9 +23,9 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
 
   const destinationPage = arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker";
 
-  async function deleteSoknadAndNavigateToPage(uuid: string) {
+  async function deleteSoknadAndNavigateToPage() {
     setIsLoading(true);
-    const deleteSoknadResponse = await deleteSoknad(uuid);
+    const deleteSoknadResponse = await deleteSoknad(paabegynt.soknadUuid);
 
     if (deleteSoknadResponse.ok) {
       router.push(destinationPage);
@@ -34,18 +34,6 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
       setIsLoading(false);
       throw new Error(deleteSoknadResponse.statusText);
     }
-  }
-
-  if (!paabegynt) {
-    return (
-      <div className={styles.inngangPaabegyntContainer}>
-        <Link href={destinationPage} passHref>
-          <Button variant="primary" as="a">
-            {getAppText("inngang.start-ny-soknad-knapp")}
-          </Button>
-        </Link>
-      </div>
-    );
   }
 
   return (
@@ -60,11 +48,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>
-      <Button
-        variant="secondary"
-        onClick={() => deleteSoknadAndNavigateToPage(paabegynt.soknadUuid)}
-        loading={isLoading}
-      >
+      <Button variant="secondary" onClick={deleteSoknadAndNavigateToPage} loading={isLoading}>
         {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
       </Button>
       {hasDeleteSoknadError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}

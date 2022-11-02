@@ -1,4 +1,5 @@
-import { Heading } from "@navikt/ds-react";
+import { Button, Heading } from "@navikt/ds-react";
+import Link from "next/link";
 import { InngangPaabegynt } from "../../components/inngang-paabegynt/InngangPaabegynt";
 import { InngangSendDocument } from "../../components/inngang-send-document/InngangSendDocument";
 import { PageMeta } from "../../components/PageMeta";
@@ -16,6 +17,9 @@ interface IProps {
 export function Inngang(props: IProps) {
   const { getAppText } = useSanity();
 
+  const destinationPage =
+    props.arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker";
+
   return (
     <>
       <PageMeta
@@ -26,10 +30,19 @@ export function Inngang(props: IProps) {
         {getAppText("inngang.tittel")}
       </Heading>
       {props.innsendte && <InngangSendDocument innsendte={props.innsendte} />}
-      <InngangPaabegynt
-        paabegynt={props.paabegynt ?? null}
-        arbeidssokerStatus={props.arbeidssokerStatus}
-      />
+      {props.paabegynt && (
+        <InngangPaabegynt
+          paabegynt={props.paabegynt}
+          arbeidssokerStatus={props.arbeidssokerStatus}
+        />
+      )}
+      {!props.paabegynt && (
+        <Link href={destinationPage} passHref>
+          <Button variant="primary" as="a">
+            {getAppText("inngang.start-ny-soknad-knapp")}
+          </Button>
+        </Link>
+      )}
     </>
   );
 }
