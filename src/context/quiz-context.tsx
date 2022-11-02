@@ -8,7 +8,6 @@ import {
   QuizFaktum,
   QuizFaktumSvarType,
 } from "../types/quiz.types";
-import api from "../api.utils";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -27,7 +26,7 @@ interface IProps {
 
 function QuizProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
-  const { uuid } = router.query;
+  const uuid = router.query.uuid as string;
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -37,8 +36,9 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     try {
       setIsError(false);
       setIsLoading(true);
+
       const res = await saveFaktum(uuid, faktum, svar);
-      await getNeste(res.sistBesvart);
+      setSoknadState(res);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -53,8 +53,9 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     try {
       setIsError(false);
       setIsLoading(true);
+
       const res = await saveFaktum(uuid, faktum, svar);
-      await getNeste(res.sistBesvart);
+      setSoknadState(res);
       setIsLoading(false);
     } catch (error: unknown) {
       // eslint-disable-next-line no-console
@@ -62,24 +63,6 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       setIsLoading(false);
       setIsError(true);
       setErrorType(ErrorTypesEnum.GenericError);
-    }
-  }
-
-  async function getNeste(lastAnswered: string) {
-    try {
-      const nesteResponse = await fetch(api(`/soknad/${uuid}/neste?sistLagret=${lastAnswered}`));
-
-      if (!nesteResponse.ok) {
-        throw new Error(nesteResponse.statusText);
-      }
-
-      const quizState = await nesteResponse.json();
-      setSoknadState(quizState);
-    } catch (error: unknown) {
-      // eslint-disable-next-line no-console
-      console.error("GET NESTE ERROR: ", error);
-      setIsError(true);
-      setErrorType(ErrorTypesEnum.GetNesteError);
     }
   }
 

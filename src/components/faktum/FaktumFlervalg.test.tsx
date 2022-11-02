@@ -134,7 +134,7 @@ describe("FaktumFlervalg", () => {
         }) as HTMLInputElement;
         expect(checkedCheckbox).toBeInTheDocument();
         expect(checkedCheckbox.value).toEqual(svar[0]);
-        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls.length).toEqual(1);
 
         // Does the first call save the faktum with the right answer?
         const putRequestBody = fetch.mock.calls[0][1]?.body as string;
@@ -148,10 +148,6 @@ describe("FaktumFlervalg", () => {
 
     test("Can select multiple answers", async () => {
       // First save the answer
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
-      // Save the answer again (second checkbox checked)
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
       fetch.mockResponseOnce(JSON.stringify(nesteMockData));
@@ -185,10 +181,10 @@ describe("FaktumFlervalg", () => {
         expect(checkedCheckboxes[1]).toBeInTheDocument();
         expect(checkedCheckboxes[1].value).toEqual(svar[1]);
 
-        expect(fetch.mock.calls.length).toEqual(4);
+        expect(fetch.mock.calls.length).toEqual(2);
 
         // Does the second save request update the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[2][1]?.body as string;
+        const putRequestBody = fetch.mock.calls[1][1]?.body as string;
         const requestJson = JSON.parse(putRequestBody);
 
         expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);

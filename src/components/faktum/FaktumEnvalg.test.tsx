@@ -128,7 +128,7 @@ describe("FaktumEnvalg", () => {
         const checkedRadio = screen.getByRole("radio", { checked: true }) as HTMLInputElement;
         expect(checkedRadio).toBeInTheDocument();
         expect(checkedRadio.value).toEqual(svar);
-        expect(fetch.mock.calls.length).toEqual(2);
+        expect(fetch.mock.calls.length).toEqual(1);
 
         // Does the first call save the faktum with the right answer?
         const putRequestBody = fetch.mock.calls[0][1]?.body as string;
