@@ -54,7 +54,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   function addArbeidsforhold(faktum: IQuizGeneratorFaktum) {
     const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
-    if (hasUnansweredFaktumId) {
+    if (faktum?.svar && hasUnansweredFaktumId) {
       setUnansweredFaktumId(hasUnansweredFaktumId);
     } else {
       addNewGeneratorAnswer(faktum);
