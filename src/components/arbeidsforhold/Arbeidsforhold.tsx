@@ -51,7 +51,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [faktum?.svar?.length]);
 
-  function addMoreArbeidsforhold(faktum: IQuizGeneratorFaktum) {
+  function addArbeidsforhold(faktum: IQuizGeneratorFaktum) {
     const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
     if (hasUnansweredFaktumId) {
@@ -130,7 +130,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
           <Button
             variant="secondary"
             className={"generator-faktum__add-button"}
-            onClick={() => addMoreArbeidsforhold(faktum)}
+            onClick={() => addArbeidsforhold(faktum)}
             icon={<BriefcaseAdd />}
           >
             {getAppText("arbeidsforhold.knapp.legg-til")}
