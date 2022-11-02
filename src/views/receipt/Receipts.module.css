@@ -5,3 +5,7 @@
 .nagivateToMineDagpengerButton {
   margin-top: var(--navds-spacing-8);
 }
+
+.dokumentasjonsTextContainer {
+  margin: var(--navds-spacing-12) 0;
+}
