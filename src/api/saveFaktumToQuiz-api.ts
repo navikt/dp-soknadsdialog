@@ -2,7 +2,7 @@ import api from "../api.utils";
 import { QuizFaktum, QuizFaktumSvarType, IQuizGeneratorFaktum } from "../types/quiz.types";
 
 export async function saveFaktum(
-  uuid: string | string[] | undefined,
+  uuid: string,
   faktum: QuizFaktum | IQuizGeneratorFaktum,
   svar: QuizFaktumSvarType | QuizFaktum[][]
 ) {

@@ -4,26 +4,26 @@ import { withSentry } from "@sentry/nextjs";
 import crypto from "crypto";
 import metrics from "../../../../../metrics";
 import { getSession } from "../../../../../auth.utils";
+import { getSoknadState } from "../../../quiz-api";
+import { mockNeste } from "../../../../../localhost-data/mock-neste";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(200).json({ status: "ok" });
+    return res.status(200).json(mockNeste);
   }
 
   const session = await getSession(req);
+  const uuid = req.query.uuid as string;
+  const faktumId = req.query.faktumId as string;
   const requestId = crypto.randomUUID();
-  const {
-    query: { uuid, faktumId },
-    body,
-  } = req;
 
   if (!session) {
-    return res.status(401).json({ status: "ikke innlogget" });
+    return res.status(401).end();
   }
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
-  const response: Response = await fetch(
+  const faktumResponse = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktumId}`,
     {
       method: "Put",
@@ -32,13 +32,24 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         Authorization: `Bearer ${onBehalfOfToken}`,
         "X-Request-ID": requestId,
       },
-      body,
+      body: req.body,
     }
   );
   stopTimer();
 
-  const data = await response.json();
-  return res.status(response.status).json(data);
+  if (!faktumResponse.ok) {
+    return res.status(faktumResponse.status).send(faktumResponse.statusText);
+  }
+
+  const { sistBesvart } = await faktumResponse.json();
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart);
+
+  if (!soknadStateResponse.ok) {
+    return res.status(soknadStateResponse.status).send(soknadStateResponse.statusText);
+  }
+
+  const soknadState = await soknadStateResponse.json();
+  return res.status(soknadStateResponse.status).send(soknadState);
 };
 
 export default withSentry(saveFaktumHandler);
