@@ -1,13 +1,16 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { audienceDPSoknad } from "../api.utils";
 import { IMineSoknader } from "../types/quiz.types";
-import { Inngang } from "../views/Inngang";
+import { Inngang } from "../views/inngang/Inngang";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import ErrorPage from "./_error";
 import { getSession } from "../auth.utils";
+import { IArbeidssokerStatus } from "./api/arbeidssoker";
+import { getArbeidssokerperioder, IArbeidssokerperioder } from "../api/arbeidssoker-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
+  arbeidssokerStatus: IArbeidssokerStatus;
   errorCode: number | null;
 }
 
@@ -30,6 +33,7 @@ export async function getServerSideProps(
             { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
           ],
         },
+        arbeidssokerStatus: "REGISTERED",
         errorCode: null,
       },
     };
@@ -46,10 +50,12 @@ export async function getServerSideProps(
   }
 
   let mineSoknader = null;
+  let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {
     errorCode = mineSoknaderResponse.status;
@@ -57,10 +63,21 @@ export async function getServerSideProps(
     mineSoknader = await mineSoknaderResponse.json();
   }
 
+  if (arbeidssokerStatusResponse.ok) {
+    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
+    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
+      (periode) => periode.tilOgMedDato === null
+    );
+
+    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
+  } else {
+    arbeidssokerStatus = "UNKNOWN";
+  }
+
   if (Object.keys(mineSoknader).length === 0) {
     return {
       redirect: {
-        destination: "/arbeidssoker",
+        destination: arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker",
         permanent: false,
       },
     };
@@ -69,13 +86,14 @@ export async function getServerSideProps(
   return {
     props: {
       mineSoknader,
+      arbeidssokerStatus,
       errorCode,
     },
   };
 }
 
 export default function InngangPage(props: IProps) {
-  const { errorCode, mineSoknader } = props;
+  const { errorCode, mineSoknader, arbeidssokerStatus } = props;
 
   if (errorCode) {
     return (
@@ -87,5 +105,11 @@ export default function InngangPage(props: IProps) {
     );
   }
 
-  return <Inngang paabegynt={mineSoknader?.paabegynt} innsendte={mineSoknader?.innsendte} />;
+  return (
+    <Inngang
+      paabegynt={mineSoknader?.paabegynt}
+      innsendte={mineSoknader?.innsendte}
+      arbeidssokerStatus={arbeidssokerStatus}
+    />
+  );
 }

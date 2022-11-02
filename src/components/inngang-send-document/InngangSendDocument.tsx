@@ -5,13 +5,13 @@ import { IMineSoknader } from "../../types/quiz.types";
 import { FormattedDate } from "../FormattedDate";
 import styles from "./inngangSendDocument.module.css";
 
-export function InngangSendDocument({ innsendte }: IMineSoknader) {
+export function InngangSendDocument(props: IMineSoknader) {
   const { getAppText } = useSanity();
 
   return (
     <div className={styles.inngangSendDocumentContainer}>
       <BodyLong>{getAppText("inngang.send-dokument.beskrivelse")}</BodyLong>
-      {innsendte?.map((soknad) => {
+      {props.innsendte?.map((soknad) => {
         return (
           <Link href={`/${soknad.soknadUuid}/kvittering`} passHref key={soknad.soknadUuid}>
             <Button variant="secondary" as="a">
