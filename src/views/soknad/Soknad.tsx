@@ -94,7 +94,7 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <main>
-        <ProgressBar currentStep={sectionIndex + 1} />
+        {soknadState.versjon_navn === "Dagpenger" && <ProgressBar currentStep={sectionIndex + 1} />}
 
         {showPersonalia && props.personalia && (
           <div className={styles.seksjonContainer}>
