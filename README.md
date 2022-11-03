@@ -44,3 +44,4 @@ npm run test
 
 - Multi-line commits --> Første linje beskriver hva som er gjort (kort). Forklar hvorfor endringen er gjort på etterføllgende linjer
 - Referer til Github-issue (navikt/dagpenger#[issue-nummer])
+-
