@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IQuizSeksjon } from "../types/quiz.types";
-import { Accordion, Button, ConfirmationPanel } from "@navikt/ds-react";
+import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
@@ -12,6 +12,9 @@ import { ProgressBar } from "../components/ProgressBar";
 import api from "../api.utils";
 import { PageMeta } from "../components/PageMeta";
 import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
+import { useAsync } from "../hooks/useAsync";
+import { deleteSoknad } from "../api/deleteSoknad-api";
+import { useUuid } from "../hooks/useUuid";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -19,6 +22,8 @@ interface IProps {
 
 export function Summary(props: IProps) {
   const router = useRouter();
+  const { uuid } = useUuid();
+  const deleteSoknadAsync = useAsync(() => deleteSoknad(uuid));
   const [hasError, setHasError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
@@ -28,9 +33,11 @@ export function Summary(props: IProps) {
     router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
-  function cancelSoknad() {
-    router.push(`/`);
-  }
+  useEffect(() => {
+    if (deleteSoknadAsync.status === "success") {
+      window.location.assign("https://arbeid.dev.nav.no/arbeid/dagpenger/mine-dagpenger");
+    }
+  }, [deleteSoknadAsync.status]);
 
   async function finishSoknad() {
     try {
@@ -85,7 +92,7 @@ export function Summary(props: IProps) {
       </Accordion>
 
       <ConfirmationPanel
-        className="confirmation-panel"
+        className="my-8"
         checked={consentGiven}
         label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
         onChange={() => setConsentGiven(!consentGiven)}
@@ -102,12 +109,21 @@ export function Summary(props: IProps) {
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
 
-        <Button variant={"secondary"} onClick={() => cancelSoknad()}>
+        <Button
+          variant={"secondary"}
+          onClick={deleteSoknadAsync.execute}
+          loading={deleteSoknadAsync.status === "pending"}
+        >
           {getAppText("oppsummering.knapp.slett-soknad")}
         </Button>
-
-        <NoSessionModal />
       </nav>
+
+      {deleteSoknadAsync.status === "error" && (
+        <div className="my-8">
+          <Alert variant={"error"}> {getAppText("oppsummering.feilmelding.slett-soknad")} </Alert>
+        </div>
+      )}
+      <NoSessionModal />
     </>
   );
 }

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { deleteSoknad } from "../../api/deleteSoknad-api";
-import { useRouter } from "next/router";
+import { useAsync } from "../../hooks/useAsync";
+import { useUuid } from "../../hooks/useUuid";
 import styles from "./ExitSoknad.module.css";
 
 interface IProps {
@@ -12,12 +13,9 @@ interface IProps {
 }
 
 export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
-  const router = useRouter();
-  const uuid = router.query.uuid as string;
+  const { uuid } = useUuid();
   const { getAppText } = useSanity();
-  const [isSoknadDeleted, setIsSoknadDeleted] = useState(false);
-  const [isDeletingSoknad, setIsDeletingSoknad] = useState(false);
-  const [hasErrorDeletingSoknad, setHasErrorDeletingSoknad] = useState(false);
+  const deleteSoknadAsync = useAsync(() => deleteSoknad(uuid));
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -25,37 +23,16 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
     }
   }, []);
 
-  async function deleteCurrentSoknad() {
-    hasErrorDeletingSoknad && setHasErrorDeletingSoknad(false);
-    setIsDeletingSoknad(true);
-
-    try {
-      const deleteResponse = await deleteSoknad(uuid);
-
-      if (deleteResponse.ok) {
-        setIsSoknadDeleted(true);
-        setIsDeletingSoknad(false);
-      } else {
-        setHasErrorDeletingSoknad(true);
-        setIsDeletingSoknad(false);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    }
-  }
-
   function closeModal() {
-    if (hasErrorDeletingSoknad) {
-      setHasErrorDeletingSoknad(false);
+    if (deleteSoknadAsync.status === "error") {
+      deleteSoknadAsync.reset();
     }
-
     handleClose();
   }
 
   return (
     <>
-      {isSoknadDeleted && (
+      {deleteSoknadAsync.status === "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -85,7 +62,7 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
         </Modal>
       )}
 
-      {!isSoknadDeleted && (
+      {deleteSoknadAsync.status !== "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -100,7 +77,7 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
 
             <p>{getAppText("slett-soknad.modal.beskrivelse")}</p>
 
-            {hasErrorDeletingSoknad && (
+            {deleteSoknadAsync.status === "error" && (
               <>
                 <Alert variant="error" className={styles.alertContainer}>
                   {getAppText("slett-soknad.modal.varsel.klarte-ikke-slette")}
@@ -120,9 +97,13 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
               </>
             )}
 
-            {!hasErrorDeletingSoknad && (
+            {deleteSoknadAsync.status !== "error" && (
               <div className="modal-container__button-container">
-                <Button variant={"danger"} onClick={deleteCurrentSoknad} loading={isDeletingSoknad}>
+                <Button
+                  variant={"danger"}
+                  onClick={deleteSoknadAsync.execute}
+                  loading={deleteSoknadAsync.status === "pending"}
+                >
                   {getAppText("slett-soknad.modal.knapp.slett")}
                 </Button>
                 <Button variant={"tertiary"} onClick={closeModal}>
