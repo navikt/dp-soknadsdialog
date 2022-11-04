@@ -20,26 +20,27 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
     <div className={styles.card}>
       {props.children}
 
-      <div className={styles.buttonContainer}>
-        {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
+      {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
+        <div className={styles.buttonContainer}>
           <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
             Endre svar
           </Button>
-        )}
+        </div>
+      )}
 
-        {!props.allFaktumAnswered && (
-          <>
-            <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
-              Fyll ut
-            </Button>
+      {!props.allFaktumAnswered && (
+        <div className={styles.buttonContainer}>
+          <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
+            Fyll ut
+          </Button>
 
-            <Detail uppercase>
-              <WarningColored />
-              Delvis utfylt
-            </Detail>
-          </>
-        )}
-      </div>
+          <Detail uppercase>
+            <WarningColored />
+            Delvis utfylt
+          </Detail>
+        </div>
+      )}
+
       {props.showValidationMessage && (
         <ValidationMessage message={getAppText("validering.generator-faktum.delvis-besvart")} />
       )}

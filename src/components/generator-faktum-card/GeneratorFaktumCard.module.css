@@ -16,6 +16,7 @@
 .buttonContainer {
   display: flex;
   align-items: center;
+  margin-top: var(--navds-spacing-6)
 }
 
 .buttonContainer button:first-child {
