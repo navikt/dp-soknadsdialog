@@ -29,6 +29,7 @@ const sectionMockData: IQuizSeksjon = {
 
 const mockSoknadState: IQuizState = {
   ferdig: false,
+  antallSeksjoner: 11,
   seksjoner: [sectionMockData],
 };
 

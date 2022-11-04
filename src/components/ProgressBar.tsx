@@ -4,13 +4,12 @@ import { Label } from "@navikt/ds-react";
 
 interface IProgressBar {
   currentStep: number;
+  totalSteps: number;
 }
 
 export function ProgressBar(props: IProgressBar) {
-  const totalSteps = 13;
-
   const progressPercentage = () => {
-    return (props.currentStep / totalSteps) * 100;
+    return (props.currentStep / props.totalSteps) * 100;
   };
 
   const renderRemaining = () => {
@@ -18,7 +17,7 @@ export function ProgressBar(props: IProgressBar) {
     const remainderWidthStyle = { width: `${remainingProgress}%` };
 
     let finalCircleStyle = {};
-    if (props.currentStep === totalSteps) {
+    if (props.currentStep === props.totalSteps) {
       finalCircleStyle = { borderWidth: `0px`, borderColor: "transparent" };
     }
 
@@ -43,10 +42,10 @@ export function ProgressBar(props: IProgressBar) {
       role={"progressbar"}
       aria-valuenow={props.currentStep}
       aria-valuemin={1}
-      aria-valuemax={totalSteps}
+      aria-valuemax={props.totalSteps}
     >
       <Label spacing>
-        Steg {props.currentStep} av {totalSteps}
+        Steg {props.currentStep} av {props.totalSteps}
       </Label>
       <div className={styles.barContainer}>
         {renderCompletedSteps()}

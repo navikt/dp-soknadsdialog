@@ -15,6 +15,7 @@ import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
+import { useNumberOfSoknadSteps } from "../../hooks/useNumberOfSoknadSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 
@@ -25,6 +26,7 @@ interface IProps {
 export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
+  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
@@ -94,7 +96,9 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <main>
-        {soknadState.versjon_navn === "Dagpenger" && <ProgressBar currentStep={sectionIndex + 1} />}
+        {soknadState.versjon_navn === "Dagpenger" && (
+          <ProgressBar currentStep={sectionIndex + 1} totalSteps={numberOfSoknadSteps} />
+        )}
 
         {showPersonalia && props.personalia && (
           <div className={styles.seksjonContainer}>

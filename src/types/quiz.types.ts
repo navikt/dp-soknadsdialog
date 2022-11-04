@@ -12,6 +12,7 @@ export interface IQuizState {
   ferdig: boolean;
   seksjoner: IQuizSeksjon[];
   roller?: string[];
+  antallSeksjoner: number;
   versjon_navn?: "Dagpenger" | "Innsending";
 }
 

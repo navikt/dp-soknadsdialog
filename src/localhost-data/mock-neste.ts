@@ -3,6 +3,7 @@ import { IQuizState } from "../types/quiz.types";
 export const mockNeste = {
   "@id": "aff02dc5-7601-464b-9376-a9148163614c",
   ferdig: true,
+  antallSeksjoner: 11,
   seksjoner: [
     {
       fakta: [

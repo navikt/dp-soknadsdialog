@@ -11,6 +11,7 @@ import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { ProgressBar } from "../components/ProgressBar";
 import api from "../api.utils";
 import { PageMeta } from "../components/PageMeta";
+import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -20,6 +21,7 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const [hasError, setHasError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { getAppText, getSeksjonTextById } = useSanity();
 
   function goToDocumentation() {
@@ -53,7 +55,7 @@ export function Summary(props: IProps) {
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
-      <ProgressBar currentStep={13} />
+      <ProgressBar currentStep={13} totalSteps={numberOfSoknadSteps} />
       <Accordion>
         {props.sections?.map((section, index) => {
           return (

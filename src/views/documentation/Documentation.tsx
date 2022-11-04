@@ -16,6 +16,7 @@ import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList"
 import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
+import { useNumberOfSoknadSteps } from "../../hooks/useNumberOfSoknadSteps";
 import { useScrollTo } from "../../hooks/dokumentkrav/useScrollTo";
 import { ProgressBar } from "../../components/ProgressBar";
 import { useQuiz } from "../../context/quiz-context";
@@ -28,16 +29,16 @@ interface IProps {
 
 export function Documentation(props: IProps) {
   const router = useRouter();
-
   const [showValidationErrors, setShowValidationErrors] = useState(false);
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [dokumentkravList, setDokumentkravList] = useState<IDokumentkravList>(
     props.dokumentkravList
   );
 
-  const { scrollTo } = useScrollTo();
   const { soknadState } = useQuiz();
+  const { scrollTo } = useScrollTo();
   const { getAppText, getInfosideText } = useSanity();
+  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
   const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
 
@@ -92,7 +93,7 @@ export function Documentation(props: IProps) {
         title={getAppText("dokumentkrav.side-metadata.tittel")}
         description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
       />
-      <ProgressBar currentStep={12} />
+      <ProgressBar currentStep={12} totalSteps={numberOfSoknadSteps} />
       {showValidationErrors && (
         <ErrorList
           heading={getAppText("dokumentkrav.feilmelding.validering.header")}
