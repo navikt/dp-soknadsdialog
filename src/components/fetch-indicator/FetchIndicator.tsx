@@ -8,23 +8,36 @@ export function FetchIndicator({ isLoading = false }) {
   const { getAppText } = useSanity();
   const [showText, setShowText] = useState(false);
   const [isLoadingInternal, setIsLoadingInternal] = useState(isLoading);
+  const [isDelayed, setIsDelayed] = useState(true);
+  const initialDelayMs = 250;
   const textDisplayDelayMs = 4500;
 
   useEffect(() => {
+    let textDisplayTimer: NodeJS.Timeout | undefined;
+    let delayTimer: NodeJS.Timeout | undefined;
     if (isLoading) {
       setIsLoadingInternal(isLoading);
-      setTimeout(() => {
+      textDisplayTimer = setTimeout(() => {
         setShowText(true);
       }, textDisplayDelayMs);
+      delayTimer = setTimeout(() => {
+        setIsDelayed(false);
+      }, initialDelayMs);
     } else {
       setIsLoadingInternal(isLoading);
+      setIsDelayed(true);
       setShowText(false);
     }
+
+    return () => {
+      clearTimeout(textDisplayTimer);
+      clearTimeout(delayTimer);
+    };
   }, [isLoading]);
 
   return (
     <div className={styles.loader}>
-      {isLoadingInternal && (
+      {isLoadingInternal && !isDelayed && (
         <>
           <div className={styles.dots}>
             <div className={styles.dotContainer}>
