@@ -65,6 +65,7 @@ spec:
         - "{{base_path}}/api/*"
         - "{{base_path}}/api/*/*"
         - "{{base_path}}/api/*/*/*"
+        - "{{base_path}}/_next/static/*/*"
   tokenx:
     enabled: true
   accessPolicy:
