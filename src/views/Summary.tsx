@@ -10,8 +10,8 @@ import { ProgressBar } from "../components/ProgressBar";
 import { PageMeta } from "../components/PageMeta";
 import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
 import { useUuid } from "../hooks/useUuid";
-import { useDeleteRequest } from "../hooks/useDeleteRequest";
 import { usePutRequest } from "../hooks/usePutRequest";
+import { useDeleteRequest } from "../hooks/useDeleteRequest";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -20,16 +20,25 @@ interface IProps {
 export function Summary(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
-
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { getAppText, getSeksjonTextById } = useSanity();
+  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
+  const [showConsentValidation, setShowConsentValidation] = useState(false);
+  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delsete");
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
-    `soknad/${uuid}/complete?locale=${router.locale}`
+    `soknad/${uuid}/cosmplete?locale=${router.locale}`
   );
 
-  function goToDocumentation() {
+  function validateAndCompleteSoknad() {
+    if (!consentGiven) {
+      setShowConsentValidation(true);
+      return;
+    }
+    finishSoknad();
+  }
+
+  function navigateToDocumentation() {
     router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
@@ -84,21 +93,25 @@ export function Summary(props: IProps) {
         className="my-8"
         checked={consentGiven}
         label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
-        onChange={() => setConsentGiven(!consentGiven)}
+        onChange={() => {
+          setConsentGiven(!consentGiven);
+          setShowConsentValidation(!showConsentValidation);
+        }}
+        error={
+          showConsentValidation && !consentGiven
+            ? getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst")
+            : undefined
+        }
       >
         {getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
 
       <nav className="navigation-container">
-        <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
+        <Button variant={"secondary"} onClick={() => navigateToDocumentation()} icon={<Left />}>
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
-        <Button
-          onClick={() => finishSoknad()}
-          disabled={!consentGiven}
-          loading={finishSoknadStatus === "pending"}
-        >
+        <Button onClick={validateAndCompleteSoknad} loading={finishSoknadStatus === "pending"}>
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
 
