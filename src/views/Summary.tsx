@@ -5,16 +5,13 @@ import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import { useSanity } from "../context/sanity-context";
-import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { ProgressBar } from "../components/ProgressBar";
-import api from "../api.utils";
 import { PageMeta } from "../components/PageMeta";
 import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
-import { useAsync } from "../hooks/useAsync";
-import { deleteSoknad } from "../api/deleteSoknad-api";
 import { useUuid } from "../hooks/useUuid";
+import { useDeleteRequest } from "../hooks/useDeleteRequest";
+import { usePutRequest } from "../hooks/usePutRequest";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -23,38 +20,30 @@ interface IProps {
 export function Summary(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
-  const deleteSoknadAsync = useAsync(() => deleteSoknad(uuid));
-  const [hasError, setHasError] = useState(false);
-  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+
   const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { getAppText, getSeksjonTextById } = useSanity();
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
+  const [finishSoknad, finishSoknadStatus] = usePutRequest(
+    `soknad/${uuid}/complete?locale=${router.locale}`
+  );
 
   function goToDocumentation() {
     router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
   useEffect(() => {
-    if (deleteSoknadAsync.status === "success") {
+    if (deleteSoknadStatus === "success") {
       window.location.assign("https://arbeid.dev.nav.no/arbeid/dagpenger/mine-dagpenger");
     }
-  }, [deleteSoknadAsync.status]);
+  }, [deleteSoknadStatus]);
 
-  async function finishSoknad() {
-    try {
-      const res = await fetch(api(`/soknad/${router.query.uuid}/complete?locale=${router.locale}`));
-
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
+  useEffect(() => {
+    if (finishSoknadStatus === "success") {
       router.push(`/${router.query.uuid}/kvittering`);
-    } catch (error) {
-      setHasError(true);
     }
-  }
-
-  if (hasError) {
-    return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
-  }
+  }, [finishSoknadStatus]);
 
   return (
     <>
@@ -105,22 +94,34 @@ export function Summary(props: IProps) {
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
-        <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
+        <Button
+          onClick={() => finishSoknad()}
+          disabled={!consentGiven}
+          loading={finishSoknadStatus === "pending"}
+        >
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
 
         <Button
           variant={"secondary"}
-          onClick={deleteSoknadAsync.execute}
-          loading={deleteSoknadAsync.status === "pending"}
+          onClick={() => deleteSoknad(uuid)}
+          loading={deleteSoknadStatus === "pending"}
         >
           {getAppText("oppsummering.knapp.slett-soknad")}
         </Button>
       </nav>
 
-      {deleteSoknadAsync.status === "error" && (
+      {deleteSoknadStatus === "error" && (
         <div className="my-8">
           <Alert variant={"error"}> {getAppText("oppsummering.feilmelding.slett-soknad")} </Alert>
+        </div>
+      )}
+
+      {finishSoknadStatus === "error" && (
+        <div className="my-8">
+          <Alert variant={"error"}>
+            {getAppText("oppsummering.feilmelding.ferdigstill-soknad")}{" "}
+          </Alert>
         </div>
       )}
       <NoSessionModal />
