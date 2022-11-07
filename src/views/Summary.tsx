@@ -71,8 +71,9 @@ export function Summary(props: IProps) {
                     })}
 
                     <Button
+                      as="a"
                       variant="secondary"
-                      onClick={() => router.push(`/${router.query.uuid}?seksjon=${index + 1}`)}
+                      href={`${router.basePath}/${router.query.uuid}?seksjon=${index + 1}`}
                     >
                       {getAppText("oppsummering.knapp.endre-svar")}
                     </Button>
