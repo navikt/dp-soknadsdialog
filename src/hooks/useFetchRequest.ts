@@ -80,6 +80,7 @@ export function useFetchRequest<T, U>(
   }
 
   const resetError = useCallback(() => {
+    setStatus("idle");
     setErrorDetails(undefined);
   }, []);
 

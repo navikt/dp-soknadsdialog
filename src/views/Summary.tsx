@@ -25,9 +25,9 @@ export function Summary(props: IProps) {
 
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
-  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delsete");
+  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
-    `soknad/${uuid}/cosmplete?locale=${router.locale}`
+    `soknad/${uuid}/complete?locale=${router.locale}`
   );
 
   function validateAndCompleteSoknad() {

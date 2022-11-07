@@ -2,9 +2,8 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
-import { deleteSoknad } from "../../api/deleteSoknad-api";
-import { useAsync } from "../../hooks/useAsync";
 import { useUuid } from "../../hooks/useUuid";
+import { useDeleteRequest } from "../../hooks/useDeleteRequest";
 import styles from "./ExitSoknad.module.css";
 
 interface IProps {
@@ -15,7 +14,8 @@ interface IProps {
 export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
-  const deleteSoknadAsync = useAsync(() => deleteSoknad(uuid));
+  const [deleteSoknad, deleteSoknadStatus, , resetDeleteSoknadError] =
+    useDeleteRequest("soknad/delete");
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -24,15 +24,15 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
   }, []);
 
   function closeModal() {
-    if (deleteSoknadAsync.status === "error") {
-      deleteSoknadAsync.reset();
+    if (deleteSoknadStatus === "error") {
+      resetDeleteSoknadError();
     }
     handleClose();
   }
 
   return (
     <>
-      {deleteSoknadAsync.status === "success" && (
+      {deleteSoknadStatus === "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -62,7 +62,7 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
         </Modal>
       )}
 
-      {deleteSoknadAsync.status !== "success" && (
+      {deleteSoknadStatus !== "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -77,7 +77,7 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
 
             <p>{getAppText("slett-soknad.modal.beskrivelse")}</p>
 
-            {deleteSoknadAsync.status === "error" && (
+            {deleteSoknadStatus === "error" && (
               <>
                 <Alert variant="error" className={styles.alertContainer}>
                   {getAppText("slett-soknad.modal.varsel.klarte-ikke-slette")}
@@ -97,12 +97,12 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
               </>
             )}
 
-            {deleteSoknadAsync.status !== "error" && (
+            {deleteSoknadStatus !== "error" && (
               <div className="modal-container__button-container">
                 <Button
                   variant={"danger"}
-                  onClick={deleteSoknadAsync.execute}
-                  loading={deleteSoknadAsync.status === "pending"}
+                  onClick={() => deleteSoknad(uuid)}
+                  loading={deleteSoknadStatus === "pending"}
                 >
                   {getAppText("slett-soknad.modal.knapp.slett")}
                 </Button>
