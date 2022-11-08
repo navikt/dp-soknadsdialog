@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IQuizSeksjon } from "../types/quiz.types";
-import { Accordion, Button, ConfirmationPanel } from "@navikt/ds-react";
+import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
 import { Faktum } from "../components/faktum/Faktum";
 import { Left } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import { useSanity } from "../context/sanity-context";
-import { ErrorRetryModal } from "../components/error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../types/error.types";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
 import { ProgressBar } from "../components/ProgressBar";
-import api from "../api.utils";
 import { PageMeta } from "../components/PageMeta";
 import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
+import { useUuid } from "../hooks/useUuid";
+import { usePutRequest } from "../hooks/usePutRequest";
+import { useDeleteRequest } from "../hooks/useDeleteRequest";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -19,35 +19,40 @@ interface IProps {
 
 export function Summary(props: IProps) {
   const router = useRouter();
-  const [hasError, setHasError] = useState(false);
-  const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+  const { uuid } = useUuid();
   const { getAppText, getSeksjonTextById } = useSanity();
+  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
 
-  function goToDocumentation() {
+  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [showConsentValidation, setShowConsentValidation] = useState(false);
+  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
+  const [finishSoknad, finishSoknadStatus] = usePutRequest(
+    `soknad/${uuid}/complete?locale=${router.locale}`
+  );
+
+  function validateAndCompleteSoknad() {
+    if (!consentGiven) {
+      setShowConsentValidation(true);
+      return;
+    }
+    finishSoknad();
+  }
+
+  function navigateToDocumentation() {
     router.push(`/${router.query.uuid}/dokumentasjon`);
   }
 
-  function cancelSoknad() {
-    router.push(`/`);
-  }
-
-  async function finishSoknad() {
-    try {
-      const res = await fetch(api(`/soknad/${router.query.uuid}/complete?locale=${router.locale}`));
-
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-      router.push(`/${router.query.uuid}/kvittering`);
-    } catch (error) {
-      setHasError(true);
+  useEffect(() => {
+    if (deleteSoknadStatus === "success") {
+      window.location.assign("https://arbeid.dev.nav.no/arbeid/dagpenger/mine-dagpenger");
     }
-  }
+  }, [deleteSoknadStatus]);
 
-  if (hasError) {
-    return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
-  }
+  useEffect(() => {
+    if (finishSoknadStatus === "success") {
+      router.push(`/${router.query.uuid}/kvittering`);
+    }
+  }, [finishSoknadStatus]);
 
   return (
     <>
@@ -86,29 +91,54 @@ export function Summary(props: IProps) {
       </Accordion>
 
       <ConfirmationPanel
-        className="confirmation-panel"
+        className="my-8"
         checked={consentGiven}
         label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
-        onChange={() => setConsentGiven(!consentGiven)}
+        onChange={() => {
+          setConsentGiven(!consentGiven);
+          setShowConsentValidation(!showConsentValidation);
+        }}
+        error={
+          showConsentValidation && !consentGiven
+            ? getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst")
+            : undefined
+        }
       >
         {getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
 
       <nav className="navigation-container">
-        <Button variant={"secondary"} onClick={() => goToDocumentation()} icon={<Left />}>
+        <Button variant={"secondary"} onClick={() => navigateToDocumentation()} icon={<Left />}>
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
-        <Button onClick={() => finishSoknad()} disabled={!consentGiven}>
+        <Button onClick={validateAndCompleteSoknad} loading={finishSoknadStatus === "pending"}>
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
 
-        <Button variant={"secondary"} onClick={() => cancelSoknad()}>
+        <Button
+          variant={"secondary"}
+          onClick={() => deleteSoknad(uuid)}
+          loading={deleteSoknadStatus === "pending"}
+        >
           {getAppText("oppsummering.knapp.slett-soknad")}
         </Button>
-
-        <NoSessionModal />
       </nav>
+
+      {deleteSoknadStatus === "error" && (
+        <div className="my-8">
+          <Alert variant={"error"}> {getAppText("oppsummering.feilmelding.slett-soknad")} </Alert>
+        </div>
+      )}
+
+      {finishSoknadStatus === "error" && (
+        <div className="my-8">
+          <Alert variant={"error"}>
+            {getAppText("oppsummering.feilmelding.ferdigstill-soknad")}{" "}
+          </Alert>
+        </div>
+      )}
+      <NoSessionModal />
     </>
   );
 }

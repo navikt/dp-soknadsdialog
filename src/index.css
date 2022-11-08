@@ -40,8 +40,8 @@
   margin: var(--navds-spacing-4) 0 var(--navds-spacing-1);
 }
 
-.confirmation-panel {
-  margin: 44px 0;
+.my-8 {
+  margin: var(--navds-spacing-11) 0;
 }
 
 .navigation-container {
