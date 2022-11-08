@@ -9,6 +9,7 @@ import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { FormattedDate } from "../FormattedDate";
 import { useDeleteRequest } from "../../hooks/useDeleteRequest";
+import { useUuid } from "../../hooks/useUuid";
 import styles from "./inngangPaabegynt.module.css";
 
 interface IProps {
@@ -17,6 +18,7 @@ interface IProps {
 }
 export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
+  const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
 
@@ -44,7 +46,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
 
       <Button
         variant="secondary"
-        onClick={() => deleteSoknad()}
+        onClick={() => deleteSoknad(uuid)}
         loading={deleteSoknadStatus === "pending"}
       >
         {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}
