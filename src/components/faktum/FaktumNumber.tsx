@@ -52,16 +52,19 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
 
     if (!isNumber(value)) {
+      debouncedChange(parseInt(value));
       setIsValid(ValidationErrorTypes.IsNotNumber);
       return;
     }
 
     switch (faktum.type) {
       case "int": {
+        setIsValid(true);
         debouncedChange(parseInt(value));
         break;
       }
       case "double": {
+        setIsValid(true);
         debouncedChange(parseFloat(value));
         break;
       }
