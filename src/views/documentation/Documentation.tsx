@@ -17,11 +17,12 @@ import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/Doku
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
 import { useNumberOfSoknadSteps } from "../../hooks/useNumberOfSoknadSteps";
-import { useScrollTo } from "../../hooks/dokumentkrav/useScrollTo";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { ProgressBar } from "../../components/ProgressBar";
 import { useQuiz } from "../../context/quiz-context";
 import styles from "./Documentation.module.css";
 import { PageMeta } from "../../components/PageMeta";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -36,7 +37,8 @@ export function Documentation(props: IProps) {
   );
 
   const { soknadState } = useQuiz();
-  const { scrollTo } = useScrollTo();
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
   const { getAppText, getInfosideText } = useSanity();
   const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
   const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
@@ -49,7 +51,8 @@ export function Documentation(props: IProps) {
 
   useEffect(() => {
     if (showValidationErrors) {
-      scrollTo(errorSummaryRef);
+      scrollIntoView(errorSummaryRef);
+      setFocus(errorSummaryRef);
     }
   }, [showValidationErrors]);
 
@@ -77,7 +80,8 @@ export function Documentation(props: IProps) {
       // If showValidationErrors is false, the async useEffect will trigger
       // a scroll as soon as the state is set (and the validation error element is in view)
       if (showValidationErrors) {
-        scrollTo(errorSummaryRef);
+        scrollIntoView(errorSummaryRef);
+        setFocus(errorSummaryRef);
       }
     }
   }

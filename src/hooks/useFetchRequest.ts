@@ -43,6 +43,7 @@ export function useFetchRequest<T, U>(
 ] {
   const [errorDetails, setErrorDetails] = useState<IErrorDetails>();
   const [status, setStatus] = useState<FetchStatus>("idle");
+
   async function doFetch(body?: T): Promise<boolean | undefined | U> {
     setStatus("pending");
     setErrorDetails(undefined);

@@ -6,12 +6,9 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
 }
 
-export function DokumentkravTitle(props: IProps) {
-  const { dokumentkrav } = props;
-
+export function DokumentkravTitle({ dokumentkrav }: IProps) {
   const { getDokumentkravTextById } = useSanity();
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-
   const beskrivelse = dokumentkrav.beskrivelse;
 
   return (
