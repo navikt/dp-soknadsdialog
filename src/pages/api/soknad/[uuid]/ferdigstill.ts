@@ -8,7 +8,7 @@ import { allTextsQuery } from "../../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../../sanity/textStructureToHtml";
 import { getSession } from "../../../../auth.utils";
 
-async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
+async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(201).json("Mock content");
   }
@@ -32,7 +32,7 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
     const ferdigstillResponse = await fetch(
       `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`,
       {
-        method: "Put",
+        method: "PUT",
         headers: headersWithToken(onBehalfOfToken),
         body: JSON.stringify({ sanityTexts: sanityTextsWithHTML }),
       }
@@ -47,4 +47,4 @@ async function completeHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(completeHandler);
+export default withSentry(ferdigstillHandler);

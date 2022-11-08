@@ -3,8 +3,9 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 2px dashed var(--navds-global-color-gray-100);
-  border-radius: 4px;
+  border: 2px dashed var(--navds-global-color-gray-400);
+  border-radius: var(--navds-border-radius-medium);
+  background-color: var(--navds-global-color-blue-50);
   width: 100%;
   padding: 1rem;
   margin: 2rem 0 1rem 0;
