@@ -35,7 +35,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
 
   useEffect(() => {
-    if (debouncedValue !== undefined && faktum.svar !== debouncedValue) {
+    if (debouncedValue !== undefined && debouncedValue !== props.faktum.svar) {
       onChange ? onChange(faktum, debouncedValue) : saveFaktum(debouncedValue);
     }
   }, [debouncedValue]);
