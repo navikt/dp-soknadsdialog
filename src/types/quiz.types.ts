@@ -97,7 +97,8 @@ export type QuizFaktumSvarType =
   | boolean
   | number
   | IQuizPeriodeFaktumAnswerType
-  | undefined;
+  | undefined
+  | null;
 
 export interface IPaabegyntSoknad {
   soknadUuid: string;

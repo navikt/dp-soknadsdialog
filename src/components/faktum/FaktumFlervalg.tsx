@@ -23,7 +23,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   }
 
   function saveFaktum(value: string[]) {
-    saveFaktumToQuiz(faktum, value);
+    saveFaktumToQuiz(faktum, value.length > 0 ? value : null);
   }
 
   if (props.faktum.readOnly || props.readonly) {
