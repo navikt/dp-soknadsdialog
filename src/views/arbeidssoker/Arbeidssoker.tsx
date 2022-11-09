@@ -4,6 +4,7 @@ import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import styles from "./Arbeidssoker.module.css";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }
@@ -17,6 +18,7 @@ export function Arbeidssoker(props: IProps) {
         title={getAppText("arbeidssoker.side-metadata.tittel")}
         description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}
       />
+      <SoknadHeader />
       {props.arbeidssokerStatus === "UNREGISTERED" && (
         <>
           <Heading level="2" size="small">

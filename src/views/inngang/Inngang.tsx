@@ -21,7 +21,7 @@ export function Inngang(props: IProps) {
     props.arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker";
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("inngang.side-metadata.tittel")}
         description={getAppText("inngang.side-metadata.meta-beskrivelse")}
@@ -43,6 +43,6 @@ export function Inngang(props: IProps) {
           </Button>
         </Link>
       )}
-    </>
+    </main>
   );
 }

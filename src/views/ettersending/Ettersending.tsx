@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { EttersendingDokumentkrav } from "./EttersendingDokumentkrav";
-import { Button, ErrorSummary } from "@navikt/ds-react";
+import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
 import { useRouter } from "next/router";
@@ -10,6 +10,14 @@ import { useUuid } from "../../hooks/useUuid";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { useSanity } from "../../context/sanity-context";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import {
+  ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL,
+  ETTERSENDING_INFORMASJON,
+  ETTERSENDING_TITTEL,
+} from "../../text-constants";
+import styles from "../receipt/Receipts.module.css";
+import { PortableText } from "@portabletext/react";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -19,9 +27,10 @@ export function Ettersending(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { setFocus } = useSetFocus();
-  const { getAppText } = useSanity();
+  const { getAppText, getInfosideText } = useSanity();
   const { scrollIntoView } = useScrollIntoView();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
+  const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
   const [bundlingComplete, setBundlingComplete] = useState(false);
   const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
 
@@ -65,6 +74,18 @@ export function Ettersending(props: IProps) {
 
   return (
     <div>
+      <SoknadHeader titleTextKey={ETTERSENDING_TITTEL} />
+
+      {ettersendingText && (
+        <div className={styles.dokumentasjonsTextContainer}>
+          <PortableText value={ettersendingText.body} />
+        </div>
+      )}
+
+      <Heading level="3" size="small">
+        {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
+      </Heading>
+
       {dokumentkravWithError.length > 0 && (
         <ErrorSummary
           size="medium"

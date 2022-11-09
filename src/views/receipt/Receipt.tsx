@@ -22,6 +22,7 @@ import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import styles from "./Receipts.module.css";
 import { PageMeta } from "../../components/PageMeta";
 import { PortableText } from "@portabletext/react";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -55,11 +56,12 @@ export function Receipt(props: IProps) {
   }
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("kvittering.side-metadata.tittel")}
         description={getAppText("kvittering.side-metadata.meta-beskrivelse")}
       />
+      <SoknadHeader />
       <ReceiptSoknadStatus {...props.soknadStatus} />
       <ArbeidssokerStatus status={props.arbeidssokerStatus} />
 
@@ -86,6 +88,6 @@ export function Receipt(props: IProps) {
         {getAppText("kvittering.mine-dagpenger.knapp")}
       </Button>
       <NoSessionModal />
-    </>
+    </main>
   );
 }

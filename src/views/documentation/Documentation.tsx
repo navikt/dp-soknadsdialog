@@ -16,14 +16,15 @@ import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList"
 import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
 import { useDokumentkravValidation } from "../../hooks/dokumentkrav/useDokumentkravValidation";
-import { useNumberOfSoknadSteps } from "../../hooks/useNumberOfSoknadSteps";
+import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { ProgressBar } from "../../components/ProgressBar";
+import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { useQuiz } from "../../context/quiz-context";
 import styles from "./Documentation.module.css";
 import { PageMeta } from "../../components/PageMeta";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -41,7 +42,7 @@ export function Documentation(props: IProps) {
   const { scrollIntoView } = useScrollIntoView();
   const { setFocus } = useSetFocus();
   const { getAppText, getInfosideText } = useSanity();
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+  const { totalSteps, documentationStep } = useProgressBarSteps();
   const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
   const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
 
@@ -93,12 +94,13 @@ export function Documentation(props: IProps) {
   }
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("dokumentkrav.side-metadata.tittel")}
         description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
       />
-      <ProgressBar currentStep={12} totalSteps={numberOfSoknadSteps} />
+      <SoknadHeader />
+      <ProgressBar currentStep={documentationStep} totalSteps={totalSteps} />
       {showValidationErrors && (
         <ErrorList
           heading={getAppText("dokumentkrav.feilmelding.validering.header")}
@@ -155,6 +157,6 @@ export function Documentation(props: IProps) {
         <ExitSoknad />
       </div>
       <NoSessionModal />
-    </>
+    </main>
   );
 }

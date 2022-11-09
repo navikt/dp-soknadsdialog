@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import { ExitSoknad } from "../components/exit-soknad/ExitSoknad";
 import { Faktum } from "../components/faktum/Faktum";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { PageMeta } from "../components/PageMeta";
-import { ProgressBar } from "../components/ProgressBar";
-import { useSanity } from "../context/sanity-context";
-import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
-import { usePutRequest } from "../hooks/usePutRequest";
-import { useUuid } from "../hooks/useUuid";
 import { IQuizSeksjon } from "../types/quiz.types";
+import { ProgressBar } from "../components/progress-bar/ProgressBar";
+import { PageMeta } from "../components/PageMeta";
+import { useProgressBarSteps } from "../hooks/useProgressBarSteps";
+import { useUuid } from "../hooks/useUuid";
+import { usePutRequest } from "../hooks/usePutRequest";
+import { SoknadHeader } from "../components/soknad-header/SoknadHeader";
+import { useSanity } from "../context/sanity-context";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -21,7 +22,7 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { getAppText, getSeksjonTextById } = useSanity();
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+  const { totalSteps, summaryStep } = useProgressBarSteps();
 
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
@@ -48,12 +49,13 @@ export function Summary(props: IProps) {
   }, [finishSoknadStatus]);
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
-      <ProgressBar currentStep={13} totalSteps={numberOfSoknadSteps} />
+      <SoknadHeader />
+      <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
       <Accordion>
         {props.sections?.map((section, index) => {
           return (
@@ -121,6 +123,6 @@ export function Summary(props: IProps) {
         <ExitSoknad />
       </div>
       <NoSessionModal />
-    </>
+    </main>
   );
 }
