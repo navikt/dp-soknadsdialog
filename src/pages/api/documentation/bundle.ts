@@ -33,12 +33,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
+    console.log(`bundlet ${dokumentkravId}`);
     const { urn } = await mellomlagringResponse.json();
     const dpSoknadResponse = await sendBundleTilDpSoknad(uuid, dokumentkravId, urn, DPSoknadToken);
 
     if (!dpSoknadResponse.ok) {
       throw new Error("Feil ved lagring av bundle i dp-soknad");
     }
+    console.log(`lagret bundle til ${dokumentkravId}`);
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
