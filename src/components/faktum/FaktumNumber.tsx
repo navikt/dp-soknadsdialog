@@ -19,6 +19,7 @@ enum ValidationErrorTypes {
   IsNegativeValue,
   IsInvalidValue,
   IsNotNumber,
+  IsEmptyValue,
 }
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
@@ -45,9 +46,17 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
 
+    // Use this when dp-soknad accept null as an answer
+    // if (!value) {
+    //   debouncedChange(null);
+    //   setIsValid(true);
+    //   return;
+    // }
+
+    // Remove this when dp-soknad accept null as an answer
     if (!value) {
-      debouncedChange(null);
-      setIsValid(true);
+      debouncedChange(undefined);
+      setIsValid(ValidationErrorTypes.IsEmptyValue);
       return;
     }
 
@@ -125,6 +134,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   function getErrorMessage() {
     switch (isValid) {
+      case ValidationErrorTypes.IsEmptyValue:
+        return getAppText("validering.number-faktum.tom-svar");
       case ValidationErrorTypes.IsNegativeValue:
         return getAppText("validering.number-faktum.ikke-negativt-tall");
       case ValidationErrorTypes.IsNotNumber:
