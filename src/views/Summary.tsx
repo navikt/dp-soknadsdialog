@@ -86,7 +86,7 @@ export function Summary(props: IProps) {
       </Accordion>
 
       <ConfirmationPanel
-        className="my-8"
+        className="my-11"
         checked={consentGiven}
         label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
         onChange={() => {
@@ -113,7 +113,7 @@ export function Summary(props: IProps) {
       </nav>
 
       {finishSoknadStatus === "error" && (
-        <div className="my-8">
+        <div className="my-11">
           <Alert variant={"error"}>
             {getAppText("oppsummering.feilmelding.ferdigstill-soknad")}{" "}
           </Alert>

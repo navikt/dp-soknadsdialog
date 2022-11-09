@@ -70,7 +70,7 @@ export function StartSoknad() {
         )}
 
         <ConfirmationPanel
-          className="my-8"
+          className="my-11"
           checked={consentGiven}
           label={getAppText("start-soknad.checkbox.samtykke-riktige-opplysninger.label")}
           onChange={() => {
