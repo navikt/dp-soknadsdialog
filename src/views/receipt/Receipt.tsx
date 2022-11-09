@@ -55,7 +55,7 @@ export function Receipt(props: IProps) {
   }
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("kvittering.side-metadata.tittel")}
         description={getAppText("kvittering.side-metadata.meta-beskrivelse")}
@@ -86,6 +86,6 @@ export function Receipt(props: IProps) {
         {getAppText("kvittering.mine-dagpenger.knapp")}
       </Button>
       <NoSessionModal />
-    </>
+    </main>
   );
 }

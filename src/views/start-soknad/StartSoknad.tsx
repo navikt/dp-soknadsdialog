@@ -1,4 +1,4 @@
-import { Alert, Button, ConfirmationPanel, Heading, Link } from "@navikt/ds-react";
+import { Alert, Button, ConfirmationPanel, Link } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -55,10 +55,6 @@ export function StartSoknad() {
         description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
       <main>
-        <Heading spacing size="xlarge" level="1">
-          {getAppText("start-soknad.tittel")}
-        </Heading>
-
         <Alert variant="info" className={styles.newSoknadAlertText}>
           {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
           <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
