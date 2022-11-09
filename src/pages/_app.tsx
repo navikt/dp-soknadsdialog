@@ -3,7 +3,6 @@ import NextApp, { AppContext, AppProps } from "next/app";
 import styles from "./_app.module.css";
 import "../index.css";
 import "../variables.css";
-import SoknadHeader from "../components/SoknadHeader";
 import { useRouter } from "next/router";
 import { fetcher } from "../api.utils";
 import { SWRConfig } from "swr";
@@ -23,11 +22,6 @@ type AppPropsSanityTexts = AppProps & {
 export default function App({ Component, pageProps, sanityTexts }: AppPropsSanityTexts) {
   const router = useRouter();
 
-  const renderHeader = () => {
-    if (router.pathname === "/") return <></>;
-    return <SoknadHeader />;
-  };
-
   onLanguageSelect(({ locale }) => {
     Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });
     router.push(router.asPath, router.asPath, { locale });
@@ -46,7 +40,6 @@ export default function App({ Component, pageProps, sanityTexts }: AppPropsSanit
     <ErrorBoundary>
       <SWRConfig value={{ fetcher }}>
         <SanityProvider initialState={sanityTexts}>
-          {renderHeader()}
           <div className={styles.app}>
             <Component {...pageProps} />
           </div>

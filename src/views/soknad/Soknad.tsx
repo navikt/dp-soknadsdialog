@@ -9,13 +9,14 @@ import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator"
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
-import { ProgressBar } from "../../components/ProgressBar";
+import { ProgressBar } from "../../components/progress-bar/ProgressBar";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { useNumberOfSoknadSteps } from "../../hooks/useNumberOfSoknadSteps";
+import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 
@@ -26,7 +27,7 @@ interface IProps {
 export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+  const { totalSteps } = useProgressBarSteps();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
@@ -95,9 +96,10 @@ export function Soknad(props: IProps) {
         title={getAppText("soknad.side-metadata.tittel")}
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
+      <SoknadHeader />
       <main>
         {soknadState.versjon_navn === "Dagpenger" && (
-          <ProgressBar currentStep={sectionIndex + 1} totalSteps={numberOfSoknadSteps} />
+          <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
         )}
 
         {showPersonalia && props.personalia && (

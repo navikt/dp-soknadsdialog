@@ -8,6 +8,7 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import { PageMeta } from "../../components/PageMeta";
 import { Timeline as timeline } from "../../components/timeline/Timeline";
 import { useSanity } from "../../context/sanity-context";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./StartSoknad.module.css";
 
@@ -54,6 +55,7 @@ export function StartSoknad() {
         title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
         description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
+      <SoknadHeader />
       <main>
         <Alert variant="info" className={styles.newSoknadAlertText}>
           {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}

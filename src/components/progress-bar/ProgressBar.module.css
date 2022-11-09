@@ -2,7 +2,7 @@
   --progress-bar-animation-duration: 500ms;
   --progress-bar-height: 16px;
   width: 100%;
-  margin: 20px 0;
+  margin: var(--navds-spacing-10) 0;
 }
 
 .barContainer {
