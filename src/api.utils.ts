@@ -13,9 +13,13 @@ export const fetcher = (url: RequestInfo, options: RequestInit = {}): Promise<un
 
 export function apiFetch(url: string | Request, init: RequestInit | undefined, requestId?: string) {
   const reqId = requestId === undefined ? crypto.randomUUID() : requestId;
+  const headers = {
+    ...init?.headers,
+    "x-request-id": reqId,
+  };
   // eslint-disable-next-line no-console
   console.log("Starter request " + reqId);
-  return fetch(url, { ...init, headers: { "x-request-id": reqId } });
+  return fetch(url, { ...init, headers });
 }
 
 declare module "http" {
