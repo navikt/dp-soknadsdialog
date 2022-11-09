@@ -1,6 +1,11 @@
 .dokumentkravContainer {
   background-color: var(--navds-global-color-gray-50);
-  padding: var(--navds-spacing-2) var(--navds-spacing-5)   var(--navds-spacing-5) var(--navds-spacing-5);
+  padding: var(--navds-spacing-4) var(--navds-spacing-5);
   margin-bottom: var(--navds-spacing-10);;
   border-radius: var(--navds-border-radius-medium);
+}
+
+.dokumentkravTitleContainer {
+  display: flex;
+  justify-content: space-between;
 }

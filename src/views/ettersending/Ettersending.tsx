@@ -76,16 +76,6 @@ export function Ettersending(props: IProps) {
     <div>
       <SoknadHeader titleTextKey={ETTERSENDING_TITTEL} />
 
-      {ettersendingText && (
-        <div className={styles.dokumentasjonsTextContainer}>
-          <PortableText value={ettersendingText.body} />
-        </div>
-      )}
-
-      <Heading level="3" size="small">
-        {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
-      </Heading>
-
       {dokumentkravWithError.length > 0 && (
         <ErrorSummary
           size="medium"
@@ -99,6 +89,16 @@ export function Ettersending(props: IProps) {
           ))}
         </ErrorSummary>
       )}
+
+      {ettersendingText && (
+        <div className={styles.dokumentasjonsTextContainer}>
+          <PortableText value={ettersendingText.body} />
+        </div>
+      )}
+
+      <Heading level="2" size="medium" className="my-6">
+        {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
+      </Heading>
 
       {props.dokumentkrav.krav.map((krav) => (
         <EttersendingDokumentkrav

@@ -5,9 +5,10 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import { PortableText } from "@portabletext/react";
 import { FileUploader } from "../../components/file-uploader/FileUploader";
 import { useSanity } from "../../context/sanity-context";
-import styles from "./EttersendingDokumentkrav.module.css";
 import { FileList } from "../../components/file-list/FileList";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { HelpText } from "../../components/HelpText";
+import { EttersendingDokumentkravTitle } from "./EttersendingDokumentkravTitle";
+import styles from "./EttersendingDokumentkrav.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -31,8 +32,12 @@ export function EttersendingDokumentkrav(props: IProps) {
 
   return (
     <div id={props.dokumentkrav.id} className={styles.dokumentkravContainer}>
-      <DokumentkravTitle dokumentkrav={props.dokumentkrav} />
+      <EttersendingDokumentkravTitle {...props.dokumentkrav} />
+
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
+      {dokumentkravText?.helpText && (
+        <HelpText className="my-6" helpText={dokumentkravText.helpText} />
+      )}
 
       <FileUploader
         dokumentkrav={props.dokumentkrav}

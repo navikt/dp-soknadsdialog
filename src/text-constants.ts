@@ -22,8 +22,11 @@ export const KVITTERING_TEKST_SENDT_AV_DEG = "kvittering.tekst.sendt-av-deg"
 
 export const ETTERSENDING_TITTEL = "ettersending.tittel"
 export const ETTERSENDING_INFORMASJON = "ettersending.informasjon"
+
 export const ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL = "ettersending.dokumenter.innsending.tittel"
 export const ETTERSENDING_DOKUMENTER_IKKE_INNSENDING_TITTEL = "ettersending.dokumenter.ikke-innsending.tittel"
 export const ETTERSENDING_DOKUMENTER_ANDRE_TITTEL = "ettersending.dokumenter.andre.tittel"
+export const ETTERSENDING_DOKUMENTER_STATUS_MOTTATT = "ettersending.dokumenter.status.mottatt"
+export const ETTERSENDING_DOKUMENTER_STATUS_MANGLER = "ettersending.dokumenter.status.mangler"
 
 export const SOKNAD_HEADER_TITTEL = "soknad.header.tittel"
