@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import crypto from "crypto";
 import { withSentry } from "@sentry/nextjs";
-import { audienceDPSoknad, audienceMellomlagring } from "../../../api.utils";
+import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
 import { headersWithToken } from "../quiz-api";
 
@@ -15,6 +16,9 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
+  const requestIdHeader = req.headers["x-request-id"];
+  const requestId = requestIdHeader === undefined ? crypto.randomUUID() : requestIdHeader;
+
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();
@@ -27,19 +31,28 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringToken
+      mellomlagringToken,
+      requestId
     );
     if (!mellomlagringResponse.ok) {
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
+    // eslint-disable-next-line no-console
     console.log(`bundlet ${dokumentkravId}`);
     const { urn } = await mellomlagringResponse.json();
-    const dpSoknadResponse = await sendBundleTilDpSoknad(uuid, dokumentkravId, urn, DPSoknadToken);
+    const dpSoknadResponse = await sendBundleTilDpSoknad(
+      uuid,
+      dokumentkravId,
+      urn,
+      DPSoknadToken,
+      requestId
+    );
 
     if (!dpSoknadResponse.ok) {
       throw new Error("Feil ved lagring av bundle i dp-soknad");
     }
+    // eslint-disable-next-line no-console
     console.log(`lagret bundle til ${dokumentkravId}`);
 
     return res.status(dpSoknadResponse.status).end();
@@ -55,14 +68,19 @@ async function sendBundleTilDpSoknad(
   uuid: string,
   dokumentkravId: string,
   urn: string,
-  DPSoknadToken: string
+  DPSoknadToken: string,
+  requestId: string
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/bundle`;
-  return fetch(url, {
-    method: "PUT",
-    headers: headersWithToken(DPSoknadToken),
-    body: JSON.stringify({ urn }),
-  });
+  return apiFetch(
+    url,
+    {
+      method: "PUT",
+      headers: headersWithToken(DPSoknadToken),
+      body: JSON.stringify({ urn }),
+    },
+    requestId
+  );
 }
 
 interface IMellomlagringBundle {
@@ -71,13 +89,21 @@ interface IMellomlagringBundle {
   filer: { urn: string }[];
 }
 
-async function bundleFilesMellomlagring(body: IMellomlagringBundle, mellomlagringToken: string) {
+async function bundleFilesMellomlagring(
+  body: IMellomlagringBundle,
+  mellomlagringToken: string,
+  requestId: string
+) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
-  return fetch(url, {
-    method: "POST",
-    headers: headersWithToken(mellomlagringToken),
-    body: JSON.stringify(body),
-  });
+  return apiFetch(
+    url,
+    {
+      method: "POST",
+      headers: headersWithToken(mellomlagringToken),
+      body: JSON.stringify(body),
+    },
+    requestId
+  );
 }
 
 export default withSentry(bundleHandler);
