@@ -56,7 +56,7 @@ export function Summary(props: IProps) {
   }, [finishSoknadStatus]);
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
@@ -141,6 +141,6 @@ export function Summary(props: IProps) {
         </div>
       )}
       <NoSessionModal />
-    </>
+    </main>
   );
 }

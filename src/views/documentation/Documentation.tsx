@@ -93,7 +93,7 @@ export function Documentation(props: IProps) {
   }
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("dokumentkrav.side-metadata.tittel")}
         description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}
@@ -153,6 +153,6 @@ export function Documentation(props: IProps) {
         toggleVisibility={setShowBundleErrorModal}
       />
       <NoSessionModal />
-    </>
+    </main>
   );
 }
