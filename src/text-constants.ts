@@ -18,5 +18,12 @@ export const KVITTERING_ANDRE_DOKUMENTER_TEKST = "kvittering.andre-dokumenter.te
 export const KVITTERING_ANDRE_DOKUMENTER_lenke = "kvittering.andre-dokumenter.lenke"
 
 export const KVITTERING_INNSENDTE_DOKUMENTER_KNAPP_LAST_OPP = "kvittering.innsendte-dokumenter.knapp.last-opp"
-
 export const KVITTERING_TEKST_SENDT_AV_DEG = "kvittering.tekst.sendt-av-deg"
+
+export const ETTERSENDING_TITTEL = "ettersending.tittel"
+export const ETTERSENDING_INFORMASJON = "ettersending.informasjon"
+export const ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL = "ettersending.dokumenter.innsending.tittel"
+export const ETTERSENDING_DOKUMENTER_IKKE_INNSENDING_TITTEL = "ettersending.dokumenter.ikke-innsending.tittel"
+export const ETTERSENDING_DOKUMENTER_ANDRE_TITTEL = "ettersending.dokumenter.andre.tittel"
+
+export const SOKNAD_HEADER_TITTEL = "soknad.header.tittel"

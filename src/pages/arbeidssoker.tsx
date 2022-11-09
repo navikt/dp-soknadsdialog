@@ -16,7 +16,7 @@ export async function getServerSideProps(
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        arbeidssokerStatus: "REGISTERED",
+        arbeidssokerStatus: "UNREGISTERED",
       },
     };
   }

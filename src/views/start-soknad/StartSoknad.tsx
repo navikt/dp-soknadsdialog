@@ -1,4 +1,4 @@
-import { Alert, Button, ConfirmationPanel, Heading, Link } from "@navikt/ds-react";
+import { Alert, Button, ConfirmationPanel, Link } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import { PageMeta } from "../../components/PageMeta";
 import { Timeline as timeline } from "../../components/timeline/Timeline";
 import { useSanity } from "../../context/sanity-context";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./StartSoknad.module.css";
 
@@ -54,11 +55,8 @@ export function StartSoknad() {
         title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
         description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
+      <SoknadHeader />
       <main>
-        <Heading spacing size="xlarge" level="1">
-          {getAppText("start-soknad.tittel")}
-        </Heading>
-
         <Alert variant="info" className={styles.newSoknadAlertText}>
           {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
           <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">

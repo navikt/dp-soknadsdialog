@@ -6,12 +6,13 @@ import { Left } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import { useSanity } from "../context/sanity-context";
 import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { ProgressBar } from "../components/ProgressBar";
+import { ProgressBar } from "../components/progress-bar/ProgressBar";
 import { PageMeta } from "../components/PageMeta";
-import { useNumberOfSoknadSteps } from "../hooks/useNumberOfSoknadSteps";
+import { useProgressBarSteps } from "../hooks/useProgressBarSteps";
 import { useUuid } from "../hooks/useUuid";
 import { usePutRequest } from "../hooks/usePutRequest";
 import { useDeleteRequest } from "../hooks/useDeleteRequest";
+import { SoknadHeader } from "../components/soknad-header/SoknadHeader";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -21,7 +22,7 @@ export function Summary(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { getAppText, getSeksjonTextById } = useSanity();
-  const { numberOfSoknadSteps } = useNumberOfSoknadSteps();
+  const { totalSteps, summaryStep } = useProgressBarSteps();
 
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
@@ -60,7 +61,8 @@ export function Summary(props: IProps) {
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
-      <ProgressBar currentStep={13} totalSteps={numberOfSoknadSteps} />
+      <SoknadHeader />
+      <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
       <Accordion>
         {props.sections?.map((section, index) => {
           return (

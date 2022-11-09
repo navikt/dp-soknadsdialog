@@ -11,7 +11,7 @@ interface IProps {
 export function SectionHeading(props: IProps) {
   return (
     <>
-      <Heading spacing size="xlarge" level="2">
+      <Heading spacing size="large" level="2">
         {props.text?.title || props.fallback}
       </Heading>
 
