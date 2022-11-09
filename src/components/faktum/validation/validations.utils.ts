@@ -7,6 +7,11 @@ export function isValidTextLength(value: string): boolean {
   return value.length <= maxTextLength;
 }
 
+export function isNumber(value: string): boolean {
+  const regExPattern = /^[0-9,.-]*$/;
+  return regExPattern.test(value);
+}
+
 export function isValidArbeidstimer(value: number): boolean {
   return value >= 0 && value <= 99;
 }
