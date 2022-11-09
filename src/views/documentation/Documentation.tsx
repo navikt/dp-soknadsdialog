@@ -23,6 +23,7 @@ import { useQuiz } from "../../context/quiz-context";
 import styles from "./Documentation.module.css";
 import { PageMeta } from "../../components/PageMeta";
 import { useSetFocus } from "../../hooks/useSetFocus";
+import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -150,6 +151,9 @@ export function Documentation(props: IProps) {
         isOpen={showBundleErrorModal}
         toggleVisibility={setShowBundleErrorModal}
       />
+      <div className="my-6">
+        <ExitSoknad />
+      </div>
       <NoSessionModal />
     </>
   );

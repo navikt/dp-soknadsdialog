@@ -32,7 +32,7 @@
   box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
 }
 
-.modal-container__button-container >*:first-child {
+.modal-container__button-container > *:first-child {
   margin-right: var(--navds-spacing-6);
 }
 
@@ -42,6 +42,10 @@
 
 .my-8 {
   margin: var(--navds-spacing-11) 0;
+}
+
+.my-6 {
+  margin: var(--navds-spacing-6) 0;
 }
 
 .navigation-container {
