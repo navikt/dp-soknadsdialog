@@ -32,7 +32,7 @@ const nesteMockData = {
   seksjoner: [
     {
       fakta: [faktumMockData],
-      beskrivendeId: "gjenopptak",
+      beskrivendeId: "din-situasjon",
       ferdig: true,
     },
   ],
@@ -40,7 +40,7 @@ const nesteMockData = {
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
-  beskrivendeId: "gjenopptak",
+  beskrivendeId: "din-situasjon",
   ferdig: true,
 };
 

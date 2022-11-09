@@ -23,7 +23,7 @@ const sectionMockData: IQuizSeksjon = {
       sannsynliggjoresAv: [],
     },
   ],
-  beskrivendeId: "gjenopptak",
+  beskrivendeId: "din-situasjon",
   ferdig: true,
 };
 

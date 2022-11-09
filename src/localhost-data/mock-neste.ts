@@ -334,7 +334,7 @@ export const mockNeste = {
         },
       ],
       ferdig: true,
-      beskrivendeId: "gjenopptak",
+      beskrivendeId: "din-situasjon",
     },
     {
       fakta: [

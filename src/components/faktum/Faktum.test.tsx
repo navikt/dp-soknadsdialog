@@ -39,7 +39,7 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
 
 const sectionStateMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
-  beskrivendeId: "gjenopptak",
+  beskrivendeId: "din-situasjon",
   ferdig: true,
 };
 

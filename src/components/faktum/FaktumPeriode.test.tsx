@@ -20,7 +20,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [faktumMockData],
-  beskrivendeId: "gjenopptak",
+  beskrivendeId: "din-situasjon",
   ferdig: true,
 };
 
