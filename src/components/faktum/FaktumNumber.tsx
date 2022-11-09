@@ -15,12 +15,7 @@ import {
   isValidPermitteringsPercent,
 } from "./validation/validations.utils";
 
-enum ValidationErrorTypes {
-  IsNegativeValue,
-  IsInvalidValue,
-  IsNotNumber,
-  IsEmptyValue,
-}
+type ValidationErrorTypes = "negativeValue" | "invalidValue" | "notNumber" | "emptyValue";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
@@ -56,13 +51,13 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     // Remove this when dp-soknad accept null as an answer
     if (!value) {
       debouncedChange(undefined);
-      setIsValid(ValidationErrorTypes.IsEmptyValue);
+      setIsValid("emptyValue");
       return;
     }
 
     if (!isNumber(value)) {
       debouncedChange(parseInt(value));
-      setIsValid(ValidationErrorTypes.IsNotNumber);
+      setIsValid("notNumber");
       return;
     }
 
@@ -93,19 +88,19 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
 
     if (value < 0) {
-      setIsValid(ValidationErrorTypes.IsNegativeValue);
+      setIsValid("negativeValue");
       return false;
     }
 
     switch (faktum.beskrivendeId) {
       case "faktum.arbeidsforhold.permittert-prosent": {
         const isValid = isValidPermitteringsPercent(value);
-        setIsValid(isValid ? true : ValidationErrorTypes.IsInvalidValue);
+        setIsValid(isValid ? true : "invalidValue");
         return isValid;
       }
       case "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold": {
         const isValid = isValidArbeidstimer(value);
-        setIsValid(isValid ? true : ValidationErrorTypes.IsInvalidValue);
+        setIsValid(isValid ? true : "invalidValue");
         return isValid;
       }
       default: {
@@ -134,13 +129,13 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
 
   function getErrorMessage() {
     switch (isValid) {
-      case ValidationErrorTypes.IsEmptyValue:
+      case "emptyValue":
         return getAppText("validering.number-faktum.tom-svar");
-      case ValidationErrorTypes.IsNegativeValue:
+      case "negativeValue":
         return getAppText("validering.number-faktum.ikke-negativt-tall");
-      case ValidationErrorTypes.IsNotNumber:
+      case "notNumber":
         return getAppText("validering.number-faktum.maa-vaere-et-tall");
-      case ValidationErrorTypes.IsInvalidValue:
+      case "invalidValue":
         return faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig");
       default:
         return undefined;
