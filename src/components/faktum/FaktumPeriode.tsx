@@ -148,6 +148,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             value={svar?.fom}
             hasError={!isValidFom || unansweredFaktumId === faktum.id}
             errorMessage={getValidationMessage()}
+            required
           />
         </div>
         <div>
