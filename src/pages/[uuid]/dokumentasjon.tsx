@@ -51,16 +51,25 @@ export async function getServerSideProps(
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
-  if (!soknadStateResponse.ok) {
-    errorCode = soknadStateResponse.status;
-  } else {
-    soknadState = await soknadStateResponse.json();
-  }
-
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkrav = await dokumentkravResponse.json();
+  }
+
+  if (dokumentkrav?.length === 0) {
+    return {
+      redirect: {
+        destination: `/${uuid}/oppsummering`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (!soknadStateResponse.ok) {
+    errorCode = soknadStateResponse.status;
+  } else {
+    soknadState = await soknadStateResponse.json();
   }
 
   return {
