@@ -1,28 +1,21 @@
-import React, { useState } from "react";
-import styles from "./ReceiptDocumentsMissing.module.css";
-import { BodyShort, Button, Heading, ReadMore } from "@navikt/ds-react";
-import {
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-  DOKUMENTKRAV_SVAR_SENDER_SENERE,
-} from "../../constants";
+import { BodyShort, Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { UploadFilesModal } from "../upload-modal/UploadModal";
-import { IDokumentkrav } from "../../types/documentation.types";
+import {
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+} from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 import {
   DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE,
   DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG,
 } from "../../text-constants";
+import { IDokumentkrav } from "../../types/documentation.types";
+import styles from "./ReceiptDocumentsMissing.module.css";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
-  const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const { getAppText, getDokumentkravTextById } = useSanity();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-
-  function toggleModal() {
-    setUploadModalOpen((state) => !state);
-  }
 
   return (
     <div className={styles.dokumentkrav}>
@@ -47,16 +40,6 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
           )}
         </ReadMore>
       )}
-
-      <Button className={styles.uploadButton} onClick={toggleModal}>
-        Last opp
-      </Button>
-
-      <UploadFilesModal
-        modalOpen={uploadModalOpen}
-        dokumentkrav={dokumentkrav}
-        closeModal={() => setUploadModalOpen(false)}
-      />
     </div>
   );
 }

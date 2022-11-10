@@ -13,7 +13,10 @@ export const KVITTERING_SOKNAD_STATUS_TAG__MANGLER_DOKUMENTER =  "kvittering.sok
 export const KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT = "kvittering.arbeidssokerstatus.info-tekst.registrert";
 export const KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UREGISTRERT = "kvittering.arbeidssokerstatus.info-tekst.uregistrert";
 
-export const KVITTERING_INNSENDTE_DOKUMENTER_KNAPP_LAST_OPP = "kvittering.innsendte-dokumenter.knapp.last-opp";
+export const KVITTERING_MANGLER_DOKUMENT_HEADING = "kvittering.heading.mangler-dokumenter";
+export const KVITTERING_MANGLER_DOKUMENT_ANTALL_MANGLER = "kvittering.tekst.antall-mangler";
+export const KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP = "kvittering.mangler-dokumenter.go-til-opplasting-knapp";
+
 export const KVITTERING_TEKST_SENDT_AV_DEG = "kvittering.tekst.sendt-av-deg";
 
 export const ETTERSENDING_TITTEL = "ettersending.tittel";
