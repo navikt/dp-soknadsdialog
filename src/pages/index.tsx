@@ -74,7 +74,7 @@ export async function getServerSideProps(
     arbeidssokerStatus = "UNKNOWN";
   }
 
-  if (Object.keys(mineSoknader).length === 0) {
+  if (mineSoknader && Object.keys(mineSoknader).length === 0) {
     return {
       redirect: {
         destination: arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker",
