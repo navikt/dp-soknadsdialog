@@ -54,7 +54,7 @@ describe("Dokumentkrav", () => {
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
     await waitFor(() => {
-      expect(screen.queryByText("filopplaster.dra-filene-hit")).toBeInTheDocument();
+      expect(screen.queryByText("filopplaster.tekst.dra-filene-hit")).toBeInTheDocument();
     });
   });
 
@@ -118,7 +118,7 @@ describe("Dokumentkrav", () => {
       await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
 
       await waitFor(() => {
-        expect(screen.queryByText("filopplaster.dra-filene-hit")).toBeInTheDocument();
+        expect(screen.queryByText("filopplaster.tekst.dra-filene-hit")).toBeInTheDocument();
       });
     }
 

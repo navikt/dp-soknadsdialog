@@ -72,7 +72,11 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <p>{getAppText("filopplaster.dra-filene-hit")}</p>
+        <p>
+          <b>{getAppText("filopplaster.tekst.dra-filene-hit")}</b>
+          <br />
+          {getAppText("filopplaster.tekst.eller")}
+        </p>
         <Button onClick={open} loading={isLoading}>
           {getAppText("filopplaster.knapp.velg-filer")}
         </Button>
