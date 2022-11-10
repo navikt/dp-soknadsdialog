@@ -4,6 +4,10 @@ import { BodyShort, Heading } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptDocumentsNotSending.module.css";
 import { DOKUMENTKRAV_SVAR_SENDER_IKKE, DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE } from "../../constants";
+import {
+  DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE,
+  DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE,
+} from "../../text-constants";
 
 interface IProps {
   documents: IDokumentkrav[];
@@ -27,10 +31,10 @@ export function ReceiptDocumentsNotSending(props: IProps) {
             <BodyShort>
               <>
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-                  <>{getAppText("kvittering.tekst.sendt-tidligere")}</>
+                  <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE)}</>
                 )}
                 {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-                  <>{getAppText("kvittering.tekst.sender-ikke")}</>
+                  <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE)}</>
                 )}
               </>
             </BodyShort>

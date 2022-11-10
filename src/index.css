@@ -48,6 +48,10 @@
   margin: var(--navds-spacing-6) 0;
 }
 
+.my-3 {
+  margin: var(--navds-spacing-3) 0;
+}
+
 .navigation-container {
   display: flex;
   margin-top: var(--navds-spacing-9);

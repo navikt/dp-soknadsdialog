@@ -1284,7 +1284,7 @@ export const mockDokumentkravBesvart = {
         "dokumentkrav.svar.andre.sender",
       ],
       begrunnelse: "234",
-      svar: "dokumentkrav.svar.send.senere",
+      svar: "dokumentkrav.svar.sendt.tidligere",
     },
     {
       id: "8057.1",
@@ -1322,7 +1322,7 @@ export const mockDokumentkravBesvart = {
         "dokumentkrav.svar.andre.sender",
       ],
       begrunnelse: "234",
-      svar: "dokumentkrav.svar.send.senere",
+      svar: "dokumentkrav.svar.sender.ikke",
     },
     {
       id: "7002",
@@ -1405,7 +1405,7 @@ export const mockDokumentkravBesvart = {
         "dokumentkrav.svar.andre.sender",
       ],
       begrunnelse: "234",
-      svar: "dokumentkrav.svar.send.senere",
+      svar: "dokumentkrav.svar.andre.sender",
     },
   ],
 };

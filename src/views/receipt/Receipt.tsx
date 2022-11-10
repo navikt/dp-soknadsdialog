@@ -11,7 +11,7 @@ import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/Rece
 import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
 import { ReceiptDocumentsNotSending } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt-documents-uploaded/ReceiptDocumentsUploaded";
-import { ReceiptDocumentsOther } from "../../components/receipt-documents-other/ReceiptDocumentsOther";
+import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
@@ -73,11 +73,11 @@ export function Receipt(props: IProps) {
 
       <div className={styles.documentList}>
         {missingDocuments.length > 0 && <ReceiptDocumentsMissing documents={missingDocuments} />}
-        <ReceiptDocumentsOther />
         {uploadedDocuments.length > 0 && <ReceiptDocumentsUploaded documents={uploadedDocuments} />}
         {notSendingDocuments.length > 0 && (
           <ReceiptDocumentsNotSending documents={notSendingDocuments} />
         )}
+        <DokumentkravGenerellInnsending />
       </div>
       <ReceiptYourAnswers sections={props.sections} />
       <Button

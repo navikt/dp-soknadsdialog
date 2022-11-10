@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IDokumentkravList } from "../../types/documentation.types";
-import { EttersendingDokumentkrav } from "./EttersendingDokumentkrav";
+import { EttersendingDokumentkravSendingItem } from "./EttersendingDokumentkravSendingItem";
 import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
@@ -13,11 +13,22 @@ import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTit
 import {
   ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL,
   ETTERSENDING_INFORMASJON,
+  ETTERSENDING_KNAPP_AVBRYT,
+  ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER,
   ETTERSENDING_TITTEL,
 } from "../../text-constants";
-import styles from "../receipt/Receipts.module.css";
 import { PortableText } from "@portabletext/react";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
+import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
+} from "../../constants";
+import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
+import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
+import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -33,6 +44,18 @@ export function Ettersending(props: IProps) {
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
   const [bundlingComplete, setBundlingComplete] = useState(false);
   const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
+
+  const dokumentkravAvailableForEttersending = props.dokumentkrav.krav.filter(
+    (krav) =>
+      krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
+  );
+
+  const dokumentkravUnavailableForEttersending = props.dokumentkrav.krav.filter(
+    (krav) =>
+      krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
+      krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
+      krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE
+  );
 
   const {
     dokumentkravToBundleAndSave,
@@ -100,17 +123,28 @@ export function Ettersending(props: IProps) {
         {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
       </Heading>
 
-      {props.dokumentkrav.krav.map((krav) => (
-        <EttersendingDokumentkrav
+      {dokumentkravAvailableForEttersending.map((krav) => (
+        <EttersendingDokumentkravSendingItem
           key={krav.id}
           dokumentkrav={krav}
           updateDokumentkrav={addDokumentkravToBundleAndSave}
         />
       ))}
 
-      <Button variant="primary" onClick={bundleAndSaveAllDokumentkrav}>
-        Send inn
-      </Button>
+      <div className="navigation-container">
+        <Button variant="primary" onClick={bundleAndSaveAllDokumentkrav}>
+          {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
+        </Button>
+
+        <Button variant="tertiary" onClick={() => undefined}>
+          {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
+        </Button>
+      </div>
+      <EttersendingDokumentkravNotSending
+        classname={"my-11"}
+        dokumentkrav={dokumentkravUnavailableForEttersending}
+      />
+      <DokumentkravGenerellInnsending classname={"my-11"} />
     </div>
   );
 }

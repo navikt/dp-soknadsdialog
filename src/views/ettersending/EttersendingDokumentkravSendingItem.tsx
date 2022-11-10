@@ -8,14 +8,14 @@ import { useSanity } from "../../context/sanity-context";
 import { FileList } from "../../components/file-list/FileList";
 import { HelpText } from "../../components/HelpText";
 import { EttersendingDokumentkravTitle } from "./EttersendingDokumentkravTitle";
-import styles from "./EttersendingDokumentkrav.module.css";
+import styles from "./Ettersending.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
   updateDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
 }
 
-export function EttersendingDokumentkrav(props: IProps) {
+export function EttersendingDokumentkravSendingItem(props: IProps) {
   const { getDokumentkravTextById } = useSanity();
   const { uploadedFiles, handleUploadedFiles } = useFileUploader();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);

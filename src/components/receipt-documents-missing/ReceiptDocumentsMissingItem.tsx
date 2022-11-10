@@ -9,6 +9,10 @@ import { PortableText } from "@portabletext/react";
 import { UploadFilesModal } from "../upload-modal/UploadModal";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
+import {
+  DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE,
+  DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG,
+} from "../../text-constants";
 
 export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -28,10 +32,10 @@ export function ReceiptDocumentsMissingItem(dokumentkrav: IDokumentkrav) {
       <BodyShort>
         <>
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-            <>{getAppText("kvittering.tekst.skal-sendes-av.noen-andre")}</>
+            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE)}</>
           )}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE && (
-            <>{getAppText("kvittering.tekst.skal-sendes-av.deg")}</>
+            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG)}</>
           )}
         </>
       </BodyShort>

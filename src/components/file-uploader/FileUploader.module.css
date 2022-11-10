@@ -11,6 +11,11 @@
   margin: 2rem 0 1rem 0;
 }
 
+.fileUploader p {
+  text-align: center;
+  margin-bottom: var(--navds-spacing-2);
+}
+
 .uploadError {
   margin-bottom: var(--navds-spacing-4);
 }

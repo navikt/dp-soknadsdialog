@@ -1,6 +1,5 @@
 import React from "react";
 import { IDokumentkrav } from "../../types/documentation.types";
-import styles from "./EttersendingDokumentkrav.module.css";
 import { Heading, Tag } from "@navikt/ds-react";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
 import { useSanity } from "../../context/sanity-context";
@@ -8,6 +7,7 @@ import {
   ETTERSENDING_DOKUMENTER_STATUS_MANGLER,
   ETTERSENDING_DOKUMENTER_STATUS_MOTTATT,
 } from "../../text-constants";
+import styles from "./Ettersending.module.css";
 
 type TagVariants = "warning" | "error" | "info" | "success";
 
