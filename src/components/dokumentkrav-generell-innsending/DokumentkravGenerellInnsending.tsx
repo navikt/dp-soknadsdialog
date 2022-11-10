@@ -10,7 +10,11 @@ import {
 } from "../../text-constants";
 import styles from "./DokumentkravGenerellInnsending.module.css";
 
-export function DokumentkravGenerellInnsending({ classname }: { classname?: string }) {
+interface IProps {
+  classname?: string;
+}
+
+export function DokumentkravGenerellInnsending({ classname }: IProps) {
   const { getAppText } = useSanity();
 
   return (

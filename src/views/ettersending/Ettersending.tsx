@@ -28,6 +28,7 @@ import {
 } from "../../constants";
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
+import Link from "next/link";
 import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
@@ -45,12 +46,12 @@ export function Ettersending(props: IProps) {
   const [bundlingComplete, setBundlingComplete] = useState(false);
   const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
 
-  const dokumentkravAvailableForEttersending = props.dokumentkrav.krav.filter(
+  const availableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
     (krav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
 
-  const dokumentkravUnavailableForEttersending = props.dokumentkrav.krav.filter(
+  const unavailableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
     (krav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
@@ -123,7 +124,7 @@ export function Ettersending(props: IProps) {
         {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
       </Heading>
 
-      {dokumentkravAvailableForEttersending.map((krav) => (
+      {availableDokumentkravForEttersending.map((krav) => (
         <EttersendingDokumentkravSendingItem
           key={krav.id}
           dokumentkrav={krav}
@@ -136,14 +137,18 @@ export function Ettersending(props: IProps) {
           {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
         </Button>
 
-        <Button variant="tertiary" onClick={() => undefined}>
-          {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
-        </Button>
+        <Link href={{ pathname: "/g[uuid]/kvittering", query: { uuid } }} passHref>
+          <Button as="a" variant="tertiary">
+            {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
+          </Button>
+        </Link>
       </div>
+
       <EttersendingDokumentkravNotSending
         classname={"my-11"}
-        dokumentkrav={dokumentkravUnavailableForEttersending}
+        dokumentkrav={unavailableDokumentkravForEttersending}
       />
+
       <DokumentkravGenerellInnsending classname={"my-11"} />
     </div>
   );
