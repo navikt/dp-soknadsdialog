@@ -96,6 +96,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         errorMessage={getValidationMessage()}
         hasWarning={hasWarning}
         warningMessage={getAppText("validering.dato-faktum.soknadsdato-varsel")}
+        required
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
