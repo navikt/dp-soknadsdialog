@@ -56,7 +56,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
 
     if (!isNumber(value)) {
-      debouncedChange(parseInt(value));
+      // Change undefined to null when dp-soknad accept null as an answer
+      debouncedChange(undefined);
       setIsValid("notNumber");
       return;
     }
