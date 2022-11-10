@@ -1,7 +1,8 @@
-import React from "react";
-import { IDokumentkrav } from "../../types/documentation.types";
+import { Button, Heading, Tag } from "@navikt/ds-react";
+import Link from "next/link";
 import { useSanity } from "../../context/sanity-context";
-import { Heading, Tag } from "@navikt/ds-react";
+import { useUuid } from "../../hooks/useUuid";
+import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDocumentsMissing.module.css";
 import { ReceiptDocumentsMissingItem } from "./ReceiptDocumentsMissingItem";
 
@@ -11,6 +12,7 @@ interface IProps {
 
 export function ReceiptDocumentsMissing(props: IProps) {
   const { getAppText } = useSanity();
+  const { uuid } = useUuid();
 
   return (
     <div>
@@ -26,6 +28,12 @@ export function ReceiptDocumentsMissing(props: IProps) {
       {props.documents.map((dokumentkrav) => (
         <ReceiptDocumentsMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
       ))}
+
+      <Link href={`/${uuid}/ettersending`} passHref>
+        <Button as="a">
+          {getAppText("kvittering.mangler-dokumenter.go-til-opplasting-knapp")}
+        </Button>
+      </Link>
     </div>
   );
 }
