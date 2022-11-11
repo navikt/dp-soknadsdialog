@@ -28,6 +28,7 @@ export const ETTERSENDING_DOKUMENTER_TEKST_LAST_OPP_FLERE = "ettersending.dokume
 
 export const ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER = "ettersending.knapp.send-inn-dokumenter";
 export const ETTERSENDING_KNAPP_AVBRYT = "ettersending.knapp.avbryt";
+export const ETTERSENDING_VALIDERING_INGEN_DOKUMENTER = "ettersending.validering.ingen-dokumenter";
 
 export const SOKNAD_HEADER_TITTEL = "soknad.header.tittel";
 

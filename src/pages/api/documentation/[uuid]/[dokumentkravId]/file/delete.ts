@@ -5,6 +5,10 @@ import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.u
 import { getSession } from "../../../../../../auth.utils";
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).json("slettet");
+  }
+
   const session = await getSession(req);
 
   if (!session) {

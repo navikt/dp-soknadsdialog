@@ -13,6 +13,7 @@ import {
 } from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
+import { HelpText } from "../../components/HelpText";
 
 interface IProps {
   dokumentkrav: IDokumentkrav[];
@@ -48,6 +49,9 @@ export function EttersendingDokumentkravNotSending({ dokumentkrav, classname }: 
                 )}
               </>
             </BodyShort>
+            {krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && dokumentkravText?.helpText && (
+              <HelpText helpText={dokumentkravText.helpText} />
+            )}
           </div>
         );
       })}

@@ -19,7 +19,8 @@ import {
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
-  updateDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
+  addDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
+  removeDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
 }
 
 export function EttersendingDokumentkravSendingItem(props: IProps) {
@@ -30,10 +31,12 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
 
   useEffect(() => {
     if (uploadedFiles.length > 0) {
-      props.updateDokumentkrav({
+      props.addDokumentkrav({
         ...props.dokumentkrav,
         filer: [...props.dokumentkrav.filer, ...uploadedFiles],
       });
+    } else {
+      props.removeDokumentkrav(props.dokumentkrav);
     }
   }, [uploadedFiles.length]);
 
