@@ -1,9 +1,5 @@
-import React, { BodyLong, Heading, Button, Modal } from "@navikt/ds-react";
-import classNames from "classnames";
 import { NextPageContext } from "next";
-import { TechnicalError } from "../svg-icons/TechnicalError";
-import { useEffect } from "react";
-import styles from "./_error.module.css";
+import { ErrorPageContent } from "../components/error-page-content/errorPageContent";
 
 interface IProps {
   title: string;
@@ -11,63 +7,18 @@ interface IProps {
   statusCode?: number;
 }
 
-export default function ErrorPage(props: IProps) {
-  const { statusCode, title, details } = props;
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
-
+export default function ErrorPage({ statusCode, title, details }: IProps) {
   if (statusCode === 404) {
     return (
-      <div className={styles.notFoundPageContainer}>
-        <Heading level="1" size="large">
-          Fant ikke siden, Statuskode 404
-        </Heading>
-        <BodyLong className={styles.pageNotFoundDescription}>
-          Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
-          deg hit.
-        </BodyLong>
-        <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
-          Gå til Ditt NAV
-        </Button>
-        {props.details}
-      </div>
+      <ErrorPageContent
+        title="Fant ikke siden, Statuskode 404"
+        details="Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
+          deg hit."
+      />
     );
   }
 
-  function gotoDittNav() {
-    window.location.assign("https://www.nav.no/no/ditt-nav");
-  }
-
-  return (
-    <Modal
-      className={classNames("modal-container", [styles.error])}
-      onClose={() => {
-        return;
-      }}
-      open={true}
-      closeButton={false}
-      shouldCloseOnOverlayClick={false}
-    >
-      <Modal.Content>
-        <div className={styles.errorIconContainer}>
-          <TechnicalError />
-        </div>
-        <Heading size={"medium"} spacing>
-          {title}
-        </Heading>
-        <BodyLong>{details}</BodyLong>
-        <div className={styles.errorButtonContainer}>
-          <Button variant="primary" size="medium" onClick={() => gotoDittNav()}>
-            Gå til Ditt NAV
-          </Button>
-        </div>
-      </Modal.Content>
-    </Modal>
-  );
+  return <ErrorPageContent title={title} details={details} />;
 }
 
 ErrorPage.getInitialProps = ({ res, err }: NextPageContext) => {

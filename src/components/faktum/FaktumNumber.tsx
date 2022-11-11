@@ -41,22 +41,13 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
 
-    // Use this when dp-soknad accept null as an answer
-    // if (!value) {
-    //   debouncedChange(null);
-    //   setIsValid(true);
-    //   return;
-    // }
-
-    // Remove this when dp-soknad accept null as an answer
     if (!value) {
-      debouncedChange(undefined);
-      setIsValid("emptyValue");
+      debouncedChange(null);
+      setIsValid(true);
       return;
     }
 
     if (!isNumber(value)) {
-      // Change undefined to null when dp-soknad accept null as an answer
       debouncedChange(undefined);
       setIsValid("notNumber");
       return;

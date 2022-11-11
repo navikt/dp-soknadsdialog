@@ -9,7 +9,6 @@ import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../HelpText";
 import { ISanityAlertText } from "../../types/sanity.types";
-import { AlertText } from "../AlertText";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { FileUploader } from "../file-uploader/FileUploader";
@@ -23,6 +22,7 @@ import { ErrorTypesEnum } from "../../types/error.types";
 import { DokumentkravTitle } from "./DokumentkravTitle";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
+import { AlertText } from "../alert-text/AlertText";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
