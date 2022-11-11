@@ -88,6 +88,7 @@ export function useEttersending() {
     dokumentkravWithError,
     dokumentkravToBundleAndSave,
     addDokumentkravToBundleAndSave,
+    removeDokumentkravToBundleAndSave,
     bundleAndSaveDokumentkrav,
   };
 }
