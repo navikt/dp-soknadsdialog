@@ -11,7 +11,7 @@ export default function ErrorPage({ statusCode, title, details }: IProps) {
   if (statusCode === 404) {
     return (
       <ErrorPageContent
-        title="Fant ikke siden, Statuskode 404"
+        title="Fant ikke siden"
         details="Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte
           deg hit."
       />
