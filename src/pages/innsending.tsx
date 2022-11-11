@@ -18,8 +18,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const session = await getSession(context.req);
-  // eslint-disable-next-line no-console
-  console.log(session);
   if (!session) {
     return {
       redirect: {
@@ -31,10 +29,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   // eslint-disable-next-line no-console
-  console.log(onBehalfOfToken);
+  console.log("token: ", onBehalfOfToken);
   const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
   // eslint-disable-next-line no-console
-  console.log(innsendingUuidResponse);
+  console.log("innsendingUuidResponse.status: ", innsendingUuidResponse.status);
+  // eslint-disable-next-line no-console
+  console.log("innsendingUuidResponse.statusText: ", innsendingUuidResponse.statusText);
   if (innsendingUuidResponse.ok) {
     const innsendingUuid = await innsendingUuidResponse.text();
 
@@ -47,6 +47,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       };
     }
   }
+
+  return {};
 }
 
 export default function Innsending() {
