@@ -6,12 +6,15 @@ interface IProps {
   details: string;
 }
 export function ErrorPageContent({ title, details }: IProps) {
+  const titleWithFallback = title ?? "Det har skjedd en teknisk feil";
+  const detailsWithFallback = details ?? "Beklager, vi mistet kontakten med systemene våre.";
+
   return (
     <main>
       <Heading level="1" size="xlarge" spacing>
-        {title}
+        {titleWithFallback}
       </Heading>
-      <BodyLong>{details}</BodyLong>
+      <BodyLong>{detailsWithFallback}</BodyLong>
       <Link href="https://www.nav.no/no/ditt-nav" passHref>
         <Button className="my-6" variant="primary" as="a" size="medium">
           Gå til Ditt NAV
