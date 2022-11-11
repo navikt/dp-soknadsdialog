@@ -18,6 +18,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const session = await getSession(context.req);
+  // eslint-disable-next-line no-console
+  console.log(session);
   if (!session) {
     return {
       redirect: {
@@ -28,8 +30,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  // eslint-disable-next-line no-console
+  console.log(onBehalfOfToken);
   const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
-
+  // eslint-disable-next-line no-console
+  console.log(innsendingUuidResponse);
   if (innsendingUuidResponse.ok) {
     const innsendingUuid = await innsendingUuidResponse.text();
 
