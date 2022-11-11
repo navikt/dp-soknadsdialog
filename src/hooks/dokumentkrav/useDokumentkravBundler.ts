@@ -33,20 +33,18 @@ export function useDokumentkravBundler(): IUseDokumentkravBundler {
 
     setIsBundling(true);
 
-    await Promise.all(
-      dokumentkravToBundle.map(async (dokumentkrav) => {
-        if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
-          try {
-            const response = await bundleDokumentkravFiles(uuid as string, dokumentkrav);
-            if (!response.ok) {
-              throw Error(response.statusText);
-            }
-          } catch {
-            tempErrorList.push(dokumentkrav);
+    for (const dokumentkrav of dokumentkravToBundle) {
+      if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
+        try {
+          const response = await bundleDokumentkravFiles(uuid as string, dokumentkrav);
+          if (!response.ok) {
+            throw Error(response.statusText);
           }
+        } catch {
+          tempErrorList.push(dokumentkrav);
         }
-      })
-    );
+      }
+    }
 
     setIsBundling(false);
 
