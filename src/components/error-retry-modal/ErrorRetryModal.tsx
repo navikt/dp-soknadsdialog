@@ -70,11 +70,9 @@ export function ErrorRetryModal(props: IProps) {
           {getAppText("teknisk-feil.modal.tittel")}
         </Heading>
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
-        <div className={styles.errorRetryModalButtonContainer}>
-          <Button variant={"primary"} onClick={reload}>
-            {getAppText("teknisk-feil.modal.knapp.prov-paa-nytt")}
-          </Button>
-        </div>
+        <Button className={styles.errorRetryModalButton} variant={"primary"} onClick={reload}>
+          {getAppText("teknisk-feil.modal.knapp.prov-paa-nytt")}
+        </Button>
       </Modal.Content>
     </Modal>
   );

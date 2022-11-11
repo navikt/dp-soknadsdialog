@@ -7,11 +7,11 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { useValidation } from "../../context/validation-context";
+import { AlertText } from "../alert-text/AlertText";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;

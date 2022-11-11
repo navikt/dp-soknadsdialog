@@ -1,7 +1,5 @@
-import React from "react";
-import { BodyLong, Button, Heading } from "@navikt/ds-react";
 import { Component, ErrorInfo, ReactNode } from "react";
-import styles from "./ErrorBoundary.module.css";
+import { ErrorPageContent } from "../error-page-content/errorPageContent";
 
 interface IProps {
   children?: ReactNode;
@@ -27,31 +25,14 @@ export default class ErrorBoundary extends Component<IProps, IState> {
     console.log({ error, errorInfo });
   }
 
-  gotoDittNav() {
-    this.setState({ hasError: false });
-    window.location.assign("https://www.nav.no/minside/");
-  }
-
   render() {
     if (this.state.hasError) {
       return (
-        <div className={styles.container}>
-          <Heading level="1" size="xlarge">
-            Vi har tekniske problemer akkurat nå
-          </Heading>
-          <BodyLong className={styles.body}>
-            Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve
-            igjen om litt.
-          </BodyLong>
-          <Button
-            variant="primary"
-            size="medium"
-            onClick={() => this.gotoDittNav()}
-            className={styles.actionButton}
-          >
-            Gå til Ditt NAV
-          </Button>
-        </div>
+        <ErrorPageContent
+          title="Vi har tekniske problemer akkurat nå"
+          details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan
+              prøve igjen om litt."
+        />
       );
     }
 

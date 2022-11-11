@@ -55,8 +55,8 @@ export default function Innsending() {
   // If everything went okay the user will be redirected. Return therefore error directly.
   return (
     <ErrorPage
-      title="Vi har tekniske problemer"
-      details="Beklager, vi får ikke kontakt med systemene våre akkurat nå. Svarene dine er lagret og du kan prøve igjen om litt."
+      title="Det har skjedd en teknisk feil"
+      details="Beklager, vi mistet kontakten med systemene våre."
     />
   );
 }

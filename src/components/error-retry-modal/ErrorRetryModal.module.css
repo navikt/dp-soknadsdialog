@@ -1,6 +1,3 @@
-.errorRetryModalButtonContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+.errorRetryModalButton {
   margin-top: var(--navds-spacing-5);
 }

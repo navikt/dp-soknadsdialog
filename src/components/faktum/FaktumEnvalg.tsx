@@ -7,9 +7,9 @@ import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
-import { AlertText } from "../AlertText";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { useValidation } from "../../context/validation-context";
+import { AlertText } from "../alert-text/AlertText";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;

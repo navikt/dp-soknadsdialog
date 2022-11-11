@@ -6,13 +6,13 @@ import { IQuizLandFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { ISanityLandGruppe } from "../../types/sanity.types";
-import { AlertText } from "../AlertText";
 import { useRouter } from "next/router";
 import { BodyShort, Label } from "@navikt/ds-react";
 import styles from "./Faktum.module.css";
 import { getCountryName } from "../../country.utils";
 import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
+import { AlertText } from "../alert-text/AlertText";
 
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();

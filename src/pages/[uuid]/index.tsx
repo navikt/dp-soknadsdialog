@@ -77,8 +77,8 @@ export default function SoknadPage(props: IProps) {
   if (props.errorCode || !props.soknadState) {
     return (
       <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        title="Vi har tekniske problemer akkurat nå"
+        details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
         statusCode={props.errorCode || 500}
       />
     );
