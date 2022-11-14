@@ -29,6 +29,7 @@ export function useGeneratorUtils(): IGeneratorUtils {
 
   function deleteGeneratorAnswer(faktum: IQuizGeneratorFaktum, answerIndex: number) {
     if (faktum.svar) {
+      // Save null as answer when deleting last genetor answer.
       if (faktum.svar.length === 1) {
         saveGeneratorFaktumToQuiz(faktum, null);
         toggleActiveGeneratorAnswer(undefined);
