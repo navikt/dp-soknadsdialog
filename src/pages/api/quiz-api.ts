@@ -27,7 +27,7 @@ export function createSoknadUuid(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
 
   return fetch(url, {
-    method: "Post",
+    method: "POST",
     headers: {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
@@ -38,7 +38,7 @@ export function createInnsendingUuid(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad?prosesstype=Innsending`;
 
   return fetch(url, {
-    method: "Post",
+    method: "POST",
     headers: {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },

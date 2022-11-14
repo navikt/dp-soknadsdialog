@@ -36,11 +36,15 @@ export const ETTERSENDING_VALIDERING_BUNDLING_FEILET = "ettersending.validering.
 
 export const SOKNAD_HEADER_TITTEL = "soknad.header.tittel";
 
-export  const DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE = "dokumentkrav.begrunnelse.sendt-tidligere";
-export  const DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE = "dokumentkrav.begrunnelse.sender-ikke";
-export  const DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE = "dokumentkrav.begrunnelse.sendes-av-andre";
-export  const DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG = "dokumentkrav.begrunnelse.sendes-av-deg";
+export const DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE = "dokumentkrav.begrunnelse.sendt-tidligere";
+export const DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE = "dokumentkrav.begrunnelse.sender-ikke";
+export const DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE = "dokumentkrav.begrunnelse.sendes-av-andre";
+export const DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG = "dokumentkrav.begrunnelse.sendes-av-deg";
 
 export const DOKUMENTKRAV_GENERELL_INNSENDING_TITTEL = "dokumentkrav.generell-innsending.tittel";
 export const DOKUMENTKRAV_GENERELL_INNSENDING_TEKST = "dokumentkrav.generell-innsending.tekst";
 export const DOKUMENTKRAV_GENERELL_INNSENDING_LENKE = "dokumentkrav.generell-innsending.lenke";
+
+export const INNSENDING_HEADER_TITTEL = "innsending.header.tittel"
+export const INNSENDING_SIDE_METADATA_TITTEL = "innsending.side-metadata.tittel"
+export const INNSENDING_SIDE_METADATA_BESKRIVELSE = "innsending.side-metadata.beskrivelse"

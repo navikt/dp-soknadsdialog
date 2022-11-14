@@ -107,7 +107,11 @@ export function Summary(props: IProps) {
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
-        <Button onClick={validateAndCompleteSoknad} loading={finishSoknadStatus === "pending"}>
+        <Button
+          onClick={validateAndCompleteSoknad}
+          loading={finishSoknadStatus === "pending"}
+          disabled={finishSoknadStatus === "success"}
+        >
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
       </nav>
