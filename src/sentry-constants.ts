@@ -9,7 +9,8 @@ export type FetchErrorType =
   | typeof GET_DOKUMENTKRAV_ERROR
   | typeof GET_MINE_SOKNADER_ERROR
   | typeof GET_ARBEIDSSOKER_STATUS_ERROR
-  | typeof CREATE_INNSENDING_UUID_ERROR;
+  | typeof CREATE_INNSENDING_UUID_ERROR
+  | typeof DELETE_SOKNAD_ERROR;
 
 export const GET_PERSONALIA_ERROR: IFetchErrorType = {
   type: "GET_PERSONALIA_ERROR",
@@ -39,4 +40,9 @@ export const GET_MINE_SOKNADER_ERROR: IFetchErrorType = {
 export const CREATE_INNSENDING_UUID_ERROR: IFetchErrorType = {
   type: "CREATE_INNSENDING_UUID_ERROR",
   message: "Feil ved oppretting av innsendings uuid",
+};
+
+export const DELETE_SOKNAD_ERROR: IFetchErrorType = {
+  type: "DELETE_SOKNAD_ERROR",
+  message: "Feil ved sletting av søknaden",
 };

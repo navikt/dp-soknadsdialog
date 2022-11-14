@@ -1,8 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getArbeidssokerperioder, IArbeidssokerperioder } from "../api/arbeidssoker-api";
 import { getSession } from "../auth.utils";
-import { GET_ARBEIDSSOKER_STATUS_ERROR } from "../sentry-constants";
-import { logFetchError } from "../sentry.logger";
 import { Arbeidssoker } from "../views/arbeidssoker/Arbeidssoker";
 import { IArbeidssokerStatus } from "./api/arbeidssoker";
 
@@ -46,7 +44,6 @@ export async function getServerSideProps(
     arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
   } else {
     arbeidssokerStatus = "UNKNOWN";
-    logFetchError(GET_ARBEIDSSOKER_STATUS_ERROR);
   }
 
   if (arbeidssokerStatus === "REGISTERED") {

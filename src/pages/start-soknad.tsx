@@ -1,12 +1,9 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import React from "react";
-import { StartSoknad } from "../views/start-soknad/StartSoknad";
-import { getSession } from "../auth.utils";
 import { audienceDPSoknad } from "../api.utils";
-import { getMineSoknader } from "./api/soknad/get-mine-soknader";
+import { getSession } from "../auth.utils";
 import { IMineSoknader } from "../types/quiz.types";
-import { logFetchError } from "../sentry.logger";
-import { GET_MINE_SOKNADER_ERROR } from "../sentry-constants";
+import { StartSoknad } from "../views/start-soknad/StartSoknad";
+import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -43,8 +40,6 @@ export async function getServerSideProps(
         },
       };
     }
-  } else {
-    logFetchError(GET_MINE_SOKNADER_ERROR);
   }
 
   return {

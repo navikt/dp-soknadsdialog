@@ -1,8 +1,10 @@
+import { GET_MINE_SOKNADER_ERROR } from "./../../../sentry-constants";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { formatISO, subDays } from "date-fns";
 import { getSession } from "../../../auth.utils";
+import { logFetchError } from "../../../sentry.logger";
 
 export function getMineSoknader(onBehalfOfToken: string) {
   // Finn ut hvor mange dager tilbake i tid vi skal ha
@@ -32,13 +34,13 @@ async function getMineSoknaderHandler(req: NextApiRequest, res: NextApiResponse)
     const response = await getMineSoknader(onBehalfOfToken);
 
     if (!response.ok) {
+      logFetchError(GET_MINE_SOKNADER_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
     return res.json(response);
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log(error);
+    logFetchError(GET_MINE_SOKNADER_ERROR);
     return res.status(500).send(error);
   }
 }

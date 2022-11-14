@@ -1,11 +1,8 @@
 import { GetServerSidePropsContext } from "next";
-import React from "react";
-import ErrorPage from "./_error";
-import { createInnsendingUuid } from "./api/quiz-api";
 import { audienceDPSoknad } from "../api.utils";
 import { getSession } from "../auth.utils";
-import { logFetchError } from "../sentry.logger";
-import { CREATE_INNSENDING_UUID_ERROR } from "../sentry-constants";
+import { createInnsendingUuid } from "./api/quiz-api";
+import ErrorPage from "./_error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
@@ -43,8 +40,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       };
     }
-  } else {
-    logFetchError(CREATE_INNSENDING_UUID_ERROR);
   }
 
   return {};
