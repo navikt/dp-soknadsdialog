@@ -4,6 +4,7 @@ import { StartSoknad } from "../views/start-soknad/StartSoknad";
 import { getSession } from "../auth.utils";
 import { audienceDPSoknad } from "../api.utils";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
+import { IMineSoknader } from "../types/quiz.types";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -26,7 +27,7 @@ export async function getServerSideProps(
     };
   }
 
-  let mineSoknader = null;
+  let mineSoknader: IMineSoknader | null = null;
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 
@@ -34,7 +35,7 @@ export async function getServerSideProps(
     mineSoknader = await mineSoknaderResponse.json();
   }
 
-  if (mineSoknader && Object.keys(mineSoknader).length !== 0) {
+  if (mineSoknader?.paabegynt) {
     return {
       redirect: {
         destination: "/",
