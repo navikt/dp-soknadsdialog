@@ -9,6 +9,8 @@ import { ValidationProvider } from "../../context/validation-context";
 import { mockNeste } from "../../localhost-data/mock-neste";
 import { IQuizState } from "../../types/quiz.types";
 import { getSession } from "../../auth.utils";
+import { logFetchError } from "../../sentry.logger";
+import { GET_SOKNAD_STATE_ERROR } from "../../sentry-constants";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -47,6 +49,7 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
+    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
   } else {
     soknadState = await soknadStateResponse.json();
   }

@@ -1,12 +1,13 @@
-import React from "react";
+import { Alert } from "@navikt/ds-react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { audienceDPSoknad } from "../../api.utils";
-import { getDokumentkrav } from "../api/documentation/[uuid]";
-import { Alert } from "@navikt/ds-react";
-import { IDokumentkravList } from "../../types/documentation.types";
 import { getSession } from "../../auth.utils";
-import { Ettersending } from "../../views/ettersending/Ettersending";
 import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-besvart";
+import { GET_DOKUMENTKRAV_ERROR } from "../../sentry-constants";
+import { logFetchError } from "../../sentry.logger";
+import { IDokumentkravList } from "../../types/documentation.types";
+import { Ettersending } from "../../views/ettersending/Ettersending";
+import { getDokumentkrav } from "../api/documentation/[uuid]";
 
 interface IProps {
   errorCode: number | null;
@@ -45,6 +46,7 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
+    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }

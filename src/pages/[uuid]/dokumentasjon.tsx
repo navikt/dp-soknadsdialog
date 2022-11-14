@@ -11,6 +11,8 @@ import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import { mockNeste } from "../../localhost-data/mock-neste";
 import { IQuizState } from "../../types/quiz.types";
 import { getSession } from "../../auth.utils";
+import { logFetchError } from "../../sentry.logger";
+import { GET_DOKUMENTKRAV_ERROR, GET_SOKNAD_STATE_ERROR } from "../../sentry-constants";
 
 interface IProps {
   errorCode: number | null;
@@ -53,6 +55,7 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
+    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }
@@ -68,6 +71,7 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
+    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
   } else {
     soknadState = await soknadStateResponse.json();
   }

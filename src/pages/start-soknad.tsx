@@ -5,6 +5,8 @@ import { getSession } from "../auth.utils";
 import { audienceDPSoknad } from "../api.utils";
 import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 import { IMineSoknader } from "../types/quiz.types";
+import { logFetchError } from "../sentry.logger";
+import { GET_MINE_SOKNADER_ERROR } from "../sentry-constants";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -41,6 +43,8 @@ export async function getServerSideProps(
         },
       };
     }
+  } else {
+    logFetchError(GET_MINE_SOKNADER_ERROR);
   }
 
   return {

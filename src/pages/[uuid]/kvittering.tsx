@@ -19,6 +19,8 @@ import {
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
 } from "../../constants";
+import { logFetchError } from "../../sentry.logger";
+import { GET_SOKNAD_STATE_ERROR, GET_DOKUMENTKRAV_ERROR } from "../../sentry-constants";
 
 interface IProps {
   errorCode: number | null;
@@ -76,12 +78,14 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   } else {
     errorCode = soknadStateResponse.status;
+    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
   }
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
     errorCode = dokumentkravResponse.status;
+    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
   }
 
   if (soknadStatusResponse.ok) {
