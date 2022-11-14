@@ -27,7 +27,6 @@ const decoratorProps: DecoratorProps = {
   enforceLogin: false,
   redirectToApp: true,
   level: "Level4",
-  utloggingsvarsel: true,
   availableLanguages,
 };
 
@@ -36,6 +35,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = locale === undefined ? "nb" : (locale as Locale);
+
     Sentry.setContext("culture", { locale: language });
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
@@ -81,7 +81,6 @@ export default class MyDocument extends Document<DecoratorComponents> {
             rel="shortcut icon"
             href={`${process.env.NEXT_PUBLIC_BASE_PATH}/favicon/favicon.ico`}
           />
-
           <Styles />
         </Head>
         <body>
