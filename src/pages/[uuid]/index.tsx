@@ -1,19 +1,16 @@
-import React from "react";
-import { Soknad } from "../../views/soknad/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { audienceDPSoknad } from "../../api.utils";
+import { getSession } from "../../auth.utils";
 import { QuizProvider } from "../../context/quiz-context";
 import { ValidationProvider } from "../../context/validation-context";
-import { audienceDPSoknad } from "../../api.utils";
+import { mockNeste } from "../../localhost-data/mock-neste";
+import { mockPersonalia } from "../../localhost-data/personalia";
+import { IPersonalia } from "../../types/personalia.types";
+import { IQuizState } from "../../types/quiz.types";
+import { Soknad } from "../../views/soknad/Soknad";
+import { getPersonalia } from "../api/personalia";
 import { getSoknadState } from "../api/quiz-api";
 import ErrorPage from "../_error";
-import { IPersonalia } from "../../types/personalia.types";
-import { mockPersonalia } from "../../localhost-data/personalia";
-import { getPersonalia } from "../api/personalia";
-import { mockNeste } from "../../localhost-data/mock-neste";
-import { IQuizState } from "../../types/quiz.types";
-import { getSession } from "../../auth.utils";
-import { logFetchError } from "../../sentry.logger";
-import { GET_PERSONALIA_ERROR, GET_SOKNAD_STATE_ERROR } from "../../sentry-constants";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -55,7 +52,6 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
-    logFetchError(GET_PERSONALIA_ERROR, uuid);
   } else {
     soknadState = await soknadStateResponse.json();
   }
@@ -65,8 +61,6 @@ export async function getServerSideProps(
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
-  } else {
-    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
   }
 
   return {

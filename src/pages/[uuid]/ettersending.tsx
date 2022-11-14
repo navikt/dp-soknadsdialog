@@ -3,8 +3,6 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { audienceDPSoknad } from "../../api.utils";
 import { getSession } from "../../auth.utils";
 import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-besvart";
-import { GET_DOKUMENTKRAV_ERROR } from "../../sentry-constants";
-import { logFetchError } from "../../sentry.logger";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { Ettersending } from "../../views/ettersending/Ettersending";
 import { getDokumentkrav } from "../api/documentation/[uuid]";
@@ -46,7 +44,6 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
-    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }

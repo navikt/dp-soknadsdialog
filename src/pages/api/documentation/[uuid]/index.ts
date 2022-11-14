@@ -4,6 +4,8 @@ import { audienceDPSoknad } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { headersWithToken } from "../../quiz-api";
 import { getSession } from "../../../../auth.utils";
+import { logFetchError } from "../../../../sentry.logger";
+import { GET_DOKUMENTKRAV_ERROR } from "../../../../sentry-constants";
 
 export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`, {
@@ -35,6 +37,7 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     const dokumentkrav = await dokumentkravResponse.json();
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
+    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

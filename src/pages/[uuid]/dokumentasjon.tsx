@@ -1,18 +1,15 @@
-import React from "react";
-import { Documentation } from "../../views/documentation/Documentation";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { QuizProvider } from "../../context/quiz-context";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSoknadState } from "../api/quiz-api";
-import { getDokumentkrav } from "../api/documentation/[uuid]";
 import { Alert } from "@navikt/ds-react";
-import { IDokumentkravList } from "../../types/documentation.types";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { audienceDPSoknad } from "../../api.utils";
+import { getSession } from "../../auth.utils";
+import { QuizProvider } from "../../context/quiz-context";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import { mockNeste } from "../../localhost-data/mock-neste";
+import { IDokumentkravList } from "../../types/documentation.types";
 import { IQuizState } from "../../types/quiz.types";
-import { getSession } from "../../auth.utils";
-import { logFetchError } from "../../sentry.logger";
-import { GET_DOKUMENTKRAV_ERROR, GET_SOKNAD_STATE_ERROR } from "../../sentry-constants";
+import { Documentation } from "../../views/documentation/Documentation";
+import { getDokumentkrav } from "../api/documentation/[uuid]";
+import { getSoknadState } from "../api/quiz-api";
 
 interface IProps {
   errorCode: number | null;
@@ -55,7 +52,6 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
-    logFetchError(GET_DOKUMENTKRAV_ERROR, uuid);
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }
@@ -71,7 +67,6 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
-    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
   } else {
     soknadState = await soknadStateResponse.json();
   }
