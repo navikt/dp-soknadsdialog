@@ -12,7 +12,7 @@ import {
 export interface IQuizContext {
   soknadState: IQuizState;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
-  saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) => void;
+  saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   isLoading: boolean;
   isError: boolean;
   errorType: ErrorTypesEnum;
@@ -49,7 +49,10 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     }
   }
 
-  async function saveGeneratorFaktumToQuiz(faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][]) {
+  async function saveGeneratorFaktumToQuiz(
+    faktum: IQuizGeneratorFaktum,
+    svar: QuizFaktum[][] | null
+  ) {
     try {
       setIsError(false);
       setIsLoading(true);
