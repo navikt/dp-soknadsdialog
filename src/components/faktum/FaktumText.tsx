@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -19,18 +19,31 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
 
-  const [debouncedText, setDebouncedText] = useState(faktum.svar || "");
+  const [debouncedText, setDebouncedText] = useState<string | null | undefined>(faktum.svar);
   const [isValid, setIsValid] = useState(true);
 
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    if (debouncedText && debouncedText !== faktum.svar) {
+    if (debouncedText !== undefined && debouncedText !== faktum.svar) {
       onChange ? onChange(faktum, debouncedText) : saveFaktum(debouncedText);
     }
   }, [debouncedText]);
 
-  function saveFaktum(value: string) {
+  function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
+    const { value } = event.target;
+    const inputValue = value.length === 0 ? null : value;
+
+    debouncedChange(inputValue);
+  }
+
+  function saveFaktum(value: string | null) {
+    if (value === null) {
+      setIsValid(true);
+      saveFaktumToQuiz(faktum, null);
+      return;
+    }
+
     if (isValidTextLength(value)) {
       setIsValid(true);
       saveFaktumToQuiz(faktum, value);
@@ -65,7 +78,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
           defaultValue={faktum?.svar}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-          onChange={(event) => debouncedChange(event.currentTarget.value)}
+          onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
         />
@@ -76,7 +89,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           size="medium"
           type="text"
-          onChange={(event) => debouncedChange(event.currentTarget.value)}
+          onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
         />
