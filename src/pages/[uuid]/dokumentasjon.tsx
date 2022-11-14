@@ -57,7 +57,7 @@ export async function getServerSideProps(
     dokumentkrav = await dokumentkravResponse.json();
   }
 
-  if (dokumentkrav?.length === 0) {
+  if (dokumentkrav?.krav.length === 0) {
     return {
       redirect: {
         destination: `/${uuid}/oppsummering`,

@@ -1,5 +1,6 @@
 .fileItem {
   display: flex;
+  align-items: center;
   margin-bottom: var(--navds-spacing-5);
 }
 

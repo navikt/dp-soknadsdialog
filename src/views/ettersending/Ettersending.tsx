@@ -30,8 +30,8 @@ import {
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
 import Link from "next/link";
-import styles from "../receipt/Receipts.module.css";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
+import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -45,15 +45,16 @@ export function Ettersending(props: IProps) {
   const { scrollIntoView } = useScrollIntoView();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
-  const [bundlingComplete, setBundlingComplete] = useState(false);
   const [noDocumentsToSave, setNoDocumentsToSave] = useState(false);
   const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
   const {
-    dokumentkravToBundleAndSave,
-    addDokumentkravToBundleAndSave,
-    removeDokumentkravToBundleAndSave,
+    isBundling,
     dokumentkravWithError,
+    dokumentkravWithNewFiles,
+    dokumentkravWithNewBundle,
+    removeDokumentkrav,
     bundleAndSaveDokumentkrav,
+    addDokumentkravWithNewFiles,
   } = useEttersending();
 
   const availableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
@@ -69,10 +70,10 @@ export function Ettersending(props: IProps) {
   );
 
   useEffect(() => {
-    if (dokumentkravToBundleAndSave.length > 0 && noDocumentsToSave) {
+    if (dokumentkravWithNewFiles.length > 0 && noDocumentsToSave) {
       setNoDocumentsToSave(false);
     }
-  }, [dokumentkravToBundleAndSave.length]);
+  }, [dokumentkravWithNewFiles.length]);
 
   useEffect(() => {
     if (dokumentkravWithError.length > 0) {
@@ -82,19 +83,13 @@ export function Ettersending(props: IProps) {
   }, [dokumentkravWithError.length]);
 
   useEffect(() => {
-    if (bundlingComplete && dokumentkravWithError.length === 0) {
-      ettersendSoknad();
-    }
-  }, [dokumentkravWithError.length, bundlingComplete]);
-
-  useEffect(() => {
     if (ettersendSoknadStatus === "success") {
       router.push(`/${uuid}/kvittering`);
     }
   }, [ettersendSoknadStatus]);
 
   async function bundleAndSaveAllDokumentkrav() {
-    if (dokumentkravToBundleAndSave.length === 0) {
+    if (dokumentkravWithNewFiles.length === 0 && dokumentkravWithNewBundle.length === 0) {
       setNoDocumentsToSave(true);
       return;
     }
@@ -103,15 +98,17 @@ export function Ettersending(props: IProps) {
       setNoDocumentsToSave(false);
     }
 
-    if (bundlingComplete) {
-      setBundlingComplete(false);
+    let readyToEttersend = true;
+    for (const dokumentkrav of dokumentkravWithNewFiles) {
+      const res = await bundleAndSaveDokumentkrav(dokumentkrav);
+      if (!res) {
+        readyToEttersend = false;
+      }
     }
 
-    for (const dokumentkrav of dokumentkravToBundleAndSave) {
-      await bundleAndSaveDokumentkrav(dokumentkrav);
+    if (readyToEttersend) {
+      ettersendSoknad();
     }
-
-    setBundlingComplete(true);
   }
 
   return (
@@ -148,8 +145,11 @@ export function Ettersending(props: IProps) {
             <EttersendingDokumentkravSendingItem
               key={krav.id}
               dokumentkrav={krav}
-              addDokumentkrav={addDokumentkravToBundleAndSave}
-              removeDokumentkrav={removeDokumentkravToBundleAndSave}
+              hasBundleError={
+                !dokumentkravWithError.findIndex((dokumentkrav) => dokumentkrav.id === krav.id)
+              }
+              removeDokumentkrav={removeDokumentkrav}
+              addDokumentkrav={addDokumentkravWithNewFiles}
             />
           ))}
 
@@ -158,7 +158,11 @@ export function Ettersending(props: IProps) {
           )}
 
           <div className="navigation-container">
-            <Button variant="primary" onClick={bundleAndSaveAllDokumentkrav}>
+            <Button
+              variant="primary"
+              onClick={bundleAndSaveAllDokumentkrav}
+              loading={isBundling || ettersendSoknadStatus === "pending"}
+            >
               {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
             </Button>
 

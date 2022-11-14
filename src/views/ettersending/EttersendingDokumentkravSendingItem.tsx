@@ -8,24 +8,27 @@ import { useSanity } from "../../context/sanity-context";
 import { FileList } from "../../components/file-list/FileList";
 import { HelpText } from "../../components/HelpText";
 import { EttersendingDokumentkravTitle } from "./EttersendingDokumentkravTitle";
-import styles from "./Ettersending.module.css";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
-import { Link } from "@navikt/ds-react";
+import { Alert, Link } from "@navikt/ds-react";
 import api from "../../api.utils";
 import {
   ETTERSENDING_DOKUMENTER_TEKST_LAST_OPP_FLERE,
   ETTERSENDING_DOKUMENTER_TEKST_TIDLIGERE_SENDT,
+  ETTERSENDING_VALIDERING_BUNDLING_FEILET,
 } from "../../text-constants";
+import styles from "./Ettersending.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
+  hasBundleError: boolean;
   addDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
   removeDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
 }
 
 export function EttersendingDokumentkravSendingItem(props: IProps) {
   const { getAppText, getDokumentkravTextById } = useSanity();
-  const { uploadedFiles, handleUploadedFiles } = useFileUploader();
+  const unbundledFiles = props.dokumentkrav.filer.filter((fil) => !fil.bundlet);
+  const { uploadedFiles, handleUploadedFiles } = useFileUploader(unbundledFiles);
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
 
@@ -74,6 +77,10 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
         uploadedFiles={uploadedFiles}
         handleUploadedFiles={handleUploadedFiles}
       />
+
+      {props.hasBundleError && (
+        <Alert variant={"error"}>{getAppText(ETTERSENDING_VALIDERING_BUNDLING_FEILET)}</Alert>
+      )}
     </div>
   );
 }

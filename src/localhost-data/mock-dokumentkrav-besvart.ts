@@ -487,7 +487,7 @@ export const mockDokumentkravBesvart = {
           urn: "urn:vedlegg:a725c786-5174-4dfb-9cf0-99febde02c96/10/6c21d069-1715-4133-93a3-0a1ab48c1582",
           storrelse: 325892,
           tidspunkt: "2022-10-14T16:16:33.548132+02:00",
-          bundlet: false,
+          bundlet: true,
         },
       ],
       gyldigeValg: [
@@ -1405,7 +1405,7 @@ export const mockDokumentkravBesvart = {
         "dokumentkrav.svar.andre.sender",
       ],
       begrunnelse: "234",
-      svar: "dokumentkrav.svar.andre.sender",
+      svar: "dokumentkrav.svar.send.senere",
     },
   ],
 };
