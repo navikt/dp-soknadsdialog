@@ -33,7 +33,7 @@ export function useGeneratorUtils(): IGeneratorUtils {
         saveGeneratorFaktumToQuiz(faktum, null);
         toggleActiveGeneratorAnswer(undefined);
       } else {
-        const svar = faktum?.svar.filter((_, index) => index === answerIndex);
+        const svar = faktum.svar.filter((_, index) => index === answerIndex);
         saveGeneratorFaktumToQuiz(faktum, svar);
         toggleActiveGeneratorAnswer(undefined);
       }
