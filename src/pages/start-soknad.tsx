@@ -2,6 +2,8 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import React from "react";
 import { StartSoknad } from "../views/start-soknad/StartSoknad";
 import { getSession } from "../auth.utils";
+import { audienceDPSoknad } from "../api.utils";
+import { getMineSoknader } from "./api/soknad/get-mine-soknader";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -13,6 +15,29 @@ export async function getServerSideProps(
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
+        permanent: false,
+      },
+    };
+  }
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {},
+    };
+  }
+
+  let mineSoknader = null;
+  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
+
+  if (mineSoknaderResponse.ok) {
+    mineSoknader = await mineSoknaderResponse.json();
+  }
+
+  if (mineSoknader && Object.keys(mineSoknader).length !== 0) {
+    return {
+      redirect: {
+        destination: "/",
         permanent: false,
       },
     };
