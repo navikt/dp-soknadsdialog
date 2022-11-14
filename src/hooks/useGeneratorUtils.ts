@@ -28,13 +28,15 @@ export function useGeneratorUtils(): IGeneratorUtils {
   }
 
   function deleteGeneratorAnswer(faktum: IQuizGeneratorFaktum, answerIndex: number) {
-    if (faktum.svar && faktum.svar.length === 1) {
-      saveGeneratorFaktumToQuiz(faktum, null);
-      toggleActiveGeneratorAnswer(undefined);
-    } else {
-      const svar = faktum.svar ? faktum?.svar.filter((_, index) => index === answerIndex) : null;
-      saveGeneratorFaktumToQuiz(faktum, svar);
-      toggleActiveGeneratorAnswer(undefined);
+    if (faktum.svar) {
+      if (faktum.svar.length === 1) {
+        saveGeneratorFaktumToQuiz(faktum, null);
+        toggleActiveGeneratorAnswer(undefined);
+      } else {
+        const svar = faktum?.svar.filter((_, index) => index === answerIndex);
+        saveGeneratorFaktumToQuiz(faktum, svar);
+        toggleActiveGeneratorAnswer(undefined);
+      }
     }
   }
 
