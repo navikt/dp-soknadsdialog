@@ -28,10 +28,18 @@ export function useGeneratorUtils(): IGeneratorUtils {
   }
 
   function deleteGeneratorAnswer(faktum: IQuizGeneratorFaktum, answerIndex: number) {
-    const svar = faktum.svar || [];
-    svar.splice(answerIndex, 1);
-    saveGeneratorFaktumToQuiz(faktum, svar);
-    toggleActiveGeneratorAnswer(undefined);
+    if (faktum.svar) {
+      // Save null as answer when deleting last genetor answer.
+      if (faktum.svar.length === 1) {
+        saveGeneratorFaktumToQuiz(faktum, null);
+        toggleActiveGeneratorAnswer(undefined);
+      } else {
+        const svar = faktum.svar.filter((_, index) => index !== answerIndex);
+
+        saveGeneratorFaktumToQuiz(faktum, svar);
+        toggleActiveGeneratorAnswer(undefined);
+      }
+    }
   }
 
   return {
