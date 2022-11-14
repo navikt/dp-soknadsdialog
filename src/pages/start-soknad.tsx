@@ -27,21 +27,20 @@ export async function getServerSideProps(
     };
   }
 
-  let mineSoknader: IMineSoknader | null = null;
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 
   if (mineSoknaderResponse.ok) {
-    mineSoknader = await mineSoknaderResponse.json();
-  }
+    const mineSoknader: IMineSoknader = await mineSoknaderResponse.json();
 
-  if (mineSoknader?.paabegynt) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
+    if (mineSoknader?.paabegynt) {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
   }
 
   return {
