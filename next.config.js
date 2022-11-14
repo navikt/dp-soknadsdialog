@@ -12,7 +12,7 @@ const supportedLocales = ["nb"];
 // Direktiver appen din benytter
 const myAppDirectives = {
   "script-src-elem": ["'self'"],
-  "img-src": ["'self'"],
+  "img-src": ["'self'", "data"],
   "connect-src": ["'self'"],
   "report-uri":
     "https://sentry.gc.nav.no/api/138/security/?sentry_key=1d4d9592b0c4442889ba64e028a16c09",
@@ -25,6 +25,7 @@ const config = {
     locales: supportedLocales,
     defaultLocale: "nb",
   },
+  productionBrowserSourceMaps: true,
   output: "standalone",
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
