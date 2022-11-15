@@ -66,10 +66,8 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     });
   }, []);
 
-  const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop,
-    noClick: true,
-    noKeyboard: true,
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop
   });
   return (
     <>
@@ -81,7 +79,7 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
           <br />
           {getAppText("filopplaster.tekst.eller")}
         </p>
-        <Button onClick={open} loading={isLoading}>
+        <Button loading={isLoading}>
           {getAppText("filopplaster.knapp.velg-filer")}
         </Button>
       </div>
