@@ -1,9 +1,15 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../../quiz-api";
-import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { withSentry } from "@sentry/nextjs";
+import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
+import {
+  SAVE_DOKUMENTS_ERROR,
+  SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR,
+  SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR,
+} from "../../../../../../sentry-constants";
+import { logRequestError } from "../../../../../../sentry.logger";
+import { IDokumentkravFil } from "../../../../../../types/documentation.types";
+import { headersWithToken } from "../../../../quiz-api";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -43,6 +49,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
+      logRequestError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-mellomlagring");
     }
 
@@ -55,11 +62,13 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
+      logRequestError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-soknad");
     }
 
     return res.status(dpSoknadResponse.status).send(fileData[0]);
   } catch (error) {
+    logRequestError(SAVE_DOKUMENTS_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

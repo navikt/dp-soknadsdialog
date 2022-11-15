@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
+import { logRequestError } from "../../../sentry.logger";
+import { GET_PERSONALIA_ERROR } from "../../../sentry-constants";
 
 export function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;
@@ -27,11 +29,13 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
+      logRequestError(GET_PERSONALIA_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
     return res.json(response);
   } catch (error) {
+    logRequestError(GET_PERSONALIA_ERROR);
     return res.status(500).send(error);
   }
 };

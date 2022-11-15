@@ -1,8 +1,7 @@
-import React from "react";
+import { Alert } from "@navikt/ds-react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { audienceDPSoknad } from "../../../api.utils";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { getSession } from "../../../auth.utils";
 import { Ettersending } from "../../../views/ettersending/Ettersending";

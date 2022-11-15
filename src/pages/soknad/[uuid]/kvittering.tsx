@@ -16,8 +16,8 @@ import { ValidationProvider } from "../../../context/validation-context";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import {
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
 } from "../../../constants";
 
 interface IProps {

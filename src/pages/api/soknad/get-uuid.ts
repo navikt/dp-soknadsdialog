@@ -3,6 +3,8 @@ import { audienceDPSoknad } from "../../../api.utils";
 import { createSoknadUuid } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
+import { CREATE_INNSENDING_UUID_ERROR } from "../../../sentry-constants";
+import { logRequestError } from "../../../sentry.logger";
 
 async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -25,6 +27,7 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
     const soknadId = await soknadUuidResponse.text();
     return res.status(soknadUuidResponse.status).send(soknadId);
   } catch (error) {
+    logRequestError(CREATE_INNSENDING_UUID_ERROR);
     return res.status(500).send(error);
   }
 }

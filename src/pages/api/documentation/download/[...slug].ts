@@ -1,9 +1,11 @@
+import { GET_MELLOMLARING_DOKUMENT_ERROR } from "./../../../../sentry-constants";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring } from "../../../../api.utils";
 import fs from "fs";
 import path from "path";
 import { getSession } from "../../../../auth.utils";
+import { logRequestError } from "../../../../sentry.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -40,14 +42,11 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!response.ok) {
+      logRequestError(GET_MELLOMLARING_DOKUMENT_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
-    // eslint-disable-next-line no-console
-    console.log("Mellomlagring headers: ", response.headers);
     const mellomlagringContentType = response.headers.get("Content-Type");
-    // eslint-disable-next-line no-console
-    console.log("mellomlagringContentType: ", mellomlagringContentType);
     if (mellomlagringContentType) {
       res.setHeader("Content-Type", mellomlagringContentType);
     }
@@ -55,6 +54,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader("Content-Disposition", "inline;");
     return res.status(200).send(response.body);
   } catch (error) {
+    logRequestError(GET_MELLOMLARING_DOKUMENT_ERROR);
     return res.status(404).send(error);
   }
 }
