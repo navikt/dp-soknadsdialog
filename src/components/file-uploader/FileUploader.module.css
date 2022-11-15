@@ -7,7 +7,7 @@
   border-radius: var(--navds-border-radius-medium);
   background-color: var(--navds-global-color-blue-50);
   width: 100%;
-  padding: 1rem 1rem 2rem;
+  padding: 1rem;
   margin: 2rem 0 1rem 0;
 }
 
@@ -23,4 +23,17 @@
 .loadingIndicator {
   text-align: center;
   margin: var(--navds-spacing-4) 0;
+}
+
+.withHover {
+  display: none;
+}
+
+@media (hover: hover) {
+  .withHover {
+    display: inline;
+  }
+  .fileUploader button {
+    margin-bottom: 1rem
+  }
 }
