@@ -12,7 +12,7 @@ export interface IDokumentkravList {
   krav: IDokumentkrav[];
 }
 
-export type IDokumentkravSvar =
+export type GyldigDokumentkravSvar =
   | typeof DOKUMENTKRAV_SVAR_SEND_NAA
   | typeof DOKUMENTKRAV_SVAR_SENDER_SENERE
   | typeof DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
@@ -25,8 +25,8 @@ export interface IDokumentkrav {
   beskrivelse?: string;
   fakta: QuizFaktum[];
   filer: IDokumentkravFil[];
-  gyldigeValg: IDokumentkravSvar[];
-  svar?: IDokumentkravSvar;
+  gyldigeValg: GyldigDokumentkravSvar[];
+  svar?: GyldigDokumentkravSvar;
   begrunnelse?: string;
   bundle?: string;
   bundleFilsti?: string;
@@ -64,7 +64,7 @@ export enum ErrorType {
 }
 
 export interface IDokumentkravChanges {
-  svar?: IDokumentkravSvar;
+  svar?: GyldigDokumentkravSvar;
   begrunnelse?: string;
   filer?: IDokumentkravFil[];
 }

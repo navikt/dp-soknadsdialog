@@ -47,6 +47,7 @@ const mockSoknadState: IQuizState = {
   ferdig: false,
   antallSeksjoner: 11,
   seksjoner: [sectionStateMockData],
+  versjon_navn: "Dagpenger",
   roller: [],
 };
 

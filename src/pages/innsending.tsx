@@ -11,7 +11,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       redirect: {
-        destination: `/uuid-innsending/`,
+        destination: `/generell-innsending/uuid-innsending`,
         permanent: false,
       },
     };
@@ -28,20 +28,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
-  // eslint-disable-next-line no-console
-  console.log("token: ", onBehalfOfToken);
   const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
-  // eslint-disable-next-line no-console
-  console.log("innsendingUuidResponse.status: ", innsendingUuidResponse.status);
-  // eslint-disable-next-line no-console
-  console.log("innsendingUuidResponse.statusText: ", innsendingUuidResponse.statusText);
+
   if (innsendingUuidResponse.ok) {
     const innsendingUuid = await innsendingUuidResponse.text();
 
     if (innsendingUuid) {
       return {
         redirect: {
-          destination: `/${innsendingUuid}/`,
+          destination: `/generell-innsending/${innsendingUuid}`,
           permanent: false,
         },
       };

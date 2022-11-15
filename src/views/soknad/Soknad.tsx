@@ -37,9 +37,6 @@ export function Soknad(props: IProps) {
   const isFirstSection = sectionIndex === 0;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const currentSection = soknadState.seksjoner[sectionIndex];
-  const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
-    (faktum) => faktum?.svar === undefined
-  );
 
   const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
@@ -98,9 +95,7 @@ export function Soknad(props: IProps) {
       />
       <SoknadHeader />
       <main>
-        {soknadState.versjon_navn === "Dagpenger" && (
-          <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
-        )}
+        <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 
         {showPersonalia && props.personalia && (
           <div className={styles.seksjonContainer}>
@@ -108,14 +103,7 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        <Section
-          section={currentSection}
-          firstUnansweredFaktumIndex={
-            firstUnansweredFaktumIndex === -1
-              ? currentSection.fakta.length
-              : firstUnansweredFaktumIndex
-          }
-        />
+        <Section section={currentSection} />
 
         <div className={styles.loaderContainer}>
           <FetchIndicator isLoading={isLoading} />

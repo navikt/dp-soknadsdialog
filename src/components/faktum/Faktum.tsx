@@ -17,6 +17,8 @@ import { FaktumLand } from "./FaktumLand";
 import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDokumentkrav } from "./FaktumDokumentkrav";
+import { useQuiz } from "../../context/quiz-context";
+import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -27,6 +29,7 @@ export interface IFaktum<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
+  const { soknadState } = useQuiz();
   const { faktum, readonly } = props;
 
   function renderFaktumType() {
@@ -84,7 +87,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   return (
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
-      {renderDokumentkrav()}
+      {soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD && renderDokumentkrav()}
     </div>
   );
 }

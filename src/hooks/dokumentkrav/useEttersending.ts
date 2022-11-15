@@ -7,15 +7,35 @@ import { useUuid } from "../useUuid";
 export function useEttersending() {
   const { uuid } = useUuid();
   const [isBundling, setIsBundling] = useState(false);
-  const [dokumentkravWithError, setDokumentkravWithError] = useState<IDokumentkrav[]>([]);
+  const [noDocumentsToSave, setNoDocumentsToSave] = useState(false);
   const [dokumentkravWithNewFiles, setDokumentkravWithNewFiles] = useState<IDokumentkrav[]>([]);
   const [dokumentkravWithNewBundle, setDokumentkravWithNewBundle] = useState<IDokumentkrav[]>([]);
+  const [dokumentkravWithBundleError, setDokumentkravWithBundleError] = useState<IDokumentkrav[]>(
+    []
+  );
   const [bundleAndSaveDokumentkravPut] =
     usePutRequest<IDocumentationBundleBody>("documentation/bundle");
 
+  function isAllDokumentkravValid(): boolean {
+    setNoDocumentsToSave(false);
+
+    if (dokumentkravWithNewFiles.length === 0 && dokumentkravWithNewBundle.length === 0) {
+      setNoDocumentsToSave(true);
+      return false;
+    }
+
+    return true;
+  }
+
   function addDokumentkravWithNewFiles(dokumentkrav: IDokumentkrav) {
     const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithNewFiles);
+
     setDokumentkravWithNewFiles(newState);
+    removeDokumentkravWithError(dokumentkrav);
+
+    if (noDocumentsToSave) {
+      setNoDocumentsToSave(false);
+    }
   }
 
   function removeDokumentkravWithNewFiles(dokumentkrav: IDokumentkrav) {
@@ -26,14 +46,14 @@ export function useEttersending() {
   }
 
   function addDokumentkravWithError(dokumentkrav: IDokumentkrav) {
-    const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithError);
-    setDokumentkravWithError(newState);
+    const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithBundleError);
+    setDokumentkravWithBundleError(newState);
   }
 
   function removeDokumentkravWithError(dokumentkrav: IDokumentkrav) {
-    const newState = removeDokumentkravFromState(dokumentkrav, dokumentkravWithError);
+    const newState = removeDokumentkravFromState(dokumentkrav, dokumentkravWithBundleError);
     if (newState) {
-      setDokumentkravWithError(newState);
+      setDokumentkravWithBundleError(newState);
     }
   }
 
@@ -64,11 +84,13 @@ export function useEttersending() {
 
   return {
     isBundling,
+    noDocumentsToSave,
     dokumentkravWithNewBundle,
-    dokumentkravWithError,
     dokumentkravWithNewFiles,
+    dokumentkravWithBundleError,
     removeDokumentkrav,
     addDokumentkravWithNewFiles,
+    isAllDokumentkravValid,
     bundleAndSaveDokumentkrav,
   };
 }

@@ -39,7 +39,7 @@ describe("Section", () => {
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={mockSoknadState}>
           <ValidationProvider>
-            <Section section={sectionMockData} firstUnansweredFaktumIndex={0} />
+            <Section section={sectionMockData} />
           </ValidationProvider>
         </QuizProvider>
       </SanityProvider>
