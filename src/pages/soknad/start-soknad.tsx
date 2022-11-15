@@ -1,9 +1,10 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { audienceDPSoknad } from "../api.utils";
-import { getSession } from "../auth.utils";
-import { IMineSoknader } from "../types/quiz.types";
-import { StartSoknad } from "../views/start-soknad/StartSoknad";
-import { getMineSoknader } from "./api/soknad/get-mine-soknader";
+import React from "react";
+import { StartSoknad } from "../../views/start-soknad/StartSoknad";
+import { getSession } from "../../auth.utils";
+import { audienceDPSoknad } from "../../api.utils";
+import { getMineSoknader } from "../api/soknad/get-mine-soknader";
+import { IMineSoknader } from "../../types/quiz.types";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext

@@ -8,7 +8,6 @@ import { ErrorTypesEnum } from "../../types/error.types";
 
 interface IProps {
   section: IQuizSeksjon;
-  firstUnansweredFaktumIndex: number;
 }
 
 export function Section(props: IProps) {
@@ -23,11 +22,9 @@ export function Section(props: IProps) {
     <>
       <SectionHeading text={sectionTexts} fallback={props.section.beskrivendeId} />
 
-      {props.section?.fakta?.map((faktum, index) => {
-        if (index <= props.firstUnansweredFaktumIndex) {
-          return <Faktum key={faktum.beskrivendeId} faktum={faktum} />;
-        }
-      })}
+      {props.section?.fakta?.map((faktum) => (
+        <Faktum key={faktum.beskrivendeId} faktum={faktum} />
+      ))}
     </>
   );
 }

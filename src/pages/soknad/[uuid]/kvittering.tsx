@@ -1,24 +1,24 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../api.utils";
-import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
-import { getSession } from "../../auth.utils";
+import { QuizProvider } from "../../../context/quiz-context";
+import { audienceDPSoknad } from "../../../api.utils";
+import { getSoknadState, getSoknadStatus } from "../../api/quiz-api";
+import { Receipt } from "../../../views/receipt/Receipt";
+import ErrorPage from "../../_error";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { ISoknadStatus } from "../../api/soknad/[uuid]/status";
+import { IArbeidssokerStatus } from "../../api/arbeidssoker";
+import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../../api/arbeidssoker-api";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { ValidationProvider } from "../../../context/validation-context";
+import { IQuizState } from "../../../types/quiz.types";
+import { getSession } from "../../../auth.utils";
 import {
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-} from "../../constants";
-import { DokumentkravProvider } from "../../context/dokumentkrav-context";
-import { QuizProvider } from "../../context/quiz-context";
-import { ValidationProvider } from "../../context/validation-context";
-import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-besvart";
-import { mockNeste } from "../../localhost-data/mock-neste";
-import { IDokumentkravList } from "../../types/documentation.types";
-import { IQuizState } from "../../types/quiz.types";
-import { Receipt } from "../../views/receipt/Receipt";
-import { IArbeidssokerStatus } from "../api/arbeidssoker";
-import { getDokumentkrav } from "../api/documentation/[uuid]";
-import { getSoknadState, getSoknadStatus } from "../api/quiz-api";
-import { ISoknadStatus } from "../api/soknad/[uuid]/status";
-import ErrorPage from "../_error";
+} from "../../../constants";
 
 interface IProps {
   errorCode: number | null;
@@ -91,7 +91,7 @@ export async function getServerSideProps(
   if (soknadStatus.status === "Paabegynt") {
     return {
       redirect: {
-        destination: `/${uuid}`,
+        destination: `/soknad/${uuid}`,
         permanent: false,
       },
     };

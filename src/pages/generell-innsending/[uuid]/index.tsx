@@ -1,13 +1,14 @@
+import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSession } from "../../auth.utils";
-import { QuizProvider } from "../../context/quiz-context";
-import { ValidationProvider } from "../../context/validation-context";
-import { mockNeste } from "../../localhost-data/mock-neste";
-import { IQuizState } from "../../types/quiz.types";
-import { Summary } from "../../views/Summary";
-import { getSoknadState } from "../api/quiz-api";
-import ErrorPage from "../_error";
+import { QuizProvider } from "../../../context/quiz-context";
+import { ValidationProvider } from "../../../context/validation-context";
+import { audienceDPSoknad } from "../../../api.utils";
+import { getSoknadState } from "../../api/quiz-api";
+import ErrorPage from "../../_error";
+import { IQuizState } from "../../../types/quiz.types";
+import { getSession } from "../../../auth.utils";
+import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
+import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -23,7 +24,7 @@ export async function getServerSideProps(
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       props: {
-        soknadState: mockNeste,
+        soknadState: mockGenerellInnsending as IQuizState,
         errorCode: null,
       },
     };
@@ -41,6 +42,7 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
 
@@ -58,20 +60,21 @@ export async function getServerSideProps(
   };
 }
 
-export default function SummaryPage(props: IProps) {
+export default function GenerellInnsendingPage(props: IProps) {
   if (props.errorCode || !props.soknadState) {
     return (
       <ErrorPage
-        title="Det har skjedd en teknisk feil"
-        details="Beklager, vi mistet kontakten med systemene våre."
+        title="Vi har tekniske problemer akkurat nå"
+        details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
         statusCode={props.errorCode || 500}
       />
     );
   }
+
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Summary sections={props.soknadState.seksjoner} />
+        <GenerellInnsending />
       </ValidationProvider>
     </QuizProvider>
   );

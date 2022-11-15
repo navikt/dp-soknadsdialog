@@ -37,9 +37,6 @@ export function Soknad(props: IProps) {
   const isFirstSection = sectionIndex === 0;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const currentSection = soknadState.seksjoner[sectionIndex];
-  const firstUnansweredFaktumIndex = currentSection?.fakta?.findIndex(
-    (faktum) => faktum?.svar === undefined
-  );
 
   const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
@@ -51,12 +48,12 @@ export function Soknad(props: IProps) {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
 
     if (!soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
-      router.push(`/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
+      router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
     if (!validSection) {
-      router.push(`/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
+      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
     }
   }, []);
 
@@ -69,7 +66,9 @@ export function Soknad(props: IProps) {
   function navigateToNextSection() {
     if (currentSection.ferdig) {
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
-      router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+        shallow: true,
+      });
     } else {
       const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
       setUnansweredFaktumId(unansweredFaktumId);
@@ -79,15 +78,15 @@ export function Soknad(props: IProps) {
   function navigateToPreviousSection() {
     setUnansweredFaktumId(undefined);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
-    router.push(`/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
 
   function navigateToDocumentation() {
-    router.push(`/${router.query.uuid}/dokumentasjon`);
+    router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
-    router.push(`/`);
+    router.push(`/soknad`);
   }
 
   return (
@@ -98,9 +97,7 @@ export function Soknad(props: IProps) {
       />
       <SoknadHeader />
       <main>
-        {soknadState.versjon_navn === "Dagpenger" && (
-          <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
-        )}
+        <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 
         {showPersonalia && props.personalia && (
           <div className={styles.seksjonContainer}>
@@ -108,14 +105,7 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        <Section
-          section={currentSection}
-          firstUnansweredFaktumIndex={
-            firstUnansweredFaktumIndex === -1
-              ? currentSection.fakta.length
-              : firstUnansweredFaktumIndex
-          }
-        />
+        <Section section={currentSection} />
 
         <div className={styles.loaderContainer}>
           <FetchIndicator isLoading={isLoading} />

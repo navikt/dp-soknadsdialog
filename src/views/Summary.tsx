@@ -39,12 +39,12 @@ export function Summary(props: IProps) {
   }
 
   function navigateToDocumentation() {
-    router.push(`/${router.query.uuid}/dokumentasjon`);
+    router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
   }
 
   useEffect(() => {
     if (finishSoknadStatus === "success") {
-      router.push(`/${router.query.uuid}/kvittering`);
+      router.push(`/soknad/${router.query.uuid}/kvittering`);
     }
   }, [finishSoknadStatus]);
 
@@ -107,7 +107,11 @@ export function Summary(props: IProps) {
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 
-        <Button onClick={validateAndCompleteSoknad} loading={finishSoknadStatus === "pending"}>
+        <Button
+          onClick={validateAndCompleteSoknad}
+          loading={finishSoknadStatus === "pending"}
+          disabled={finishSoknadStatus === "success"}
+        >
           {getAppText("oppsummering.knapp.send-soknad")}
         </Button>
       </nav>

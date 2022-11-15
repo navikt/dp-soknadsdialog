@@ -34,7 +34,7 @@ export function ReceiptDocumentsMissing(props: IProps) {
         <ReceiptDocumentsMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
       ))}
 
-      <Link href={`/${uuid}/ettersending`} passHref>
+      <Link href={`/soknad/${uuid}/ettersending`} passHref>
         <Button as="a">{getAppText(KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP)}</Button>
       </Link>
     </div>

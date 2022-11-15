@@ -36,7 +36,7 @@ export function Arbeidssoker(props: IProps) {
             </Link>
           </div>
           <BodyLong className={styles.arbeidssokerSokDagpengerLikevel}>
-            <Link href="/start-soknad">
+            <Link href="/soknad/start-soknad">
               {getAppText("arbeidssoker.sok-dagpenger-likevel.lenke-tekst")}
             </Link>
             {getAppText("arbeidssoker.sok-dagpenger-likevel.beskrivelse-tekst")}
@@ -52,7 +52,7 @@ export function Arbeidssoker(props: IProps) {
             {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
           </Alert>
           <div className="navigation-container">
-            <Link href="/start-soknad" passHref>
+            <Link href="/soknad/start-soknad" passHref>
               <Button variant="primary" as="a">
                 {getAppText("arbeidssoker.sok-dagpenger.knapp")}
               </Button>

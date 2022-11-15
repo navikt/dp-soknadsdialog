@@ -33,7 +33,7 @@ export function StartSoknad() {
 
       if (uuidResponse.ok) {
         const uuid = await uuidResponse.text();
-        router.push(`/${uuid}`);
+        router.push(`/soknad/${uuid}`);
       } else {
         throw new Error(uuidResponse.statusText);
       }

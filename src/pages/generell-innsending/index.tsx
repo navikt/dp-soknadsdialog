@@ -1,8 +1,9 @@
 import { GetServerSidePropsContext } from "next";
-import { audienceDPSoknad } from "../api.utils";
-import { getSession } from "../auth.utils";
-import { createInnsendingUuid } from "./api/quiz-api";
-import ErrorPage from "./_error";
+import React from "react";
+import ErrorPage from "../_error";
+import { createInnsendingUuid } from "../api/quiz-api";
+import { audienceDPSoknad } from "../../api.utils";
+import { getSession } from "../../auth.utils";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
@@ -10,7 +11,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return {
       redirect: {
-        destination: `/uuid-innsending/`,
+        destination: `/generell-innsending/uuid-innsending`,
         permanent: false,
       },
     };
@@ -35,7 +36,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     if (innsendingUuid) {
       return {
         redirect: {
-          destination: `/${innsendingUuid}/`,
+          destination: `/generell-innsending/${innsendingUuid}`,
           permanent: false,
         },
       };
@@ -45,7 +46,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {};
 }
 
-export default function Innsending() {
+export default function GenerellInnsending() {
   // If everything went okay the user will be redirected. Return therefore error directly.
   return (
     <ErrorPage

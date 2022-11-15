@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { EttersendingDokumentkravSendingItem } from "./EttersendingDokumentkravSendingItem";
 import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
@@ -41,17 +41,17 @@ export function Ettersending(props: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { setFocus } = useSetFocus();
-  const { getAppText, getInfosideText } = useSanity();
   const { scrollIntoView } = useScrollIntoView();
+  const { getAppText, getInfosideText } = useSanity();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
-  const [noDocumentsToSave, setNoDocumentsToSave] = useState(false);
   const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
   const {
     isBundling,
-    dokumentkravWithError,
+    noDocumentsToSave,
+    dokumentkravWithBundleError,
     dokumentkravWithNewFiles,
-    dokumentkravWithNewBundle,
+    isAllDokumentkravValid,
     removeDokumentkrav,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
@@ -70,44 +70,31 @@ export function Ettersending(props: IProps) {
   );
 
   useEffect(() => {
-    if (dokumentkravWithNewFiles.length > 0 && noDocumentsToSave) {
-      setNoDocumentsToSave(false);
-    }
-  }, [dokumentkravWithNewFiles.length]);
-
-  useEffect(() => {
-    if (dokumentkravWithError.length > 0) {
+    if (dokumentkravWithBundleError.length > 0) {
       scrollIntoView(errorSummaryRef);
       setFocus(errorSummaryRef);
     }
-  }, [dokumentkravWithError.length]);
+  }, [dokumentkravWithBundleError.length]);
 
   useEffect(() => {
     if (ettersendSoknadStatus === "success") {
-      router.push(`/${uuid}/kvittering`);
+      router.push(`/soknad/${uuid}/kvittering`);
     }
   }, [ettersendSoknadStatus]);
 
   async function bundleAndSaveAllDokumentkrav() {
-    if (dokumentkravWithNewFiles.length === 0 && dokumentkravWithNewBundle.length === 0) {
-      setNoDocumentsToSave(true);
-      return;
-    }
-
-    if (noDocumentsToSave) {
-      setNoDocumentsToSave(false);
-    }
-
-    let readyToEttersend = true;
-    for (const dokumentkrav of dokumentkravWithNewFiles) {
-      const res = await bundleAndSaveDokumentkrav(dokumentkrav);
-      if (!res) {
-        readyToEttersend = false;
+    if (isAllDokumentkravValid()) {
+      let readyToEttersend = true;
+      for (const dokumentkrav of dokumentkravWithNewFiles) {
+        const res = await bundleAndSaveDokumentkrav(dokumentkrav);
+        if (!res) {
+          readyToEttersend = false;
+        }
       }
-    }
 
-    if (readyToEttersend) {
-      ettersendSoknad();
+      if (readyToEttersend) {
+        ettersendSoknad();
+      }
     }
   }
 
@@ -115,13 +102,13 @@ export function Ettersending(props: IProps) {
     <div>
       <SoknadHeader titleTextKey={ETTERSENDING_TITTEL} />
 
-      {dokumentkravWithError.length > 0 && (
+      {dokumentkravWithBundleError.length > 0 && (
         <ErrorSummary
           size="medium"
           ref={errorSummaryRef}
           heading={getAppText("ettersending.feilmelding.oppsummering.tittel")}
         >
-          {dokumentkravWithError.map((krav) => (
+          {dokumentkravWithBundleError.map((krav) => (
             <ErrorSummary.Item key={krav.id} href={`#${krav.id}`}>
               <DokumentkravTitle dokumentkrav={krav} />
             </ErrorSummary.Item>
@@ -145,11 +132,13 @@ export function Ettersending(props: IProps) {
             <EttersendingDokumentkravSendingItem
               key={krav.id}
               dokumentkrav={krav}
-              hasBundleError={
-                !dokumentkravWithError.findIndex((dokumentkrav) => dokumentkrav.id === krav.id)
-              }
               removeDokumentkrav={removeDokumentkrav}
               addDokumentkrav={addDokumentkravWithNewFiles}
+              hasBundleError={
+                !dokumentkravWithBundleError.findIndex(
+                  (dokumentkrav) => dokumentkrav.id === krav.id
+                )
+              }
             />
           ))}
 
@@ -162,11 +151,12 @@ export function Ettersending(props: IProps) {
               variant="primary"
               onClick={bundleAndSaveAllDokumentkrav}
               loading={isBundling || ettersendSoknadStatus === "pending"}
+              disabled={ettersendSoknadStatus === "success"}
             >
               {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
             </Button>
 
-            <Link href={`/${uuid}/kvittering`} passHref>
+            <Link href={`/soknad/${uuid}/kvittering`} passHref>
               <Button as="a" variant="secondary">
                 {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
               </Button>

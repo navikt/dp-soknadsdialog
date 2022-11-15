@@ -1,11 +1,11 @@
 import { Alert } from "@navikt/ds-react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSession } from "../../auth.utils";
-import { mockDokumentkravBesvart } from "../../localhost-data/mock-dokumentkrav-besvart";
-import { IDokumentkravList } from "../../types/documentation.types";
-import { Ettersending } from "../../views/ettersending/Ettersending";
-import { getDokumentkrav } from "../api/documentation/[uuid]";
+import { audienceDPSoknad } from "../../../api.utils";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { getSession } from "../../../auth.utils";
+import { Ettersending } from "../../../views/ettersending/Ettersending";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
   errorCode: number | null;

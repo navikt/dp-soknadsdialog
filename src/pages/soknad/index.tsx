@@ -1,12 +1,12 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../api.utils";
-import { getArbeidssokerperioder, IArbeidssokerperioder } from "../api/arbeidssoker-api";
-import { getSession } from "../auth.utils";
-import { IMineSoknader } from "../types/quiz.types";
-import { Inngang } from "../views/inngang/Inngang";
-import { IArbeidssokerStatus } from "./api/arbeidssoker";
-import { getMineSoknader } from "./api/soknad/get-mine-soknader";
-import ErrorPage from "./_error";
+import { audienceDPSoknad } from "../../api.utils";
+import { IMineSoknader } from "../../types/quiz.types";
+import { Inngang } from "../../views/inngang/Inngang";
+import { getMineSoknader } from "../api/soknad/get-mine-soknader";
+import ErrorPage from "../_error";
+import { getSession } from "../../auth.utils";
+import { IArbeidssokerStatus } from "../api/arbeidssoker";
+import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -77,7 +77,8 @@ export async function getServerSideProps(
   if (mineSoknader && Object.keys(mineSoknader).length === 0) {
     return {
       redirect: {
-        destination: arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker",
+        destination:
+          arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker",
         permanent: false,
       },
     };

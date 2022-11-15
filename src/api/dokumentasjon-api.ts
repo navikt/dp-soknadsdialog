@@ -1,9 +1,13 @@
 import api from "../api.utils";
-import { IDokumentkrav, IDokumentkravFil } from "../types/documentation.types";
+import {
+  GyldigDokumentkravSvar,
+  IDokumentkrav,
+  IDokumentkravFil,
+} from "../types/documentation.types";
 
 interface IDokumentkravSvar {
-  svar: string;
-  begrunnelse: string | undefined;
+  svar: GyldigDokumentkravSvar;
+  begrunnelse?: string;
 }
 
 export async function saveDokumentkravSvar(
