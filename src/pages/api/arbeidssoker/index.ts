@@ -17,8 +17,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   if (!session) return res.status(401).end();
 
   const payload = decodeJwt(session.token);
-  const idtoken = req.cookies["selvbetjening-idtoken"];
-  if (!idtoken || !payload?.pid) {
+  if (!payload?.pid) {
     return res.status(401).end();
   }
 
@@ -30,7 +29,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   try {
     const response = await fetch(url.toString(), {
       headers: {
-        cookie: `selvbetjening-idtoken=${idtoken}`,
+        cookie: `selvbetjening-idtoken=${session.token}`,
         "Nav-Consumer-Id": "dp-soknadsdialog",
         "Nav-Call-Id": callId,
       },
