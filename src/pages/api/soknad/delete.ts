@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { headersWithToken } from "../quiz-api";
 import { getSession } from "../../../auth.utils";
-import { logFetchError } from "../../../sentry.logger";
+import { logRequestError } from "../../../sentry.logger";
 import { DELETE_SOKNAD_ERROR } from "../../../sentry-constants";
 
 async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -27,13 +27,13 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!deleteSoknadResponse.ok) {
-      logFetchError(DELETE_SOKNAD_ERROR, uuid);
+      logRequestError(DELETE_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved sletting av soknad fra dp-soknad");
     }
 
     return res.json(deleteSoknadResponse);
   } catch (error) {
-    logFetchError(DELETE_SOKNAD_ERROR, uuid);
+    logRequestError(DELETE_SOKNAD_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

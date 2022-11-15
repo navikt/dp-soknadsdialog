@@ -5,7 +5,7 @@ import { withSentry } from "@sentry/nextjs";
 import { mockNeste } from "../../../../localhost-data/mock-neste";
 import metrics from "../../../../metrics";
 import { getSession } from "../../../../auth.utils";
-import { logFetchError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../sentry.logger";
 import { GET_SOKNAD_STATE_ERROR } from "../../../../sentry-constants";
 
 async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -31,14 +31,14 @@ async function nesteHandler(req: NextApiRequest, res: NextApiResponse) {
     measureNeste();
 
     if (!soknadStateResponse.ok) {
-      logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
+      logRequestError(GET_SOKNAD_STATE_ERROR, uuid);
       throw new Error("Feil ved henting av soknadstate fra dp-soknad");
     }
 
     const soknadState = await soknadStateResponse.json();
     return res.status(soknadStateResponse.status).send(soknadState);
   } catch (error) {
-    logFetchError(GET_SOKNAD_STATE_ERROR, uuid);
+    logRequestError(GET_SOKNAD_STATE_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

@@ -1,4 +1,4 @@
-export type SentryLoggingErrorType =
+export type RequestErrorType =
   | typeof GET_PERSONALIA_ERROR
   | typeof GET_SOKNAD_STATE_ERROR
   | typeof GET_DOKUMENTKRAV_ERROR

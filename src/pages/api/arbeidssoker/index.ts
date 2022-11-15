@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { formatISO } from "date-fns";
 import { decodeJwt } from "@navikt/dp-auth";
 import { getSession } from "../../../auth.utils";
-import { logFetchError } from "../../../sentry.logger";
+import { logRequestError } from "../../../sentry.logger";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 
@@ -42,7 +42,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
 
     return res.status(response.status).send(response.statusText);
   } catch (error) {
-    logFetchError(GET_ARBEIDSSOKER_STATUS_ERROR, callId);
+    logRequestError(GET_ARBEIDSSOKER_STATUS_ERROR, callId);
     return res.status(500).end(`Noe gikk galt (callId: ${callId})`);
   }
 }

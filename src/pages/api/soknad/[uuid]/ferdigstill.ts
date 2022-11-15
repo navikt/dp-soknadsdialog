@@ -6,7 +6,7 @@ import { getSession } from "../../../../auth.utils";
 import { allTextsQuery } from "../../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../../sanity/textStructureToHtml";
 import { FERDIGSTILL_ERROR } from "../../../../sentry-constants";
-import { logFetchError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../sentry.logger";
 import { ISanityTexts } from "../../../../types/sanity.types";
 import { headersWithToken } from "../../quiz-api";
 
@@ -41,12 +41,12 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!ferdigstillResponse.ok) {
-      logFetchError(FERDIGSTILL_ERROR, uuid);
+      logRequestError(FERDIGSTILL_ERROR, uuid);
       return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }
     return res.status(ferdigstillResponse.status).end();
   } catch (error: unknown) {
-    logFetchError(FERDIGSTILL_ERROR, uuid);
+    logRequestError(FERDIGSTILL_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

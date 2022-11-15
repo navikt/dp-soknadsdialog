@@ -4,7 +4,7 @@ import { withSentry } from "@sentry/nextjs";
 import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../../../api.utils";
 import { getSession } from "../../../../../auth.utils";
 import crypto from "crypto";
-import { logFetchError } from "../../../../../sentry.logger";
+import { logRequestError } from "../../../../../sentry.logger";
 import {
   BUNBLE_DOCKUMENTKRAV_ERROR,
   BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
@@ -37,7 +37,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logFetchError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR, uuid);
+      logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR, uuid);
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
@@ -52,13 +52,13 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logFetchError(SEND_BUNBLE_TO_DP_SOKNAD_ERROR, uuid);
+      logRequestError(SEND_BUNBLE_TO_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved lagring av bundle i dp-soknad");
     }
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
-    logFetchError(BUNBLE_DOCKUMENTKRAV_ERROR, uuid);
+    logRequestError(BUNBLE_DOCKUMENTKRAV_ERROR, uuid);
     return res.status(500).json(error);
   }
 }

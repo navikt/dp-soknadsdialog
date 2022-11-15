@@ -1,12 +1,12 @@
 import * as Sentry from "@sentry/nextjs";
-import { SentryLoggingErrorType } from "./sentry-constants";
+import { RequestErrorType } from "./sentry-constants";
 
 export function logMissingSanityText(textId: string) {
   Sentry.captureException(new MissingTextError(`Mangler tekst for "${textId}"`));
 }
 
-export function logFetchError(error: SentryLoggingErrorType, uuid?: string) {
-  Sentry.captureException(new FetchError(`${error}`), {
+export function logRequestError(error: RequestErrorType, uuid?: string) {
+  Sentry.captureException(new RequestError(`${error}`), {
     tags: {
       uuid: uuid ?? "Not provided",
     },
@@ -20,9 +20,9 @@ class MissingTextError extends Error {
   }
 }
 
-class FetchError extends Error {
+class RequestError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "FetchError";
+    this.name = "RequestError";
   }
 }

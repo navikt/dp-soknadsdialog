@@ -7,7 +7,7 @@ import {
   SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR,
   SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR,
 } from "../../../../../../sentry-constants";
-import { logFetchError } from "../../../../../../sentry.logger";
+import { logRequestError } from "../../../../../../sentry.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { headersWithToken } from "../../../../quiz-api";
 
@@ -49,7 +49,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logFetchError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
+      logRequestError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-mellomlagring");
     }
 
@@ -62,13 +62,13 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logFetchError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
+      logRequestError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-soknad");
     }
 
     return res.status(dpSoknadResponse.status).send(fileData[0]);
   } catch (error) {
-    logFetchError(SAVE_DOKUMENTS_ERROR, uuid);
+    logRequestError(SAVE_DOKUMENTS_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

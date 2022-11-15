@@ -8,7 +8,7 @@ import {
   BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
   SEND_BUNBLE_TO_DP_SOKNAD_ERROR as SEND_BUNDLE_TO_DP_SOKNAD_ERROR,
 } from "../../../sentry-constants";
-import { logFetchError } from "../../../sentry.logger";
+import { logRequestError } from "../../../sentry.logger";
 import { headersWithToken } from "../quiz-api";
 
 export interface IDocumentationBundleBody {
@@ -45,7 +45,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       requestId
     );
     if (!mellomlagringResponse.ok) {
-      logFetchError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR);
+      logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR);
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
@@ -59,13 +59,13 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logFetchError(SEND_BUNDLE_TO_DP_SOKNAD_ERROR);
+      logRequestError(SEND_BUNDLE_TO_DP_SOKNAD_ERROR);
       throw new Error("Feil ved lagring av bundle i dp-soknad");
     }
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
-    logFetchError(BUNBLE_DOCKUMENTKRAV_ERROR);
+    logRequestError(BUNBLE_DOCKUMENTKRAV_ERROR);
     return res.status(500).json(error);
   }
 }

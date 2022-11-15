@@ -4,7 +4,7 @@ import { createSoknadUuid } from "../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { CREATE_INNSENDING_UUID_ERROR } from "../../../sentry-constants";
-import { logFetchError } from "../../../sentry.logger";
+import { logRequestError } from "../../../sentry.logger";
 
 async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -27,7 +27,7 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
     const soknadId = await soknadUuidResponse.text();
     return res.status(soknadUuidResponse.status).send(soknadId);
   } catch (error) {
-    logFetchError(CREATE_INNSENDING_UUID_ERROR);
+    logRequestError(CREATE_INNSENDING_UUID_ERROR);
     return res.status(500).send(error);
   }
 }

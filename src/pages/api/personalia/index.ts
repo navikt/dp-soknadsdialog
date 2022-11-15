@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
-import { logFetchError } from "../../../sentry.logger";
+import { logRequestError } from "../../../sentry.logger";
 import { GET_PERSONALIA_ERROR } from "../../../sentry-constants";
 
 export function getPersonalia(onBehalfOfToken: string) {
@@ -29,13 +29,13 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
-      logFetchError(GET_PERSONALIA_ERROR);
+      logRequestError(GET_PERSONALIA_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
     return res.json(response);
   } catch (error) {
-    logFetchError(GET_PERSONALIA_ERROR);
+    logRequestError(GET_PERSONALIA_ERROR);
     return res.status(500).send(error);
   }
 };

@@ -3,7 +3,7 @@ import { headersWithToken } from "../../../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
-import { logFetchError } from "../../../../../../sentry.logger";
+import { logRequestError } from "../../../../../../sentry.logger";
 import {
   DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR,
   DELETE_FILE_FROM_DP_SOKNAD_ERROR,
@@ -34,7 +34,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logFetchError(DELETE_FILE_FROM_DP_SOKNAD_ERROR, uuid);
+      logRequestError(DELETE_FILE_FROM_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved sletting i dp-soknad");
     }
 
@@ -45,7 +45,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logFetchError(DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR, uuid);
+      logRequestError(DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR, uuid);
     }
 
     return res.status(dpSoknadResponse.status).end();

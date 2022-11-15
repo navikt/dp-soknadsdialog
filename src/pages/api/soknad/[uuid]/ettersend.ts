@@ -2,7 +2,7 @@ import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
-import { logFetchError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../sentry.logger";
 import { headersWithToken } from "../../quiz-api";
 import { ETTERSENDING_ERROR } from "./../../../../sentry-constants";
 
@@ -26,12 +26,12 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ettersendResponse.ok) {
-      logFetchError(ETTERSENDING_ERROR, uuid);
+      logRequestError(ETTERSENDING_ERROR, uuid);
       return res.status(ettersendResponse.status).send(ettersendResponse.statusText);
     }
     return res.status(ettersendResponse.status).end();
   } catch (error: unknown) {
-    logFetchError(ETTERSENDING_ERROR, uuid);
+    logRequestError(ETTERSENDING_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

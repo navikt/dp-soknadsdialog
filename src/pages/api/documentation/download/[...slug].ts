@@ -5,7 +5,7 @@ import { audienceMellomlagring } from "../../../../api.utils";
 import fs from "fs";
 import path from "path";
 import { getSession } from "../../../../auth.utils";
-import { logFetchError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../sentry.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -42,7 +42,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!response.ok) {
-      logFetchError(GET_MELLOMLARING_DOKUMENT_ERROR);
+      logRequestError(GET_MELLOMLARING_DOKUMENT_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 
@@ -54,7 +54,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader("Content-Disposition", "inline;");
     return res.status(200).send(response.body);
   } catch (error) {
-    logFetchError(GET_MELLOMLARING_DOKUMENT_ERROR);
+    logRequestError(GET_MELLOMLARING_DOKUMENT_ERROR);
     return res.status(404).send(error);
   }
 }
