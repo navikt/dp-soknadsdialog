@@ -52,7 +52,7 @@ export function GenerellInnsending() {
     addDokumentkravWithNewFiles,
   } = useEttersending();
   const [ferdigstillInnsending, ferdigstillInnsendingStatus] = usePutRequest(
-    `soknad/${uuid}/ferdigstill`
+    `soknad/${uuid}/ferdigstill?locale=${router.locale}`
   );
 
   useEffect(() => {
