@@ -151,6 +151,7 @@ export function Ettersending(props: IProps) {
               variant="primary"
               onClick={bundleAndSaveAllDokumentkrav}
               loading={isBundling || ettersendSoknadStatus === "pending"}
+              disabled={ettersendSoknadStatus === "success"}
             >
               {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
             </Button>
