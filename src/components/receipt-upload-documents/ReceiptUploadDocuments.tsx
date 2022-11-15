@@ -45,7 +45,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
         <div>
           <BodyShort>{getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST)}</BodyShort>
 
-          <Link href={`/${uuid}/innsending`} passHref>
+          <Link href={`/generell-innsending`} passHref>
             <Button as="a" className={styles.goToInnsending}>
               {getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE)}
             </Button>
