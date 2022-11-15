@@ -36,7 +36,7 @@ export async function getServerSideProps(
     if (mineSoknader?.paabegynt) {
       return {
         redirect: {
-          destination: "/",
+          destination: "/soknad",
           permanent: false,
         },
       };
