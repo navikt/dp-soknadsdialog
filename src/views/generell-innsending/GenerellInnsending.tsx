@@ -4,7 +4,6 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
-import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -17,7 +16,6 @@ import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
 import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
 import {
   ETTERSENDING_VALIDERING_INGEN_DOKUMENTER,
-  INNSENDING_HEADER_TITTEL,
   INNSENDING_SIDE_METADATA_BESKRIVELSE,
   INNSENDING_SIDE_METADATA_TITTEL,
 } from "../../text-constants";
@@ -104,7 +102,6 @@ export function GenerellInnsending() {
         title={getAppText(INNSENDING_SIDE_METADATA_TITTEL)}
         description={getAppText(INNSENDING_SIDE_METADATA_BESKRIVELSE)}
       />
-      <SoknadHeader titleTextKey={INNSENDING_HEADER_TITTEL} />
       <main>
         <Section section={currentSection} />
 

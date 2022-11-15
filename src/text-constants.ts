@@ -45,7 +45,6 @@ export const DOKUMENTKRAV_GENERELL_INNSENDING_TITTEL = "dokumentkrav.generell-in
 export const DOKUMENTKRAV_GENERELL_INNSENDING_TEKST = "dokumentkrav.generell-innsending.tekst";
 export const DOKUMENTKRAV_GENERELL_INNSENDING_LENKE = "dokumentkrav.generell-innsending.lenke";
 
-export const INNSENDING_HEADER_TITTEL = "innsending.header.tittel"
 export const INNSENDING_SIDE_METADATA_TITTEL = "innsending.side-metadata.tittel"
 export const INNSENDING_SIDE_METADATA_BESKRIVELSE = "innsending.side-metadata.beskrivelse"
 
