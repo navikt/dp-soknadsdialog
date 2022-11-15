@@ -17,8 +17,8 @@ export const KVITTERING_MANGLER_DOKUMENT_HEADING = "kvittering.heading.mangler-d
 export const KVITTERING_MANGLER_DOKUMENT_ANTALL_MANGLER = "kvittering.tekst.antall-mangler";
 export const KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP = "kvittering.mangler-dokumenter.go-til-opplasting-knapp";
 
-export const KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST = "kvittering.ettersending.frist-utgatt.tekst";
-export const KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE = "kvittering.ettersending.frist-utgatt.lenke";
+export const KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST = "kvittering.ettersending.tekst.frist-utgatt";
+export const KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE = "kvittering.ettersending.lenke.frist-utgatt";
 
 export const KVITTERING_TEKST_SENDT_AV_DEG = "kvittering.tekst.sendt-av-deg";
 
