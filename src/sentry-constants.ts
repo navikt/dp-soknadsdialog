@@ -1,48 +1,39 @@
-interface IFetchErrorType {
-  message: string;
-  type: string;
-}
-
 export type FetchErrorType =
   | typeof GET_PERSONALIA_ERROR
   | typeof GET_SOKNAD_STATE_ERROR
   | typeof GET_DOKUMENTKRAV_ERROR
-  | typeof GET_MINE_SOKNADER_ERROR
   | typeof GET_ARBEIDSSOKER_STATUS_ERROR
+  | typeof GET_MINE_SOKNADER_ERROR
   | typeof CREATE_INNSENDING_UUID_ERROR
-  | typeof DELETE_SOKNAD_ERROR;
+  | typeof DELETE_SOKNAD_ERROR
+  | typeof GET_MELLOMLARING_DOKUMENT_ERROR
+  | typeof POST_BUNBLE_TO_DP_MELLOMLAGRING_ERROR
+  | typeof PUT_ETTERSENDING_ERROR
+  | typeof PUT_FERDIGSTILL_ERROR
+  | typeof POST_BUNBLE_TO_DP_SOKNAD_ERROR;
 
-export const GET_PERSONALIA_ERROR: IFetchErrorType = {
-  type: "GET_PERSONALIA_ERROR",
-  message: "Feil ved henting av personalia",
-};
+// Personalia
+export const GET_PERSONALIA_ERROR = "Feil ved henting av personalia";
 
-export const GET_SOKNAD_STATE_ERROR: IFetchErrorType = {
-  type: "GET_SOKNAD_STATE_ERROR",
-  message: "Feil ved henting av søknadsstate",
-};
+// Arbeidssøker
+export const GET_ARBEIDSSOKER_STATUS_ERROR = "Feil ved henting av arbeidssøker status";
 
-export const GET_DOKUMENTKRAV_ERROR: IFetchErrorType = {
-  type: "GET_DOKUMENTKRAV_ERROR",
-  message: "Feil ved henting av dokumentskrav",
-};
+// Mine søknader
+export const GET_MINE_SOKNADER_ERROR = "Feil ved henting av mine søknader";
 
-export const GET_ARBEIDSSOKER_STATUS_ERROR: IFetchErrorType = {
-  type: "GET_ARBEIDSSOKER_STATUS_ERROR",
-  message: "Feil ved henting av arbeidssøker status",
-};
+// Søknad
+export const GET_SOKNAD_STATE_ERROR = "Feil ved henting av søknadsstate fra dp-soknad";
+export const DELETE_SOKNAD_ERROR = "Feil ved sletting av søknaden";
 
-export const GET_MINE_SOKNADER_ERROR: IFetchErrorType = {
-  type: "GET_MINE_SOKNADER_ERROR",
-  message: "Feil ved henting av mine søknader",
-};
+// Dokumentasjonskrav
+export const GET_DOKUMENTKRAV_ERROR = "Feil ved henting av dokumentskrav";
+export const GET_MELLOMLARING_DOKUMENT_ERROR = "Feil ved henting av fil fra mellomlagring";
+export const POST_BUNBLE_TO_DP_MELLOMLAGRING_ERROR = "Feil ved bundling i dp-mellomlagring";
+export const POST_BUNBLE_TO_DP_SOKNAD_ERROR = "Feil ved lagring av bundle i dp-soknad";
 
-export const CREATE_INNSENDING_UUID_ERROR: IFetchErrorType = {
-  type: "CREATE_INNSENDING_UUID_ERROR",
-  message: "Feil ved oppretting av innsendings uuid",
-};
+// Innsending
+export const CREATE_INNSENDING_UUID_ERROR = "Feil ved oppretting av innsendings uuid";
 
-export const DELETE_SOKNAD_ERROR: IFetchErrorType = {
-  type: "DELETE_SOKNAD_ERROR",
-  message: "Feil ved sletting av søknaden",
-};
+// Ettersending
+export const PUT_ETTERSENDING_ERROR = "Feil ved ettersending";
+export const PUT_FERDIGSTILL_ERROR = "Feil ved ferdigstill";

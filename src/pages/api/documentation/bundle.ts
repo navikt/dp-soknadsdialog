@@ -4,6 +4,11 @@ import { withSentry } from "@sentry/nextjs";
 import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
 import { headersWithToken } from "../quiz-api";
+import { logFetchError } from "../../../sentry.logger";
+import {
+  POST_BUNBLE_TO_DP_MELLOMLAGRING_ERROR,
+  POST_BUNBLE_TO_DP_SOKNAD_ERROR,
+} from "../../../sentry-constants";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -39,11 +44,10 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       requestId
     );
     if (!mellomlagringResponse.ok) {
+      logFetchError(POST_BUNBLE_TO_DP_MELLOMLAGRING_ERROR);
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
-    // eslint-disable-next-line no-console
-    console.log(`bundlet ${dokumentkravId}`);
     const { urn } = await mellomlagringResponse.json();
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,
@@ -54,16 +58,13 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
+      logFetchError(POST_BUNBLE_TO_DP_SOKNAD_ERROR);
       throw new Error("Feil ved lagring av bundle i dp-soknad");
     }
-    // eslint-disable-next-line no-console
-    console.log(`lagret bundle til ${dokumentkravId}`);
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
-    // TODO SENTRY LOG
-    // eslint-disable-next-line no-console
-    console.error("CATCH ERROR bundleDokumentkrav(): ", error);
+    logFetchError(POST_BUNBLE_TO_DP_MELLOMLAGRING_ERROR);
     return res.status(500).json(error);
   }
 }

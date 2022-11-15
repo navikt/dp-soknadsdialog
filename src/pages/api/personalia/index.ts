@@ -29,6 +29,7 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
+      logFetchError(GET_PERSONALIA_ERROR);
       throw new Error(`unexpected response ${response.statusText}`);
     }
 

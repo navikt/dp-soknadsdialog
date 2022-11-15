@@ -6,9 +6,8 @@ export function logMissingSanityText(textId: string) {
 }
 
 export function logFetchError(error: FetchErrorType, uuid?: string) {
-  Sentry.captureException(new FetchError(`${error.message}`), {
+  Sentry.captureException(new FetchError(`${error}`), {
     tags: {
-      type: error.type,
       uuid: uuid ?? "Not provided",
     },
   });

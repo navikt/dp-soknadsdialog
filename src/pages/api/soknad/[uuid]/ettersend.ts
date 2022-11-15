@@ -1,8 +1,10 @@
+import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../api.utils";
-import { headersWithToken } from "../../quiz-api";
-import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../../auth.utils";
+import { logFetchError } from "../../../../sentry.logger";
+import { headersWithToken } from "../../quiz-api";
+import { PUT_ETTERSENDING_ERROR } from "./../../../../sentry-constants";
 
 async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -24,10 +26,12 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ettersendResponse.ok) {
+      logFetchError(PUT_ETTERSENDING_ERROR, uuid);
       return res.status(ettersendResponse.status).send(ettersendResponse.statusText);
     }
     return res.status(ettersendResponse.status).end();
   } catch (error: unknown) {
+    logFetchError(PUT_ETTERSENDING_ERROR, uuid);
     return res.status(500).send(error);
   }
 }
