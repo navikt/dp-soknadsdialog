@@ -4,6 +4,11 @@ import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
+import { logFetchError } from "../../../../../../sentry.logger";
+import {
+  SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR,
+  SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR,
+} from "../../../../../../sentry-constants";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -43,6 +48,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
+      logFetchError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-mellomlagring");
     }
 
@@ -55,11 +61,14 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
+      logFetchError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved lagring til dp-soknad");
     }
 
     return res.status(dpSoknadResponse.status).send(fileData[0]);
   } catch (error) {
+    logFetchError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
+    logFetchError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

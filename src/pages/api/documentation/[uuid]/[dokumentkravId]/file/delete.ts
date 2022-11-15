@@ -3,6 +3,11 @@ import { headersWithToken } from "../../../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
+import { logFetchError } from "../../../../../../sentry.logger";
+import {
+  DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR,
+  DELETE_FILE_FROM_DP_SOKNAD_ERROR,
+} from "../../../../../../sentry-constants";
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -29,6 +34,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
+      logFetchError(DELETE_FILE_FROM_DP_SOKNAD_ERROR, uuid);
       throw new Error("Feil ved sletting i dp-soknad");
     }
 
@@ -39,9 +45,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      // TODO Should be logged to sentry, but it does not effect user so we do not throw error here
-      // eslint-disable-next-line no-console
-      console.error("Feil ved sletting av fil i dp-mellomlagring");
+      logFetchError(DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR, uuid);
     }
 
     return res.status(dpSoknadResponse.status).end();
