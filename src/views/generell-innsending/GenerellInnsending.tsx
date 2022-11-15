@@ -132,13 +132,13 @@ export function GenerellInnsending() {
             onClick={bundleAndSaveAllDokumentkrav}
             loading={isBundling || ferdigstillInnsendingStatus === "pending"}
           >
-            {getAppText("innsending.knapp.send-inn")}
+            {getAppText("generell-innsending.knapp.send-inn")}
           </Button>
           <Button
             variant={"secondary"}
             onClick={() => setDeleteSoknadModalOpen(!deleteSoknadModalOpen)}
           >
-            {getAppText("innsending.knapp.avbryt-slett")}
+            {getAppText("generell-innsending.knapp.avbryt-slett")}
           </Button>
         </nav>
 
