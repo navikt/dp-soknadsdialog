@@ -75,7 +75,7 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <span className={styles.withHover}>
+        <span className={styles.hasHover}>
           <p>
             <b>{getAppText("filopplaster.tekst.dra-filene-hit")}</b>
             <br />
