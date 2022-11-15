@@ -23,6 +23,7 @@ import styles from "./Receipts.module.css";
 import { PageMeta } from "../../components/PageMeta";
 import { PortableText } from "@portabletext/react";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
+import { ReceiptUploadDocuments } from "../../components/receipt-upload-documents/ReceiptUploadDocuments";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -52,7 +53,7 @@ export function Receipt(props: IProps) {
   );
 
   function navigateToMineDagpener() {
-    window.location.assign("https://arbeid.dev.nav.no/arbeid/dagpenger/mine-dagpenger");
+    window.location.assign("https://www.nav.no/arbeid/dagpenger/mine-dagpenger");
   }
 
   return (
@@ -73,6 +74,7 @@ export function Receipt(props: IProps) {
 
       <div className={styles.documentList}>
         {missingDocuments.length > 0 && <ReceiptDocumentsMissing documents={missingDocuments} />}
+        <ReceiptUploadDocuments soknadStatus={props.soknadStatus} />
         {uploadedDocuments.length > 0 && <ReceiptDocumentsUploaded documents={uploadedDocuments} />}
         {notSendingDocuments.length > 0 && (
           <ReceiptDocumentsNotSending documents={notSendingDocuments} />
