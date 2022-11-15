@@ -27,8 +27,10 @@ import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DeleteSoknadModal } from "../../components/exit-soknad/DeleteSoknadModal";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "./GenerellInnsending.module.css";
+import { useRouter } from "next/router";
 
 export function GenerellInnsending() {
+  const router = useRouter();
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
@@ -38,6 +40,7 @@ export function GenerellInnsending() {
   const { data, error } = useSWR<IDokumentkravList>(
     shouldFetchDokumentkrav ? api(`/documentation/${uuid}`) : null
   );
+  // Generell innsending har bare 1 seksjon.
   const currentSection = soknadState.seksjoner[0];
   const shouldRenderDokumentkrav = data && data.krav?.length > 0;
   const {
@@ -64,6 +67,7 @@ export function GenerellInnsending() {
     }
   }, [soknadState]);
 
+  // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {
     if (data) {
       for (const dokumentkrav of data.krav) {
@@ -71,6 +75,12 @@ export function GenerellInnsending() {
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    if (ferdigstillInnsendingStatus === "success") {
+      router.push(`/generell-innsending/${uuid}/kvittering`);
+    }
+  }, [ferdigstillInnsendingStatus]);
 
   async function bundleAndSaveAllDokumentkrav() {
     if (isAllDokumentkravValid()) {

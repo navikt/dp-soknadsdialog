@@ -48,3 +48,6 @@ export const DOKUMENTKRAV_GENERELL_INNSENDING_LENKE = "dokumentkrav.generell-inn
 export const INNSENDING_HEADER_TITTEL = "innsending.header.tittel"
 export const INNSENDING_SIDE_METADATA_TITTEL = "innsending.side-metadata.tittel"
 export const INNSENDING_SIDE_METADATA_BESKRIVELSE = "innsending.side-metadata.beskrivelse"
+
+export const GENERELL_INNSENDING_KVITTERING_TEXT = "generell-innsending.kvittering.text"
+export const GENERELL_INNSENDING_KVITTERING_KNAPP_MINE_DAGPENGER = "generell-innsending.kvittering.knapp.mine-dagpenger"
