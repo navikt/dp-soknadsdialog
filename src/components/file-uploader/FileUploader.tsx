@@ -28,16 +28,10 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
   const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
 
   const onDrop = useCallback((selectedFiles: File[]) => {
-    // eslint-disable-next-line no-console
-    console.log("FileUpload onCrop callback");
     setErrors([]);
     setIsLoading(true);
-    // eslint-disable-next-line no-console
-    console.log("FileUpload selectedFiles: ", selectedFiles);
 
     selectedFiles.forEach(async (file, index) => {
-      // eslint-disable-next-line no-console
-      console.log("FileUpload file: ", file.name);
       if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
         setErrors((currentState) => [
           ...currentState,
@@ -72,7 +66,11 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     });
   }, []);
 
-  const { getRootProps, getInputProps, open } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true,
+  });
   return (
     <>
       <div {...getRootProps()} className={styles.fileUploader}>
