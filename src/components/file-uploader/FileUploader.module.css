@@ -24,3 +24,16 @@
   text-align: center;
   margin: var(--navds-spacing-4) 0;
 }
+
+.withHover {
+  display: none;
+}
+
+@media (hover: hover) {
+  .withHover {
+    display: inline;
+  }
+  .fileUploader button {
+    margin-bottom: 1rem
+  }
+}

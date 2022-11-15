@@ -13,6 +13,7 @@ interface IProps {
   handleUploadedFiles: (file: IDokumentkravFil) => void;
   maxFileSize: number;
 }
+
 interface IFileError {
   fileName: string;
   error: "INVALID_FILE_FORMAT" | "INVALID_FILE_SIZE" | "SERVER_ERROR";
@@ -66,24 +67,22 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     });
   }, []);
 
-  const { getRootProps, getInputProps, open } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    noClick: true,
-    noKeyboard: true,
   });
   return (
     <>
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <p>
-          <b>{getAppText("filopplaster.tekst.dra-filene-hit")}</b>
-          <br />
-          {getAppText("filopplaster.tekst.eller")}
-        </p>
-        <Button onClick={open} loading={isLoading}>
-          {getAppText("filopplaster.knapp.velg-filer")}
-        </Button>
+        <span className={styles.withHover}>
+          <p>
+            <b>{getAppText("filopplaster.tekst.dra-filene-hit")}</b>
+            <br />
+            {getAppText("filopplaster.tekst.eller")}
+          </p>
+        </span>
+        <Button loading={isLoading}>{getAppText("filopplaster.knapp.velg-filer")}</Button>
       </div>
 
       {errors.length > 0 && (
