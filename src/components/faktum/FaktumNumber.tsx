@@ -159,7 +159,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         size="medium"
         type="text"
         maxLength={9}
-        inputMode="numeric"
+        inputMode="decimal"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={getValidationMessage()}
