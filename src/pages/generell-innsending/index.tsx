@@ -1,9 +1,9 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
-import ErrorPage from "./_error";
-import { createInnsendingUuid } from "./api/quiz-api";
-import { audienceDPSoknad } from "../api.utils";
-import { getSession } from "../auth.utils";
+import ErrorPage from "../_error";
+import { createInnsendingUuid } from "../api/quiz-api";
+import { audienceDPSoknad } from "../../api.utils";
+import { getSession } from "../../auth.utils";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
@@ -46,7 +46,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {};
 }
 
-export default function Innsending() {
+export default function GenerellInnsending() {
   // If everything went okay the user will be redirected. Return therefore error directly.
   return (
     <ErrorPage

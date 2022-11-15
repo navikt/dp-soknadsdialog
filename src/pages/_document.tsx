@@ -13,9 +13,9 @@ const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
 
 // TODO: Legg til "en" når vi får alle tekster inn i Sanity;
 const supportedLocales = ["nb"];
-const availableLanguages = supportedLocales.map((l) => ({
-  locale: l,
-  url: "https://www.nav.no/dagpenger/soknad/" + l,
+const availableLanguages = supportedLocales.map((locale) => ({
+  locale,
+  url: `https://www.nav.no/dagpenger/dialog/${locale}`,
   handleInApp: true,
 })) as DecoratorProps["availableLanguages"];
 

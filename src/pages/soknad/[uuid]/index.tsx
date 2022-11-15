@@ -1,17 +1,17 @@
 import React from "react";
-import { Soknad } from "../../views/soknad/Soknad";
+import { Soknad } from "../../../views/soknad/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { QuizProvider } from "../../context/quiz-context";
-import { ValidationProvider } from "../../context/validation-context";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSoknadState } from "../api/quiz-api";
-import ErrorPage from "../_error";
-import { IPersonalia } from "../../types/personalia.types";
-import { mockPersonalia } from "../../localhost-data/personalia";
-import { getPersonalia } from "../api/personalia";
-import { mockNeste } from "../../localhost-data/mock-neste";
-import { IQuizState } from "../../types/quiz.types";
-import { getSession } from "../../auth.utils";
+import { QuizProvider } from "../../../context/quiz-context";
+import { ValidationProvider } from "../../../context/validation-context";
+import { audienceDPSoknad } from "../../../api.utils";
+import { getSoknadState } from "../../api/quiz-api";
+import ErrorPage from "../../_error";
+import { IPersonalia } from "../../../types/personalia.types";
+import { mockPersonalia } from "../../../localhost-data/personalia";
+import { getPersonalia } from "../../api/personalia";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { IQuizState } from "../../../types/quiz.types";
+import { getSession } from "../../../auth.utils";
 
 interface IProps {
   soknadState: IQuizState | null;
