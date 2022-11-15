@@ -18,6 +18,7 @@ import { FaktumBoolean } from "./FaktumBoolean";
 import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDokumentkrav } from "./FaktumDokumentkrav";
 import { useQuiz } from "../../context/quiz-context";
+import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -86,7 +87,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   return (
     <div className={styles.faktum} id={faktum.beskrivendeId}>
       {renderFaktumType()}
-      {soknadState.versjon_navn === "Dagpenger" && renderDokumentkrav()}
+      {soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD && renderDokumentkrav()}
     </div>
   );
 }
