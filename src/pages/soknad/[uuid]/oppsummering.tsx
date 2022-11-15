@@ -1,14 +1,14 @@
 import React from "react";
-import { Summary } from "../../views/Summary";
+import { Summary } from "../../../views/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { QuizProvider } from "../../context/quiz-context";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSoknadState } from "../api/quiz-api";
-import ErrorPage from "../_error";
-import { ValidationProvider } from "../../context/validation-context";
-import { mockNeste } from "../../localhost-data/mock-neste";
-import { IQuizState } from "../../types/quiz.types";
-import { getSession } from "../../auth.utils";
+import { QuizProvider } from "../../../context/quiz-context";
+import { audienceDPSoknad } from "../../../api.utils";
+import { getSoknadState } from "../../api/quiz-api";
+import ErrorPage from "../../_error";
+import { ValidationProvider } from "../../../context/validation-context";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { IQuizState } from "../../../types/quiz.types";
+import { getSession } from "../../../auth.utils";
 
 interface IProps {
   soknadState: IQuizState | null;

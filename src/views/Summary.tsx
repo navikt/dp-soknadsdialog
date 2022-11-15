@@ -13,6 +13,7 @@ import { useUuid } from "../hooks/useUuid";
 import { usePutRequest } from "../hooks/usePutRequest";
 import { SoknadHeader } from "../components/soknad-header/SoknadHeader";
 import { useSanity } from "../context/sanity-context";
+import Link from "next/link";
 
 interface IProps {
   sections: IQuizSeksjon[];
@@ -39,12 +40,12 @@ export function Summary(props: IProps) {
   }
 
   function navigateToDocumentation() {
-    router.push(`/${router.query.uuid}/dokumentasjon`);
+    router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
   }
 
   useEffect(() => {
     if (finishSoknadStatus === "success") {
-      router.push(`/${router.query.uuid}/kvittering`);
+      router.push(`/soknad/${router.query.uuid}/kvittering`);
     }
   }, [finishSoknadStatus]);
 
@@ -70,13 +71,11 @@ export function Summary(props: IProps) {
                       return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
                     })}
 
-                    <Button
-                      as="a"
-                      variant="secondary"
-                      href={`${router.basePath}/${router.query.uuid}?seksjon=${index + 1}`}
-                    >
-                      {getAppText("oppsummering.knapp.endre-svar")}
-                    </Button>
+                    <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
+                      <Button variant="primary" as="a">
+                        {getAppText("oppsummering.knapp.endre-svar")}
+                      </Button>
+                    </Link>
                   </>
                 </Accordion.Content>
               </Accordion.Item>

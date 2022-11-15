@@ -41,7 +41,7 @@ export function GenerellInnsendingDocument(props: IProps) {
       />
 
       <FileList
-        dokumentkravId={props.dokumentkrav.beskrivendeId}
+        dokumentkravId={props.dokumentkrav.id}
         uploadedFiles={uploadedFiles}
         handleUploadedFiles={handleUploadedFiles}
       />

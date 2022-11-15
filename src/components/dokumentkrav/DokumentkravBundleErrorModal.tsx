@@ -49,7 +49,7 @@ export function DokumentkravBundleErrorModal({
         })
       );
 
-      router.push(`/${router.query.uuid}/oppsummering`);
+      router.push(`/soknad/${router.query.uuid}/oppsummering`);
     } catch {
       setIsSavingSvar(false);
       toggleVisibility(false);

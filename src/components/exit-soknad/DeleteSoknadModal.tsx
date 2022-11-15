@@ -52,7 +52,7 @@ export function DeleteSoknadModal({ isOpen, handleClose }: IProps) {
                 <Button as="a">{getAppText("soknad-slettet.modal.knapp.lukk")}</Button>
               </Link>
 
-              <Link href="/start-soknad" passHref>
+              <Link href="/soknad/start-soknad" passHref>
                 <Button as="a" variant="tertiary">
                   {getAppText("soknad-slettet.modal.knapp.start-ny-soknad")}
                 </Button>

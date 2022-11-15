@@ -25,7 +25,7 @@ export function DokumentkravGenerellInnsending({ classname }: IProps) {
 
       <BodyShort>{getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TEKST)}</BodyShort>
 
-      <Link href="/innsending">{getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_LENKE)}</Link>
+      <Link href="/generell-innsending">{getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_LENKE)}</Link>
     </div>
   );
 }

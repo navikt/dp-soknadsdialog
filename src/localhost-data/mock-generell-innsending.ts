@@ -6,17 +6,17 @@ export const mockGenerellInnsending = {
       fakta: [
         {
           id: "1001",
-          svar: "faktum.hvorfor.svar.klage",
+          svar: "faktum.generell-innsending.hvorfor.svar.klage",
           type: "envalg",
           roller: ["søker"],
           readOnly: false,
           gyldigeValg: [
-            "faktum.hvorfor.svar.klage",
-            "faktum.hvorfor.svar.ettersending",
-            "faktum.hvorfor.svar.endring",
-            "faktum.hvorfor.svar.vet-ikke",
+            "faktum.generell-innsending.hvorfor.svar.klage",
+            "faktum.generell-innsending.hvorfor.svar.ettersending",
+            "faktum.generell-innsending.hvorfor.svar.endring",
+            "faktum.generell-innsending.hvorfor.svar.annet",
           ],
-          beskrivendeId: "faktum.hvorfor",
+          beskrivendeId: "faktum.generell-innsending.hvorfor",
           sannsynliggjoresAv: [],
         },
         {
@@ -25,7 +25,7 @@ export const mockGenerellInnsending = {
           type: "tekst",
           roller: ["søker"],
           readOnly: false,
-          beskrivendeId: "faktum.tittel",
+          beskrivendeId: "faktum.generell-innsending.tittel-paa-dokument",
           sannsynliggjoresAv: [
             {
               id: "1005",
@@ -39,7 +39,7 @@ export const mockGenerellInnsending = {
         },
       ],
       ferdig: true,
-      beskrivendeId: "spørsmål",
+      beskrivendeId: "generell-innsending",
     },
   ],
   "@opprettet": "2022-11-14T15:58:11.400328686",

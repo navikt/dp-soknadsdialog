@@ -1,12 +1,14 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../../api.utils";
-import { headersWithToken } from "../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
+import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../../sanity-client";
-import { ISanityTexts } from "../../../../types/sanity.types";
+import { audienceDPSoknad } from "../../../../api.utils";
+import { getSession } from "../../../../auth.utils";
 import { allTextsQuery } from "../../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../../sanity/textStructureToHtml";
-import { getSession } from "../../../../auth.utils";
+import { FERDIGSTILL_ERROR } from "../../../../sentry-constants";
+import { logRequestError } from "../../../../sentry.logger";
+import { ISanityTexts } from "../../../../types/sanity.types";
+import { headersWithToken } from "../../quiz-api";
 
 async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -39,10 +41,12 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!ferdigstillResponse.ok) {
+      logRequestError(FERDIGSTILL_ERROR, uuid);
       return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }
     return res.status(ferdigstillResponse.status).end();
   } catch (error: unknown) {
+    logRequestError(FERDIGSTILL_ERROR, uuid);
     return res.status(500).send(error);
   }
 }

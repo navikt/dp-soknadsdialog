@@ -61,7 +61,9 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
       }
       case "double": {
         setIsValid(true);
-        debouncedChange(parseFloat(value));
+        // Replaced comma with dot
+        const formattedValue = value.replace(/,/g, ".");
+        debouncedChange(parseFloat(formattedValue));
         break;
       }
 
@@ -144,16 +146,20 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     }
   }
 
+  // Replaced dot with comma
+  const displayValue = debouncedValue?.toString().replace(/\./g, ",");
+
   return (
     <>
       <TextField
         className={styles.faktumNumber}
-        defaultValue={debouncedValue?.toString()}
+        defaultValue={displayValue}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         size="medium"
         type="text"
-        inputMode="numeric"
+        maxLength={9}
+        inputMode="decimal"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={getValidationMessage()}

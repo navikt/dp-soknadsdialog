@@ -23,7 +23,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   useEffect(() => {
     if (deleteSoknadStatus === "success") {
       const destinationPage =
-        arbeidssokerStatus === "REGISTERED" ? "/start-soknad" : "/arbeidssoker";
+        arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
       router.push(destinationPage);
     }
   }, [deleteSoknadStatus]);
@@ -36,7 +36,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
       </BodyLong>
 
-      <Link href={paabegynt.soknadUuid} passHref>
+      <Link href={`/soknad/${paabegynt.soknadUuid}`} passHref>
         <Button variant="primary" as="a">
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>

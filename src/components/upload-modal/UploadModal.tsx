@@ -67,19 +67,13 @@ export function UploadFilesModal(props: IProps) {
       if (!response.ok) {
         setIsSaving(false);
         setError("BUNDLE_ERROR");
-        // eslint-disable-next-line no-console
-        console.log("bundleDokumentkravFiles respone ikke OK!");
       } else {
         setIsSaving(false);
         setBundleFilesSuccess(true);
       }
-      // eslint-disable-next-line no-console
-      console.log(response.status);
     } catch (error) {
       setIsSaving(false);
       setError("BUNDLE_ERROR");
-      // eslint-disable-next-line no-console
-      console.log(error);
     }
   }
 

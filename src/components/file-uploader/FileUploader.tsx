@@ -66,7 +66,11 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     });
   }, []);
 
-  const { getRootProps, getInputProps, open } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    noKeyboard: true,
+  });
   return (
     <>
       <div {...getRootProps()} className={styles.fileUploader}>

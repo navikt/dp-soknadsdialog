@@ -1,8 +1,10 @@
+import { GET_ARBEIDSSOKER_STATUS_ERROR } from "./../../../sentry-constants";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuid } from "uuid";
 import { formatISO } from "date-fns";
 import { decodeJwt } from "@navikt/dp-auth";
 import { getSession } from "../../../auth.utils";
+import { logRequestError } from "../../../sentry.logger";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 
@@ -15,10 +17,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   if (!session) return res.status(401).end();
 
   const payload = decodeJwt(session.token);
-  const idtoken = req.cookies["selvbetjening-idtoken"];
-  if (!idtoken || !payload?.pid) {
-    // eslint-disable-next-line no-console
-    console.log("Mangler token");
+  if (!payload?.pid) {
     return res.status(401).end();
   }
 
@@ -30,7 +29,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   try {
     const response = await fetch(url.toString(), {
       headers: {
-        cookie: `selvbetjening-idtoken=${idtoken}`,
+        cookie: `selvbetjening-idtoken=${session.token}`,
         "Nav-Consumer-Id": "dp-soknadsdialog",
         "Nav-Call-Id": callId,
       },
@@ -42,10 +41,7 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
 
     return res.status(response.status).send(response.statusText);
   } catch (error) {
-    // TODO Sentry logg
-    // eslint-disable-next-line no-console
-    console.error(`Kall mot veilarbregistrering (callId: ${callId}) feilet. Feilmelding: ${error}`);
-
+    logRequestError(GET_ARBEIDSSOKER_STATUS_ERROR, callId);
     return res.status(500).end(`Noe gikk galt (callId: ${callId})`);
   }
 }
