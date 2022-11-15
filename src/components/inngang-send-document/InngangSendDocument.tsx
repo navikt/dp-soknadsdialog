@@ -13,7 +13,7 @@ export function InngangSendDocument(props: IMineSoknader) {
       <BodyLong>{getAppText("inngang.send-dokument.beskrivelse")}</BodyLong>
       {props.innsendte?.map((soknad) => {
         return (
-          <Link href={`/${soknad.soknadUuid}/kvittering`} passHref key={soknad.soknadUuid}>
+          <Link href={`/soknad/${soknad.soknadUuid}/kvittering`} passHref key={soknad.soknadUuid}>
             <Button variant="secondary" as="a">
               {getAppText("inngang.send-dokument.knapp-tekst")}{" "}
               <FormattedDate date={soknad.forstInnsendt} short />

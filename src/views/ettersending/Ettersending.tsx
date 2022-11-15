@@ -78,7 +78,7 @@ export function Ettersending(props: IProps) {
 
   useEffect(() => {
     if (ettersendSoknadStatus === "success") {
-      router.push(`/${uuid}/kvittering`);
+      router.push(`/soknad/${uuid}/kvittering`);
     }
   }, [ettersendSoknadStatus]);
 
@@ -156,7 +156,7 @@ export function Ettersending(props: IProps) {
               {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
             </Button>
 
-            <Link href={`/${uuid}/kvittering`} passHref>
+            <Link href={`/soknad/${uuid}/kvittering`} passHref>
               <Button as="a" variant="secondary">
                 {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
               </Button>

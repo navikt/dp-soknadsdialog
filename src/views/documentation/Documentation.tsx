@@ -72,7 +72,7 @@ export function Documentation(props: IProps) {
     if (isValid(dokumentkravList.krav)) {
       try {
         await bundleFiles(dokumentkravList.krav);
-        router.push(`/${router.query.uuid}/oppsummering`);
+        router.push(`/soknad/${router.query.uuid}/oppsummering`);
       } catch {
         setShowBundleErrorModal(true);
       }
@@ -90,7 +90,7 @@ export function Documentation(props: IProps) {
 
   function navigateToSoknad() {
     const lastSectionIndex = soknadState.seksjoner.length;
-    router.push(`/${router.query.uuid}?seksjon=${lastSectionIndex}`);
+    router.push(`/soknad/${router.query.uuid}?seksjon=${lastSectionIndex}`);
   }
 
   return (
