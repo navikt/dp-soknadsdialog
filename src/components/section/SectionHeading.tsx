@@ -2,6 +2,7 @@ import React from "react";
 import { Heading, ReadMore } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { ISanitySeksjon } from "../../types/sanity.types";
+import styles from "./SectionHeading.module.css";
 
 interface IProps {
   text: ISanitySeksjon | undefined;
@@ -18,7 +19,7 @@ export function SectionHeading(props: IProps) {
       {props.text?.description && <PortableText value={props.text?.description} />}
 
       {props.text?.helpText && (
-        <ReadMore header={props.text?.helpText.title}>
+        <ReadMore className={styles.readMore} header={props.text?.helpText.title}>
           <PortableText value={props.text?.helpText.body} />
         </ReadMore>
       )}
