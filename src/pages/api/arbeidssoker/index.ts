@@ -19,8 +19,6 @@ async function arbeidssokerStatusHandler(req: NextApiRequest, res: NextApiRespon
   const payload = decodeJwt(session.token);
   const idtoken = req.cookies["selvbetjening-idtoken"];
   if (!idtoken || !payload?.pid) {
-    // eslint-disable-next-line no-console
-    console.log("Mangler token");
     return res.status(401).end();
   }
 

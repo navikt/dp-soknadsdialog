@@ -1,4 +1,4 @@
-export type FetchErrorType =
+export type SentryLoggingErrorType =
   | typeof GET_PERSONALIA_ERROR
   | typeof GET_SOKNAD_STATE_ERROR
   | typeof GET_DOKUMENTKRAV_ERROR
@@ -8,8 +8,8 @@ export type FetchErrorType =
   | typeof DELETE_SOKNAD_ERROR
   | typeof GET_MELLOMLARING_DOKUMENT_ERROR
   | typeof BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR
-  | typeof PUT_ETTERSENDING_ERROR
-  | typeof PUT_FERDIGSTILL_ERROR
+  | typeof ETTERSENDING_ERROR
+  | typeof FERDIGSTILL_ERROR
   | typeof DELETE_FILE_FROM_DP_SOKNAD_ERROR
   | typeof BUNBLE_DOCKUMENTKRAV_ERROR
   | typeof DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR
@@ -32,11 +32,11 @@ export const DELETE_SOKNAD_ERROR = "Feil ved sletting av søknaden";
 
 // Dokumentasjonskrav
 export const GET_DOKUMENTKRAV_ERROR = "Feil ved henting av dokumentskrav";
-export const GET_MELLOMLARING_DOKUMENT_ERROR = "Feil ved henting av fil fra mellomlagring";
+export const GET_MELLOMLARING_DOKUMENT_ERROR = "Feil ved henting fra mellomlagring";
 export const BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR = "Feil ved bundling i dp-mellomlagring";
 export const BUNBLE_DOCKUMENTKRAV_ERROR = "Feil ved bundling av dokumentkrav";
 export const SEND_BUNBLE_TO_DP_SOKNAD_ERROR = "Feil ved lagring av bundle i dp-soknad";
-export const DELETE_FILE_FROM_DP_SOKNAD_ERROR = "Feil ved sletting i dp-soknad";
+export const DELETE_FILE_FROM_DP_SOKNAD_ERROR = "Feil ved sletting av fil i dp-soknad";
 export const DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR =
   "Feil ved sletting av fil i dp-mellomlagring";
 export const SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR = "Feil ved lagring til dp-mellomlagring";
@@ -46,5 +46,5 @@ export const SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR = "Feil ved lagring til dp-soknad
 export const CREATE_INNSENDING_UUID_ERROR = "Feil ved oppretting av innsendings uuid";
 
 // Ettersending
-export const PUT_ETTERSENDING_ERROR = "Feil ved ettersending";
-export const PUT_FERDIGSTILL_ERROR = "Feil ved ferdigstill";
+export const ETTERSENDING_ERROR = "Feil ved ettersending";
+export const FERDIGSTILL_ERROR = "Feil ved ferdigstill";
