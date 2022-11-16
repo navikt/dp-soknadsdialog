@@ -14,12 +14,7 @@ if (process.env.AUTH_PROVIDER == "local") {
 } else {
   getSession = makeSession({
     identityProvider: idporten,
-    oboProvider: withInMemoryCache(tokenX, {
-      // eslint-disable-next-line no-console
-      cacheHit: () => console.log(`TokenX cache hit`),
-      // eslint-disable-next-line no-console
-      cacheMiss: () => console.log(`TokenX cache miss`),
-    }),
+    oboProvider: withInMemoryCache(tokenX),
   });
 }
 
