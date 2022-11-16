@@ -5,13 +5,12 @@ import {
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { QuizFaktum } from "../../types/quiz.types";
 
 type NumberValidationErrorTypes = "negativeValue" | "invalidValue" | "notNumber" | "emptyValue";
 
 interface IProps {
   setHasError: (hasError: boolean | NumberValidationErrorTypes) => void;
-  getErrorMessage: (faktum: QuizFaktum) => string | undefined;
+  getErrorMessage: (faktumId: string) => string | undefined;
   isValidInput: (value: number | null) => boolean;
 }
 
@@ -73,8 +72,8 @@ export function useValidateFaktumNumber(faktumBeskrivendeId: string): IProps {
     }
   }
 
-  function getErrorMessage(faktum: QuizFaktum) {
-    if (unansweredFaktumId === faktum.id) {
+  function getErrorMessage(faktumId: string) {
+    if (unansweredFaktumId === faktumId) {
       return getAppText("validering.faktum.ubesvart");
     } else if (hasError) {
       return getErrorMessageByErrorType();

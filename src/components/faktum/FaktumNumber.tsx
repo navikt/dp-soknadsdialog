@@ -99,7 +99,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         inputMode="decimal"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
-        error={getErrorMessage(props.faktum)}
+        error={getErrorMessage(props.faktum.id)}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
