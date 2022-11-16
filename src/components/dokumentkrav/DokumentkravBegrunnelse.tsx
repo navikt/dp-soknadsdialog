@@ -35,7 +35,7 @@ export function DokumentkravBegrunnelse({
     }
   }, [svar]);
 
-  const textId = `${svar}.begrunnelse`;
+  const textId = `faktum.dokument.${svar}.begrunnelse`;
   const begrunnelseText = getDokumentkravTextById(textId);
 
   return (
