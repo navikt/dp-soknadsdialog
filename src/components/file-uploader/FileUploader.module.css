@@ -25,13 +25,13 @@
   margin: var(--navds-spacing-4) 0;
 }
 
-@media (any-hover: none) {
+@media (hover: none) and (pointer: coarse) {
   .hasHover {
     display: none;
   }
 }
 
-@media (any-hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .fileUploader button {
     margin-bottom: 1rem
   }
