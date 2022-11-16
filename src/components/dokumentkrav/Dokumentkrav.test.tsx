@@ -88,7 +88,7 @@ describe("Dokumentkrav", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByLabelText("dokumentkrav.svar.sender.ikke.begrunnelse")
+        screen.getByLabelText("faktum.dokument.dokumentkrav.svar.sender.ikke.begrunnelse")
       ).toBeInTheDocument();
     });
   });
