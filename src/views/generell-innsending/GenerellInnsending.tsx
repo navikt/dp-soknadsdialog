@@ -26,16 +26,20 @@ import { DeleteSoknadModal } from "../../components/exit-soknad/DeleteSoknadModa
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "./GenerellInnsending.module.css";
 import { useRouter } from "next/router";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function GenerellInnsending() {
   const router = useRouter();
   const { uuid } = useUuid();
   const { mutate } = useSWRConfig();
   const { getAppText } = useSanity();
+  const isFirstRender = useFirstRender();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
-  const { data, error } = useSWR<IDokumentkravList>(api(`/documentation/${uuid}`));
+  const { data, error } = useSWR<IDokumentkravList>(
+    !isFirstRender ? api(`/documentation/${uuid}`) : null
+  );
   // Generell innsending har bare 1 seksjon.
   const currentSection = soknadState.seksjoner[0];
   const shouldRenderDokumentkrav = data && data.krav?.length > 0;
@@ -60,7 +64,9 @@ export function GenerellInnsending() {
   }, [soknadState]);
 
   useEffect(() => {
-    mutate(api(`/documentation/${uuid}`));
+    if (!isFirstRender) {
+      mutate(api(`/documentation/${uuid}`));
+    }
   }, [soknadState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
