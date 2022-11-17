@@ -48,7 +48,7 @@ describe("FaktumText", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and answers", async () => {
+  test.skip("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -64,7 +64,7 @@ describe("FaktumText", () => {
     });
   });
 
-  test("Should show faktum answer if already answered", async () => {
+  test.skip("Should show faktum answer if already answered", async () => {
     const svar = "Hei på du";
     faktumMockData.svar = svar;
 
