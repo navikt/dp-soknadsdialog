@@ -11,9 +11,11 @@ import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 import { TEXTAREA_FAKTUM_IDS } from "../../constants";
 import styles from "./Faktum.module.css";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
@@ -25,7 +27,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    if (faktum.svar && debouncedText !== faktum.svar) {
+    if (!isFirstRender && debouncedText !== faktum.svar) {
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
       onChange ? onChange(faktum, inputValue) : saveFaktum(inputValue);
     }
