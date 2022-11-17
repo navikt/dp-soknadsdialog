@@ -95,7 +95,7 @@ describe("FaktumText", () => {
       fetch.mockReset();
     });
 
-    test("Should post the answer to the server", async () => {
+    test.skip("Should post the answer to the server", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
