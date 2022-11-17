@@ -4,11 +4,9 @@ import { FaktumPeriode } from "./FaktumPeriode";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
-import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
-import { mockNeste } from "../../localhost-data/mock-neste";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
@@ -84,28 +82,16 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects an answer", () => {
-    beforeEach(() => {
-      fetch.enableMocks();
-    });
-
-    afterEach(() => {
-      fetch.mockReset();
-    });
-
     test("Should post the answer to the server", async () => {
-      // First save the from date
-      fetch.mockResponseOnce(JSON.stringify(mockNeste));
-      // Then save the to date
-      fetch.mockResponseOnce(JSON.stringify(mockNeste));
-
       const user = userEvent.setup();
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
+      const onchange = jest.fn();
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <ValidationProvider>
-              <FaktumPeriode faktum={faktumMockData} />
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
             </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
@@ -122,18 +108,8 @@ describe("FaktumPeriode", () => {
       await user.type(datepickerTom, svar.tom);
 
       await waitFor(() => {
-        expect((datepickerFom as HTMLInputElement).value).toEqual(svar.fom);
-        expect((datepickerTom as HTMLInputElement).value).toEqual(svar.tom);
-
-        expect(fetch.mock.calls.length).toEqual(2);
-
-        // Does the first call save the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[1][1]?.body as string;
-        const requestJson = JSON.parse(putRequestBody);
-
-        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar.fom).toBe(svar.fom);
-        expect(requestJson.svar.tom).toBe(svar.tom);
+        expect(onchange).toBeCalledTimes(2);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
   });
