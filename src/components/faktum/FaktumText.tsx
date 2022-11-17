@@ -25,7 +25,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    if (debouncedText !== undefined && debouncedText !== faktum.svar) {
+    if (debouncedText !== undefined && debouncedText !== value) {
       onChange ? onChange(faktum, debouncedText) : saveFaktum(debouncedText);
     }
   }, [debouncedText]);
