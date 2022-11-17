@@ -32,7 +32,7 @@ export function useValidateFaktumNumber(faktumBeskrivendeId: string): IProps {
       return isValid;
     }
 
-    if (faktumBeskrivendeId === "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold") {
+    if (faktumBeskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
       if (value === null) {
         setHasError("emptyValue");
         return false;
