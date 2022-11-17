@@ -19,14 +19,15 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { getAppText, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
   const [value, setValue] = useState<string>(faktum.svar ?? "");
-  const [debouncedText, setDebouncedText] = useState<string | null | undefined>(value);
+  const [debouncedText, setDebouncedText] = useState<string>(value);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
-    if (debouncedText !== undefined && debouncedText !== value) {
-      onChange ? onChange(faktum, debouncedText) : saveFaktum(debouncedText);
+    if (faktum.svar && debouncedText !== faktum.svar) {
+      const inputValue = debouncedText.length === 0 ? null : debouncedText;
+      onChange ? onChange(faktum, inputValue) : saveFaktum(inputValue);
     }
   }, [debouncedText]);
 
@@ -38,10 +39,9 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
-    const inputValue = value.length === 0 ? null : value;
 
     setValue(value);
-    debouncedChange(inputValue);
+    debouncedChange(value);
   }
 
   function saveFaktum(value: string | null) {
