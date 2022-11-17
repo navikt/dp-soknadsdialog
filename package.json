@@ -10,7 +10,8 @@
     "test-coverage": "jest --collect-coverage",
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "port-forward": "./scripts/local-auth.sh && ./scripts/port-forward.sh"
   },
   "engines": {
     "node": ">=15.0.0",
