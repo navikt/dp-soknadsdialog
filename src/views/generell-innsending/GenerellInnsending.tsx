@@ -35,10 +35,7 @@ export function GenerellInnsending() {
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
-  const [shouldFetchDokumentkrav, setShouldFetchDokumentkrav] = useState(false);
-  const { data, error } = useSWR<IDokumentkravList>(
-    shouldFetchDokumentkrav ? api(`/documentation/${uuid}`) : null
-  );
+  const { data, error } = useSWR<IDokumentkravList>(api(`/documentation/${uuid}`));
   // Generell innsending har bare 1 seksjon.
   const currentSection = soknadState.seksjoner[0];
   const shouldRenderDokumentkrav = data && data.krav?.length > 0;
@@ -59,10 +56,6 @@ export function GenerellInnsending() {
   useEffect(() => {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
-    }
-
-    if (soknadState.ferdig) {
-      setShouldFetchDokumentkrav(true);
     }
   }, [soknadState]);
 
