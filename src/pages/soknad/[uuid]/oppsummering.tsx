@@ -1,5 +1,5 @@
 import React from "react";
-import { Summary } from "../../../views/Summary";
+import { Summary } from "../../../views/summary/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
@@ -72,7 +72,7 @@ export default function SummaryPage(props: IProps) {
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Summary sections={props.soknadState.seksjoner} />
+        <Summary soknadState={props.soknadState} />
       </ValidationProvider>
     </QuizProvider>
   );
