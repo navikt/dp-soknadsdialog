@@ -16,12 +16,12 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getAppText } = useSanity();
-  const faktumTexts = useSanity().getFaktumTextById(props.faktum.beskrivendeId);
-
-  const [debouncedText, setDebouncedText] = useState<string | null | undefined>(faktum.svar);
+  const { getAppText, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
+  const [value, setValue] = useState<string>(faktum.svar ?? "");
+  const [debouncedText, setDebouncedText] = useState<string | null | undefined>(value);
 
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
 
   useEffect(() => {
@@ -30,10 +30,17 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     }
   }, [debouncedText]);
 
+  useEffect(() => {
+    if (!faktum.svar) {
+      setValue("");
+    }
+  }, [faktum.svar]);
+
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
     const inputValue = value.length === 0 ? null : value;
 
+    setValue(value);
     debouncedChange(inputValue);
   }
 
@@ -75,7 +82,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
         <Textarea
-          defaultValue={faktum?.svar}
+          value={value}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           onChange={onValueChange}
@@ -84,7 +91,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         />
       ) : (
         <TextField
-          defaultValue={faktum?.svar}
+          value={value}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           size="medium"
