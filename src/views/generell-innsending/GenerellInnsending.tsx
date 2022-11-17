@@ -8,7 +8,7 @@ import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import api from "../../api.utils";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { useUuid } from "../../hooks/useUuid";
@@ -30,6 +30,7 @@ import { useRouter } from "next/router";
 export function GenerellInnsending() {
   const router = useRouter();
   const { uuid } = useUuid();
+  const { mutate } = useSWRConfig();
   const { getAppText } = useSanity();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
@@ -64,6 +65,10 @@ export function GenerellInnsending() {
       setShouldFetchDokumentkrav(true);
     }
   }, [soknadState]);
+
+  useEffect(() => {
+    mutate(api(`/documentation/${uuid}`));
+  }, [soknadState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {
