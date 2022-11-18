@@ -104,7 +104,7 @@ export async function getServerSideProps(
   );
 
   if (missingDocuments && missingDocuments.length > 0) {
-    soknadStatus = { status: "ManglerDokumenter" };
+    soknadStatus.status = "ManglerDokumenter";
   }
 
   if (arbeidssokerStatusResponse.ok) {
