@@ -4,7 +4,6 @@ import { FaktumText } from "./FaktumText";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizTekstFaktum, IQuizSeksjon, IQuizState } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
-import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
@@ -17,19 +16,6 @@ const faktumMockData: IQuizTekstFaktum = {
   beskrivendeId: "faktum.arbeidsforhold.navn-bedrift",
   sannsynliggjoresAv: [],
   roller: [],
-};
-
-const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
-
-const nesteMockData = {
-  ferdig: false,
-  seksjoner: [
-    {
-      fakta: [faktumMockData],
-      beskrivendeId: "din-situasjon",
-      ferdig: true,
-    },
-  ],
 };
 
 const sectionMockData: IQuizSeksjon = {
@@ -48,7 +34,7 @@ describe("FaktumText", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test.skip("Should show faktum question and answers", async () => {
+  test("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -64,7 +50,7 @@ describe("FaktumText", () => {
     });
   });
 
-  test.skip("Should show faktum answer if already answered", async () => {
+  test("Should show faktum answer if already answered", async () => {
     const svar = "Hei på du";
     faktumMockData.svar = svar;
 
@@ -87,28 +73,16 @@ describe("FaktumText", () => {
   });
 
   describe("When user inputs an answer", () => {
-    beforeEach(() => {
-      fetch.enableMocks();
-    });
-
-    afterEach(() => {
-      fetch.mockReset();
-    });
-
-    test.skip("Should post the answer to the server", async () => {
-      // First save the answer
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
-
+    test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = "Hei på du";
+      const onchange = jest.fn();
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <ValidationProvider>
-              <FaktumText faktum={faktumMockData} />
+              <FaktumText faktum={faktumMockData} onChange={onchange} />
             </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
@@ -118,28 +92,23 @@ describe("FaktumText", () => {
       await user.type(textInput, svar);
 
       await waitFor(() => {
-        expect(textInput.value).toEqual(svar);
-        expect(fetch.mock.calls.length).toEqual(1);
-
-        // Does the first call save the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
-        const requestJson = JSON.parse(putRequestBody);
-
-        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar).toBe(svar);
+        expect(onchange).toHaveBeenCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
+    
     test.skip("Should show error on invalid input", async () => {
       const inValidTextLengthMock =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like.";
       const errorTextKey = "validering.text-faktum.for-lang-tekst";
       const user = userEvent.setup();
+      const onchange = jest.fn();
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <ValidationProvider>
-              <FaktumText faktum={faktumMockData} />
+              <FaktumText faktum={faktumMockData} onChange={onchange} />
             </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
@@ -150,9 +119,9 @@ describe("FaktumText", () => {
 
       await waitFor(() => {
         expect(textInput.value).toEqual(inValidTextLengthMock);
+        expect(onchange).toHaveBeenCalledTimes(0);
         const errorText = screen.getByText(errorTextKey);
         expect(errorText).toBeInTheDocument();
-        expect(fetch.mock.calls.length).toEqual(0);
       });
     });
   });

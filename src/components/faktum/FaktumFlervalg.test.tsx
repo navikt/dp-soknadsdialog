@@ -4,7 +4,6 @@ import { FaktumFlervalg } from "./FaktumFlervalg";
 import { SanityProvider } from "../../context/sanity-context";
 import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
 import { QuizProvider } from "../../context/quiz-context";
-import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
@@ -21,19 +20,6 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   ],
   beskrivendeId: "faktum.eget-gaardsbruk-type-gaardsbruk",
   sannsynliggjoresAv: [],
-};
-
-const lagreFaktumMock = { status: "ok", sistBesvart: "123" };
-
-const nesteMockData = {
-  ferdig: false,
-  seksjoner: [
-    {
-      fakta: [faktumMockData],
-      beskrivendeId: "din-situasjon",
-      ferdig: true,
-    },
-  ],
 };
 
 const sectionMockData: IQuizSeksjon = {
@@ -98,28 +84,16 @@ describe("FaktumFlervalg", () => {
   });
 
   describe("When user selects an answer", () => {
-    beforeEach(() => {
-      fetch.enableMocks();
-    });
-
-    afterEach(() => {
-      fetch.mockReset();
-    });
-
     test("Should post the answer to the server", async () => {
-      // First save the answer
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
-
       const user = userEvent.setup();
       const svar = [faktumMockData.gyldigeValg[1]];
+      const onchange = jest.fn();
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <ValidationProvider>
-              <FaktumFlervalg faktum={faktumMockData} />
+              <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
             </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
@@ -130,37 +104,21 @@ describe("FaktumFlervalg", () => {
       user.click(svarCheckbox);
 
       await waitFor(() => {
-        const checkedCheckbox = screen.getByRole("checkbox", {
-          checked: true,
-        }) as HTMLInputElement;
-        expect(checkedCheckbox).toBeInTheDocument();
-        expect(checkedCheckbox.value).toEqual(svar[0]);
-        expect(fetch.mock.calls.length).toEqual(1);
-
-        // Does the first call save the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[0][1]?.body as string;
-        const requestJson = JSON.parse(putRequestBody);
-
-        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar.length).toBe(1);
-        expect(requestJson.svar[0]).toBe(svar[0]);
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
 
-    test.skip("Can select multiple answers", async () => {
-      // First save the answer
-      fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
-      // Then get next question (if any)
-      fetch.mockResponseOnce(JSON.stringify(nesteMockData));
-
+    test("Can select multiple answers", async () => {
       const user = userEvent.setup();
       const svar = [faktumMockData.gyldigeValg[1], faktumMockData.gyldigeValg[2]];
+      const onchange = jest.fn();
 
       render(
         <SanityProvider initialState={sanityMocks}>
           <QuizProvider initialState={soknadStateMockData}>
             <ValidationProvider>
-              <FaktumFlervalg faktum={faktumMockData} />
+              <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
             </ValidationProvider>
           </QuizProvider>
         </SanityProvider>
@@ -173,25 +131,8 @@ describe("FaktumFlervalg", () => {
       user.click(svar2Checkbox);
 
       await waitFor(() => {
-        const checkedCheckboxes = screen.getAllByRole("checkbox", {
-          checked: true,
-        }) as HTMLInputElement[];
-        expect(checkedCheckboxes[0]).toBeInTheDocument();
-        expect(checkedCheckboxes[0].value).toEqual(svar[0]);
-
-        expect(checkedCheckboxes[1]).toBeInTheDocument();
-        expect(checkedCheckboxes[1].value).toEqual(svar[1]);
-
-        expect(fetch.mock.calls.length).toEqual(2);
-
-        // Does the second save request update the faktum with the right answer?
-        const putRequestBody = fetch.mock.calls[1][1]?.body as string;
-        const requestJson = JSON.parse(putRequestBody);
-
-        expect(requestJson.beskrivendeId).toBe(faktumMockData.beskrivendeId);
-        expect(requestJson.svar.length).toBe(2);
-        expect(requestJson.svar[0]).toBe(svar[0]);
-        expect(requestJson.svar[1]).toBe(svar[1]);
+        expect(onchange).toHaveBeenCalledTimes(2);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
   });
