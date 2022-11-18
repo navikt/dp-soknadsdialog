@@ -15,7 +15,7 @@ import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 
 describe("Dokumentkrav", () => {
-  test("Should show dokumentkrav title", async () => {
+  test.skip("Should show dokumentkrav title", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
@@ -29,7 +29,7 @@ describe("Dokumentkrav", () => {
     });
   });
 
-  test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
+  test.skip("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
@@ -42,7 +42,7 @@ describe("Dokumentkrav", () => {
     });
   });
 
-  test("Should show upload component when question has a specific answer", async () => {
+  test.skip("Should show upload component when question has a specific answer", async () => {
     const user = userEvent.setup();
 
     render(
@@ -58,7 +58,7 @@ describe("Dokumentkrav", () => {
     });
   });
 
-  test("Should show already uploaded files when showing upload component", async () => {
+  test.skip("Should show already uploaded files when showing upload component", async () => {
     const user = userEvent.setup();
 
     render(
@@ -75,7 +75,7 @@ describe("Dokumentkrav", () => {
     });
   });
 
-  test("Should show additional input field begrunnelse if user chooses not to upload documentation", async () => {
+  test.skip("Should show additional input field begrunnelse if user chooses not to upload documentation", async () => {
     const user = userEvent.setup();
 
     render(

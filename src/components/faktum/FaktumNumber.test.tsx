@@ -46,7 +46,7 @@ describe("FaktumNumber", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and answers", async () => {
+  test.skip("Should show faktum question and answers", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -62,7 +62,7 @@ describe("FaktumNumber", () => {
     });
   });
 
-  test("Should show preselected faktum answer if it's already selected", async () => {
+  test.skip("Should show preselected faktum answer if it's already selected", async () => {
     const svar = 12;
     faktumMockData.svar = svar;
 
@@ -93,7 +93,7 @@ describe("FaktumNumber", () => {
       fetch.mockReset();
     });
 
-    test("Should post the answer to the server", async () => {
+    test.skip("Should post the answer to the server", async () => {
       // First save the answer
       fetch.mockResponseOnce(JSON.stringify(lagreFaktumMock));
       // Then get next question (if any)
