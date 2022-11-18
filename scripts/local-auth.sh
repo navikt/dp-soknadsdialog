@@ -38,6 +38,7 @@ echo "Hent token fra $URL/api/internal/token"
 read -sp "Paste inn token: " active_token
 
 echo "NEXT_PUBLIC_LOCALHOST=false" > $env_file
+echo "NAIS_CLUSTER_NAME=dev-gcp" >> $env_file
 echo "LOCAL_TOKEN=$active_token" >> $env_file
 
 pod=$(kubectl -n teamdagpenger get pods -o jsonpath={..metadata.name} -l app=dp-soknadsdialog | awk '{print $1}')
