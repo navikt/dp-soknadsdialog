@@ -19,10 +19,6 @@ die() {
   msg "$msg"
   exit "$code"
 }
-# Anbefalte tools
-# kubectl
-# kubens
-# kubectx
 
 cluster=$(kubectx -c)
 env_file="$script_dir/../.env.local"
