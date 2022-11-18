@@ -96,7 +96,7 @@ describe("FaktumText", () => {
         expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
-
+    
     test.skip("Should show error on invalid input", async () => {
       const inValidTextLengthMock =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like.";
@@ -119,8 +119,7 @@ describe("FaktumText", () => {
 
       await waitFor(() => {
         expect(textInput.value).toEqual(inValidTextLengthMock);
-        // expect(onchange).toHaveBeenCalledTimes(0);
-        expect(onchange).toHaveBeenCalledWith(0);
+        expect(onchange).toHaveBeenCalledTimes(0);
         const errorText = screen.getByText(errorTextKey);
         expect(errorText).toBeInTheDocument();
       });

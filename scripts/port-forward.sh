@@ -29,4 +29,4 @@ then
 fi
 
 echo "API_BASE_URL=http://localhost:8081/arbeid/dagpenger/soknadapi" >> $env_file
-kubectl port-forward svc/dp-soknad 8081:80
+kubectl -n teamdagpenger port-forward svc/dp-soknad 8081:80

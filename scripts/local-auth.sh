@@ -19,10 +19,6 @@ die() {
   msg "$msg"
   exit "$code"
 }
-# Anbefalte tools
-# kubectl
-# kubens
-# kubectx
 
 cluster=$(kubectx -c)
 env_file="$script_dir/../.env.local"
@@ -44,5 +40,5 @@ read -sp "Paste inn token: " active_token
 echo "NEXT_PUBLIC_LOCALHOST=false" > $env_file
 echo "LOCAL_TOKEN=$active_token" >> $env_file
 
-pod=$(kubectl get pods -o jsonpath={..metadata.name} -l app=dp-soknadsdialog | awk '{print $1}')
-kubectl exec $pod -- env | grep TOKEN_X -i >> $env_file
+pod=$(kubectl -n teamdagpenger get pods -o jsonpath={..metadata.name} -l app=dp-soknadsdialog | awk '{print $1}')
+kubectl -n teamdagpenger exec $pod -- env | grep TOKEN_X -i >> $env_file
