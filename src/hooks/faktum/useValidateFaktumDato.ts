@@ -9,10 +9,8 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 
-type DateValidationErrorType = "invalidDate" | "isNotValidYearRange" | "invalidBirthDate";
-
 interface IProps {
-  hasError: boolean | DateValidationErrorType;
+  hasError: boolean;
   hasWarning: boolean;
   setHasWarning: (value: boolean) => void;
   getErrorMessage: () => string | undefined;
@@ -24,25 +22,25 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   const { unansweredFaktumId } = useValidation();
   const [hasWarning, setHasWarning] = useState(false);
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [hasError, setHasError] = useState<boolean | DateValidationErrorType>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   function isValidDate(date: Date) {
     switch (faktum.beskrivendeId) {
       case "faktum.dagpenger-soknadsdato": {
         const isValid = isFromYear1900(date);
         const hasWarning = isOverTwoWeeks(date);
-        setHasError(!isValid ? "invalidDate" : false);
+        setHasError(!isValid);
         setHasWarning(hasWarning);
         return isValid;
       }
       case "faktum.barn-foedselsdato": {
         const isValid = isFromYear1900(date) && !isFuture(date);
-        setHasError(!isValid ? "invalidBirthDate" : false);
+        setHasError(!isValid);
         return isValid;
       }
       default: {
         const isValid = isWithinYearRange(date);
-        setHasError(!isValid ? "invalidDate" : false);
+        setHasError(!isValid);
         return isValid;
       }
     }
@@ -51,11 +49,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   function getErrorMessage() {
     if (unansweredFaktumId === faktum.id) {
       return getAppText("validering.faktum.ubesvart");
-    } else if (hasError === "invalidBirthDate") {
-      // return "ugyldig fødselsdato";
-      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
-    } else if (hasError === "invalidDate") {
-      // return "ugyldig dato";
+    } else if (hasError) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     } else {
       return undefined;
