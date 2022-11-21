@@ -47,10 +47,10 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   }
 
   function getErrorMessage() {
-    if (unansweredFaktumId === faktum.id) {
-      return getAppText("validering.faktum.ubesvart");
-    } else if (hasError) {
+    if (hasError) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
+    } else if (unansweredFaktumId === faktum.id) {
+      return getAppText("validering.faktum.ubesvart");
     } else {
       return undefined;
     }
