@@ -14,12 +14,14 @@ import { FormattedDate } from "../FormattedDate";
 import { isFromYear1900 } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 
+type validationErrorFomType = "futureDate" | "invalidDate";
+
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText } = useSanity();
-  const [hasErrorFom, setHasErrorFom] = useState(false);
+  const [hasErrorFom, setHasErrorFom] = useState<validationErrorFomType | boolean>(false);
   const [hasErrorTom, serHasErrorTom] = useState(false);
   const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
 
@@ -93,14 +95,24 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     let validPeriode = true;
 
     if (fom) {
-      const validFom = !isFuture(new Date(fom)) && isFromYear1900(new Date(fom));
-      setHasErrorFom(!validFom);
-      validPeriode = validFom;
+      const future = isFuture(new Date(fom));
+      const isValidFromDate = isFromYear1900(new Date(fom));
+
+      if (future) {
+        setHasErrorFom("futureDate");
+      } else if (!isValidFromDate) {
+        setHasErrorFom("invalidDate");
+      } else {
+        setHasErrorFom(false);
+      }
+
+      validPeriode = !future && isValidFromDate;
     }
 
     if (tom) {
-      const validTom =
-        new Date(tom).getTime() >= new Date(fom).getTime() && isFromYear1900(new Date(fom));
+      const tomDate = new Date(tom).getTime();
+      const fomDate = new Date(fom).getTime();
+      const validTom = tomDate >= fomDate && isFromYear1900(new Date(fom));
 
       serHasErrorTom(!validTom);
       validPeriode = validTom;
@@ -110,8 +122,10 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function getFomErrorMessage() {
-    if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
+    if (hasErrorFom && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
       return getAppText("validering.arbeidsforhold.varighet-fra");
+    } else if (hasErrorFom === "invalidDate") {
+      return getAppText("validering.ugyldig-dato");
     } else {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     }
@@ -146,7 +160,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
-            hasError={hasErrorFom || unansweredFaktumId === faktum.id}
+            hasError={hasErrorFom !== false || unansweredFaktumId === faktum.id}
             errorMessage={getValidationMessage()}
             required
           />
