@@ -19,7 +19,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
-  const [isValid, setIsValid] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [value, setValue] = useState<string>(faktum.svar ?? "");
   const [debouncedText, setDebouncedText] = useState<string>(value);
 
@@ -48,16 +48,16 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   function saveFaktum(value: string | null) {
     if (value === null) {
-      setIsValid(true);
+      setHasError(false);
       saveFaktumToQuiz(faktum, null);
       return;
     }
-
-    if (isValidTextLength(value)) {
-      setIsValid(true);
-      saveFaktumToQuiz(faktum, value);
+    if (!isValidTextLength(value)) {
+      setHasError(true);
+      return;
     } else {
-      setIsValid(false);
+      setHasError(false);
+      saveFaktumToQuiz(faktum, value);
     }
   }
 
@@ -73,7 +73,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   function getErrorMessage() {
     if (unansweredFaktumId === faktum.id) {
       return getAppText("validering.faktum.ubesvart");
-    } else if (!isValid) {
+    } else if (hasError) {
       return faktumTexts?.errorMessage ?? getAppText("validering.text-faktum.for-lang-tekst");
     } else {
       return undefined;

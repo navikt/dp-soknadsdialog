@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useValidateFaktumNumber } from "../../hooks/faktum/useFaktumNumberValidation";
+import { useValidateFaktumNumber } from "../../hooks/faktum/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";

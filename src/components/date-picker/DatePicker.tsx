@@ -108,9 +108,9 @@ export function DatePicker(props: IDatePicker) {
           {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.errorMessage}
         </div>
       )}
-      {props.hasWarning && props.warningMessage && (
+      {props.hasWarning && (
         <Alert variant="warning" className={styles.datePickerWarning}>
-          {props.warningMessage}
+          {getAppText("validering.dato-faktum.soknadsdato-varsel")}
         </Alert>
       )}
     </div>

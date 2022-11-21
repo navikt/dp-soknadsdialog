@@ -11,7 +11,7 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
-import { isValidDateYear } from "./validation/validations.utils";
+import { isFromYear1900 } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
@@ -93,14 +93,14 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     let validPeriode = true;
 
     if (fom) {
-      const validFom = !isFuture(new Date(fom)) && isValidDateYear(new Date(fom));
+      const validFom = !isFuture(new Date(fom)) && isFromYear1900(new Date(fom));
       setIsValidFom(validFom);
       validPeriode = validFom;
     }
 
     if (tom) {
       const validTom =
-        new Date(tom).getTime() >= new Date(fom).getTime() && isValidDateYear(new Date(fom));
+        new Date(tom).getTime() >= new Date(fom).getTime() && isFromYear1900(new Date(fom));
 
       setIsValidTom(validTom);
       validPeriode = validTom;

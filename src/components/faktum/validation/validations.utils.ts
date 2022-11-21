@@ -20,7 +20,7 @@ export function isValidPermitteringsPercent(value: number): boolean {
   return value >= 0 && value <= 100;
 }
 
-export function isValidDateYear(date: Date): boolean {
+export function isFromYear1900(date: Date): boolean {
   return date >= new Date("1900-01-01");
 }
 
@@ -28,8 +28,8 @@ export function isOverTwoWeeks(date: Date): boolean {
   return date >= addWeeks(new Date(), 2);
 }
 
-export function isValidYearRange(date: Date): boolean {
-  return isValidDateYear(date) && date <= addYears(new Date(), YEAR_RANGE);
+export function isWithinYearRange(date: Date): boolean {
+  return isFromYear1900(date) && date <= addYears(new Date(), YEAR_RANGE);
 }
 
 export function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
