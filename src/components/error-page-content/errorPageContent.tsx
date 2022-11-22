@@ -15,7 +15,7 @@ export function ErrorPageContent({ title, details }: IProps) {
         {titleWithFallback}
       </Heading>
       <BodyLong>{detailsWithFallback}</BodyLong>
-      <Link href="https://www.nav.no/no/ditt-nav" passHref>
+      <Link href="https://www.nav.no/minside" passHref>
         <Button className="my-6" variant="primary" as="a" size="medium">
           Gå til Min side
         </Button>

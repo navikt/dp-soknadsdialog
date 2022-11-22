@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import {
-  QuizFaktum,
   IQuizGeneratorFaktum,
   IQuizPeriodeFaktumAnswerType,
+  QuizFaktum,
 } from "../../types/quiz.types";
 import { Faktum, IFaktum } from "../faktum/Faktum";
 import { useSanity } from "../../context/sanity-context";
@@ -25,7 +25,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
-  const { getAppText, getSvaralternativTextById, getFaktumTextById } = useSanity();
+  const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -87,9 +87,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
 
               <BodyShort>{getArbeidsforholdVarighet(fakta)}</BodyShort>
 
-              <Detail uppercase spacing>
-                <>{getSvaralternativTextById(getArbeidsforholdEndret(fakta))?.text}</>
-              </Detail>
+              <ArbeidsforholdEndret fakta={fakta}></ArbeidsforholdEndret>
             </GeneratorFaktumCard>
 
             <Modal
@@ -168,8 +166,19 @@ export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
 }
 
 export function getArbeidsforholdEndret(arbeidsforhold: QuizFaktum[]): string {
+  return arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.arbeidsforhold.endret")
+    ?.svar as string;
+}
+
+function ArbeidsforholdEndret({ fakta }: { fakta: QuizFaktum[] }) {
+  const { getSvaralternativTextById } = useSanity();
+
+  const arbeidsforholdEndret = getArbeidsforholdEndret(fakta);
+  if (!arbeidsforholdEndret) return null;
+
   return (
-    (arbeidsforhold.find((answer) => answer.beskrivendeId === "faktum.arbeidsforhold.endret")
-      ?.svar as string) ?? "Fant ikke årsak"
+    <Detail uppercase spacing>
+      <>{getSvaralternativTextById(arbeidsforholdEndret)?.text}</>
+    </Detail>
   );
 }

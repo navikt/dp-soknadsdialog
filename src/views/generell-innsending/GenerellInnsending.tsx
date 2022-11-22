@@ -8,7 +8,7 @@ import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import api from "../../api.utils";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { useUuid } from "../../hooks/useUuid";
@@ -26,17 +26,19 @@ import { DeleteSoknadModal } from "../../components/exit-soknad/DeleteSoknadModa
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "./GenerellInnsending.module.css";
 import { useRouter } from "next/router";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function GenerellInnsending() {
   const router = useRouter();
   const { uuid } = useUuid();
+  const { mutate } = useSWRConfig();
   const { getAppText } = useSanity();
+  const isFirstRender = useFirstRender();
   const { soknadState, isError, isLoading, errorType } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
-  const [shouldFetchDokumentkrav, setShouldFetchDokumentkrav] = useState(false);
   const { data, error } = useSWR<IDokumentkravList>(
-    shouldFetchDokumentkrav ? api(`/documentation/${uuid}`) : null
+    !isFirstRender ? api(`/documentation/${uuid}`) : null
   );
   // Generell innsending har bare 1 seksjon.
   const currentSection = soknadState.seksjoner[0];
@@ -59,11 +61,13 @@ export function GenerellInnsending() {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-
-    if (soknadState.ferdig) {
-      setShouldFetchDokumentkrav(true);
-    }
   }, [soknadState]);
+
+  useEffect(() => {
+    if (!isFirstRender) {
+      mutate(api(`/documentation/${uuid}`));
+    }
+  }, [soknadState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {

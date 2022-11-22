@@ -5,11 +5,11 @@ import crypto from "crypto";
 import metrics from "../../../../../metrics";
 import { getSession } from "../../../../../auth.utils";
 import { getSoknadState } from "../../../quiz-api";
-import { mockNeste } from "../../../../../localhost-data/mock-neste";
+import { mockGenerellInnsending } from "../../../../../localhost-data/mock-generell-innsending";
 
 const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(200).json(mockNeste);
+    return res.status(200).json(mockGenerellInnsending);
   }
 
   const session = await getSession(req);

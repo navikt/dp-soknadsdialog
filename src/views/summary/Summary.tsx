@@ -1,41 +1,65 @@
 import { Left } from "@navikt/ds-icons";
-import { Accordion, Alert, Button, ConfirmationPanel } from "@navikt/ds-react";
+import { Accordion, Alert, Button, ConfirmationPanel, Tag } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { ExitSoknad } from "../components/exit-soknad/ExitSoknad";
-import { Faktum } from "../components/faktum/Faktum";
-import { NoSessionModal } from "../components/no-session-modal/NoSessionModal";
-import { IQuizSeksjon } from "../types/quiz.types";
-import { ProgressBar } from "../components/progress-bar/ProgressBar";
-import { PageMeta } from "../components/PageMeta";
-import { useProgressBarSteps } from "../hooks/useProgressBarSteps";
-import { useUuid } from "../hooks/useUuid";
-import { usePutRequest } from "../hooks/usePutRequest";
-import { SoknadHeader } from "../components/soknad-header/SoknadHeader";
-import { useSanity } from "../context/sanity-context";
+import { useEffect, useRef, useState } from "react";
+import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
+import { Faktum } from "../../components/faktum/Faktum";
+import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import { IQuizState } from "../../types/quiz.types";
+import { ProgressBar } from "../../components/progress-bar/ProgressBar";
+import { PageMeta } from "../../components/PageMeta";
+import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
+import { useUuid } from "../../hooks/useUuid";
+import { usePutRequest } from "../../hooks/usePutRequest";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
+import { useSanity } from "../../context/sanity-context";
 import Link from "next/link";
+import { useSetFocus } from "../../hooks/useSetFocus";
+import styles from "./Summary.module.css";
 
 interface IProps {
-  sections: IQuizSeksjon[];
+  soknadState: IQuizState;
 }
 
-export function Summary(props: IProps) {
+export function Summary({ soknadState }: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
+  const { setFocus } = useSetFocus();
 
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
+  const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
+  const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
+
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
     `soknad/${uuid}/ferdigstill?locale=${router.locale}`
   );
+
+  useEffect(() => {
+    if (showSoknadNotCompleteError) {
+      setFocus(soknadCompleteErrorRef);
+    }
+  }, [showSoknadNotCompleteError]);
 
   function validateAndCompleteSoknad() {
     if (!consentGiven) {
       setShowConsentValidation(true);
       return;
     }
+    if (!soknadState.ferdig) {
+      setshowSoknadNotCompleteError(true);
+
+      // If showValidationErrors is false, the async useEffect will trigger
+      // a scroll as soon as the state is set (and the validation error element is in view)
+      if (showSoknadNotCompleteError) {
+        setFocus(soknadCompleteErrorRef);
+      }
+
+      return;
+    }
+
     finishSoknad();
   }
 
@@ -58,12 +82,18 @@ export function Summary(props: IProps) {
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
       <Accordion>
-        {props.sections?.map((section, index) => {
+        {soknadState.seksjoner?.map((section, index) => {
           return (
             <div key={section.beskrivendeId}>
               <Accordion.Item key={section.beskrivendeId}>
                 <Accordion.Header>
                   {getSeksjonTextById(section.beskrivendeId)?.title}
+
+                  {showSoknadNotCompleteError && !section.ferdig && (
+                    <Tag variant="error" className={styles.notCompleteTag}>
+                      {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
+                    </Tag>
+                  )}
                 </Accordion.Header>
                 <Accordion.Content>
                   <>
@@ -100,6 +130,12 @@ export function Summary(props: IProps) {
       >
         {getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
       </ConfirmationPanel>
+
+      {showSoknadNotCompleteError && (
+        <Alert tabIndex={-1} variant="error" ref={soknadCompleteErrorRef}>
+          {getAppText("oppsummering.feilmelding.soknad-ikke-ferdig-utfylt")}
+        </Alert>
+      )}
 
       <nav className="navigation-container">
         <Button variant={"secondary"} onClick={() => navigateToDocumentation()} icon={<Left />}>
