@@ -57,13 +57,15 @@ export function StartSoknad() {
       />
       <SoknadHeader />
       <main>
-        <Alert variant="info" className={styles.newSoknadAlertText}>
-          {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
-          <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
-            {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
-          </Link>{" "}
-          {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
-        </Alert>
+        {false /* skjul varsel, slett denne om noen dager/uker */ && (
+          <Alert variant="info" className={styles.newSoknadAlertText}>
+            {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
+            <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
+              {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
+            </Link>{" "}
+            {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
+          </Alert>
+        )}
 
         {startSideText?.body && (
           <PortableText value={startSideText.body} components={{ types: { timeline } }} />
