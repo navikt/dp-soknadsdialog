@@ -13,9 +13,11 @@ import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
 import { isValidDateYear } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText } = useSanity();
@@ -33,7 +35,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
   useEffect(() => {
-    if (faktum.svar === undefined) {
+    if (faktum.svar === undefined && !isFirstRender) {
       setCurrentAnswer(undefined);
     }
   }, [faktum.svar]);

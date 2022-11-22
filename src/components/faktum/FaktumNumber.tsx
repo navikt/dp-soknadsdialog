@@ -33,7 +33,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }, [debouncedValue]);
 
   useEffect(() => {
-    if (faktum.svar === undefined) {
+    if (faktum.svar === undefined && !isFirstRender) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);

@@ -11,19 +11,16 @@ import styles from "./Faktum.module.css";
 import { getCountryName } from "../../country.utils";
 import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, onChange } = props;
-  const { getFaktumTextById, getAppText } = useSanity();
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
+  const { getFaktumTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
-
-  const shouldPreSelectNorway =
-    !currentAnswer &&
-    (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-      faktum.beskrivendeId === "faktum.arbeidsforhold.land");
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -39,13 +36,18 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     .sort(sortByLabel);
 
   useEffect(() => {
+    const shouldPreSelectNorway =
+      !currentAnswer &&
+      (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+        faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+
     if (shouldPreSelectNorway) {
       onSelect("NOR");
     }
   }, []);
 
   useEffect(() => {
-    if (faktum.svar === undefined) {
+    if (faktum.svar === undefined && !isFirstRender) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);

@@ -34,7 +34,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   }, [debouncedText]);
 
   useEffect(() => {
-    if (!faktum.svar) {
+    if (faktum.svar === undefined && !isFirstRender) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
