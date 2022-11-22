@@ -33,6 +33,12 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
     }
   }, [currentAnswer]);
 
+  useEffect(() => {
+    if (faktum.svar === undefined) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
+
   function saveFaktum(value: string) {
     const mappedAnswer = textIdToBoolean(value);
 

@@ -18,8 +18,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const { getFaktumTextById, getAppText } = useSanity();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-
-  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
 
   const shouldPreSelectNorway =
     !currentAnswer &&
@@ -44,6 +43,12 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       onSelect("NOR");
     }
   }, []);
+
+  useEffect(() => {
+    if (faktum.svar === undefined) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
 
   function onSelect(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);

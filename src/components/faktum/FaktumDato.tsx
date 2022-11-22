@@ -29,6 +29,12 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     }
   }, []);
 
+  useEffect(() => {
+    if (faktum.svar === undefined) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
+
   const onDateSelection = (value: Date) => {
     const date = formatISO(value, { representation: "date" });
     setCurrentAnswer(date);

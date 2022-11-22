@@ -10,8 +10,8 @@ import { HelpText } from "../HelpText";
 import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
 import { TEXTAREA_FAKTUM_IDS } from "../../constants";
-import styles from "./Faktum.module.css";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import styles from "./Faktum.module.css";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
@@ -20,8 +20,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState<string>(faktum.svar ?? "");
-  const [debouncedText, setDebouncedText] = useState<string>(value);
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
+  const [debouncedText, setDebouncedText] = useState<string>(currentAnswer);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
@@ -35,14 +35,14 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
 
   useEffect(() => {
     if (!faktum.svar) {
-      setValue("");
+      setCurrentAnswer("");
     }
   }, [faktum.svar]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
 
-    setValue(value);
+    setCurrentAnswer(value);
     debouncedChange(value);
   }
 
@@ -84,7 +84,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
         <Textarea
-          value={value}
+          value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           onChange={onValueChange}
@@ -93,7 +93,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         />
       ) : (
         <TextField
-          value={value}
+          value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           size="medium"

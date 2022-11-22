@@ -26,6 +26,12 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
     }
   }, [currentAnswer]);
 
+  useEffect(() => {
+    if (faktum.svar === undefined) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
+
   function onSelection(value: string) {
     setCurrentAnswer(value);
     saveFaktum(value);

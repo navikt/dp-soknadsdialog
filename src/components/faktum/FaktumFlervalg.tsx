@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -16,6 +16,12 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
+
+  useEffect(() => {
+    if (faktum.svar === undefined) {
+      setCurrentAnswer([]);
+    }
+  }, [faktum.svar]);
 
   function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);

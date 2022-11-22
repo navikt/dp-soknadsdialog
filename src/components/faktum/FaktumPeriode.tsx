@@ -21,35 +21,39 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { getFaktumTextById, getAppText } = useSanity();
   const [isValidFom, setIsValidFom] = useState(true);
   const [isValidTom, setIsValidTom] = useState(true);
-  const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
+  const [currentAnswer, setCurrentAnswer] = useState<IQuizPeriodeFaktumAnswerType | undefined>(
+    faktum.svar
+  );
 
-  const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
-  const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
+  const beskrivendeIdFra = `${faktum.beskrivendeId}.fra`;
+  const beskrivendeIdTil = `${faktum.beskrivendeId}.til`;
 
-  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const faktumTextFra = getAppText(beskrivendeIdFra);
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
   useEffect(() => {
-    setSvar(props.faktum.svar ? props.faktum.svar : undefined);
-  }, [props.faktum.svar]);
+    if (faktum.svar === undefined) {
+      setCurrentAnswer(undefined);
+    }
+  }, [faktum.svar]);
 
   function onFromDateSelection(value: Date) {
     const parsedFromDate = formatISO(value, { representation: "date" });
-    const period = { ...svar, fom: parsedFromDate };
-    setSvar(period);
+    const period = { ...currentAnswer, fom: parsedFromDate };
+    setCurrentAnswer(period);
 
     onChange ? onChange(faktum, period) : saveFaktum(period);
   }
 
   function onToDateSelection(value: Date) {
-    if (!svar?.fom) {
+    if (!currentAnswer?.fom) {
       return;
     }
 
     const parsedToDate = formatISO(value, { representation: "date" });
-    const period = { ...svar, tom: parsedToDate };
-    setSvar(period);
+    const period = { ...currentAnswer, tom: parsedToDate };
+    setCurrentAnswer(period);
 
     onChange ? onChange(faktum, period) : saveFaktum(period);
   }
@@ -62,25 +66,25 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     }
   }
 
-  if (props.faktum.readOnly || props.readonly) {
+  if (faktum.readOnly || props.readonly) {
     return (
       <div className={periodeStyles.faktumPeriode}>
         <Label className={periodeStyles.readOnlyTittel}>
           {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         </Label>
-        {svar?.fom && (
+        {currentAnswer?.fom && (
           <div className={periodeStyles.faktumPeriodeFra}>
             <Label>{faktumTextFra}</Label>
             <BodyShort>
-              <FormattedDate date={svar?.fom} />
+              <FormattedDate date={currentAnswer?.fom} />
             </BodyShort>
           </div>
         )}
-        {svar?.tom && (
+        {currentAnswer?.tom && (
           <div>
             <Label>{faktumTextTil}</Label>
             <BodyShort>
-              <FormattedDate date={svar?.tom} />
+              <FormattedDate date={currentAnswer?.tom} />
             </BodyShort>
           </div>
         )}
@@ -145,7 +149,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             id={beskrivendeIdFra}
             label={faktumTextFra}
             onChange={onFromDateSelection}
-            value={svar?.fom}
+            value={currentAnswer?.fom}
             hasError={!isValidFom || unansweredFaktumId === faktum.id}
             errorMessage={getValidationMessage()}
             required
@@ -155,10 +159,10 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
           <DatePicker
             id={beskrivendeIdTil}
             label={faktumTextTil}
-            disabled={!svar?.fom}
+            disabled={!currentAnswer?.fom}
             onChange={onToDateSelection}
-            value={svar?.tom}
-            min={svar?.fom}
+            value={currentAnswer?.tom}
+            min={currentAnswer?.fom}
             hasError={!isValidTom}
             errorMessage={getAppText("validering.arbeidsforhold.varighet-til")}
           />
