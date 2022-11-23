@@ -3,7 +3,6 @@ import { formatISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
 import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { DatePicker } from "../date-picker/DatePicker";
@@ -15,13 +14,12 @@ import styles from "./Faktum.module.css";
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById } = useSanity();
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
 
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
-  const { hasError, hasWarning, setHasWarning, getErrorMessage, isValidDate } =
+  const { setHasWarning, getErrorMessage, isValidDate, getWarningMessage } =
     useValidateFaktumDato(faktum);
 
   useEffect(() => {
@@ -62,9 +60,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description}
-        hasError={hasError !== false || unansweredFaktumId === faktum.id}
-        errorMessage={getErrorMessage()}
-        hasWarning={hasWarning}
+        error={getErrorMessage()}
+        warning={getWarningMessage()}
         required
       />
       {faktumTexts?.helpText && (

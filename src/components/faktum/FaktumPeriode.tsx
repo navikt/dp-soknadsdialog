@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { formatISO, isFuture } from "date-fns";
+import { formatISO } from "date-fns";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { DatePicker } from "../date-picker/DatePicker";
@@ -11,19 +11,15 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
-import { isFromYear1900 } from "./validation/validations.utils";
-import { useValidation } from "../../context/validation-context";
-
-type validationErrorFomType = "futureDate" | "invalidDate";
+import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText } = useSanity();
-  const [hasErrorFom, setHasErrorFom] = useState<validationErrorFomType | boolean>(false);
-  const [hasErrorTom, serHasErrorTom] = useState(false);
   const [svar, setSvar] = useState<IQuizPeriodeFaktumAnswerType | undefined>(props.faktum.svar);
+  const { isValidPeriode, getTomErrorMessage, getFomErrorMessage } =
+    useValidateFaktumPeriode(faktum);
 
   const beskrivendeIdFra = `${props.faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${props.faktum.beskrivendeId}.til`;
@@ -90,57 +86,6 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     );
   }
 
-  function isValidPeriode(svar: IQuizPeriodeFaktumAnswerType) {
-    const { fom, tom } = svar;
-    let validPeriode = true;
-
-    if (fom) {
-      const future = isFuture(new Date(fom));
-      const isValidFromDate = isFromYear1900(new Date(fom));
-
-      if (future) {
-        setHasErrorFom("futureDate");
-      } else if (!isValidFromDate) {
-        setHasErrorFom("invalidDate");
-      } else {
-        setHasErrorFom(false);
-      }
-
-      validPeriode = !future && isValidFromDate;
-    }
-
-    if (tom) {
-      const tomDate = new Date(tom).getTime();
-      const fomDate = new Date(fom).getTime();
-      const validTom = tomDate >= fomDate && isFromYear1900(new Date(fom));
-
-      serHasErrorTom(!validTom);
-      validPeriode = validTom;
-    }
-
-    return validPeriode;
-  }
-
-  function getFomErrorMessage() {
-    if (hasErrorFom && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return getAppText("validering.arbeidsforhold.varighet-fra");
-    } else if (hasErrorFom === "invalidDate") {
-      return getAppText("validering.ugyldig-dato");
-    } else {
-      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
-    }
-  }
-
-  function getValidationMessage() {
-    if (hasErrorFom) {
-      return getFomErrorMessage();
-    } else if (unansweredFaktumId === faktum.id) {
-      return getAppText("validering.faktum.ubesvart");
-    } else {
-      return undefined;
-    }
-  }
-
   return (
     <div className={periodeStyles.faktumPeriode}>
       <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
@@ -160,8 +105,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             label={faktumTextFra}
             onChange={onFromDateSelection}
             value={svar?.fom}
-            hasError={hasErrorFom !== false || unansweredFaktumId === faktum.id}
-            errorMessage={getValidationMessage()}
+            error={getFomErrorMessage()}
             required
           />
         </div>
@@ -173,8 +117,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
             onChange={onToDateSelection}
             value={svar?.tom}
             min={svar?.fom}
-            hasError={hasErrorTom}
-            errorMessage={getAppText("validering.arbeidsforhold.varighet-til")}
+            error={getTomErrorMessage()}
           />
         </div>
       </Fieldset>
