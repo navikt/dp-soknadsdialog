@@ -38,7 +38,6 @@ echo "Hent token fra $URL/api/internal/token"
 read -sep "Paste inn token: " active_token
 
 echo > $env_file
-
 echo "NAIS_CLUSTER_NAME=dev-gcp" >> $env_file
 echo "LOCAL_TOKEN=$active_token" >> $env_file
 
