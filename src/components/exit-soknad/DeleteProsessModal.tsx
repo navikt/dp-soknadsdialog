@@ -16,7 +16,7 @@ interface IProps {
 export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps) {
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
-  const [deleteSoknad, deleteSoknadStatus, , resetDeleteSoknadError] =
+  const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest("soknad/delete");
 
   useEffect(() => {
@@ -26,15 +26,15 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
   }, []);
 
   function closeModal() {
-    if (deleteSoknadStatus === "error") {
-      resetDeleteSoknadError();
+    if (deleteProsessStatus === "error") {
+      resetDeleteProsessError();
     }
     handleClose();
   }
 
   return (
     <>
-      {deleteSoknadStatus === "success" && (
+      {deleteProsessStatus === "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -69,7 +69,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
         </Modal>
       )}
 
-      {deleteSoknadStatus !== "success" && (
+      {deleteProsessStatus !== "success" && (
         <Modal
           className="modal-container"
           open={isOpen}
@@ -84,7 +84,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
 
             <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
 
-            {deleteSoknadStatus === "error" && (
+            {deleteProsessStatus === "error" && (
               <>
                 <Alert variant="error" className={styles.alertContainer}>
                   {getAppText(getDeleteErrorTextKey(prosessType))}
@@ -104,12 +104,12 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               </>
             )}
 
-            {deleteSoknadStatus !== "error" && (
+            {deleteProsessStatus !== "error" && (
               <div className="modal-container__button-container">
                 <Button
                   variant={"danger"}
-                  onClick={() => deleteSoknad(uuid)}
-                  loading={deleteSoknadStatus === "pending"}
+                  onClick={() => deleteProsess(uuid)}
+                  loading={deleteProsessStatus === "pending"}
                 >
                   {getAppText(getDeleteButtonTextKey(prosessType))}
                 </Button>
