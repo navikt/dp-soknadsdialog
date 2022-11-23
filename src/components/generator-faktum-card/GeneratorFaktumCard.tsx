@@ -61,7 +61,14 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         <ValidationMessage message={getAppText("validering.generator-faktum.delvis-besvart")} />
       )}
 
-      <DeleteGeneratorFaktumModal isOpen={modalOpen} handleClose={() => setModalOpen(false)} />
+      <DeleteGeneratorFaktumModal
+        title={getAppText("slett-arbeidsforhold.modal.tittel")}
+        description={getAppText("slett-arbeidsforhold.modal.beskrivelse")}
+        deleteButtonText={getAppText("slett-arbeidsforhold.modal.knapp.slett")}
+        cancelButtonText={getAppText("slett-arbeidsforhold.modal.knapp.avbryt")}
+        isOpen={modalOpen}
+        handleClose={() => setModalOpen(false)}
+      />
     </div>
   );
 }

@@ -1,15 +1,17 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useEffect } from "react";
-import { useSanity } from "../../context/sanity-context";
-// import styles from "./deleteFaktumModal.module.css";
 
 interface IProps {
+  title: string;
+  description: string;
+  deleteButtonText: string;
+  cancelButtonText: string;
   isOpen: boolean;
   handleClose: () => void;
 }
 
-export function DeleteGeneratorFaktumModal({ isOpen, handleClose }: IProps) {
-  const { getAppText } = useSanity();
+export function DeleteGeneratorFaktumModal(props: IProps) {
+  const { title, description, deleteButtonText, cancelButtonText, isOpen, handleClose } = props;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -31,10 +33,10 @@ export function DeleteGeneratorFaktumModal({ isOpen, handleClose }: IProps) {
     >
       <Modal.Content>
         <Heading size={"medium"} spacing>
-          {getAppText("slett-soknad.modal.tittel")}
+          {title}
         </Heading>
 
-        <p>{getAppText("slett-soknad.modal.beskrivelse")}</p>
+        <p>{description}</p>
 
         <div className="modal-container__button-container">
           <Button
@@ -42,10 +44,10 @@ export function DeleteGeneratorFaktumModal({ isOpen, handleClose }: IProps) {
             // onClick={() => deleteSoknad(uuid)}
             // loading={deleteSoknadStatus === "pending"}
           >
-            {getAppText("slett-soknad.modal.knapp.slett")}
+            {deleteButtonText}
           </Button>
           <Button variant={"tertiary"} onClick={closeModal}>
-            {getAppText("slett-soknad.modal.knapp.ikke-slett-soknad")}
+            {cancelButtonText}
           </Button>
         </div>
       </Modal.Content>
