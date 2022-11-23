@@ -28,7 +28,7 @@ export function isOverTwoWeeks(date: Date): boolean {
   return date >= addWeeks(new Date(), 2);
 }
 
-export function isWithinYearRange(date: Date): boolean {
+export function isWithinValidYearRange(date: Date): boolean {
   return isFromYear1900(date) && date <= addYears(new Date(), YEAR_RANGE);
 }
 

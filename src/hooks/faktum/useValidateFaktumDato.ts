@@ -3,7 +3,7 @@ import { useState } from "react";
 import {
   isFromYear1900,
   isOverTwoWeeks,
-  isWithinYearRange,
+  isWithinValidYearRange,
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
@@ -40,7 +40,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
         return isValid;
       }
       default: {
-        const isValid = isWithinYearRange(date);
+        const isValid = isWithinValidYearRange(date);
         setHasError(!isValid ? "invalidDate" : false);
         return isValid;
       }
