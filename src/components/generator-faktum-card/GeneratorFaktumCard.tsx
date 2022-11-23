@@ -20,10 +20,20 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
     <div className={styles.card}>
       {props.children}
 
+      <div className={styles.buttonContainer}>
+        <Detail uppercase>
+          <WarningColored />
+          Delvis utfylt
+        </Detail>
+      </div>
+
       {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
         <div className={styles.buttonContainer}>
           <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
             Endre svar
+          </Button>
+          <Button size={"medium"} variant={"secondary"} onClick={props.deleteFaktum}>
+            Slett arbeidsforhold
           </Button>
         </div>
       )}
@@ -34,10 +44,9 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
             Fyll ut
           </Button>
 
-          <Detail uppercase>
-            <WarningColored />
-            Delvis utfylt
-          </Detail>
+          <Button size={"medium"} variant={"secondary"} onClick={props.deleteFaktum}>
+            Slett arbeidsforhold
+          </Button>
         </div>
       )}
 
