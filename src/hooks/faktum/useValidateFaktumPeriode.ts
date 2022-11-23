@@ -45,12 +45,12 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
       const fomDate = new Date(fom).getTime();
 
       const isValidTomDate = tomDate >= fomDate;
-      const afterYear1900 = isFromYear1900(new Date(fom));
+      const afterYear1900 = isFromYear1900(new Date(tom));
 
-      if (!isValidTomDate) {
-        setHasTomError("isBeforeFomDate");
-      } else if (!afterYear1900) {
+      if (!afterYear1900) {
         setHasTomError("invalidDate");
+      } else if (!isValidTomDate) {
+        setHasTomError("isBeforeFomDate");
       } else {
         setHasTomError(false);
       }
@@ -83,13 +83,11 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
     }
   }
 
-  // Todo rydd opp dette
-  // Bytte teksten for validering.arbeidsforhold.varighet-til tibake til ugyldig dato
   function getTomErrorMessage() {
     if (hasTomError && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
       return hasTomError === "invalidDate"
-        ? getAppText("validering.arbeidsforhold.varighet-til")
-        : getAppText("validering.ugyldig-dato");
+        ? getAppText("validering.ugyldig-dato")
+        : getAppText("validering.arbeidsforhold.varighet-til");
     } else if (hasTomError === "invalidDate") {
       return getAppText("validering.ugyldig-dato");
     } else {

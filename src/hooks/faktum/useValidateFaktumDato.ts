@@ -12,7 +12,6 @@ import { QuizFaktum } from "../../types/quiz.types";
 type dateFaktumErrorType = "invalidDate" | "invalidBirthDate";
 
 interface IProps {
-  setHasWarning: (value: boolean) => void;
   getErrorMessage: () => string | undefined;
   getWarningMessage: () => string | undefined;
   isValidDate: (value: Date) => boolean;
@@ -35,9 +34,18 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
         return isValid;
       }
       case "faktum.barn-foedselsdato": {
-        const isValid = isFromYear1900(date) && !isFuture(date);
-        setHasError(!isValid ? "invalidBirthDate" : false);
-        return isValid;
+        const future = isFuture(date);
+        const fromYear1900 = isFromYear1900(date);
+
+        if (!fromYear1900) {
+          setHasError("invalidDate");
+        } else if (future) {
+          setHasError("invalidBirthDate");
+        } else {
+          setHasError(false);
+        }
+
+        return !isFuture && isFromYear1900;
       }
       default: {
         const isValid = isWithinValidYearRange(date);
@@ -48,10 +56,11 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   }
 
   function getErrorMessage() {
-    if (hasError === "invalidDate") {
-      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
-    } else if (hasError === "invalidBirthDate") {
-      // return "ugyldig fødselsdato";
+    if (hasError && faktum.beskrivendeId === "faktum.barn-foedselsdato") {
+      return hasError === "invalidBirthDate"
+        ? faktumTexts?.errorMessage
+        : getAppText("validering.ugyldig-dato");
+    } else if (hasError) {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
     } else if (unansweredFaktumId === faktum.id) {
       return getAppText("validering.faktum.ubesvart");
@@ -65,7 +74,6 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   }
 
   return {
-    setHasWarning,
     getErrorMessage,
     getWarningMessage,
     isValidDate,

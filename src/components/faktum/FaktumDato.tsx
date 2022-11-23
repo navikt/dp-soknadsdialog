@@ -21,15 +21,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
-  const { setHasWarning, getErrorMessage, isValidDate, getWarningMessage } =
-    useValidateFaktumDato(faktum);
-
-  useEffect(() => {
-    if (props.faktum.svar) {
-      const hasWarning = !isValidDate(new Date(props.faktum.svar));
-      setHasWarning(hasWarning);
-    }
-  }, []);
+  const { getErrorMessage, isValidDate, getWarningMessage } = useValidateFaktumDato(faktum);
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
