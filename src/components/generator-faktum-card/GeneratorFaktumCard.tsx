@@ -20,13 +20,6 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
     <div className={styles.card}>
       {props.children}
 
-      <div className={styles.buttonContainer}>
-        <Detail uppercase>
-          <WarningColored />
-          Delvis utfylt
-        </Detail>
-      </div>
-
       {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
         <div className={styles.buttonContainer}>
           <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
@@ -39,15 +32,23 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
       )}
 
       {!props.allFaktumAnswered && (
-        <div className={styles.buttonContainer}>
-          <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
-            Fyll ut
-          </Button>
+        <>
+          <div className={styles.buttonContainer}>
+            <Detail uppercase>
+              <WarningColored />
+              Delvis utfylt
+            </Detail>
+          </div>
+          <div className={styles.buttonContainer}>
+            <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
+              Fyll ut
+            </Button>
 
-          <Button size={"medium"} variant={"secondary"} onClick={props.deleteFaktum}>
-            Slett arbeidsforhold
-          </Button>
-        </div>
+            <Button size={"medium"} variant={"secondary"} onClick={props.deleteFaktum}>
+              Slett arbeidsforhold
+            </Button>
+          </div>
+        </>
       )}
 
       {props.showValidationMessage && (
