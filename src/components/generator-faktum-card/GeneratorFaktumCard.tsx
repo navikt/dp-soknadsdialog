@@ -6,7 +6,10 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
 import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/deleteGeneratorFaktumModal";
 
+export type generatorFaktumType = "faktum-standard" | "faktum-barn" | "faktum-arbeidsforhold";
+
 interface IProps {
+  generatorFaktumType: generatorFaktumType;
   editFaktum?: () => void;
   deleteFaktum?: () => void;
   allFaktumAnswered?: boolean;
@@ -18,10 +21,6 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
   const { getAppText } = useSanity();
   const [modalOpen, setModalOpen] = useState(false);
 
-  function deleteGeneratorFaktum() {
-    setModalOpen(true);
-  }
-
   return (
     <div className={styles.card}>
       {props.children}
@@ -31,7 +30,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
           <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
             Endre svar
           </Button>
-          <Button size={"medium"} variant={"secondary"} onClick={deleteGeneratorFaktum}>
+          <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
             Slett
           </Button>
         </div>
@@ -50,7 +49,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
               Fyll ut
             </Button>
 
-            <Button size={"medium"} variant={"secondary"} onClick={deleteGeneratorFaktum}>
+            <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
               Slett
             </Button>
           </div>
@@ -62,10 +61,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
       )}
 
       <DeleteGeneratorFaktumModal
-        title={getAppText("slett-arbeidsforhold.modal.tittel")}
-        description={getAppText("slett-arbeidsforhold.modal.beskrivelse")}
-        deleteButtonText={getAppText("slett-arbeidsforhold.modal.knapp.slett")}
-        cancelButtonText={getAppText("slett-arbeidsforhold.modal.knapp.avbryt")}
+        faktumType={props.generatorFaktumType}
         delete={props.deleteFaktum}
         isOpen={modalOpen}
         handleClose={() => setModalOpen(false)}

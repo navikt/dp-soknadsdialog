@@ -1,18 +1,18 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useEffect } from "react";
+import { useSanity } from "../../context/sanity-context";
+import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
 
 interface IProps {
-  title: string;
-  description: string;
-  deleteButtonText: string;
-  cancelButtonText: string;
+  faktumType: generatorFaktumType;
   isOpen: boolean;
   handleClose: () => void;
   delete: (() => void) | undefined;
 }
 
 export function DeleteGeneratorFaktumModal(props: IProps) {
-  const { title, description, deleteButtonText, cancelButtonText, isOpen, handleClose } = props;
+  const { getAppText } = useSanity();
+  const { faktumType, isOpen, handleClose } = props;
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -30,17 +30,17 @@ export function DeleteGeneratorFaktumModal(props: IProps) {
     >
       <Modal.Content>
         <Heading size={"medium"} spacing>
-          {title}
+          {getAppText(`slett-${faktumType}.modal.tittel`)}
         </Heading>
 
-        <p>{description}</p>
+        <p>{getAppText(`slett-${faktumType}.modal.beskrivelse`)}</p>
 
         <div className="modal-container__button-container">
           <Button variant={"danger"} onClick={props.delete}>
-            {deleteButtonText}
+            {getAppText(`slett-${faktumType}.modal.knapp.slett`)}
           </Button>
           <Button variant={"tertiary"} onClick={handleClose}>
-            {cancelButtonText}
+            {getAppText(`slett-${faktumType}.modal.knapp.avbryt`)}
           </Button>
         </div>
       </Modal.Content>

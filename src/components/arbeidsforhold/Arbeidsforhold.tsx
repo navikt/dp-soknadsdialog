@@ -75,6 +75,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
+              generatorFaktumType="faktum-arbeidsforhold"
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
