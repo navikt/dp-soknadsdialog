@@ -66,6 +66,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         description={getAppText("slett-arbeidsforhold.modal.beskrivelse")}
         deleteButtonText={getAppText("slett-arbeidsforhold.modal.knapp.slett")}
         cancelButtonText={getAppText("slett-arbeidsforhold.modal.knapp.avbryt")}
+        delete={props.deleteFaktum}
         isOpen={modalOpen}
         handleClose={() => setModalOpen(false)}
       />

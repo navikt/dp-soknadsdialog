@@ -8,6 +8,7 @@ interface IProps {
   cancelButtonText: string;
   isOpen: boolean;
   handleClose: () => void;
+  delete: (() => void) | undefined;
 }
 
 export function DeleteGeneratorFaktumModal(props: IProps) {
@@ -39,11 +40,7 @@ export function DeleteGeneratorFaktumModal(props: IProps) {
         <p>{description}</p>
 
         <div className="modal-container__button-container">
-          <Button
-            variant={"danger"}
-            // onClick={() => deleteSoknad(uuid)}
-            // loading={deleteSoknadStatus === "pending"}
-          >
+          <Button variant={"danger"} onClick={props.delete}>
             {deleteButtonText}
           </Button>
           <Button variant={"tertiary"} onClick={closeModal}>
