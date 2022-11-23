@@ -10,10 +10,12 @@ import styles from "./Faktum.module.css";
 import { ISanityAlertText } from "../../types/sanity.types";
 import { useValidation } from "../../context/validation-context";
 import { AlertText } from "../alert-text/AlertText";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
@@ -25,6 +27,12 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
       setAlertText(getSvaralternativTextById(currentAnswer)?.alertText);
     }
   }, [currentAnswer]);
+
+  useEffect(() => {
+    if (faktum.svar === undefined && !isFirstRender) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);

@@ -10,41 +10,46 @@ import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 import { isNumber } from "./validation/validations.utils";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const { faktum, onChange } = props;
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById } = useSanity();
-  const {
-    setHasError: setHasError,
-    isValidInput,
-    getErrorMessage,
-  } = useValidateFaktumNumber(faktum.beskrivendeId);
-  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-
-  const [debouncedValue, setDebouncedValue] = useState<number | null | undefined>(
-    props.faktum.svar
+  const { setHasError, isValidInput, getErrorMessage } = useValidateFaktumNumber(
+    faktum.beskrivendeId
   );
+
+  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
+  const [debouncedValue, setDebouncedValue] = useState<number | null>(faktum.svar || null);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
 
   useEffect(() => {
-    if (debouncedValue !== undefined && debouncedValue !== props.faktum.svar) {
+    if (!isFirstRender && debouncedValue !== faktum.svar) {
       onChange ? onChange(faktum, debouncedValue) : saveFaktum(debouncedValue);
     }
   }, [debouncedValue]);
 
+  useEffect(() => {
+    if (faktum.svar === undefined && !isFirstRender) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
+
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
+    setCurrentAnswer(value);
 
     if (!value) {
       setHasError(false);
-      debouncedChange(null);
+      setDebouncedValue(null);
       return;
     }
 
     if (!isNumber(value)) {
       setHasError("notNumber");
-      debouncedChange(undefined);
       return;
     }
 
@@ -61,9 +66,6 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         debouncedChange(parseFloat(formattedValue));
         break;
       }
-
-      default:
-        break;
     }
   }
 
@@ -84,13 +86,13 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   // Replace dot with comma
-  const displayValue = debouncedValue?.toString().replace(/\./g, ",");
+  const displayValue = currentAnswer.replace(/\./g, ",");
 
   return (
     <>
       <TextField
         className={styles.faktumNumber}
-        defaultValue={displayValue}
+        value={displayValue}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         size="medium"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -8,14 +8,22 @@ import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { useValidation } from "../../context/validation-context";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
+  const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
+
+  useEffect(() => {
+    if (faktum.svar === undefined && !isFirstRender) {
+      setCurrentAnswer([]);
+    }
+  }, [faktum.svar]);
 
   function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
