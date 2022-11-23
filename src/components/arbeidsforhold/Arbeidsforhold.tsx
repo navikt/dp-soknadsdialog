@@ -110,12 +110,6 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
-                  >
-                    {getAppText("soknad.generator.slett-knapp")}
-                  </Button>
                 </div>
               </Modal.Content>
             </Modal>
