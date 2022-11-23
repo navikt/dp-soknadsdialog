@@ -12,9 +12,11 @@ import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { useValidation } from "../../context/validation-context";
 import { AlertText } from "../alert-text/AlertText";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
@@ -32,6 +34,12 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
       setAlertText(getSvaralternativTextById(currentAnswer)?.alertText);
     }
   }, [currentAnswer]);
+
+  useEffect(() => {
+    if (faktum.svar === undefined && !isFirstRender) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
 
   function saveFaktum(value: string) {
     const mappedAnswer = textIdToBoolean(value);

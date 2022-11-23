@@ -11,9 +11,11 @@ import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 import { useValidation } from "../../context/validation-context";
+import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
+  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
@@ -28,6 +30,12 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       setHasWarnining(hasWarning);
     }
   }, []);
+
+  useEffect(() => {
+    if (faktum.svar === undefined && !isFirstRender) {
+      setCurrentAnswer("");
+    }
+  }, [faktum.svar]);
 
   const onDateSelection = (value: Date) => {
     const date = formatISO(value, { representation: "date" });
