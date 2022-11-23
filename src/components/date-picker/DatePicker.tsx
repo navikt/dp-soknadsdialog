@@ -12,7 +12,7 @@ interface IDatePicker {
   label: string;
   description?: TypedObject | TypedObject[];
   warning?: string;
-  error: string | undefined;
+  error?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
