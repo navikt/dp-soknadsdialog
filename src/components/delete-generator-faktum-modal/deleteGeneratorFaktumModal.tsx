@@ -20,15 +20,11 @@ export function DeleteGeneratorFaktumModal(props: IProps) {
     }
   }, []);
 
-  function closeModal() {
-    handleClose();
-  }
-
   return (
     <Modal
       className="modal-container"
       open={isOpen}
-      onClose={closeModal}
+      onClose={handleClose}
       closeButton={true}
       shouldCloseOnOverlayClick={true}
     >
@@ -43,7 +39,7 @@ export function DeleteGeneratorFaktumModal(props: IProps) {
           <Button variant={"danger"} onClick={props.delete}>
             {deleteButtonText}
           </Button>
-          <Button variant={"tertiary"} onClick={closeModal}>
+          <Button variant={"tertiary"} onClick={handleClose}>
             {cancelButtonText}
           </Button>
         </div>
