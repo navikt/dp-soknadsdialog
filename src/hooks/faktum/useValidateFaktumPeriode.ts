@@ -29,10 +29,10 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
       const future = isFuture(new Date(fom));
       const isValidFromDate = isFromYear1900(new Date(fom));
 
-      if (future) {
-        setHasFomError("futureDate");
-      } else if (!isValidFromDate) {
+      if (!isValidFromDate) {
         setHasFomError("invalidDate");
+      } else if (future) {
+        setHasFomError("futureDate");
       } else {
         setHasFomError(false);
       }

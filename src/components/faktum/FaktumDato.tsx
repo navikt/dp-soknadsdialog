@@ -36,9 +36,9 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    const inputValid = isValidDate(new Date(value));
+    const isValid = isValidDate(new Date(value));
 
-    if (inputValid) {
+    if (isValid) {
       saveFaktumToQuiz(faktum, value);
     }
   }
