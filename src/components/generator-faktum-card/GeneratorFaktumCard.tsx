@@ -32,7 +32,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
             Endre svar
           </Button>
           <Button size={"medium"} variant={"secondary"} onClick={deleteGeneratorFaktum}>
-            Slett arbeidsforhold
+            Slett
           </Button>
         </div>
       )}
@@ -51,7 +51,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
             </Button>
 
             <Button size={"medium"} variant={"secondary"} onClick={deleteGeneratorFaktum}>
-              Slett arbeidsforhold
+              Slett
             </Button>
           </div>
         </>

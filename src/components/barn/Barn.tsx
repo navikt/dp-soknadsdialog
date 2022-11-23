@@ -82,13 +82,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     Lagre og lukk
                   </Button>
-
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
-                  >
-                    Slett
-                  </Button>
                 </div>
               </Modal.Content>
             </Modal>
