@@ -10,7 +10,7 @@ interface IProps {
   delete: (() => void) | undefined;
 }
 
-export function DeleteGeneratorFaktumModal(props: IProps) {
+export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
   const { getAppText } = useSanity();
   const { faktumType, isOpen, handleClose } = props;
 
