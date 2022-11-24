@@ -100,6 +100,11 @@ async function saveFileToMellomlagring(
     Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
   }
 
+  // eslint-disable-next-line no-console
+  console.log(
+    `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}`
+  );
+
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
   return fetch(url, {
     method: "POST",

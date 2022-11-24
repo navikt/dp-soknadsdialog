@@ -29,6 +29,11 @@ export class AppMetrics {
     help: "Størrelse på filer som ikke lastes opp",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
+  public filtypeOpplastet = new Counter({
+    name: "dp_soknadsdialog_file_upload_type",
+    help: "Filertyper som lastes opp",
+    labelNames: ["filetype"],
+  });
   public pageInitialLoadCounter = new Counter({
     name: "dp_soknadsdialog_request_counter",
     help: "Number of requests",
