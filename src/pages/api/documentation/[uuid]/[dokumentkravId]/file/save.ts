@@ -102,7 +102,6 @@ async function saveFileToMellomlagring(
     Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
   }
 
-  // eslint-disable-next-line no-console
   console.log(
     `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}, callId=${callId}`
   );
