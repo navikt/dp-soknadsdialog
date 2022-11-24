@@ -1,4 +1,5 @@
 import { withSentry } from "@sentry/nextjs";
+import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
@@ -95,6 +96,7 @@ async function saveFileToMellomlagring(
       });
   });
 
+  const callId = uuidV4();
   const fileSizeBytes = Number(req.headers["content-length"]);
   if (!isNaN(fileSizeBytes)) {
     Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
@@ -102,7 +104,7 @@ async function saveFileToMellomlagring(
 
   // eslint-disable-next-line no-console
   console.log(
-    `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}`
+    `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}, callId=${callId}`
   );
 
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
@@ -113,9 +115,14 @@ async function saveFileToMellomlagring(
       "User-Agent": req.headers["user-agent"] || "",
       "Content-Length": req.headers["content-length"] || "",
       "Content-Type": req.headers["content-type"] || "multipart/form-data",
+      "X-Request-Id": callId,
     },
     body: Buffer.concat(buffers),
   }).catch((e) => {
+    // eslint-disable-next-line no-console
+    console.error(
+      `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}`
+    );
     if (!isNaN(fileSizeBytes)) {
       Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
     }
