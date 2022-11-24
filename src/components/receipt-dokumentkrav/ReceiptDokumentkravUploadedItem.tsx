@@ -15,7 +15,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav }: IProps) {
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   return (
-    <div className="my-6">
+    <li className="my-6">
       <div className={styles.dokumentkravTitle}>
         <Link
           href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
@@ -39,6 +39,6 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav }: IProps) {
           )}
         </ReadMore>
       )}
-    </div>
+    </li>
   );
 }

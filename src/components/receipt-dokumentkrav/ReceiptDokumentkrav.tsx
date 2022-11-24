@@ -16,6 +16,7 @@ import { ReceiptDokumentkravMissingItem } from "./ReceiptDokumentkravMissingItem
 import { ReceiptDocumentsNotSending } from "../receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDokumentkravUploadedItem } from "./ReceiptDokumentkravUploadedItem";
 import { ReceiptUploadDocuments } from "../receipt-upload-documents/ReceiptUploadDocuments";
+import styles from "./ReceiptDokumentkrav.module.css";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -62,16 +63,18 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
             {getAppText(KVITTERING_HEADING_DOKUMENTER_SENDE_INN)}
           </Heading>
 
-          {missingDocuments.map((dokumentkrav) => (
-            <ReceiptDokumentkravMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
-          ))}
+          <ol className={styles.dokumentkravList}>
+            {missingDocuments.map((dokumentkrav) => (
+              <ReceiptDokumentkravMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
+            ))}
 
-          {uploadedDocuments.map((dokumentkrav) => (
-            <ReceiptDokumentkravUploadedItem
-              key={dokumentkrav.beskrivendeId}
-              dokumentkrav={dokumentkrav}
-            />
-          ))}
+            {uploadedDocuments.map((dokumentkrav) => (
+              <ReceiptDokumentkravUploadedItem
+                key={dokumentkrav.beskrivendeId}
+                dokumentkrav={dokumentkrav}
+              />
+            ))}
+          </ol>
 
           <ReceiptUploadDocuments soknadStatus={soknadStatus} />
 

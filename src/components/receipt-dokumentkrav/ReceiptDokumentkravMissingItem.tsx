@@ -18,7 +18,7 @@ export function ReceiptDokumentkravMissingItem(dokumentkrav: IDokumentkrav) {
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   return (
-    <div className="my-6">
+    <li className="my-6">
       <div className={styles.dokumentkravTitle}>
         <Heading level="3" size="xsmall">
           {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
@@ -45,6 +45,6 @@ export function ReceiptDokumentkravMissingItem(dokumentkrav: IDokumentkrav) {
           )}
         </ReadMore>
       )}
-    </div>
+    </li>
   );
 }
