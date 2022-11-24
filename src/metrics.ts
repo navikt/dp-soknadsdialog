@@ -1,4 +1,4 @@
-import { collectDefaultMetrics, Counter, Histogram } from "prom-client";
+import { collectDefaultMetrics, Counter, Histogram, linearBuckets } from "prom-client";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -18,6 +18,11 @@ export class AppMetrics {
     name: "dp_soknadsdialog_requests_duration_seconds",
     help: "Load time for API call to dp-soknad",
     labelNames: ["path"],
+  });
+  public filstørrelseOpplastet = new Histogram({
+    name: "dp_soknadsdialog_file_upload_bytes",
+    help: "Størrelse på filer som lastes opp",
+    buckets: linearBuckets(1000000, 1000000, 20),
   });
   public pageInitialLoadCounter = new Counter({
     name: "dp_soknadsdialog_request_counter",

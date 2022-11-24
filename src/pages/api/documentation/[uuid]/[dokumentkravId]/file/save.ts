@@ -10,6 +10,7 @@ import {
 import { logRequestError } from "../../../../../../sentry.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { headersWithToken } from "../../../../quiz-api";
+import Metrics from "../../../../../../metrics";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -93,6 +94,11 @@ async function saveFileToMellomlagring(
         return resolve(buffers);
       });
   });
+
+  const fileSizeBytes = Number(req.headers["content-length"]);
+  if (!isNaN(fileSizeBytes)) {
+    Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
+  }
 
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
   return fetch(url, {
