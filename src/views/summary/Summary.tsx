@@ -16,6 +16,7 @@ import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Summary.module.css";
 import { useQuiz } from "../../context/quiz-context";
+import { SectionHeading } from "../../components/section/SectionHeading";
 
 export function Summary() {
   const router = useRouter();
@@ -29,6 +30,9 @@ export function Summary() {
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
+
+  const textId = "oppsummering";
+  const summarySectionText = getSeksjonTextById(textId);
 
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
     `soknad/${uuid}/ferdigstill?locale=${router.locale}`
@@ -78,6 +82,9 @@ export function Summary() {
       />
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
+
+      <SectionHeading text={summarySectionText} fallback={textId} />
+
       <Accordion>
         {soknadState.seksjoner?.map((section, index) => {
           return (
