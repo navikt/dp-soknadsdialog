@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { Faktum } from "../../components/faktum/Faktum";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
-import { IQuizState } from "../../types/quiz.types";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PageMeta } from "../../components/PageMeta";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -16,14 +15,12 @@ import { useSanity } from "../../context/sanity-context";
 import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Summary.module.css";
+import { useQuiz } from "../../context/quiz-context";
 
-interface IProps {
-  soknadState: IQuizState;
-}
-
-export function Summary({ soknadState }: IProps) {
+export function Summary() {
   const router = useRouter();
   const { uuid } = useUuid();
+  const { soknadState } = useQuiz();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
