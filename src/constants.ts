@@ -10,7 +10,7 @@ export const DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE = "dokumentkrav.svar.andre.sender
 export const DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE = "dokumentkrav.svar.sendt.tidligere";
 
 export const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "application/pdf"];
-export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 31457280; // 30mb in bytes
+export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 52428800 // 50mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
 export const YEAR_RANGE = 100;
