@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import { useSanity } from "../../context/sanity-context";
 import { BodyShort, Heading } from "@navikt/ds-react";
 import Link from "next/link";
@@ -18,12 +17,14 @@ export function DokumentkravGenerellInnsending({ classname }: IProps) {
   const { getAppText } = useSanity();
 
   return (
-    <div className={classNames(styles.documentItem, classname)}>
-      <Heading level={"2"} size="medium" className="my-3">
+    <div className={classname}>
+      <Heading level={"2"} size="small" className="my-3">
         {getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TITTEL)}
       </Heading>
 
-      <BodyShort>{getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TEKST)}</BodyShort>
+      <BodyShort className={styles.innsendingTekst}>
+        {getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TEKST)}
+      </BodyShort>
 
       <Link href="/generell-innsending">{getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_LENKE)}</Link>
     </div>

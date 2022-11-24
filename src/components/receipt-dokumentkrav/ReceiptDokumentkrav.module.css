@@ -1,0 +1,14 @@
+
+.dokumentkravItem {
+  margin-bottom: var(--navds-spacing-11);
+}
+
+.dokumentkravTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--navds-spacing-2);
+}
+
+.dokumentkravTag {
+  flex-shrink: 0;
+}

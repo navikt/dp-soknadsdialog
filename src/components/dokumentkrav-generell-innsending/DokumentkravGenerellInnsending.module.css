@@ -1,4 +1,3 @@
-.documentItem a{
-  display: inline-block;
-  margin-top: var(--navds-spacing-5);
+.innsendingTekst {
+  margin-bottom: var(--navds-spacing-5);
 }

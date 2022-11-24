@@ -34,7 +34,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
   const canUploadDocuments = within12Weeks();
 
   return (
-    <>
+    <div className="my-12">
       {canUploadDocuments && (
         <Link href={`/soknad/${uuid}/ettersending`} passHref>
           <Button as="a">{getAppText(KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP)}</Button>
@@ -52,6 +52,6 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
           </Link>
         </div>
       )}
-    </>
+    </div>
   );
 }
