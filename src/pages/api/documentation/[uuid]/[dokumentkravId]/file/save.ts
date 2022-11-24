@@ -110,6 +110,9 @@ async function saveFileToMellomlagring(
       "Content-Type": req.headers["content-type"] || "multipart/form-data",
     },
     body: Buffer.concat(buffers),
+  }).catch((e) => {
+    Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+    throw e;
   });
 }
 

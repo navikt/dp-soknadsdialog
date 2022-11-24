@@ -24,6 +24,11 @@ export class AppMetrics {
     help: "Størrelse på filer som lastes opp",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
+  public filstørrelseOpplastetFeilet = new Histogram({
+    name: "dp_soknadsdialog_file_upload_bytes_failed",
+    help: "Størrelse på filer som ikke lastes opp",
+    buckets: linearBuckets(1000000, 1000000, 20),
+  });
   public pageInitialLoadCounter = new Counter({
     name: "dp_soknadsdialog_request_counter",
     help: "Number of requests",
