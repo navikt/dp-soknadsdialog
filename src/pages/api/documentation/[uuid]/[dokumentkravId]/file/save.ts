@@ -111,7 +111,9 @@ async function saveFileToMellomlagring(
     },
     body: Buffer.concat(buffers),
   }).catch((e) => {
-    Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+    if (!isNaN(fileSizeBytes)) {
+      Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+    }
     throw e;
   });
 }
