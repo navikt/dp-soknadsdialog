@@ -17,17 +17,26 @@ interface IProps {
   showValidationMessage: boolean;
 }
 
-export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
+export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Element {
+  const {
+    children,
+    readOnly,
+    editFaktum,
+    allFaktumAnswered,
+    showValidationMessage,
+    generatorFaktumType,
+    deleteFaktum,
+  } = props;
   const { getAppText } = useSanity();
   const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <div className={styles.card}>
-      {props.children}
+      {children}
 
-      {!props.readOnly && props.editFaktum && props.allFaktumAnswered && (
+      {!readOnly && editFaktum && allFaktumAnswered && (
         <div className={styles.buttonContainer}>
-          <Button size={"medium"} variant={"secondary"} onClick={props.editFaktum}>
+          <Button size={"medium"} variant={"secondary"} onClick={editFaktum}>
             Endre svar
           </Button>
           <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
@@ -36,7 +45,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         </div>
       )}
 
-      {!props.allFaktumAnswered && (
+      {!allFaktumAnswered && (
         <>
           <div className={styles.buttonContainer}>
             <Detail uppercase>
@@ -45,7 +54,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
             </Detail>
           </div>
           <div className={styles.buttonContainer}>
-            <Button size={"medium"} variant={"primary"} onClick={props.editFaktum}>
+            <Button size={"medium"} variant={"primary"} onClick={editFaktum}>
               Fyll ut
             </Button>
 
@@ -56,13 +65,13 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>) {
         </>
       )}
 
-      {props.showValidationMessage && (
+      {showValidationMessage && (
         <ValidationMessage message={getAppText("validering.generator-faktum.delvis-besvart")} />
       )}
 
       <DeleteGeneratorFaktumModal
-        faktumType={props.generatorFaktumType}
-        delete={props.deleteFaktum}
+        faktumType={generatorFaktumType}
+        delete={deleteFaktum}
         isOpen={modalOpen}
         handleClose={() => setModalOpen(false)}
       />
