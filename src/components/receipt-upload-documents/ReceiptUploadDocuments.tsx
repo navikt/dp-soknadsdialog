@@ -42,7 +42,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
       )}
 
       {!canUploadDocuments && (
-        <div>
+        <>
           <BodyShort>{getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST)}</BodyShort>
 
           <Link href={`/generell-innsending`} passHref>
@@ -50,7 +50,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
               {getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE)}
             </Button>
           </Link>
-        </div>
+        </>
       )}
     </div>
   );
