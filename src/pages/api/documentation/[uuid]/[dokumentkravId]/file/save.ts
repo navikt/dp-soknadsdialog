@@ -117,15 +117,17 @@ async function saveFileToMellomlagring(
       "X-Request-Id": callId,
     },
     body: Buffer.concat(buffers),
-  }).catch((e) => {
-    // eslint-disable-next-line no-console
-    console.error(
-      `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}`
-    );
-    if (!isNaN(fileSizeBytes)) {
-      Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+  }).then((res) => {
+    if (!res.ok) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${res.status}`
+      );
+      if (!isNaN(fileSizeBytes)) {
+        Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+      }
     }
-    throw e;
+    return res;
   });
 }
 
