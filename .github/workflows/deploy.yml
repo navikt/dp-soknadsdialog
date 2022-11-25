@@ -18,12 +18,12 @@ jobs:
           cache: "npm" # npm sin cache
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: node_modules
-        with:
-          path: ./node_modules
-          key: modules-${{ hashFiles('package-lock.json') }}
+      #- name: Cache node_modules
+      #  uses: actions/cache@v3
+      #  id: node_modules
+      #  with:
+      #    path: ./node_modules
+      #    key: modules-${{ hashFiles('package-lock.json') }}
 
       - if: steps.node_modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
@@ -89,7 +89,7 @@ jobs:
           destination: '/dp-soknadsdialog/_next'
 
   deploy-dev:
-    needs: [ build ]
+    needs: [ build, deploy-cdn ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -116,7 +116,7 @@ jobs:
           set_commits: skip
 
   deploy-prod:
-    needs: [ build ]
+    needs: [ build, deploy-cdn ]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
