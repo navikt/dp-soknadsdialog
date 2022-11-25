@@ -37,10 +37,10 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
       {!readOnly && editFaktum && allFaktumAnswered && (
         <div className={styles.buttonContainer}>
           <Button size={"medium"} variant={"secondary"} onClick={editFaktum}>
-            Endre svar
+            {getAppText("generator-faktum-kort.endre-svar.knapp")}
           </Button>
           <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
-            Slett
+            {getAppText("generator-faktum-kort.slett.knapp")}
           </Button>
         </div>
       )}
@@ -50,16 +50,16 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
           <div className={styles.buttonContainer}>
             <Detail uppercase>
               <WarningColored />
-              Delvis utfylt
+              {getAppText("generator-faktum-kort.delvis-utfylt.varsel")}
             </Detail>
           </div>
           <div className={styles.buttonContainer}>
             <Button size={"medium"} variant={"primary"} onClick={editFaktum}>
-              Fyll ut
+              {getAppText("generator-faktum-kort.fyll-ut.knapp")}
             </Button>
 
             <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
-              Slett
+              {getAppText("generator-faktum-kort.slett.knapp")}
             </Button>
           </div>
         </>
