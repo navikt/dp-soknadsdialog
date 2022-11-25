@@ -1,23 +1,3 @@
-export type RequestErrorType =
-  | typeof GET_PERSONALIA_ERROR
-  | typeof GET_SOKNAD_STATE_ERROR
-  | typeof GET_DOKUMENTKRAV_ERROR
-  | typeof GET_ARBEIDSSOKER_STATUS_ERROR
-  | typeof GET_MINE_SOKNADER_ERROR
-  | typeof CREATE_INNSENDING_UUID_ERROR
-  | typeof DELETE_SOKNAD_ERROR
-  | typeof GET_MELLOMLARING_DOKUMENT_ERROR
-  | typeof BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR
-  | typeof ETTERSENDING_ERROR
-  | typeof FERDIGSTILL_ERROR
-  | typeof DELETE_FILE_FROM_DP_SOKNAD_ERROR
-  | typeof BUNBLE_DOCKUMENTKRAV_ERROR
-  | typeof DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR
-  | typeof SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR
-  | typeof SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR
-  | typeof SAVE_DOKUMENTS_ERROR
-  | typeof SEND_BUNBLE_TO_DP_SOKNAD_ERROR;
-
 // Personalia
 export const GET_PERSONALIA_ERROR = "Feil ved henting av personalia";
 
@@ -40,9 +20,6 @@ export const SEND_BUNBLE_TO_DP_SOKNAD_ERROR = "Feil ved lagring av bundle i dp-s
 export const DELETE_FILE_FROM_DP_SOKNAD_ERROR = "Feil ved sletting av fil i dp-soknad";
 export const DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR =
   "Feil ved sletting av fil i dp-mellomlagring";
-export const SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR = "Feil ved lagring til dp-mellomlagring";
-export const SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR = "Feil ved lagring til dp-soknad";
-export const SAVE_DOKUMENTS_ERROR = "Feil ved lagring av filer";
 
 // Innsending
 export const CREATE_INNSENDING_UUID_ERROR = "Feil ved oppretting av innsendings uuid";

@@ -1,13 +1,12 @@
 import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
-import { getSession } from "../../../../../../auth.utils";
 import {
-  SAVE_DOKUMENTS_ERROR,
-  SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR,
-  SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR,
-} from "../../../../../../sentry-constants";
+  audienceDPSoknad,
+  audienceMellomlagring,
+  getErrorMessage,
+} from "../../../../../../api.utils";
+import { getSession } from "../../../../../../auth.utils";
 import { logRequestError } from "../../../../../../sentry.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { headersWithToken } from "../../../../quiz-api";
@@ -55,8 +54,8 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(SAVE_FILE_FROM_TO_DP_MELLOMLAGRING_ERROR, uuid);
-      throw new Error("Feil ved lagring til dp-mellomlagring");
+      logRequestError(mellomlagringResponse.statusText, uuid);
+      return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
     const fileData = await mellomlagringResponse.json();
@@ -69,14 +68,15 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(SAVE_FILE_FROM_TO_DP_SOKNAD_ERROR, uuid);
-      throw new Error("Feil ved lagring til dp-soknad");
+      logRequestError(dpSoknadResponse.statusText, uuid);
+      return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     return res.status(dpSoknadResponse.status).send(fileData[0]);
   } catch (error) {
-    logRequestError(SAVE_DOKUMENTS_ERROR, uuid);
-    return res.status(500).send(error);
+    const message = getErrorMessage(error);
+    logRequestError(message, uuid);
+    return res.status(500).send(message);
   }
 }
 
@@ -112,7 +112,8 @@ async function saveFileToMellomlagring(
   );
 
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
-  return fetch(url, {
+
+  const response = await fetch(url, {
     method: "POST",
     headers: {
       ...headersWithToken(mellomLagringToken),
@@ -122,18 +123,17 @@ async function saveFileToMellomlagring(
       "X-Request-Id": callId,
     },
     body: Buffer.concat(buffers),
-  }).then((res) => {
-    if (!res.ok) {
-      // eslint-disable-next-line no-console
-      console.error(
-        `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${res.status}`
-      );
-      if (!isNaN(fileSizeBytes)) {
-        Metrics.filOpplastetFeilet.observe(fileSizeBytes);
-      }
-    }
-    return res;
   });
+
+  if (!response.ok) {
+    console.error(
+      `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${response.status}`
+    );
+    if (!isNaN(fileSizeBytes)) {
+      Metrics.filOpplastetFeilet.observe(fileSizeBytes);
+    }
+  }
+  return response;
 }
 
 async function saveFileToDPSoknad(
