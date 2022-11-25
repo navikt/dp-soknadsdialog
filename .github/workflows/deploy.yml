@@ -3,8 +3,8 @@ name: Build and deploy
 on: [ push ]
 
 env:
-  IMAGE: ghcr.io/${{ github.repository }}/dp-soknadsdialog:${{ github.sha }}
-  LATEST_IMAGE: ghcr.io/${{ github.repository }}/dp-soknadsdialog:latest
+  IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
+  LATEST_IMAGE: ghcr.io/${{ github.repository }}:latest
   BASE_PATH: /dagpenger/dialog
 
 jobs:
