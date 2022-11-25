@@ -18,16 +18,26 @@ jobs:
           cache: "npm" # npm sin cache
           registry-url: "https://npm.pkg.github.com"
 
-      - uses: actions/cache@v2
-        id: cache
+      - name: cache node_modules
+        uses: actions/cache@v3
+        id: node_modules
         with:
-          path: ./node_modules # Cacher ferdig installert node_modules
+          path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
-      - if: steps.cache.outputs.cache-hit != 'true'
+      - if: steps.node_modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
 
       - run: npm test
+
+      - name: cache .next/cache
+        uses: actions/cache@v3
+        with:
+          path: ./.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-    
+
       - run: npm run build
 
       # Bygg docker image
