@@ -1,8 +1,8 @@
 **
 
-!next.config.js ./
-!package.json ./
+!next.config.js
+!package.json
 
-!public ./public
-!.next/standalone ./
-!.next/static ./.next/static
+!public/
+!.next/standalone/
+!.next/static/

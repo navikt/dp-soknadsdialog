@@ -18,7 +18,7 @@ jobs:
           cache: "npm" # npm sin cache
           registry-url: "https://npm.pkg.github.com"
 
-      - name: cache node_modules
+      - name: Cache node_modules
         uses: actions/cache@v3
         id: node_modules
         with:
@@ -30,7 +30,7 @@ jobs:
 
       - run: npm test
 
-      - name: cache .next/cache
+      - name: Cache .next/cache
         uses: actions/cache@v3
         with:
           path: ./.next/cache
@@ -55,9 +55,6 @@ jobs:
           tags: ${{ env.IMAGE }},${{ env.LATEST_IMAGE }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          #secrets: |
-          #  "NODE_AUTH_TOKEN=${{ secrets.READER_TOKEN }}"
-          #  "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}"
 
   deploy-dev:
     needs: [ build ]
