@@ -6,7 +6,7 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
 import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/deleteGeneratorFaktumModal";
 
-export type generatorFaktumType = "faktum-standard" | "faktum-barn" | "faktum-arbeidsforhold";
+export type generatorFaktumType = "standard" | "barn" | "arbeidsforhold";
 
 interface IProps {
   generatorFaktumType: generatorFaktumType;

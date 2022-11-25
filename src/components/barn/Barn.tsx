@@ -51,7 +51,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
-              generatorFaktumType="faktum-barn"
+              generatorFaktumType="barn"
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}

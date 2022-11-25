@@ -61,7 +61,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
-              generatorFaktumType="faktum-standard"
+              generatorFaktumType="standard"
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
