@@ -15,7 +15,7 @@ export function GenerellInnsendingKvittering() {
   return (
     <>
       {kvitteringText && <PortableText value={kvitteringText.body} />}
-      <Link href="https://www.nav.no/no/mine-dagpenger" passHref>
+      <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
         <Button className="my-6" variant="primary" as="a" size="medium">
           {getAppText(GENERELL_INNSENDING_KVITTERING_KNAPP_MINE_DAGPENGER)}
         </Button>
