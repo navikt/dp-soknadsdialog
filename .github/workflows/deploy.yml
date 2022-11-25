@@ -25,6 +25,7 @@ jobs:
       #    path: ./node_modules
       #    key: modules-${{ hashFiles('package-lock.json') }}
 
+      - run: cat /home/runner/work/_temp/.npmrc
       - if: steps.node_modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
         env:
