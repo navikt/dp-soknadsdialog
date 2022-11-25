@@ -58,6 +58,33 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Cache static files
+        uses: actions/cache@v3
+        with:
+          path: ./.next/static
+          key: ${{ github.sha }}
+
+  upload-cdn:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: [ dev, prod ]
+    steps:
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ./.next/static
+          key: ${{ github.sha }}
+
+      - name: Upload static files
+        uses: nais/frontend-plattform-cdn-upload-action@main
+        with:
+          cdn-environment: cdn.${{matrix.env}}.nav.no
+          cdn-team-name: teamdagpenger
+          source: ./.next/static
+          destination: '/dp-soknadsdialog/_next'
+
   deploy-dev:
     needs: [ build ]
     runs-on: ubuntu-latest
