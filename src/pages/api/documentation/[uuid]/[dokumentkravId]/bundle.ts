@@ -10,6 +10,7 @@ import {
   BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
   SEND_BUNBLE_TO_DP_SOKNAD_ERROR,
 } from "../../../../../sentry-constants";
+import Metrics from "../../../../../metrics";
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -41,7 +42,8 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 
-    const { urn } = await mellomlagringResponse.json();
+    const { urn, storrelse } = await mellomlagringResponse.json();
+    Metrics.filstørrelseBundlet.observe(storrelse);
 
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,
