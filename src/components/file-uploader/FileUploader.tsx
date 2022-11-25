@@ -28,43 +28,43 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
   const uuid = router.query.uuid as string;
   const hasServerError = errors.find((item) => item.error === "SERVER_ERROR");
 
-  const onDrop = useCallback((selectedFiles: File[]) => {
+  const onDrop = useCallback(async (selectedFiles: File[]) => {
     setErrors([]);
     setIsLoading(true);
 
-    selectedFiles.forEach(async (file, index) => {
-      if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
-        setErrors((currentState) => [
-          ...currentState,
-          { fileName: file.name, error: "INVALID_FILE_FORMAT" },
-        ]);
-      } else if (file.size > maxFileSize) {
-        setErrors((currentState) => [
-          ...currentState,
-          { fileName: file.name, error: "INVALID_FILE_SIZE" },
-        ]);
-      } else {
-        try {
-          const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkrav.id);
-
-          if (fileResponse.ok) {
-            const savedDokumentkravFile = await fileResponse.json();
-            handleUploadedFiles(savedDokumentkravFile);
-          } else {
-            throw Error(fileResponse.statusText);
-          }
-        } catch (error) {
+    await Promise.all(
+      selectedFiles.map(async (file) => {
+        if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
           setErrors((currentState) => [
             ...currentState,
-            { fileName: file.name, error: "SERVER_ERROR" },
+            { fileName: file.name, error: "INVALID_FILE_FORMAT" },
           ]);
-        }
-      }
+        } else if (file.size > maxFileSize) {
+          setErrors((currentState) => [
+            ...currentState,
+            { fileName: file.name, error: "INVALID_FILE_SIZE" },
+          ]);
+        } else {
+          try {
+            const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkrav.id);
 
-      if (index === selectedFiles.length - 1) {
-        setIsLoading(false);
-      }
-    });
+            if (fileResponse.ok) {
+              const savedDokumentkravFile = await fileResponse.json();
+              handleUploadedFiles(savedDokumentkravFile);
+            } else {
+              throw Error(fileResponse.statusText);
+            }
+          } catch (error) {
+            setErrors((currentState) => [
+              ...currentState,
+              { fileName: file.name, error: "SERVER_ERROR" },
+            ]);
+          }
+        }
+      })
+    );
+
+    setIsLoading(false);
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
