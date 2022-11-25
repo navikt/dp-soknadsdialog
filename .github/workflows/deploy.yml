@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        env: [ dev, prod ]
+        env: [ cdn.dev.nav.no, cdn.nav.no ]
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -121,7 +121,7 @@ jobs:
       - name: Upload static files
         uses: nais/frontend-plattform-cdn-upload-action@main
         with:
-          cdn-environment: cdn.${{matrix.env}}.nav.no
+          cdn-environment: ${{ matrix.env }}
           cdn-team-name: teamdagpenger
           source: ./.next/static
           destination: '/dp-soknadsdialog/_next'
