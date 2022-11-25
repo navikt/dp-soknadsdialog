@@ -31,11 +31,13 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const requestId = requestIdHeader === undefined ? crypto.randomUUID() : requestIdHeader;
 
   try {
+    const bundlingTimer = Metrics.tidBruktBundling.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       body,
       mellomlagringToken,
       requestId
     );
+    bundlingTimer();
 
     if (!mellomlagringResponse.ok) {
       logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR, uuid);

@@ -29,6 +29,10 @@ export class AppMetrics {
     help: "Størrelse på bundles som lages",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
+  public tidBruktBundling = new Histogram({
+    name: "dp_soknadsdialog_file_bundle_seconds",
+    help: "Tid brukt på bundling",
+  });
   public bundleFeil = new Counter({
     name: "dp_soknadsdialog_bundle_failed",
     help: "Sammensetting av bundle feilet",
