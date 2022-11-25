@@ -18,7 +18,17 @@ jobs:
           #cache: "npm" # npm sin cache
           registry-url: "https://npm.pkg.github.com"
 
-      - run: npm install --ignore-scripts
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: node_modules
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
+      - run: npm ci --ignore-scripts
+        if: steps.node_modules.outputs.cache-hit != 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
   build:
     runs-on: ubuntu-latest
