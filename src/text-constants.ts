@@ -5,6 +5,7 @@ export const KVITTERING_SOKNAD_STATUS_SUBTITLE_INNSENDT_DATO = "kvittering.sokna
 export const KVITTERING_SOKNAD_STATUS_DESCRIPTION_UNDER_BEHANDLING =  "kvittering.soknad-status.description.under-behandling";
 export const KVITTERING_SOKNAD_STATUS_DESCRIPTION_FERDIG_BEHANDLET =  "kvittering.soknad-status.description.ferdig-behehandlet";
 export const KVITTERING_SOKNAD_STATUS_DESCRIPTION_MANGLER_DOKUMENTER =  "kvittering.soknad-status.description.mangler-dokumenter";
+export const KVITTERING_SOKNAD_STATUS_DESCRIPTION_UKJENT =  "kvittering.soknad-status.description.ukjent";
 
 export const KVITTERING_SOKNAD_STATUS_TAG__UNDER_BEHANDLING =  "kvittering.soknad-status.tag.under-behandling";
 export const KVITTERING_SOKNAD_STATUS_TAG__FERDIG_BEHANDLET =  "kvittering.soknad-status.tag.ferdig-behehandlet";

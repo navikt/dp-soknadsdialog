@@ -22,7 +22,7 @@ import {
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { DeleteSoknadModal } from "../../components/exit-soknad/DeleteSoknadModal";
+import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "./GenerellInnsending.module.css";
 import { useRouter } from "next/router";
@@ -146,7 +146,8 @@ export function GenerellInnsending() {
           </Button>
         </nav>
 
-        <DeleteSoknadModal
+        <DeleteProsessModal
+          prosessType={"Innsending"}
           isOpen={deleteSoknadModalOpen}
           handleClose={() => setDeleteSoknadModalOpen(false)}
         />

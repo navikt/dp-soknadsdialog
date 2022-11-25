@@ -8,12 +8,14 @@ export type QuizFaktum =
   | IQuizNumberFaktum
   | IQuizLandFaktum;
 
+export type QuizProsess = "Dagpenger" | "Innsending";
+
 export interface IQuizState {
   ferdig: boolean;
   seksjoner: IQuizSeksjon[];
   roller?: string[];
   antallSeksjoner: number;
-  versjon_navn?: "Dagpenger" | "Innsending";
+  versjon_navn?: QuizProsess;
 }
 
 export interface IQuizBaseFaktum {

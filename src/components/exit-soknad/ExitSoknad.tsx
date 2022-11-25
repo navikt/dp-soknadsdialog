@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@navikt/ds-react";
-import { DeleteSoknadModal } from "./DeleteSoknadModal";
+import { DeleteProsessModal } from "./DeleteProsessModal";
 import { ContinueLaterModal } from "./ContinueLaterModal";
 import { useSanity } from "../../context/sanity-context";
 
@@ -17,7 +17,8 @@ export function ExitSoknad() {
         {getAppText("soknad.knapp.slett")}
       </Button>
 
-      <DeleteSoknadModal
+      <DeleteProsessModal
+        prosessType={"Dagpenger"}
         isOpen={deleteSoknadModalOpen}
         handleClose={() => setDeleteSoknadModalOpen(false)}
       />
