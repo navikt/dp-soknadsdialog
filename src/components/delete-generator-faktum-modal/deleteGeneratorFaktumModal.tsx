@@ -1,5 +1,6 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useEffect } from "react";
+import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
 
@@ -13,6 +14,7 @@ interface IProps {
 export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
   const { getAppText } = useSanity();
   const { faktumType, isOpen, handleClose } = props;
+  const { isLoading } = useQuiz();
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -36,7 +38,7 @@ export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
         <p>{getAppText(`slett-${faktumType}.modal.beskrivelse`)}</p>
 
         <div className="modal-container__button-container">
-          <Button variant={"danger"} onClick={props.delete}>
+          <Button variant={"danger"} onClick={props.delete} loading={isLoading}>
             {getAppText(`slett-${faktumType}.modal.knapp.slett`)}
           </Button>
           <Button variant={"tertiary"} onClick={handleClose}>
