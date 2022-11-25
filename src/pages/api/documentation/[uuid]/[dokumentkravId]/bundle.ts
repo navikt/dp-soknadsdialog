@@ -39,6 +39,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
 
     if (!mellomlagringResponse.ok) {
       logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR, uuid);
+      Metrics.bundleFeil.inc();
       throw new Error("Feil ved bundling i dp-mellomlagring");
     }
 

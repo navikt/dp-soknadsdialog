@@ -29,6 +29,10 @@ export class AppMetrics {
     help: "Størrelse på bundles som lages",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
+  public bundleFeil = new Counter({
+    name: "dp_soknadsdialog_bundle_failed",
+    help: "Sammensetting av bundle feilet",
+  });
   public filstørrelseOpplastetFeilet = new Histogram({
     name: "dp_soknadsdialog_file_upload_bytes_failed",
     help: "Størrelse på filer som ikke lastes opp",
