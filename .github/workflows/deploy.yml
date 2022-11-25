@@ -27,6 +27,8 @@ jobs:
 
       - if: steps.node_modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - run: npm test
 
