@@ -89,7 +89,7 @@ jobs:
           destination: '/dp-soknadsdialog/_next'
 
   deploy-dev:
-    needs: [ build, deploy-cdn ]
+    needs: [ build, upload-cdn ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -116,7 +116,7 @@ jobs:
           set_commits: skip
 
   deploy-prod:
-    needs: [ build, deploy-cdn ]
+    needs: [ build, upload-cdn ]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
