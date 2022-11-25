@@ -40,7 +40,8 @@ export class AppMetrics {
   });
   public bundleAntallFiler = new Histogram({
     name: "dp_soknadsdialog_file_bundle_files",
-    help: "Tid brukt på bundling",
+    help: "Antall filer i hver bundle",
+    buckets: linearBuckets(1, 1, 20),
   });
   public bundleFeil = new Counter({
     name: "dp_soknadsdialog_bundle_failed",
