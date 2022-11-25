@@ -9,4 +9,5 @@ Sentry.init({
   dsn: SENTRY_DSN,
   tracesSampleRate: 1.0,
   environment: SENTRY_ENV,
+  debug: SENTRY_ENV === "development",
 });
