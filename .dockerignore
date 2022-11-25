@@ -3,6 +3,7 @@
 !src/**
 !public/**
 !next*
+!.next*
 !jest*
 !cypress/testData/**
 
