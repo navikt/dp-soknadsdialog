@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-          #cache: "npm" # npm sin cache
+          cache: "npm"
           registry-url: "https://npm.pkg.github.com"
 
       - name: Cache node_modules
@@ -139,7 +139,6 @@ jobs:
           PRINT_PAYLOAD: true
 
       - name: Lag deployment i Sentry
-        if: ${{ always() }}
         uses: getsentry/action-release@v1
         continue-on-error: true
         env:
