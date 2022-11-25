@@ -30,15 +30,14 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
-  build:
+  test:
+    needs: [ install ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
-          cache: "npm" # npm sin cache
-          registry-url: "https://npm.pkg.github.com"
 
       - name: Cache node_modules
         uses: actions/cache@v3
@@ -53,6 +52,22 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
       - run: npm test
+
+  build:
+    needs: [ install ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: node_modules
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Cache .next/cache
         uses: actions/cache@v3
