@@ -28,6 +28,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - run: npm ci --ignore-scripts
+        if: steps.node_modules.outputs.cache-hit != 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
