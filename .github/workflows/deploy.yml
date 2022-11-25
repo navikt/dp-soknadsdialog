@@ -70,9 +70,9 @@ jobs:
     strategy:
       matrix:
         env: [ dev, prod ]
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+    #permissions:
+    #  contents: 'read'
+    #  id-token: 'write'
     steps:
       - uses: actions/cache@v2
         id: restore-build
