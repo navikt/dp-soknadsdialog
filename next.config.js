@@ -27,6 +27,7 @@ const config = {
   },
   productionBrowserSourceMaps: true,
   output: "standalone",
+  swcMinify: true,
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },
