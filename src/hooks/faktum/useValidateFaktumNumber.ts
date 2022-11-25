@@ -6,66 +6,66 @@ import {
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 
-type NumberValidationErrorTypes = "negativeValue" | "invalidValue" | "notNumber" | "emptyValue";
+type numberValidationErrorTypes = "NegativeValue" | "InvalidValue" | "NotNumber" | "EmptyValue";
 
-interface IProps {
-  setHasError: (hasError: boolean | NumberValidationErrorTypes) => void;
+interface IUseValidateFaktumNumber {
+  setHasError: (hasError: numberValidationErrorTypes | undefined) => void;
   getErrorMessage: (faktumId: string) => string | undefined;
-  isValidInput: (value: number | null) => boolean;
+  isValid: (value: number | null) => boolean;
 }
 
-export function useValidateFaktumNumber(faktumBeskrivendeId: string): IProps {
+export function useValidateFaktumNumber(faktumBeskrivendeId: string): IUseValidateFaktumNumber {
   const { getAppText, getFaktumTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(faktumBeskrivendeId);
-  const [hasError, setHasError] = useState<boolean | NumberValidationErrorTypes>(false);
+  const [hasError, setHasError] = useState<numberValidationErrorTypes | undefined>(undefined);
 
-  function isValidInput(value: number | null) {
+  function isValid(value: number | null) {
     if (faktumBeskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
       if (value === null) {
-        setHasError("emptyValue");
+        setHasError("EmptyValue");
         return false;
       }
 
       const isValid = isValidPermitteringsPercent(value);
-      setHasError(!isValid ? "invalidValue" : false);
+      setHasError(!isValid ? "InvalidValue" : undefined);
       return isValid;
     }
 
     if (faktumBeskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
       if (value === null) {
-        setHasError("emptyValue");
+        setHasError("EmptyValue");
         return false;
       }
 
       const isValid = isValidArbeidstimer(value);
-      setHasError(!isValid ? "invalidValue" : false);
+      setHasError(!isValid ? "InvalidValue" : undefined);
       return isValid;
     }
 
     if (value === null || value === 0) {
-      setHasError(false);
+      setHasError(undefined);
       return true;
     }
 
     if (value < 0) {
-      setHasError("negativeValue");
+      setHasError("NegativeValue");
       return false;
     }
 
-    setHasError(false);
+    setHasError(undefined);
     return true;
   }
 
   function getErrorMessageByErrorType() {
     switch (hasError) {
-      case "emptyValue":
+      case "EmptyValue":
         return getAppText("validering.number-faktum.tom-svar");
-      case "negativeValue":
+      case "NegativeValue":
         return getAppText("validering.number-faktum.ikke-negativt-tall");
-      case "notNumber":
+      case "NotNumber":
         return getAppText("validering.number-faktum.maa-vaere-et-tall");
-      case "invalidValue":
+      case "InvalidValue":
         return faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig");
       default:
         return undefined;
@@ -85,6 +85,6 @@ export function useValidateFaktumNumber(faktumBeskrivendeId: string): IProps {
   return {
     setHasError,
     getErrorMessage,
-    isValidInput,
+    isValid,
   };
 }

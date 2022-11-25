@@ -5,23 +5,23 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 
-type validationFomDateErrorType = "futureDate" | "invalidDate";
-type validationTomDateErrorType = "isBeforeFomDate" | "invalidDate";
+type validationFomDateErrorType = "FutureDate" | "InvalidDate";
+type validationTomDateErrorType = "IsBeforeFomDate" | "InvalidDate";
 
-interface IProps {
+interface IUseValidateFaktumPeriode {
   getFomErrorMessage: () => string | undefined;
   getTomErrorMessage: () => string | undefined;
-  isValidPeriode: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
+  isValid: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
 }
 
-export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
+export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
   const { getAppText, getFaktumTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [hasFomError, setHasFomError] = useState<validationFomDateErrorType | boolean>(false);
-  const [hasTomError, setHasTomError] = useState<validationTomDateErrorType | boolean>(false);
+  const [hasFomError, setHasFomError] = useState<validationFomDateErrorType | undefined>(undefined);
+  const [hasTomError, setHasTomError] = useState<validationTomDateErrorType | undefined>(undefined);
 
-  function isValidPeriode(svar: IQuizPeriodeFaktumAnswerType) {
+  function isValid(svar: IQuizPeriodeFaktumAnswerType) {
     const { fom, tom } = svar;
     let validPeriode = true;
 
@@ -30,11 +30,11 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
       const isValidFromDate = isFromYear1900(new Date(fom));
 
       if (!isValidFromDate) {
-        setHasFomError("invalidDate");
+        setHasFomError("InvalidDate");
       } else if (future) {
-        setHasFomError("futureDate");
+        setHasFomError("FutureDate");
       } else {
-        setHasFomError(false);
+        setHasFomError(undefined);
       }
 
       validPeriode = !future && isValidFromDate;
@@ -48,11 +48,11 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
       const afterYear1900 = isFromYear1900(new Date(tom));
 
       if (!afterYear1900) {
-        setHasTomError("invalidDate");
+        setHasTomError("InvalidDate");
       } else if (!isValidTomDate) {
-        setHasTomError("isBeforeFomDate");
+        setHasTomError("IsBeforeFomDate");
       } else {
-        setHasTomError(false);
+        setHasTomError(undefined);
       }
 
       validPeriode = isValidTomDate && afterYear1900;
@@ -63,10 +63,10 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
 
   function getFomErrorMessageByRule() {
     if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return hasFomError === "futureDate"
+      return hasFomError === "FutureDate"
         ? getAppText("validering.arbeidsforhold.varighet-fra")
         : getAppText("validering.ugyldig-dato");
-    } else if (hasFomError === "invalidDate") {
+    } else if (hasFomError === "InvalidDate") {
       return getAppText("validering.ugyldig-dato");
     } else {
       return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
@@ -85,10 +85,10 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
 
   function getTomErrorMessage() {
     if (hasTomError && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return hasTomError === "invalidDate"
+      return hasTomError === "InvalidDate"
         ? getAppText("validering.ugyldig-dato")
         : getAppText("validering.arbeidsforhold.varighet-til");
-    } else if (hasTomError === "invalidDate") {
+    } else if (hasTomError === "InvalidDate") {
       return getAppText("validering.ugyldig-dato");
     } else {
       return undefined;
@@ -98,6 +98,6 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IProps {
   return {
     getFomErrorMessage,
     getTomErrorMessage,
-    isValidPeriode,
+    isValid,
   };
 }

@@ -21,7 +21,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
-  const { getErrorMessage, isValidDate, getWarningMessage } = useValidateFaktumDato(faktum);
+  const { getErrorMessage, isValid, getWarningMessage } = useValidateFaktumDato(faktum);
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
@@ -36,9 +36,9 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   };
 
   function saveFaktum(value: string) {
-    const isValid = isValidDate(new Date(value));
+    const isValidDate = isValid(new Date(value));
 
-    if (isValid) {
+    if (isValidDate) {
       saveFaktumToQuiz(faktum, value);
     }
   }

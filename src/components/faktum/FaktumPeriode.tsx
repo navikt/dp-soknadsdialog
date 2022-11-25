@@ -19,8 +19,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { isValidPeriode, getTomErrorMessage, getFomErrorMessage } =
-    useValidateFaktumPeriode(faktum);
+  const { isValid, getTomErrorMessage, getFomErrorMessage } = useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<IQuizPeriodeFaktumAnswerType | undefined>(
     faktum.svar
   );
@@ -59,9 +58,9 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(svar: IQuizPeriodeFaktumAnswerType) {
-    const isValid = isValidPeriode(svar);
+    const isValidPeriode = isValid(svar);
 
-    if (isValid) {
+    if (isValidPeriode) {
       saveFaktumToQuiz(faktum, svar);
     }
   }

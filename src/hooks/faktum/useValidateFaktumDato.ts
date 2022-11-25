@@ -9,27 +9,27 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 
-type dateFaktumErrorType = "invalidDate" | "invalidBirthDate";
+type dateFaktumErrorType = "InvalidDate" | "InvalidBirthDate";
 
-interface IProps {
+interface IUseValidateFaktumDato {
   getErrorMessage: () => string | undefined;
   getWarningMessage: () => string | undefined;
-  isValidDate: (value: Date) => boolean;
+  isValid: (value: Date) => boolean;
 }
 
-export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
+export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
   const { getAppText, getFaktumTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [hasError, setHasError] = useState<boolean | dateFaktumErrorType>(false);
+  const [hasError, setHasError] = useState<dateFaktumErrorType | undefined>(undefined);
   const [hasWarning, setHasWarning] = useState(false);
 
-  function isValidDate(date: Date) {
+  function isValid(date: Date) {
     switch (faktum.beskrivendeId) {
       case "faktum.dagpenger-soknadsdato": {
         const isValid = isFromYear1900(date);
         const hasWarning = isOverTwoWeeks(date);
-        setHasError(!isValid ? "invalidDate" : false);
+        setHasError(!isValid ? "InvalidDate" : undefined);
         setHasWarning(hasWarning);
         return isValid;
       }
@@ -38,18 +38,18 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
         const fromYear1900 = isFromYear1900(date);
 
         if (!fromYear1900) {
-          setHasError("invalidDate");
+          setHasError("InvalidDate");
         } else if (future) {
-          setHasError("invalidBirthDate");
+          setHasError("InvalidBirthDate");
         } else {
-          setHasError(false);
+          setHasError(undefined);
         }
 
         return !isFuture && isFromYear1900;
       }
       default: {
         const isValid = isWithinValidYearRange(date);
-        setHasError(!isValid ? "invalidDate" : false);
+        setHasError(!isValid ? "InvalidDate" : undefined);
         return isValid;
       }
     }
@@ -57,7 +57,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
 
   function getErrorMessage() {
     if (hasError && faktum.beskrivendeId === "faktum.barn-foedselsdato") {
-      return hasError === "invalidBirthDate"
+      return hasError === "InvalidBirthDate"
         ? faktumTexts?.errorMessage
         : getAppText("validering.ugyldig-dato");
     } else if (hasError) {
@@ -76,6 +76,6 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IProps {
   return {
     getErrorMessage,
     getWarningMessage,
-    isValidDate,
+    isValid,
   };
 }
