@@ -25,13 +25,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
   const body = req.body;
+  const antallFiler = Number(req.body.filer?.length);
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? crypto.randomUUID() : requestIdHeader;
 
   try {
-    const bundlingTimer = Metrics.tidBruktBundling.startTimer();
+    const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       body,
       mellomlagringToken,
@@ -46,7 +47,8 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const { urn, storrelse } = await mellomlagringResponse.json();
-    Metrics.filstørrelseBundlet.observe(storrelse);
+    Metrics.bundleStørrelse.observe(storrelse);
+    if (!isNaN(antallFiler)) Metrics.bundleAntallFiler.observe(antallFiler);
 
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,

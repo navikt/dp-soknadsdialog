@@ -104,7 +104,7 @@ async function saveFileToMellomlagring(
 
   const fileSizeBytes = Number(req.headers["content-length"]);
   if (!isNaN(fileSizeBytes)) {
-    Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
+    Metrics.filOpplastetStørrelse.observe(fileSizeBytes);
   }
 
   console.log(
@@ -129,7 +129,7 @@ async function saveFileToMellomlagring(
         `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${res.status}`
       );
       if (!isNaN(fileSizeBytes)) {
-        Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+        Metrics.filOpplastetFeilet.observe(fileSizeBytes);
       }
     }
     return res;

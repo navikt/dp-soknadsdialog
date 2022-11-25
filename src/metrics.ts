@@ -19,33 +19,32 @@ export class AppMetrics {
     help: "Load time for API call to dp-soknad",
     labelNames: ["path"],
   });
-  public filstørrelseOpplastet = new Histogram({
+  public filOpplastetStørrelse = new Histogram({
     name: "dp_soknadsdialog_file_upload_bytes",
     help: "Størrelse på filer som lastes opp",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
-  public filstørrelseBundlet = new Histogram({
+  public filOpplastetFeilet = new Histogram({
+    name: "dp_soknadsdialog_file_upload_bytes_failed",
+    help: "Størrelse på filer som ikke lastes opp",
+    buckets: linearBuckets(1000000, 1000000, 20),
+  });
+  public bundleStørrelse = new Histogram({
     name: "dp_soknadsdialog_file_bundle_bytes",
     help: "Størrelse på bundles som lages",
     buckets: linearBuckets(1000000, 1000000, 20),
   });
-  public tidBruktBundling = new Histogram({
+  public bundleTidBrukt = new Histogram({
     name: "dp_soknadsdialog_file_bundle_seconds",
+    help: "Tid brukt på bundling",
+  });
+  public bundleAntallFiler = new Histogram({
+    name: "dp_soknadsdialog_file_bundle_files",
     help: "Tid brukt på bundling",
   });
   public bundleFeil = new Counter({
     name: "dp_soknadsdialog_bundle_failed",
     help: "Sammensetting av bundle feilet",
-  });
-  public filstørrelseOpplastetFeilet = new Histogram({
-    name: "dp_soknadsdialog_file_upload_bytes_failed",
-    help: "Størrelse på filer som ikke lastes opp",
-    buckets: linearBuckets(1000000, 1000000, 20),
-  });
-  public filtypeOpplastet = new Counter({
-    name: "dp_soknadsdialog_file_upload_type",
-    help: "Filertyper som lastes opp",
-    labelNames: ["filetype"],
   });
   public pageInitialLoadCounter = new Counter({
     name: "dp_soknadsdialog_request_counter",
