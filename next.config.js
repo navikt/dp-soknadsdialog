@@ -25,6 +25,7 @@ const config = {
     locales: supportedLocales,
     defaultLocale: "nb",
   },
+  assetPrefix: process.env.ASSET_PREFIX,
   productionBrowserSourceMaps: true,
   output: "standalone",
   swcMinify: true,

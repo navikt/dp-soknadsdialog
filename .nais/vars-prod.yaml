@@ -8,3 +8,5 @@ loginservice:
   wellKnown: https://navnob2c.b2clogin.com/navnob2c.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten
 sentry_stage: production
 veilarbproxyUrl: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder
+cdn:
+  url: https://cdn.dev.nav.no/teamdagpenger/dp-soknadsdialog
