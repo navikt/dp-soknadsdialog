@@ -5,7 +5,7 @@ async function testHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
     throw new Error("Fake error kastet");
   } catch (error) {
-    logRequestError("Test sentry uten withSentry wrapper");
+    logRequestError("Test custom request error logger");
     return res.status(500).send("Failed");
   }
 

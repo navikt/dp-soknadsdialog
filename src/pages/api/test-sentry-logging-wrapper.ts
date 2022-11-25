@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 
-async function testHandler(req: NextApiRequest, res: NextApiResponse) {
+async function testWrapperHandler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    throw new Error("Fake error kastet");
+    throw new Error("Test withSentry wrapper on api route");
   } catch (error) {
     return res.status(500).send("Failed");
   }
@@ -11,4 +11,4 @@ async function testHandler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).send("ok");
 }
 
-export default withSentry(testHandler);
+export default withSentry(testWrapperHandler);
