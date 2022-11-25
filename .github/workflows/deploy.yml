@@ -72,6 +72,7 @@ jobs:
       - name: Lag deployment i Sentry
         if: ${{ always() }}
         uses: getsentry/action-release@v1
+        continue-on-error: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_URL: https://sentry.gc.nav.no
@@ -98,6 +99,7 @@ jobs:
 
       - name: Lag deployment i Sentry
         uses: getsentry/action-release@v1
+        continue-on-error: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_URL: https://sentry.gc.nav.no
