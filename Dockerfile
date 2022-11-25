@@ -13,6 +13,8 @@ COPY public ./public
 COPY .next/standalone ./
 COPY .next/static ./.next/static
 
+RUN sed -i '/"STATIC_ASSET_PREFIX"/process.env.ASSET_PREFIX/i' ./server.js
+
 EXPOSE 3000
 USER node
 
