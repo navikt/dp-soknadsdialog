@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
-import crypto from "crypto";
+import { v4 as uuidV4 } from "uuid";
 import metrics from "../../../../../metrics";
 import { getSession } from "../../../../../auth.utils";
 import { getSoknadState } from "../../../quiz-api";
@@ -15,7 +15,7 @@ const saveFaktumHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getSession(req);
   const uuid = req.query.uuid as string;
   const faktumId = req.query.faktumId as string;
-  const requestId = crypto.randomUUID();
+  const requestId = uuidV4();
 
   if (!session) {
     return res.status(401).end();

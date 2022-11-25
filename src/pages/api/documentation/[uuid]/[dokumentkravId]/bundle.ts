@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { v4 as uuidV4 } from "uuid";
 import { headersWithToken } from "../../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../../../api.utils";
 import { getSession } from "../../../../../auth.utils";
-import crypto from "crypto";
 import { logRequestError } from "../../../../../sentry.logger";
 import {
   BUNBLE_DOCKUMENTKRAV_ERROR,
@@ -29,7 +29,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
   const requestIdHeader = req.headers["x-request-id"];
-  const requestId = requestIdHeader === undefined ? crypto.randomUUID() : requestIdHeader;
+  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
