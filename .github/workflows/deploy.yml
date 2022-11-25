@@ -8,7 +8,7 @@ env:
   BASE_PATH: /dagpenger/dialog
 
 jobs:
-  build:
+  install:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,14 +18,25 @@ jobs:
           #cache: "npm" # npm sin cache
           registry-url: "https://npm.pkg.github.com"
 
-      #- name: Cache node_modules
-      #  uses: actions/cache@v3
-      #  id: node_modules
-      #  with:
-      #    path: ./node_modules
-      #    key: modules-${{ hashFiles('package-lock.json') }}
+      - run: npm install --ignore-scripts
 
-      - run: cat /home/runner/work/_temp/.npmrc
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+          cache: "npm" # npm sin cache
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: node_modules
+        with:
+          path: ./node_modules
+          key: modules-${{ hashFiles('package-lock.json') }}
+
       - if: steps.node_modules.outputs.cache-hit != 'true'
         run: npm ci --ignore-scripts
         env:
