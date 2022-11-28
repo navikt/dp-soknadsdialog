@@ -4,7 +4,7 @@ import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
-import { DeleteGeneratorFaktumModal2 } from "../delete-generator-faktum-modal/DeleteGeneratorFaktumModal2";
+import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/DeleteGeneratorFaktumModal";
 
 export type generatorFaktumType = "standard" | "barn" | "arbeidsforhold";
 
@@ -69,7 +69,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
         <ValidationMessage message={getAppText("validering.generator-faktum.delvis-besvart")} />
       )}
 
-      <DeleteGeneratorFaktumModal2
+      <DeleteGeneratorFaktumModal
         faktumType={generatorFaktumType}
         delete={deleteFaktum}
         isOpen={modalOpen}
