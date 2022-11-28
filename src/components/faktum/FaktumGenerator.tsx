@@ -61,6 +61,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
+              generatorFaktumType="standard"
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
@@ -88,12 +89,6 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
-                  </Button>
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-                  >
-                    {getAppText("soknad.generator.slett-knapp")}
                   </Button>
                 </div>
               </Modal.Content>
