@@ -32,7 +32,6 @@ import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNo
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "../receipt/Receipts.module.css";
-import { usePostRequest } from "../../hooks/usePostRequest";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -69,8 +68,6 @@ export function Ettersending(props: IProps) {
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE
   );
-  const [testSentry] = usePostRequest<{ uuid: string }>("test-sentry-logging");
-  const [testSentryWrapper] = usePostRequest<{ uuid: string }>("test-sentry-logging-wrapper");
 
   useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
@@ -104,9 +101,6 @@ export function Ettersending(props: IProps) {
   return (
     <div>
       <SoknadHeader titleTextKey={ETTERSENDING_TITTEL} />
-
-      <Button onClick={() => testSentry({ uuid })}>Test Sentry</Button>
-      <Button onClick={() => testSentryWrapper({ uuid })}>Test Sentry med wrapper</Button>
 
       {dokumentkravWithBundleError.length > 0 && (
         <ErrorSummary

@@ -11,5 +11,4 @@ Sentry.init({
   tracesSampleRate: 1.0,
   integrations: [new Sentry.Integrations.Http({ tracing: true })],
   environment: SENTRY_ENV,
-  debug: SENTRY_ENV === "development",
 });
