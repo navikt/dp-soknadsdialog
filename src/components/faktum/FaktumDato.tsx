@@ -29,10 +29,12 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     }
   }, [faktum.svar]);
 
-  const onDateSelection = (value: Date) => {
-    const date = formatISO(value, { representation: "date" });
-    setCurrentAnswer(date);
-    onChange ? onChange(faktum, date) : saveFaktum(date);
+  const onDateSelection = (value: Date | null) => {
+    if (value) {
+      const date = formatISO(value, { representation: "date" });
+      setCurrentAnswer(date);
+      onChange ? onChange(faktum, date) : saveFaktum(date);
+    }
   };
 
   function saveFaktum(value: string) {

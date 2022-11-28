@@ -37,20 +37,23 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     }
   }, [faktum.svar]);
 
-  function onFromDateSelection(value: Date) {
-    const parsedFromDate = formatISO(value, { representation: "date" });
-    const period = { ...currentAnswer, fom: parsedFromDate };
-    setCurrentAnswer(period);
+  function onFromDateSelection(value: Date | null) {
+    if (value) {
+      const parsedFromDate = formatISO(value, { representation: "date" });
+      const period = { ...currentAnswer, fom: parsedFromDate };
+      setCurrentAnswer(period);
 
-    onChange ? onChange(faktum, period) : saveFaktum(period);
+      onChange ? onChange(faktum, period) : saveFaktum(period);
+    }
   }
 
-  function onToDateSelection(value: Date) {
+  function onToDateSelection(value: Date | null) {
     if (!currentAnswer?.fom) {
       return;
     }
 
-    const parsedToDate = formatISO(value, { representation: "date" });
+    const parsedToDate = value ? formatISO(value, { representation: "date" }) : null;
+
     const period = { ...currentAnswer, tom: parsedToDate };
     setCurrentAnswer(period);
 
