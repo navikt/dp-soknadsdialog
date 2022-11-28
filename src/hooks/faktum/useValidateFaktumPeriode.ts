@@ -29,7 +29,12 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       const future = isFuture(new Date(fom));
       const isValidFromDate = isFromYear1900(new Date(fom));
 
-      if (!isValidFromDate) {
+      if (
+        faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode.fra" ||
+        faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode.fra"
+      ) {
+        setHasFomError(!isValidFromDate ? "InvalidDate" : undefined);
+      } else if (!isValidFromDate) {
         setHasFomError("InvalidDate");
       } else if (future) {
         setHasFomError("FutureDate");
