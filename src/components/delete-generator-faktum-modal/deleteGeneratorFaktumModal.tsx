@@ -37,14 +37,14 @@ export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
 
         <p>{getAppText(`slett-faktum-${faktumType}.modal.beskrivelse`)}</p>
 
-        <div className="modal-container__button-container">
+        <nav className="modal-container__button-container">
           <Button variant={"danger"} onClick={props.delete} loading={isLoading}>
             {getAppText(`slett-faktum-${faktumType}.modal.knapp.slett`)}
           </Button>
           <Button variant={"tertiary"} onClick={handleClose}>
             {getAppText(`slett-faktum-${faktumType}.modal.knapp.avbryt`)}
           </Button>
-        </div>
+        </nav>
       </Modal.Content>
     </Modal>
   );
