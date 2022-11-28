@@ -30,8 +30,8 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       const isValidFromDate = isFromYear1900(new Date(fom));
 
       if (
-        faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode.fra" ||
-        faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode.fra"
+        faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode" ||
+        faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode"
       ) {
         setHasFomError(!isValidFromDate ? "InvalidDate" : undefined);
       } else if (!isValidFromDate) {
