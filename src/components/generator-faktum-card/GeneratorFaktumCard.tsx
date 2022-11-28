@@ -4,7 +4,7 @@ import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
-import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/DeleteGeneratorFaktumModal";
+import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/deleteGeneratorFaktumModal";
 
 export type generatorFaktumType = "standard" | "barn" | "arbeidsforhold";
 
