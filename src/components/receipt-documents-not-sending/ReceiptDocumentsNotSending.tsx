@@ -21,7 +21,7 @@ export function ReceiptDocumentsNotSending(props: IProps) {
         {getAppText("kvittering.heading.sender-ikke-dokumenter")}
       </Heading>
 
-      <ol className={styles.dokumentkravList}>
+      <ul className={styles.dokumentkravList}>
         {props.documents.map((dokumentkrav) => {
           const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
           return (
@@ -42,7 +42,7 @@ export function ReceiptDocumentsNotSending(props: IProps) {
             </li>
           );
         })}
-      </ol>
+      </ul>
     </div>
   );
 }
