@@ -11,10 +11,8 @@ interface IDatePicker {
   id: string;
   label: string;
   description?: TypedObject | TypedObject[];
-  hasError?: boolean;
-  errorMessage?: string;
-  hasWarning?: boolean;
-  warningMessage?: string;
+  warning?: string;
+  error?: string;
   placeholder?: string;
   onChange: (value: Date) => void;
   disabled?: boolean;
@@ -85,7 +83,7 @@ export function DatePicker(props: IDatePicker) {
       )}
       <input
         className={classNames(styles.datePickerInput, {
-          [styles.datePickerInputError]: props.hasError || isEmptyDate,
+          [styles.datePickerInputError]: props.error || isEmptyDate,
         })}
         type="date"
         id={props.id}
@@ -98,19 +96,19 @@ export function DatePicker(props: IDatePicker) {
         min={min}
         max={max}
       />
-      {(props.hasError || isEmptyDate) && (
+      {(props.error || isEmptyDate) && (
         <div
           className={classNames(
             styles.datePickerInputErrorLabel,
             "navds-error-message navds-label"
           )}
         >
-          {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.errorMessage}
+          {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.error}
         </div>
       )}
-      {props.hasWarning && props.warningMessage && (
+      {props.warning && (
         <Alert variant="warning" className={styles.datePickerWarning}>
-          {props.warningMessage}
+          {props.warning}
         </Alert>
       )}
     </div>
