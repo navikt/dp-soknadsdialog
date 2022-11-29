@@ -22,7 +22,7 @@ export function DokumentkravGenerellInnsending({ classname }: IProps) {
         {getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TITTEL)}
       </Heading>
 
-      <BodyShort className={styles.innsendingTekst}>
+      <BodyShort className={styles.innsendingText}>
         {getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_TEKST)}
       </BodyShort>
 
