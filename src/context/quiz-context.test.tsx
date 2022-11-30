@@ -5,7 +5,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { IQuizBooleanFaktum, IQuizState } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";
 import fetch from "jest-fetch-mock";
-
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../__mocks__/sanity.mocks";
 import { ValidationProvider } from "./validation-context";
@@ -20,6 +19,8 @@ const faktum: IQuizBooleanFaktum = {
   sannsynliggjoresAv: [],
 };
 
+// We need to await states in these tests, and the way to do that is to await
+// screen changes. Explicitly print out the loading and error states so that we can await and test for those
 function ContextSpion() {
   const { isLoading, isError } = useQuiz();
   if (isLoading) return <>Laster</>;
@@ -63,6 +64,33 @@ describe("Quiz context", () => {
 
       expect(requestJson.beskrivendeId).toBe(faktum.beskrivendeId);
       expect(requestJson.svar).toBe(true);
+    });
+  });
+
+  test("Should register error if the faktum could not be saved", async () => {
+    fetch.mockReject(new Error("fake error message"));
+    jest.spyOn(console, "error").mockImplementation(() => {
+      // Suppressing the error warning from quiz-context to make the test logs prettier
+    });
+
+    render(
+      <SanityProvider initialState={sanityMocks}>
+        <QuizProvider initialState={initialState}>
+          <ValidationProvider>
+            <FaktumBoolean faktum={faktum} />
+            <ContextSpion />
+          </ValidationProvider>
+        </QuizProvider>
+      </SanityProvider>
+    );
+
+    const user = userEvent.setup();
+    const radio = screen.getByLabelText("f1.svar.ja");
+    await user.click(radio);
+
+    waitFor(() => {
+      expect(screen.getByText("Error")).toBeInTheDocument();
+      expect(fetch.mock.calls.length).toEqual(1);
     });
   });
 });
