@@ -9,4 +9,4 @@ loginservice:
 sentry_stage: "development"
 veilarbproxyUrl: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder
 cdn:
-  url: https://cdn.dev.nav.no/teamdagpenger/dp-soknadsdialog
+  url: https://cdn.nav.no/teamdagpenger/dp-soknadsdialog

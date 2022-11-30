@@ -100,9 +100,6 @@ jobs:
   upload-cdn:
     needs: [ test, build ]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        env: [ cdn.dev.nav.no, cdn.nav.no ]
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -114,9 +111,8 @@ jobs:
           key: ${{ github.sha }}
 
       - name: Upload static files
-        uses: nais/frontend-plattform-cdn-upload-action@main
+        uses: navikt/frontend/actions/cdn-upload/v1@main
         with:
-          cdn-environment: ${{ matrix.env }}
           cdn-team-name: teamdagpenger
           source: ./.next/static
           destination: '/dp-soknadsdialog/_next'
