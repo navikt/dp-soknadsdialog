@@ -14,7 +14,7 @@ type dateFaktumErrorType = "InvalidDate" | "InvalidBirthDate";
 interface IUseValidateFaktumDato {
   getErrorMessage: () => string | undefined;
   getWarningMessage: () => string | undefined;
-  isValid: (value: Date) => boolean;
+  isValid: (date: Date) => boolean | ((date: Date) => boolean);
 }
 
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
@@ -45,7 +45,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
           setHasError(undefined);
         }
 
-        return !isFuture && isFromYear1900;
+        return !future && isFromYear1900;
       }
       default: {
         const isValid = isWithinValidYearRange(date);
