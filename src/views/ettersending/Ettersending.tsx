@@ -69,6 +69,13 @@ export function Ettersending(props: IProps) {
       krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE
   );
 
+  const missingDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (dokumentkrav) => !dokumentkrav.bundleFilsti
+  );
+  const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (dokumentkrav) => dokumentkrav.bundleFilsti
+  );
+
   useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
       scrollIntoView(errorSummaryRef);
@@ -126,45 +133,33 @@ export function Ettersending(props: IProps) {
             {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
           </Heading>
 
-          {availableDokumentkravForEttersending.map((krav: IDokumentkrav) => {
-            const ettersendingDokumenterStatusMangler = !krav.bundleFilsti;
+          {missingDokumentkrav.map((krav: IDokumentkrav) => (
+            <EttersendingDokumentkravSendingItem
+              key={krav.id}
+              dokumentkrav={krav}
+              removeDokumentkrav={removeDokumentkrav}
+              addDokumentkrav={addDokumentkravWithNewFiles}
+              hasBundleError={
+                !dokumentkravWithBundleError.findIndex(
+                  (dokumentkrav) => dokumentkrav.id === krav.id
+                )
+              }
+            />
+          ))}
 
-            if (ettersendingDokumenterStatusMangler) {
-              return (
-                <EttersendingDokumentkravSendingItem
-                  key={krav.id}
-                  dokumentkrav={krav}
-                  removeDokumentkrav={removeDokumentkrav}
-                  addDokumentkrav={addDokumentkravWithNewFiles}
-                  hasBundleError={
-                    !dokumentkravWithBundleError.findIndex(
-                      (dokumentkrav) => dokumentkrav.id === krav.id
-                    )
-                  }
-                />
-              );
-            }
-          })}
-
-          {availableDokumentkravForEttersending.map((krav: IDokumentkrav) => {
-            const ettersendingDokumenterStatusMottatt = !!krav.bundleFilsti;
-
-            if (ettersendingDokumenterStatusMottatt) {
-              return (
-                <EttersendingDokumentkravSendingItem
-                  key={krav.id}
-                  dokumentkrav={krav}
-                  removeDokumentkrav={removeDokumentkrav}
-                  addDokumentkrav={addDokumentkravWithNewFiles}
-                  hasBundleError={
-                    !dokumentkravWithBundleError.findIndex(
-                      (dokumentkrav) => dokumentkrav.id === krav.id
-                    )
-                  }
-                />
-              );
-            }
-          })}
+          {receivedDokumentkrav.map((krav: IDokumentkrav) => (
+            <EttersendingDokumentkravSendingItem
+              key={krav.id}
+              dokumentkrav={krav}
+              removeDokumentkrav={removeDokumentkrav}
+              addDokumentkrav={addDokumentkravWithNewFiles}
+              hasBundleError={
+                !dokumentkravWithBundleError.findIndex(
+                  (dokumentkrav) => dokumentkrav.id === krav.id
+                )
+              }
+            />
+          ))}
 
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />
