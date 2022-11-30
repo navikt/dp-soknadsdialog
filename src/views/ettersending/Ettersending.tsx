@@ -57,7 +57,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
     addDokumentkravWithNewFiles,
   } = useEttersending();
 
-  const availableDokumentkravForEttersending = dokumentkrav.krav.filter(
+  const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
     (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
@@ -69,7 +69,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
     (krav: IDokumentkrav) => krav.bundleFilsti
   );
 
-  const unavailableDokumentkravForEttersending = dokumentkrav.krav.filter(
+  const unavailableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
     (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
