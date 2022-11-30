@@ -37,7 +37,7 @@ interface IProps {
   dokumentkrav: IDokumentkravList;
 }
 
-export function Ettersending(props: IProps) {
+export function Ettersending({ dokumentkrav }: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { setFocus } = useSetFocus();
@@ -57,7 +57,7 @@ export function Ettersending(props: IProps) {
     addDokumentkravWithNewFiles,
   } = useEttersending();
 
-  const availableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
+  const availableDokumentkravForEttersending = dokumentkrav.krav.filter(
     (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
@@ -69,7 +69,7 @@ export function Ettersending(props: IProps) {
     (krav: IDokumentkrav) => krav.bundleFilsti
   );
 
-  const unavailableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
+  const unavailableDokumentkravForEttersending = dokumentkrav.krav.filter(
     (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
