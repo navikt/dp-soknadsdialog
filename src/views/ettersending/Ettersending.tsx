@@ -58,22 +58,22 @@ export function Ettersending(props: IProps) {
   } = useEttersending();
 
   const availableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
-    (krav) =>
+    (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
 
+  const missingDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (krav: IDokumentkrav) => !krav.bundleFilsti
+  );
+  const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (krav: IDokumentkrav) => krav.bundleFilsti
+  );
+
   const unavailableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
-    (krav) =>
+    (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE
-  );
-
-  const missingDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
-    (dokumentkrav) => !dokumentkrav.bundleFilsti
-  );
-  const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
-    (dokumentkrav) => dokumentkrav.bundleFilsti
   );
 
   useEffect(() => {
