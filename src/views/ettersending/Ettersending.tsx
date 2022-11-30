@@ -58,15 +58,15 @@ export function Ettersending({ dokumentkrav }: IProps) {
   } = useEttersending();
 
   const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
-    (krav: IDokumentkrav) =>
+    (krav: IDokumentkrav): boolean =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
 
   const missingDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
-    (krav: IDokumentkrav) => !krav.bundleFilsti
+    (krav: IDokumentkrav): boolean => !krav.bundleFilsti
   );
   const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
-    (krav: IDokumentkrav) => krav.bundleFilsti
+    (krav: IDokumentkrav): boolean => !!krav.bundleFilsti
   );
 
   const unavailableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
