@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { IDokumentkravList } from "../../types/documentation.types";
+import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { EttersendingDokumentkravSendingItem } from "./EttersendingDokumentkravSendingItem";
 import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -115,37 +115,60 @@ export function Ettersending(props: IProps) {
           ))}
         </ErrorSummary>
       )}
-
       {ettersendingText && (
         <div className={styles.dokumentasjonsTextContainer}>
           <PortableText value={ettersendingText.body} />
         </div>
       )}
-
       {availableDokumentkravForEttersending.length > 0 && (
         <>
           <Heading level="2" size="medium" className="my-6">
             {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
           </Heading>
 
-          {availableDokumentkravForEttersending.map((krav) => (
-            <EttersendingDokumentkravSendingItem
-              key={krav.id}
-              dokumentkrav={krav}
-              removeDokumentkrav={removeDokumentkrav}
-              addDokumentkrav={addDokumentkravWithNewFiles}
-              hasBundleError={
-                !dokumentkravWithBundleError.findIndex(
-                  (dokumentkrav) => dokumentkrav.id === krav.id
-                )
-              }
-            />
-          ))}
+          {availableDokumentkravForEttersending.map((krav: IDokumentkrav) => {
+            const ettersendingDokumenterStatusMangler = !krav.bundleFilsti;
+
+            if (ettersendingDokumenterStatusMangler) {
+              return (
+                <EttersendingDokumentkravSendingItem
+                  key={krav.id}
+                  dokumentkrav={krav}
+                  removeDokumentkrav={removeDokumentkrav}
+                  addDokumentkrav={addDokumentkravWithNewFiles}
+                  hasBundleError={
+                    !dokumentkravWithBundleError.findIndex(
+                      (dokumentkrav) => dokumentkrav.id === krav.id
+                    )
+                  }
+                />
+              );
+            }
+          })}
+
+          {availableDokumentkravForEttersending.map((krav: IDokumentkrav) => {
+            const ettersendingDokumenterStatusMottatt = !!krav.bundleFilsti;
+
+            if (ettersendingDokumenterStatusMottatt) {
+              return (
+                <EttersendingDokumentkravSendingItem
+                  key={krav.id}
+                  dokumentkrav={krav}
+                  removeDokumentkrav={removeDokumentkrav}
+                  addDokumentkrav={addDokumentkravWithNewFiles}
+                  hasBundleError={
+                    !dokumentkravWithBundleError.findIndex(
+                      (dokumentkrav) => dokumentkrav.id === krav.id
+                    )
+                  }
+                />
+              );
+            }
+          })}
 
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />
           )}
-
           <div className="navigation-container">
             <Button
               variant="primary"
