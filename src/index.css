@@ -40,6 +40,10 @@
   margin: var(--navds-spacing-4) 0 var(--navds-spacing-1);
 }
 
+.my-12 {
+  margin: var(--navds-spacing-12) 0;
+}
+
 .my-11 {
   margin: var(--navds-spacing-11) 0;
 }

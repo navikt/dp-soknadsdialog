@@ -31,7 +31,6 @@ import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-ge
 import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
-import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -117,7 +116,7 @@ export function Ettersending(props: IProps) {
       )}
 
       {ettersendingText && (
-        <div className={styles.dokumentasjonsTextContainer}>
+        <div className="my-12">
           <PortableText value={ettersendingText.body} />
         </div>
       )}
