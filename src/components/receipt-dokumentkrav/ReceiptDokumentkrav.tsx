@@ -41,7 +41,7 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
   );
 
-  const hasDokumentkrav = dokumentkravList.krav.length > 0;
+  const shouldShowEttersending = missingDocuments.length > 0 || uploadedDocuments.length > 0;
 
   const missingDokumentkravText = getInfosideText("kvittering.dokumentasjon");
   const allDokumentkravUploadedText = getInfosideText("kvittering.alle-dokumentkrav-ferdig");
@@ -51,7 +51,7 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
 
   return (
     <>
-      {hasDokumentkrav && (
+      {shouldShowEttersending && (
         <>
           {dokumentkravText && (
             <div className="my-12">
@@ -77,17 +77,17 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
           </ol>
 
           <ReceiptUploadDocuments soknadStatus={soknadStatus} />
-
-          {notSendingDocuments.length > 0 && (
-            <ReceiptDocumentsNotSending documents={notSendingDocuments} />
-          )}
         </>
       )}
 
-      {!hasDokumentkrav && noDokumentkravDocumentsText && (
+      {!shouldShowEttersending && noDokumentkravDocumentsText && (
         <div className="my-12">
           <PortableText value={noDokumentkravDocumentsText.body} />
         </div>
+      )}
+
+      {notSendingDocuments.length > 0 && (
+        <ReceiptDocumentsNotSending documents={notSendingDocuments} />
       )}
     </>
   );
