@@ -1,4 +1,5 @@
-import crypto from "crypto";
+import { v4 as uuidV4 } from "uuid";
+
 export const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
 export const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
 
@@ -12,7 +13,7 @@ export const fetcher = (url: RequestInfo, options: RequestInit = {}): Promise<un
   fetch(url, options).then((r: { json: () => unknown }) => r.json());
 
 export function apiFetch(url: string | Request, init: RequestInit | undefined, requestId?: string) {
-  const reqId = requestId === undefined ? crypto.randomUUID() : requestId;
+  const reqId = requestId === undefined ? uuidV4() : requestId;
   const headers = {
     ...init?.headers,
     "x-request-id": reqId,

@@ -1,5 +1,5 @@
 import { withSentry } from "@sentry/nextjs";
-import crypto from "crypto";
+import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
 import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
@@ -27,7 +27,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const requestIdHeader = req.headers["x-request-id"];
-  const requestId = requestIdHeader === undefined ? crypto.randomUUID() : requestIdHeader;
+  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
 
   const session = await getSession(req);
   if (!session) {

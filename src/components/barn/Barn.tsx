@@ -51,6 +51,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
         return (
           <div key={svarIndex}>
             <GeneratorFaktumCard
+              generatorFaktumType="barn"
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
@@ -81,13 +82,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
                     Lagre og lukk
-                  </Button>
-
-                  <Button
-                    variant={"secondary"}
-                    onClick={() => deleteGeneratorAnswer(faktum, svarIndex)}
-                  >
-                    Slett
                   </Button>
                 </div>
               </Modal.Content>

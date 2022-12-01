@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useValidateFaktumNumber } from "../../hooks/faktum/useFaktumNumberValidation";
+import { useValidateFaktumNumber } from "../../hooks/faktum/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";
@@ -17,9 +17,7 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById } = useSanity();
-  const { setHasError, isValidInput, getErrorMessage } = useValidateFaktumNumber(
-    faktum.beskrivendeId
-  );
+  const { setHasError, isValid, getErrorMessage } = useValidateFaktumNumber(faktum.beskrivendeId);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
@@ -43,24 +41,24 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
     setCurrentAnswer(value);
 
     if (!value) {
-      setHasError(false);
+      setHasError(undefined);
       setDebouncedValue(null);
       return;
     }
 
     if (!isNumber(value)) {
-      setHasError("notNumber");
+      setHasError("NotNumber");
       return;
     }
 
     switch (faktum.type) {
       case "int": {
-        setHasError(false);
+        setHasError(undefined);
         debouncedChange(parseInt(value));
         break;
       }
       case "double": {
-        setHasError(false);
+        setHasError(undefined);
         // Replace comma with dot
         const formattedValue = value.replace(/,/g, ".");
         debouncedChange(parseFloat(formattedValue));
@@ -70,8 +68,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   }
 
   function saveFaktum(value: number | null) {
-    const isValid = isValidInput(value);
-    if (isValid) {
+    const isValidNumber = isValid(value);
+    if (isValidNumber) {
       saveFaktumToQuiz(faktum, value);
     }
   }

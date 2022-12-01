@@ -25,8 +25,10 @@ const config = {
     locales: supportedLocales,
     defaultLocale: "nb",
   },
+  assetPrefix: process.env.ASSET_PREFIX,
   productionBrowserSourceMaps: true,
   output: "standalone",
+  swcMinify: true,
   publicRuntimeConfig: {
     NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
   },

@@ -37,17 +37,21 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
+  const callId = uuidV4();
   const uuid = req.query.uuid as string;
   const dokumentkravId = req.query.dokumentkravId as string;
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+
+  res.setHeader("X-Request-Id", callId);
 
   try {
     const mellomlagringResponse = await saveFileToMellomlagring(
       req,
       uuid,
       dokumentkravId,
-      mellomlagringToken
+      mellomlagringToken,
+      callId
     );
 
     if (!mellomlagringResponse.ok) {
@@ -60,7 +64,8 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       DPSoknadToken,
-      fileData[0]
+      fileData[0],
+      callId
     );
 
     if (!dpSoknadResponse.ok) {
@@ -79,7 +84,8 @@ async function saveFileToMellomlagring(
   req: NextApiRequest,
   uuid: string,
   dokumentkravId: string,
-  mellomLagringToken: string
+  mellomLagringToken: string,
+  callId: string
 ) {
   const buffers: Uint8Array[] = [];
 
@@ -96,10 +102,9 @@ async function saveFileToMellomlagring(
       });
   });
 
-  const callId = uuidV4();
   const fileSizeBytes = Number(req.headers["content-length"]);
   if (!isNaN(fileSizeBytes)) {
-    Metrics.filstørrelseOpplastet.observe(fileSizeBytes);
+    Metrics.filOpplastetStørrelse.observe(fileSizeBytes);
   }
 
   console.log(
@@ -124,7 +129,7 @@ async function saveFileToMellomlagring(
         `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${res.status}`
       );
       if (!isNaN(fileSizeBytes)) {
-        Metrics.filstørrelseOpplastetFeilet.observe(fileSizeBytes);
+        Metrics.filOpplastetFeilet.observe(fileSizeBytes);
       }
     }
     return res;
@@ -135,13 +140,17 @@ async function saveFileToDPSoknad(
   uuid: string,
   dokumentkravId: string,
   DPSoknadToken: string,
-  fil: IDokumentkravFil
+  fil: IDokumentkravFil,
+  callId: string
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil`;
   return fetch(url, {
     method: "PUT",
     body: JSON.stringify(fil),
-    headers: headersWithToken(DPSoknadToken),
+    headers: {
+      ...headersWithToken(DPSoknadToken),
+      "X-Request-Id": callId,
+    },
   });
 }
 
