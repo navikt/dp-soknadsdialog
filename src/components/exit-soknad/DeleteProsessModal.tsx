@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
@@ -15,6 +15,7 @@ interface IProps {
 
 export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps) {
   const { uuid } = useUuid();
+  const [isLoading, setIsLoading] = useState(false);
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest("soknad/delete");
@@ -60,7 +61,12 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
                 href={prosessType === "Dagpenger" ? "/soknad/start-soknad" : "/generell-innsending"}
                 passHref
               >
-                <Button as="a" variant="tertiary">
+                <Button
+                  as="a"
+                  variant="tertiary"
+                  onClick={() => setIsLoading(true)}
+                  loading={isLoading}
+                >
                   {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
                 </Button>
               </Link>

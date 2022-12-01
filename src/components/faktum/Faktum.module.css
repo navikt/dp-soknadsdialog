@@ -13,3 +13,7 @@
 .faktumNumber input {
   width: 50%;
 }
+
+.faktumDatoWarningSpacing {
+  margin-top: var(--navds-spacing-4);
+}

@@ -13,8 +13,8 @@ type dateFaktumErrorType = "InvalidDate" | "InvalidBirthDate";
 
 interface IUseValidateFaktumDato {
   getErrorMessage: () => string | undefined;
-  getWarningMessage: () => string | undefined;
   isValid: (date: Date) => boolean | ((date: Date) => boolean);
+  getHasWarning: (date: Date) => boolean;
 }
 
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
@@ -22,15 +22,12 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [hasError, setHasError] = useState<dateFaktumErrorType | undefined>(undefined);
-  const [hasWarning, setHasWarning] = useState(false);
 
   function isValid(date: Date) {
     switch (faktum.beskrivendeId) {
       case "faktum.dagpenger-soknadsdato": {
         const isValid = isFromYear1900(date);
-        const hasWarning = isOverTwoWeeks(date);
         setHasError(!isValid ? "InvalidDate" : undefined);
-        setHasWarning(hasWarning);
         return isValid;
       }
       case "faktum.barn-foedselsdato": {
@@ -69,13 +66,13 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
   }
 
-  function getWarningMessage() {
-    return hasWarning ? getAppText("validering.dato-faktum.soknadsdato-varsel") : undefined;
+  function getHasWarning(date: Date) {
+    return faktum.beskrivendeId === "faktum.dagpenger-soknadsdato" && isOverTwoWeeks(date);
   }
 
   return {
     getErrorMessage,
-    getWarningMessage,
     isValid,
+    getHasWarning,
   };
 }
