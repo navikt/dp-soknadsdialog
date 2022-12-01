@@ -1,7 +1,7 @@
 import { Alert, Button, ConfirmationPanel, Link } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import api from "../../api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
@@ -11,19 +11,36 @@ import { useSanity } from "../../context/sanity-context";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./StartSoknad.module.css";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function StartSoknad() {
   const router = useRouter();
+  const { getAppText, getInfosideText } = useSanity();
+  const { setFocus } = useSetFocus();
+
   const [isError, setIsError] = useState(false);
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
-  const { getAppText, getInfosideText } = useSanity();
+  const missingConsentRef = useRef<HTMLInputElement>(null);
   const startSideText = getInfosideText("startside");
+
+  useEffect(() => {
+    if (showConsentValidation) {
+      setFocus(missingConsentRef);
+    }
+  }, [showConsentValidation]);
 
   async function startSoknad() {
     if (!consentGiven) {
       setShowConsentValidation(true);
+
+      // If showConsentValidation is false, the async useEffect will trigger
+      // a scroll as soon as the state is set (and the validation error element is in view)
+      if (showConsentValidation) {
+        setFocus(missingConsentRef);
+      }
+
       return;
     }
 
@@ -84,6 +101,7 @@ export function StartSoknad() {
               ? getAppText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
               : undefined
           }
+          ref={missingConsentRef}
         />
         <Button
           variant="primary"
