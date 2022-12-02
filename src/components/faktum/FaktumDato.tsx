@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { FormattedDate } from "../FormattedDate";
@@ -20,9 +21,17 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
+  const { getErrorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const { getErrorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
+  const [debouncedDate, setDebouncedText] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
+
+  useEffect(() => {
+    if (!isFirstRender && debouncedDate !== faktum.svar) {
+      onChange ? onChange(faktum, debouncedDate) : saveFaktum(debouncedDate);
+    }
+  }, [debouncedDate]);
 
   useEffect(() => {
     if (!faktum.svar && !isFirstRender) {
@@ -32,22 +41,15 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
-    onDateChange: (value?: Date) => handleDateChange(value),
+    onDateChange: (value?: Date) => {
+      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
+      setCurrentAnswer(debounceValue);
+      debouncedChange(debounceValue);
+    },
   });
 
-  function handleDateChange(value?: Date) {
-    if (!value) {
-      setCurrentAnswer("");
-      onChange ? onChange(faktum, null) : saveFaktum(null);
-    } else {
-      const date = formatISO(value, { representation: "date" });
-      setCurrentAnswer(date);
-      onChange ? onChange(faktum, date) : saveFaktum(date);
-    }
-  }
-
-  function saveFaktum(value: string | null) {
-    if (!value) {
+  function saveFaktum(value: string | null | undefined) {
+    if (!value || value === "") {
       saveFaktumToQuiz(faktum, null);
     }
 
