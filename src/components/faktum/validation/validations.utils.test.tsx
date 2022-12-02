@@ -4,8 +4,8 @@ import {
   isValidPermitteringsPercent,
   isOverTwoWeeks,
   isValidTextLength,
-  isValidYearRange,
-  isValidDateYear,
+  isWithinValidYearRange,
+  isFromYear1900,
 } from "./validations.utils";
 
 const validTextLengthMock =
@@ -46,9 +46,9 @@ describe("Input validation", () => {
   });
 
   test("Validate date year", async () => {
-    expect(isValidDateYear(new Date("1800-01-01"))).toBe(false);
-    expect(isValidDateYear(new Date("1900-01-01"))).toBe(true);
-    expect(isValidDateYear(new Date("1950-01-01"))).toBe(true);
+    expect(isFromYear1900(new Date("1800-01-01"))).toBe(false);
+    expect(isFromYear1900(new Date("1900-01-01"))).toBe(true);
+    expect(isFromYear1900(new Date("1950-01-01"))).toBe(true);
   });
 
   test("Validate year range", async () => {
@@ -58,10 +58,10 @@ describe("Input validation", () => {
     const nextMonth = addMonths(new Date(), 1);
     const lastMonth = addMonths(new Date(), -1);
 
-    expect(isValidYearRange(today)).toBe(true);
-    expect(isValidYearRange(about200years)).toBe(false);
-    expect(isValidYearRange(last200years)).toBe(false);
-    expect(isValidYearRange(nextMonth)).toBe(true);
-    expect(isValidYearRange(lastMonth)).toBe(true);
+    expect(isWithinValidYearRange(today)).toBe(true);
+    expect(isWithinValidYearRange(about200years)).toBe(false);
+    expect(isWithinValidYearRange(last200years)).toBe(false);
+    expect(isWithinValidYearRange(nextMonth)).toBe(true);
+    expect(isWithinValidYearRange(lastMonth)).toBe(true);
   });
 });

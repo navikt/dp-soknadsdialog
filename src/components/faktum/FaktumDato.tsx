@@ -1,35 +1,27 @@
-import React, { useEffect, useState } from "react";
 import { BodyShort, Label } from "@navikt/ds-react";
-import { formatISO, isFuture } from "date-fns";
+import { formatISO } from "date-fns";
+import { useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { DatePicker } from "../date-picker/DatePicker";
-import { isOverTwoWeeks, isValidDateYear, isValidYearRange } from "./validation/validations.utils";
 import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
-  const { unansweredFaktumId } = useValidation();
-  const { getAppText, getFaktumTextById } = useSanity();
-  const [isValid, setIsValid] = useState(true);
-  const [hasWarning, setHasWarnining] = useState(false);
+  const { getFaktumTextById } = useSanity();
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
+
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
 
-  useEffect(() => {
-    if (props.faktum.svar) {
-      const hasWarning = !validateInput(new Date(props.faktum.svar));
-      setHasWarnining(hasWarning);
-    }
-  }, []);
+  const { getErrorMessage, isValid, getWarningMessage } = useValidateFaktumDato(faktum);
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
@@ -37,16 +29,18 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     }
   }, [faktum.svar]);
 
-  const onDateSelection = (value: Date) => {
-    const date = formatISO(value, { representation: "date" });
-    setCurrentAnswer(date);
-    onChange ? onChange(faktum, date) : saveFaktum(date);
+  const onDateSelection = (value: Date | null) => {
+    if (value) {
+      const date = formatISO(value, { representation: "date" });
+      setCurrentAnswer(date);
+      onChange ? onChange(faktum, date) : saveFaktum(date);
+    }
   };
 
   function saveFaktum(value: string) {
-    const inputValid = validateInput(new Date(value));
+    const isValidDate = isValid(new Date(value));
 
-    if (inputValid) {
+    if (isValidDate) {
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -60,38 +54,6 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     );
   }
 
-  function validateInput(date: Date) {
-    switch (props.faktum.beskrivendeId) {
-      case "faktum.dagpenger-soknadsdato": {
-        const isValid = isValidDateYear(date);
-        const hasWarning = isOverTwoWeeks(date);
-        setIsValid(isValid);
-        setHasWarnining(hasWarning);
-        return isValid;
-      }
-      case "faktum.barn-foedselsdato": {
-        const isValid = isValidDateYear(date) && !isFuture(date);
-        setIsValid(isValid);
-        return isValid;
-      }
-      default: {
-        const isValid = isValidYearRange(date);
-        setIsValid(isValid);
-        return isValid;
-      }
-    }
-  }
-
-  function getValidationMessage() {
-    if (unansweredFaktumId === faktum.id) {
-      return getAppText("validering.faktum.ubesvart");
-    } else if (!isValid) {
-      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
-    } else {
-      return undefined;
-    }
-  }
-
   return (
     <>
       <DatePicker
@@ -100,10 +62,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
         onChange={onDateSelection}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description}
-        hasError={!isValid || unansweredFaktumId === faktum.id}
-        errorMessage={getValidationMessage()}
-        hasWarning={hasWarning}
-        warningMessage={getAppText("validering.dato-faktum.soknadsdato-varsel")}
+        error={getErrorMessage()}
+        warning={getWarningMessage()}
         required
       />
       {faktumTexts?.helpText && (

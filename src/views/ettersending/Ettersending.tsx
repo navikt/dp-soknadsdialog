@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { IDokumentkravList } from "../../types/documentation.types";
+import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { EttersendingDokumentkravSendingItem } from "./EttersendingDokumentkravSendingItem";
 import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -32,13 +32,12 @@ import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNo
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { IEttersendBody } from "../../pages/api/soknad/ettersend";
-import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
 }
 
-export function Ettersending(props: IProps) {
+export function Ettersending({ dokumentkrav }: IProps) {
   const router = useRouter();
   const { uuid } = useUuid();
   const { setFocus } = useSetFocus();
@@ -59,13 +58,20 @@ export function Ettersending(props: IProps) {
     addDokumentkravWithNewFiles,
   } = useEttersending();
 
-  const availableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
-    (krav) =>
+  const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
+    (krav: IDokumentkrav): boolean =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA || krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
 
-  const unavailableDokumentkravForEttersending = props.dokumentkrav.krav.filter(
-    (krav) =>
+  const missingDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (krav: IDokumentkrav): boolean => !krav.bundleFilsti
+  );
+  const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
+    (krav: IDokumentkrav): boolean => !!krav.bundleFilsti
+  );
+
+  const unavailableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
+    (krav: IDokumentkrav) =>
       krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE ||
       krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE
@@ -119,7 +125,7 @@ export function Ettersending(props: IProps) {
       )}
 
       {ettersendingText && (
-        <div className={styles.dokumentasjonsTextContainer}>
+        <div className="my-12">
           <PortableText value={ettersendingText.body} />
         </div>
       )}
@@ -130,19 +136,37 @@ export function Ettersending(props: IProps) {
             {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
           </Heading>
 
-          {availableDokumentkravForEttersending.map((krav) => (
-            <EttersendingDokumentkravSendingItem
-              key={krav.id}
-              dokumentkrav={krav}
-              removeDokumentkrav={removeDokumentkrav}
-              addDokumentkrav={addDokumentkravWithNewFiles}
-              hasBundleError={
-                !dokumentkravWithBundleError.findIndex(
-                  (dokumentkrav) => dokumentkrav.id === krav.id
-                )
-              }
-            />
-          ))}
+          {missingDokumentkrav.map(
+            (krav: IDokumentkrav): JSX.Element => (
+              <EttersendingDokumentkravSendingItem
+                key={krav.id}
+                dokumentkrav={krav}
+                removeDokumentkrav={removeDokumentkrav}
+                addDokumentkrav={addDokumentkravWithNewFiles}
+                hasBundleError={
+                  !dokumentkravWithBundleError.findIndex(
+                    (dokumentkrav) => dokumentkrav.id === krav.id
+                  )
+                }
+              />
+            )
+          )}
+
+          {receivedDokumentkrav.map(
+            (krav: IDokumentkrav): JSX.Element => (
+              <EttersendingDokumentkravSendingItem
+                key={krav.id}
+                dokumentkrav={krav}
+                removeDokumentkrav={removeDokumentkrav}
+                addDokumentkrav={addDokumentkravWithNewFiles}
+                hasBundleError={
+                  !dokumentkravWithBundleError.findIndex(
+                    (dokumentkrav) => dokumentkrav.id === krav.id
+                  )
+                }
+              />
+            )
+          )}
 
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />

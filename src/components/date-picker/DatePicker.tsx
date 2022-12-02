@@ -11,14 +11,12 @@ interface IDatePicker {
   id: string;
   label: string;
   description?: TypedObject | TypedObject[];
-  hasError?: boolean;
-  errorMessage?: string;
-  hasWarning?: boolean;
-  warningMessage?: string;
+  warning?: string;
+  error?: string;
   placeholder?: string;
-  onChange: (value: Date) => void;
+  onChange: (value: Date | null) => void;
   disabled?: boolean;
-  value?: string;
+  value?: string | null;
   min?: string;
   max?: string;
   required?: boolean;
@@ -52,23 +50,27 @@ export function DatePicker(props: IDatePicker) {
     const formattedDate = new Date(selectedDate);
     setIsEmptyDate(false);
 
-    if (!selectedDate && props.required) {
-      setDate(undefined);
-    } else if (isValidDate(formattedDate)) {
+    if (selectedDate && isValidDate(formattedDate)) {
       setDate(formattedDate);
       props.onChange(formattedDate);
-    } else {
-      setIsEmptyDate(false);
+    }
+
+    if (props.required && !selectedDate) {
+      setDate(undefined);
+      setIsEmptyDate(true);
+    }
+
+    if (!props.required && !selectedDate) {
+      setDate(undefined);
+      props.onChange(null);
     }
   }
 
   function onLeaveDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
 
-    if (!selectedDate && props.required) {
-      setIsEmptyDate(true);
-      setDate(undefined);
-    }
+    setIsEmptyDate(!!props.required && !selectedDate);
+    setDate(selectedDate ? new Date(selectedDate) : undefined);
   }
 
   return (
@@ -85,7 +87,7 @@ export function DatePicker(props: IDatePicker) {
       )}
       <input
         className={classNames(styles.datePickerInput, {
-          [styles.datePickerInputError]: props.hasError || isEmptyDate,
+          [styles.datePickerInputError]: props.error || isEmptyDate,
         })}
         type="date"
         id={props.id}
@@ -98,19 +100,19 @@ export function DatePicker(props: IDatePicker) {
         min={min}
         max={max}
       />
-      {(props.hasError || isEmptyDate) && (
+      {(props.error || isEmptyDate) && (
         <div
           className={classNames(
             styles.datePickerInputErrorLabel,
             "navds-error-message navds-label"
           )}
         >
-          {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.errorMessage}
+          {isEmptyDate ? getAppText("validering.ugyldig-dato") : props.error}
         </div>
       )}
-      {props.hasWarning && props.warningMessage && (
+      {props.warning && (
         <Alert variant="warning" className={styles.datePickerWarning}>
-          {props.warningMessage}
+          {props.warning}
         </Alert>
       )}
     </div>

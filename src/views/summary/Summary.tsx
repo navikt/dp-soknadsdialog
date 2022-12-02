@@ -1,11 +1,11 @@
 import { Left } from "@navikt/ds-icons";
 import { Accordion, Alert, Button, ConfirmationPanel, Tag } from "@navikt/ds-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { Faktum } from "../../components/faktum/Faktum";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
-import { IQuizState } from "../../types/quiz.types";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PageMeta } from "../../components/PageMeta";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -13,19 +13,17 @@ import { useUuid } from "../../hooks/useUuid";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
-import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
-import styles from "./Summary.module.css";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { useQuiz } from "../../context/quiz-context";
+import { SectionHeading } from "../../components/section/SectionHeading";
+import styles from "./Summary.module.css";
 
-interface IProps {
-  soknadState: IQuizState;
-}
-
-export function Summary({ soknadState }: IProps) {
+export function Summary() {
   const router = useRouter();
   const { uuid } = useUuid();
+  const { soknadState } = useQuiz();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
@@ -35,6 +33,8 @@ export function Summary({ soknadState }: IProps) {
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
 
+  const textId = "oppsummering";
+  const summarySectionText = getSeksjonTextById(textId);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
 
   useEffect(() => {
@@ -82,6 +82,9 @@ export function Summary({ soknadState }: IProps) {
       />
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
+
+      <SectionHeading text={summarySectionText} fallback={textId} />
+
       <Accordion>
         {soknadState.seksjoner?.map((section, index) => {
           return (
