@@ -6,7 +6,6 @@ import { useValidation } from "../../context/validation-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 
 type validationFomDateErrorType = "FutureDate" | "InvalidDate";
-type validationTomDateErrorType = "IsBeforeFomDate" | "InvalidDate";
 
 interface IUseValidateFaktumPeriode {
   getFomErrorMessage: () => string | undefined;
@@ -19,7 +18,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [hasFomError, setHasFomError] = useState<validationFomDateErrorType | undefined>(undefined);
-  const [hasTomError, setHasTomError] = useState<validationTomDateErrorType | undefined>(undefined);
+  const [hasTomError, setHasTomError] = useState<string | undefined>(undefined);
 
   function isValid(svar: IQuizPeriodeFaktumAnswerType) {
     const { fom, tom } = svar;
@@ -46,21 +45,15 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     }
 
     if (tom) {
-      const tomDate = new Date(tom).getTime();
-      const fomDate = new Date(fom).getTime();
-
-      const isValidTomDate = tomDate >= fomDate;
       const afterYear1900 = isFromYear1900(new Date(tom));
 
       if (!afterYear1900) {
         setHasTomError("InvalidDate");
-      } else if (!isValidTomDate) {
-        setHasTomError("IsBeforeFomDate");
       } else {
         setHasTomError(undefined);
       }
 
-      validPeriode = isValidTomDate && afterYear1900;
+      validPeriode = afterYear1900;
     }
 
     return validPeriode;

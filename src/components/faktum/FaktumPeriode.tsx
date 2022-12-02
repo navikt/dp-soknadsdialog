@@ -76,7 +76,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   });
 
   function handleDateChange(value?: IDateRange) {
-    if (!value || (value && !value.from)) {
+    if (value && !value.from) {
       setCurrentAnswer(undefined);
       debouncedChange(null);
     }
