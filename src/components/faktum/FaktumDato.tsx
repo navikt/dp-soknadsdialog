@@ -12,8 +12,8 @@ import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 
-const fromDate = new Date("1900-01-01");
-const toDate = addYears(new Date(), 100);
+const FROM_DATE = new Date("1900-01-01");
+const TO_DATE = addYears(new Date(), 100);
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
@@ -32,22 +32,26 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
-    onDateChange: (value?: Date) => {
-      if (!value) {
-        setCurrentAnswer("");
-        onChange ? onChange(faktum, null) : saveFaktumToQuiz(faktum, null);
-      } else {
-        const date = formatISO(value, { representation: "date" });
-        setCurrentAnswer(date);
-        onChange ? onChange(faktum, date) : saveFaktum(date);
-      }
-    },
+    onDateChange: (value?: Date) => handleDateChange(value),
   });
 
-  function saveFaktum(value: string) {
-    const isValidDate = isValid(new Date(value));
+  function handleDateChange(value?: Date) {
+    if (!value) {
+      setCurrentAnswer("");
+      onChange ? onChange(faktum, null) : saveFaktum(null);
+    } else {
+      const date = formatISO(value, { representation: "date" });
+      setCurrentAnswer(date);
+      onChange ? onChange(faktum, date) : saveFaktum(date);
+    }
+  }
 
-    if (isValidDate) {
+  function saveFaktum(value: string | null) {
+    if (!value) {
+      saveFaktumToQuiz(faktum, null);
+    }
+
+    if (value && isValid(new Date(value))) {
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -72,8 +76,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       <UNSAFE_DatePicker
         {...datepickerProps}
         dropdownCaption
-        fromDate={fromDate}
-        toDate={toDate}
+        fromDate={FROM_DATE}
+        toDate={TO_DATE}
         strategy="fixed"
       >
         <UNSAFE_DatePicker.Input

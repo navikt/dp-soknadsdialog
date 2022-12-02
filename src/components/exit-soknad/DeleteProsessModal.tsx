@@ -35,98 +35,94 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
 
   return (
     <>
-      {deleteProsessStatus === "success" && (
-        <Modal
-          className="modal-container"
-          open={isOpen}
-          onClose={() => undefined}
-          closeButton={false}
-          shouldCloseOnOverlayClick={false}
-        >
-          <Modal.Content>
-            <Heading size={"medium"} spacing>
-              {getAppText(getDeletedSuccessTitleTextKey(prosessType))}
-            </Heading>
+      <Modal
+        className="modal-container"
+        open={isOpen && deleteProsessStatus === "success"}
+        onClose={() => undefined}
+        closeButton={false}
+        shouldCloseOnOverlayClick={false}
+      >
+        <Modal.Content>
+          <Heading size={"medium"} spacing>
+            {getAppText(getDeletedSuccessTitleTextKey(prosessType))}
+          </Heading>
 
-            <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
+          <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
 
-            <div className="modal-container__button-container">
-              <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
-                <Button as="a">
-                  {getAppText(getDeletedSuccessPrimaryButtonTextKey(prosessType))}
-                </Button>
-              </Link>
+          <div className="modal-container__button-container">
+            <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+              <Button as="a">
+                {getAppText(getDeletedSuccessPrimaryButtonTextKey(prosessType))}
+              </Button>
+            </Link>
 
-              <Link
-                href={prosessType === "Dagpenger" ? "/soknad/start-soknad" : "/generell-innsending"}
-                passHref
+            <Link
+              href={prosessType === "Dagpenger" ? "/soknad/start-soknad" : "/generell-innsending"}
+              passHref
+            >
+              <Button
+                as="a"
+                variant="tertiary"
+                onClick={() => setIsLoading(true)}
+                loading={isLoading}
               >
-                <Button
-                  as="a"
-                  variant="tertiary"
-                  onClick={() => setIsLoading(true)}
-                  loading={isLoading}
-                >
-                  {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
-                </Button>
-              </Link>
-            </div>
-          </Modal.Content>
-        </Modal>
-      )}
+                {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
+              </Button>
+            </Link>
+          </div>
+        </Modal.Content>
+      </Modal>
 
-      {deleteProsessStatus !== "success" && (
-        <Modal
-          className="modal-container"
-          open={isOpen}
-          onClose={closeModal}
-          closeButton={true}
-          shouldCloseOnOverlayClick={true}
-        >
-          <Modal.Content>
-            <Heading size={"medium"} spacing>
-              {getAppText(getTitleTextKey(prosessType))}
-            </Heading>
+      <Modal
+        className="modal-container"
+        open={isOpen && deleteProsessStatus !== "success"}
+        onClose={closeModal}
+        closeButton={true}
+        shouldCloseOnOverlayClick={true}
+      >
+        <Modal.Content>
+          <Heading size={"medium"} spacing>
+            {getAppText(getTitleTextKey(prosessType))}
+          </Heading>
 
-            <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
+          <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
 
-            {deleteProsessStatus === "error" && (
-              <>
-                <Alert variant="error" className={styles.alertContainer}>
-                  {getAppText(getDeleteErrorTextKey(prosessType))}
-                </Alert>
+          {deleteProsessStatus === "error" && (
+            <>
+              <Alert variant="error" className={styles.alertContainer}>
+                {getAppText(getDeleteErrorTextKey(prosessType))}
+              </Alert>
 
-                <div className="modal-container__button-container">
-                  <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
-                    <Button as="a">
-                      {getAppText(getDeleteErrorPrimaryButtonTextKey(prosessType))}
-                    </Button>
-                  </Link>
-
-                  <Button variant={"tertiary"} onClick={closeModal}>
-                    {getAppText(getDeleteErrorSecondaryButtonTextKey(prosessType))}
-                  </Button>
-                </div>
-              </>
-            )}
-
-            {deleteProsessStatus !== "error" && (
               <div className="modal-container__button-container">
-                <Button
-                  variant={"danger"}
-                  onClick={() => deleteProsess(uuid)}
-                  loading={deleteProsessStatus === "pending"}
-                >
-                  {getAppText(getDeleteButtonTextKey(prosessType))}
-                </Button>
+                <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+                  <Button as="a">
+                    {getAppText(getDeleteErrorPrimaryButtonTextKey(prosessType))}
+                  </Button>
+                </Link>
+
                 <Button variant={"tertiary"} onClick={closeModal}>
-                  {getAppText(getDeleteCancelButtonTextKey(prosessType))}
+                  {getAppText(getDeleteErrorSecondaryButtonTextKey(prosessType))}
                 </Button>
               </div>
-            )}
-          </Modal.Content>
-        </Modal>
-      )}
+            </>
+          )}
+
+          {deleteProsessStatus !== "error" && (
+            <div className="modal-container__button-container">
+              <Button
+                variant={"danger"}
+                onClick={() => deleteProsess(uuid)}
+                loading={deleteProsessStatus === "pending"}
+              >
+                {getAppText(getDeleteButtonTextKey(prosessType))}
+              </Button>
+              <Button variant={"tertiary"} onClick={closeModal}>
+                {getAppText(getDeleteCancelButtonTextKey(prosessType))}
+              </Button>
+            </div>
+          )}
+        </Modal.Content>
+      </Modal>
     </>
   );
 }
