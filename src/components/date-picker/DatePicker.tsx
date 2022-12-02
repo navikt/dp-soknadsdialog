@@ -14,9 +14,9 @@ interface IDatePicker {
   warning?: string;
   error?: string;
   placeholder?: string;
-  onChange: (value: Date) => void;
+  onChange: (value: Date | null) => void;
   disabled?: boolean;
-  value?: string;
+  value?: string | null;
   min?: string;
   max?: string;
   required?: boolean;
@@ -50,23 +50,27 @@ export function DatePicker(props: IDatePicker) {
     const formattedDate = new Date(selectedDate);
     setIsEmptyDate(false);
 
-    if (!selectedDate && props.required) {
-      setDate(undefined);
-    } else if (isValidDate(formattedDate)) {
+    if (selectedDate && isValidDate(formattedDate)) {
       setDate(formattedDate);
       props.onChange(formattedDate);
-    } else {
-      setIsEmptyDate(false);
+    }
+
+    if (props.required && !selectedDate) {
+      setDate(undefined);
+      setIsEmptyDate(true);
+    }
+
+    if (!props.required && !selectedDate) {
+      setDate(undefined);
+      props.onChange(null);
     }
   }
 
   function onLeaveDate(event: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = event.target.value;
 
-    if (!selectedDate && props.required) {
-      setIsEmptyDate(true);
-      setDate(undefined);
-    }
+    setIsEmptyDate(!!props.required && !selectedDate);
+    setDate(selectedDate ? new Date(selectedDate) : undefined);
   }
 
   return (
