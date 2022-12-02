@@ -78,9 +78,9 @@ describe("DokumentkravBundleErrorModal", () => {
 
     expect(fetch.mock.calls.length).toEqual(1);
     expect(fetch.mock.calls[0][1]?.method).toEqual("PUT");
-    expect(fetch.mock.calls[0][0]).toContain("api/documentation/localhost-uuid/5678/svar");
+    expect(fetch.mock.calls[0][0]).toContain("api/documentation/svar");
 
-    expect(requestJson.svar).toBe("dokumentkrav.svar.send.senere");
-    expect(requestJson.begrunnelse).toBe("Teknisk feil på innsending av filer");
+    expect(requestJson.dokumentkravSvar.svar).toBe("dokumentkrav.svar.send.senere");
+    expect(requestJson.dokumentkravSvar.begrunnelse).toBe("Teknisk feil på innsending av filer");
   });
 });

@@ -224,8 +224,6 @@ describe("Dokumentkrav", () => {
 
       expect(fetch.mock.calls.length).toEqual(1);
       expect(fetch.mock.calls[0][1]?.method).toEqual("DELETE");
-
-      expect(requestJson.filnavn).toBe(fileToTest.filnavn);
       expect(requestJson.filsti).toBe(fileToTest.filsti);
     });
   });
