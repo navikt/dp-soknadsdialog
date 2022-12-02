@@ -19,6 +19,7 @@ import { useValidation } from "../../context/validation-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -28,7 +29,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, isError, isLoading, errorType } = useQuiz();
+  const { soknadState, isError, isLoading } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
 
@@ -143,7 +144,7 @@ export function Soknad(props: IProps) {
             {getAppText("soknad.auto-lagret.tekst")}
           </p>
         )}
-        {isError && <ErrorRetryModal errorType={errorType} />}
+        {isError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
 
         <ExitSoknad />
         <NoSessionModal />

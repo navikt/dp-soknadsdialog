@@ -9,7 +9,7 @@ import {
 import { getSession } from "../../../../../../auth.utils";
 import { logRequestError } from "../../../../../../sentry.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
-import { headersWithToken } from "../../../../quiz-api";
+import { headersWithToken } from "../../../../../../api/quiz-api";
 import Metrics from "../../../../../../metrics";
 
 // Needed to allow files to be uploaded

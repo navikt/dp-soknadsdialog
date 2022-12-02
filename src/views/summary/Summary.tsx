@@ -16,6 +16,8 @@ import { useSanity } from "../../context/sanity-context";
 import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Summary.module.css";
+import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
+import { Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 interface IProps {
   soknadState: IQuizState;
@@ -33,9 +35,7 @@ export function Summary({ soknadState }: IProps) {
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
 
-  const [finishSoknad, finishSoknadStatus] = usePutRequest(
-    `soknad/${uuid}/ferdigstill?locale=${router.locale}`
-  );
+  const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
 
   useEffect(() => {
     if (showSoknadNotCompleteError) {
@@ -60,7 +60,8 @@ export function Summary({ soknadState }: IProps) {
       return;
     }
 
-    finishSoknad();
+    const locale = router.locale as Locale | undefined;
+    finishSoknad({ uuid, locale });
   }
 
   function navigateToDocumentation() {

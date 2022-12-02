@@ -6,6 +6,7 @@ import { useUuid } from "../../hooks/useUuid";
 import { useDeleteRequest } from "../../hooks/useDeleteRequest";
 import styles from "./ExitSoknad.module.css";
 import { QuizProsess } from "../../types/quiz.types";
+import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 
 interface IProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
-    useDeleteRequest("soknad/delete");
+    useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -108,7 +109,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               <div className="modal-container__button-container">
                 <Button
                   variant={"danger"}
-                  onClick={() => deleteProsess(uuid)}
+                  onClick={() => deleteProsess({ uuid })}
                   loading={deleteProsessStatus === "pending"}
                 >
                   {getAppText(getDeleteButtonTextKey(prosessType))}

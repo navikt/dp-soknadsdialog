@@ -3,7 +3,7 @@ import { Summary } from "../../../views/summary/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadState } from "../../api/quiz-api";
+import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";

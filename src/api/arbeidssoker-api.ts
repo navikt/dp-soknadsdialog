@@ -4,6 +4,7 @@ import { formatISO } from "date-fns";
 import { decodeJwt } from "@navikt/dp-auth";
 import { getSession } from "../auth.utils";
 
+export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 export interface IArbeidssokerperioder {
   arbeidssokerperioder: [
     {

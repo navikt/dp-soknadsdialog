@@ -16,18 +16,6 @@ export const GENERIC_ERROR_DETAILS: IErrorDetails = {
 export function useFetchRequest<T, U>(
   url: string,
   method: FetchMethod,
-  parseResponse: true
-): [(body?: T) => Promise<U | undefined>, FetchStatus, IErrorDetails, () => void];
-
-export function useFetchRequest<T>(
-  url: string,
-  method: FetchMethod,
-  parseResponse?: false
-): [(body?: T) => Promise<boolean>, FetchStatus, IErrorDetails, () => void];
-
-export function useFetchRequest<T, U>(
-  url: string,
-  method: FetchMethod,
   parseResponse?: boolean
 ): [(body?: T) => Promise<boolean | U>, FetchStatus, IErrorDetails, () => void];
 

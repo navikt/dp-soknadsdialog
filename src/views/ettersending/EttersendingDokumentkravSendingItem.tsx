@@ -56,7 +56,7 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
         <div className="my-3">
           {`${getAppText(ETTERSENDING_DOKUMENTER_TEKST_TIDLIGERE_SENDT)} `}
           <Link
-            href={api(`/documentation/download/${props.dokumentkrav.bundleFilsti}`)}
+            href={api(`/documentation/download-file/${props.dokumentkrav.bundleFilsti}`)}
             rel="noreferrer"
             target="_blank"
           >

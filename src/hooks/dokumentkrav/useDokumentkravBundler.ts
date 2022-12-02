@@ -1,8 +1,9 @@
-import { useRouter } from "next/router";
 import { useState } from "react";
-import { bundleDokumentkravFiles } from "../../api/dokumentasjon-api";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { IDokumentkrav } from "../../types/documentation.types";
+import { usePutRequest } from "../usePutRequest";
+import { IDocumentationBundleBody } from "../../pages/api/documentation/bundle";
+import { useUuid } from "../useUuid";
 
 interface IUseDokumentkravBundler {
   bundleFiles: (list: IDokumentkrav[]) => void;
@@ -12,11 +13,11 @@ interface IUseDokumentkravBundler {
 }
 
 export function useDokumentkravBundler(): IUseDokumentkravBundler {
-  const router = useRouter();
-  const { uuid } = router.query;
-
+  const { uuid } = useUuid();
   const [isBundling, setIsBundling] = useState(false);
   const [bundleErrors, setBundleErrors] = useState<IDokumentkrav[]>([]);
+  const [bundleAndSaveDokumentkravPut] =
+    usePutRequest<IDocumentationBundleBody>("documentation/bundle");
 
   async function bundleFiles(dokumentkravList: IDokumentkrav[]) {
     setBundleErrors([]);
@@ -35,12 +36,13 @@ export function useDokumentkravBundler(): IUseDokumentkravBundler {
 
     for (const dokumentkrav of dokumentkravToBundle) {
       if (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0) {
-        try {
-          const response = await bundleDokumentkravFiles(uuid as string, dokumentkrav);
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-        } catch {
+        const responseOk = await bundleAndSaveDokumentkravPut({
+          uuid,
+          dokumentkravId: dokumentkrav.id,
+          fileUrns: dokumentkrav.filer.map((file) => ({ urn: file.urn })),
+        });
+
+        if (!responseOk) {
           tempErrorList.push(dokumentkrav);
         }
       }

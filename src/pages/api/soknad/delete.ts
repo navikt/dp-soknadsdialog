@@ -1,10 +1,13 @@
 import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../api.utils";
-import { headersWithToken } from "../quiz-api";
+import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
+import { headersWithToken } from "../../../api/quiz-api";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
-import { DELETE_SOKNAD_ERROR } from "../../../sentry-constants";
+
+export interface IDeleteSoknadBody {
+  uuid: string;
+}
 
 async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -12,29 +15,28 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const session = await getSession(req);
-  const uuid = req.body;
-
   if (!session) {
     return res.status(401).end();
   }
 
+  const { uuid } = req.body;
   try {
     const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
-
     const deleteSoknadResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}`, {
       method: "DELETE",
       headers: headersWithToken(onBehalfOfToken),
     });
 
     if (!deleteSoknadResponse.ok) {
-      logRequestError(DELETE_SOKNAD_ERROR, uuid);
-      throw new Error("Feil ved sletting av soknad fra dp-soknad");
+      logRequestError(deleteSoknadResponse.statusText, uuid);
+      return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
     }
 
     return res.json(deleteSoknadResponse);
   } catch (error) {
-    logRequestError(DELETE_SOKNAD_ERROR, uuid);
-    return res.status(500).send(error);
+    const message = getErrorMessage(error);
+    logRequestError(message, uuid);
+    return res.status(500).send(message);
   }
 }
 

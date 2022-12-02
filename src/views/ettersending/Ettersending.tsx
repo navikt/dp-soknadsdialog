@@ -31,6 +31,7 @@ import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-ge
 import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
+import { IEttersendBody } from "../../pages/api/soknad/ettersend";
 import styles from "../receipt/Receipts.module.css";
 
 interface IProps {
@@ -45,7 +46,8 @@ export function Ettersending(props: IProps) {
   const { getAppText, getInfosideText } = useSanity();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
-  const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
+  const [ettersendSoknad, ettersendSoknadStatus] =
+    usePutRequest<IEttersendBody>(`soknad/ettersend`);
   const {
     isBundling,
     noDocumentsToSave,
@@ -93,7 +95,7 @@ export function Ettersending(props: IProps) {
       }
 
       if (readyToEttersend) {
-        ettersendSoknad();
+        ettersendSoknad({ uuid });
       }
     }
   }

@@ -1,13 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../../quiz-api";
 import { withSentry } from "@sentry/nextjs";
-import { audienceDPSoknad, audienceMellomlagring } from "../../../../../../api.utils";
-import { getSession } from "../../../../../../auth.utils";
-import { logRequestError } from "../../../../../../sentry.logger";
-import {
-  DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR,
-  DELETE_FILE_FROM_DP_SOKNAD_ERROR,
-} from "../../../../../../sentry-constants";
+import { getSession } from "../../../../auth.utils";
+import { logRequestError } from "../../../../sentry.logger";
+import { headersWithToken } from "../../../../api/quiz-api";
+import { audienceDPSoknad, audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
+import { DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR } from "../../../../sentry-constants";
+
+export interface IDeleteFileBody {
+  uuid: string;
+  dokumentkravId: string;
+  filsti: string;
+}
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -15,13 +18,11 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const session = await getSession(req);
-
   if (!session) {
     return res.status(401).end();
   }
 
-  const uuid = req.query.uuid as string;
-  const dokumentkravId = req.query.dokumentkravId as string;
+  const { uuid, dokumentkravId, filsti } = req.body;
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
@@ -30,12 +31,12 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       DPSoknadToken,
-      req.body.filsti
+      filsti
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(DELETE_FILE_FROM_DP_SOKNAD_ERROR, uuid);
-      throw new Error("Feil ved sletting i dp-soknad");
+      logRequestError(dpSoknadResponse.statusText, uuid);
+      return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     const mellomlagringResponse = await deleteFileFromMellomlagring(
@@ -48,9 +49,11 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
       logRequestError(DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR, uuid);
     }
 
-    return res.status(dpSoknadResponse.status).end();
+    return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
   } catch (error) {
-    return res.status(500).json(error);
+    const message = getErrorMessage(error);
+    logRequestError(message);
+    return res.status(500).send(message);
   }
 }
 

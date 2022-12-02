@@ -1,10 +1,14 @@
 import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../../api.utils";
-import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../sentry.logger";
-import { headersWithToken } from "../../quiz-api";
-import { ETTERSENDING_ERROR } from "./../../../../sentry-constants";
+import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
+import { getSession } from "../../../auth.utils";
+import { logRequestError } from "../../../sentry.logger";
+import { headersWithToken } from "../../../api/quiz-api";
+import { ETTERSENDING_ERROR } from "../../../sentry-constants";
+
+export interface IEttersendBody {
+  uuid: string;
+}
 
 async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
@@ -12,7 +16,7 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const session = await getSession(req);
-  const uuid = req.query.uuid as string;
+  const { uuid } = req.body;
 
   if (!session) {
     return res.status(401).end();
@@ -31,8 +35,9 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     }
     return res.status(ettersendResponse.status).end();
   } catch (error: unknown) {
-    logRequestError(ETTERSENDING_ERROR, uuid);
-    return res.status(500).send(error);
+    const message = getErrorMessage(error);
+    logRequestError(message, uuid);
+    return res.status(500).send(message);
   }
 }
 

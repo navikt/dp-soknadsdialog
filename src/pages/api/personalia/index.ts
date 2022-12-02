@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
-import { GET_PERSONALIA_ERROR } from "../../../sentry-constants";
 
 export function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;
@@ -20,7 +19,6 @@ export function getPersonalia(onBehalfOfToken: string) {
 const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getSession(req);
-
     if (!session) {
       return res.status(401).end();
     }
@@ -29,14 +27,15 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
-      logRequestError(GET_PERSONALIA_ERROR);
-      throw new Error(`unexpected response ${response.statusText}`);
+      logRequestError(response.statusText);
+      return res.status(response.status).send(response.statusText);
     }
 
-    return res.json(response);
+    return res.status(response.status).json(response);
   } catch (error) {
-    logRequestError(GET_PERSONALIA_ERROR);
-    return res.status(500).send(error);
+    const message = getErrorMessage(error);
+    logRequestError(message);
+    return res.status(500).send(message);
   }
 };
 

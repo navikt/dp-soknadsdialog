@@ -12,10 +12,9 @@ import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status
 import { ReceiptDocumentsNotSending } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDocumentsUploaded } from "../../components/receipt-documents-uploaded/ReceiptDocumentsUploaded";
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
-import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
-import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
-import { IQuizSeksjon } from "../../types/quiz.types";
+import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
+import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";

@@ -15,14 +15,15 @@ import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../file-list/FileList";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import styles from "./Dokumentkrav.module.css";
-import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
-import { useRouter } from "next/router";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { DokumentkravTitle } from "./DokumentkravTitle";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { AlertText } from "../alert-text/AlertText";
+import { usePutRequest } from "../../hooks/usePutRequest";
+import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
+import { useUuid } from "../../hooks/useUuid";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -32,8 +33,7 @@ interface IProps {
 }
 
 export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationError }: IProps) {
-  const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid } = useUuid();
   const isFirstRender = useFirstRender();
 
   const [svar, setSvar] = useState(dokumentkrav.svar);
@@ -43,7 +43,7 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(dokumentkrav.filer);
   const { getDokumentkravTextById, getDokumentkravSvarTextById, getAppText } = useSanity();
-
+  const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody>("documentation/svar");
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   useEffect(() => {
@@ -66,20 +66,21 @@ export function Dokumentkrav({ dokumentkrav, onChange, bundleError, validationEr
   }, [svar, begrunnelse, uploadedFiles]);
 
   async function save() {
-    try {
-      if (!svar) {
-        throw new Error("Mangler svar");
-      }
+    if (svar === undefined) {
+      setHasError(true);
+      return;
+    }
 
-      const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+    const responseOk = await saveDokumentkravSvar({
+      uuid,
+      dokumentkravId: dokumentkrav.id,
+      dokumentkravSvar: {
         svar,
         begrunnelse,
-      });
+      },
+    });
 
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-    } catch (error) {
+    if (!responseOk) {
       setHasError(true);
     }
   }

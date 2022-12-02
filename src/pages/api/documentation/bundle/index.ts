@@ -6,14 +6,14 @@ import {
   audienceDPSoknad,
   audienceMellomlagring,
   getErrorMessage,
-} from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
+} from "../../../../api.utils";
+import { getSession } from "../../../../auth.utils";
 import {
   BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
   SEND_BUNBLE_TO_DP_SOKNAD_ERROR as SEND_BUNDLE_TO_DP_SOKNAD_ERROR,
-} from "../../../sentry-constants";
-import { logRequestError } from "../../../sentry.logger";
-import { headersWithToken } from "../quiz-api";
+} from "../../../../sentry-constants";
+import { logRequestError } from "../../../../sentry.logger";
+import { headersWithToken } from "../../../../api/quiz-api";
 
 export interface IDocumentationBundleBody {
   uuid: string;

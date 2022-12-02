@@ -2,7 +2,7 @@ import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-li
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
-import { headersWithToken } from "../../quiz-api";
+import { headersWithToken } from "../../../../api/quiz-api";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../sentry.logger";
 import { GET_DOKUMENTKRAV_ERROR } from "../../../../sentry-constants";

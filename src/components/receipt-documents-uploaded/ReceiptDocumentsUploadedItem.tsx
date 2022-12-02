@@ -17,7 +17,7 @@ export function ReceiptDocumentsUploadedItem({ dokumentkrav }: IProps) {
     <div className={styles.documentItem}>
       <div>
         <Link
-          href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
+          href={api(`/documentation/download-file/${dokumentkrav.bundleFilsti}`)}
           rel="noreferrer"
           target="_blank"
         >

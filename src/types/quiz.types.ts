@@ -117,3 +117,16 @@ export interface IMineSoknader {
   paabegynt?: IPaabegyntSoknad;
   innsendte?: IInnsentSoknad[];
 }
+
+export type ISoknadStatuser =
+  | "Paabegynt"
+  | "UnderBehandling"
+  | "FerdigBehandlet"
+  | "ManglerDokumenter"
+  | "Ukjent";
+
+export interface ISoknadStatus {
+  status: ISoknadStatuser;
+  opprettet?: string;
+  innsendt?: string;
+}

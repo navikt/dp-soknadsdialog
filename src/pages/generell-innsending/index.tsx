@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import ErrorPage from "../_error";
-import { createInnsendingUuid } from "../api/quiz-api";
+import { createInnsendingUuid } from "../../api/quiz-api";
 import { audienceDPSoknad } from "../../api.utils";
 import { getSession } from "../../auth.utils";
 

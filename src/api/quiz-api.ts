@@ -1,4 +1,5 @@
-import { quizMalResponse } from "../../localhost-data/quiz-mal-response";
+import { quizMalResponse } from "../localhost-data/quiz-mal-response";
+import { formatISO, subDays } from "date-fns";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -29,6 +30,22 @@ export function createSoknadUuid(onBehalfOfToken: string) {
   return fetch(url, {
     method: "POST",
     headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
+export function getMineSoknader(onBehalfOfToken: string) {
+  // Finn ut hvor mange dager tilbake i tid vi skal ha
+  const fromDate = subDays(Date.now(), 3);
+  const formattedDate = formatISO(fromDate, { representation: "date" });
+
+  const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formattedDate}`;
+  return fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
   });
