@@ -24,8 +24,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { getErrorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const [debouncedDate, setDebouncedText] = useState(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setDebouncedText, 500);
+  const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
   useEffect(() => {
     if (!isFirstRender && debouncedDate !== faktum.svar) {

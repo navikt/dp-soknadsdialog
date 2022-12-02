@@ -18,6 +18,7 @@ import periodeStyles from "./FaktumPeriode.module.css";
 import { FormattedDate } from "../FormattedDate";
 import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 
 interface IDateRange {
   from: Date | undefined;
@@ -36,6 +37,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const [currentAnswer, setCurrentAnswer] = useState<
     IQuizPeriodeFaktumAnswerType | undefined | null
   >(faktum.svar);
+  const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
+  const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
 
   const beskrivendeIdFra = `${faktum.beskrivendeId}.fra`;
   const beskrivendeIdTil = `${faktum.beskrivendeId}.til`;
@@ -43,6 +46,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const faktumTextFra = getAppText(beskrivendeIdFra);
   const faktumTextTil = getAppText(beskrivendeIdTil);
+
+  useEffect(() => {
+    if (!isFirstRender && debouncedPeriode !== faktum.svar) {
+      onChange ? onChange(faktum, debouncedPeriode) : saveFaktum(debouncedPeriode);
+    }
+  }, [debouncedPeriode]);
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
@@ -59,6 +68,46 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     }
 
     return undefined;
+  }
+
+  const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
+    defaultSelected: getInitialRangeDateValue(),
+    onRangeChange: (value?: IDateRange) => handleDateChange(value),
+  });
+
+  function handleDateChange(value?: IDateRange) {
+    if (!value || (value && !value.from)) {
+      setCurrentAnswer(undefined);
+      debouncedChange(null);
+    }
+
+    if (value && value.from) {
+      if (!value.to) {
+        const parsedFromDate = formatISO(value.from, { representation: "date" });
+        const period = { fom: parsedFromDate };
+
+        setCurrentAnswer(period);
+        debouncedChange(period);
+      }
+
+      if (value.to) {
+        const parsedFromDate = formatISO(value.from, { representation: "date" });
+        const parsedToDate = formatISO(value.to, { representation: "date" });
+        const period = { fom: parsedFromDate, tom: parsedToDate };
+        setCurrentAnswer(period);
+        debouncedChange(period);
+      }
+    }
+  }
+
+  function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null | undefined) {
+    if (!value) {
+      saveFaktumToQuiz(faktum, null);
+    }
+
+    if (value && isValid(value)) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   if (faktum.readOnly || props.readonly) {
@@ -86,52 +135,6 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
       </div>
     );
   }
-
-  function handleDateChange(value?: IDateRange) {
-    if (!value) {
-      setCurrentAnswer(undefined);
-      return;
-    }
-
-    if (value && !value.from) {
-      setCurrentAnswer(undefined);
-      onChange ? onChange(faktum, null) : saveFaktum(null);
-    }
-
-    if (value && value.from) {
-      if (!value.to) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const period = { fom: parsedFromDate };
-
-        setCurrentAnswer(period);
-        onChange ? onChange(faktum, period) : saveFaktum(period);
-      }
-
-      if (value.to) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const parsedToDate = formatISO(value.to, { representation: "date" });
-        const period = { fom: parsedFromDate, tom: parsedToDate };
-
-        setCurrentAnswer(period);
-        onChange ? onChange(faktum, period) : saveFaktum(period);
-      }
-    }
-  }
-
-  function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null) {
-    if (!value) {
-      saveFaktumToQuiz(faktum, null);
-    }
-
-    if (value && isValid(value)) {
-      saveFaktumToQuiz(faktum, value);
-    }
-  }
-
-  const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
-    defaultSelected: getInitialRangeDateValue(),
-    onRangeChange: (value?: IDateRange) => handleDateChange(value),
-  });
 
   return (
     <div className={periodeStyles.faktumPeriode}>
