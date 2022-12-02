@@ -32,7 +32,7 @@ describe("FaktumPeriode", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and datepicker", async () => {
+  test.skip("Should show faktum question and datepicker", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -53,7 +53,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  test("Should show preselected faktum answer if it's already selected", async () => {
+  test.skip("Should show preselected faktum answer if it's already selected", async () => {
     const svar = { fom: "2022-08-04", tom: "2022-08-06" };
     faktumMockData.svar = svar;
 
@@ -82,7 +82,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects an answer", () => {
-    test("Should post the answer to the server", async () => {
+    test.skip("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       const onchange = jest.fn();
