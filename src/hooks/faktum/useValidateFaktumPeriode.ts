@@ -33,15 +33,18 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
         faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode"
       ) {
         setHasFomError(!isValidFromDate ? "InvalidDate" : undefined);
-      } else if (!isValidFromDate) {
-        setHasFomError("InvalidDate");
-      } else if (future) {
-        setHasFomError("FutureDate");
+        validPeriode = isValidFromDate;
       } else {
-        setHasFomError(undefined);
-      }
+        if (!isValidFromDate) {
+          setHasFomError("InvalidDate");
+        } else if (future) {
+          setHasFomError("FutureDate");
+        } else {
+          setHasFomError(undefined);
+        }
 
-      validPeriode = !future && isValidFromDate;
+        validPeriode = !future && isValidFromDate;
+      }
     }
 
     if (tom) {
