@@ -36,7 +36,6 @@ export function createSoknadUuid(onBehalfOfToken: string) {
 }
 
 export function getMineSoknader(onBehalfOfToken: string) {
-  // Finn ut hvor mange dager tilbake i tid vi skal ha
   const fromDate = subDays(Date.now(), 3);
   const formattedDate = formatISO(fromDate, { representation: "date" });
 
