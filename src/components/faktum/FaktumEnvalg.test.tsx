@@ -1,12 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumEnvalg } from "./FaktumEnvalg";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
+import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
+import { SetupContext } from "../../__mocks__/SetupContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -28,25 +25,15 @@ const sectionMockData: IQuizSeksjon = {
   ferdig: true,
 };
 
-const soknadStateMockData: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("FaktumEnvalg", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumEnvalg faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumEnvalg faktum={faktumMockData} />
+      </SetupContext>
     );
 
     await waitFor(() => {
@@ -62,13 +49,9 @@ describe("FaktumEnvalg", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumEnvalg faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumEnvalg faktum={faktumMockData} />
+      </SetupContext>
     );
 
     // Casting it to access the value attribute
@@ -86,13 +69,9 @@ describe("FaktumEnvalg", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumEnvalg faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <SetupContext quizSeksjoner={[sectionMockData]}>
+          <FaktumEnvalg faktum={faktumMockData} onChange={onchange} />
+        </SetupContext>
       );
 
       const firstRadio = screen.getByLabelText(svar);

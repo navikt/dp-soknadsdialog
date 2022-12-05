@@ -1,13 +1,10 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumLand } from "./FaktumLand";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
+import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { getCountryName } from "../../country.utils";
-import { ValidationProvider } from "../../context/validation-context";
+import { SetupContext } from "../../__mocks__/SetupContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",
@@ -76,25 +73,15 @@ const sectionMockData: IQuizSeksjon = {
   ferdig: true,
 };
 
-const soknadStateMockData: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("FaktumLand", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumLand faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumLand faktum={faktumMockData} />
+      </SetupContext>
     );
 
     const option1 = getCountryName(faktumMockData.gyldigeLand[0], "no");
@@ -114,13 +101,9 @@ describe("FaktumLand", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumLand faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumLand faktum={faktumMockData} />
+      </SetupContext>
     );
 
     // Casting it to access the value attribute
@@ -140,13 +123,9 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumLand faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <SetupContext quizSeksjoner={[sectionMockData]}>
+          <FaktumLand faktum={faktumMockData} onChange={onchange} />
+        </SetupContext>
       );
 
       const selectedOptionText = getCountryName(svar, "no");
@@ -166,21 +145,14 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumLand faktum={faktumMockDataBostedsland} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <SetupContext quizSeksjoner={[sectionMockData]}>
+          <FaktumLand faktum={faktumMockDataBostedsland} onChange={onchange} />
+        </SetupContext>
       );
 
       await waitFor(() => {
         const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
         expect(selectedOption.value).toEqual(svar);
-      });
-
-      await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockDataBostedsland, svar);
       });

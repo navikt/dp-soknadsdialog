@@ -1,12 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumText } from "./FaktumText";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizTekstFaktum, IQuizSeksjon, IQuizState } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
+import { IQuizTekstFaktum, IQuizSeksjon } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
+import { SetupContext } from "../../__mocks__/SetupContext";
 
 const faktumMockData: IQuizTekstFaktum = {
   id: "8004.1",
@@ -24,25 +21,15 @@ const sectionMockData: IQuizSeksjon = {
   ferdig: true,
 };
 
-const soknadStateMockData: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("FaktumText", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumText faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumText faktum={faktumMockData} />
+      </SetupContext>
     );
 
     await waitFor(() => {
@@ -55,13 +42,9 @@ describe("FaktumText", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumText faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <SetupContext quizSeksjoner={[sectionMockData]}>
+        <FaktumText faktum={faktumMockData} />
+      </SetupContext>
     );
 
     // Casting it to access the value attribute
@@ -79,13 +62,9 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumText faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <SetupContext quizSeksjoner={[sectionMockData]}>
+          <FaktumText faktum={faktumMockData} onChange={onchange} />
+        </SetupContext>
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -96,7 +75,7 @@ describe("FaktumText", () => {
         expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
-    
+
     test.skip("Should show error on invalid input", async () => {
       const inValidTextLengthMock =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like.";
@@ -105,13 +84,9 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumText faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <SetupContext quizSeksjoner={[sectionMockData]}>
+          <FaktumText faktum={faktumMockData} onChange={onchange} />
+        </SetupContext>
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;

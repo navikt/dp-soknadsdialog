@@ -8,18 +8,17 @@ import {
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Dokumentkrav } from "./Dokumentkrav";
-import { SanityProvider } from "../../context/sanity-context";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
+import { SetupContext } from "../../__mocks__/SetupContext";
 
 describe("Dokumentkrav", () => {
   test("Should show dokumentkrav title", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SetupContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SanityProvider>
+      </SetupContext>
     );
 
     await waitFor(() => {
@@ -31,9 +30,9 @@ describe("Dokumentkrav", () => {
 
   test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SetupContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SanityProvider>
+      </SetupContext>
     );
 
     await waitFor(() => {
@@ -46,9 +45,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SetupContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SanityProvider>
+      </SetupContext>
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -62,9 +61,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SetupContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SanityProvider>
+      </SetupContext>
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -79,9 +78,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SetupContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SanityProvider>
+      </SetupContext>
     );
 
     await user.click(screen.getByLabelText("dokumentkrav.svar.sender.ikke"));
@@ -138,9 +137,9 @@ describe("Dokumentkrav", () => {
         const user = userEvent.setup();
 
         render(
-          <SanityProvider initialState={sanityMocks}>
+          <SetupContext>
             <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-          </SanityProvider>
+          </SetupContext>
         );
 
         const file = new File(["file"], "image.jpg", {
@@ -163,9 +162,9 @@ describe("Dokumentkrav", () => {
       const user = userEvent.setup();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
+        <SetupContext>
           <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-        </SanityProvider>
+        </SetupContext>
       );
 
       const file = new File(["file"], "image.json", {
@@ -180,7 +179,6 @@ describe("Dokumentkrav", () => {
       expect(
         await screen.findByText("filopplaster.feilmelding.format-storrelse-beskrivelse")
       ).toBeInTheDocument();
-
       expect(fetch.mock.calls.length).toEqual(0);
     });
   });
@@ -206,9 +204,9 @@ describe("Dokumentkrav", () => {
       const user = userEvent.setup();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
+        <SetupContext>
           <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-        </SanityProvider>
+        </SetupContext>
       );
 
       expect(await screen.findByText(fileToTest.filnavn)).toBeInTheDocument();
