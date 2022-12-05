@@ -1,0 +1,77 @@
+import React from "react";
+import { render, waitFor, screen } from "@testing-library/react";
+import { StartSoknad } from "./StartSoknad";
+import userEvent from "@testing-library/user-event";
+import { mockSoknadState, SetupContext } from "../../__mocks__/SetupContext";
+import fetch from "jest-fetch-mock";
+
+jest.mock("../../session.utils", () => {
+  return {
+    useSession: jest.fn(() => ({
+      session: { expiresIn: 1234 },
+      isLoading: false,
+      isError: false,
+    })),
+  };
+});
+
+describe("StartSoknad", () => {
+  beforeEach(() => {
+    fetch.enableMocks();
+  });
+
+  afterEach(() => {
+    fetch.mockReset();
+  });
+
+  test("Should show error message if user tries to start application without consenting", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <SetupContext>
+        <StartSoknad />
+      </SetupContext>
+    );
+
+    const startApplicationButton = screen.getByRole("button", {
+      name: "start-soknad.knapp.start",
+    });
+
+    user.click(startApplicationButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
+      ).toBeInTheDocument();
+
+      expect(fetch.mock.calls.length).toBe(0);
+    });
+  });
+
+  test("Should start an application", async () => {
+    fetch.mockResponseOnce("localhost-uuid", { status: 200, statusText: "OK" });
+    const user = userEvent.setup();
+
+    const quizState = { ...mockSoknadState };
+    quizState.ferdig = true;
+
+    render(
+      <SetupContext soknadState={quizState}>
+        <StartSoknad />
+      </SetupContext>
+    );
+
+    const consentCheckbox = screen.getByRole("checkbox");
+
+    const sendApplicationButton = screen.getByRole("button", {
+      name: "start-soknad.knapp.start",
+    });
+
+    user.click(consentCheckbox);
+    user.click(sendApplicationButton);
+
+    await waitFor(() => {
+      expect(fetch.mock.calls.length).toBe(1);
+    });
+  });
+});
