@@ -4,7 +4,6 @@ import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
 import { headersWithToken } from "../../../api/quiz-api";
-import { ETTERSENDING_ERROR } from "../../../sentry-constants";
 
 export interface IEttersendBody {
   uuid: string;
@@ -30,7 +29,7 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ettersendResponse.ok) {
-      logRequestError(ETTERSENDING_ERROR, uuid);
+      logRequestError(ettersendResponse.statusText, uuid);
       return res.status(ettersendResponse.status).send(ettersendResponse.statusText);
     }
     return res.status(ettersendResponse.status).end();

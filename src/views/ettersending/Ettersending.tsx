@@ -46,7 +46,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
   const [ettersendSoknad, ettersendSoknadStatus] =
-    usePutRequest<IEttersendBody>(`soknad/ettersend`);
+    usePutRequest<IEttersendBody>("soknad/ettersend");
   const {
     isBundling,
     noDocumentsToSave,

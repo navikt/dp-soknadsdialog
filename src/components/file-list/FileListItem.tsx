@@ -36,7 +36,7 @@ export function FileListItem({ file, dokumentkravId, handleUploadedFiles }: IPro
     <li className={styles.fileItem}>
       <div>
         <Link
-          href={api(`/documentation/download-file/${file.filsti}`)}
+          href={api(`/documentation/download/${file.filsti}`)}
           download={file.filnavn}
           id={file.filsti}
         >

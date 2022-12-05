@@ -5,7 +5,7 @@ import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
 
-async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
+async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {
     return res.status(200).send("localhost-uuid");
   }
@@ -33,4 +33,4 @@ async function getUuidHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(getUuidHandler);
+export default withSentry(uuidHandler);

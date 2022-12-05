@@ -6,10 +6,10 @@ import {
   audienceDPSoknad,
   audienceMellomlagring,
   getErrorMessage,
-} from "../../../../api.utils";
-import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../sentry.logger";
-import { headersWithToken } from "../../../../api/quiz-api";
+} from "../../../api.utils";
+import { getSession } from "../../../auth.utils";
+import { logRequestError } from "../../../sentry.logger";
+import { headersWithToken } from "../../../api/quiz-api";
 
 export interface IDocumentationBundleBody {
   uuid: string;

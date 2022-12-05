@@ -58,7 +58,7 @@ export function GenerellInnsending() {
   } = useEttersending();
   const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody>("documentation/svar");
   const [ferdigstillInnsending, ferdigstillInnsendingStatus] =
-    usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
+    usePutRequest<IFerdigstillBody>("soknad/ferdigstill");
 
   useEffect(() => {
     if (unansweredFaktumId) {

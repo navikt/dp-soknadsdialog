@@ -1,9 +1,8 @@
-import { GET_MELLOMLARING_DOKUMENT_ERROR } from "../../../../sentry-constants";
+import fs from "fs";
+import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
-import fs from "fs";
-import path from "path";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../sentry.logger";
 
@@ -27,10 +26,10 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const { slug } = req.query;
-  // slug will always be an array when [...] is used https://nextjs.org/docs/api-routes/dynamic-api-routes
+  const { params } = req.query;
+  // params will always be an array when [...] is used https://nextjs.org/docs/api-routes/dynamic-api-routes
   // @ts-ignore
-  const urn = slug.join("/");
+  const urn = params.join("/");
 
   try {
     const onBehalfOfToken = await session.apiToken(audienceMellomlagring);
@@ -41,7 +40,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!response.ok) {
-      logRequestError(GET_MELLOMLARING_DOKUMENT_ERROR);
+      logRequestError(response.statusText);
       return res.status(response.status).send(response.statusText);
     }
 
