@@ -8,10 +8,6 @@ import {
   getErrorMessage,
 } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
-import {
-  BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
-  SEND_BUNBLE_TO_DP_SOKNAD_ERROR as SEND_BUNDLE_TO_DP_SOKNAD_ERROR,
-} from "../../../../sentry-constants";
 import { logRequestError } from "../../../../sentry.logger";
 import { headersWithToken } from "../../../../api/quiz-api";
 
@@ -30,15 +26,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const requestIdHeader = req.headers["x-request-id"];
-  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();
   }
 
   const { uuid, dokumentkravId, fileUrns } = req.body;
+  const requestIdHeader = req.headers["x-request-id"];
+  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
@@ -49,7 +44,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       requestId
     );
     if (!mellomlagringResponse.ok) {
-      logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR);
+      logRequestError(mellomlagringResponse.statusText);
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
@@ -63,7 +58,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(SEND_BUNDLE_TO_DP_SOKNAD_ERROR);
+      logRequestError(dpSoknadResponse.statusText);
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 

@@ -4,7 +4,6 @@ import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../sentry.logger";
 import { headersWithToken } from "../../../../api/quiz-api";
 import { audienceDPSoknad, audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
-import { DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR } from "../../../../sentry-constants";
 
 export interface IDeleteFileBody {
   uuid: string;
@@ -42,11 +41,11 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     const mellomlagringResponse = await deleteFileFromMellomlagring(
       uuid,
       mellomlagringToken,
-      req.body.filsti
+      filsti
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(DELETE_FILE_FROM_DP_MELLOMLAGRING_ERROR, uuid);
+      logRequestError(mellomlagringResponse.statusText, uuid);
     }
 
     return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
