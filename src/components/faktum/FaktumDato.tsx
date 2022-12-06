@@ -26,6 +26,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
   const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
+  const [hasInvalidReselectedDate, setInvalidReselectedDate] = useState(false);
 
   useEffect(() => {
     if (!isFirstRender && debouncedDate !== faktum.svar) {
@@ -50,10 +51,12 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
 
   function saveFaktum(value: string | null | undefined) {
     if (!value || value === "") {
+      setInvalidReselectedDate(true);
       saveFaktumToQuiz(faktum, null);
     }
 
     if (value && isValid(new Date(value))) {
+      setInvalidReselectedDate(false);
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -87,14 +90,20 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
           id={props.faktum.beskrivendeId}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={datePickerDescription}
-          error={getErrorMessage()}
+          error={
+            hasInvalidReselectedDate ? getAppText("validering.ugyldig-dato") : getErrorMessage()
+          }
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
       {hasWarning && (
-        <Alert variant="warning" className={styles.faktumDatoWarningSpacing}>
+        <Alert
+          data-testid="faktum.soknadsdato-varsel"
+          variant="warning"
+          className={styles.faktumDatoWarningSpacing}
+        >
           {getAppText("validering.dato-faktum.soknadsdato-varsel")}
         </Alert>
       )}

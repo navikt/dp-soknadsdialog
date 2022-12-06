@@ -84,6 +84,7 @@
     "lint-staged": "^13.0.3",
     "node-mocks-http": "^1.11.0",
     "prettier": "^2.7.1",
+    "resize-observer-polyfill": "^1.5.1",
     "typescript": "^4.7.4"
   }
 }
