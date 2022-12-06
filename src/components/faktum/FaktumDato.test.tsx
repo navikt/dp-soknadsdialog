@@ -124,7 +124,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user seleted an date three weeks from now", () => {
+  describe("When user selet a date three weeks from now", () => {
     test("Should post seleted date to server and display warning message", async () => {
       const threeWeeksFromNow = addWeeks(new Date(), 3);
       const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy"); // eg: 20.11.2022
@@ -151,6 +151,31 @@ describe("FaktumDato", () => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockData, isoFormattedDate);
         expect(warningMessage).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user types in 10102022 on datepicker", () => {
+    test("Should post 2022-10-10 to server", async () => {
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumDato faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      await user.type(datepicker, "10102022");
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toBeCalledWith(faktumMockData, "2022-10-10");
       });
     });
   });
@@ -239,15 +264,19 @@ describe("FaktumDato", () => {
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
       await user.type(datepicker, "10.10.10");
 
       await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockData, null);
+        expect(datePickerError).toBeInTheDocument();
       });
     });
 
-    test("Types in 10.10.10 should post null to server and show error message", async () => {
+    test("Types in 101010 should post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
 
@@ -262,7 +291,7 @@ describe("FaktumDato", () => {
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
-      await user.type(datepicker, "10.10.10");
+      await user.type(datepicker, "101010");
       const datePickerError = document.querySelector(
         ".navds-form-field__error"
       ) as HTMLInputElement;
@@ -270,6 +299,38 @@ describe("FaktumDato", () => {
       await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockData, null);
+        expect(datePickerError).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user select future date on faktum.barn-foedselsdato", () => {
+    test("Selecting future date on faktum.barn-fodeseldato should show error messaage", async () => {
+      faktumMockData.beskrivendeId = "faktum.barn-foedselsdato";
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      const threeWeeksFromNow = addWeeks(new Date(), 3);
+      const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy");
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumDato faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+      await user.type(datepicker, datePickerFormattedDate);
+
+      await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
       });
     });
