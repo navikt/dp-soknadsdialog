@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { StartSoknad } from "./StartSoknad";
 import userEvent from "@testing-library/user-event";
-import { mockSoknadState, SetupContext } from "../../__mocks__/SetupContext";
+import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
 import fetch from "jest-fetch-mock";
 
 jest.mock("../../session.utils", () => {
@@ -28,9 +28,9 @@ describe("StartSoknad", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext>
+      <MockContext>
         <StartSoknad />
-      </SetupContext>
+      </MockContext>
     );
 
     const startApplicationButton = screen.getByRole("button", {
@@ -56,9 +56,9 @@ describe("StartSoknad", () => {
     quizState.ferdig = true;
 
     render(
-      <SetupContext soknadState={quizState}>
+      <MockContext soknadState={quizState}>
         <StartSoknad />
-      </SetupContext>
+      </MockContext>
     );
 
     const consentCheckbox = screen.getByRole("checkbox");

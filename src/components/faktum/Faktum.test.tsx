@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Faktum } from "./Faktum";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum = {
   id: "10001",
@@ -43,9 +43,9 @@ const sectionMockdata: IQuizSeksjon = {
 describe("Faktum", () => {
   test("Should show faktum question and answers", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext quizSeksjoner={[sectionMockdata]}>
         <Faktum faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -59,9 +59,9 @@ describe("Faktum", () => {
 
   test("Should show faktum dokumentation info if that's triggered by the answer", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext quizSeksjoner={[sectionMockdata]}>
         <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
-      </SetupContext>
+      </MockContext>
     );
 
     const dokumentationTitle = dokumentasjonskravMockdata[0].beskrivendeId;

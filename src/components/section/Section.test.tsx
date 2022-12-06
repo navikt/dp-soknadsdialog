@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Section } from "./Section";
 import { IQuizSeksjon } from "../../types/quiz.types";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [
@@ -27,9 +27,9 @@ const sectionMockData: IQuizSeksjon = {
 describe("Section", () => {
   test("Should show section info and the first unanswered question", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <Section section={sectionMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {

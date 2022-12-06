@@ -3,7 +3,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "3008",
@@ -31,9 +31,9 @@ describe("FaktumFlervalg", () => {
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumFlervalg faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -52,9 +52,9 @@ describe("FaktumFlervalg", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumFlervalg faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -73,9 +73,9 @@ describe("FaktumFlervalg", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const svarCheckbox = screen.getByLabelText(svar[0]);
@@ -94,9 +94,9 @@ describe("FaktumFlervalg", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const svar1Checkbox = screen.getByLabelText(svar[0]);

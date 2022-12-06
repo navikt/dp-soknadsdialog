@@ -26,7 +26,7 @@ const mockDokumentkravList: IDokumentkravList = {
   krav: [],
 };
 
-export function SetupContext(props: PropsWithChildren<IProps>) {
+export function MockContext(props: PropsWithChildren<IProps>) {
   const { children, dokumentkrav = [], quizSeksjoner = [], soknadState = mockSoknadState } = props;
 
   return (

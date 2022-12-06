@@ -4,7 +4,7 @@ import { Receipt } from "./Receipt";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 import { IDokumentkrav } from "../../types/documentation.types";
 
 jest.mock("../../session.utils", () => {
@@ -66,13 +66,13 @@ describe("Receipt", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext quizSeksjoner={[sectionMockdata]}>
         <Receipt
           arbeidssokerStatus="REGISTERED"
           soknadStatus={soknadStatus}
           sections={[sectionMockdata]}
         />
-      </SetupContext>
+      </MockContext>
     );
 
     const expandSummaryButton = screen.getByRole("button", {
@@ -93,9 +93,9 @@ describe("Receipt", () => {
   describe("Arbeidssøkerstatus", () => {
     test("Should show warning if user has not signed up as registrert arbeidssøker", async () => {
       render(
-        <SetupContext>
+        <MockContext>
           <Receipt arbeidssokerStatus="UNREGISTERED" soknadStatus={soknadStatus} sections={[]} />
-        </SetupContext>
+        </MockContext>
       );
 
       await waitFor(() => {
@@ -109,9 +109,9 @@ describe("Receipt", () => {
   describe("Dokumentasjonskrav", () => {
     test("Should show dokumentkrav", async () => {
       render(
-        <SetupContext dokumentkrav={[dokumentkrav]}>
+        <MockContext dokumentkrav={[dokumentkrav]}>
           <Receipt arbeidssokerStatus="REGISTERED" soknadStatus={soknadStatus} sections={[]} />
-        </SetupContext>
+        </MockContext>
       );
 
       await waitFor(() => {

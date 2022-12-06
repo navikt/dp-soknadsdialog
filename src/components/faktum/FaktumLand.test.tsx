@@ -4,7 +4,7 @@ import { FaktumLand } from "./FaktumLand";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { getCountryName } from "../../country.utils";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",
@@ -79,9 +79,9 @@ describe("FaktumLand", () => {
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumLand faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     const option1 = getCountryName(faktumMockData.gyldigeLand[0], "no");
@@ -101,9 +101,9 @@ describe("FaktumLand", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumLand faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -123,9 +123,9 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumLand faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const selectedOptionText = getCountryName(svar, "no");
@@ -145,9 +145,9 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumLand faktum={faktumMockDataBostedsland} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       await waitFor(() => {

@@ -3,7 +3,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumDato } from "./FaktumDato";
 import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
@@ -25,9 +25,9 @@ describe("FaktumDato", () => {
 
   test("Should show faktum question and datepicker", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumDato faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId);
@@ -43,9 +43,9 @@ describe("FaktumDato", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumDato faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -63,9 +63,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumDato faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;

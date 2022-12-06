@@ -5,7 +5,7 @@ import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz
 import userEvent from "@testing-library/user-event";
 
 import * as SentryLogger from "../../sentry.logger";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",
@@ -31,9 +31,9 @@ describe("FaktumBoolean", () => {
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumBoolean faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
@@ -46,9 +46,9 @@ describe("FaktumBoolean", () => {
     faktumMockData.svar = true;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumBoolean faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -67,9 +67,9 @@ describe("FaktumBoolean", () => {
     faktumMockData.readOnly = true;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumBoolean faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     expect(spy).not.toHaveBeenCalledWith("");
@@ -83,9 +83,9 @@ describe("FaktumBoolean", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumBoolean faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const radioToClick = screen.getByLabelText(svar);

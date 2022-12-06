@@ -3,7 +3,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { Summary } from "./Summary";
 import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { mockSoknadState, SetupContext } from "../../__mocks__/SetupContext";
+import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
 import fetch from "jest-fetch-mock";
 
 jest.mock("../../session.utils", () => {
@@ -50,9 +50,9 @@ describe("Summary", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext quizSeksjoner={[sectionMockdata]}>
         <Summary />
-      </SetupContext>
+      </MockContext>
     );
 
     const expandSectionButton = screen.getByRole("button", {
@@ -74,9 +74,9 @@ describe("Summary", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext>
+      <MockContext>
         <Summary />
-      </SetupContext>
+      </MockContext>
     );
 
     const sendApplicationButton = screen.getByRole("button", {
@@ -101,9 +101,9 @@ describe("Summary", () => {
     quizState.ferdig = false;
 
     render(
-      <SetupContext soknadState={quizState}>
+      <MockContext soknadState={quizState}>
         <Summary />
-      </SetupContext>
+      </MockContext>
     );
 
     const consentCheckbox = screen.getByRole("checkbox");
@@ -132,9 +132,9 @@ describe("Summary", () => {
     quizState.ferdig = true;
 
     render(
-      <SetupContext soknadState={quizState}>
+      <MockContext soknadState={quizState}>
         <Summary />
-      </SetupContext>
+      </MockContext>
     );
 
     const consentCheckbox = screen.getByRole("checkbox");

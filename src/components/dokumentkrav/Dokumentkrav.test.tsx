@@ -11,14 +11,14 @@ import { Dokumentkrav } from "./Dokumentkrav";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 describe("Dokumentkrav", () => {
   test("Should show dokumentkrav title", async () => {
     render(
-      <SetupContext>
+      <MockContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -30,9 +30,9 @@ describe("Dokumentkrav", () => {
 
   test("Should show dokumentkrav title and employer name for arbeidsforhold dokumentkrav", async () => {
     render(
-      <SetupContext>
+      <MockContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -45,9 +45,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext>
+      <MockContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SetupContext>
+      </MockContext>
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -61,9 +61,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext>
+      <MockContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SetupContext>
+      </MockContext>
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -78,9 +78,9 @@ describe("Dokumentkrav", () => {
     const user = userEvent.setup();
 
     render(
-      <SetupContext>
+      <MockContext>
         <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-      </SetupContext>
+      </MockContext>
     );
 
     await user.click(screen.getByLabelText("dokumentkrav.svar.sender.ikke"));
@@ -137,9 +137,9 @@ describe("Dokumentkrav", () => {
         const user = userEvent.setup();
 
         render(
-          <SetupContext>
+          <MockContext>
             <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-          </SetupContext>
+          </MockContext>
         );
 
         const file = new File(["file"], "image.jpg", {
@@ -162,9 +162,9 @@ describe("Dokumentkrav", () => {
       const user = userEvent.setup();
 
       render(
-        <SetupContext>
+        <MockContext>
           <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-        </SetupContext>
+        </MockContext>
       );
 
       const file = new File(["file"], "image.json", {
@@ -204,9 +204,9 @@ describe("Dokumentkrav", () => {
       const user = userEvent.setup();
 
       render(
-        <SetupContext>
+        <MockContext>
           <Dokumentkrav dokumentkrav={mockDokumentkravList.krav[0]} onChange={() => ""} />
-        </SetupContext>
+        </MockContext>
       );
 
       expect(await screen.findByText(fileToTest.filnavn)).toBeInTheDocument();

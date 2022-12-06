@@ -3,7 +3,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumText } from "./FaktumText";
 import { IQuizTekstFaktum, IQuizSeksjon } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: IQuizTekstFaktum = {
   id: "8004.1",
@@ -27,9 +27,9 @@ describe("FaktumText", () => {
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumText faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -42,9 +42,9 @@ describe("FaktumText", () => {
     faktumMockData.svar = svar;
 
     render(
-      <SetupContext quizSeksjoner={[sectionMockData]}>
+      <MockContext quizSeksjoner={[sectionMockData]}>
         <FaktumText faktum={faktumMockData} />
-      </SetupContext>
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -62,9 +62,9 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumText faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -84,9 +84,9 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <SetupContext quizSeksjoner={[sectionMockData]}>
+        <MockContext quizSeksjoner={[sectionMockData]}>
           <FaktumText faktum={faktumMockData} onChange={onchange} />
-        </SetupContext>
+        </MockContext>
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;

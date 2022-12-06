@@ -3,7 +3,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { ReceiptUploadDocuments } from "./ReceiptUploadDocuments";
 import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { sub, formatISO } from "date-fns";
-import { SetupContext } from "../../__mocks__/SetupContext";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const soknadStatusMock: ISoknadStatus = {
   status: "UnderBehandling",
@@ -15,11 +15,11 @@ test("Should show link to ettersending if soknad is sent in within 12 weeks", as
   const innsendt = new Date();
 
   render(
-    <SetupContext>
+    <MockContext>
       <ReceiptUploadDocuments
         soknadStatus={{ ...soknadStatusMock, innsendt: formatISO(innsendt) }}
       />
-    </SetupContext>
+    </MockContext>
   );
 
   await waitFor(() => {
@@ -33,11 +33,11 @@ describe("ReceiptUploadDocuments", () => {
     const outsideEttersendingBoundary = sub(innsendt, { weeks: 13 });
 
     render(
-      <SetupContext>
+      <MockContext>
         <ReceiptUploadDocuments
           soknadStatus={{ ...soknadStatusMock, innsendt: formatISO(outsideEttersendingBoundary) }}
         />
-      </SetupContext>
+      </MockContext>
     );
 
     await waitFor(() => {
