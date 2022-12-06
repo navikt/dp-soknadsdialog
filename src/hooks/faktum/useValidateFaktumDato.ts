@@ -25,11 +25,6 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
   function isValid(date: Date) {
     switch (faktum.beskrivendeId) {
-      case "faktum.dagpenger-soknadsdato": {
-        const isValid = isFromYear1900(date);
-        setHasError(!isValid ? "InvalidDate" : undefined);
-        return isValid;
-      }
       case "faktum.barn-foedselsdato": {
         const future = isFuture(date);
         const fromYear1900 = isFromYear1900(date);

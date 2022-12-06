@@ -7,7 +7,7 @@ import { QuizProvider } from "../../context/quiz-context";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
-import { addWeeks, format, formatISO } from "date-fns";
+import { addWeeks, format, formatISO, addYears } from "date-fns";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
@@ -151,6 +151,37 @@ describe("FaktumDato", () => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockData, isoFormattedDate);
         expect(warningMessage).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user selet a date over 100 years from now", () => {
+    test("Should show error message", async () => {
+      const twoHundretYearsFromNow = addYears(new Date(), 200);
+      const datePickerFormattedDate = formatISO(twoHundretYearsFromNow, { representation: "date" });
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumDato faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      await user.type(datepicker, datePickerFormattedDate);
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+      await user.type(datepicker, datePickerFormattedDate);
+
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
       });
     });
   });
