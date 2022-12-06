@@ -21,13 +21,24 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
+export const mockSection: IQuizSeksjon = {
+  fakta: [],
+  beskrivendeId: "din-situasjon",
+  ferdig: true,
+};
+
 const mockDokumentkravList: IDokumentkravList = {
   soknad_uuid: "12345",
   krav: [],
 };
 
 export function MockContext(props: PropsWithChildren<IProps>) {
-  const { children, dokumentkrav = [], quizSeksjoner = [], soknadState = mockSoknadState } = props;
+  const {
+    children,
+    dokumentkrav = [],
+    quizSeksjoner = [mockSection],
+    soknadState = mockSoknadState,
+  } = props;
 
   return (
     <div id="__next">

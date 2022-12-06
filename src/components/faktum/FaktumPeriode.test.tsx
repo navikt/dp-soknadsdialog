@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumPeriode } from "./FaktumPeriode";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../__mocks__/MockContext";
 
@@ -13,19 +13,13 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("FaktumPeriode", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and datepicker", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumPeriode faktum={faktumMockData} />
       </MockContext>
     );
@@ -45,7 +39,7 @@ describe("FaktumPeriode", () => {
     faktumMockData.svar = svar;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumPeriode faktum={faktumMockData} />
       </MockContext>
     );
@@ -71,7 +65,7 @@ describe("FaktumPeriode", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );

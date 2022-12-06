@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 
 import * as SentryLogger from "../../sentry.logger";
@@ -19,19 +19,13 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("FaktumBoolean", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumBoolean faktum={faktumMockData} />
       </MockContext>
     );
@@ -46,7 +40,7 @@ describe("FaktumBoolean", () => {
     faktumMockData.svar = true;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumBoolean faktum={faktumMockData} />
       </MockContext>
     );
@@ -67,7 +61,7 @@ describe("FaktumBoolean", () => {
     faktumMockData.readOnly = true;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumBoolean faktum={faktumMockData} />
       </MockContext>
     );
@@ -83,7 +77,7 @@ describe("FaktumBoolean", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumBoolean faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );

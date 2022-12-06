@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumText } from "./FaktumText";
-import { IQuizTekstFaktum, IQuizSeksjon } from "../../types/quiz.types";
+import { IQuizTekstFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../__mocks__/MockContext";
 
@@ -15,19 +15,13 @@ const faktumMockData: IQuizTekstFaktum = {
   roller: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("FaktumText", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumText faktum={faktumMockData} />
       </MockContext>
     );
@@ -42,7 +36,7 @@ describe("FaktumText", () => {
     faktumMockData.svar = svar;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumText faktum={faktumMockData} />
       </MockContext>
     );
@@ -62,7 +56,7 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumText faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );
@@ -84,7 +78,7 @@ describe("FaktumText", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumText faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );

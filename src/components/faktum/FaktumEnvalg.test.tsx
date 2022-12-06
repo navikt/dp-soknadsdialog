@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumEnvalg } from "./FaktumEnvalg";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../__mocks__/MockContext";
 
@@ -19,19 +19,13 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("FaktumEnvalg", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumEnvalg faktum={faktumMockData} />
       </MockContext>
     );
@@ -49,7 +43,7 @@ describe("FaktumEnvalg", () => {
     faktumMockData.svar = svar;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumEnvalg faktum={faktumMockData} />
       </MockContext>
     );
@@ -69,7 +63,7 @@ describe("FaktumEnvalg", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumEnvalg faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );

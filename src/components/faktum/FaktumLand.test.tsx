@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumLand } from "./FaktumLand";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { getCountryName } from "../../country.utils";
 import { MockContext } from "../../__mocks__/MockContext";
@@ -67,19 +67,13 @@ const faktumMockDataBostedsland = {
   beskrivendeId: "faktum.hvilket-land-bor-du-i",
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("FaktumLand", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumLand faktum={faktumMockData} />
       </MockContext>
     );
@@ -101,7 +95,7 @@ describe("FaktumLand", () => {
     faktumMockData.svar = svar;
 
     render(
-      <MockContext quizSeksjoner={[sectionMockData]}>
+      <MockContext>
         <FaktumLand faktum={faktumMockData} />
       </MockContext>
     );
@@ -123,7 +117,7 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumLand faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );
@@ -145,7 +139,7 @@ describe("FaktumLand", () => {
       const onchange = jest.fn();
 
       render(
-        <MockContext quizSeksjoner={[sectionMockData]}>
+        <MockContext>
           <FaktumLand faktum={faktumMockDataBostedsland} onChange={onchange} />
         </MockContext>
       );

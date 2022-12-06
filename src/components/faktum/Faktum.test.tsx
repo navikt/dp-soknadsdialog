@@ -1,7 +1,7 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Faktum } from "./Faktum";
-import { IQuizGeneratorFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum = {
@@ -34,16 +34,10 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
   },
 ];
 
-const sectionMockdata: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
 describe("Faktum", () => {
   test("Should show faktum question and answers", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext>
         <Faktum faktum={faktumMockData} />
       </MockContext>
     );
@@ -59,7 +53,7 @@ describe("Faktum", () => {
 
   test("Should show faktum dokumentation info if that's triggered by the answer", async () => {
     render(
-      <MockContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext>
         <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
       </MockContext>
     );
