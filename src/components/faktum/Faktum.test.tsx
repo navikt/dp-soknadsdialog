@@ -1,13 +1,10 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Faktum } from "./Faktum";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
+import { MockContext } from "../../__mocks__/MockContext";
 
-const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
+const faktumMockData: QuizFaktum = {
   id: "10001",
   svar: "faktum.mottatt-dagpenger-siste-12-mnd.svar.nei",
   type: "envalg",
@@ -37,30 +34,12 @@ const dokumentasjonskravMockdata: QuizFaktum[] | IQuizGeneratorFaktum[] = [
   },
 ];
 
-const sectionStateMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
-const mockSoknadState: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionStateMockData],
-  versjon_navn: "Dagpenger",
-  roller: [],
-};
-
 describe("Faktum", () => {
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={mockSoknadState}>
-          <ValidationProvider>
-            <Faktum faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <Faktum faktum={faktumMockData} />
+      </MockContext>
     );
 
     await waitFor(() => {
@@ -74,15 +53,9 @@ describe("Faktum", () => {
 
   test("Should show faktum dokumentation info if that's triggered by the answer", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={mockSoknadState}>
-          <ValidationProvider>
-            <Faktum
-              faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }}
-            />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
+      </MockContext>
     );
 
     const dokumentationTitle = dokumentasjonskravMockdata[0].beskrivendeId;
