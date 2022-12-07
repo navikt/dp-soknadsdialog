@@ -7,6 +7,7 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
 import { Timeline as timeline } from "../../components/timeline/Timeline";
+import { ReadMore as readMore } from "../../components/sanity/readmore/ReadMore";
 import { useSanity } from "../../context/sanity-context";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ErrorTypesEnum } from "../../types/error.types";
@@ -85,7 +86,7 @@ export function StartSoknad() {
         )}
 
         {startSideText?.body && (
-          <PortableText value={startSideText.body} components={{ types: { timeline } }} />
+          <PortableText value={startSideText.body} components={{ types: { timeline, readMore } }} />
         )}
 
         <ConfirmationPanel
