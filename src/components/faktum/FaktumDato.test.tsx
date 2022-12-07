@@ -158,7 +158,7 @@ describe("FaktumDato", () => {
   describe("When user selet a date over 100 years from now", () => {
     test("Should show error message", async () => {
       const twoHundretYearsFromNow = addYears(new Date(), 200);
-      const datePickerFormattedDate = formatISO(twoHundretYearsFromNow, { representation: "date" });
+      const datePickerFormattedDate = format(twoHundretYearsFromNow, "dd.MM.yyyy");
 
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -211,7 +211,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user removes a date that are three weeks from now", () => {
+  describe("When user removes a date three weeks from now", () => {
     test("Should save null to server and removes warning message", async () => {
       const threeWeeksFromNow = addWeeks(new Date(), 3);
       const threeWeeksFromNotIsoFormatted = formatISO(threeWeeksFromNow, {
@@ -280,7 +280,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user a type in different invalid date", () => {
-    test("Types in 10.10.10 should post null to server", async () => {
+    test("Types in 10.10.10 should post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
 

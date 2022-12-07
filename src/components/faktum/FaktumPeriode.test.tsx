@@ -32,7 +32,7 @@ describe("FaktumPeriode", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test.skip("Should show faktum question and datepicker", async () => {
+  test("Should show faktum question and datepicker", async () => {
     render(
       <SanityProvider initialState={sanityMocks}>
         <QuizProvider initialState={soknadStateMockData}>
@@ -53,9 +53,11 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  test.skip("Should show preselected faktum answer if it's already selected", async () => {
+  test("Should show preselected faktum answer if it's already selected", async () => {
     const svar = { fom: "2022-08-04", tom: "2022-08-06" };
     faktumMockData.svar = svar;
+
+    const datePickerFormattedDate = { fom: "04.08.2022", tom: "06.08.2022" };
 
     render(
       <SanityProvider initialState={sanityMocks}>
@@ -76,15 +78,14 @@ describe("FaktumPeriode", () => {
     ) as HTMLInputElement;
 
     await waitFor(() => {
-      expect(datepickerFom.value).toBe(svar.fom);
-      expect(datepickerTom.value).toBe(svar.tom);
+      expect(datepickerFom.value).toBe(datePickerFormattedDate.fom);
+      expect(datepickerTom.value).toBe(datePickerFormattedDate.tom);
     });
   });
 
-  describe("When user selects an answer", () => {
-    test.skip("Should post the answer to the server", async () => {
+  describe("When user selects an from date", () => {
+    test("Should post selected from date to the server", async () => {
       const user = userEvent.setup();
-      const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       const onchange = jest.fn();
 
       render(
@@ -98,18 +99,100 @@ describe("FaktumPeriode", () => {
       );
 
       const datepickerFom = screen.getByLabelText(faktumMockData.beskrivendeId + ".fra");
-      const datepickerTom = screen.getByLabelText(faktumMockData.beskrivendeId + ".til");
 
       // To trigger correct behavior as explained here: https://github.com/testing-library/user-event/issues/399#issuecomment-815664027
-      await user.clear(datepickerFom);
-      await user.type(datepickerFom, svar.fom);
-
-      await user.clear(datepickerTom);
-      await user.type(datepickerTom, svar.tom);
+      await user.type(datepickerFom, "04.08.2022");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(2);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
+      });
+    });
+  });
+
+  describe("When user adds tom date to existing periode answer with just fom date", () => {
+    test("Should post post fom and tom date to server", async () => {
+      const svar = { fom: "2022-08-04" };
+      faktumMockData.svar = svar;
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      const datepickerTom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".til"
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(datepickerFom.value).toBe("04.08.2022");
+      });
+
+      await user.type(datepickerTom, "06.08.2022");
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
+          fom: "2022-08-04",
+          tom: "2022-08-06",
+        });
+      });
+    });
+  });
+
+  // Dette blir kanskje ikke riktig, det må vi ser mer på
+  describe("When user types tom date that is before fom date", () => {
+    test.skip("Should post just fom date to server and clear tom date", async () => {
+      const svar = { fom: "2022-08-04", tom: "2022-09-05" };
+      faktumMockData.svar = svar;
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      const datepickerTom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".til"
+      ) as HTMLInputElement;
+
+      await waitFor(() => {
+        expect(datepickerFom.value).toBe("04.08.2022");
+        expect(datepickerTom.value).toBe("05.09.2022");
+      });
+
+      await user.type(datepickerTom, "05.05.2022");
+
+      await user.clear(datepickerTom);
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
+          fom: "2022-08-04",
+        });
       });
     });
   });
