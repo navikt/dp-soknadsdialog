@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { Faktum } from "../../components/faktum/Faktum";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
-import { IQuizState } from "../../types/quiz.types";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PageMeta } from "../../components/PageMeta";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -16,14 +15,13 @@ import { useSanity } from "../../context/sanity-context";
 import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Summary.module.css";
+import { useQuiz } from "../../context/quiz-context";
+import { SectionHeading } from "../../components/section/SectionHeading";
 
-interface IProps {
-  soknadState: IQuizState;
-}
-
-export function Summary({ soknadState }: IProps) {
+export function Summary() {
   const router = useRouter();
   const { uuid } = useUuid();
+  const { soknadState } = useQuiz();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
@@ -32,6 +30,9 @@ export function Summary({ soknadState }: IProps) {
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
+
+  const textId = "oppsummering";
+  const summarySectionText = getSeksjonTextById(textId);
 
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
     `soknad/${uuid}/ferdigstill?locale=${router.locale}`
@@ -81,13 +82,17 @@ export function Summary({ soknadState }: IProps) {
       />
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
+
+      <SectionHeading text={summarySectionText} fallback={textId} />
+
       <Accordion>
         {soknadState.seksjoner?.map((section, index) => {
+          const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
             <div key={section.beskrivendeId}>
               <Accordion.Item key={section.beskrivendeId}>
                 <Accordion.Header>
-                  {getSeksjonTextById(section.beskrivendeId)?.title}
+                  {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
 
                   {showSoknadNotCompleteError && !section.ferdig && (
                     <Tag variant="error" className={styles.notCompleteTag}>

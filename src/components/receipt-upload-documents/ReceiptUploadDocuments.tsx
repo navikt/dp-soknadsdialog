@@ -34,7 +34,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
   const canUploadDocuments = within12Weeks();
 
   return (
-    <>
+    <div className="my-12">
       {canUploadDocuments && (
         <Link href={`/soknad/${uuid}/ettersending`} passHref>
           <Button as="a">{getAppText(KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP)}</Button>
@@ -42,7 +42,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
       )}
 
       {!canUploadDocuments && (
-        <div>
+        <>
           <BodyShort>{getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST)}</BodyShort>
 
           <Link href={`/generell-innsending`} passHref>
@@ -50,8 +50,8 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
               {getAppText(KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE)}
             </Button>
           </Link>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }

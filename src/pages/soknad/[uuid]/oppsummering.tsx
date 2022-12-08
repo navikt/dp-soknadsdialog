@@ -72,7 +72,7 @@ export default function SummaryPage(props: IProps) {
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Summary soknadState={props.soknadState} />
+        <Summary />
       </ValidationProvider>
     </QuizProvider>
   );

@@ -19,6 +19,7 @@ jest.mock("next/router", () => {
       query: {
         uuid: "localhost-uuid",
       },
+      push: jest.fn(),
     }),
   };
 });

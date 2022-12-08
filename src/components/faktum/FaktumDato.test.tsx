@@ -1,12 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumDato } from "./FaktumDato";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
+import { MockContext } from "../../__mocks__/MockContext";
 import { addWeeks, format, formatISO, addYears } from "date-fns";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
@@ -17,31 +14,15 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
-const soknadStateMockData: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("FaktumDato", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and datepicker", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumDato faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <FaktumDato faktum={faktumMockData} />
+      </MockContext>
     );
 
     const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId);
@@ -56,13 +37,9 @@ describe("FaktumDato", () => {
     faktumMockData.svar = "2022-08-04";
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumDato faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <FaktumDato faktum={faktumMockData} />
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -79,13 +56,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -105,13 +78,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -134,13 +103,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -164,13 +129,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -192,13 +153,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -224,13 +181,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
@@ -258,13 +211,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -285,13 +234,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -312,13 +257,9 @@ describe("FaktumDato", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -346,13 +287,9 @@ describe("FaktumDato", () => {
       const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy");
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumDato faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
