@@ -328,4 +328,68 @@ describe("FaktumPeriode", () => {
       });
     });
   });
+
+  describe("When user clear from date", () => {
+    test("Should clear input and save null to server", async () => {
+      const svar = { fom: "2022-08-04", tom: "2022-08-06" };
+      faktumMockData.svar = svar;
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      await user.clear(datepickerFom);
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, null);
+      });
+    });
+  });
+
+  describe("When user clear to date", () => {
+    test("Should save fom to server", async () => {
+      const svar = { fom: "2022-08-04", tom: "2022-08-06" };
+      faktumMockData.svar = svar;
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerTom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".til"
+      ) as HTMLInputElement;
+
+      await user.clear(datepickerTom);
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
+          fom: "2022-08-04",
+        });
+      });
+    });
+  });
 });
