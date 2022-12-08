@@ -6,8 +6,9 @@ import {
   UNSAFE_useRangeDatepicker,
 } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { addYears, formatISO } from "date-fns";
+import { formatISO } from "date-fns";
 import { useEffect, useState } from "react";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
@@ -24,9 +25,6 @@ interface IDateRange {
   from: Date | undefined;
   to?: Date | undefined;
 }
-
-const FROM_DATE = new Date("1900-01-01");
-const TO_DATE = addYears(new Date(), 100);
 
 export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { faktum, onChange } = props;
@@ -158,8 +156,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         <UNSAFE_DatePicker
           {...datepickerProps}
           dropdownCaption
-          fromDate={FROM_DATE}
-          toDate={TO_DATE}
+          fromDate={DATEPICKER_MIN_DATE}
+          toDate={DATEPICKER_MAX_DATE}
           strategy="fixed"
         >
           <div className={periodeStyles.datePickerSpacing}>

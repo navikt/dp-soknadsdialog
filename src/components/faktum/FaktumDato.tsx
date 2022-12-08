@@ -1,6 +1,6 @@
 import { Alert, BodyShort, Label, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { addYears, formatISO } from "date-fns";
+import { formatISO } from "date-fns";
 import { useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -12,9 +12,7 @@ import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-
-const FROM_DATE = new Date("1900-01-01");
-const TO_DATE = addYears(new Date(), 100);
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
@@ -50,7 +48,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   });
 
   function saveFaktum(value: string | undefined | null) {
-    if (!value || value === "") {
+    if (!value) {
       setInvalidReselectedDate(true);
       saveFaktumToQuiz(faktum, null);
     }
@@ -81,8 +79,8 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       <UNSAFE_DatePicker
         {...datepickerProps}
         dropdownCaption
-        fromDate={FROM_DATE}
-        toDate={TO_DATE}
+        fromDate={DATEPICKER_MIN_DATE}
+        toDate={DATEPICKER_MAX_DATE}
         strategy="fixed"
       >
         <UNSAFE_DatePicker.Input

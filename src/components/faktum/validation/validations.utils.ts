@@ -1,6 +1,7 @@
-import { MAX_TEXT_LENGTH, YEAR_RANGE } from "../../../constants";
+import { addWeeks } from "date-fns";
+import { DATEPICKER_MIN_DATE, MAX_TEXT_LENGTH } from "../../../constants";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
-import { addWeeks, addYears } from "date-fns";
+import { DATEPICKER_MAX_DATE } from "./../../../constants";
 
 export function isValidTextLength(value: string): boolean {
   const maxTextLength = MAX_TEXT_LENGTH;
@@ -20,16 +21,12 @@ export function isValidPermitteringsPercent(value: number): boolean {
   return value >= 0 && value <= 100;
 }
 
-export function isFromYear1900(date: Date): boolean {
-  return date >= new Date("1900-01-01");
-}
-
 export function isOverTwoWeeks(date: Date): boolean {
   return date >= addWeeks(new Date(), 2);
 }
 
 export function isWithinValidYearRange(date: Date): boolean {
-  return isFromYear1900(date) && date <= addYears(new Date(), YEAR_RANGE);
+  return date >= DATEPICKER_MIN_DATE && date <= DATEPICKER_MAX_DATE;
 }
 
 export function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {

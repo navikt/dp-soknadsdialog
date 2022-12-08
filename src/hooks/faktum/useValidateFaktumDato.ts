@@ -1,7 +1,6 @@
 import { isFuture } from "date-fns";
 import { useState } from "react";
 import {
-  isFromYear1900,
   isOverTwoWeeks,
   isWithinValidYearRange,
 } from "../../components/faktum/validation/validations.utils";
@@ -27,9 +26,9 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     switch (faktum.beskrivendeId) {
       case "faktum.barn-foedselsdato": {
         const future = isFuture(date);
-        const fromYear1900 = isFromYear1900(date);
+        const isValid = isWithinValidYearRange(date);
 
-        if (!fromYear1900) {
+        if (!isValid) {
           setHasError("InvalidDate");
         } else if (future) {
           setHasError("InvalidBirthDate");
@@ -37,7 +36,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
           setHasError(undefined);
         }
 
-        return !future && isFromYear1900;
+        return !future && isValid;
       }
       default: {
         const isValid = isWithinValidYearRange(date);

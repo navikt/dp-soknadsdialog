@@ -5,7 +5,6 @@ import {
   isOverTwoWeeks,
   isValidTextLength,
   isWithinValidYearRange,
-  isFromYear1900,
 } from "./validations.utils";
 
 const validTextLengthMock =
@@ -43,12 +42,6 @@ describe("Input validation", () => {
     expect(isOverTwoWeeks(lastWeek)).toBe(false);
     expect(isOverTwoWeeks(nextMonth)).toBe(true);
     expect(isOverTwoWeeks(lastMonth)).toBe(false);
-  });
-
-  test("Validate date year", async () => {
-    expect(isFromYear1900(new Date("1800-01-01"))).toBe(false);
-    expect(isFromYear1900(new Date("1900-01-01"))).toBe(true);
-    expect(isFromYear1900(new Date("1950-01-01"))).toBe(true);
   });
 
   test("Validate year range", async () => {

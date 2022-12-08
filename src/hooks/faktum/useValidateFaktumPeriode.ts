@@ -28,7 +28,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       const future = isFuture(new Date(fom));
       const isValidFromDate = isWithinValidYearRange(new Date(fom));
 
-      // Future date is allowed on those two faktum. Only validate isFromYear1900 is required
+      // Future date is allowed on those two special cases
       const specialCase =
         faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode" ||
         faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
