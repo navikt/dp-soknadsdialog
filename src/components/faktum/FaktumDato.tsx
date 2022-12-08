@@ -43,7 +43,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : "";
+      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
