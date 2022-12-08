@@ -1,10 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { IFaktum } from "./Faktum";
-import { PortableText } from "@portabletext/react";
-import { addYears, formatISO } from "date-fns";
-import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
 import {
   BodyShort,
   Fieldset,
@@ -12,13 +5,20 @@ import {
   UNSAFE_DatePicker,
   UNSAFE_useRangeDatepicker,
 } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
+import { addYears, formatISO } from "date-fns";
+import { useEffect, useState } from "react";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../hooks/useFirstRender";
+import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
+import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
-import { FormattedDate } from "../FormattedDate";
-import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 
 interface IDateRange {
   from: Date | undefined;
@@ -33,6 +33,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
+  const [toIsBeforeFrom, setToIsBeforeFrom] = useState(false);
   const { isValid, getTomErrorMessage, getFomErrorMessage } = useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<
     IQuizPeriodeFaktumAnswerType | undefined | null
@@ -73,6 +74,11 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
     defaultSelected: getInitialRangeDateValue(),
     onRangeChange: (value?: IDateRange) => handleDateChange(value),
+    onValidate: (value) => {
+      if (value.to) {
+        setToIsBeforeFrom(!!value.to?.isBeforeFrom);
+      }
+    },
   });
 
   function handleDateChange(value?: IDateRange) {
@@ -101,12 +107,14 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null | undefined) {
-    if (!value) {
-      saveFaktumToQuiz(faktum, null);
-    }
+    if (!toIsBeforeFrom) {
+      if (!value) {
+        saveFaktumToQuiz(faktum, null);
+      }
 
-    if (value && isValid(value)) {
-      saveFaktumToQuiz(faktum, value);
+      if (value && isValid(value)) {
+        saveFaktumToQuiz(faktum, value);
+      }
     }
   }
 
@@ -159,13 +167,19 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
               {...fromInputProps}
               id={beskrivendeIdFra}
               label={faktumTextFra}
+              placeholder={getAppText("datovelger.dato-format")}
               error={getFomErrorMessage()}
             />
             <UNSAFE_DatePicker.Input
               {...toInputProps}
               id={beskrivendeIdTil}
               label={faktumTextTil}
-              error={getTomErrorMessage()}
+              placeholder={getAppText("datovelger.dato-format")}
+              error={
+                toIsBeforeFrom
+                  ? getAppText("validering.arbeidsforhold.varighet-til")
+                  : getTomErrorMessage()
+              }
             />
           </div>
         </UNSAFE_DatePicker>

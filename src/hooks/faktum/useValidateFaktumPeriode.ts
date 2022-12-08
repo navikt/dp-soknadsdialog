@@ -1,6 +1,6 @@
 import { isFuture } from "date-fns";
 import { useState } from "react";
-import { isFromYear1900 } from "../../components/faktum/validation/validations.utils";
+import { isWithinValidYearRange } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
@@ -26,7 +26,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
 
     if (fom) {
       const future = isFuture(new Date(fom));
-      const isValidFromDate = isFromYear1900(new Date(fom));
+      const isValidFromDate = isWithinValidYearRange(new Date(fom));
 
       // Future date is allowed on those two faktum. Only validate isFromYear1900 is required
       const specialCase =
@@ -50,15 +50,15 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     }
 
     if (tom) {
-      const afterYear1900 = isFromYear1900(new Date(tom));
+      const isValid = isWithinValidYearRange(new Date(tom));
 
-      if (!afterYear1900) {
+      if (!isValid) {
         setHasTomError("InvalidDate");
       } else {
         setHasTomError(undefined);
       }
 
-      validPeriode = afterYear1900;
+      validPeriode = isValid;
     }
 
     return validPeriode;
