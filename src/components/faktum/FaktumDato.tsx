@@ -43,13 +43,13 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
+      const debounceValue = value ? formatISO(value, { representation: "date" }) : "";
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
   });
 
-  function saveFaktum(value: string | null | undefined) {
+  function saveFaktum(value: string | undefined | null) {
     if (!value || value === "") {
       setInvalidReselectedDate(true);
       saveFaktumToQuiz(faktum, null);
