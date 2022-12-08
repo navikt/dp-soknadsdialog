@@ -1,4 +1,6 @@
+@import "@navikt/ds-tokens";
+
 :root {
   --app-max-width: 680px;
-  --app-padding: var(--navds-spacing-4);
+  --app-padding: var(--a-spacing-4);
 }

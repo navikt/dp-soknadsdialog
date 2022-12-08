@@ -5,13 +5,13 @@
 }
 
 .dokumentkravItem {
-  margin-bottom: var(--navds-spacing-11);
+  margin-bottom: var(--a-spacing-11);
 }
 
 .dokumentkravTitle {
   display: flex;
   justify-content: space-between;
-  gap: var(--navds-spacing-2);
+  gap: var(--a-spacing-2);
 }
 
 .dokumentkravTag {

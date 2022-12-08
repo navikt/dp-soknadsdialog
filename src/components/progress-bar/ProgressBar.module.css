@@ -2,7 +2,7 @@
   --progress-bar-animation-duration: 500ms;
   --progress-bar-height: 16px;
   width: 100%;
-  margin: var(--navds-spacing-10) 0;
+  margin: var(--a-spacing-10) 0;
 }
 
 .barContainer {
@@ -17,7 +17,7 @@
   height: var(--progress-bar-height);
   min-width: 16px;
   border-radius: 100px;
-  background-color: var(--navds-semantic-color-link-visited);
+  background-color: var(--a-purple-500);
   transition: width var(--progress-bar-animation-duration);
 }
 
@@ -33,16 +33,16 @@
   display: inline-block;
   flex-grow: 40;
   height: 2px;
-  background-color: var(--navds-semantic-color-border-muted);
+  background-color: var(--a-purple-500);
   border-radius: 100px;
-
 }
 .finalCircle {
   height: var(--progress-bar-height);
   display: inline-block;
   flex-basis: var(--progress-bar-height);
-  border: 3px solid var(--navds-semantic-color-border);
-  transition: border-width var(--progress-bar-animation-duration), border-color var(--progress-bar-animation-duration);
+  border: 3px solid var(--a-gray-600);
+  transition: border-width var(--progress-bar-animation-duration),
+    border-color var(--progress-bar-animation-duration);
   box-sizing: border-box;
   border-radius: 100px;
 }

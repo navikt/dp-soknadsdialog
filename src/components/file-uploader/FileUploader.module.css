@@ -3,9 +3,9 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  border: 2px dashed var(--navds-global-color-gray-400);
-  border-radius: var(--navds-border-radius-medium);
-  background-color: var(--navds-global-color-blue-50);
+  border: 2px dashed var(--a-gray-400);
+  border-radius: var(--a-border-radius-medium);
+  background-color: var(--a-color-blue-50);
   width: 100%;
   padding: 1rem;
   margin: 2rem 0 1rem 0;
@@ -13,16 +13,16 @@
 
 .fileUploader p {
   text-align: center;
-  margin-bottom: var(--navds-spacing-2);
+  margin-bottom: var(--a-spacing-2);
 }
 
 .uploadError {
-  margin-bottom: var(--navds-spacing-4);
+  margin-bottom: var(--a-spacing-4);
 }
 
 .loadingIndicator {
   text-align: center;
-  margin: var(--navds-spacing-4) 0;
+  margin: var(--a-spacing-4) 0;
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -33,6 +33,6 @@
 
 @media (hover: hover) and (pointer: fine) {
   .fileUploader button {
-    margin-bottom: 1rem
+    margin-bottom: 1rem;
   }
 }
