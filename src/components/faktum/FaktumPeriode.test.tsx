@@ -7,12 +7,13 @@ import { QuizProvider } from "../../context/quiz-context";
 import userEvent from "@testing-library/user-event";
 import { sanityMocks } from "../../__mocks__/sanity.mocks";
 import { ValidationProvider } from "../../context/validation-context";
+import { addDays, format, formatISO } from "date-fns";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
   type: "periode",
   readOnly: false,
-  beskrivendeId: "faktum.dagpenger-soknadsdato",
+  beskrivendeId: "faktum.arbeidsforhold",
   sannsynliggjoresAv: [],
 };
 
@@ -152,9 +153,8 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  // Dette blir kanskje ikke riktig, det må vi ser mer på
-  describe("When user types tom date that is before fom date", () => {
-    test.skip("Should post just fom date to server and clear tom date", async () => {
+  describe("When user selects tom date that is before fom date", () => {
+    test("Should post just fom date to server and clear tom date", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-09-05" };
       faktumMockData.svar = svar;
 
@@ -179,6 +179,10 @@ describe("FaktumPeriode", () => {
         faktumMockData.beskrivendeId + ".til"
       ) as HTMLInputElement;
 
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+
       await waitFor(() => {
         expect(datepickerFom.value).toBe("04.08.2022");
         expect(datepickerTom.value).toBe("05.09.2022");
@@ -186,12 +190,140 @@ describe("FaktumPeriode", () => {
 
       await user.type(datepickerTom, "05.05.2022");
 
-      await user.clear(datepickerTom);
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user selects in future date on the employment relationship", () => {
+    test("Should should show error message", async () => {
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      const tenDaysFromNow = addDays(new Date(), 10);
+      const datePickerFormattedDate = format(tenDaysFromNow, "dd.MM.yyyy");
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+
+      await user.type(datepickerFom, datePickerFormattedDate);
+
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user selects too old date on start of the employment relationship", () => {
+    test("Should should show error message", async () => {
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+
+      await user.type(datepickerFom, "01.01.1800");
+
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user selects from date too far in the future", () => {
+    test("Should should show error message", async () => {
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      const datePickerError = document.querySelector(
+        ".navds-form-field__error"
+      ) as HTMLInputElement;
+
+      await user.type(datepickerFom, "06.08.3022");
+
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe("When user selects future date for specialCase faktum", () => {
+    // faktum.arbeidsforhold.naar-var-lonnsplikt-periode or faktum.arbeidsforhold.permittert-periode
+    test("Should should show error message", async () => {
+      faktumMockData.beskrivendeId = "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
+
+      const tenDaysFromNow = addDays(new Date(), 10);
+      const datePickerFormattedDate = format(tenDaysFromNow, "dd.MM.yyyy");
+      const isoFormattedDate = formatISO(tenDaysFromNow, { representation: "date" });
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <SanityProvider initialState={sanityMocks}>
+          <QuizProvider initialState={soknadStateMockData}>
+            <ValidationProvider>
+              <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+            </ValidationProvider>
+          </QuizProvider>
+        </SanityProvider>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      await user.type(datepickerFom, datePickerFormattedDate);
 
       await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
         expect(onchange).toHaveBeenCalledWith(faktumMockData, {
-          fom: "2022-08-04",
+          fom: isoFormattedDate,
         });
       });
     });
