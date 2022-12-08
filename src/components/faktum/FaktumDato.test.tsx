@@ -1,10 +1,9 @@
-import React from "react";
-import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumDato } from "./FaktumDato";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { addWeeks, addYears, format, formatISO } from "date-fns";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import { MockContext } from "../../__mocks__/MockContext";
-import { addWeeks, format, formatISO, addYears } from "date-fns";
+import { FaktumDato } from "./FaktumDato";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
