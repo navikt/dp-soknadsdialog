@@ -17,8 +17,16 @@ import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Summary.module.css";
 import { useQuiz } from "../../context/quiz-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
+import { IPersonalia } from "../../types/personalia.types";
+import { Personalia } from "../../components/personalia/Personalia";
 
-export function Summary() {
+interface IProps {
+  personalia: IPersonalia | null;
+}
+
+export function Summary(props: IProps) {
+  const { personalia } = props;
+
   const router = useRouter();
   const { uuid } = useUuid();
   const { soknadState } = useQuiz();
@@ -33,6 +41,8 @@ export function Summary() {
 
   const textId = "oppsummering";
   const summarySectionText = getSeksjonTextById(textId);
+  const textPersonaliaId = "personalia";
+  const personaliaTexts = getSeksjonTextById(textPersonaliaId);
 
   const [finishSoknad, finishSoknadStatus] = usePutRequest(
     `soknad/${uuid}/ferdigstill?locale=${router.locale}`
@@ -86,34 +96,42 @@ export function Summary() {
       <SectionHeading text={summarySectionText} fallback={textId} />
 
       <Accordion>
+        {personalia && (
+          <Accordion.Item>
+            <Accordion.Header>
+              {personaliaTexts?.title ? personaliaTexts.title : textPersonaliaId}
+            </Accordion.Header>
+            <Accordion.Content>
+              <Personalia personalia={personalia} mode="summary" />
+            </Accordion.Content>
+          </Accordion.Item>
+        )}
         {soknadState.seksjoner?.map((section, index) => {
           return (
-            <div key={section.beskrivendeId}>
-              <Accordion.Item key={section.beskrivendeId}>
-                <Accordion.Header>
-                  {getSeksjonTextById(section.beskrivendeId)?.title}
+            <Accordion.Item key={section.beskrivendeId}>
+              <Accordion.Header>
+                {getSeksjonTextById(section.beskrivendeId)?.title}
 
-                  {showSoknadNotCompleteError && !section.ferdig && (
-                    <Tag variant="error" className={styles.notCompleteTag}>
-                      {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
-                    </Tag>
-                  )}
-                </Accordion.Header>
-                <Accordion.Content>
-                  <>
-                    {section.fakta.map((faktum) => {
-                      return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
-                    })}
+                {showSoknadNotCompleteError && !section.ferdig && (
+                  <Tag variant="error" className={styles.notCompleteTag}>
+                    {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
+                  </Tag>
+                )}
+              </Accordion.Header>
+              <Accordion.Content>
+                <>
+                  {section.fakta.map((faktum) => {
+                    return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
+                  })}
 
-                    <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
-                      <Button variant="primary" as="a">
-                        {getAppText("oppsummering.knapp.endre-svar")}
-                      </Button>
-                    </Link>
-                  </>
-                </Accordion.Content>
-              </Accordion.Item>
-            </div>
+                  <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
+                    <Button variant="primary" as="a">
+                      {getAppText("oppsummering.knapp.endre-svar")}
+                    </Button>
+                  </Link>
+                </>
+              </Accordion.Content>
+            </Accordion.Item>
           );
         })}
       </Accordion>
