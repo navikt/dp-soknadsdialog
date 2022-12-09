@@ -60,7 +60,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user selects an from date", () => {
+  describe("When user selects from date", () => {
     test("Should post selected from date to the server", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -84,7 +84,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user adds tom date to existing periode answer", () => {
-    test("Should post post fom and tom date to server", async () => {
+    test("Should post fom and tom date to server", async () => {
       const svar = { fom: "2022-08-04" };
       faktumMockData.svar = svar;
 
@@ -160,7 +160,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects in future date on the employment relationship", () => {
-    test("Should should show error message", async () => {
+    test("Should show error message", async () => {
       const user = userEvent.setup();
 
       const tenDaysFromNow = addDays(new Date(), 10);
@@ -189,7 +189,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects too old date on start of the employment relationship", () => {
-    test("Should should show error message", async () => {
+    test("Should show error message", async () => {
       const user = userEvent.setup();
 
       render(
@@ -215,7 +215,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects from date too far in the future", () => {
-    test("Should should show error message", async () => {
+    test("Should show error message", async () => {
       const user = userEvent.setup();
 
       render(
@@ -242,7 +242,7 @@ describe("FaktumPeriode", () => {
 
   describe("When user selects future date for specialCase faktum", () => {
     // faktum.arbeidsforhold.naar-var-lonnsplikt-periode or faktum.arbeidsforhold.permittert-periode
-    test("Should should show error message", async () => {
+    test("Should show error message", async () => {
       faktumMockData.beskrivendeId = "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
 
       const tenDaysFromNow = addDays(new Date(), 10);
@@ -273,7 +273,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user clear from date", () => {
+  describe("When user clears from date", () => {
     test("Should clear input and save null to server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
@@ -300,7 +300,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user clear to date", () => {
+  describe("When user clears to date", () => {
     test("Should save fom to server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;

@@ -92,8 +92,8 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user selet a date three weeks from now", () => {
-    test("Should post seleted date to server and display warning message", async () => {
+  describe("When user selects a date three weeks from now", () => {
+    test("Should post selected date to server and display warning message", async () => {
       const threeWeeksFromNow = addWeeks(new Date(), 3);
       const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy"); // eg: 20.11.2022
       const isoFormattedDate = formatISO(threeWeeksFromNow, { representation: "date" }); // eg 2022-11-20
@@ -119,7 +119,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user selet a date over 100 years from now", () => {
+  describe("When user selects a date over 100 years from now", () => {
     test("Should show error message", async () => {
       const twoHundretYearsFromNow = addYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundretYearsFromNow, "dd.MM.yyyy");
@@ -227,7 +227,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user a type in different invalid date", () => {
+  describe("When user types in different invalid date", () => {
     test("Types in 10.10.10 should post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -275,7 +275,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user select future date on faktum.barn-foedselsdato", () => {
+  describe("When user selects future date on faktum.barn-foedselsdato", () => {
     test("Selecting future date on faktum.barn-fodeseldato should show error messaage", async () => {
       faktumMockData.beskrivendeId = "faktum.barn-foedselsdato";
 

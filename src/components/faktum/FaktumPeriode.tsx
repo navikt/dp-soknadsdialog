@@ -80,12 +80,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   });
 
   function handleDateChange(value?: IDateRange) {
-    if (value && !value.from) {
+    if (!value?.from) {
       setCurrentAnswer(undefined);
       debouncedChange(null);
     }
 
-    if (value && value.from) {
+    if (value?.from) {
       if (!value.to) {
         const parsedFromDate = formatISO(value.from, { representation: "date" });
         const period = { fom: parsedFromDate };
