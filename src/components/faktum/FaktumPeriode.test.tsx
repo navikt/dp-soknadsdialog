@@ -159,7 +159,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user selects in future date on the employment relationship", () => {
+  describe("When user selects in future date on start date of employment relationship", () => {
     test("Should show error message", async () => {
       const user = userEvent.setup();
 

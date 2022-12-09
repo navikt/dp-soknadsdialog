@@ -202,8 +202,8 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user a types in too old date: eg 01.01.1800", () => {
-    test("Should show validation text", async () => {
+  describe("When user a types in date before 01.01.1900: eg 01.01.1800", () => {
+    test("Should show error message", async () => {
       const seletedDate = format(new Date("01.01.1800"), "dd.MM.yyyy");
 
       const user = userEvent.setup();
