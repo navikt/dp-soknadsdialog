@@ -121,8 +121,8 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user selects tom date that is before fom date", () => {
-    test("Should post just fom date to server and clear tom date", async () => {
+  describe("When user types in tom date that is before fom date", () => {
+    test("Should show error message", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-09-05" };
       faktumMockData.svar = svar;
 
@@ -143,7 +143,7 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
 
       await waitFor(() => {
@@ -159,25 +159,30 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user selects in future date on start date of employment relationship", () => {
+  describe("When user selects future date for employment relationship start date, faktum: faktum.arbeidsforhold", () => {
     test("Should show error message", async () => {
       const user = userEvent.setup();
+
+      const faktumArbeidsforholdMockData = {
+        ...faktumMockData,
+        beskrivendeId: "faktum.arbeidsforhold",
+      };
 
       const tenDaysFromNow = addDays(new Date(), 10);
       const datePickerFormattedDate = format(tenDaysFromNow, "dd.MM.yyyy");
 
       render(
         <MockContext>
-          <FaktumPeriode faktum={faktumMockData} />
+          <FaktumPeriode faktum={faktumArbeidsforholdMockData} />
         </MockContext>
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumArbeidsforholdMockData.beskrivendeId + ".fra"
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, datePickerFormattedDate);
@@ -188,13 +193,14 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user selects too old date on start of the employment relationship", () => {
-    test("Should show error message", async () => {
+  describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
+    test("When types inn 01.01.1800 should show error message and not post to server", async () => {
       const user = userEvent.setup();
+      const onchange = jest.fn();
 
       render(
         <MockContext>
-          <FaktumPeriode faktum={faktumMockData} />
+          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );
 
@@ -203,24 +209,24 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, "01.01.1800");
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
+        expect(onchange).not.toBeCalled();
       });
     });
-  });
 
-  describe("When user selects from date too far in the future", () => {
-    test("Should show error message", async () => {
+    test("When types in 06.06.2322 should show error message not post to server", async () => {
       const user = userEvent.setup();
+      const onchange = jest.fn();
 
       render(
         <MockContext>
-          <FaktumPeriode faktum={faktumMockData} />
+          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
         </MockContext>
       );
 
@@ -229,20 +235,21 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
 
-      await user.type(datepickerFom, "06.08.3022");
+      await user.type(datepickerFom, "06.08.2322");
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
+        expect(onchange).not.toBeCalled();
       });
     });
   });
 
   describe("When user selects future date for specialCase faktum", () => {
     // faktum.arbeidsforhold.naar-var-lonnsplikt-periode or faktum.arbeidsforhold.permittert-periode
-    test("Should show error message", async () => {
+    test("Should post selected date to server", async () => {
       faktumMockData.beskrivendeId = "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
 
       const tenDaysFromNow = addDays(new Date(), 10);
@@ -273,8 +280,33 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  describe("When user clears from date", () => {
-    test("Should clear input and save null to server", async () => {
+  describe("When user clears selected date from datepicker", () => {
+    test("When user clears fom date from selected periode that contains fom only should post null to server", async () => {
+      const svar = { fom: "2022-08-04" };
+      faktumMockData.svar = svar;
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <MockContext>
+          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
+      );
+
+      const datepickerFom = screen.getByLabelText(
+        faktumMockData.beskrivendeId + ".fra"
+      ) as HTMLInputElement;
+
+      await user.clear(datepickerFom);
+
+      await waitFor(() => {
+        expect(onchange).toBeCalledTimes(1);
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, null);
+      });
+    });
+
+    test("When user clears fom date from selected periode that contains both fom and tom should post null to server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
 
@@ -298,10 +330,8 @@ describe("FaktumPeriode", () => {
         expect(onchange).toHaveBeenCalledWith(faktumMockData, null);
       });
     });
-  });
 
-  describe("When user clears to date", () => {
-    test("Should save fom to server", async () => {
+    test("When user clears tom date from selected periode that contains both fom and tom should post fom to server alone", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
 
@@ -322,9 +352,7 @@ describe("FaktumPeriode", () => {
 
       await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
-          fom: "2022-08-04",
-        });
+        expect(onchange).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
       });
     });
   });

@@ -92,8 +92,8 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user selects a date that is not within valid date range", () => {
-    test("Select a date two hundret years from now should show error message and not post to server", async () => {
+  describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
+    test("Selecting a date two hundret years from now should show error message and not post to server", async () => {
       const twoHundredYearsFromNow = addYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
@@ -119,7 +119,7 @@ describe("FaktumDato", () => {
       });
     });
 
-    test("Select a date two hundret years before now should show error message and not post to server", async () => {
+    test("Selecting a date two hundret years before now should show error message and not post to server", async () => {
       const twoHundredYearsFromNow = addYears(new Date(), -200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
