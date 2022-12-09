@@ -25,7 +25,7 @@ import { PageMeta } from "../../components/PageMeta";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { ReadMore as readMore } from "../../components/sanity/readmore/ReadMore";
+import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 
 interface IProps {
   dokumentkravList: IDokumentkravList;
@@ -117,7 +117,10 @@ export function Documentation(props: IProps) {
         </ErrorList>
       )}
       {dokumentasjonskravText?.body && (
-        <PortableText value={dokumentasjonskravText.body} components={{ types: { readMore } }} />
+        <PortableText
+          value={dokumentasjonskravText.body}
+          components={{ types: { readMore: ReadMore } }}
+        />
       )}
       {dokumentkravList.krav.map((dokumentkrav, index) => {
         const dokumentkravNumber = index + 1;

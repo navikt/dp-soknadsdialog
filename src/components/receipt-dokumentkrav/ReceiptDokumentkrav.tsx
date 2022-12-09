@@ -16,7 +16,7 @@ import { ReceiptDokumentkravMissingItem } from "./ReceiptDokumentkravMissingItem
 import { ReceiptDocumentsNotSending } from "../receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDokumentkravUploadedItem } from "./ReceiptDokumentkravUploadedItem";
 import { ReceiptUploadDocuments } from "../receipt-upload-documents/ReceiptUploadDocuments";
-import { ReadMore as readMore } from "../../components/sanity/readmore/ReadMore";
+import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 import styles from "./ReceiptDokumentkrav.module.css";
 
 interface IProps {
@@ -56,7 +56,10 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
         <>
           {dokumentkravText && (
             <div className="my-12">
-              <PortableText value={dokumentkravText.body} components={{ types: { readMore } }} />
+              <PortableText
+                value={dokumentkravText.body}
+                components={{ types: { readMore: ReadMore } }}
+              />
             </div>
           )}
 
@@ -85,7 +88,7 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
         <div className="my-12">
           <PortableText
             value={noDokumentkravDocumentsText.body}
-            components={{ types: { readMore } }}
+            components={{ types: { readMore: ReadMore } }}
           />
         </div>
       )}
