@@ -72,6 +72,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
+  // Wasning mesage is specific for faktum "faktum.dagpenger-soknadsdato"
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
   return (
