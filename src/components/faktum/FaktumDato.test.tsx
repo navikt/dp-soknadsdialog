@@ -92,37 +92,10 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user selects a date three weeks from now", () => {
-    test("Should post selected date to server and display warning message", async () => {
-      const threeWeeksFromNow = addWeeks(new Date(), 3);
-      const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy"); // eg: 20.11.2022
-      const isoFormattedDate = formatISO(threeWeeksFromNow, { representation: "date" }); // eg 2022-11-20
-
-      const user = userEvent.setup();
-      const onchange = jest.fn();
-
-      render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
-        </MockContext>
-      );
-
-      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
-      await user.type(datepicker, datePickerFormattedDate);
-      const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
-
-      await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, isoFormattedDate);
-        expect(warningMessage).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("When user selects a date over 100 years from now", () => {
-    test("Should show error message", async () => {
-      const twoHundretYearsFromNow = addYears(new Date(), 200);
-      const datePickerFormattedDate = format(twoHundretYearsFromNow, "dd.MM.yyyy");
+  describe("When user selects a date that is not within valid date range", () => {
+    test("Select a date two hundret years from now should show error message and not post to server", async () => {
+      const twoHundredYearsFromNow = addYears(new Date(), 200);
+      const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -136,18 +109,45 @@ describe("FaktumDato", () => {
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
       await user.type(datepicker, datePickerFormattedDate);
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
       await user.type(datepicker, datePickerFormattedDate);
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
+        expect(onchange).not.toBeCalled();
+      });
+    });
+
+    test("Select a date two hundret years before now should show error message and not post to server", async () => {
+      const twoHundredYearsFromNow = addYears(new Date(), -200);
+      const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
+
+      const user = userEvent.setup();
+      const onchange = jest.fn();
+
+      render(
+        <MockContext>
+          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
+      );
+
+      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      await user.type(datepicker, datePickerFormattedDate);
+      const datePickerError = document.querySelector(
+        '*[id^="datepicker-input-error"]'
+      ) as HTMLInputElement;
+      await user.type(datepicker, datePickerFormattedDate);
+
+      await waitFor(() => {
+        expect(datePickerError).toBeInTheDocument();
+        expect(onchange).not.toBeCalled();
       });
     });
   });
 
-  describe("When user types in 10102022 on datepicker", () => {
-    test("Should post 2022-10-10 to server", async () => {
+  describe("When user types in date without dot between date, month and year on datepicker. Eg. 10102022", () => {
+    test("Should post 2022-10-10 to server because DDMMYYYY is also a valid format", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
 
@@ -167,67 +167,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user removes a date three weeks from now", () => {
-    test("Should save null to server and removes warning message", async () => {
-      const threeWeeksFromNow = addWeeks(new Date(), 3);
-      const threeWeeksFromNotIsoFormatted = formatISO(threeWeeksFromNow, {
-        representation: "date",
-      });
-
-      faktumMockData.svar = threeWeeksFromNotIsoFormatted;
-
-      const user = userEvent.setup();
-      const onchange = jest.fn();
-
-      render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
-        </MockContext>
-      );
-
-      const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
-
-      await waitFor(() => {
-        expect(warningMessage).toBeInTheDocument();
-      });
-
-      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
-      await user.clear(datepicker);
-
-      await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, null);
-        expect(warningMessage).not.toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("When user a types in date before 01.01.1900: eg 01.01.1800", () => {
-    test("Should show error message", async () => {
-      const seletedDate = format(new Date("01.01.1800"), "dd.MM.yyyy");
-
-      const user = userEvent.setup();
-      const onchange = jest.fn();
-
-      render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
-        </MockContext>
-      );
-
-      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
-      await user.type(datepicker, seletedDate);
-      const datePickerError = document.querySelector(
-        ".navds-form-field__error"
-      ) as HTMLInputElement;
-
-      await waitFor(() => {
-        expect(datePickerError).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe("When user types in different invalid date", () => {
+  describe("When user types in different invalid date formats. Valid format is DDMMYYY or DD.MM.YYYY", () => {
     test("Types in 10.10.10 should post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -240,7 +180,7 @@ describe("FaktumDato", () => {
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
       await user.type(datepicker, "10.10.10");
 
@@ -264,7 +204,7 @@ describe("FaktumDato", () => {
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
       await user.type(datepicker, "101010");
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
 
       await waitFor(() => {
@@ -273,11 +213,81 @@ describe("FaktumDato", () => {
         expect(datePickerError).toBeInTheDocument();
       });
     });
+
+    describe("When user selects a date for faktum: faktum.dagpenger-soknadsdato", () => {
+      test("Selects a date three weeks from now should post selected date to server and display warning message", async () => {
+        const faktumSoknadsdatoMockData = {
+          ...faktumMockData,
+          beskrivendeId: "faktum.dagpenger-soknadsdato",
+        };
+
+        const threeWeeksFromNow = addWeeks(new Date(), 3);
+        const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy"); // eg: 20.11.2022
+        const isoFormattedDate = formatISO(threeWeeksFromNow, { representation: "date" }); // eg 2022-11-20
+
+        const user = userEvent.setup();
+        const onchange = jest.fn();
+
+        render(
+          <MockContext>
+            <FaktumDato faktum={faktumSoknadsdatoMockData} onChange={onchange} />
+          </MockContext>
+        );
+
+        const datepicker = screen.getByLabelText(
+          faktumSoknadsdatoMockData.beskrivendeId
+        ) as HTMLInputElement;
+        await user.type(datepicker, datePickerFormattedDate);
+        const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
+
+        await waitFor(() => {
+          expect(onchange).toBeCalledTimes(1);
+          expect(onchange).toBeCalledWith(faktumSoknadsdatoMockData, isoFormattedDate);
+          expect(warningMessage).toBeInTheDocument();
+        });
+      });
+
+      test("When user clear selected date three weeks from now should removes error message and post null to server", async () => {
+        const threeWeeksFromNow = addWeeks(new Date(), 3);
+        const threeWeeksFromNotIsoFormatted = formatISO(threeWeeksFromNow, {
+          representation: "date",
+        });
+
+        faktumMockData.svar = threeWeeksFromNotIsoFormatted;
+
+        const user = userEvent.setup();
+        const onchange = jest.fn();
+
+        render(
+          <MockContext>
+            <FaktumDato faktum={faktumMockData} onChange={onchange} />
+          </MockContext>
+        );
+
+        const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
+
+        await waitFor(() => {
+          expect(warningMessage).toBeInTheDocument();
+        });
+
+        const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+        await user.clear(datepicker);
+
+        await waitFor(() => {
+          expect(onchange).toBeCalledTimes(1);
+          expect(onchange).toBeCalledWith(faktumMockData, null);
+          expect(warningMessage).not.toBeInTheDocument();
+        });
+      });
+    });
   });
 
   describe("When user selects future date on faktum.barn-foedselsdato", () => {
-    test("Selecting future date on faktum.barn-fodeseldato should show error messaage", async () => {
-      faktumMockData.beskrivendeId = "faktum.barn-foedselsdato";
+    test("Should show error messaage and not post to server", async () => {
+      const faktumBarnFodselsdatoMockData = {
+        ...faktumMockData,
+        beskrivendeId: "faktum.barn-foedselsdato",
+      };
 
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -287,18 +297,21 @@ describe("FaktumDato", () => {
 
       render(
         <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+          <FaktumDato faktum={faktumBarnFodselsdatoMockData} onChange={onchange} />
         </MockContext>
       );
 
-      const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      const datepicker = screen.getByLabelText(
+        faktumBarnFodselsdatoMockData.beskrivendeId
+      ) as HTMLInputElement;
       const datePickerError = document.querySelector(
-        ".navds-form-field__error"
+        '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
       await user.type(datepicker, datePickerFormattedDate);
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
+        expect(onchange).not.toBeCalled();
       });
     });
   });
