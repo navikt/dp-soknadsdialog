@@ -2,10 +2,11 @@ import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import React from "react";
 import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
 } from "../../constants";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useSanity } from "../../context/sanity-context";
@@ -29,11 +30,12 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
   const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
+      (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !dokumentkrav.bundleFilsti)
   );
 
   const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
-    (dokumentkrav) => dokumentkrav.bundle
+    (dokumentkrav) => dokumentkrav.bundleFilsti
   );
 
   const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
