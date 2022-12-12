@@ -35,10 +35,12 @@ export function ReceiptYourAnswers(props: IProps) {
           </Accordion.Item>
         )}
         {sections?.map((section) => {
+          const sectionTexts = getSeksjonTextById(section.beskrivendeId);
+
           return (
             <Accordion.Item key={section.beskrivendeId}>
               <Accordion.Header>
-                {getSeksjonTextById(section.beskrivendeId)?.title}
+                {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
               </Accordion.Header>
               <Accordion.Content>
                 {section.fakta.map((faktum) => {

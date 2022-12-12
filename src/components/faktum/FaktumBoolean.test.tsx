@@ -1,16 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizGeneratorFaktum, IQuizSeksjon, IQuizState, QuizFaktum } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
 
 import * as SentryLogger from "../../sentry.logger";
-
-//jest.mock("../../sentry.logger");
+import { MockContext } from "../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",
@@ -24,31 +19,15 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-const sectionMockData: IQuizSeksjon = {
-  fakta: [faktumMockData],
-  beskrivendeId: "din-situasjon",
-  ferdig: true,
-};
-
-const soknadStateMockData: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("FaktumBoolean", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
   test("Should show faktum question and answers", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumBoolean faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <FaktumBoolean faktum={faktumMockData} />
+      </MockContext>
     );
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
@@ -61,13 +40,9 @@ describe("FaktumBoolean", () => {
     faktumMockData.svar = true;
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumBoolean faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <FaktumBoolean faktum={faktumMockData} />
+      </MockContext>
     );
 
     // Casting it to access the value attribute
@@ -86,13 +61,9 @@ describe("FaktumBoolean", () => {
     faktumMockData.readOnly = true;
 
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={soknadStateMockData}>
-          <ValidationProvider>
-            <FaktumBoolean faktum={faktumMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext>
+        <FaktumBoolean faktum={faktumMockData} />
+      </MockContext>
     );
 
     expect(spy).not.toHaveBeenCalledWith("");
@@ -106,13 +77,9 @@ describe("FaktumBoolean", () => {
       const onchange = jest.fn();
 
       render(
-        <SanityProvider initialState={sanityMocks}>
-          <QuizProvider initialState={soknadStateMockData}>
-            <ValidationProvider>
-              <FaktumBoolean faktum={faktumMockData} onChange={onchange} />
-            </ValidationProvider>
-          </QuizProvider>
-        </SanityProvider>
+        <MockContext>
+          <FaktumBoolean faktum={faktumMockData} onChange={onchange} />
+        </MockContext>
       );
 
       const radioToClick = screen.getByLabelText(svar);
