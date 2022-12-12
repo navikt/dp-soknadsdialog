@@ -1,7 +1,7 @@
 import { BodyLong, Button } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { ErrorTypesEnum } from "../../types/error.types";
@@ -9,8 +9,8 @@ import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { FormattedDate } from "../FormattedDate";
 import { useDeleteRequest } from "../../hooks/useDeleteRequest";
-import styles from "./inngangPaabegynt.module.css";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
+import styles from "./inngangPaabegynt.module.css";
 
 interface IProps {
   paabegynt: IPaabegyntSoknad;
@@ -20,6 +20,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (deleteSoknadStatus === "success") {
@@ -37,8 +38,8 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
       </BodyLong>
 
-      <Link href={`/soknad/${paabegynt.soknadUuid}`} passHref>
-        <Button variant="primary" as="a">
+      <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref>
+        <Button variant="primary" as="a" loading={isLoading} onClick={() => setIsLoading(true)}>
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>

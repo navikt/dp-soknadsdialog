@@ -2,10 +2,11 @@ import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import React from "react";
 import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
 } from "../../constants";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useSanity } from "../../context/sanity-context";
@@ -16,6 +17,7 @@ import { ReceiptDocumentsNotSending } from "../receipt-documents-not-sending/Rec
 import { ReceiptDokumentkravUploadedItem } from "./ReceiptDokumentkravUploadedItem";
 import { ReceiptUploadDocuments } from "../receipt-upload-documents/ReceiptUploadDocuments";
 import { ISoknadStatus } from "../../types/quiz.types";
+import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 import styles from "./ReceiptDokumentkrav.module.css";
 
 interface IProps {
@@ -28,11 +30,12 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
   const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
+      (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !dokumentkrav.bundleFilsti)
   );
 
   const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
-    (dokumentkrav) => dokumentkrav.bundle
+    (dokumentkrav) => dokumentkrav.bundleFilsti
   );
 
   const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
@@ -55,7 +58,10 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
         <>
           {dokumentkravText && (
             <div className="my-12">
-              <PortableText value={dokumentkravText.body} />
+              <PortableText
+                value={dokumentkravText.body}
+                components={{ types: { readMore: ReadMore } }}
+              />
             </div>
           )}
 
@@ -82,7 +88,10 @@ export function ReceiptDokumentkrav({ soknadStatus }: IProps) {
 
       {!shouldShowEttersending && noDokumentkravDocumentsText && (
         <div className="my-12">
-          <PortableText value={noDokumentkravDocumentsText.body} />
+          <PortableText
+            value={noDokumentkravDocumentsText.body}
+            components={{ types: { readMore: ReadMore } }}
+          />
         </div>
       )}
 

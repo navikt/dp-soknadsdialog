@@ -48,7 +48,8 @@ export function Soknad(props: IProps) {
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
 
-    if (!soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+    // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
+    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
       router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 

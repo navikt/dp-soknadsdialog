@@ -1,11 +1,8 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Section } from "./Section";
-import { SanityProvider } from "../../context/sanity-context";
-import { IQuizSeksjon, IQuizState } from "../../types/quiz.types";
-import { QuizProvider } from "../../context/quiz-context";
-import { sanityMocks } from "../../__mocks__/sanity.mocks";
-import { ValidationProvider } from "../../context/validation-context";
+import { IQuizSeksjon } from "../../types/quiz.types";
+import { MockContext } from "../../__mocks__/MockContext";
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [
@@ -27,22 +24,12 @@ const sectionMockData: IQuizSeksjon = {
   ferdig: true,
 };
 
-const mockSoknadState: IQuizState = {
-  ferdig: false,
-  antallSeksjoner: 11,
-  seksjoner: [sectionMockData],
-};
-
 describe("Section", () => {
   test("Should show section info and the first unanswered question", async () => {
     render(
-      <SanityProvider initialState={sanityMocks}>
-        <QuizProvider initialState={mockSoknadState}>
-          <ValidationProvider>
-            <Section section={sectionMockData} />
-          </ValidationProvider>
-        </QuizProvider>
-      </SanityProvider>
+      <MockContext quizSeksjoner={[sectionMockData]}>
+        <Section section={sectionMockData} />
+      </MockContext>
     );
 
     await waitFor(() => {

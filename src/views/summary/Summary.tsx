@@ -87,11 +87,12 @@ export function Summary() {
 
       <Accordion>
         {soknadState.seksjoner?.map((section, index) => {
+          const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
             <div key={section.beskrivendeId}>
               <Accordion.Item key={section.beskrivendeId}>
                 <Accordion.Header>
-                  {getSeksjonTextById(section.beskrivendeId)?.title}
+                  {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
 
                   {showSoknadNotCompleteError && !section.ferdig && (
                     <Tag variant="error" className={styles.notCompleteTag}>
