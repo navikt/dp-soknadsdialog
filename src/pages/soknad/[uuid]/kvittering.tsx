@@ -70,12 +70,14 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let dokumentkrav: IDokumentkravList | null = null;
   let soknadStatus: ISoknadStatus = { status: "Ukjent" };
+  let personalia = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
@@ -122,9 +124,6 @@ export async function getServerSideProps(
   } else {
     arbeidssokerStatus = "UNKNOWN";
   }
-
-  let personalia = null;
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();

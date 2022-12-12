@@ -47,17 +47,16 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let personalia = null;
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
   }
-
-  let personalia = null;
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
