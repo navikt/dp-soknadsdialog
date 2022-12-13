@@ -3,7 +3,7 @@ import { Label } from "@navikt/ds-react";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponentProps } from "@portabletext/react/src/types";
-import { useSvgIcon } from "../../hooks/useSvgIcon";
+import { useSvgIcon } from "../../../hooks/useSvgIcon";
 import styles from "./Timeline.module.css";
 
 interface ITimelineItem {
