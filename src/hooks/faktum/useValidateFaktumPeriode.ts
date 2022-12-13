@@ -51,12 +51,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
 
     if (tom) {
       const isValid = isWithinValidYearRange(new Date(tom));
-
-      if (!isValid) {
-        setHasTomError("InvalidDate");
-      } else {
-        setHasTomError(undefined);
-      }
+      setHasTomError(isValid ? "InvalidDate" : undefined);
 
       validPeriode = isValid;
     }

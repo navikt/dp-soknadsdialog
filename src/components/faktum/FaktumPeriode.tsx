@@ -31,7 +31,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const [toIsBeforeFrom, setToIsBeforeFrom] = useState(false);
+  const [toDateIsBeforeFromDate, setToDateIsBeforeFromDate] = useState(false);
   const { isValid, getTomErrorMessage, getFomErrorMessage } = useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<
     IQuizPeriodeFaktumAnswerType | undefined | null
@@ -74,7 +74,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     onRangeChange: (value?: IDateRange) => handleDateChange(value),
     onValidate: (value) => {
       if (value.to) {
-        setToIsBeforeFrom(!!value.to?.isBeforeFrom);
+        setToDateIsBeforeFromDate(!!value.to?.isBeforeFrom);
       }
     },
   });
@@ -105,14 +105,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null | undefined) {
-    if (!toIsBeforeFrom) {
-      if (!value) {
-        saveFaktumToQuiz(faktum, null);
-      }
+    if (!value) {
+      saveFaktumToQuiz(faktum, null);
+    }
 
-      if (value && isValid(value)) {
-        saveFaktumToQuiz(faktum, value);
-      }
+    if (!toDateIsBeforeFromDate && value && isValid(value)) {
+      saveFaktumToQuiz(faktum, value);
     }
   }
 
@@ -174,7 +172,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
               error={
-                toIsBeforeFrom
+                toDateIsBeforeFromDate
                   ? getAppText("validering.arbeidsforhold.varighet-til")
                   : getTomErrorMessage()
               }
