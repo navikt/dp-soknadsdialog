@@ -12,8 +12,6 @@ import { getCountryName } from "../../country.utils";
 import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { AlertText } from "../alert-text/AlertText";
-import { ISanityLandGruppe } from "../../types/sanity.types";
 
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
@@ -21,11 +19,8 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getFaktumTextById, getLandGruppeTextById, getAppText } = useSanity();
+  const { getFaktumTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
-  const [currentLandGruppeText, setcurrentLandGruppeText] = useState<
-    ISanityLandGruppe | undefined
-  >();
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -60,13 +55,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   function onSelect(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
     setCurrentAnswer(value);
-
-    const landGruppeId = getLandGruppeIdByAlpha3Code(value);
-    setcurrentLandGruppeText(getLandGruppeTextById(landGruppeId));
-  }
-
-  function getLandGruppeIdByAlpha3Code(code: string) {
-    return faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
   }
 
   function saveFaktum(value: string) {
@@ -99,9 +87,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
-      )}
-      {(currentLandGruppeText?.alertText?.title || currentLandGruppeText?.alertText?.body) && (
-        <AlertText alertText={currentLandGruppeText.alertText} />
       )}
     </>
   );
