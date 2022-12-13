@@ -11,9 +11,10 @@ import Link from "next/link";
 
 interface IProps {
   personalia: IPersonalia;
+  mode?: "standard" | "summary";
 }
 
-export function Personalia({ personalia }: IProps) {
+export function Personalia({ personalia, mode = "standard" }: IProps) {
   const {
     fødselsDato,
     folkeregistrertAdresse: adresse,
@@ -37,7 +38,7 @@ export function Personalia({ personalia }: IProps) {
 
   return (
     <>
-      <SectionHeading text={personaliaTexts} fallback={textId} />
+      {mode === "standard" && <SectionHeading text={personaliaTexts} fallback={textId} />}
 
       {navn && (
         <div className={styles.personaliaFaktum}>

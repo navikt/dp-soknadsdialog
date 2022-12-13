@@ -6,6 +6,7 @@ import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../__mocks__/MockContext";
 import { IDokumentkrav } from "../../types/documentation.types";
+import { IPersonalia } from "../../types/personalia.types";
 
 jest.mock("../../session.utils", () => {
   return {
@@ -61,6 +62,14 @@ const soknadStatus: ISoknadStatus = {
   innsendt: "2022-10-21T09:47:29",
 };
 
+const personalia: IPersonalia = {
+  forNavn: "Donald",
+  mellomNavn: "Anton",
+  etterNavn: "Duck",
+  fødselsDato: "090634",
+  ident: "36963",
+};
+
 describe("Receipt", () => {
   test("Should show summary question and answers", async () => {
     const user = userEvent.setup();
@@ -71,6 +80,7 @@ describe("Receipt", () => {
           arbeidssokerStatus="REGISTERED"
           soknadStatus={soknadStatus}
           sections={[sectionMockdata]}
+          personalia={personalia}
         />
       </MockContext>
     );
@@ -94,7 +104,12 @@ describe("Receipt", () => {
     test("Should show warning if user has not signed up as registrert arbeidssøker", async () => {
       render(
         <MockContext>
-          <Receipt arbeidssokerStatus="UNREGISTERED" soknadStatus={soknadStatus} sections={[]} />
+          <Receipt
+            arbeidssokerStatus="UNREGISTERED"
+            soknadStatus={soknadStatus}
+            sections={[]}
+            personalia={personalia}
+          />
         </MockContext>
       );
 
@@ -110,7 +125,12 @@ describe("Receipt", () => {
     test("Should show dokumentkrav", async () => {
       render(
         <MockContext dokumentkrav={[dokumentkrav]}>
-          <Receipt arbeidssokerStatus="REGISTERED" soknadStatus={soknadStatus} sections={[]} />
+          <Receipt
+            arbeidssokerStatus="REGISTERED"
+            soknadStatus={soknadStatus}
+            sections={[]}
+            personalia={personalia}
+          />
         </MockContext>
       );
 
