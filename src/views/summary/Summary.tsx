@@ -1,5 +1,6 @@
 import { Left } from "@navikt/ds-icons";
 import { Accordion, Alert, Button, ConfirmationPanel, Tag } from "@navikt/ds-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
@@ -12,13 +13,14 @@ import { useUuid } from "../../hooks/useUuid";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
-import Link from "next/link";
 import { useSetFocus } from "../../hooks/useSetFocus";
-import styles from "./Summary.module.css";
+import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
+import { Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { useQuiz } from "../../context/quiz-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
+import styles from "./Summary.module.css";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -37,16 +39,13 @@ export function Summary(props: IProps) {
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
+  const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
+
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
-
   const textId = "oppsummering";
-  const summarySectionText = getSeksjonTextById(textId);
   const textPersonaliaId = "personalia";
+  const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
-
-  const [finishSoknad, finishSoknadStatus] = usePutRequest(
-    `soknad/${uuid}/ferdigstill?locale=${router.locale}`
-  );
 
   useEffect(() => {
     if (showSoknadNotCompleteError) {
@@ -71,7 +70,8 @@ export function Summary(props: IProps) {
       return;
     }
 
-    finishSoknad();
+    const locale = router.locale as Locale | undefined;
+    finishSoknad({ uuid, locale });
   }
 
   function navigateToDocumentation() {
@@ -90,9 +90,9 @@ export function Summary(props: IProps) {
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
+
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
-
       <SectionHeading text={summarySectionText} fallback={textId} />
 
       <Accordion>
@@ -106,6 +106,7 @@ export function Summary(props: IProps) {
             </Accordion.Content>
           </Accordion.Item>
         )}
+
         {soknadState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
@@ -121,9 +122,9 @@ export function Summary(props: IProps) {
               </Accordion.Header>
               <Accordion.Content>
                 <>
-                  {section.fakta.map((faktum) => {
-                    return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
-                  })}
+                  {section.fakta.map((faktum) => (
+                    <Faktum key={faktum.id} faktum={faktum} readonly={true} />
+                  ))}
 
                   <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
                     <Button variant="primary" as="a">

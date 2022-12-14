@@ -20,13 +20,16 @@ import {
   INNSENDING_SIDE_METADATA_TITTEL,
 } from "../../text-constants";
 import { usePutRequest } from "../../hooks/usePutRequest";
-import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import styles from "./GenerellInnsending.module.css";
 import { useRouter } from "next/router";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
+import { ErrorTypesEnum } from "../../types/error.types";
+import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
+import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 export function GenerellInnsending() {
   const router = useRouter();
@@ -34,7 +37,7 @@ export function GenerellInnsending() {
   const { mutate } = useSWRConfig();
   const { getAppText } = useSanity();
   const isFirstRender = useFirstRender();
-  const { soknadState, isError, isLoading, errorType } = useQuiz();
+  const { soknadState, isError, isLoading } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
   const { data, error } = useSWR<IDokumentkravList>(
@@ -53,9 +56,9 @@ export function GenerellInnsending() {
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
   } = useEttersending();
-  const [ferdigstillInnsending, ferdigstillInnsendingStatus] = usePutRequest(
-    `soknad/${uuid}/ferdigstill?locale=${router.locale}`
-  );
+  const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody>("documentation/svar");
+  const [ferdigstillInnsending, ferdigstillInnsendingStatus] =
+    usePutRequest<IFerdigstillBody>("soknad/ferdigstill");
 
   useEffect(() => {
     if (unansweredFaktumId) {
@@ -73,7 +76,13 @@ export function GenerellInnsending() {
   useEffect(() => {
     if (data) {
       for (const dokumentkrav of data.krav) {
-        saveDokumentkravSvar(uuid, dokumentkrav.id, { svar: DOKUMENTKRAV_SVAR_SEND_NAA });
+        saveDokumentkravSvar({
+          uuid,
+          dokumentkravId: dokumentkrav.id,
+          dokumentkravSvar: {
+            svar: DOKUMENTKRAV_SVAR_SEND_NAA,
+          },
+        });
       }
     }
   }, [data]);
@@ -95,7 +104,8 @@ export function GenerellInnsending() {
       }
 
       if (readyToFerdigstill) {
-        ferdigstillInnsending();
+        const locale = router.locale as Locale | undefined;
+        ferdigstillInnsending({ uuid, locale });
       }
     }
   }
@@ -152,7 +162,7 @@ export function GenerellInnsending() {
           handleClose={() => setDeleteSoknadModalOpen(false)}
         />
 
-        {(isError || error) && <ErrorRetryModal errorType={errorType} />}
+        {(isError || error) && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
 
         <NoSessionModal />
       </main>

@@ -1,15 +1,15 @@
 import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiFetch, audienceDPSoknad, audienceMellomlagring } from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
 import {
-  BUNBLE_DOCKUMENTKRAV_ERROR,
-  BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR,
-  SEND_BUNBLE_TO_DP_SOKNAD_ERROR as SEND_BUNDLE_TO_DP_SOKNAD_ERROR,
-} from "../../../sentry-constants";
+  apiFetch,
+  audienceDPSoknad,
+  audienceMellomlagring,
+  getErrorMessage,
+} from "../../../api.utils";
+import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
-import { headersWithToken } from "../quiz-api";
+import { headersWithToken } from "../../../api/quiz-api";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -26,15 +26,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const requestIdHeader = req.headers["x-request-id"];
-  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();
   }
 
   const { uuid, dokumentkravId, fileUrns } = req.body;
+  const requestIdHeader = req.headers["x-request-id"];
+  const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
@@ -45,8 +44,8 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       requestId
     );
     if (!mellomlagringResponse.ok) {
-      logRequestError(BUNBLE_FILES_IN_DP_MELLOMLAGRING_ERROR);
-      throw new Error("Feil ved bundling i dp-mellomlagring");
+      logRequestError(mellomlagringResponse.statusText);
+      return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
     const { urn } = await mellomlagringResponse.json();
@@ -59,14 +58,15 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(SEND_BUNDLE_TO_DP_SOKNAD_ERROR);
-      throw new Error("Feil ved lagring av bundle i dp-soknad");
+      logRequestError(dpSoknadResponse.statusText);
+      return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
-    logRequestError(BUNBLE_DOCKUMENTKRAV_ERROR);
-    return res.status(500).json(error);
+    const message = getErrorMessage(error);
+    logRequestError(message);
+    return res.status(500).send(message);
   }
 }
 

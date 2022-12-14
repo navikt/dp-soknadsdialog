@@ -3,7 +3,7 @@ import { Documentation } from "../../../views/documentation/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadState } from "../../api/quiz-api";
+import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../../types/documentation.types";

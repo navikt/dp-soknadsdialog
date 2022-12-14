@@ -3,7 +3,7 @@ import React from "react";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
 import { getSession } from "../../auth.utils";
 import { audienceDPSoknad } from "../../api.utils";
-import { getMineSoknader } from "../api/soknad/get-mine-soknader";
+import { getMineSoknader } from "../../api/quiz-api";
 import { IMineSoknader } from "../../types/quiz.types";
 
 export async function getServerSideProps(

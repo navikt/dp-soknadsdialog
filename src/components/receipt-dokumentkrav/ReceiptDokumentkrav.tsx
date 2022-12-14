@@ -10,13 +10,13 @@ import {
 } from "../../constants";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useSanity } from "../../context/sanity-context";
-import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { KVITTERING_HEADING_DOKUMENTER_SENDE_INN } from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ReceiptDokumentkravMissingItem } from "./ReceiptDokumentkravMissingItem";
 import { ReceiptDocumentsNotSending } from "../receipt-documents-not-sending/ReceiptDocumentsNotSending";
 import { ReceiptDokumentkravUploadedItem } from "./ReceiptDokumentkravUploadedItem";
 import { ReceiptUploadDocuments } from "../receipt-upload-documents/ReceiptUploadDocuments";
+import { ISoknadStatus } from "../../types/quiz.types";
 import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 import styles from "./ReceiptDokumentkrav.module.css";
 

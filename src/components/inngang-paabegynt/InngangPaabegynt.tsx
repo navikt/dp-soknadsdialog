@@ -3,12 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
+import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { FormattedDate } from "../FormattedDate";
 import { useDeleteRequest } from "../../hooks/useDeleteRequest";
+import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import styles from "./inngangPaabegynt.module.css";
 
 interface IProps {
@@ -18,7 +19,7 @@ interface IProps {
 export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
-  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest("soknad/delete");
+  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
 
       <Button
         variant="secondary"
-        onClick={() => deleteSoknad(paabegynt.soknadUuid)}
+        onClick={() => deleteSoknad({ uuid: paabegynt.soknadUuid })}
         loading={deleteSoknadStatus === "pending"}
       >
         {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}

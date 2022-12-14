@@ -1,13 +1,13 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { useRouter } from "next/router";
-import { saveFaktum } from "../api/saveFaktumToQuiz-api";
-import { ErrorTypesEnum } from "../types/error.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
   QuizFaktum,
   QuizFaktumSvarType,
 } from "../types/quiz.types";
+import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
+import { usePutRequest } from "../hooks/usePutRequest";
+import { useUuid } from "../hooks/useUuid";
 
 export interface IQuizContext {
   soknadState: IQuizState;
@@ -15,7 +15,6 @@ export interface IQuizContext {
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   isLoading: boolean;
   isError: boolean;
-  errorType: ErrorTypesEnum;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -25,27 +24,17 @@ interface IProps {
 }
 
 function QuizProvider(props: PropsWithChildren<IProps>) {
-  const router = useRouter();
-  const uuid = router.query.uuid as string;
+  const { uuid } = useUuid();
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorType, setErrorType] = useState<ErrorTypesEnum>(ErrorTypesEnum.GenericError);
+  const [saveFaktum, saveFaktumStatus] = usePutRequest<ISaveFaktumBody, IQuizState>(
+    "soknad/faktum/save",
+    true
+  );
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
-    try {
-      setIsError(false);
-      setIsLoading(true);
-
-      const res = await saveFaktum(uuid, faktum, svar);
-      setSoknadState(res);
-      setIsLoading(false);
-    } catch (error: unknown) {
-      // eslint-disable-next-line no-console
-      console.error("Lagre faktum error: ", error);
-      setIsLoading(false);
-      setIsError(true);
-      setErrorType(ErrorTypesEnum.SaveFaktumError);
+    const response = await saveFaktum({ uuid, faktum, svar });
+    if (response) {
+      setSoknadState(response);
     }
   }
 
@@ -53,19 +42,9 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     faktum: IQuizGeneratorFaktum,
     svar: QuizFaktum[][] | null
   ) {
-    try {
-      setIsError(false);
-      setIsLoading(true);
-
-      const res = await saveFaktum(uuid, faktum, svar);
-      setSoknadState(res);
-      setIsLoading(false);
-    } catch (error: unknown) {
-      // eslint-disable-next-line no-console
-      console.error("Lagre faktum error: ", error);
-      setIsLoading(false);
-      setIsError(true);
-      setErrorType(ErrorTypesEnum.GenericError);
+    const response = await saveFaktum({ uuid, faktum, svar });
+    if (response) {
+      setSoknadState(response);
     }
   }
 
@@ -75,9 +54,8 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         soknadState,
         saveFaktumToQuiz,
         saveGeneratorFaktumToQuiz,
-        isLoading,
-        isError,
-        errorType,
+        isLoading: saveFaktumStatus === "pending",
+        isError: saveFaktumStatus === "error",
       }}
     >
       {props.children}

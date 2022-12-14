@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadMal } from "../quiz-api";
+import { getSoknadMal } from "../../../api/quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 
-async function getMal(req: NextApiRequest, res: NextApiResponse) {
+async function malHandler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession(req);
   let soknadMal;
 
@@ -22,4 +22,4 @@ async function getMal(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(getMal);
+export default withSentry(malHandler);

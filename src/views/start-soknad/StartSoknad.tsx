@@ -11,15 +11,14 @@ import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 import { useSanity } from "../../context/sanity-context";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ErrorTypesEnum } from "../../types/error.types";
-import styles from "./StartSoknad.module.css";
 import { useSetFocus } from "../../hooks/useSetFocus";
+import styles from "./StartSoknad.module.css";
 
 export function StartSoknad() {
   const router = useRouter();
-  const { getAppText, getInfosideText } = useSanity();
   const { setFocus } = useSetFocus();
-
   const [isError, setIsError] = useState(false);
+  const { getAppText, getInfosideText } = useSanity();
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
@@ -47,7 +46,7 @@ export function StartSoknad() {
 
     try {
       setIsCreatingSoknadUUID(true);
-      const uuidResponse = await fetch(api("soknad/get-uuid"));
+      const uuidResponse = await fetch(api("soknad/uuid"));
 
       if (uuidResponse.ok) {
         const uuid = await uuidResponse.text();

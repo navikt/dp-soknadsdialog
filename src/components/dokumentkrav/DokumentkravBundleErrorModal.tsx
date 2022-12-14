@@ -1,12 +1,14 @@
+import React, { useEffect, useState } from "react";
 import { BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { saveDokumentkravSvar } from "../../api/dokumentasjon-api";
 import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { DokumentkravTitle } from "./DokumentkravTitle";
+import { usePutRequest } from "../../hooks/usePutRequest";
+import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
+import { useUuid } from "../../hooks/useUuid";
 
 interface IProps {
   dokumentkravList: IDokumentkrav[];
@@ -20,11 +22,12 @@ export function DokumentkravBundleErrorModal({
   toggleVisibility,
 }: IProps) {
   const router = useRouter();
-  const { uuid } = router.query;
+  const { uuid } = useUuid();
   const { getAppText } = useSanity();
-
   const [isSavingSvar, setIsSavingSvar] = useState(false);
   const [savingSvarError, setSavingSvarError] = useState(false);
+  const [saveDokumentkravSvar, , saveDokumentkravSvarError] =
+    usePutRequest<IDokumentkravSvarBody>("documentation/svar");
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -36,18 +39,20 @@ export function DokumentkravBundleErrorModal({
     setIsSavingSvar(true);
 
     try {
-      await Promise.all(
-        dokumentkravList.map(async (dokumentkrav) => {
-          const response = await saveDokumentkravSvar(uuid as string, dokumentkrav.id, {
+      for (const dokumentkrav of dokumentkravList) {
+        const responseOk = await saveDokumentkravSvar({
+          uuid,
+          dokumentkravId: dokumentkrav.id,
+          dokumentkravSvar: {
             svar: "dokumentkrav.svar.send.senere",
             begrunnelse: "Teknisk feil på innsending av filer",
-          });
+          },
+        });
 
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-        })
-      );
+        if (!responseOk) {
+          throw Error(saveDokumentkravSvarError.message);
+        }
+      }
 
       router.push(`/soknad/${router.query.uuid}/oppsummering`);
     } catch {
