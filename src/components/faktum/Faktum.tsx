@@ -85,7 +85,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   }
 
   return (
-    <div className={styles.faktum} id={faktum.beskrivendeId}>
+    <div className={styles.faktum} data-faktum-id={faktum.beskrivendeId}>
       {renderFaktumType()}
       {soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD && renderDokumentkrav()}
     </div>
