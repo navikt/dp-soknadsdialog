@@ -1,25 +1,4 @@
 import api from "../api.utils";
-import {
-  GyldigDokumentkravSvar,
-  IDokumentkrav,
-  IDokumentkravFil,
-} from "../types/documentation.types";
-
-interface IDokumentkravSvar {
-  svar: GyldigDokumentkravSvar;
-  begrunnelse?: string;
-}
-
-export async function saveDokumentkravSvar(
-  uuid: string,
-  dokumentkravId: string,
-  payload: IDokumentkravSvar
-) {
-  return fetch(api(`/documentation/${uuid}/${dokumentkravId}/svar`), {
-    method: "PUT",
-    body: JSON.stringify(payload),
-  });
-}
 
 export async function saveDokumenkravFile(file: File, uuid: string, dokumentkravId: string) {
   const requestData = new FormData();
@@ -32,35 +11,5 @@ export async function saveDokumenkravFile(file: File, uuid: string, dokumentkrav
       accept: "application/json",
     },
     body: requestData,
-  });
-}
-
-export async function deleteDokumentkravFile(
-  uuid: string,
-  dokumentkravId: string,
-  file: IDokumentkravFil
-) {
-  return fetch(api(`/documentation/${uuid}/${dokumentkravId}/file/delete`), {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(file),
-  });
-}
-
-export async function bundleDokumentkravFiles(uuid: string, dokumentkrav: IDokumentkrav) {
-  const body = {
-    soknadId: uuid,
-    filer: dokumentkrav.filer.map((file) => ({ urn: file.urn })),
-    bundleNavn: dokumentkrav.id,
-  };
-
-  return fetch(api(`/documentation/${uuid}/${dokumentkrav.id}/bundle`), {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
   });
 }

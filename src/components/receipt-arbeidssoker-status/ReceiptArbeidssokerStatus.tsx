@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert, BodyShort } from "@navikt/ds-react";
-import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
+import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptArbeidssokerStatus.module.css";
 import {

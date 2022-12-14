@@ -31,6 +31,7 @@ import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-ge
 import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNotSending";
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
+import { IEttersendBody } from "../../pages/api/soknad/ettersend";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -44,7 +45,8 @@ export function Ettersending({ dokumentkrav }: IProps) {
   const { getAppText, getInfosideText } = useSanity();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
-  const [ettersendSoknad, ettersendSoknadStatus] = usePutRequest(`soknad/${uuid}/ettersend`);
+  const [ettersendSoknad, ettersendSoknadStatus] =
+    usePutRequest<IEttersendBody>("soknad/ettersend");
   const {
     isBundling,
     noDocumentsToSave,
@@ -99,7 +101,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
       }
 
       if (readyToEttersend) {
-        ettersendSoknad();
+        ettersendSoknad({ uuid });
       }
     }
   }
@@ -121,11 +123,13 @@ export function Ettersending({ dokumentkrav }: IProps) {
           ))}
         </ErrorSummary>
       )}
+
       {ettersendingText && (
         <div className="my-12">
           <PortableText value={ettersendingText.body} />
         </div>
       )}
+
       {availableDokumentkravForEttersending.length > 0 && (
         <>
           <Heading level="2" size="medium" className="my-6">
@@ -167,6 +171,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />
           )}
+
           <div className="navigation-container">
             <Button
               variant="primary"

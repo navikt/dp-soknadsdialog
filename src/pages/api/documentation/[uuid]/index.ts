@@ -1,11 +1,10 @@
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../../api.utils";
+import { audienceDPSoknad, getErrorMessage } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
-import { headersWithToken } from "../../quiz-api";
+import { headersWithToken } from "../../../../api/quiz-api";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../sentry.logger";
-import { GET_DOKUMENTKRAV_ERROR } from "../../../../sentry-constants";
 
 export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`, {
@@ -37,8 +36,9 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     const dokumentkrav = await dokumentkravResponse.json();
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
-    logRequestError(GET_DOKUMENTKRAV_ERROR, uuid);
-    return res.status(500).send(error);
+    const message = getErrorMessage(error);
+    logRequestError(message, uuid);
+    return res.status(500).send(message);
   }
 }
 

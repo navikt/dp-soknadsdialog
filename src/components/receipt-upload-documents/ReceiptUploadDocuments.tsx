@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useUuid } from "../../hooks/useUuid";
-import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
+import { ISoknadStatus } from "../../types/quiz.types";
 import {
   KVITTERING_ETTERSENDING_FRIST_UTGATT_LENKE,
   KVITTERING_ETTERSENDING_FRIST_UTGATT_TEKST,

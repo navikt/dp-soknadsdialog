@@ -1,24 +1,29 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadState, getSoknadStatus } from "../../api/quiz-api";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { mockNeste } from "../../../localhost-data/mock-neste";
-import { ISoknadStatus } from "../../api/soknad/[uuid]/status";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker";
-import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../../api/arbeidssoker-api";
+import {
+  getArbeidssokerperioder,
+  IArbeidssokerperioder,
+  IArbeidssokerStatus,
+} from "../../../api/arbeidssoker-api";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { IQuizState } from "../../../types/quiz.types";
+import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import {
   DOKUMENTKRAV_SVAR_SENDER_SENERE,
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
 } from "../../../constants";
+import { getPersonalia } from "../../api/personalia";
+import { IPersonalia } from "../../../types/personalia.types";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 
 interface IProps {
   errorCode: number | null;
@@ -26,6 +31,7 @@ interface IProps {
   dokumentkrav: IDokumentkravList | null;
   soknadStatus: ISoknadStatus;
   arbeidssokerStatus: IArbeidssokerStatus;
+  personalia: IPersonalia | null;
 }
 
 export async function getServerSideProps(
@@ -39,6 +45,7 @@ export async function getServerSideProps(
       props: {
         soknadState: mockNeste,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
+        personalia: mockPersonalia,
         soknadStatus: {
           status: "UnderBehandling",
           opprettet: "2022-10-21T09:42:37.291157",
@@ -65,12 +72,14 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let dokumentkrav: IDokumentkravList | null = null;
   let soknadStatus: ISoknadStatus = { status: "Ukjent" };
+  let personalia = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
@@ -118,11 +127,16 @@ export async function getServerSideProps(
     arbeidssokerStatus = "UNKNOWN";
   }
 
+  if (personaliaResponse.ok) {
+    personalia = await personaliaResponse.json();
+  }
+
   return {
     props: {
       soknadState,
       dokumentkrav,
       soknadStatus,
+      personalia,
       arbeidssokerStatus,
       errorCode,
     },
@@ -130,33 +144,36 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
+  const { personalia, soknadState, soknadStatus, arbeidssokerStatus, errorCode, dokumentkrav } =
+    props;
   // eslint-disable-next-line no-console
-  !props.soknadStatus && console.error("Mangler soknadStatus");
+  !soknadStatus && console.error("Mangler soknadStatus");
   // eslint-disable-next-line no-console
-  !props.arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
+  !arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
 
-  if (!props.soknadState || !props.dokumentkrav) {
+  if (!soknadState || !dokumentkrav) {
     // eslint-disable-next-line no-console
-    !props.soknadState && console.error("Mangler soknadstate");
+    !soknadState && console.error("Mangler soknadstate");
     // eslint-disable-next-line no-console
-    !props.dokumentkrav && console.error("Mangler dokumentkrav");
+    !dokumentkrav && console.error("Mangler dokumentkrav");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
         details="Beklager, vi mistet kontakten med systemene våre."
-        statusCode={props.errorCode || 500}
+        statusCode={errorCode || 500}
       />
     );
   }
 
   return (
-    <QuizProvider initialState={props.soknadState}>
-      <DokumentkravProvider initialState={props.dokumentkrav}>
+    <QuizProvider initialState={soknadState}>
+      <DokumentkravProvider initialState={dokumentkrav}>
         <ValidationProvider>
           <Receipt
-            soknadStatus={props.soknadStatus}
-            arbeidssokerStatus={props.arbeidssokerStatus}
-            sections={props.soknadState.seksjoner}
+            soknadStatus={soknadStatus}
+            arbeidssokerStatus={arbeidssokerStatus}
+            sections={soknadState.seksjoner}
+            personalia={personalia}
           />
         </ValidationProvider>
       </DokumentkravProvider>

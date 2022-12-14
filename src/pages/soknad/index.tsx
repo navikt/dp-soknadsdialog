@@ -2,11 +2,14 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { audienceDPSoknad } from "../../api.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
-import { getMineSoknader } from "../api/soknad/get-mine-soknader";
+import { getMineSoknader } from "../../api/quiz-api";
 import ErrorPage from "../_error";
 import { getSession } from "../../auth.utils";
-import { IArbeidssokerStatus } from "../api/arbeidssoker";
-import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
+import {
+  getArbeidssokerperioder,
+  IArbeidssokerperioder,
+  IArbeidssokerStatus,
+} from "../../api/arbeidssoker-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;

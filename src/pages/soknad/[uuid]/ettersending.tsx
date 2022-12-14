@@ -61,5 +61,5 @@ export default function EttersendingPage(props: IProps) {
     return <Alert variant="info">Ingen dokumentasjonskrav tilgjengelig på søknaden</Alert>;
   }
 
-  return <Ettersending dokumentkrav={props.dokumentkrav}></Ettersending>;
+  return <Ettersending dokumentkrav={props.dokumentkrav} />;
 }

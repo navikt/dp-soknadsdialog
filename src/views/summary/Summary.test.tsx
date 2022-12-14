@@ -5,6 +5,7 @@ import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
 import fetch from "jest-fetch-mock";
+import { IPersonalia } from "../../types/personalia.types";
 
 jest.mock("../../session.utils", () => {
   return {
@@ -37,6 +38,14 @@ const sectionMockdata: IQuizSeksjon = {
   ferdig: true,
 };
 
+const personalia: IPersonalia = {
+  forNavn: "Donald",
+  mellomNavn: "Anton",
+  etterNavn: "Duck",
+  fødselsDato: "090634",
+  ident: "36963",
+};
+
 describe("Summary", () => {
   beforeEach(() => {
     fetch.enableMocks();
@@ -51,7 +60,7 @@ describe("Summary", () => {
 
     render(
       <MockContext quizSeksjoner={[sectionMockdata]}>
-        <Summary />
+        <Summary personalia={personalia} />
       </MockContext>
     );
 
@@ -75,7 +84,7 @@ describe("Summary", () => {
 
     render(
       <MockContext>
-        <Summary />
+        <Summary personalia={personalia} />
       </MockContext>
     );
 
@@ -102,7 +111,7 @@ describe("Summary", () => {
 
     render(
       <MockContext soknadState={quizState}>
-        <Summary />
+        <Summary personalia={personalia} />
       </MockContext>
     );
 
@@ -133,7 +142,7 @@ describe("Summary", () => {
 
     render(
       <MockContext soknadState={quizState}>
-        <Summary />
+        <Summary personalia={personalia} />
       </MockContext>
     );
 

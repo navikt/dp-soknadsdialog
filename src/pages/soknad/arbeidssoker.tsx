@@ -1,8 +1,11 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getArbeidssokerperioder, IArbeidssokerperioder } from "../../api/arbeidssoker-api";
+import {
+  getArbeidssokerperioder,
+  IArbeidssokerperioder,
+  IArbeidssokerStatus,
+} from "../../api/arbeidssoker-api";
 import { getSession } from "../../auth.utils";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
-import { IArbeidssokerStatus } from "../api/arbeidssoker";
 
 interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;

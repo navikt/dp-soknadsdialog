@@ -1,7 +1,7 @@
 import { Detail, Heading, Tag } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useSanity } from "../../context/sanity-context";
-import { ISoknadStatus, ISoknadStatuser } from "../../pages/api/soknad/[uuid]/status";
+import { ISoknadStatus, ISoknadStatuser } from "../../types/quiz.types";
 import styles from "./ReceiptSoknadStatus.module.css";
 import {
   KVITTERING_SOKNAD_STATUS_DESCRIPTION_FERDIG_BEHANDLET,

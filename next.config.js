@@ -30,7 +30,7 @@ const config = {
   output: "standalone",
   swcMinify: true,
   publicRuntimeConfig: {
-    NEXT_PUBLIC_SENTRY_STAGE: process.env.NEXT_PUBLIC_SENTRY_STAGE,
+    NEXT_PUBLIC_SENTRY_ENV: process.env.NEXT_PUBLIC_SENTRY_ENV,
   },
   async headers() {
     const env = process.env.NEXT_PUBLIC_LOCALHOST !== "true" ? "prod" : "dev";

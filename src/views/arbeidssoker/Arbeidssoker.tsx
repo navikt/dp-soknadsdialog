@@ -2,9 +2,10 @@ import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
 import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidssokerStatus } from "../../pages/api/arbeidssoker";
-import styles from "./Arbeidssoker.module.css";
+import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
+import styles from "./Arbeidssoker.module.css";
+
 interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }

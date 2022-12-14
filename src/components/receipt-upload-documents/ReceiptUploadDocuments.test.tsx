@@ -1,9 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { ReceiptUploadDocuments } from "./ReceiptUploadDocuments";
-import { ISoknadStatus } from "../../pages/api/soknad/[uuid]/status";
 import { sub, formatISO } from "date-fns";
 import { MockContext } from "../../__mocks__/MockContext";
+import { ISoknadStatus } from "../../types/quiz.types";
 
 const soknadStatusMock: ISoknadStatus = {
   status: "UnderBehandling",
