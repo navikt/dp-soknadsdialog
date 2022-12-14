@@ -75,13 +75,13 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
       <div {...getRootProps()} className={styles.fileUploader}>
         <input data-testid="dropzone" {...getInputProps()} />
 
-        <span className={styles.hasHover}>
+        <div className={styles.hasHover}>
           <p>
-            <b>{getAppText("filopplaster.tekst.dra-filene-hit")}</b>
+            <strong>{getAppText("filopplaster.tekst.dra-filene-hit")}</strong>
             <br />
             {getAppText("filopplaster.tekst.eller")}
           </p>
-        </span>
+        </div>
         <Button loading={isLoading}>{getAppText("filopplaster.knapp.velg-filer")}</Button>
       </div>
 
