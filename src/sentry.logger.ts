@@ -19,7 +19,7 @@ class MissingTextError extends Error {
   }
 }
 
-class RequestError extends Error {
+export class RequestError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "RequestError";
