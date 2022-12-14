@@ -123,7 +123,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
           )}
         </Modal.Content>
       </Modal>
-      )
     </>
   );
 }

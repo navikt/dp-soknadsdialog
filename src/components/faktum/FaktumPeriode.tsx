@@ -161,14 +161,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
           <div className={periodeStyles.datePickerSpacing}>
             <UNSAFE_DatePicker.Input
               {...fromInputProps}
-              id={beskrivendeIdFra}
               label={faktumTextFra}
               placeholder={getAppText("datovelger.dato-format")}
               error={getFomErrorMessage()}
             />
             <UNSAFE_DatePicker.Input
               {...toInputProps}
-              id={beskrivendeIdTil}
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
               error={

@@ -86,7 +86,6 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       >
         <UNSAFE_DatePicker.Input
           {...inputProps}
-          id={props.faktum.beskrivendeId}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
