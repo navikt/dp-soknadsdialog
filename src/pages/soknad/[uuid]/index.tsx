@@ -47,18 +47,17 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let personalia = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
   }
-
-  let personalia = null;
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
@@ -74,20 +73,22 @@ export async function getServerSideProps(
 }
 
 export default function SoknadPage(props: IProps) {
-  if (props.errorCode || !props.soknadState) {
+  const { errorCode, soknadState, personalia } = props;
+
+  if (errorCode || !soknadState) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
         details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
-        statusCode={props.errorCode || 500}
+        statusCode={errorCode || 500}
       />
     );
   }
 
   return (
-    <QuizProvider initialState={props.soknadState}>
+    <QuizProvider initialState={soknadState}>
       <ValidationProvider>
-        <Soknad personalia={props.personalia} />
+        <Soknad personalia={personalia} />
       </ValidationProvider>
     </QuizProvider>
   );

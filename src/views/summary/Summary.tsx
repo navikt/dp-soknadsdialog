@@ -18,9 +18,17 @@ import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { useQuiz } from "../../context/quiz-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
+import { IPersonalia } from "../../types/personalia.types";
+import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
 
-export function Summary() {
+interface IProps {
+  personalia: IPersonalia | null;
+}
+
+export function Summary(props: IProps) {
+  const { personalia } = props;
+
   const router = useRouter();
   const { uuid } = useUuid();
   const { soknadState } = useQuiz();
@@ -31,11 +39,13 @@ export function Summary() {
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
-  const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
-
-  const textId = "oppsummering";
-  const summarySectionText = getSeksjonTextById(textId);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
+
+  const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
+  const textId = "oppsummering";
+  const textPersonaliaId = "personalia";
+  const summarySectionText = getSeksjonTextById(textId);
+  const personaliaTexts = getSeksjonTextById(textPersonaliaId);
 
   useEffect(() => {
     if (showSoknadNotCompleteError) {
@@ -80,41 +90,50 @@ export function Summary() {
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
       />
+
       <SoknadHeader />
       <ProgressBar currentStep={summaryStep} totalSteps={totalSteps} />
-
       <SectionHeading text={summarySectionText} fallback={textId} />
 
       <Accordion>
+        {personalia && (
+          <Accordion.Item>
+            <Accordion.Header>
+              {personaliaTexts?.title ? personaliaTexts.title : textPersonaliaId}
+            </Accordion.Header>
+            <Accordion.Content>
+              <Personalia personalia={personalia} mode="summary" />
+            </Accordion.Content>
+          </Accordion.Item>
+        )}
+
         {soknadState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
-            <div key={section.beskrivendeId}>
-              <Accordion.Item key={section.beskrivendeId}>
-                <Accordion.Header>
-                  {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
+            <Accordion.Item key={section.beskrivendeId}>
+              <Accordion.Header>
+                {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
 
-                  {showSoknadNotCompleteError && !section.ferdig && (
-                    <Tag variant="error" className={styles.notCompleteTag}>
-                      {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
-                    </Tag>
-                  )}
-                </Accordion.Header>
-                <Accordion.Content>
-                  <>
-                    {section.fakta.map((faktum) => {
-                      return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
-                    })}
+                {showSoknadNotCompleteError && !section.ferdig && (
+                  <Tag variant="error" className={styles.notCompleteTag}>
+                    {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
+                  </Tag>
+                )}
+              </Accordion.Header>
+              <Accordion.Content>
+                <>
+                  {section.fakta.map((faktum) => (
+                    <Faktum key={faktum.id} faktum={faktum} readonly={true} />
+                  ))}
 
-                    <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
-                      <Button variant="primary" as="a">
-                        {getAppText("oppsummering.knapp.endre-svar")}
-                      </Button>
-                    </Link>
-                  </>
-                </Accordion.Content>
-              </Accordion.Item>
-            </div>
+                  <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
+                    <Button variant="primary" as="a">
+                      {getAppText("oppsummering.knapp.endre-svar")}
+                    </Button>
+                  </Link>
+                </>
+              </Accordion.Content>
+            </Accordion.Item>
           );
         })}
       </Accordion>
