@@ -79,7 +79,6 @@ export function useFetchRequest<T, U>(
         tags: {
           message: GENERIC_ERROR_DETAILS.message,
           responseCode: GENERIC_ERROR_DETAILS.responseCode,
-          body: JSON.stringify(body),
         },
       });
       return false;
