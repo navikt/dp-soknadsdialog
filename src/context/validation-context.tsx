@@ -3,6 +3,8 @@ import React, { createContext, PropsWithChildren, useState } from "react";
 export interface IValidationContext {
   unansweredFaktumId?: string;
   setUnansweredFaktumId: (unansweredFaktumId: string | undefined) => void;
+  datePickerIsOpen: boolean;
+  setDatePickerIsOpen: (isOpen: boolean) => void;
 }
 
 export const ValidationContext = createContext<IValidationContext | undefined>(undefined);
@@ -12,8 +14,15 @@ function ValidationProvider(props: PropsWithChildren) {
     undefined
   );
 
+  // Todo, lage ny AppContent og flytte denne linjen ut
+  const [datePickerIsOpen, setContextDatePickerIsOpen] = useState(false);
+
   function setUnansweredFaktumId(unansweredFaktumId: string | undefined) {
     setContextUnansweredFaktumId(unansweredFaktumId);
+  }
+
+  function setDatePickerIsOpen(isOpen: boolean) {
+    setContextDatePickerIsOpen(isOpen);
   }
 
   return (
@@ -21,6 +30,8 @@ function ValidationProvider(props: PropsWithChildren) {
       value={{
         unansweredFaktumId,
         setUnansweredFaktumId,
+        datePickerIsOpen,
+        setDatePickerIsOpen,
       }}
     >
       {props.children}

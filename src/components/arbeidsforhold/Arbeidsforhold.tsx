@@ -24,7 +24,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
-  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
+  const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -95,11 +95,12 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
               shouldCloseOnOverlayClick={false}
+              shouldCloseOnEsc={!datePickerIsOpen}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Content>
                 <Heading size={"large"} spacing>
-                  {getAppText("arbeidsforhold.knapp.legg-til")}{" "}
+                  {getAppText("arbeidsforhold.knapp.legg-til")}
                 </Heading>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />

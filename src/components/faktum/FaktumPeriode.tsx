@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
@@ -31,6 +32,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
+  const { setDatePickerIsOpen } = useValidation();
   const [toDateIsBeforeFromDate, setToDateIsBeforeFromDate] = useState(false);
   const { isValid, getTomErrorMessage, getFomErrorMessage } = useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<
@@ -78,6 +80,11 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
       }
     },
   });
+
+  // Use to prevent Escape key press to close both datepicker and modal simultaneously
+  useEffect(() => {
+    setDatePickerIsOpen(!!datepickerProps.open);
+  }, [datepickerProps]);
 
   function handleDateChange(value?: IDateRange) {
     if (!value?.from) {

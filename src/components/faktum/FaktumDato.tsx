@@ -2,8 +2,10 @@ import { Alert, BodyShort, Label, UNSAFE_DatePicker, UNSAFE_useDatepicker } from
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { useEffect, useState } from "react";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
@@ -12,14 +14,14 @@ import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { getErrorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
+  const { setDatePickerIsOpen } = useValidation();
+  const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
   const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
@@ -46,6 +48,11 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       debouncedChange(debounceValue);
     },
   });
+
+  // Use to prevent Escape key press to close both datepicker and modal simultaneously
+  useEffect(() => {
+    setDatePickerIsOpen(!!datepickerProps.open);
+  }, [datepickerProps]);
 
   function saveFaktum(value: string | undefined | null) {
     if (!value) {
@@ -89,9 +96,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
-          error={
-            hasInvalidReselectedDate ? getAppText("validering.ugyldig-dato") : getErrorMessage()
-          }
+          error={hasInvalidReselectedDate ? getAppText("validering.ugyldig-dato") : errorMessage}
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (
