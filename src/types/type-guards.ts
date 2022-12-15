@@ -32,3 +32,12 @@ export function isGeneratorFaktum(
 export function isPeriodeAnswer(value: QuizFaktumSvarType): value is IQuizPeriodeFaktumAnswerType {
   return (value as IQuizPeriodeFaktumAnswerType).tom !== undefined;
 }
+
+/**
+ * Check if element is defined (not null or undefined). Typically used in Array.filters
+ * @param element Element to check
+ * @return true if element is defined. False otherwise
+ */
+export function isDefined<T>(element: T | null | undefined): element is T {
+  return !!element;
+}
