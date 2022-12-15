@@ -34,7 +34,8 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen } = useValidation();
   const [toDateIsBeforeFromDate, setToDateIsBeforeFromDate] = useState(false);
-  const { isValid, getTomErrorMessage, getFomErrorMessage } = useValidateFaktumPeriode(faktum);
+  const { isValid, tomErrorMessage, fomErrorMessage, clearTomErrorMessage } =
+    useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<
     IQuizPeriodeFaktumAnswerType | undefined | null
   >(faktum.svar);
@@ -49,7 +50,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const faktumTextTil = getAppText(beskrivendeIdTil);
 
   useEffect(() => {
-    if (!isFirstRender && debouncedPeriode !== faktum.svar) {
+    if (!isFirstRender) {
       onChange ? onChange(faktum, debouncedPeriode) : saveFaktum(debouncedPeriode);
     }
   }, [debouncedPeriode]);
@@ -88,7 +89,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
   function handleDateChange(value?: IDateRange) {
     if (!value?.from) {
-      setCurrentAnswer(undefined);
+      setCurrentAnswer(null);
       debouncedChange(null);
     }
 
@@ -97,6 +98,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         const parsedFromDate = formatISO(value.from, { representation: "date" });
         const period = { fom: parsedFromDate };
 
+        clearTomErrorMessage();
         setCurrentAnswer(period);
         debouncedChange(period);
       }
@@ -170,7 +172,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
               {...fromInputProps}
               label={faktumTextFra}
               placeholder={getAppText("datovelger.dato-format")}
-              error={getFomErrorMessage()}
+              error={fomErrorMessage}
             />
             <UNSAFE_DatePicker.Input
               {...toInputProps}
@@ -179,7 +181,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
               error={
                 toDateIsBeforeFromDate
                   ? getAppText("validering.arbeidsforhold.varighet-til")
-                  : getTomErrorMessage()
+                  : tomErrorMessage
               }
             />
           </div>

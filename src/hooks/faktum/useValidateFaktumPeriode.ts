@@ -1,101 +1,82 @@
 import { isFuture } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isWithinValidYearRange } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 
-type validationFomDateErrorType = "FutureDate" | "InvalidDate";
-
 interface IUseValidateFaktumPeriode {
-  getFomErrorMessage: () => string | undefined;
-  getTomErrorMessage: () => string | undefined;
   isValid: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
+  fomErrorMessage: string | undefined;
+  tomErrorMessage: string | undefined;
+  clearTomErrorMessage: () => void;
 }
 
 export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
-  const { getAppText, getFaktumTextById } = useSanity();
+  const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [hasFomError, setHasFomError] = useState<validationFomDateErrorType | undefined>(undefined);
-  const [hasTomError, setHasTomError] = useState<string | undefined>(undefined);
+  const [fomErrorMessage, setFomErrorMessage] = useState<string | undefined>(undefined);
+  const [tomErrorMessage, setTomErrorMessage] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      setFomErrorMessage(getAppText("validering.faktum.ubesvart"));
+    } else {
+      setFomErrorMessage(undefined);
+    }
+  }, [unansweredFaktumId]);
 
   function isValid(svar: IQuizPeriodeFaktumAnswerType) {
     const { fom, tom } = svar;
-    let validPeriode = true;
+    let isValidPeriode = true;
 
-    if (fom) {
-      const future = isFuture(new Date(fom));
-      const isValidFromDate = isWithinValidYearRange(new Date(fom));
+    const fomDateIsInfuture = isFuture(new Date(fom));
+    const isValidFromDate = isWithinValidYearRange(new Date(fom));
 
-      // Future date is allowed on those two special cases
-      const specialCase =
-        faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode" ||
-        faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
+    setFomErrorMessage(undefined);
+    setTomErrorMessage(undefined);
 
-      if (specialCase) {
-        setHasFomError(!isValidFromDate ? "InvalidDate" : undefined);
-        validPeriode = isValidFromDate;
-      } else {
-        if (!isValidFromDate) {
-          setHasFomError("InvalidDate");
-        } else if (future) {
-          setHasFomError("FutureDate");
-        } else {
-          setHasFomError(undefined);
-        }
+    const specialCase =
+      faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode" ||
+      faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
 
-        validPeriode = !future && isValidFromDate;
-      }
+    // Future date is allowed on those two special cases
+    if (specialCase && !isValidFromDate) {
+      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
+      isValidPeriode = false;
     }
 
-    if (tom) {
-      const isValid = isWithinValidYearRange(new Date(tom));
-      setHasTomError(!isValid ? "InvalidDate" : undefined);
-
-      validPeriode = isValid;
+    if (fomDateIsInfuture && !specialCase) {
+      setFomErrorMessage(getAppText("validering.fremtidig-dato"));
+      isValidPeriode = false;
     }
 
-    return validPeriode;
+    if (fomDateIsInfuture && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
+      setFomErrorMessage(getAppText("validering.arbeidsforhold.varighet-fra"));
+      isValidPeriode = false;
+    }
+
+    if (!isValidFromDate) {
+      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
+      isValidPeriode = false;
+    }
+
+    if (tom && !isWithinValidYearRange(new Date(tom))) {
+      setTomErrorMessage(getAppText("validering.ugyldig-dato"));
+      isValidPeriode = false;
+    }
+
+    return isValidPeriode;
   }
 
-  function getFomErrorMessageByRule() {
-    if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return hasFomError === "FutureDate"
-        ? getAppText("validering.arbeidsforhold.varighet-fra")
-        : getAppText("validering.ugyldig-dato");
-    } else if (hasFomError === "InvalidDate") {
-      return getAppText("validering.ugyldig-dato");
-    } else {
-      return faktumTexts?.errorMessage ? faktumTexts.errorMessage : faktum.beskrivendeId;
-    }
-  }
-
-  function getFomErrorMessage() {
-    if (hasFomError) {
-      return getFomErrorMessageByRule();
-    } else if (unansweredFaktumId === faktum.id) {
-      return getAppText("validering.faktum.ubesvart");
-    } else {
-      return undefined;
-    }
-  }
-
-  function getTomErrorMessage() {
-    if (hasTomError && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      return hasTomError === "InvalidDate"
-        ? getAppText("validering.ugyldig-dato")
-        : getAppText("validering.arbeidsforhold.varighet-til");
-    } else if (hasTomError === "InvalidDate") {
-      return getAppText("validering.ugyldig-dato");
-    } else {
-      return undefined;
-    }
+  function clearTomErrorMessage() {
+    setTomErrorMessage(undefined);
   }
 
   return {
-    getFomErrorMessage,
-    getTomErrorMessage,
     isValid,
+    fomErrorMessage,
+    tomErrorMessage,
+    clearTomErrorMessage,
   };
 }

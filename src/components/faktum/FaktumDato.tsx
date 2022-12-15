@@ -29,7 +29,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const [hasInvalidReselectedDate, setInvalidReselectedDate] = useState(false);
 
   useEffect(() => {
-    if (!isFirstRender && debouncedDate !== faktum.svar) {
+    if (!isFirstRender) {
       onChange ? onChange(faktum, debouncedDate) : saveFaktum(debouncedDate);
     }
   }, [debouncedDate]);
