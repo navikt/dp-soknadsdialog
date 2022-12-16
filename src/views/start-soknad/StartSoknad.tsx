@@ -79,7 +79,7 @@ export function StartSoknad() {
             {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
             <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
               {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
-            </Link>{" "}
+            </Link>
             {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
           </Alert>
         )}

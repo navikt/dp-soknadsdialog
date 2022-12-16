@@ -72,7 +72,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     return undefined;
   }
 
-  const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
+  const { datepickerProps, toInputProps, fromInputProps, setSelected } = UNSAFE_useRangeDatepicker({
     defaultSelected: getInitialRangeDateValue(),
     onRangeChange: (value?: IDateRange) => handleDateChange(value),
     onValidate: (value) => {
@@ -83,12 +83,21 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   });
 
   // Use to prevent Escape key press to close both datepicker and modal simultaneously
+  // This is a temporaty fix for ds-react version 2.0.9
+  // Design system team are working on a better solution
   useEffect(() => {
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
   function handleDateChange(value?: IDateRange) {
-    if (!value?.from) {
+    if (!value?.from && value?.to) {
+      // Clear to date when from date is empty programmatically
+      setSelected({ from: undefined });
+      setCurrentAnswer(null);
+      debouncedChange(null);
+    }
+
+    if (!value?.from && !value?.to) {
       setCurrentAnswer(null);
       debouncedChange(null);
     }

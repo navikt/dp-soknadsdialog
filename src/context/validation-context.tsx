@@ -14,7 +14,7 @@ function ValidationProvider(props: PropsWithChildren) {
     undefined
   );
 
-  // Todo, lage ny AppContent og flytte denne linjen ut
+  // Tempory fix for ds-react 2.0.9 to prevent closing clossing modal and datepicker simultaneously
   const [datePickerIsOpen, setContextDatePickerIsOpen] = useState(false);
 
   function setUnansweredFaktumId(unansweredFaktumId: string | undefined) {
