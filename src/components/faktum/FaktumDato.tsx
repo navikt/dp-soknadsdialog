@@ -26,7 +26,6 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
   const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
-  const [newAnswerIsInvalid, setNewAnswerIsInvalid] = useState(false);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -62,12 +61,10 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
     }
 
     if (value && !isValid(new Date(value))) {
-      setNewAnswerIsInvalid(true);
       saveFaktumToQuiz(faktum, null);
     }
 
     if (value && isValid(new Date(value))) {
-      setNewAnswerIsInvalid(false);
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -102,7 +99,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
-          error={newAnswerIsInvalid ? getAppText("validering.ugyldig-dato") : errorMessage}
+          error={errorMessage}
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (

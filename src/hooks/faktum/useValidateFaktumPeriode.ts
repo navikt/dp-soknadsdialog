@@ -9,7 +9,6 @@ interface IUseValidateFaktumPeriode {
   isValid: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
   fomErrorMessage: string | undefined;
   tomErrorMessage: string | undefined;
-  clearTomErrorMessage: () => void;
 }
 
 export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
@@ -19,11 +18,9 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
   const [tomErrorMessage, setTomErrorMessage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      setFomErrorMessage(getAppText("validering.faktum.ubesvart"));
-    } else {
-      setFomErrorMessage(undefined);
-    }
+    setFomErrorMessage(
+      unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+    );
   }, [unansweredFaktumId]);
 
   function isValid(svar: IQuizPeriodeFaktumAnswerType) {
@@ -61,6 +58,10 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       isValidPeriode = false;
     }
 
+    if (!tom) {
+      setTomErrorMessage(undefined);
+    }
+
     if (tom && !isWithinValidYearRange(new Date(tom))) {
       setTomErrorMessage(getAppText("validering.ugyldig-dato"));
       isValidPeriode = false;
@@ -69,14 +70,9 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     return isValidPeriode;
   }
 
-  function clearTomErrorMessage() {
-    setTomErrorMessage(undefined);
-  }
-
   return {
     isValid,
     fomErrorMessage,
     tomErrorMessage,
-    clearTomErrorMessage,
   };
 }

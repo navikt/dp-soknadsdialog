@@ -19,9 +19,11 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setErrorMessage(
-      unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
-    );
+    if (!errorMessage) {
+      setErrorMessage(
+        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+      );
+    }
   }, [unansweredFaktumId]);
 
   function isValid(date: Date) {
