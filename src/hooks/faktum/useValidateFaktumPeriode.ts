@@ -9,6 +9,7 @@ interface IUseValidateFaktumPeriode {
   isValid: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
   fomErrorMessage: string | undefined;
   tomErrorMessage: string | undefined;
+  getTomIsBeforeTomErrorMessage: () => string;
 }
 
 export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
@@ -70,9 +71,16 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     return isValidPeriode;
   }
 
+  function getTomIsBeforeTomErrorMessage() {
+    return faktum.beskrivendeId === "faktum.arbeidsforhold.varighet"
+      ? getAppText("validering.arbeidsforhold.varighet-til")
+      : getAppText("validering.sluttdato-kan-ikke-vaere-foor-dato");
+  }
+
   return {
     isValid,
     fomErrorMessage,
     tomErrorMessage,
+    getTomIsBeforeTomErrorMessage,
   };
 }

@@ -33,8 +33,9 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen } = useValidation();
-  const [toDateIsBeforeFromDate, setToDateIsBeforeFromDate] = useState(false);
-  const { isValid, tomErrorMessage, fomErrorMessage } = useValidateFaktumPeriode(faktum);
+  const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
+  const { isValid, tomErrorMessage, fomErrorMessage, getTomIsBeforeTomErrorMessage } =
+    useValidateFaktumPeriode(faktum);
   const [currentAnswer, setCurrentAnswer] = useState<
     IQuizPeriodeFaktumAnswerType | undefined | null
   >(faktum.svar);
@@ -76,7 +77,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     onRangeChange: (value?: IDateRange) => handleDateChange(value),
     onValidate: (value) => {
       if (value.to) {
-        setToDateIsBeforeFromDate(!!value.to?.isBeforeFrom);
+        setTomDateIsBeforeFomDate(!!value.to?.isBeforeFrom);
       }
     },
   });
@@ -105,7 +106,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
 
     if (value?.from) {
       // When to date is not speficied or to date is before from date
-      if (!value.to || toDateIsBeforeFromDate) {
+      if (!value.to || tomDateIsBeforeFomDate) {
         const parsedFromDate = formatISO(value.from, { representation: "date" });
         const period = { fom: parsedFromDate };
 
@@ -193,11 +194,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
               {...toInputProps}
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
-              error={
-                toDateIsBeforeFromDate
-                  ? getAppText("validering.arbeidsforhold.varighet-til")
-                  : tomErrorMessage
-              }
+              error={tomDateIsBeforeFomDate ? getTomIsBeforeTomErrorMessage() : tomErrorMessage}
             />
           </div>
         </UNSAFE_DatePicker>
