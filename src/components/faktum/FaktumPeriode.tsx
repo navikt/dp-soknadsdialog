@@ -104,7 +104,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
     }
 
     if (value?.from) {
-      // When to date is not speficied or before from date
+      // When to date is not speficied or to date is before from date
       if (!value.to || toDateIsBeforeFromDate) {
         const parsedFromDate = formatISO(value.from, { representation: "date" });
         const period = { fom: parsedFromDate };
@@ -113,7 +113,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
         debouncedChange(period);
       }
 
-      // When both from and to dat is provided
+      // When both from and to date is provided
       if (value.to) {
         const parsedFromDate = formatISO(value.from, { representation: "date" });
         const parsedToDate = formatISO(value.to, { representation: "date" });
