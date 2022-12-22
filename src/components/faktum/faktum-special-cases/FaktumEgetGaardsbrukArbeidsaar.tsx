@@ -46,19 +46,22 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
   }
 
   return (
-    <Dropdown
+    <div
       ref={faktumEgetGaardsbrukArbeidsaarRef}
-      label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
-      onChange={handleOnSelect}
-      options={years}
-      currentValue={currentAnswer?.toString() || ""}
-      placeHolderText={"Velg et år"}
-      readOnly={readonly}
-      error={
-        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
-      }
       tabIndex={-1}
       aria-invalid={unansweredFaktumId === faktum.id}
-    />
+    >
+      <Dropdown
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        onChange={handleOnSelect}
+        options={years}
+        currentValue={currentAnswer?.toString() || ""}
+        placeHolderText={"Velg et år"}
+        readOnly={readonly}
+        error={
+          unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+        }
+      />
+    </div>
   );
 }

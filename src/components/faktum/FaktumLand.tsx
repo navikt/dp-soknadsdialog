@@ -85,9 +85,8 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   }
 
   return (
-    <>
+    <div ref={faktumLandRef} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
-        ref={faktumLandRef}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
@@ -97,12 +96,10 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
-        tabIndex={-1}
-        aria-invalid={unansweredFaktumId === faktum.id}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </>
+    </div>
   );
 }
