@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import {
@@ -19,11 +19,16 @@ import { findEmployerName } from "../../faktum.utils";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useRouter } from "next/router";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
+  const abeidsforholdRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -51,6 +56,13 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [faktum?.svar?.length]);
 
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(abeidsforholdRef);
+      setFocus(abeidsforholdRef);
+    }
+  }, [unansweredFaktumId]);
+
   function addArbeidsforhold(faktum: IQuizGeneratorFaktum) {
     const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
@@ -73,7 +85,12 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div key={svarIndex}>
+          <div
+            key={svarIndex}
+            ref={abeidsforholdRef}
+            tabIndex={-1}
+            aria-invalid={unansweredFaktumId === faktum.id}
+          >
             <GeneratorFaktumCard
               generatorFaktumType="arbeidsforhold"
               allFaktumAnswered={!unansweredFaktum}

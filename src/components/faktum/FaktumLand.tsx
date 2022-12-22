@@ -1,5 +1,5 @@
 import { PortableText } from "@portabletext/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
 import { IFaktum } from "./Faktum";
 import { IQuizLandFaktum } from "../../types/quiz.types";
@@ -12,6 +12,8 @@ import { getCountryName } from "../../country.utils";
 import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const router = useRouter();
@@ -21,6 +23,9 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
+  const faktumLandRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -52,6 +57,13 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     }
   }, [faktum.svar]);
 
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumLandRef);
+      setFocus(faktumLandRef);
+    }
+  }, [unansweredFaktumId]);
+
   function onSelect(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
     setCurrentAnswer(value);
@@ -75,6 +87,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   return (
     <>
       <Dropdown
+        ref={faktumLandRef}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
@@ -84,6 +97,8 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        tabIndex={-1}
+        aria-invalid={unansweredFaktumId === faktum.id}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

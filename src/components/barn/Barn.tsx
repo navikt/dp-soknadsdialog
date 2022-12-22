@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
@@ -12,6 +12,8 @@ import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegi
 import { ChildAdd } from "../../svg-icons/ChildAdd";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
@@ -21,6 +23,9 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { unansweredFaktumId } = useValidation();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
+  const barnRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -40,6 +45,13 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [faktum?.svar?.length]);
 
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(barnRef);
+      setFocus(barnRef);
+    }
+  }, [unansweredFaktumId]);
+
   return (
     <>
       {faktum?.svar?.map((fakta, svarIndex) => {
@@ -49,7 +61,12 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div key={svarIndex}>
+          <div
+            key={svarIndex}
+            ref={barnRef}
+            aria-invalid={unansweredFaktumId === faktum.id}
+            tabIndex={-1}
+          >
             <GeneratorFaktumCard
               generatorFaktumType="barn"
               allFaktumAnswered={!unansweredFaktum}

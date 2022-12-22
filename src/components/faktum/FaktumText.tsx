@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -12,6 +12,8 @@ import { useValidation } from "../../context/validation-context";
 import { TEXTAREA_FAKTUM_IDS } from "../../constants";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import styles from "./Faktum.module.css";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
@@ -19,6 +21,11 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
+  const faktumTextRef = useRef<HTMLInputElement>(null);
+  const faktumTextAreaRef = useRef<HTMLTextAreaElement>(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
   const [hasError, setHasError] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
   const [debouncedText, setDebouncedText] = useState<string>(currentAnswer);
@@ -38,6 +45,17 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      const currentRef = TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId)
+        ? faktumTextAreaRef
+        : faktumTextRef;
+
+      scrollIntoView(currentRef);
+      setFocus(currentRef);
+    }
+  }, [unansweredFaktumId]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
@@ -84,15 +102,19 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
         <Textarea
+          ref={faktumTextAreaRef}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
+          tabIndex={-1}
         />
       ) : (
         <TextField
+          ref={faktumTextRef}
+          tabIndex={-1}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}

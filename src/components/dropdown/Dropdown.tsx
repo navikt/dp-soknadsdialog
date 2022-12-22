@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ReactNode } from "react";
+import React, { ChangeEvent, MutableRefObject, ReactNode } from "react";
 import { Select, Label, BodyShort } from "@navikt/ds-react";
 
 interface IProps {
@@ -10,6 +10,8 @@ interface IProps {
   description?: ReactNode;
   readOnly?: boolean;
   error?: string;
+  ref?: MutableRefObject<null>;
+  tabIndex?: number;
 }
 
 export interface IDropdownOption {
@@ -35,6 +37,8 @@ export function Dropdown(props: IProps) {
       value={props.currentValue}
       description={props.description && props.description}
       error={props.error}
+      tabIndex={props.tabIndex}
+      ref={props.ref}
     >
       {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (

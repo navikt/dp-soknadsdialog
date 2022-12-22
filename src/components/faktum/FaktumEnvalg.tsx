@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -11,13 +11,19 @@ import { ISanityAlertText } from "../../types/sanity.types";
 import { useValidation } from "../../context/validation-context";
 import { AlertText } from "../alert-text/AlertText";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
   const isFirstRender = useFirstRender();
+  const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
+  const faktumEnvalgRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -33,6 +39,13 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumEnvalgRef);
+      setFocus(faktumEnvalgRef);
+    }
+  }, [unansweredFaktumId]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -55,6 +68,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   return (
     <>
       <RadioGroup
+        ref={faktumEnvalgRef}
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
@@ -62,6 +76,7 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        tabIndex={-1}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

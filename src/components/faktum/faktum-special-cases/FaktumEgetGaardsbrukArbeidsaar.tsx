@@ -1,7 +1,9 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
+import { useScrollIntoView } from "../../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../../hooks/useSetFocus";
 import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
 import { IFaktum } from "../Faktum";
@@ -22,6 +24,17 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
 
+  const faktumEgetGaardsbrukArbeidsaarRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumEgetGaardsbrukArbeidsaarRef);
+      setFocus(faktumEgetGaardsbrukArbeidsaarRef);
+    }
+  }, [unansweredFaktumId]);
+
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
     setCurrentAnswer(value);
@@ -34,6 +47,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
 
   return (
     <Dropdown
+      ref={faktumEgetGaardsbrukArbeidsaarRef}
       label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
       onChange={handleOnSelect}
       options={years}
@@ -43,6 +57,8 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       error={
         unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
       }
+      tabIndex={-1}
+      aria-invalid={unansweredFaktumId === faktum.id}
     />
   );
 }

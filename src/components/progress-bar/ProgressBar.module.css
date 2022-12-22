@@ -5,6 +5,10 @@
   margin: var(--navds-spacing-10) 0;
 }
 
+.progressBar:focus-visible {
+  outline: none;
+}
+
 .barContainer {
   display: flex;
   flex-wrap: nowrap;
@@ -35,14 +39,14 @@
   height: 2px;
   background-color: var(--navds-semantic-color-border-muted);
   border-radius: 100px;
-
 }
 .finalCircle {
   height: var(--progress-bar-height);
   display: inline-block;
   flex-basis: var(--progress-bar-height);
   border: 3px solid var(--navds-semantic-color-border);
-  transition: border-width var(--progress-bar-animation-duration), border-color var(--progress-bar-animation-duration);
+  transition: border-width var(--progress-bar-animation-duration),
+    border-color var(--progress-bar-animation-duration);
   box-sizing: border-box;
   border-radius: 100px;
 }

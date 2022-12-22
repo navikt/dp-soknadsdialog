@@ -4,7 +4,7 @@ import {
   BARN_LISTE_FAKTUM_ID,
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { Faktum, IFaktum } from "./Faktum";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
@@ -17,6 +17,8 @@ import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "./validation/ValidationMessage";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -37,6 +39,9 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const { isLoading } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
+  const faktumGeneratorRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
   useEffect(() => {
@@ -50,6 +55,13 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [props.faktum?.svar]);
 
+  useEffect(() => {
+    if (unansweredFaktumId === props.faktum.id) {
+      scrollIntoView(faktumGeneratorRef);
+      setFocus(faktumGeneratorRef);
+    }
+  }, [unansweredFaktumId]);
+
   return (
     <>
       {props.faktum?.svar?.map((fakta, svarIndex) => {
@@ -59,7 +71,12 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div key={svarIndex}>
+          <div
+            key={svarIndex}
+            ref={faktumGeneratorRef}
+            tabIndex={-1}
+            aria-invalid={unansweredFaktumId === props.faktum.id}
+          >
             <GeneratorFaktumCard
               generatorFaktumType="standard"
               allFaktumAnswered={!unansweredFaktum}

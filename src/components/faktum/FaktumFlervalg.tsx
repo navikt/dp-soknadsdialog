@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
 import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
@@ -9,6 +9,8 @@ import { HelpText } from "../HelpText";
 import styles from "./Faktum.module.css";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
@@ -18,12 +20,22 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
+  const faktumFlervalgRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
       setCurrentAnswer([]);
     }
   }, [faktum.svar]);
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumFlervalgRef);
+      setFocus(faktumFlervalgRef);
+    }
+  }, [unansweredFaktumId]);
 
   function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -48,6 +60,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   return (
     <>
       <CheckboxGroup
+        ref={faktumFlervalgRef}
         legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
@@ -55,6 +68,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        tabIndex={-1}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);
