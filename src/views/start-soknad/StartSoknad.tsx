@@ -1,4 +1,4 @@
-import { Alert, Button, ConfirmationPanel, Link } from "@navikt/ds-react";
+import { Button, ConfirmationPanel } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -6,13 +6,12 @@ import api from "../../api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
-import { Timeline } from "../../components/sanity/timeline/Timeline";
 import { ReadMore } from "../../components/sanity/readmore/ReadMore";
-import { useSanity } from "../../context/sanity-context";
+import { Timeline } from "../../components/sanity/timeline/Timeline";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { ErrorTypesEnum } from "../../types/error.types";
+import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
-import styles from "./StartSoknad.module.css";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 export function StartSoknad() {
   const router = useRouter();

@@ -51,7 +51,7 @@ export interface IQuizTekstFaktum extends IQuizBaseFaktum {
 
 export interface IQuizDatoFaktum extends IQuizBaseFaktum {
   type: "localdate";
-  svar?: string;
+  svar?: string | null;
 }
 
 export interface IQuizPeriodeFaktum extends IQuizBaseFaktum {

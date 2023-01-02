@@ -1,3 +1,5 @@
+import { addYears } from "date-fns";
+
 export const ARBEIDSFORHOLD_FAKTUM_ID = "faktum.arbeidsforhold";
 export const BARN_LISTE_FAKTUM_ID = "faktum.barn-liste";
 export const BARN_LISTE_REGISTER_FAKTUM_ID = "faktum.register.barn-liste";
@@ -13,7 +15,9 @@ export const ALLOWED_FILE_FORMATS = ["image/png", "image/jpg", "image/jpeg", "ap
 export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 52428800; // 50mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
-export const YEAR_RANGE = 100;
+
+export const DATEPICKER_MIN_DATE = new Date("1900-01-01");
+export const DATEPICKER_MAX_DATE = addYears(new Date(), 100);
 
 export const TEXTAREA_FAKTUM_IDS = [
   "faktum.reist-tilbake-periode",
