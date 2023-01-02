@@ -55,7 +55,11 @@ describe("Summary", () => {
     fetch.mockReset();
   });
 
-  test.skip("Should show questions and answers", async () => {
+  // To fix ref scrollIntoView is not a function error
+  // https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
+  Element.prototype.scrollIntoView = jest.fn();
+
+  test("Should show questions and answers", async () => {
     const user = userEvent.setup();
 
     render(
@@ -79,7 +83,7 @@ describe("Summary", () => {
     });
   });
 
-  test.skip("Should show error message if user tries to send application without consenting", async () => {
+  test("Should show error message if user tries to send application without consenting", async () => {
     const user = userEvent.setup();
 
     render(
@@ -103,7 +107,7 @@ describe("Summary", () => {
     });
   });
 
-  test.skip("Should show error message if user tries to send a partially done application", async () => {
+  test("Should show error message if user tries to send a partially done application", async () => {
     const user = userEvent.setup();
 
     const quizState = { ...mockSoknadState };
@@ -133,7 +137,7 @@ describe("Summary", () => {
     });
   });
 
-  test.skip("Should send the finished application", async () => {
+  test("Should send the finished application", async () => {
     fetch.mockResponseOnce("OK", { status: 200, statusText: "OK" });
     const user = userEvent.setup();
 
