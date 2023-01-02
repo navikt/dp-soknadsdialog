@@ -1,5 +1,6 @@
 import { Label } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
+import { useSanity } from "../../context/sanity-context";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./ProgressBar.module.css";
@@ -13,6 +14,7 @@ export function ProgressBar(props: IProgressBar) {
   const progressbarRef = useRef(null);
   const { setFocus } = useSetFocus();
   const { scrollIntoView } = useScrollIntoView();
+  const { getAppText } = useSanity();
 
   useEffect(() => {
     scrollIntoView(progressbarRef);
@@ -47,19 +49,27 @@ export function ProgressBar(props: IProgressBar) {
     return <div className={styles.completed} style={completedWidthStyle}></div>;
   };
 
+  const currentStepText = `${getAppText("steg-indikator.naavaerende-steg.tekst")} ${
+    props.currentStep
+  }`;
+
+  const ofTotalStepText = `${getAppText("steg-indikator.av-totalt-steg.tekst")} ${
+    props.totalSteps
+  }`;
+
   return (
     <div
       ref={progressbarRef}
+      tabIndex={-1}
       className={styles.progressBar}
       role={"progressbar"}
       aria-valuenow={props.currentStep}
       aria-valuemin={1}
       aria-valuemax={props.totalSteps}
-      tabIndex={-1}
       aria-labelledby="progressbar"
     >
       <Label spacing id="progressbar">
-        {`Steg ${props.currentStep} av ${props.totalSteps}`}
+        {`${currentStepText} ${ofTotalStepText}`}
       </Label>
       <div className={styles.barContainer}>
         {renderCompletedSteps()}

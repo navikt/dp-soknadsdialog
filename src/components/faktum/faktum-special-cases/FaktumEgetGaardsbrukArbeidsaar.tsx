@@ -44,7 +44,7 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
         onChange={handleOnSelect}
         options={years}
         currentValue={currentAnswer?.toString() || ""}
-        placeHolderText={"Velg et år"}
+        placeHolderText={getAppText("faktum.eget-gaarsbruk-arbeidsarr.placeholder-tekst")}
         readOnly={readonly}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
