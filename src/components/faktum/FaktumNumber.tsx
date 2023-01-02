@@ -1,35 +1,33 @@
 import { BodyShort, Label, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidateFaktumNumber } from "../../hooks/faktum/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../hooks/useFirstRender";
 import { IQuizNumberFaktum } from "../../types/quiz.types";
 import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 import { isNumber } from "./validation/validations.utils";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useValidation } from "../../context/validation-context";
-import { useSetFocus } from "../../hooks/useSetFocus";
 
-export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
+export const FaktumNumber = forwardRef(FaktumNumberComponent);
+
+function FaktumNumberComponent(
+  props: IFaktum<IQuizNumberFaktum>,
+  ref: Ref<HTMLInputElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById } = useSanity();
-  const { unansweredFaktumId } = useValidation();
   const { setHasError, isValid, getErrorMessage } = useValidateFaktumNumber(faktum.beskrivendeId);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
   const [debouncedValue, setDebouncedValue] = useState<number | null>(faktum.svar || null);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
-  const faktumNumberRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   useEffect(() => {
     if (!isFirstRender && debouncedValue !== faktum.svar) {
@@ -42,13 +40,6 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumNumberRef);
-      setFocus(faktumNumberRef);
-    }
-  }, [unansweredFaktumId]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
@@ -103,7 +94,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   return (
     <>
       <TextField
-        ref={faktumNumberRef}
+        ref={ref}
+        tabIndex={-1}
         className={styles.faktumNumber}
         value={displayValue}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
@@ -115,7 +107,6 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={getErrorMessage(props.faktum.id)}
-        tabIndex={-1}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

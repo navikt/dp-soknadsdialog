@@ -1,21 +1,24 @@
+import { BodyShort, Label } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import React, { useEffect, useRef, useState } from "react";
-import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
-import { IFaktum } from "./Faktum";
-import { IQuizLandFaktum } from "../../types/quiz.types";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useRouter } from "next/router";
-import { BodyShort, Label } from "@navikt/ds-react";
-import styles from "./Faktum.module.css";
-import { getCountryName } from "../../country.utils";
-import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
+import { getCountryName } from "../../country.utils";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { IQuizLandFaktum } from "../../types/quiz.types";
+import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
+import styles from "./Faktum.module.css";
 
-export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
+export const FaktumLand = forwardRef(FaktumLandComponent);
+
+function FaktumLandComponent(
+  props: IFaktum<IQuizLandFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const router = useRouter();
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
@@ -23,9 +26,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
-  const faktumLandRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -57,13 +57,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
     }
   }, [faktum.svar]);
 
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumLandRef);
-      setFocus(faktumLandRef);
-    }
-  }, [unansweredFaktumId]);
-
   function onSelect(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
     setCurrentAnswer(value);
@@ -85,7 +78,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   }
 
   return (
-    <div ref={faktumLandRef} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}

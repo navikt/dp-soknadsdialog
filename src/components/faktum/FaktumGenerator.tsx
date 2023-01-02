@@ -1,47 +1,61 @@
-import { QuizFaktum, IQuizGeneratorFaktum } from "../../types/quiz.types";
+import { Button, Heading, Modal } from "@navikt/ds-react";
+import { forwardRef, Ref, useEffect, useRef } from "react";
 import {
   ARBEIDSFORHOLD_FAKTUM_ID,
   BARN_LISTE_FAKTUM_ID,
   BARN_LISTE_REGISTER_FAKTUM_ID,
 } from "../../constants";
-import React, { useEffect, useRef } from "react";
-import { Button, Heading, Modal } from "@navikt/ds-react";
-import { Faktum, IFaktum } from "./Faktum";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
-import { Barn } from "../barn/Barn";
-import { useSanity } from "../../context/sanity-context";
-import { BarnRegister } from "../barn/BarnRegister";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { ValidationMessage } from "./validation/ValidationMessage";
+import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../hooks/useSetFocus";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
+import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
+import { Barn } from "../barn/Barn";
+import { BarnRegister } from "../barn/BarnRegister";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { Faktum, IFaktum } from "./Faktum";
+import { ValidationMessage } from "./validation/ValidationMessage";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
+  const generatorFaktumRef = useRef(null);
+  const { unansweredFaktumId } = useValidation();
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
+  useEffect(() => {
+    if (unansweredFaktumId === props.faktum.id) {
+      scrollIntoView(generatorFaktumRef);
+      setFocus(generatorFaktumRef);
+    }
+  }, [unansweredFaktumId]);
+
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
-      return <Arbeidsforhold {...props} />;
+      return <Arbeidsforhold ref={generatorFaktumRef} {...props} />;
     case BARN_LISTE_REGISTER_FAKTUM_ID:
       return <BarnRegister {...props} />;
     case BARN_LISTE_FAKTUM_ID:
-      return <Barn {...props} />;
+      return <Barn ref={generatorFaktumRef} {...props} />;
     default:
-      return <StandardGenerator {...props} />;
+      return <StandardGenerator ref={generatorFaktumRef} {...props} />;
   }
 }
 
-function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
+const StandardGenerator = forwardRef(StandardGeneratorComponent);
+
+function StandardGeneratorComponent(
+  props: IFaktum<IQuizGeneratorFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
   const { isLoading } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
-  const faktumGeneratorRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   // Set active index to open modal when adding a new answer. Quiz returns an array with 1 faktum after adding a new answer.
   useEffect(() => {
@@ -55,15 +69,8 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [props.faktum?.svar]);
 
-  useEffect(() => {
-    if (unansweredFaktumId === props.faktum.id) {
-      scrollIntoView(faktumGeneratorRef);
-      setFocus(faktumGeneratorRef);
-    }
-  }, [unansweredFaktumId]);
-
   return (
-    <>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === props.faktum.id}>
       {props.faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -71,12 +78,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div
-            key={svarIndex}
-            ref={faktumGeneratorRef}
-            tabIndex={-1}
-            aria-invalid={unansweredFaktumId === props.faktum.id}
-          >
+          <div key={svarIndex}>
             <GeneratorFaktumCard
               generatorFaktumType="standard"
               allFaktumAnswered={!unansweredFaktum}
@@ -122,7 +124,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
       {unansweredFaktumId === props.faktum.id && (
         <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
-    </>
+    </div>
   );
 }
 

@@ -1,30 +1,29 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import { BodyShort, Label, Textarea, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { IQuizTekstFaktum } from "../../types/quiz.types";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
+import { TEXTAREA_FAKTUM_IDS } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
-import { TEXTAREA_FAKTUM_IDS } from "../../constants";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { IQuizTekstFaktum } from "../../types/quiz.types";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { isValidTextLength } from "./validation/validations.utils";
 
-export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
+export const FaktumText = forwardRef(FaktumTextComponent);
+
+export function FaktumTextComponent(
+  props: IFaktum<IQuizTekstFaktum>,
+  ref: Ref<HTMLInputElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
-  const faktumTextRef = useRef<HTMLInputElement>(null);
-  const faktumTextAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   const [hasError, setHasError] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
@@ -45,17 +44,6 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      const currentRef = TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId)
-        ? faktumTextAreaRef
-        : faktumTextRef;
-
-      scrollIntoView(currentRef);
-      setFocus(currentRef);
-    }
-  }, [unansweredFaktumId]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
@@ -102,18 +90,18 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
         <Textarea
-          ref={faktumTextAreaRef}
+          ref={ref as Ref<HTMLTextAreaElement> | undefined}
+          tabIndex={-1}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
-          tabIndex={-1}
         />
       ) : (
         <TextField
-          ref={faktumTextRef}
+          ref={ref}
           tabIndex={-1}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { FaktumEnvalg } from "./FaktumEnvalg";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import styles from "./Faktum.module.css";
@@ -19,6 +19,9 @@ import { FaktumGenerator } from "./FaktumGenerator";
 import { FaktumDokumentkrav } from "./FaktumDokumentkrav";
 import { useQuiz } from "../../context/quiz-context";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
+import { useValidation } from "../../context/validation-context";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -31,11 +34,23 @@ const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-fo
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   const { soknadState } = useQuiz();
   const { faktum, readonly } = props;
+  const { unansweredFaktumId } = useValidation();
+  const faktumRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumRef);
+      setFocus(faktumRef);
+    }
+  }, [unansweredFaktumId]);
 
   function renderFaktumType() {
     if (faktum.beskrivendeId === FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER) {
       return (
         <FaktumEgetGaardsbrukArbeidsaar
+          ref={faktumRef}
           faktum={faktum as IQuizNumberFaktum}
           onChange={props.onChange}
           readonly={readonly}
@@ -45,29 +60,85 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
 
     switch (faktum.type) {
       case "boolean":
-        return <FaktumBoolean faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumBoolean
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "envalg":
-        return <FaktumEnvalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumEnvalg
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "flervalg":
-        return <FaktumFlervalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumFlervalg
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "tekst":
-        return <FaktumText faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumText
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "double":
       case "int":
-        return <FaktumNumber faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumNumber
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "land":
-        return <FaktumLand faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumLand
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "localdate":
-        return <FaktumDato faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumDato
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "periode":
-        return <FaktumPeriode faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        return (
+          <FaktumPeriode
+            ref={faktumRef}
+            faktum={faktum}
+            onChange={props.onChange}
+            readonly={readonly}
+          />
+        );
 
       case "generator":
         return <FaktumGenerator faktum={faktum as IQuizGeneratorFaktum} readonly={readonly} />;

@@ -1,12 +1,10 @@
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IQuizBooleanFaktum } from "../../types/quiz.types";
 import { ISanityAlertText } from "../../types/sanity.types";
@@ -16,7 +14,12 @@ import { HelpText } from "../HelpText";
 import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 
-export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
+export const FaktumBoolean = forwardRef(FaktumBooleanComponent);
+
+function FaktumBooleanComponent(
+  props: IFaktum<IQuizBooleanFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
@@ -25,9 +28,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const faktumBooleanRef = useRef<HTMLFieldSetElement>(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   useEffect(() => {
     if (currentAnswer !== "") {
@@ -40,13 +40,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumBooleanRef);
-      setFocus(faktumBooleanRef);
-    }
-  }, [unansweredFaktumId]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -81,7 +74,8 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   return (
     <>
       <RadioGroup
-        ref={faktumBooleanRef}
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
@@ -89,7 +83,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
-        tabIndex={-1}
       >
         {faktum.gyldigeValg?.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

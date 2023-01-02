@@ -7,7 +7,7 @@ import {
 } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { useEffect, useRef, useState } from "react";
+import { forwardRef, Ref, useEffect, useRef, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -29,7 +29,12 @@ interface IDateRange {
   to?: Date | undefined;
 }
 
-export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
+export const FaktumPeriode = forwardRef(FaktumPeriodeComponent);
+
+function FaktumPeriodeComponent(
+  props: IFaktum<IQuizPeriodeFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const { faktum, onChange } = props;
   const faktumPeriodeRef = useRef(null);
   const isFirstRender = useFirstRender();
@@ -180,7 +185,7 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   return (
     <div
       className={periodeStyles.faktumPeriode}
-      ref={faktumPeriodeRef}
+      ref={ref}
       tabIndex={-1}
       aria-invalid={unansweredFaktumId === faktum.id}
     >

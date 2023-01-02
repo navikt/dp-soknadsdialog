@@ -1,34 +1,34 @@
-import React, { useEffect, useRef } from "react";
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect } from "react";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
+import { findEmployerName } from "../../faktum.utils";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
+import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import {
   IQuizGeneratorFaktum,
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
 } from "../../types/quiz.types";
 import { Faktum, IFaktum } from "../faktum/Faktum";
-import { useSanity } from "../../context/sanity-context";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../context/quiz-context";
-import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
-import { PortableText } from "@portabletext/react";
-import { FormattedDate } from "../FormattedDate";
-import { findEmployerName } from "../../faktum.utils";
-import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
-import { useRouter } from "next/router";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
+import { FormattedDate } from "../FormattedDate";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 
-export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
+export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
+
+function ArbeidsforholdComponent(
+  props: IFaktum<IQuizGeneratorFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
-  const abeidsforholdRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
   const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -56,13 +56,6 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [faktum?.svar?.length]);
 
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(abeidsforholdRef);
-      setFocus(abeidsforholdRef);
-    }
-  }, [unansweredFaktumId]);
-
   function addArbeidsforhold(faktum: IQuizGeneratorFaktum) {
     const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
@@ -74,7 +67,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
   }
 
   return (
-    <>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
@@ -85,12 +78,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div
-            key={svarIndex}
-            ref={abeidsforholdRef}
-            tabIndex={-1}
-            aria-invalid={unansweredFaktumId === faktum.id}
-          >
+          <div key={svarIndex}>
             <GeneratorFaktumCard
               generatorFaktumType="arbeidsforhold"
               allFaktumAnswered={!unansweredFaktum}
@@ -151,7 +139,7 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
 

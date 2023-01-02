@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect } from "react";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
+import { ChildAdd } from "../../svg-icons/ChildAdd";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import { Faktum, IFaktum } from "../faktum/Faktum";
-import { useSanity } from "../../context/sanity-context";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../context/quiz-context";
-import { useRouter } from "next/router";
-import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
-import { ChildAdd } from "../../svg-icons/ChildAdd";
-import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
 
-export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
+export const Barn = forwardRef(BarnComponent);
+
+function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivElement> | undefined) {
   const { faktum } = props;
   const { locale } = useRouter();
   const { isLoading } = useQuiz();
@@ -23,9 +23,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { unansweredFaktumId } = useValidation();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const barnRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -45,15 +42,8 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
     }
   }, [faktum?.svar?.length]);
 
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(barnRef);
-      setFocus(barnRef);
-    }
-  }, [unansweredFaktumId]);
-
   return (
-    <>
+    <div ref={ref} aria-invalid={unansweredFaktumId === faktum.id} tabIndex={-1}>
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -61,12 +51,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
         );
 
         return (
-          <div
-            key={svarIndex}
-            ref={barnRef}
-            aria-invalid={unansweredFaktumId === faktum.id}
-            tabIndex={-1}
-          >
+          <div key={svarIndex}>
             <GeneratorFaktumCard
               generatorFaktumType="barn"
               allFaktumAnswered={!unansweredFaktum}
@@ -122,6 +107,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useRef } from "react";
 import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { IQuizEnvalgFaktum } from "../../types/quiz.types";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
-import { ISanityAlertText } from "../../types/sanity.types";
 import { useValidation } from "../../context/validation-context";
-import { AlertText } from "../alert-text/AlertText";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { IQuizEnvalgFaktum } from "../../types/quiz.types";
+import { ISanityAlertText } from "../../types/sanity.types";
+import { AlertText } from "../alert-text/AlertText";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
+import styles from "./Faktum.module.css";
 
-export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
+export const FaktumEnvalg = forwardRef(FaktumEnvalgComponent);
+
+function FaktumEnvalgComponent(
+  props: IFaktum<IQuizEnvalgFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-  const faktumEnvalgRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
@@ -39,13 +39,6 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumEnvalgRef);
-      setFocus(faktumEnvalgRef);
-    }
-  }, [unansweredFaktumId]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -68,7 +61,8 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   return (
     <>
       <RadioGroup
-        ref={faktumEnvalgRef}
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
@@ -76,7 +70,6 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
-        tabIndex={-1}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

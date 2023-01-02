@@ -1,9 +1,7 @@
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, forwardRef, LegacyRef, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
-import { useScrollIntoView } from "../../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../../hooks/useSetFocus";
 import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
 import { IFaktum } from "../Faktum";
@@ -16,24 +14,18 @@ for (let i = 0; i <= 4; i++) {
   years.push({ value: year, label: year });
 }
 
-export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
+export const FaktumEgetGaardsbrukArbeidsaar = forwardRef(FaktumEgetGaardsbrukArbeidsaarComponent);
+
+function FaktumEgetGaardsbrukArbeidsaarComponent(
+  props: IFaktum<IQuizNumberFaktum>,
+  ref: LegacyRef<HTMLDivElement> | undefined
+) {
   const { faktum, readonly } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
-
-  const faktumEgetGaardsbrukArbeidsaarRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumEgetGaardsbrukArbeidsaarRef);
-      setFocus(faktumEgetGaardsbrukArbeidsaarRef);
-    }
-  }, [unansweredFaktumId]);
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
@@ -46,11 +38,7 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
   }
 
   return (
-    <div
-      ref={faktumEgetGaardsbrukArbeidsaarRef}
-      tabIndex={-1}
-      aria-invalid={unansweredFaktumId === faktum.id}
-    >
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         onChange={handleOnSelect}

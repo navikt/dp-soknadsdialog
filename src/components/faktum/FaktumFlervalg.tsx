@@ -1,21 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
 import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
 import { PortableText } from "@portabletext/react";
-import { IQuizFlervalgFaktum } from "../../types/quiz.types";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
+import { IQuizFlervalgFaktum } from "../../types/quiz.types";
 import { ISanityAlertText } from "../../types/sanity.types";
-import { AlertText } from "../alert-text/AlertText";
 import { isDefined } from "../../types/type-guards";
+import { AlertText } from "../alert-text/AlertText";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
 
-export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
+export const FaktumFlervalg = forwardRef(FaktumFlervalgComponent);
+
+function FaktumFlervalgComponent(
+  props: IFaktum<IQuizFlervalgFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const isFirstRender = useFirstRender();
@@ -23,9 +26,6 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [alertText, setAlertText] = useState<ISanityAlertText[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
-  const faktumFlervalgRef = useRef(null);
-  const { scrollIntoView } = useScrollIntoView();
-  const { setFocus } = useSetFocus();
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
@@ -42,13 +42,6 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
       setCurrentAnswer([]);
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumFlervalgRef);
-      setFocus(faktumFlervalgRef);
-    }
-  }, [unansweredFaktumId]);
 
   function onSelection(value: string[]) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
@@ -73,7 +66,8 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   return (
     <>
       <CheckboxGroup
-        ref={faktumFlervalgRef}
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
@@ -81,7 +75,6 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
-        tabIndex={-1}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);
