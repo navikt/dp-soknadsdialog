@@ -1,7 +1,7 @@
 import { Alert, BodyShort, Label, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -9,6 +9,8 @@ import { useValidation } from "../../context/validation-context";
 import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 import { IQuizDatoFaktum } from "../../types/quiz.types";
 import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
@@ -18,9 +20,12 @@ import styles from "./Faktum.module.css";
 export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
+  const faktumDatoRef = useRef(null);
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { setDatePickerIsOpen } = useValidation();
+  const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
+  const { setFocus } = useSetFocus();
+  const { scrollIntoView } = useScrollIntoView();
   const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
@@ -38,6 +43,13 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
+
+  useEffect(() => {
+    if (unansweredFaktumId === faktum.id) {
+      scrollIntoView(faktumDatoRef);
+      setFocus(faktumDatoRef);
+    }
+  }, [unansweredFaktumId]);
 
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
@@ -86,7 +98,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
   return (
-    <>
+    <div ref={faktumDatoRef} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <UNSAFE_DatePicker
         {...datepickerProps}
         dropdownCaption
@@ -114,6 +126,6 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
           {getAppText("validering.dato-faktum.soknadsdato-varsel")}
         </Alert>
       )}
-    </>
+    </div>
   );
 }
