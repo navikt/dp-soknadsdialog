@@ -1,18 +1,5 @@
 @import "~@navikt/ds-css/dist/index.css";
 
-:root {
-  /* // Fiks for at design i appen skal forbli proporsjonalt mens vi migrerer til nye @navikt/ds-react fra designsystemet https://navikt.github.io/Designsystemet/?path=/story/ds-react-typography-intro--page */
-  --navds-font-size-title-2xl: 2.2222222222222223rem;
-  --navds-font-size-title-xl: 1.7777777777777777rem;
-  --navds-font-size-title-l: 1.5555555555555556rem;
-  --navds-font-size-title-m: 1.3333333333333333rem;
-  --navds-font-size-title-s: 1.1111111111111112rem;
-  --navds-font-size-xl: 1.1111111111111112rem;
-  --navds-font-size-l: 1rem;
-  --navds-font-size-m: 0.8888888888888888rem;
-  --navds-font-size-s: 0.7777777777777778rem;
-}
-
 .modal-container {
   width: 100%;
   max-width: var(--app-max-width);
