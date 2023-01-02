@@ -6,9 +6,12 @@ import { IQuizFlervalgFaktum } from "../../types/quiz.types";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
 import { useValidation } from "../../context/validation-context";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { ISanityAlertText } from "../../types/sanity.types";
+import { AlertText } from "../alert-text/AlertText";
+import { isDefined } from "../../types/type-guards";
+import styles from "./Faktum.module.css";
 
 export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
@@ -16,8 +19,18 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+  const [alertText, setAlertText] = useState<ISanityAlertText[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
+
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+
+  useEffect(() => {
+    const alertTexts = currentAnswer
+      .map((answer) => getSvaralternativTextById(answer)?.alertText)
+      .filter(isDefined);
+
+    setAlertText(alertTexts);
+  }, [currentAnswer]);
 
   useEffect(() => {
     if (faktum.svar === undefined && !isFirstRender) {
@@ -65,9 +78,18 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
           );
         })}
       </CheckboxGroup>
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+
+      {alertText.map((sanityText, index) => {
+        return (
+          (sanityText?.body || sanityText?.title) && (
+            <AlertText key={index} alertText={sanityText} spacingTop />
+          )
+        );
+      })}
     </>
   );
 }

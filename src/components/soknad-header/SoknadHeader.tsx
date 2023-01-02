@@ -17,7 +17,7 @@ export function SoknadHeader(props: IProps) {
         <div className={styles.icon}>
           <HeaderIcon />
         </div>
-        <Heading size="xlarge" level={"1"}>
+        <Heading size="xlarge" level={"1"} id="header-icon">
           {getAppText(props.titleTextKey ? props.titleTextKey : SOKNAD_HEADER_TITTEL)}
         </Heading>
       </div>
