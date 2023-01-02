@@ -1,9 +1,9 @@
 .seksjonContainer {
-  margin-bottom: var(--navds-spacing-5);
+  margin-bottom: var(--a-spacing-5);
 }
 
 .loaderContainer {
-  margin-bottom: var(--navds-spacing-5);
+  margin-bottom: var(--a-spacing-5);
 }
 
 .autoSaveText {
@@ -12,5 +12,5 @@
 }
 
 .autoSaveText svg {
-  margin-right: var(--navds-spacing-1);
+  margin-right: var(--a-spacing-1);
 }

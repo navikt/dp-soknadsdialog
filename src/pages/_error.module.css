@@ -1,25 +1,25 @@
 .error {
-  background-color: var(--navds-global-color-orange-50);
-  box-shadow: 0 0 0 1px var(--navds-global-color-orange-600);
+  background-color: var(--a-orange-50);
+  box-shadow: 0 0 0 1px var(--a-orange-600);
   padding: 8px;
 }
 
 .error:focus {
-  box-shadow: 0 0 0 3px var(--navds-global-color-orange-600);
+  box-shadow: 0 0 0 3px var(--a-orange-600);
 }
 
 .errorButtonContainer {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin-top: var(--navds-spacing-5);
+  margin-top: var(--a-spacing-5);
 }
 
 .notFoundPageContainer {
-  margin-bottom: var(--navds-spacing-8);
+  margin-bottom: var(--a-spacing-8);
 }
 
 .pageNotFoundDescription {
-  margin-top: var(--navds-spacing-2);
-  margin-bottom: var(--navds-spacing-8);
+  margin-top: var(--a-spacing-2);
+  margin-bottom: var(--a-spacing-8);
 }
