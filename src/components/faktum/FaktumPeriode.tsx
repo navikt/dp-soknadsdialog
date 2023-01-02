@@ -7,7 +7,7 @@ import {
 } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { forwardRef, Ref, useEffect, useRef, useState } from "react";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -15,8 +15,6 @@ import { useValidation } from "../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
 import { FormattedDate } from "../FormattedDate";
 import { HelpText } from "../HelpText";
@@ -36,12 +34,9 @@ function FaktumPeriodeComponent(
   ref: Ref<HTMLDivElement> | undefined
 ) {
   const { faktum, onChange } = props;
-  const faktumPeriodeRef = useRef(null);
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { setFocus } = useSetFocus();
-  const { scrollIntoView } = useScrollIntoView();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
   const { isValid, tomErrorMessage, fomErrorMessage, getTomIsBeforeTomErrorMessage } =
@@ -70,13 +65,6 @@ function FaktumPeriodeComponent(
       setCurrentAnswer(undefined);
     }
   }, [faktum.svar]);
-
-  useEffect(() => {
-    if (unansweredFaktumId === faktum.id) {
-      scrollIntoView(faktumPeriodeRef);
-      setFocus(faktumPeriodeRef);
-    }
-  }, [unansweredFaktumId]);
 
   function getDefaultSelectedValue(): IDateRange | undefined {
     if (currentAnswer?.fom) {
