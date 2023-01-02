@@ -1,4 +1,4 @@
-import { Alert, Button, ConfirmationPanel, Link } from "@navikt/ds-react";
+import { Button, ConfirmationPanel } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -6,13 +6,12 @@ import api from "../../api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
-import { Timeline } from "../../components/sanity/timeline/Timeline";
 import { ReadMore } from "../../components/sanity/readmore/ReadMore";
-import { useSanity } from "../../context/sanity-context";
+import { Timeline } from "../../components/sanity/timeline/Timeline";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { ErrorTypesEnum } from "../../types/error.types";
+import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
-import styles from "./StartSoknad.module.css";
+import { ErrorTypesEnum } from "../../types/error.types";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -74,16 +73,6 @@ export function StartSoknad() {
       />
       <SoknadHeader />
       <main>
-        {false /* skjul varsel, slett denne om noen dager/uker */ && (
-          <Alert variant="info" className={styles.newSoknadAlertText}>
-            {getAppText("start-soknad.ny-soknad-info.start-tekst")}{" "}
-            <Link href="https://www.nav.no/arbeid/dagpenger/soknad-veileder?legacy=tru">
-              {getAppText("start-soknad.ny-soknad-info.lenke-tekst")}
-            </Link>{" "}
-            {getAppText("start-soknad.ny-soknad-info.slutt-tekst")}
-          </Alert>
-        )}
-
         {startSideText?.body && (
           <PortableText
             value={startSideText.body}

@@ -13,6 +13,7 @@
   margin-bottom: var(--navds-spacing-2);
 }
 
-.faktumPeriodeFra {
-  margin-bottom: var(--navds-spacing-10);
+.datePickerSpacing {
+  display: grid;
+  gap: var(--navds-spacing-6);
 }

@@ -7,11 +7,20 @@ import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
 import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
-import styles from "./Receipts.module.css";
 import { PageMeta } from "../../components/PageMeta";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ReceiptDokumentkrav } from "../../components/receipt-dokumentkrav/ReceiptDokumentkrav";
+import { IDokumentkrav } from "../../types/documentation.types";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { IPersonalia } from "../../types/personalia.types";
+import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
+} from "../../constants";
+import styles from "./Receipts.module.css";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -21,9 +30,28 @@ interface IProps {
 }
 
 export function Receipt(props: IProps) {
-  const { soknadStatus, arbeidssokerStatus, sections, personalia } = props;
+  const { soknadStatus, sections, arbeidssokerStatus, personalia } = props;
 
   const { getAppText } = useSanity();
+  const { dokumentkravList } = useDokumentkrav();
+  const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) =>
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
+      (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !dokumentkrav.bundleFilsti)
+  );
+
+  const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) => dokumentkrav.bundleFilsti
+  );
+
+  const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) =>
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE ||
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
+  );
+
+  const noDokumentkravTriggered = missingDocuments.length === 0 && uploadedDocuments.length === 0;
 
   function navigateToMineDagpener() {
     window.location.assign("https://www.nav.no/arbeid/dagpenger/mine-dagpenger");
@@ -39,11 +67,16 @@ export function Receipt(props: IProps) {
       <ReceiptSoknadStatus {...soknadStatus} />
       <ArbeidssokerStatus status={arbeidssokerStatus} />
 
-      <ReceiptDokumentkrav soknadStatus={soknadStatus} />
+      <ReceiptDokumentkrav
+        soknadStatus={soknadStatus}
+        missingDocuments={missingDocuments}
+        uploadedDocuments={uploadedDocuments}
+        notSendingDocuments={notSendingDocuments}
+      />
 
-      <DokumentkravGenerellInnsending classname="my-12" />
-
+      {noDokumentkravTriggered && <DokumentkravGenerellInnsending classname="my-12" />}
       <ReceiptYourAnswers sections={sections} personalia={personalia} />
+
       <Button
         variant="primary"
         className={styles.nagivateToMineDagpengerButton}
