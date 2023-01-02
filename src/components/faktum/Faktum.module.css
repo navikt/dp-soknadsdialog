@@ -1,5 +1,5 @@
 .faktum {
-  margin-bottom: var(--navds-spacing-10);
+  margin-bottom: var(--a-spacing-10);
 }
 
 .faktum:last-child {
@@ -15,5 +15,5 @@
 }
 
 .faktumDatoWarningSpacing {
-  margin-top: var(--navds-spacing-4);
+  margin-top: var(--a-spacing-4);
 }
