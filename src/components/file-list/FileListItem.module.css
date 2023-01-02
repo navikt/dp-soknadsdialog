@@ -1,7 +1,7 @@
 .fileItem {
   display: flex;
   align-items: center;
-  margin-bottom: var(--navds-spacing-5);
+  margin-bottom: var(--a-spacing-5);
 }
 
 .deleteButton {

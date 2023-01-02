@@ -1,12 +1,12 @@
 .card {
-  padding: var(--navds-spacing-4);
-  background-color: var(--navds-global-color-blue-50);
-  border-radius: var(--navds-border-radius-medium);
-  margin-bottom: var(--navds-spacing-5);
+  padding: var(--a-spacing-4);
+  background-color: var(--a-blue-50);
+  border-radius: var(--a-border-radius-medium);
+  margin-bottom: var(--a-spacing-5);
 }
 
 .fakta {
-  margin-top: var(--navds-spacing-4);
+  margin-top: var(--a-spacing-4);
 }
 
 .fakta:empty {
@@ -16,13 +16,13 @@
 .buttonContainer {
   display: flex;
   align-items: center;
-  margin-top: var(--navds-spacing-6)
+  margin-top: var(--a-spacing-6);
 }
 
 .buttonContainer button:first-child {
-  margin-right: var(--navds-spacing-6);
+  margin-right: var(--a-spacing-6);
 }
 
 .buttonContainer svg {
-  margin-right: var(--navds-spacing-2);
+  margin-right: var(--a-spacing-2);
 }
