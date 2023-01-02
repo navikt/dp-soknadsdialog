@@ -17,7 +17,7 @@
   height: var(--progress-bar-height);
   min-width: 16px;
   border-radius: 100px;
-  background-color: var(--navds-semantic-color-link-visited);
+  background-color: var(--a-purple-500);
   transition: width var(--progress-bar-animation-duration);
 }
 
@@ -29,18 +29,20 @@
   flex-grow: 2;
   transition: width var(--progress-bar-animation-duration);
 }
+
 .remainingLine {
   display: inline-block;
   flex-grow: 40;
   height: 2px;
-  background-color: var(--navds-semantic-color-border-muted);
+  background-color: var(--a-purple-500);
   border-radius: 100px;
 }
+
 .finalCircle {
   height: var(--progress-bar-height);
   display: inline-block;
   flex-basis: var(--progress-bar-height);
-  border: 3px solid var(--navds-semantic-color-border);
+  border: 3px solid var(--a-gray-600);
   transition: border-width var(--progress-bar-animation-duration),
     border-color var(--progress-bar-animation-duration);
   box-sizing: border-box;
