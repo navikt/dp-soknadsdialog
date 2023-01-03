@@ -23,7 +23,6 @@ function FaktumEnvalgComponent(
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);

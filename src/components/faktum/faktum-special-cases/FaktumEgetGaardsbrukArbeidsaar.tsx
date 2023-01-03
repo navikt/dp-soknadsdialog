@@ -1,4 +1,4 @@
-import { ChangeEvent, forwardRef, LegacyRef, useState } from "react";
+import { ChangeEvent, forwardRef, Ref, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -18,7 +18,7 @@ export const FaktumEgetGaardsbrukArbeidsaar = forwardRef(FaktumEgetGaardsbrukArb
 
 function FaktumEgetGaardsbrukArbeidsaarComponent(
   props: IFaktum<IQuizNumberFaktum>,
-  ref: LegacyRef<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined
 ) {
   const { faktum, readonly } = props;
   const { saveFaktumToQuiz } = useQuiz();
