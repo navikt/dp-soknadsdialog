@@ -1,5 +1,4 @@
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
-import { useRouter } from "next/router";
 import { forwardRef, Ref, useEffect } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -11,13 +10,14 @@ import { Faktum, IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
+import { BarnBostedsland } from "./BarnBodstedsland";
+import { BarnNavn } from "./BarnNavn";
+import { getChildBirthDate } from "./BarnRegister";
 
 export const Barn = forwardRef(BarnComponent);
 
 function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivElement> | undefined) {
   const { faktum } = props;
-  const { locale } = useRouter();
   const { isLoading } = useQuiz();
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -61,11 +61,11 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
-                {getChildName(fakta)}
+                <BarnNavn barn={fakta} />
               </Heading>
               <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
               <Detail uppercase spacing>
-                <>{getChildBostedsland(fakta, locale)}</>
+                <BarnBostedsland barn={fakta} />
               </Detail>
             </GeneratorFaktumCard>
             <Modal
@@ -83,7 +83,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
 
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                    Lagre og lukk
+                    {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
               </Modal.Content>
