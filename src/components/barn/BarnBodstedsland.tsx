@@ -18,6 +18,11 @@ export function BarnBostedsland({ barn }: IProps) {
     return <>{getAppText("faktum.barn-statsborgerskap.fant-ikke-bostedsland")}</>;
   }
 
+  // PDL kan returnerer XXX eller XUK, disse betyr statsløs eller ukjent
+  if (bostedland === "XXX" || bostedland === "XUK") {
+    return <>{getAppText("faktum.barn-statsborgerskap.ukjent")}</>;
+  }
+
   return (
     <>
       {getAppText("faktum.barn-statsborgerskap.bor-i")} {getCountryName(bostedland, locale)}
