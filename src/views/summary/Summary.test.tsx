@@ -55,6 +55,10 @@ describe("Summary", () => {
     fetch.mockReset();
   });
 
+  // To fix ref scrollIntoView is not a function error
+  // https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
+  Element.prototype.scrollIntoView = jest.fn();
+
   test("Should show questions and answers", async () => {
     const user = userEvent.setup();
 

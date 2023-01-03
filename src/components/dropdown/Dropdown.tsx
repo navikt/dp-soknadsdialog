@@ -1,5 +1,5 @@
-import React, { ChangeEvent, ReactNode } from "react";
-import { Select, Label, BodyShort } from "@navikt/ds-react";
+import { BodyShort, Label, Select } from "@navikt/ds-react";
+import { ChangeEvent, ReactNode } from "react";
 
 interface IProps {
   label: string;

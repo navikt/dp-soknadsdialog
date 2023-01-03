@@ -1,19 +1,24 @@
+import { BodyShort, Label } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import React, { useEffect, useState } from "react";
-import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
-import { IFaktum } from "./Faktum";
-import { IQuizLandFaktum } from "../../types/quiz.types";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useRouter } from "next/router";
-import { BodyShort, Label } from "@navikt/ds-react";
-import styles from "./Faktum.module.css";
-import { getCountryName } from "../../country.utils";
-import { HelpText } from "../HelpText";
 import { useValidation } from "../../context/validation-context";
+import { getCountryName } from "../../country.utils";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { IQuizLandFaktum } from "../../types/quiz.types";
+import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
+import styles from "./Faktum.module.css";
 
-export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
+export const FaktumLand = forwardRef(FaktumLandComponent);
+
+function FaktumLandComponent(
+  props: IFaktum<IQuizLandFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const router = useRouter();
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
@@ -73,7 +78,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   }
 
   return (
-    <>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -88,6 +93,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </>
+    </div>
   );
 }

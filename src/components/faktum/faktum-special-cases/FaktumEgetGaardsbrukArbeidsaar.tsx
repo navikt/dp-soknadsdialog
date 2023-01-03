@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, forwardRef, Ref, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -14,7 +14,12 @@ for (let i = 0; i <= 4; i++) {
   years.push({ value: year, label: year });
 }
 
-export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
+export const FaktumEgetGaardsbrukArbeidsaar = forwardRef(FaktumEgetGaardsbrukArbeidsaarComponent);
+
+function FaktumEgetGaardsbrukArbeidsaarComponent(
+  props: IFaktum<IQuizNumberFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const { faktum, readonly } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -33,16 +38,18 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
   }
 
   return (
-    <Dropdown
-      label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
-      onChange={handleOnSelect}
-      options={years}
-      currentValue={currentAnswer?.toString() || ""}
-      placeHolderText={"Velg et år"}
-      readOnly={readonly}
-      error={
-        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
-      }
-    />
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
+      <Dropdown
+        label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        onChange={handleOnSelect}
+        options={years}
+        currentValue={currentAnswer?.toString() || ""}
+        placeHolderText={getAppText("faktum.eget-gaarsbruk-arbeidsarr.placeholder-tekst")}
+        readOnly={readonly}
+        error={
+          unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+        }
+      />
+    </div>
   );
 }

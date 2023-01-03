@@ -1,24 +1,30 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import { BodyShort, Label, Textarea, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { IQuizTekstFaktum } from "../../types/quiz.types";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
+import { TEXTAREA_FAKTUM_IDS } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import { isValidTextLength } from "./validation/validations.utils";
 import { useValidation } from "../../context/validation-context";
-import { TEXTAREA_FAKTUM_IDS } from "../../constants";
+import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { IQuizTekstFaktum } from "../../types/quiz.types";
+import { HelpText } from "../HelpText";
+import { IFaktum } from "./Faktum";
 import styles from "./Faktum.module.css";
+import { isValidTextLength } from "./validation/validations.utils";
 
-export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
+export const FaktumText = forwardRef(FaktumTextComponent);
+
+export function FaktumTextComponent(
+  props: IFaktum<IQuizTekstFaktum>,
+  ref: Ref<HTMLInputElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
+
   const [hasError, setHasError] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
   const [debouncedText, setDebouncedText] = useState<string>(currentAnswer);
@@ -84,6 +90,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
         <Textarea
+          ref={ref as Ref<HTMLTextAreaElement> | undefined}
+          tabIndex={-1}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -93,6 +101,8 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
         />
       ) : (
         <TextField
+          ref={ref}
+          tabIndex={-1}
           value={currentAnswer}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}

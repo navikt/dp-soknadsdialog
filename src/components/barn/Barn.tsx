@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
+import { forwardRef, Ref, useEffect } from "react";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
+import { ChildAdd } from "../../svg-icons/ChildAdd";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import { Faktum, IFaktum } from "../faktum/Faktum";
-import { useSanity } from "../../context/sanity-context";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../context/quiz-context";
-import { getChildBirthDate } from "./BarnRegister";
-import { ChildAdd } from "../../svg-icons/ChildAdd";
-import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
-import { BarnNavn } from "./BarnNavn";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { BarnBostedsland } from "./BarnBodstedsland";
+import { BarnNavn } from "./BarnNavn";
+import { getChildBirthDate } from "./BarnRegister";
 
-export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
+export const Barn = forwardRef(BarnComponent);
+
+function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivElement> | undefined) {
   const { faktum } = props;
   const { isLoading } = useQuiz();
   const { getAppText } = useSanity();
@@ -41,7 +43,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   }, [faktum?.svar?.length]);
 
   return (
-    <>
+    <div ref={ref} aria-invalid={unansweredFaktumId === faktum.id} tabIndex={-1}>
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -105,6 +107,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

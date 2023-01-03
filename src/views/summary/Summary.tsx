@@ -21,7 +21,6 @@ import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
-
 interface IProps {
   personalia: IPersonalia | null;
 }
@@ -36,7 +35,8 @@ export function Summary(props: IProps) {
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
 
-  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [consentGiven, setConsentGiven] = useState(false);
+  const consentRef = useRef(null);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
@@ -56,6 +56,7 @@ export function Summary(props: IProps) {
   function validateAndCompleteSoknad() {
     if (!consentGiven) {
       setShowConsentValidation(true);
+      setFocus(consentRef);
       return;
     }
     if (!soknadState.ferdig) {
@@ -139,6 +140,7 @@ export function Summary(props: IProps) {
       </Accordion>
 
       <ConfirmationPanel
+        ref={consentRef}
         className="my-11"
         checked={consentGiven}
         label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
@@ -178,7 +180,7 @@ export function Summary(props: IProps) {
       {finishSoknadStatus === "error" && (
         <div className="my-11">
           <Alert variant={"error"}>
-            {getAppText("oppsummering.feilmelding.ferdigstill-soknad")}{" "}
+            {getAppText("oppsummering.feilmelding.ferdigstill-soknad")}
           </Alert>
         </div>
       )}

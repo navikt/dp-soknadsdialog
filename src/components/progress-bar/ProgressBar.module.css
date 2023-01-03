@@ -5,6 +5,14 @@
   margin: var(--a-spacing-10) 0;
 }
 
+.progressBar:focus-visible {
+  outline: none;
+}
+
+.progressBar:focus-visible {
+  outline: none;
+}
+
 .barContainer {
   display: flex;
   flex-wrap: nowrap;
