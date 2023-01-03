@@ -7,15 +7,15 @@ import { useSanity } from "../../context/sanity-context";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../context/quiz-context";
-import { useRouter } from "next/router";
-import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
+import { getChildBirthDate } from "./BarnRegister";
 import { ChildAdd } from "../../svg-icons/ChildAdd";
 import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { BarnNavn } from "./BarnNavn";
+import { BarnBostedsland } from "./BarnBodstedsland";
 
 export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   const { faktum } = props;
-  const { locale } = useRouter();
   const { isLoading } = useQuiz();
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -59,11 +59,11 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
-                {getChildName(fakta)}
+                <BarnNavn barn={fakta} />
               </Heading>
               <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
               <Detail uppercase spacing>
-                <>{getChildBostedsland(fakta, locale)}</>
+                <BarnBostedsland barn={fakta} />
               </Detail>
             </GeneratorFaktumCard>
             <Modal
@@ -81,7 +81,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
 
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                    Lagre og lukk
+                    {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
               </Modal.Content>
