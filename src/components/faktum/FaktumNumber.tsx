@@ -21,8 +21,8 @@ function FaktumNumberComponent(
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById } = useSanity();
-  const { setHasError, isValid, getErrorMessage } = useValidateFaktumNumber(faktum.beskrivendeId);
+  const { getFaktumTextById, getAppText } = useSanity();
+  const { errorMessage, isValid, updateErrorMessage } = useValidateFaktumNumber(faktum);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
@@ -46,24 +46,21 @@ function FaktumNumberComponent(
     setCurrentAnswer(value);
 
     if (!value) {
-      setHasError(undefined);
       setDebouncedValue(null);
       return;
     }
 
     if (!isNumber(value)) {
-      setHasError("NotNumber");
+      updateErrorMessage(getAppText("validering.number-faktum.maa-vaere-et-tall"));
       return;
     }
 
     switch (faktum.type) {
       case "int": {
-        setHasError(undefined);
         debouncedChange(parseInt(value));
         break;
       }
       case "double": {
-        setHasError(undefined);
         // Replace comma with dot
         const formattedValue = value.replace(/,/g, ".");
         debouncedChange(parseFloat(formattedValue));
@@ -73,8 +70,15 @@ function FaktumNumberComponent(
   }
 
   function saveFaktum(value: number | null) {
-    const isValidNumber = isValid(value);
-    if (isValidNumber) {
+    // Generator faktum "Egen næring" inneholder bare et int faktum faktum.egen-naering-organisasjonsnummer.
+    // Vi ønsker ikke lagrer null for dette siden den vil også lukke modalen.
+    if (value === null && faktum.beskrivendeId !== "faktum.egen-naering-organisasjonsnummer") {
+      updateErrorMessage(undefined);
+      saveFaktumToQuiz(faktum, null);
+    }
+
+    if (value && isValid(value)) {
+      updateErrorMessage(undefined);
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -106,7 +110,7 @@ function FaktumNumberComponent(
         inputMode="decimal"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
-        error={getErrorMessage(props.faktum.id)}
+        error={errorMessage}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
