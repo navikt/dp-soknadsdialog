@@ -31,12 +31,10 @@ export function useValidateFaktumNumber({
   }, [unansweredFaktumId]);
 
   function isValid(value: number | null) {
-    if (value === 0) return true;
-
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
       // Generator faktum "egen næring" contains only one faktum (faktum.egen-naering-organisasjonsnummer).
       // We cannot save null because it will close generator faktum modal
-      if (!value) {
+      if (value === null) {
         setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
         return false;
       }
@@ -51,22 +49,12 @@ export function useValidateFaktumNumber({
       return true;
     }
 
-    if (beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
-      if (!value) return true;
+    if (value === null) return true;
 
+    if (value === 0) return true;
+
+    if (value && beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
       if (!isValidPermitteringsPercent(value)) {
-        setErrorMessage(
-          faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig")
-        );
-      }
-
-      return true;
-    }
-
-    if (beskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
-      if (!value) return true;
-
-      if (!isValidArbeidstimer(value)) {
         setErrorMessage(
           faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig")
         );
@@ -77,7 +65,17 @@ export function useValidateFaktumNumber({
       return true;
     }
 
-    if (!value) return true;
+    if (value && beskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
+      if (!isValidArbeidstimer(value)) {
+        setErrorMessage(
+          faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig")
+        );
+
+        return false;
+      }
+
+      return true;
+    }
 
     return true;
   }
