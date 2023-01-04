@@ -1,0 +1,6 @@
+.generatorReadOnlyCard {
+  padding: var(--navds-spacing-4);
+  background-color: var(--navds-global-color-blue-50);
+  border-radius: var(--navds-border-radius-medium);
+  margin-bottom: var(--navds-spacing-5);
+}

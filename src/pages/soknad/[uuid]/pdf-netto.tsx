@@ -9,9 +9,17 @@ import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { Pdf } from "../../../views/pdf/Pdf";
+import { IPersonalia } from "../../../types/personalia.types";
+import { mockPersonalia } from "../../../localhost-data/personalia";
+import { getPersonalia } from "../../api/personalia";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
   soknadState: IQuizState | null;
+  personalia: IPersonalia | null;
+  dokumentkrav: IDokumentkravList | null;
   errorCode: number | null;
 }
 
@@ -25,6 +33,8 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        personalia: mockPersonalia,
+        dokumentkrav: mockDokumentkravBesvart,
         errorCode: null,
       },
     };
@@ -41,10 +51,14 @@ export async function getServerSideProps(
   }
 
   let errorCode = null;
+  let personalia = null;
   let soknadState = null;
+  let dokumentkrav = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
@@ -52,16 +66,28 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
+  if (dokumentkravResponse.ok) {
+    dokumentkrav = await dokumentkravResponse.json();
+  } else {
+    errorCode = dokumentkravResponse.status;
+  }
+
+  if (personaliaResponse.ok) {
+    personalia = await personaliaResponse.json();
+  }
+
   return {
     props: {
+      personalia,
       soknadState,
+      dokumentkrav,
       errorCode,
     },
   };
 }
 
-export default function SoknadPage(props: IProps) {
-  if (props.errorCode || !props.soknadState) {
+export default function PdfNettoPage(props: IProps) {
+  if (props.errorCode || !props.soknadState || !props.personalia) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -74,7 +100,7 @@ export default function SoknadPage(props: IProps) {
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Pdf />
+        <Pdf personalia={props.personalia} dokumentkrav={props.dokumentkrav} />
       </ValidationProvider>
     </QuizProvider>
   );

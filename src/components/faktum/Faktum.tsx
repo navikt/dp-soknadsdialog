@@ -1,93 +1,158 @@
 import React from "react";
-import { FaktumEnvalg } from "./FaktumEnvalg";
-import { FaktumFlervalg } from "./FaktumFlervalg";
+import { FaktumEnvalg } from "./faktum-envalg/FaktumEnvalg";
+import { FaktumFlervalg } from "./faktum-flervalg/FaktumFlervalg";
 import styles from "./Faktum.module.css";
 import {
-  QuizFaktum,
-  QuizFaktumSvarType,
   IQuizGeneratorFaktum,
   IQuizNumberFaktum,
+  QuizFaktum,
+  QuizFaktumSvarType,
 } from "../../types/quiz.types";
-import { FaktumText } from "./FaktumText";
-import { FaktumNumber } from "./FaktumNumber";
-import { FaktumDato } from "./FaktumDato";
-import { FaktumPeriode } from "./FaktumPeriode";
+import { FaktumText } from "./faktum-text/FaktumText";
+import { FaktumNumber } from "./faktum-number/FaktumNumber";
+import { FaktumDato } from "./faktum-dato/FaktumDato";
+import { FaktumPeriode } from "./faktum-periode/FaktumPeriode";
 import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
-import { FaktumLand } from "./FaktumLand";
-import { FaktumBoolean } from "./FaktumBoolean";
-import { FaktumGenerator } from "./FaktumGenerator";
-import { FaktumDokumentkrav } from "./FaktumDokumentkrav";
-import { useQuiz } from "../../context/quiz-context";
-import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
+import { FaktumLand } from "./faktum-land/FaktumLand";
+import { FaktumBoolean } from "./faktum-boolean/FaktumBoolean";
+import { FaktumGenerator } from "./faktum-generator/FaktumGenerator";
+import { FaktumBooleanReadOnly } from "./faktum-boolean/FaktumBooleanReadOnly";
+import { FaktumEnvalgReadOnly } from "./faktum-envalg/FaktumEnvalgReadOnly";
+import { FaktumFlervalgReadOnly } from "./faktum-flervalg/FaktumFlervalgReadOnly";
+import { FaktumTextReadOnly } from "./faktum-text/FaktumTextReadOnly";
+import { FaktumNumberReadOnly } from "./faktum-number/FaktumNumberReadOnly";
+import { FaktumLandReadOnly } from "./faktum-land/FaktumLandReadOnly";
+import { FaktumDatoReadOnly } from "./faktum-dato/FaktumDatoReadOnly";
+import { FaktumPeriodeReadOnly } from "./faktum-periode/FaktumPeriodeReadOnly";
+import { FileContent } from "@navikt/ds-icons";
+import { useSanity } from "../../context/sanity-context";
+import { FaktumGeneratorReadOnly } from "./faktum-generator/FaktumGeneratorReadOnly";
 
 export interface IFaktum<P> {
   faktum: P;
   onChange?: (faktum: QuizFaktum, value: QuizFaktumSvarType) => void;
   readonly?: boolean;
+  showAllFaktumTexts?: boolean;
+}
+
+export interface IFaktumReadOnly<P> {
+  faktum: P;
+  showAllFaktumTexts?: boolean;
 }
 
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
-  const { soknadState } = useQuiz();
-  const { faktum, readonly } = props;
+  const { faktum, readonly, showAllFaktumTexts } = props;
+  const { getAppText, getDokumentkravTextById } = useSanity();
 
   function renderFaktumType() {
     if (faktum.beskrivendeId === FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER) {
+      if (faktum.readOnly || readonly) {
+        return (
+          <FaktumNumberReadOnly
+            faktum={faktum as IQuizNumberFaktum}
+            showAllFaktumTexts={showAllFaktumTexts}
+          />
+        );
+      }
+
       return (
         <FaktumEgetGaardsbrukArbeidsaar
           faktum={faktum as IQuizNumberFaktum}
           onChange={props.onChange}
-          readonly={readonly}
         />
       );
     }
 
     switch (faktum.type) {
       case "boolean":
-        return <FaktumBoolean faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumBooleanReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumBoolean faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "envalg":
-        return <FaktumEnvalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumEnvalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumEnvalg faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "flervalg":
-        return <FaktumFlervalg faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumFlervalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumFlervalg faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "tekst":
-        return <FaktumText faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumTextReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumText faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "double":
       case "int":
-        return <FaktumNumber faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumNumberReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumNumber faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "land":
-        return <FaktumLand faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumLandReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumLand faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "localdate":
-        return <FaktumDato faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumDatoReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumDato faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "periode":
-        return <FaktumPeriode faktum={faktum} onChange={props.onChange} readonly={readonly} />;
+        if (faktum.readOnly || readonly) {
+          return <FaktumPeriodeReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
+        } else {
+          return <FaktumPeriode faktum={faktum} onChange={props.onChange} />;
+        }
 
       case "generator":
-        return <FaktumGenerator faktum={faktum as IQuizGeneratorFaktum} readonly={readonly} />;
+        if (readonly) {
+          return (
+            <FaktumGeneratorReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />
+          );
+        } else {
+          return <FaktumGenerator faktum={faktum as IQuizGeneratorFaktum} />;
+        }
     }
   }
 
-  function renderDokumentkrav() {
-    if (faktum.readOnly || readonly) {
-      return;
-    }
-
-    return props.faktum.sannsynliggjoresAv?.map((dokumentkrav) => (
-      <FaktumDokumentkrav key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
-    ));
-  }
-
+  const shouldRenderDokumtkravText = showAllFaktumTexts || (!faktum.readOnly && !readonly);
   return (
     <div className={styles.faktum} data-faktum-id={faktum.beskrivendeId}>
       {renderFaktumType()}
-      {soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD && renderDokumentkrav()}
+
+      {shouldRenderDokumtkravText &&
+        faktum.sannsynliggjoresAv?.map((dokumentkrav) => {
+          const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
+          return (
+            <p className={styles.dokumentkravContainer} key={dokumentkrav.beskrivendeId}>
+              <FileContent />
+              {getAppText("soknad.faktum-maa-dokumenteres.del-1")}
+              {` ${
+                dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId
+              }. `}
+              {getAppText("soknad.faktum-maa-dokumenteres.del-2")}
+            </p>
+          );
+        })}
     </div>
   );
 }

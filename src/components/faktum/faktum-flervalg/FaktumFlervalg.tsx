@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { BodyShort, Checkbox, CheckboxGroup, Label } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
+import { IFaktum } from "../Faktum";
 import { PortableText } from "@portabletext/react";
-import { IQuizFlervalgFaktum } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import { useValidation } from "../../context/validation-context";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { ISanityAlertText } from "../../types/sanity.types";
-import { AlertText } from "../alert-text/AlertText";
-import { isDefined } from "../../types/type-guards";
-import styles from "./Faktum.module.css";
+import { IQuizFlervalgFaktum } from "../../../types/quiz.types";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { HelpText } from "../../HelpText";
+import { useValidation } from "../../../context/validation-context";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import { ISanityAlertText } from "../../../types/sanity.types";
+import { AlertText } from "../../alert-text/AlertText";
+import { isDefined } from "../../../types/type-guards";
+import styles from "../Faktum.module.css";
 
 export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const { faktum, onChange } = props;
@@ -19,7 +19,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-  const [alertText, setAlertText] = useState<ISanityAlertText[]>([]);
+  const [alertTexts, setAlertTexts] = useState<ISanityAlertText[]>([]);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
@@ -29,7 +29,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
       .map((answer) => getSvaralternativTextById(answer)?.alertText)
       .filter(isDefined);
 
-    setAlertText(alertTexts);
+    setAlertTexts(alertTexts);
   }, [currentAnswer]);
 
   useEffect(() => {
@@ -45,17 +45,6 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
 
   function saveFaktum(value: string[]) {
     saveFaktumToQuiz(faktum, value.length > 0 ? value : null);
-  }
-
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        {currentAnswer.map((textId) => (
-          <BodyShort key={textId}>{getSvaralternativTextById(textId)?.text || textId}</BodyShort>
-        ))}
-      </>
-    );
   }
 
   return (
@@ -83,7 +72,7 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
 
-      {alertText.map((sanityText, index) => {
+      {alertTexts.map((sanityText, index) => {
         return (
           (sanityText?.body || sanityText?.title) && (
             <AlertText key={index} alertText={sanityText} spacingTop />

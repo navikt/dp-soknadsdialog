@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -15,7 +15,7 @@ for (let i = 0; i <= 4; i++) {
 }
 
 export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>) {
-  const { faktum, readonly } = props;
+  const { faktum } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
@@ -39,7 +39,6 @@ export function FaktumEgetGaardsbrukArbeidsaar(props: IFaktum<IQuizNumberFaktum>
       options={years}
       currentValue={currentAnswer?.toString() || ""}
       placeHolderText={"Velg et år"}
-      readOnly={readonly}
       error={
         unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
       }

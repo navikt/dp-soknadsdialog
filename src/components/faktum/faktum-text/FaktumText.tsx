@@ -1,17 +1,17 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { Textarea, BodyShort, Label, TextField } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import { Textarea, TextField } from "@navikt/ds-react";
+import { TEXTAREA_FAKTUM_IDS } from "../../../constants";
+import { IFaktum } from "../Faktum";
+import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { IQuizTekstFaktum } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import { isValidTextLength } from "./validation/validations.utils";
-import { useValidation } from "../../context/validation-context";
-import { TEXTAREA_FAKTUM_IDS } from "../../constants";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import styles from "./Faktum.module.css";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { HelpText } from "../../HelpText";
+import { isValidTextLength } from "../validation/validations.utils";
+import { useValidation } from "../../../context/validation-context";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
   const { faktum, onChange } = props;
@@ -52,6 +52,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
       saveFaktumToQuiz(faktum, null);
       return;
     }
+
     if (!isValidTextLength(value)) {
       setHasError(true);
       return;
@@ -59,15 +60,6 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
       setHasError(false);
       saveFaktumToQuiz(faktum, value);
     }
-  }
-
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{debouncedText}</BodyShort>
-      </>
-    );
   }
 
   function getErrorMessage() {
@@ -103,6 +95,7 @@ export function FaktumText(props: IFaktum<IQuizTekstFaktum>) {
           error={getErrorMessage()}
         />
       )}
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}

@@ -1,9 +1,9 @@
 import React from "react";
+import userEvent from "@testing-library/user-event";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumNumber } from "./FaktumNumber";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
-import userEvent from "@testing-library/user-event";
-import { MockContext } from "../../__mocks__/MockContext";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
+import { MockContext } from "../../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   beskrivendeId: "faktum.barn-inntekt",

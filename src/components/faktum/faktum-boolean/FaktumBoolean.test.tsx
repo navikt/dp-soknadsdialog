@@ -1,11 +1,11 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import React from "react";
 import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 
-import * as SentryLogger from "../../sentry.logger";
-import { MockContext } from "../../__mocks__/MockContext";
+import * as SentryLogger from "../../../sentry.logger";
+import { MockContext } from "../../../__mocks__/MockContext";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",

@@ -79,7 +79,6 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
-              readOnly={props.readonly}
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"} spacing>
@@ -119,20 +118,16 @@ export function Arbeidsforhold(props: IFaktum<IQuizGeneratorFaktum>) {
         );
       })}
 
-      {!props.readonly && (
-        <>
-          <Button
-            variant="secondary"
-            className={"generator-faktum__add-button"}
-            onClick={() => addArbeidsforhold(faktum)}
-            icon={<BriefcaseAdd />}
-          >
-            {getAppText("arbeidsforhold.knapp.legg-til")}
-          </Button>
-          {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
-          )}
-        </>
+      <Button
+        variant="secondary"
+        className={"generator-faktum__add-button"}
+        onClick={() => addArbeidsforhold(faktum)}
+        icon={<BriefcaseAdd />}
+      >
+        {getAppText("arbeidsforhold.knapp.legg-til")}
+      </Button>
+      {unansweredFaktumId === faktum.id && (
+        <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
     </>
   );

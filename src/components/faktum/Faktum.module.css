@@ -17,3 +17,12 @@
 .faktumDatoWarningSpacing {
   margin-top: var(--navds-spacing-4);
 }
+
+.dokumentkravContainer {
+  display: flex;
+}
+
+.dokumentkravContainer svg {
+  flex-shrink: 0;
+  margin-right: var(--navds-spacing-1);
+}

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import { Radio, RadioGroup } from "@navikt/ds-react";
+import { IFaktum } from "../Faktum";
+import { IQuizBooleanFaktum } from "../../../types/quiz.types";
+import { ISanityAlertText } from "../../../types/sanity.types";
+import { ErrorTypesEnum } from "../../../types/error.types";
 import { PortableText } from "@portabletext/react";
-import { IQuizBooleanFaktum } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
-import { ISanityAlertText } from "../../types/sanity.types";
-import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../../types/error.types";
-import { useValidation } from "../../context/validation-context";
-import { AlertText } from "../alert-text/AlertText";
-import { useFirstRender } from "../../hooks/useFirstRender";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { HelpText } from "../../HelpText";
+import { ErrorRetryModal } from "../../error-retry-modal/ErrorRetryModal";
+import { useValidation } from "../../../context/validation-context";
+import { AlertText } from "../../alert-text/AlertText";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const { faktum, onChange } = props;
@@ -55,15 +55,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
 
   if (!faktum.beskrivendeId) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
-  }
-
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{getSvaralternativTextById(currentAnswer)?.text || currentAnswer}</BodyShort>
-      </>
-    );
   }
 
   return (

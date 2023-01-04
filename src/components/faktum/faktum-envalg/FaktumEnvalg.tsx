@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
-import { IFaktum } from "./Faktum";
+import React, { useEffect, useState } from "react";
+import { Radio, RadioGroup } from "@navikt/ds-react";
+import { IFaktum } from "../Faktum";
 import { PortableText } from "@portabletext/react";
-import { IQuizEnvalgFaktum } from "../../types/quiz.types";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { HelpText } from "../HelpText";
-import styles from "./Faktum.module.css";
-import { ISanityAlertText } from "../../types/sanity.types";
-import { useValidation } from "../../context/validation-context";
-import { AlertText } from "../alert-text/AlertText";
-import { useFirstRender } from "../../hooks/useFirstRender";
+import { IQuizEnvalgFaktum } from "../../../types/quiz.types";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { HelpText } from "../../HelpText";
+import styles from "../Faktum.module.css";
+import { ISanityAlertText } from "../../../types/sanity.types";
+import { useValidation } from "../../../context/validation-context";
+import { AlertText } from "../../alert-text/AlertText";
+import { useFirstRender } from "../../../hooks/useFirstRender";
 
 export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   const { faktum, onChange } = props;
@@ -43,15 +43,6 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
     onChange ? onChange(faktum, value) : saveFaktumToQuiz(faktum, value);
   }
 
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{getSvaralternativTextById(currentAnswer)?.text || currentAnswer}</BodyShort>
-      </>
-    );
-  }
-
   return (
     <>
       <RadioGroup
@@ -72,9 +63,11 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
           );
         })}
       </RadioGroup>
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+
       {(alertText?.body || alertText?.title) && <AlertText alertText={alertText} spacingTop />}
     </>
   );

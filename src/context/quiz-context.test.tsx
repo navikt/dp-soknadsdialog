@@ -1,6 +1,6 @@
 import React from "react";
 import { QuizProvider, useQuiz } from "./quiz-context";
-import { FaktumBoolean } from "../components/faktum/FaktumBoolean";
+import { FaktumBoolean } from "../components/faktum/faktum-boolean/FaktumBoolean";
 import { render, screen, waitFor } from "@testing-library/react";
 import { IQuizBooleanFaktum, IQuizState } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";

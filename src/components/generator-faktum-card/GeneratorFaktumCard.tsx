@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useState } from "react";
-import styles from "./GeneratorFaktumCard.module.css";
 import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
 import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/DeleteGeneratorFaktumModal";
+import styles from "./GeneratorFaktumCard.module.css";
 
 export type generatorFaktumType = "standard" | "barn" | "arbeidsforhold";
 
@@ -13,14 +13,12 @@ interface IProps {
   editFaktum?: () => void;
   deleteFaktum?: () => void;
   allFaktumAnswered?: boolean;
-  readOnly?: boolean;
   showValidationMessage: boolean;
 }
 
 export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Element {
   const {
     children,
-    readOnly,
     editFaktum,
     allFaktumAnswered,
     showValidationMessage,
@@ -34,11 +32,12 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
     <div className={styles.card}>
       {children}
 
-      {!readOnly && editFaktum && allFaktumAnswered && (
+      {allFaktumAnswered && editFaktum && (
         <div className={styles.buttonContainer}>
           <Button size={"medium"} variant={"secondary"} onClick={editFaktum}>
             {getAppText("generator-faktum-kort.endre-svar.knapp")}
           </Button>
+
           <Button size={"medium"} variant={"secondary"} onClick={() => setModalOpen(true)}>
             {getAppText("generator-faktum-kort.slett.knapp")}
           </Button>
@@ -53,6 +52,7 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
               {getAppText("generator-faktum-kort.delvis-utfylt.varsel")}
             </Detail>
           </div>
+
           <div className={styles.buttonContainer}>
             <Button size={"medium"} variant={"primary"} onClick={editFaktum}>
               {getAppText("generator-faktum-kort.fyll-ut.knapp")}

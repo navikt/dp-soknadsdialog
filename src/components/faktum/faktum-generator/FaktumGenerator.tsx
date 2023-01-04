@@ -1,22 +1,22 @@
-import { QuizFaktum, IQuizGeneratorFaktum } from "../../types/quiz.types";
+import React, { useEffect } from "react";
+import { Button, Heading, Modal } from "@navikt/ds-react";
+import { QuizFaktum, IQuizGeneratorFaktum } from "../../../types/quiz.types";
 import {
   ARBEIDSFORHOLD_FAKTUM_ID,
   BARN_LISTE_FAKTUM_ID,
   BARN_LISTE_REGISTER_FAKTUM_ID,
-} from "../../constants";
-import React, { useEffect } from "react";
-import { Button, Heading, Modal } from "@navikt/ds-react";
-import { Faktum, IFaktum } from "./Faktum";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
-import { Barn } from "../barn/Barn";
-import { useSanity } from "../../context/sanity-context";
-import { BarnRegister } from "../barn/BarnRegister";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../context/quiz-context";
-import { useValidation } from "../../context/validation-context";
-import { ValidationMessage } from "./validation/ValidationMessage";
+} from "../../../constants";
+import { Faktum, IFaktum } from "../Faktum";
+import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
+import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
+import { Barn } from "../../barn/Barn";
+import { useSanity } from "../../../context/sanity-context";
+import { BarnRegister } from "../../barn/BarnRegister";
+import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
+import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
+import { useQuiz } from "../../../context/quiz-context";
+import { useValidation } from "../../../context/validation-context";
+import { ValidationMessage } from "../validation/ValidationMessage";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
@@ -65,7 +65,6 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-              readOnly={props.readonly}
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
@@ -96,6 +95,7 @@ function StandardGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
           </div>
         );
       })}
+
       {!props.readonly && (
         <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
           {getAppText("soknad.generator-faktum.knapp.legg-til")}
