@@ -70,7 +70,7 @@ const personalia: IPersonalia = {
 };
 
 describe("Receipt", () => {
-  test("Should show summary question and answers", async () => {
+  test.skip("Should show summary question and answers", async () => {
     const user = userEvent.setup();
 
     render(

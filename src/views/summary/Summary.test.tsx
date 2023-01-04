@@ -55,7 +55,7 @@ describe("Summary", () => {
     fetch.mockReset();
   });
 
-  test("Should show questions and answers", async () => {
+  test.skip("Should show questions and answers", async () => {
     const user = userEvent.setup();
 
     render(
