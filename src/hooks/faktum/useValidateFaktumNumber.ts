@@ -31,6 +31,10 @@ export function useValidateFaktumNumber({
   }, [unansweredFaktumId]);
 
   function isValid(value: number | null) {
+    if (value === null && beskrivendeId !== "faktum.egen-naering-organisasjonsnummer") return true;
+
+    if (value === 0) return true;
+
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
       // Generator faktum "egen næring" contains only one faktum (faktum.egen-naering-organisasjonsnummer).
       // We cannot save null because it will close generator faktum modal
@@ -48,10 +52,6 @@ export function useValidateFaktumNumber({
 
       return true;
     }
-
-    if (value === null) return true;
-
-    if (value === 0) return true;
 
     if (value && beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
       if (!isValidPermitteringsPercent(value)) {
