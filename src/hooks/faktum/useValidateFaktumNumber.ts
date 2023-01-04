@@ -32,7 +32,7 @@ export function useValidateFaktumNumber({
 
   function isValid(value: number | null) {
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
-      if (value === null) {
+      if (!value) {
         setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
         return false;
       }
@@ -48,7 +48,7 @@ export function useValidateFaktumNumber({
     }
 
     if (beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
-      if (value === null) {
+      if (!value) {
         setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
         return false;
       }
@@ -62,7 +62,7 @@ export function useValidateFaktumNumber({
     }
 
     if (beskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
-      if (value === null) {
+      if (!value) {
         setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
         return false;
       }

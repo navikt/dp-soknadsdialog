@@ -70,7 +70,7 @@ function FaktumNumberComponent(
   }
 
   function saveFaktum(value: number | null) {
-    if (value && isValid(value)) {
+    if (isValid(value)) {
       updateErrorMessage(undefined);
       saveFaktumToQuiz(faktum, value);
     }
