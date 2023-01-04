@@ -70,13 +70,6 @@ function FaktumNumberComponent(
   }
 
   function saveFaktum(value: number | null) {
-    // Generator faktum "Egen næring" inneholder bare et int faktum faktum.egen-naering-organisasjonsnummer.
-    // Vi ønsker ikke lagrer null for dette siden den vil også lukke modalen.
-    if (value === null && faktum.beskrivendeId !== "faktum.egen-naering-organisasjonsnummer") {
-      updateErrorMessage(undefined);
-      saveFaktumToQuiz(faktum, null);
-    }
-
     if (value && isValid(value)) {
       updateErrorMessage(undefined);
       saveFaktumToQuiz(faktum, value);

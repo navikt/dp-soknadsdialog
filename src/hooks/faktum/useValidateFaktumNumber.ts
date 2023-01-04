@@ -8,7 +8,7 @@ import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 
 interface IUseValidateFaktumNumber {
-  isValid: (value: number) => boolean;
+  isValid: (value: number | null) => boolean;
   errorMessage: string | undefined;
   updateErrorMessage: (message: string | undefined) => void;
 }
@@ -30,9 +30,14 @@ export function useValidateFaktumNumber({
     }
   }, [unansweredFaktumId]);
 
-  function isValid(value: number) {
+  function isValid(value: number | null) {
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
-      if (value.toString().length !== 9) {
+      if (value === null) {
+        setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
+        return false;
+      }
+
+      if (value?.toString().length !== 9) {
         setErrorMessage(
           getAppText("faktum.egen-naering-organisasjonsnummer.validering-maa-vaere-ni-siffer")
         );
@@ -71,13 +76,13 @@ export function useValidateFaktumNumber({
       }
     }
 
+    if (!value) return true;
+
+    if (value === 0) return true;
+
     if (value < 0) {
       setErrorMessage(getAppText("validering.number-faktum.ikke-negativt-tall"));
       return false;
-    }
-
-    if (value === 0) {
-      return true;
     }
 
     return true;
