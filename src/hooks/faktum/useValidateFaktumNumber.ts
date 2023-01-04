@@ -33,22 +33,6 @@ export function useValidateFaktumNumber({
   function isValid(value: number | null) {
     if (value === 0) return true;
 
-    // The number of hours per week cannot be more than 168 hours
-    if (
-      beskrivendeId === "faktum.egen-naering-arbeidstimer-naa" ||
-      beskrivendeId === "faktum.egen-naering-arbeidstimer-for" ||
-      beskrivendeId === "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold"
-    ) {
-      if (!value) return true;
-
-      if (value > 168) {
-        setErrorMessage("Antall timer per uke kan ikke være mer enn 168 timer");
-        return false;
-      }
-
-      return true;
-    }
-
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
       // Generator faktum "egen næring" contains only one faktum (faktum.egen-naering-organisasjonsnummer).
       // We cannot save null because it will close generator faktum modal
