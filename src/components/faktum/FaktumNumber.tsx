@@ -44,6 +44,7 @@ function FaktumNumberComponent(
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
     setCurrentAnswer(value);
+    updateErrorMessage(undefined);
 
     if (!value) {
       setDebouncedValue(null);
@@ -71,7 +72,6 @@ function FaktumNumberComponent(
 
   function saveFaktum(value: number | null) {
     if (isValid(value)) {
-      updateErrorMessage(undefined);
       saveFaktumToQuiz(faktum, value);
     }
   }
