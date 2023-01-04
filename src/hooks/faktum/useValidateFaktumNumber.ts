@@ -31,8 +31,6 @@ export function useValidateFaktumNumber({
   }, [unansweredFaktumId]);
 
   function isValid(value: number | null) {
-    setErrorMessage(undefined);
-
     if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
       if (!value) {
         setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
