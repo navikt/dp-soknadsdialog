@@ -56,6 +56,11 @@ function FaktumNumberComponent(
       return;
     }
 
+    if (parseInt(value) < 0) {
+      updateErrorMessage(getAppText("validering.number-faktum.ikke-negativt-tall"));
+      return;
+    }
+
     switch (faktum.type) {
       case "int": {
         debouncedChange(parseInt(value));
