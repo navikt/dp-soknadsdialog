@@ -60,7 +60,7 @@ export function useValidateFaktumNumber({
       beskrivendeId === "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold"
     ) {
       if (value > 168) {
-        setErrorMessage("Antall timer per uke kan ikke være mer enn 168 timer");
+        setErrorMessage(getAppText("validering.antall-arbeidstimer-per-uke.ikke-over-168-timer"));
         return false;
       }
 
