@@ -68,7 +68,6 @@ export function Soknad(props: IProps) {
 
   function navigateToNextSection() {
     if (currentSection.ferdig) {
-      setNavigating(true);
       const nextIndex = sectionParam && parseInt(sectionParam) + 1;
       router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
         shallow: true,
@@ -81,7 +80,6 @@ export function Soknad(props: IProps) {
 
   function navigateToPreviousSection() {
     setUnansweredFaktumId(undefined);
-    setNavigating(true);
     const nextIndex = sectionParam && parseInt(sectionParam) - 1;
     router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
   }
@@ -138,12 +136,7 @@ export function Soknad(props: IProps) {
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>
           ) : (
-            <Button
-              onClick={() => navigateToNextSection()}
-              icon={<Right />}
-              iconPosition={"right"}
-              loading={navigating}
-            >
+            <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
               {getAppText("soknad.knapp.neste-steg")}
             </Button>
           )}
