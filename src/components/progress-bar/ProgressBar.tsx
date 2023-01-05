@@ -60,20 +60,11 @@ export function ProgressBar(props: IProgressBar) {
   const stepText = `${currentStepText} ${ofTotalStepText}`;
 
   return (
-    <div
-      ref={progressbarRef}
-      tabIndex={-1}
-      className={styles.progressBar}
-      aria-label={stepText}
-      aria-valuenow={props.currentStep}
-      aria-valuemin={1}
-      aria-valuemax={props.totalSteps}
-      aria-labelledby={stepText}
-    >
-      <Label spacing id="progressbar">
+    <div className={styles.progressBar}>
+      <Label ref={progressbarRef} tabIndex={-1} spacing>
         {stepText}
       </Label>
-      <div className={styles.barContainer}>
+      <div className={styles.barContainer} aria-hidden>
         {renderCompletedSteps()}
         {renderRemaining()}
       </div>
