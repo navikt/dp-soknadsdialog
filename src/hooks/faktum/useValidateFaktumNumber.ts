@@ -53,6 +53,20 @@ export function useValidateFaktumNumber({
 
     if (value === null) return true;
 
+    // The number of hours per week cannot be more than 168 hours
+    if (
+      beskrivendeId === "faktum.egen-naering-arbeidstimer-naa" ||
+      beskrivendeId === "faktum.egen-naering-arbeidstimer-for" ||
+      beskrivendeId === "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold"
+    ) {
+      if (value > 168) {
+        setErrorMessage("Antall timer per uke kan ikke være mer enn 168 timer");
+        return false;
+      }
+
+      return true;
+    }
+
     if (value && beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
       if (!isValidPermitteringsPercent(value)) {
         setErrorMessage(
