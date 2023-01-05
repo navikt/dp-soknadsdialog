@@ -15,6 +15,7 @@ export function ErrorRetryModal(props: IProps) {
   const { getAppText } = useSanity();
   const [errorMessage, setErrorMessage] = useState("");
   const [errorsCount, setErrorsCount] = useState(1);
+  const [nagivating, setNagivating] = useState(false);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -52,6 +53,7 @@ export function ErrorRetryModal(props: IProps) {
   }
 
   if (errorsCount > 2) {
+    setNagivating(true);
     router.push("/500");
   }
 
@@ -70,7 +72,12 @@ export function ErrorRetryModal(props: IProps) {
           {getAppText("teknisk-feil.modal.tittel")}
         </Heading>
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
-        <Button className={styles.errorRetryModalButton} variant={"primary"} onClick={reload}>
+        <Button
+          className={styles.errorRetryModalButton}
+          variant={"primary"}
+          onClick={reload}
+          loading={nagivating}
+        >
           {getAppText("teknisk-feil.modal.knapp.prov-paa-nytt")}
         </Button>
       </Modal.Content>

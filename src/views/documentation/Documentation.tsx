@@ -46,6 +46,7 @@ export function Documentation(props: IProps) {
   const { totalSteps, documentationStep } = useProgressBarSteps();
   const { isValid, getValidationError, validationErrors } = useDokumentkravValidation();
   const { bundleFiles, isBundling, bundleErrors, hasBundleError } = useDokumentkravBundler();
+  const [navigating, setNavigating] = useState(false);
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const dokumentasjonskravText = getInfosideText("dokumentasjonskrav");
@@ -90,6 +91,7 @@ export function Documentation(props: IProps) {
   }
 
   function navigateToSoknad() {
+    setNavigating(true);
     const lastSectionIndex = soknadState.seksjoner.length;
     router.push(`/soknad/${router.query.uuid}?seksjon=${lastSectionIndex}`);
   }
@@ -146,7 +148,12 @@ export function Documentation(props: IProps) {
         </Alert>
       )}
       <nav className="navigation-container">
-        <Button variant={"secondary"} onClick={() => navigateToSoknad()} icon={<Left />}>
+        <Button
+          variant={"secondary"}
+          onClick={() => navigateToSoknad()}
+          icon={<Left />}
+          loading={navigating}
+        >
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 

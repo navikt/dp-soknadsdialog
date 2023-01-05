@@ -20,7 +20,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isNagivating, setNavigating] = useState(false);
 
   useEffect(() => {
     if (deleteSoknadStatus === "success") {
@@ -39,7 +39,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
       </BodyLong>
 
       <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref>
-        <Button variant="primary" as="a" loading={isLoading} onClick={() => setIsLoading(true)}>
+        <Button variant="primary" as="a" loading={isNagivating} onClick={() => setNavigating(true)}>
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>
