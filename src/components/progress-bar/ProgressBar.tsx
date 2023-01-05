@@ -11,6 +11,8 @@ interface IProgressBar {
 }
 
 export function ProgressBar(props: IProgressBar) {
+  const { currentStep, totalSteps } = props;
+
   const progressbarRef = useRef(null);
   const { setFocus } = useSetFocus();
   const { scrollIntoView } = useScrollIntoView();
@@ -19,10 +21,10 @@ export function ProgressBar(props: IProgressBar) {
   useEffect(() => {
     scrollIntoView(progressbarRef);
     setFocus(progressbarRef);
-  }, [props.currentStep]);
+  }, [currentStep]);
 
   const progressPercentage = () => {
-    return (props.currentStep / props.totalSteps) * 100;
+    return (currentStep / totalSteps) * 100;
   };
 
   const renderRemaining = () => {
@@ -30,7 +32,7 @@ export function ProgressBar(props: IProgressBar) {
     const remainderWidthStyle = { width: `${remainingProgress}%` };
 
     let finalCircleStyle = {};
-    if (props.currentStep === props.totalSteps) {
+    if (currentStep === totalSteps) {
       finalCircleStyle = { borderWidth: `0px`, borderColor: "transparent" };
     }
 
@@ -49,13 +51,9 @@ export function ProgressBar(props: IProgressBar) {
     return <div className={styles.completed} style={completedWidthStyle}></div>;
   };
 
-  const currentStepText = `${getAppText("steg-indikator.naavaerende-steg.tekst")} ${
-    props.currentStep
-  }`;
+  const currentStepText = `${getAppText("steg-indikator.naavaerende-steg.tekst")} ${currentStep}`;
 
-  const ofTotalStepText = `${getAppText("steg-indikator.av-totalt-steg.tekst")} ${
-    props.totalSteps
-  }`;
+  const ofTotalStepText = `${getAppText("steg-indikator.av-totalt-steg.tekst")} ${totalSteps}`;
 
   const stepText = `${currentStepText} ${ofTotalStepText}`;
 
