@@ -6,7 +6,7 @@ import { IQuizBooleanFaktum, IQuizState } from "../types/quiz.types";
 import { SanityProvider } from "./sanity-context";
 import fetch from "jest-fetch-mock";
 import userEvent from "@testing-library/user-event";
-import { sanityMocks } from "../__mocks__/sanity.mocks";
+import { mockSanityTexts } from "../__mocks__/MockContext";
 import { ValidationProvider } from "./validation-context";
 
 const initialState: IQuizState = { ferdig: false, seksjoner: [], antallSeksjoner: 0 };
@@ -41,7 +41,7 @@ describe("Quiz context", () => {
     fetch.mockResponseOnce(JSON.stringify({ ...faktum, svar: true }));
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SanityProvider initialState={mockSanityTexts}>
         <QuizProvider initialState={initialState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
@@ -74,7 +74,7 @@ describe("Quiz context", () => {
     });
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SanityProvider initialState={mockSanityTexts}>
         <QuizProvider initialState={initialState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />

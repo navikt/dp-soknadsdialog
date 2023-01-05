@@ -15,7 +15,7 @@ export interface ISanityFaktum {
   textId: string;
   text: string;
   description?: TypedObject | TypedObject[];
-  errorMessage: string;
+  errorMessage?: string;
   helpText?: ISanityHelpText;
   unit?: string;
 }
