@@ -15,7 +15,7 @@ interface IProps {
 
 export function DokumentkravGenerellInnsending({ classname }: IProps) {
   const { getAppText } = useSanity();
-  const [isLoading, setIsLoading] = useState(false);
+  const [navigating, setNavigating] = useState(false);
 
   return (
     <div className={classname}>
@@ -28,7 +28,7 @@ export function DokumentkravGenerellInnsending({ classname }: IProps) {
       </BodyShort>
 
       <Link href="/generell-innsending" passHref>
-        <Button as="a" variant="tertiary" loading={isLoading} onClick={() => setIsLoading(true)}>
+        <Button as="a" variant="tertiary" loading={navigating} onClick={() => setNavigating(true)}>
           {getAppText(DOKUMENTKRAV_GENERELL_INNSENDING_LENKE)}
         </Button>
       </Link>
