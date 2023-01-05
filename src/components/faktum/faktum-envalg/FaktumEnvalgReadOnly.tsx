@@ -29,7 +29,11 @@ export function FaktumEnvalgReadOnly(props: IFaktumReadOnly<IQuizEnvalgFaktum>) 
       </BodyShort>
 
       {showAllFaktumTexts && faktumTexts?.helpText && (
-        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        <HelpText
+          className={styles.helpTextSpacing}
+          helpText={faktumTexts.helpText}
+          defaultOpen={true}
+        />
       )}
 
       {showAllFaktumTexts && (alertText?.body || alertText?.title) && (

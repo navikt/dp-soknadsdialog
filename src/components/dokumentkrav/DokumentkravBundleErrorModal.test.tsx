@@ -8,6 +8,7 @@ import fetch from "jest-fetch-mock";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { Modal } from "@navikt/ds-react";
 import { IDokumentkrav } from "../../types/documentation.types";
+import { mockSanityTexts } from "../../__mocks__/MockContext";
 
 describe("DokumentkravBundleErrorModal", () => {
   beforeAll(() => {
@@ -32,7 +33,7 @@ describe("DokumentkravBundleErrorModal", () => {
     const bundleErrorList: IDokumentkrav[] = [mockDokumentkravList.krav[0]];
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SanityProvider initialState={mockSanityTexts}>
         <DokumentkravBundleErrorModal
           dokumentkravList={bundleErrorList}
           isOpen={true}
@@ -62,7 +63,7 @@ describe("DokumentkravBundleErrorModal", () => {
     );
 
     render(
-      <SanityProvider initialState={sanityMocks}>
+      <SanityProvider initialState={mockSanityTexts}>
         <DokumentkravBundleErrorModal
           dokumentkravList={bundleErrorList}
           isOpen={true}

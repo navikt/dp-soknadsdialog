@@ -27,7 +27,11 @@ export function FaktumDatoReadOnly(props: IFaktumReadOnly<IQuizDatoFaktum>) {
       </BodyShort>
 
       {showAllFaktumTexts && faktumTexts?.helpText && (
-        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        <HelpText
+          className={styles.helpTextSpacing}
+          helpText={faktumTexts.helpText}
+          defaultOpen={true}
+        />
       )}
     </>
   );

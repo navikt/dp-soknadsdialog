@@ -35,7 +35,11 @@ export function FaktumFlervalgReadOnly(props: IFaktumReadOnly<IQuizFlervalgFaktu
       </div>
 
       {showAllFaktumTexts && faktumTexts?.helpText && (
-        <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        <HelpText
+          className={styles.helpTextSpacing}
+          helpText={faktumTexts.helpText}
+          defaultOpen={true}
+        />
       )}
 
       {showAllFaktumTexts &&
