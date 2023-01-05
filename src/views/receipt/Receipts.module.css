@@ -1,7 +1,7 @@
 .documentList > * {
-  margin-bottom: var(--navds-spacing-12);
+  margin-bottom: var(--a-spacing-12);
 }
 
 .nagivateToMineDagpengerButton {
-  margin-top: var(--navds-spacing-8);
+  margin-top: var(--a-spacing-8);
 }

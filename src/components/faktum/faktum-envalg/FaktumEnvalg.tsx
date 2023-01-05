@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { IFaktum } from "../Faktum";
-import { PortableText } from "@portabletext/react";
+import { ISanityAlertText } from "../../../types/sanity.types";
 import { IQuizEnvalgFaktum } from "../../../types/quiz.types";
+import { PortableText } from "@portabletext/react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
-import styles from "../Faktum.module.css";
-import { ISanityAlertText } from "../../../types/sanity.types";
 import { useValidation } from "../../../context/validation-context";
 import { AlertText } from "../../alert-text/AlertText";
 import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
-export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
+export const FaktumEnvalg = forwardRef(FaktumEnvalgComponent);
+
+function FaktumEnvalgComponent(
+  props: IFaktum<IQuizEnvalgFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
   const isFirstRender = useFirstRender();
+  const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
@@ -46,6 +51,8 @@ export function FaktumEnvalg(props: IFaktum<IQuizEnvalgFaktum>) {
   return (
     <>
       <RadioGroup
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}

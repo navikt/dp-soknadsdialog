@@ -1,7 +1,7 @@
 import { Fieldset, UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { useEffect, useState } from "react";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
@@ -20,12 +20,17 @@ interface IDateRange {
   to?: Date | undefined;
 }
 
-export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
+export const FaktumPeriode = forwardRef(FaktumPeriodeComponent);
+
+function FaktumPeriodeComponent(
+  props: IFaktum<IQuizPeriodeFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { setDatePickerIsOpen } = useValidation();
+  const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
   const { isValid, tomErrorMessage, fomErrorMessage, getTomIsBeforeTomErrorMessage } =
     useValidateFaktumPeriode(faktum);
@@ -130,7 +135,12 @@ export function FaktumPeriode(props: IFaktum<IQuizPeriodeFaktum>) {
   }
 
   return (
-    <div className={periodeStyles.faktumPeriode}>
+    <div
+      className={periodeStyles.faktumPeriode}
+      ref={ref}
+      tabIndex={-1}
+      aria-invalid={unansweredFaktumId === faktum.id}
+    >
       <Fieldset legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}>
         {faktumTexts?.description && (
           <div className={periodeStyles.faktumPeriodeDescription}>

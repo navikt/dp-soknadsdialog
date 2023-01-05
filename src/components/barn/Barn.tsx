@@ -1,21 +1,23 @@
-import React, { useEffect } from "react";
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
+import { forwardRef, Ref, useEffect } from "react";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
+import { ChildAdd } from "../../svg-icons/ChildAdd";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
 import { Faktum, IFaktum } from "../faktum/Faktum";
-import { useSanity } from "../../context/sanity-context";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../context/quiz-context";
-import { useRouter } from "next/router";
-import { getChildBirthDate, getChildBostedsland, getChildName } from "./BarnRegister";
-import { ChildAdd } from "../../svg-icons/ChildAdd";
-import { useValidation } from "../../context/validation-context";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { BarnBostedsland } from "./BarnBodstedsland";
+import { BarnNavn } from "./BarnNavn";
+import { getChildBirthDate } from "./BarnRegister";
 
-export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
+export const Barn = forwardRef(BarnComponent);
+
+function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivElement> | undefined) {
   const { faktum } = props;
-  const { locale } = useRouter();
   const { isLoading } = useQuiz();
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -41,7 +43,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
   }, [faktum?.svar?.length]);
 
   return (
-    <>
+    <div ref={ref} aria-invalid={unansweredFaktumId === faktum.id} tabIndex={-1}>
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -58,13 +60,13 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
-                {getChildName(fakta)}
+                <BarnNavn barn={fakta} />
               </Heading>
 
               <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
 
               <Detail uppercase spacing>
-                <>{getChildBostedsland(fakta, locale)}</>
+                <BarnBostedsland barn={fakta} />
               </Detail>
             </GeneratorFaktumCard>
 
@@ -83,7 +85,7 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
 
                 <div className={"modal-container__button-container"}>
                   <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
-                    Lagre og lukk
+                    {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
               </Modal.Content>
@@ -103,6 +105,6 @@ export function Barn(props: IFaktum<IQuizGeneratorFaktum>) {
       {unansweredFaktumId === faktum.id && (
         <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
-    </>
+    </div>
   );
 }

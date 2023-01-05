@@ -1,18 +1,23 @@
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { IQuizNumberFaktum } from "../../../types/quiz.types";
+import { IFaktum } from "../Faktum";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidateFaktumNumber } from "../../../hooks/faktum/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
-import { IFaktum } from "../Faktum";
 import { isNumber } from "../validation/validations.utils";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 
-export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
+export const FaktumNumber = forwardRef(FaktumNumberComponent);
+
+function FaktumNumberComponent(
+  props: IFaktum<IQuizNumberFaktum>,
+  ref: Ref<HTMLInputElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
@@ -80,6 +85,8 @@ export function FaktumNumber(props: IFaktum<IQuizNumberFaktum>) {
   return (
     <>
       <TextField
+        ref={ref}
+        tabIndex={-1}
         className={styles.faktumNumber}
         value={displayValue}
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}

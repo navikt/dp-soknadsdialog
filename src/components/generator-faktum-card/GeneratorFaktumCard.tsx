@@ -1,9 +1,11 @@
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useRef, useState, useEffect } from "react";
 import { Button, Detail } from "@navikt/ds-react";
 import { WarningColored } from "@navikt/ds-icons";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { useSanity } from "../../context/sanity-context";
 import { DeleteGeneratorFaktumModal } from "../delete-generator-faktum-modal/DeleteGeneratorFaktumModal";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./GeneratorFaktumCard.module.css";
 
 export type generatorFaktumType = "standard" | "barn" | "arbeidsforhold";
@@ -27,9 +29,24 @@ export function GeneratorFaktumCard(props: PropsWithChildren<IProps>): JSX.Eleme
   } = props;
   const { getAppText } = useSanity();
   const [modalOpen, setModalOpen] = useState(false);
+  const generatorFaktumCardRef = useRef(null);
+  const { scrollIntoView } = useScrollIntoView();
+  const { setFocus } = useSetFocus();
+
+  useEffect(() => {
+    if (showValidationMessage) {
+      scrollIntoView(generatorFaktumCardRef);
+      setFocus(generatorFaktumCardRef);
+    }
+  }, [showValidationMessage]);
 
   return (
-    <div className={styles.card}>
+    <div
+      ref={generatorFaktumCardRef}
+      className={styles.card}
+      tabIndex={-1}
+      aria-invalid={showValidationMessage}
+    >
       {children}
 
       {allFaktumAnswered && editFaktum && (

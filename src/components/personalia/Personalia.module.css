@@ -1,5 +1,5 @@
 .personaliaFaktum {
-  margin-bottom: var(--navds-spacing-5);
+  margin-bottom: var(--a-spacing-5);
 }
 
 .personaliaFaktum:last-child {
@@ -7,5 +7,5 @@
 }
 
 .over67Warning {
-  margin-bottom: var(--navds-spacing-5);
+  margin-bottom: var(--a-spacing-5);
 }

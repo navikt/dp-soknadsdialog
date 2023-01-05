@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { Checkbox, CheckboxGroup } from "@navikt/ds-react";
 import { IFaktum } from "../Faktum";
-import { PortableText } from "@portabletext/react";
 import { IQuizFlervalgFaktum } from "../../../types/quiz.types";
+import { ISanityAlertText } from "../../../types/sanity.types";
+import { PortableText } from "@portabletext/react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { ISanityAlertText } from "../../../types/sanity.types";
 import { AlertText } from "../../alert-text/AlertText";
 import { isDefined } from "../../../types/type-guards";
 import styles from "../Faktum.module.css";
 
-export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
+export const FaktumFlervalg = forwardRef(FaktumFlervalgComponent);
+
+function FaktumFlervalgComponent(
+  props: IFaktum<IQuizFlervalgFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const isFirstRender = useFirstRender();
@@ -50,6 +55,8 @@ export function FaktumFlervalg(props: IFaktum<IQuizFlervalgFaktum>) {
   return (
     <>
       <CheckboxGroup
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}

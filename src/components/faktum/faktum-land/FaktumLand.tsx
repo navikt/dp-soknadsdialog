@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { PortableText } from "@portabletext/react";
 import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
 import { IFaktum } from "../Faktum";
@@ -12,7 +12,12 @@ import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 
-export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
+export const FaktumLand = forwardRef(FaktumLandComponent);
+
+function FaktumLandComponent(
+  props: IFaktum<IQuizLandFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const router = useRouter();
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
@@ -61,7 +66,7 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
   }
 
   return (
-    <>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
@@ -77,6 +82,6 @@ export function FaktumLand(props: IFaktum<IQuizLandFaktum>) {
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-    </>
+    </div>
   );
 }

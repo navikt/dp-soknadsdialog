@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, Ref } from "react";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { IFaktum } from "../Faktum";
 import { IQuizBooleanFaktum } from "../../../types/quiz.types";
@@ -14,7 +14,12 @@ import { AlertText } from "../../alert-text/AlertText";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 
-export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
+export const FaktumBoolean = forwardRef(FaktumBooleanComponent);
+
+function FaktumBooleanComponent(
+  props: IFaktum<IQuizBooleanFaktum>,
+  ref: Ref<HTMLFieldSetElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
@@ -23,11 +28,6 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-
-  function onSelection(value: string) {
-    setCurrentAnswer(value);
-    saveFaktum(value);
-  }
 
   useEffect(() => {
     if (currentAnswer !== "") {
@@ -40,6 +40,11 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
       setCurrentAnswer("");
     }
   }, [faktum.svar]);
+
+  function onSelection(value: string) {
+    setCurrentAnswer(value);
+    saveFaktum(value);
+  }
 
   function saveFaktum(value: string) {
     const mappedAnswer = textIdToBoolean(value);
@@ -60,6 +65,8 @@ export function FaktumBoolean(props: IFaktum<IQuizBooleanFaktum>) {
   return (
     <>
       <RadioGroup
+        ref={ref}
+        tabIndex={-1}
         legend={faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}

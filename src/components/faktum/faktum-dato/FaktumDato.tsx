@@ -1,8 +1,8 @@
+import { useEffect, useState, forwardRef, Ref } from "react";
 import { Alert, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -14,12 +14,17 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 
-export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
+export const FaktumDato = forwardRef(FaktumDatoComponent);
+
+function FaktumDatoComponent(
+  props: IFaktum<IQuizDatoFaktum>,
+  ref: Ref<HTMLDivElement> | undefined
+) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { setDatePickerIsOpen } = useValidation();
+  const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
@@ -76,7 +81,7 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
   return (
-    <>
+    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <UNSAFE_DatePicker
         {...datepickerProps}
         dropdownCaption
@@ -104,6 +109,6 @@ export function FaktumDato(props: IFaktum<IQuizDatoFaktum>) {
           {getAppText("validering.dato-faktum.soknadsdato-varsel")}
         </Alert>
       )}
-    </>
+    </div>
   );
 }
