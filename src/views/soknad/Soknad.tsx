@@ -20,6 +20,7 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -68,7 +69,9 @@ export function Soknad(props: IProps) {
 
   function navigateToNextSection() {
     if (currentSection.ferdig) {
-      const nextIndex = sectionParam && parseInt(sectionParam) + 1;
+      const currentSection = parseInt(sectionParam);
+      const nextIndex = sectionParam && currentSection + 1;
+      trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
       router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
         shallow: true,
       });

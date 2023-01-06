@@ -23,3 +23,11 @@ export function trackSkjemaÅpnet(skjemanavn: string, skjemaId: string) {
     skjemaId,
   });
 }
+
+export function trackSkjemaStegFullført(skjemanavn: string, skjemaId: string, steg: number) {
+  track("skjema steg fullført", {
+    skjemanavn,
+    skjemaId,
+    steg,
+  });
+}
