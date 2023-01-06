@@ -11,11 +11,13 @@ import { FormattedDate } from "../FormattedDate";
 import { useDeleteRequest } from "../../hooks/useDeleteRequest";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import styles from "./inngangPaabegynt.module.css";
+import { trackSkjemaÅpnet } from "../../amplitude.tracking";
 
 interface IProps {
   paabegynt: IPaabegyntSoknad;
   arbeidssokerStatus: IArbeidssokerStatus;
 }
+
 export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
@@ -30,6 +32,11 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
     }
   }, [deleteSoknadStatus]);
 
+  function fortsettSoknad() {
+    trackSkjemaÅpnet("dagpenger", paabegynt.soknadUuid);
+    setNavigating(true);
+  }
+
   return (
     <div className={styles.inngangPaabegyntContainer}>
       <BodyLong>
@@ -39,7 +46,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
       </BodyLong>
 
       <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref>
-        <Button variant="primary" as="a" loading={isNagivating} onClick={() => setNavigating(true)}>
+        <Button variant="primary" as="a" loading={isNagivating} onClick={fortsettSoknad}>
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>

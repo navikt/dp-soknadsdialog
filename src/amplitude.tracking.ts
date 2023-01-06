@@ -16,3 +16,10 @@ export function trackSkjemaStartet(skjemanavn: string, skjemaId: string) {
     skjemaId,
   });
 }
+
+export function trackSkjemaÅpnet(skjemanavn: string, skjemaId: string) {
+  track("skjema åpnet", {
+    skjemanavn,
+    skjemaId,
+  });
+}
