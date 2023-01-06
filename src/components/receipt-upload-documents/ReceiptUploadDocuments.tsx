@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { BodyShort, Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
@@ -20,12 +20,15 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
   const { getAppText } = useSanity();
   const { uuid } = useUuid();
   const canUseEttersending = soknadStatus.innsendt && isDateWithin12Weeks(soknadStatus.innsendt);
+  const [nagivating, setNavigating] = useState(false);
 
   return (
     <div className="my-12">
       {canUseEttersending && (
         <Link href={`/soknad/${uuid}/ettersending`} passHref>
-          <Button as="a">{getAppText(KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP)}</Button>
+          <Button as="a" onClick={() => setNavigating(true)} loading={nagivating}>
+            {getAppText(KVITTERING_MANGLER_DOKUMENT_GO_TIL_OPPLASTING_KNAPP)}
+          </Button>
         </Link>
       )}
 
