@@ -31,3 +31,10 @@ export function trackSkjemaStegFullført(skjemanavn: string, skjemaId: string, s
     steg,
   });
 }
+
+export function trackSkjemaFullført(skjemanavn: string, skjemaId: string) {
+  track("skjema fullført", {
+    skjemanavn,
+    skjemaId,
+  });
+}
