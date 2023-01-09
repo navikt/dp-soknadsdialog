@@ -10,21 +10,21 @@ import styles from "../Faktum.module.css";
 
 export function FaktumEnvalgReadOnly(props: IFaktumReadOnly<IQuizEnvalgFaktum>) {
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const alertText = getSvaralternativTextById(faktum?.svar || "")?.alertText;
 
   return (
     <>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
 
       {showAllFaktumTexts && faktumTexts?.description && (
         <PortableText value={faktumTexts.description} />
       )}
 
       <BodyShort>
-        {showAllFaktumTexts && <strong>Svar: </strong>}
+        {showAllFaktumTexts && <strong>{getAppText("pdf.faktum.svar")}</strong>}
         {faktum.svar && getSvaralternativTextById(faktum.svar)?.text}
       </BodyShort>
 

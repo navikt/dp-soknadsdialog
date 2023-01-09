@@ -12,19 +12,19 @@ import { PortableText } from "@portabletext/react";
 export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById } = useSanity();
+  const { getFaktumTextById, getAppText } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   return (
     <>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
 
       {showAllFaktumTexts && faktumTexts?.description && (
         <PortableText value={faktumTexts.description} />
       )}
 
       <BodyShort>
-        {showAllFaktumTexts && <strong>Svar: </strong>}
+        {showAllFaktumTexts && <strong>{getAppText("pdf.faktum.svar")}</strong>}
         {faktum.svar ? getCountryName(faktum.svar, router.locale) : faktum.svar}
       </BodyShort>
 

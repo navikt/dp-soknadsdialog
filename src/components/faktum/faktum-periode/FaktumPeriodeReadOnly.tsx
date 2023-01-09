@@ -27,7 +27,7 @@ export function FaktumPeriodeReadOnly(props: IFaktumReadOnly<IQuizPeriodeFaktum>
 
       {faktum.svar?.fom && (
         <div className={styles.faktumPeriodeFra}>
-          <Label>{faktumTextFra}</Label>
+          <Label as={"p"}>{faktumTextFra}</Label>
           <BodyShort>
             <FormattedDate date={faktum.svar?.fom} />
           </BodyShort>
@@ -36,7 +36,7 @@ export function FaktumPeriodeReadOnly(props: IFaktumReadOnly<IQuizPeriodeFaktum>
 
       {faktum.svar?.tom && (
         <div>
-          <Label>{faktumTextTil}</Label>
+          <Label as={"p"}>{faktumTextTil}</Label>
           <BodyShort>
             <FormattedDate date={faktum.svar?.tom} />
           </BodyShort>

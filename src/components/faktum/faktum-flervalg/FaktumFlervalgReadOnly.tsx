@@ -12,7 +12,7 @@ import { ISanityAlertText } from "../../../types/sanity.types";
 
 export function FaktumFlervalgReadOnly(props: IFaktumReadOnly<IQuizFlervalgFaktum>) {
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById, getSvaralternativTextById } = useSanity();
+  const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const alertTexts: ISanityAlertText[] | undefined = faktum.svar
@@ -21,14 +21,14 @@ export function FaktumFlervalgReadOnly(props: IFaktumReadOnly<IQuizFlervalgFaktu
 
   return (
     <>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
 
       {showAllFaktumTexts && faktumTexts?.description && (
         <PortableText value={faktumTexts.description} />
       )}
 
       <div>
-        {showAllFaktumTexts && <strong>Svar: </strong>}
+        {showAllFaktumTexts && <strong>{getAppText("pdf.faktum.svar")}</strong>}
         {faktum.svar?.map((textId) => (
           <BodyShort key={textId}>{getSvaralternativTextById(textId)?.text}</BodyShort>
         ))}

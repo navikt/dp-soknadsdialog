@@ -6,21 +6,47 @@ import { useSanity } from "../../context/sanity-context";
 import { useQuiz } from "../../context/quiz-context";
 import { Personalia } from "../../components/personalia/Personalia";
 import { IPersonalia } from "../../types/personalia.types";
-import { IDokumentkravList } from "../../types/documentation.types";
+import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
 import { Heading } from "@navikt/ds-react";
 import styles from "./Pdf.module.css";
+import {
+  DOKUMENTKRAV_SVAR_SEND_NAA,
+  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
+  DOKUMENTKRAV_SVAR_SENDER_IKKE,
+  DOKUMENTKRAV_SVAR_SENDER_SENERE,
+  DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
+} from "../../constants";
+import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravMissingItem";
+import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSendingItem";
 
 interface IProps {
   personalia: IPersonalia;
-  dokumentkrav: IDokumentkravList | null;
-  showAllFaktumTexts?: boolean;
+  dokumentkravList: IDokumentkravList;
+  showAllTexts: boolean;
 }
 
 export function Pdf(props: IProps) {
-  const { personalia, dokumentkrav, showAllFaktumTexts } = props;
+  const { personalia, dokumentkravList, showAllTexts } = props;
   const { getAppText } = useSanity();
   const { soknadState } = useQuiz();
+
+  const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) =>
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
+      (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !dokumentkrav.bundleFilsti)
+  );
+
+  const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) => dokumentkrav.bundleFilsti
+  );
+
+  const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
+    (dokumentkrav) =>
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE ||
+      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
+  );
 
   return (
     <>
@@ -38,7 +64,7 @@ export function Pdf(props: IProps) {
               key={section.beskrivendeId}
               section={section}
               readonly={true}
-              showAllFaktumTexts={showAllFaktumTexts}
+              showAllTexts={showAllTexts}
             />
           </div>
         ))}
@@ -47,11 +73,26 @@ export function Pdf(props: IProps) {
           <Heading spacing size="large" level="2">
             Dokumentkrav
           </Heading>
-          <ul>
-            {dokumentkrav?.krav.map((krav) => (
-              <ReceiptDokumentkravUploadedItem key={krav.beskrivendeId} dokumentkrav={krav} />
+
+          <ol className={styles.dokumentkravList}>
+            {missingDocuments.map((dokumentkrav) => (
+              <ReceiptDokumentkravMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
             ))}
-          </ul>
+
+            {uploadedDocuments.map((dokumentkrav) => (
+              <ReceiptDokumentkravUploadedItem
+                key={dokumentkrav.beskrivendeId}
+                dokumentkrav={dokumentkrav}
+              />
+            ))}
+
+            {notSendingDocuments.map((dokumentkrav) => (
+              <ReceiptDocumentsNotSendingItem
+                key={dokumentkrav.beskrivendeId}
+                dokumentkrav={dokumentkrav}
+              />
+            ))}
+          </ol>
         </div>
       </main>
     </>

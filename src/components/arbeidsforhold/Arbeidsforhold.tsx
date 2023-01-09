@@ -68,7 +68,7 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
       {faktum?.svar?.map((fakta, svarIndex) => {

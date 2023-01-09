@@ -20,7 +20,7 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
   props: IFaktum<IQuizNumberFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum } = props;
+  const { faktum, onChange } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
@@ -30,7 +30,7 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
     setCurrentAnswer(value);
-    props.onChange ? props.onChange(faktum, value) : saveFaktum(value);
+    onChange ? onChange(faktum, value) : saveFaktum(value);
   }
 
   function saveFaktum(value: number) {

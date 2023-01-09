@@ -87,7 +87,7 @@ export async function getServerSideProps(
 }
 
 export default function PdfNettoPage(props: IProps) {
-  if (props.errorCode || !props.soknadState || !props.personalia) {
+  if (props.errorCode || !props.soknadState || !props.personalia || !props.dokumentkrav) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -100,7 +100,11 @@ export default function PdfNettoPage(props: IProps) {
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Pdf personalia={props.personalia} dokumentkrav={props.dokumentkrav} />
+        <Pdf
+          personalia={props.personalia}
+          dokumentkravList={props.dokumentkrav}
+          showAllTexts={false}
+        />
       </ValidationProvider>
     </QuizProvider>
   );

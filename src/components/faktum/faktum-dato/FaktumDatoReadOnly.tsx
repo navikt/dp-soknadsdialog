@@ -10,19 +10,19 @@ import styles from "../Faktum.module.css";
 
 export function FaktumDatoReadOnly(props: IFaktumReadOnly<IQuizDatoFaktum>) {
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById } = useSanity();
+  const { getFaktumTextById, getAppText } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
   return (
     <>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
 
       {showAllFaktumTexts && faktumTexts?.description && (
         <PortableText value={faktumTexts.description} />
       )}
 
       <BodyShort>
-        {showAllFaktumTexts && <strong>Svar: </strong>}
+        {showAllFaktumTexts && <strong>{getAppText("pdf.faktum.svar")}</strong>}
         {faktum.svar && <FormattedDate date={faktum.svar} />}
       </BodyShort>
 

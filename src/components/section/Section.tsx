@@ -9,7 +9,7 @@ import { ErrorTypesEnum } from "../../types/error.types";
 interface IProps {
   section: IQuizSeksjon;
   readonly?: boolean;
-  showAllFaktumTexts?: boolean;
+  showAllTexts?: boolean;
 }
 
 export function Section(props: IProps) {
@@ -22,14 +22,18 @@ export function Section(props: IProps) {
 
   return (
     <>
-      <SectionHeading text={sectionTexts} fallback={props.section.beskrivendeId} />
+      <SectionHeading
+        text={sectionTexts}
+        fallback={props.section.beskrivendeId}
+        showAllTexts={props.showAllTexts}
+      />
 
       {props.section?.fakta?.map((faktum) => (
         <Faktum
           key={faktum.beskrivendeId}
           faktum={faktum}
           readonly={props.readonly}
-          showAllFaktumTexts={props.showAllFaktumTexts}
+          showAllFaktumTexts={props.showAllTexts}
         />
       ))}
     </>
