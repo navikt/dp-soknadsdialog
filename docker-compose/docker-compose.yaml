@@ -73,6 +73,9 @@ services:
       NAIS_CLUSTER_NAME: "dev-gcp"
       KAFKA_RESET_POLICY: "earliest"
       TOKEN_X_CLIENT_ID: "localhost:teamdagpenger:dp-soknad"
+      PERSON_KONTO_REGISTER_SCOPE: "localhost:okonomi:sokos-kontoregister-person"
+      DP_INNSYN_URL: "https://dummyInnsynUrl"
+      DP_INNSYN_AUDIENCE: "localhost:teamdagpenger:dp-innsyn"
 
   mock:
     image: "ghcr.io/navikt/dp-mock-quiz-behovloser/dp-mock-quiz-behovloser:latest"
