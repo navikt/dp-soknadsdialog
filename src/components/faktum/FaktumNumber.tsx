@@ -43,32 +43,34 @@ function FaktumNumberComponent(
 
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
-    setCurrentAnswer(value);
+    const inputValue = value.trim();
+
+    setCurrentAnswer(inputValue);
     updateErrorMessage(undefined);
 
-    if (!value) {
+    if (!inputValue) {
       setDebouncedValue(null);
       return;
     }
 
-    if (!isNumber(value)) {
+    if (!isNumber(inputValue)) {
       updateErrorMessage(getAppText("validering.number-faktum.maa-vaere-et-tall"));
       return;
     }
 
-    if (parseInt(value) < 0) {
+    if (parseInt(inputValue) < 0) {
       updateErrorMessage(getAppText("validering.number-faktum.ikke-negativt-tall"));
       return;
     }
 
     switch (faktum.type) {
       case "int": {
-        debouncedChange(parseInt(value));
+        debouncedChange(parseInt(inputValue));
         break;
       }
       case "double": {
         // Replace comma with dot
-        const formattedValue = value.replace(/,/g, ".");
+        const formattedValue = inputValue.replace(/,/g, ".");
         debouncedChange(parseFloat(formattedValue));
         break;
       }
