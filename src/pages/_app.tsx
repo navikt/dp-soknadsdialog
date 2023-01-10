@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NextApp, { AppContext, AppProps } from "next/app";
 import styles from "./_app.module.css";
 import "../index.css";
@@ -14,6 +14,7 @@ import { sanityClient } from "../../sanity-client";
 import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
 import ErrorPage from "./_error";
+import { initAmplitude } from "../amplitude.tracking";
 
 type AppPropsSanityTexts = AppProps & {
   sanityTexts: ISanityTexts;
@@ -21,6 +22,10 @@ type AppPropsSanityTexts = AppProps & {
 
 export default function App({ Component, pageProps, sanityTexts }: AppPropsSanityTexts) {
   const router = useRouter();
+
+  useEffect(() => {
+    initAmplitude();
+  }, []);
 
   onLanguageSelect(({ locale }) => {
     Cookies.set("NEXT_LOCALE", locale, { path: router.basePath, expires: 30 });

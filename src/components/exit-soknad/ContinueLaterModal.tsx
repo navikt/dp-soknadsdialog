@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
@@ -10,6 +10,7 @@ interface IProps {
 
 export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
   const { getAppText } = useSanity();
+  const [navigating, setNavigating] = useState(false);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -33,7 +34,7 @@ export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
         <p>{getAppText("fortsett-soknad-senere.modal.beskrivelse")}</p>
 
         <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
-          <Button as="a" variant="primary">
+          <Button as="a" variant="primary" onClick={() => setNavigating(true)} loading={navigating}>
             {getAppText("fortsett-soknad-senere.modal.knapp.til-mine-dagpenger")}
           </Button>
         </Link>

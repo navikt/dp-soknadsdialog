@@ -1,7 +1,7 @@
 import { FileSuccess, Left, Right } from "@navikt/ds-icons";
 import { Button } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
@@ -20,6 +20,7 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -32,6 +33,7 @@ export function Soknad(props: IProps) {
   const { soknadState, isError, isLoading } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
+  const [navigating, setNavigating] = useState(false);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
@@ -67,7 +69,9 @@ export function Soknad(props: IProps) {
 
   function navigateToNextSection() {
     if (currentSection.ferdig) {
-      const nextIndex = sectionParam && parseInt(sectionParam) + 1;
+      const currentSection = parseInt(sectionParam);
+      const nextIndex = sectionParam && currentSection + 1;
+      trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
       router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
         shallow: true,
       });
@@ -84,10 +88,12 @@ export function Soknad(props: IProps) {
   }
 
   function navigateToDocumentation() {
+    setNavigating(true);
     router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
   }
 
   function cancelSoknad() {
+    setNavigating(true);
     router.push(`/soknad`);
   }
 
@@ -115,7 +121,7 @@ export function Soknad(props: IProps) {
 
         <nav className="navigation-container">
           {isFirstSection ? (
-            <Button variant={"secondary"} onClick={() => cancelSoknad()}>
+            <Button variant={"secondary"} onClick={() => cancelSoknad()} loading={navigating}>
               {getAppText("soknad.knapp.avbryt")}
             </Button>
           ) : (
@@ -129,7 +135,7 @@ export function Soknad(props: IProps) {
           )}
 
           {isLastSection && soknadState.ferdig ? (
-            <Button onClick={() => navigateToDocumentation()}>
+            <Button onClick={() => navigateToDocumentation()} loading={navigating}>
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>
           ) : (

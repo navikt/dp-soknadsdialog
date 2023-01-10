@@ -12,6 +12,7 @@ import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { trackSkjemaStartet } from "../../amplitude.tracking";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -49,6 +50,7 @@ export function StartSoknad() {
 
       if (uuidResponse.ok) {
         const uuid = await uuidResponse.text();
+        trackSkjemaStartet("dagpenger", uuid);
         router.push(`/soknad/${uuid}`);
       } else {
         throw new Error(uuidResponse.statusText);

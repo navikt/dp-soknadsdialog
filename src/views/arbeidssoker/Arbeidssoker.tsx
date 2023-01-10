@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
 import { PageMeta } from "../../components/PageMeta";
@@ -10,8 +11,16 @@ interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 
+type currentNagivatingType =
+  | "registrer-som-arbeidssoker-button"
+  | "registrer-som-arbeidssoker-cancel-button"
+  | "start-soknad-button";
+
 export function Arbeidssoker(props: IProps) {
   const { getAppText } = useSanity();
+  const [currentNagivating, setCurrentNavigating] = useState<currentNagivatingType | undefined>(
+    undefined
+  );
 
   return (
     <>
@@ -28,12 +37,23 @@ export function Arbeidssoker(props: IProps) {
           <BodyLong>{getAppText("arbeidssoker.beskrivelse")}</BodyLong>
           <div className="navigation-container">
             <Link href="https://arbeidssokerregistrering.nav.no/" passHref>
-              <Button variant="primary" as="a">
+              <Button
+                variant="primary"
+                as="a"
+                onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-button")}
+                loading={currentNagivating === "registrer-som-arbeidssoker-button"}
+              >
                 {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
               </Button>
             </Link>
             <Link href={`https://www.nav.no/no/ditt-nav`} passHref>
-              <Button variant="secondary">{getAppText("arbeidssoker.avbryt-knapp")}</Button>
+              <Button
+                variant="secondary"
+                onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-cancel-button")}
+                loading={currentNagivating === "registrer-som-arbeidssoker-cancel-button"}
+              >
+                {getAppText("arbeidssoker.avbryt-knapp")}
+              </Button>
             </Link>
           </div>
           <BodyLong className={styles.arbeidssokerSokDagpengerLikevel}>
@@ -54,12 +74,23 @@ export function Arbeidssoker(props: IProps) {
           </Alert>
           <div className="navigation-container">
             <Link href="/soknad/start-soknad" passHref>
-              <Button variant="primary" as="a">
+              <Button
+                variant="primary"
+                as="a"
+                onClick={() => setCurrentNavigating("start-soknad-button")}
+                loading={currentNagivating === "start-soknad-button"}
+              >
                 {getAppText("arbeidssoker.sok-dagpenger.knapp")}
               </Button>
             </Link>
             <Link href={`https://www.nav.no/no/ditt-nav`} passHref>
-              <Button variant="secondary">{getAppText("arbeidssoker.avbryt-knapp")}</Button>
+              <Button
+                variant="secondary"
+                onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-button")}
+                loading={currentNagivating === "registrer-som-arbeidssoker-button"}
+              >
+                {getAppText("arbeidssoker.avbryt-knapp")}
+              </Button>
             </Link>
           </div>
         </>

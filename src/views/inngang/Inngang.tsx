@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
 import { InngangPaabegynt } from "../../components/inngang-paabegynt/InngangPaabegynt";
@@ -16,6 +17,7 @@ interface IProps {
 
 export function Inngang(props: IProps) {
   const { getAppText } = useSanity();
+  const [navigating, setNavigating] = useState(false);
 
   const destinationPage =
     props.arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
@@ -38,7 +40,7 @@ export function Inngang(props: IProps) {
       )}
       {!props.paabegynt && (
         <Link href={destinationPage} passHref>
-          <Button variant="primary" as="a">
+          <Button variant="primary" as="a" loading={navigating} onClick={() => setNavigating(true)}>
             {getAppText("inngang.start-ny-soknad-knapp")}
           </Button>
         </Link>

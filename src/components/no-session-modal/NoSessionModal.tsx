@@ -12,6 +12,7 @@ export function NoSessionModal() {
   const { session, isLoading, isError } = useSession();
   const [timeLeft, setTimeLeft] = useState<number | undefined>();
   const [modalOpen, setModalOpen] = useState(false);
+  const [isNagivating, setNavigating] = useState(false);
 
   useEffect(() => {
     if (Modal.setAppElement) {
@@ -50,6 +51,11 @@ export function NoSessionModal() {
     window.location.reload();
   }
 
+  function nagivateToNavHomePage() {
+    setNavigating(true);
+    router.push("https://nav.no/");
+  }
+
   return (
     <Modal
       className="modal-container modal-container--error"
@@ -72,7 +78,7 @@ export function NoSessionModal() {
           <Button variant={"primary"} onClick={login}>
             {getAppText("utlopt-sessjon.modal.knapp.logg-inn")}
           </Button>
-          <Button variant={"tertiary"} onClick={() => router.push("https://nav.no/")}>
+          <Button variant={"tertiary"} onClick={nagivateToNavHomePage} loading={isNagivating}>
             {getAppText("utlopt-sessjon.modal.knapp.tilbake")}
           </Button>
         </div>
