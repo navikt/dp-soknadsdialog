@@ -21,8 +21,8 @@ function FaktumNumberComponent(
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
-  const { getFaktumTextById } = useSanity();
-  const { setHasError, isValid, getErrorMessage } = useValidateFaktumNumber(faktum.beskrivendeId);
+  const { getFaktumTextById, getAppText } = useSanity();
+  const { errorMessage, isValid, updateErrorMessage } = useValidateFaktumNumber(faktum);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
@@ -43,29 +43,34 @@ function FaktumNumberComponent(
 
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
-    setCurrentAnswer(value);
+    const inputValue = value.trim();
 
-    if (!value) {
-      setHasError(undefined);
+    setCurrentAnswer(inputValue);
+    updateErrorMessage(undefined);
+
+    if (!inputValue) {
       setDebouncedValue(null);
       return;
     }
 
-    if (!isNumber(value)) {
-      setHasError("NotNumber");
+    if (!isNumber(inputValue)) {
+      updateErrorMessage(getAppText("validering.number-faktum.maa-vaere-et-tall"));
+      return;
+    }
+
+    if (parseInt(inputValue) < 0) {
+      updateErrorMessage(getAppText("validering.number-faktum.ikke-negativt-tall"));
       return;
     }
 
     switch (faktum.type) {
       case "int": {
-        setHasError(undefined);
-        debouncedChange(parseInt(value));
+        debouncedChange(parseInt(inputValue));
         break;
       }
       case "double": {
-        setHasError(undefined);
         // Replace comma with dot
-        const formattedValue = value.replace(/,/g, ".");
+        const formattedValue = inputValue.replace(/,/g, ".");
         debouncedChange(parseFloat(formattedValue));
         break;
       }
@@ -73,8 +78,7 @@ function FaktumNumberComponent(
   }
 
   function saveFaktum(value: number | null) {
-    const isValidNumber = isValid(value);
-    if (isValidNumber) {
+    if (isValid(value)) {
       saveFaktumToQuiz(faktum, value);
     }
   }
@@ -106,7 +110,7 @@ function FaktumNumberComponent(
         inputMode="decimal"
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
-        error={getErrorMessage(props.faktum.id)}
+        error={errorMessage}
       />
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />

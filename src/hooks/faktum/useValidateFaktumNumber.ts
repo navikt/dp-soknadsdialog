@@ -1,90 +1,106 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   isValidArbeidstimer,
   isValidPermitteringsPercent,
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-
-type numberValidationErrorTypes = "NegativeValue" | "InvalidValue" | "NotNumber" | "EmptyValue";
+import { QuizFaktum } from "../../types/quiz.types";
 
 interface IUseValidateFaktumNumber {
-  setHasError: (hasError: numberValidationErrorTypes | undefined) => void;
-  getErrorMessage: (faktumId: string) => string | undefined;
   isValid: (value: number | null) => boolean;
+  errorMessage: string | undefined;
+  updateErrorMessage: (message: string | undefined) => void;
 }
 
-export function useValidateFaktumNumber(faktumBeskrivendeId: string): IUseValidateFaktumNumber {
+export function useValidateFaktumNumber({
+  id,
+  beskrivendeId,
+}: QuizFaktum): IUseValidateFaktumNumber {
   const { getAppText, getFaktumTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const faktumTexts = getFaktumTextById(faktumBeskrivendeId);
-  const [hasError, setHasError] = useState<numberValidationErrorTypes | undefined>(undefined);
+  const faktumTexts = getFaktumTextById(beskrivendeId);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (!errorMessage) {
+      setErrorMessage(
+        unansweredFaktumId === id ? getAppText("validering.faktum.ubesvart") : undefined
+      );
+    }
+  }, [unansweredFaktumId]);
 
   function isValid(value: number | null) {
-    if (faktumBeskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
+    if (value === 0) return true;
+
+    // Generator faktum "egen næring" contains only one faktum (faktum.egen-naering-organisasjonsnummer).
+    // We cannot save null because it will close generator faktum modal
+    if (beskrivendeId === "faktum.egen-naering-organisasjonsnummer") {
       if (value === null) {
-        setHasError("EmptyValue");
+        setErrorMessage(getAppText("validering.number-faktum.tom-svar"));
         return false;
       }
 
-      const isValid = isValidPermitteringsPercent(value);
-      setHasError(!isValid ? "InvalidValue" : undefined);
-      return isValid;
-    }
-
-    if (faktumBeskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
-      if (value === null) {
-        setHasError("EmptyValue");
+      if (value?.toString().length !== 9) {
+        setErrorMessage(
+          getAppText("faktum.egen-naering-organisasjonsnummer.validering-maa-vaere-ni-siffer")
+        );
         return false;
       }
 
-      const isValid = isValidArbeidstimer(value);
-      setHasError(!isValid ? "InvalidValue" : undefined);
-      return isValid;
-    }
-
-    if (value === null || value === 0) {
-      setHasError(undefined);
       return true;
     }
 
-    if (value < 0) {
-      setHasError("NegativeValue");
-      return false;
+    if (value === null) return true;
+
+    // The number of hours per week cannot be more than 168 hours
+    if (
+      beskrivendeId === "faktum.egen-naering-arbeidstimer-naa" ||
+      beskrivendeId === "faktum.egen-naering-arbeidstimer-for" ||
+      beskrivendeId === "faktum.arbeidsforhold.antall-timer-dette-arbeidsforhold"
+    ) {
+      if (value > 168) {
+        setErrorMessage(getAppText("validering.antall-arbeidstimer-per-uke.ikke-over-168-timer"));
+        return false;
+      }
+
+      return true;
     }
 
-    setHasError(undefined);
+    if (value && beskrivendeId === "faktum.arbeidsforhold.permittert-prosent") {
+      if (!isValidPermitteringsPercent(value)) {
+        setErrorMessage(
+          faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig")
+        );
+
+        return false;
+      }
+
+      return true;
+    }
+
+    if (value && beskrivendeId === "faktum.arbeidsforhold.antall-timer-jobbet") {
+      if (!isValidArbeidstimer(value)) {
+        setErrorMessage(
+          faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig")
+        );
+
+        return false;
+      }
+
+      return true;
+    }
+
     return true;
   }
 
-  function getErrorMessageByErrorType() {
-    switch (hasError) {
-      case "EmptyValue":
-        return getAppText("validering.number-faktum.tom-svar");
-      case "NegativeValue":
-        return getAppText("validering.number-faktum.ikke-negativt-tall");
-      case "NotNumber":
-        return getAppText("validering.number-faktum.maa-vaere-et-tall");
-      case "InvalidValue":
-        return faktumTexts?.errorMessage ?? getAppText("validering.number-faktum.ugyldig");
-      default:
-        return undefined;
-    }
-  }
-
-  function getErrorMessage(faktumId: string) {
-    if (unansweredFaktumId === faktumId) {
-      return getAppText("validering.faktum.ubesvart");
-    } else if (hasError) {
-      return getErrorMessageByErrorType();
-    } else {
-      undefined;
-    }
+  function updateErrorMessage(message: string | undefined) {
+    setErrorMessage(message);
   }
 
   return {
-    setHasError,
-    getErrorMessage,
     isValid,
+    errorMessage,
+    updateErrorMessage,
   };
 }
