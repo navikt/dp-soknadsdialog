@@ -5,12 +5,6 @@ import {
   DOKUMENTKRAV_SVAR_SENDER_IKKE,
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
 } from "../../constants";
-import {
-  DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE,
-  DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE,
-  DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE,
-  ETTERSENDING_DOKUMENTER_IKKE_INNSENDING_TITTEL,
-} from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { HelpText } from "../../components/HelpText";
@@ -26,7 +20,7 @@ export function EttersendingDokumentkravNotSending({ dokumentkrav, classname }: 
   return (
     <div className={classname}>
       <Heading level="2" size="medium" className="my-3">
-        {getAppText(ETTERSENDING_DOKUMENTER_IKKE_INNSENDING_TITTEL)}
+        {getAppText("ettersending.dokumenter.ikke-innsending.tittel")}
       </Heading>
 
       {dokumentkrav.map((krav) => {
@@ -39,13 +33,13 @@ export function EttersendingDokumentkravNotSending({ dokumentkrav, classname }: 
             <BodyShort>
               <>
                 {krav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-                  <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE)}</>
+                  <>{getAppText("dokumentkrav.begrunnelse.sendt-tidligere")}</>
                 )}
                 {krav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-                  <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE)}</>
+                  <>{getAppText("dokumentkrav.begrunnelse.sender-ikke")}</>
                 )}
                 {krav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-                  <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE)}</>
+                  <>{getAppText("dokumentkrav.begrunnelse.sendes-av-andre")}</>
                 )}
               </>
             </BodyShort>

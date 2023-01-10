@@ -3,18 +3,6 @@ import { PortableText } from "@portabletext/react";
 import { useSanity } from "../../context/sanity-context";
 import { ISoknadStatus, ISoknadStatuser } from "../../types/quiz.types";
 import styles from "./ReceiptSoknadStatus.module.css";
-import {
-  KVITTERING_SOKNAD_STATUS_DESCRIPTION_FERDIG_BEHANDLET,
-  KVITTERING_SOKNAD_STATUS_DESCRIPTION_MANGLER_DOKUMENTER,
-  KVITTERING_SOKNAD_STATUS_DESCRIPTION_UKJENT,
-  KVITTERING_SOKNAD_STATUS_DESCRIPTION_UNDER_BEHANDLING,
-  KVITTERING_SOKNAD_STATUS_SUBTITLE_INNSENDT_DATO,
-  KVITTERING_SOKNAD_STATUS_TAG__FERDIG_BEHANDLET,
-  KVITTERING_SOKNAD_STATUS_TAG__MANGLER_DOKUMENTER,
-  KVITTERING_SOKNAD_STATUS_TAG__UNDER_BEHANDLING,
-  KVITTERING_SOKNAD_STATUS_TITLE_FERDIG,
-  KVITTERING_SOKNAD_STATUS_TITLE_MOTTATT,
-} from "../../text-constants";
 import { format } from "date-fns";
 
 export function ReceiptSoknadStatus(props: ISoknadStatus) {
@@ -26,8 +14,8 @@ export function ReceiptSoknadStatus(props: ISoknadStatus) {
       <div className={styles.receiptSoknadTilstandHeader}>
         <Heading level="2" size="medium">
           {props.status === "FerdigBehandlet"
-            ? getAppText(KVITTERING_SOKNAD_STATUS_TITLE_FERDIG)
-            : getAppText(KVITTERING_SOKNAD_STATUS_TITLE_MOTTATT)}
+            ? getAppText("kvittering.soknad-status.title.ferdig")
+            : getAppText("kvittering.soknad-status.title.mottatt")}
         </Heading>
         {props.status !== "Ukjent" && (
           <Tag variant={getTagColor(props.status)}>
@@ -38,7 +26,7 @@ export function ReceiptSoknadStatus(props: ISoknadStatus) {
 
       {props.innsendt && (
         <Detail>
-          {`${getAppText(KVITTERING_SOKNAD_STATUS_SUBTITLE_INNSENDT_DATO)} ${format(
+          {`${getAppText("kvittering.soknad-status.subtitle.innsendt-dato")} ${format(
             new Date(props.innsendt),
             "dd.MM.yyyy - HH:mm"
           )}`}
@@ -53,13 +41,13 @@ export function ReceiptSoknadStatus(props: ISoknadStatus) {
 function getStatusDescriptionTextKey(status: ISoknadStatuser) {
   switch (status) {
     case "UnderBehandling":
-      return KVITTERING_SOKNAD_STATUS_DESCRIPTION_UNDER_BEHANDLING;
+      return "kvittering.soknad-status.description.under-behandling";
     case "FerdigBehandlet":
-      return KVITTERING_SOKNAD_STATUS_DESCRIPTION_FERDIG_BEHANDLET;
+      return "kvittering.soknad-status.description.ferdig-behehandlet";
     case "ManglerDokumenter":
-      return KVITTERING_SOKNAD_STATUS_DESCRIPTION_MANGLER_DOKUMENTER;
+      return "kvittering.soknad-status.description.mangler-dokumenter";
     case "Ukjent":
-      return KVITTERING_SOKNAD_STATUS_DESCRIPTION_UKJENT;
+      return "kvittering.soknad-status.description.ukjent";
     default:
       return "getStatusDescriptionTextKey() no-text-key";
   }
@@ -68,11 +56,11 @@ function getStatusDescriptionTextKey(status: ISoknadStatuser) {
 function getStatusTagTextKey(status: ISoknadStatuser) {
   switch (status) {
     case "UnderBehandling":
-      return KVITTERING_SOKNAD_STATUS_TAG__UNDER_BEHANDLING;
+      return "kvittering.soknad-status.tag.under-behandling";
     case "FerdigBehandlet":
-      return KVITTERING_SOKNAD_STATUS_TAG__FERDIG_BEHANDLET;
+      return "kvittering.soknad-status.tag.ferdig-behehandlet";
     case "ManglerDokumenter":
-      return KVITTERING_SOKNAD_STATUS_TAG__MANGLER_DOKUMENTER;
+      return "kvittering.soknad-status.tag.mangler-dokumenter";
     default:
       return "getStatusTagTextKey() no-text-key";
   }

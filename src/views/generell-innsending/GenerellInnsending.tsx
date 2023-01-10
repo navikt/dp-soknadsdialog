@@ -14,11 +14,6 @@ import { IDokumentkravList } from "../../types/documentation.types";
 import { useUuid } from "../../hooks/useUuid";
 import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
 import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
-import {
-  ETTERSENDING_VALIDERING_INGEN_DOKUMENTER,
-  INNSENDING_SIDE_METADATA_BESKRIVELSE,
-  INNSENDING_SIDE_METADATA_TITTEL,
-} from "../../text-constants";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
@@ -113,8 +108,8 @@ export function GenerellInnsending() {
   return (
     <>
       <PageMeta
-        title={getAppText(INNSENDING_SIDE_METADATA_TITTEL)}
-        description={getAppText(INNSENDING_SIDE_METADATA_BESKRIVELSE)}
+        title={getAppText("innsending.side-metadata.tittel")}
+        description={getAppText("innsending.side-metadata.beskrivelse")}
       />
       <main>
         <Section section={currentSection} />
@@ -133,7 +128,7 @@ export function GenerellInnsending() {
           ))}
 
         {noDocumentsToSave && (
-          <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />
+          <ValidationMessage message={getAppText("ettersending.validering.ingen-dokumenter")} />
         )}
 
         <div className={styles.loaderContainer}>

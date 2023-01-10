@@ -10,14 +10,6 @@ import { useUuid } from "../../hooks/useUuid";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { useSanity } from "../../context/sanity-context";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
-import {
-  ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL,
-  ETTERSENDING_INFORMASJON,
-  ETTERSENDING_KNAPP_AVBRYT,
-  ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER,
-  ETTERSENDING_TITTEL,
-  ETTERSENDING_VALIDERING_INGEN_DOKUMENTER,
-} from "../../text-constants";
 import { PortableText } from "@portabletext/react";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import {
@@ -44,7 +36,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
   const { scrollIntoView } = useScrollIntoView();
   const { getAppText, getInfosideText } = useSanity();
   const errorSummaryRef = useRef<HTMLDivElement>(null);
-  const ettersendingText = getInfosideText(ETTERSENDING_INFORMASJON);
+  const ettersendingText = getInfosideText("ettersending.informasjon");
   const [ettersendSoknad, ettersendSoknadStatus] =
     usePutRequest<IEttersendBody>("soknad/ettersend");
   const {
@@ -108,7 +100,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
 
   return (
     <div>
-      <SoknadHeader titleTextKey={ETTERSENDING_TITTEL} />
+      <SoknadHeader titleTextKey={"ettersending.tittel"} />
 
       {dokumentkravWithBundleError.length > 0 && (
         <ErrorSummary
@@ -133,7 +125,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
       {availableDokumentkravForEttersending.length > 0 && (
         <>
           <Heading level="2" size="medium" className="my-6">
-            {getAppText(ETTERSENDING_DOKUMENTER_INNSENDING_TITTEL)}
+            {getAppText("ettersending.dokumenter.innsending.tittel")}
           </Heading>
 
           {missingDokumentkrav.map(
@@ -169,7 +161,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
           )}
 
           {noDocumentsToSave && (
-            <ValidationMessage message={getAppText(ETTERSENDING_VALIDERING_INGEN_DOKUMENTER)} />
+            <ValidationMessage message={getAppText("ettersending.validering.ingen-dokumenter")} />
           )}
 
           <div className="navigation-container">
@@ -179,12 +171,12 @@ export function Ettersending({ dokumentkrav }: IProps) {
               loading={isBundling || ettersendSoknadStatus === "pending"}
               disabled={ettersendSoknadStatus === "success"}
             >
-              {getAppText(ETTERSENDING_KNAPP_SEND_INN_DOKUMENTER)}
+              {getAppText("ettersending.knapp.send-inn-dokumenter")}
             </Button>
 
             <Link href={`/soknad/${uuid}/kvittering`} passHref>
               <Button as="a" variant="secondary">
-                {getAppText(ETTERSENDING_KNAPP_AVBRYT)}
+                {getAppText("ettersending.knapp.avbryt")}
               </Button>
             </Link>
           </div>

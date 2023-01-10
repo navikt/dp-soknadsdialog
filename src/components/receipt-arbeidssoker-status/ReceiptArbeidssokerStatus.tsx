@@ -3,10 +3,6 @@ import { Alert, BodyShort } from "@navikt/ds-react";
 import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptArbeidssokerStatus.module.css";
-import {
-  KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT,
-  KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UREGISTRERT,
-} from "../../text-constants";
 
 interface IProps {
   status: IArbeidssokerStatus;
@@ -19,21 +15,21 @@ export function ArbeidssokerStatus(props: IProps) {
     case "UNREGISTERED":
       return (
         <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText(KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_UREGISTRERT)}
+          {getAppText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")}
         </Alert>
       );
 
     case "REGISTERED":
       return (
         <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText(KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT)}
+          {getAppText("kvittering.arbeidssokerstatus.info-tekst.registrert")}
         </BodyShort>
       );
 
     case "UNKNOWN":
       return (
         <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText(KVITTERING_ARBEIDSSOKERSTATUS_INFO_TEXT_REGISTRERT)}
+          {getAppText("kvittering.arbeidssokerstatus.info-tekst.registrert")}
         </BodyShort>
       );
   }
