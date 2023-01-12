@@ -6,7 +6,6 @@ import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRem
 import { FileUploader } from "../../components/file-uploader/FileUploader";
 import { FileList } from "../../components/file-list/FileList";
 import { Alert } from "@navikt/ds-react";
-import { ETTERSENDING_VALIDERING_BUNDLING_FEILET } from "../../text-constants";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -47,7 +46,7 @@ export function GenerellInnsendingDocument(props: IProps) {
       />
 
       {props.hasBundleError && (
-        <Alert variant={"error"}>{getAppText(ETTERSENDING_VALIDERING_BUNDLING_FEILET)}</Alert>
+        <Alert variant={"error"}>{getAppText("ettersending.validering.bundling-feilet")}</Alert>
       )}
     </>
   );

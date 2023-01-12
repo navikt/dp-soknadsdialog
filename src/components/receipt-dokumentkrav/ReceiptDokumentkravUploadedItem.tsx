@@ -2,7 +2,6 @@ import { BodyShort, Heading, Link, ReadMore, Tag } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import api from "../../api.utils";
 import { useSanity } from "../../context/sanity-context";
-import { KVITTERING_TEKST_SENDT_AV_DEG } from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 
@@ -30,7 +29,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav }: IProps) {
           {getAppText("kvittering.dokumenter.status.mottatt")}
         </Tag>
       </div>
-      <BodyShort>{getAppText(KVITTERING_TEKST_SENDT_AV_DEG)}</BodyShort>
+      <BodyShort>{getAppText("kvittering.tekst.sendt-av-deg")}</BodyShort>
 
       {dokumentkravText?.helpText && (
         <ReadMore header={dokumentkravText?.helpText?.title}>

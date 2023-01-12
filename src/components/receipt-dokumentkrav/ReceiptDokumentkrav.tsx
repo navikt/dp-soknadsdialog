@@ -2,7 +2,6 @@ import React from "react";
 import { Heading } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useSanity } from "../../context/sanity-context";
-import { KVITTERING_HEADING_DOKUMENTER_SENDE_INN } from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ISoknadStatus } from "../../types/quiz.types";
 import { ReceiptDokumentkravMissingItem } from "./ReceiptDokumentkravMissingItem";
@@ -43,7 +42,7 @@ export function ReceiptDokumentkrav(props: IProps) {
           )}
 
           <Heading level={"2"} size="small" className="my-6">
-            {getAppText(KVITTERING_HEADING_DOKUMENTER_SENDE_INN)}
+            {getAppText("kvittering.heading.dokumenter-sende-inn")}
           </Heading>
 
           <ol className={styles.dokumentkravList}>
