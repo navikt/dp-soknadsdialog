@@ -31,7 +31,7 @@ export function Dropdown(props: IProps) {
     <Select
       label={props.label}
       size="medium"
-      onChange={onChange}
+      onChange={props.onChange}
       value={props.currentValue}
       description={props.description && props.description}
       error={props.error}

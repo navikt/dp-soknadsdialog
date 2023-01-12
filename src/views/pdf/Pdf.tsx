@@ -23,11 +23,13 @@ import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documen
 interface IProps {
   personalia: IPersonalia;
   dokumentkravList: IDokumentkravList;
-  showAllTexts: boolean;
+  pdfView: PdfView;
 }
 
+export type PdfView = "netto" | "brutto";
+
 export function Pdf(props: IProps) {
-  const { personalia, dokumentkravList, showAllTexts } = props;
+  const { personalia, dokumentkravList, pdfView } = props;
   const { getAppText } = useSanity();
   const { soknadState } = useQuiz();
 
@@ -64,7 +66,7 @@ export function Pdf(props: IProps) {
               key={section.beskrivendeId}
               section={section}
               readonly={true}
-              showAllTexts={showAllTexts}
+              showAllTexts={pdfView === "brutto"}
             />
           </div>
         ))}
@@ -76,13 +78,18 @@ export function Pdf(props: IProps) {
 
           <ol className={styles.dokumentkravList}>
             {missingDocuments.map((dokumentkrav) => (
-              <ReceiptDokumentkravMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
+              <ReceiptDokumentkravMissingItem
+                key={dokumentkrav.beskrivendeId}
+                dokumentkrav={dokumentkrav}
+                pdfView={pdfView}
+              />
             ))}
 
             {uploadedDocuments.map((dokumentkrav) => (
               <ReceiptDokumentkravUploadedItem
                 key={dokumentkrav.beskrivendeId}
                 dokumentkrav={dokumentkrav}
+                pdfView={pdfView}
               />
             ))}
 
@@ -90,6 +97,7 @@ export function Pdf(props: IProps) {
               <ReceiptDocumentsNotSendingItem
                 key={dokumentkrav.beskrivendeId}
                 dokumentkrav={dokumentkrav}
+                pdfView={pdfView}
               />
             ))}
           </ol>

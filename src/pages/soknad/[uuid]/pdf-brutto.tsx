@@ -103,7 +103,7 @@ export default function PdfBruttoPage(props: IProps) {
         <Pdf
           personalia={props.personalia}
           dokumentkravList={props.dokumentkrav}
-          showAllTexts={true}
+          pdfView={"brutto"}
         />
       </ValidationProvider>
     </QuizProvider>

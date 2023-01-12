@@ -103,7 +103,7 @@ export default function PdfNettoPage(props: IProps) {
         <Pdf
           personalia={props.personalia}
           dokumentkravList={props.dokumentkrav}
-          showAllTexts={false}
+          pdfView={"netto"}
         />
       </ValidationProvider>
     </QuizProvider>

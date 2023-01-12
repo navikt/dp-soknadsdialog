@@ -9,9 +9,9 @@ export function FaktumGeneratorReadOnly(props: IFaktumReadOnly<IQuizGeneratorFak
     <>
       {faktum?.svar?.map((fakta, index) => (
         <div className={styles.generatorReadOnlyCard} key={index}>
-          {fakta.map((f) => (
+          {fakta.map((f, index) => (
             <Faktum
-              key={faktum.beskrivendeId}
+              key={index}
               faktum={f}
               readonly={true}
               showAllFaktumTexts={showAllFaktumTexts}
