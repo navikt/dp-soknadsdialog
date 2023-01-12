@@ -3,10 +3,6 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import { Heading, Tag } from "@navikt/ds-react";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
 import { useSanity } from "../../context/sanity-context";
-import {
-  ETTERSENDING_DOKUMENTER_STATUS_MANGLER,
-  ETTERSENDING_DOKUMENTER_STATUS_MOTTATT,
-} from "../../text-constants";
 import styles from "./Ettersending.module.css";
 
 type TagVariants = "warning" | "error" | "info" | "success";
@@ -35,8 +31,8 @@ function getTagColor(bundleFilsti?: string): TagVariants {
 
 function getTagTextKey(bundleFilsti?: string): string {
   if (bundleFilsti) {
-    return ETTERSENDING_DOKUMENTER_STATUS_MOTTATT;
+    return "ettersending.dokumenter.status.mottatt";
   } else {
-    return ETTERSENDING_DOKUMENTER_STATUS_MANGLER;
+    return "ettersending.dokumenter.status.mangler";
   }
 }

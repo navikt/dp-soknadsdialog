@@ -1,10 +1,6 @@
 import React from "react";
 import { BodyShort, Heading, ReadMore } from "@navikt/ds-react";
 import { DOKUMENTKRAV_SVAR_SENDER_IKKE, DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE } from "../../constants";
-import {
-  DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE,
-  DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE,
-} from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PdfView } from "../../views/pdf/Pdf";
@@ -32,11 +28,12 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
       <BodyShort>
         <>
           {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
+
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDT_TIDLIGERE)}</>
+            <>{getAppText("dokumentkrav.begrunnelse.sendt-tidligere")}</>
           )}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDER_IKKE)}</>
+            <>{getAppText("dokumentkrav.begrunnelse.sender-ikke")}</>
           )}
         </>
       </BodyShort>

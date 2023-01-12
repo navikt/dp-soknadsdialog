@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
 import { ArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
@@ -34,6 +35,7 @@ export function Receipt(props: IProps) {
 
   const { getAppText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
+  const [nagivating, setNavigating] = useState(false);
   const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
     (dokumentkrav) =>
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
@@ -54,6 +56,7 @@ export function Receipt(props: IProps) {
   const noDokumentkravTriggered = missingDocuments.length === 0 && uploadedDocuments.length === 0;
 
   function navigateToMineDagpener() {
+    setNavigating(true);
     window.location.assign("https://www.nav.no/arbeid/dagpenger/mine-dagpenger");
   }
 
@@ -81,6 +84,7 @@ export function Receipt(props: IProps) {
         variant="primary"
         className={styles.nagivateToMineDagpengerButton}
         onClick={navigateToMineDagpener}
+        loading={nagivating}
       >
         {getAppText("kvittering.mine-dagpenger.knapp")}
       </Button>

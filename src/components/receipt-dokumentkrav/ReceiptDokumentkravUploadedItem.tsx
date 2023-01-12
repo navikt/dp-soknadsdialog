@@ -2,7 +2,6 @@ import { BodyShort, Heading, Link, ReadMore, Tag } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import api from "../../api.utils";
 import { useSanity } from "../../context/sanity-context";
-import { KVITTERING_TEKST_SENDT_AV_DEG } from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
@@ -51,7 +50,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProp
 
       <BodyShort>
         {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-        {getAppText(KVITTERING_TEKST_SENDT_AV_DEG)}
+        {getAppText("kvittering.tekst.sendt-av-deg")}
       </BodyShort>
 
       {dokumentkravText?.helpText && pdfView !== "netto" && (

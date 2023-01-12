@@ -21,6 +21,7 @@ import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
+import { trackSkjemaFullført } from "../../amplitude.tracking";
 interface IProps {
   personalia: IPersonalia | null;
 }
@@ -37,6 +38,7 @@ export function Summary(props: IProps) {
 
   const [consentGiven, setConsentGiven] = useState(false);
   const consentRef = useRef(null);
+  const [navigating, setIsNagivating] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
@@ -72,10 +74,12 @@ export function Summary(props: IProps) {
     }
 
     const locale = router.locale as Locale | undefined;
+    trackSkjemaFullført("dagpenger", uuid);
     finishSoknad({ uuid, locale });
   }
 
   function navigateToDocumentation() {
+    setIsNagivating(true);
     router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
   }
 
@@ -164,7 +168,12 @@ export function Summary(props: IProps) {
       )}
 
       <nav className="navigation-container">
-        <Button variant={"secondary"} onClick={() => navigateToDocumentation()} icon={<Left />}>
+        <Button
+          variant={"secondary"}
+          onClick={() => navigateToDocumentation()}
+          icon={<Left />}
+          loading={navigating}
+        >
           {getAppText("soknad.knapp.forrige-steg")}
         </Button>
 

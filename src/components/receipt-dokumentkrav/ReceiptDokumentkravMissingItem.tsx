@@ -5,10 +5,6 @@ import {
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
 } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
-import {
-  DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE,
-  DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG,
-} from "../../text-constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
@@ -47,10 +43,10 @@ export function ReceiptDokumentkravMissingItem(props: IProps) {
         <>
           {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_ANDRE)}</>
+            <>{getAppText("dokumentkrav.begrunnelse.sendes-av-andre")}</>
           )}
           {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE && (
-            <>{getAppText(DOKUMENTKRAV_BEGRUNNELSE_SENDES_AV_DEG)}</>
+            <>{getAppText("dokumentkrav.begrunnelse.sendes-av-deg")}</>
           )}
         </>
       </BodyShort>
