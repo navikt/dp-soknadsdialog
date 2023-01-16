@@ -1,24 +1,24 @@
+import React, { forwardRef, Ref, useRef, useEffect } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { forwardRef, Ref, useEffect, useRef } from "react";
+import { QuizFaktum, IQuizGeneratorFaktum } from "../../../types/quiz.types";
 import {
   ARBEIDSFORHOLD_FAKTUM_ID,
   BARN_LISTE_FAKTUM_ID,
   BARN_LISTE_REGISTER_FAKTUM_ID,
-} from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useSetFocus } from "../../hooks/useSetFocus";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
-import { Arbeidsforhold } from "../arbeidsforhold/Arbeidsforhold";
-import { Barn } from "../barn/Barn";
-import { BarnRegister } from "../barn/BarnRegister";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { Faktum, IFaktum } from "./Faktum";
-import { ValidationMessage } from "./validation/ValidationMessage";
+} from "../../../constants";
+import { Faktum, IFaktum } from "../Faktum";
+import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
+import { useScrollIntoView } from "../../../hooks/useScrollIntoView";
+import { useSetFocus } from "../../../hooks/useSetFocus";
+import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
+import { Barn } from "../../barn/Barn";
+import { useSanity } from "../../../context/sanity-context";
+import { BarnRegister } from "../../barn/BarnRegister";
+import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
+import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
+import { useQuiz } from "../../../context/quiz-context";
+import { useValidation } from "../../../context/validation-context";
+import { ValidationMessage } from "../validation/ValidationMessage";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const generatorFaktumRef = useRef(null);
@@ -84,7 +84,6 @@ function StandardGeneratorComponent(
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(props.faktum, svarIndex)}
-              readOnly={props.readonly}
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
@@ -115,11 +114,10 @@ function StandardGeneratorComponent(
           </div>
         );
       })}
-      {!props.readonly && (
-        <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
-          {getAppText("soknad.generator-faktum.knapp.legg-til")}
-        </Button>
-      )}
+
+      <Button variant="secondary" onClick={() => addNewGeneratorAnswer(props.faktum)}>
+        {getAppText("soknad.generator-faktum.knapp.legg-til")}
+      </Button>
 
       {unansweredFaktumId === props.faktum.id && (
         <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />

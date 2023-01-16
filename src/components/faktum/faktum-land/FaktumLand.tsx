@@ -1,17 +1,16 @@
-import { BodyShort, Label } from "@navikt/ds-react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { PortableText } from "@portabletext/react";
+import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
+import { IFaktum } from "../Faktum";
+import { IQuizLandFaktum } from "../../../types/quiz.types";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
 import { useRouter } from "next/router";
-import { forwardRef, Ref, useEffect, useState } from "react";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
-import { getCountryName } from "../../country.utils";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { IQuizLandFaktum } from "../../types/quiz.types";
-import { Dropdown, IDropdownOption } from "../dropdown/Dropdown";
-import { HelpText } from "../HelpText";
-import { IFaktum } from "./Faktum";
-import styles from "./Faktum.module.css";
+import { getCountryName } from "../../../country.utils";
+import { HelpText } from "../../HelpText";
+import { useValidation } from "../../../context/validation-context";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -66,17 +65,6 @@ function FaktumLandComponent(
     saveFaktumToQuiz(faktum, value);
   }
 
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>
-          {props.faktum.svar ? getCountryName(props.faktum.svar, router.locale) : props.faktum.svar}
-        </BodyShort>
-      </>
-    );
-  }
-
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Dropdown
@@ -90,6 +78,7 @@ function FaktumLandComponent(
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
       />
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}

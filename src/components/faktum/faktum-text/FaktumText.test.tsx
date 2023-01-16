@@ -1,9 +1,9 @@
 import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumText } from "./FaktumText";
-import { IQuizTekstFaktum } from "../../types/quiz.types";
+import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { MockContext } from "../../__mocks__/MockContext";
+import { MockContext } from "../../../__mocks__/MockContext";
 
 const faktumMockData: IQuizTekstFaktum = {
   id: "8004.1",

@@ -6,20 +6,22 @@ import { ISanitySeksjon } from "../../types/sanity.types";
 interface IProps {
   text: ISanitySeksjon | undefined;
   fallback: string;
+  showAllTexts?: boolean;
 }
 
 export function SectionHeading(props: IProps) {
+  const { text, fallback, showAllTexts = true } = props;
   return (
     <>
       <Heading spacing size="large" level="2">
-        {props.text?.title || props.fallback}
+        {text?.title || fallback}
       </Heading>
 
-      {props.text?.description && <PortableText value={props.text?.description} />}
+      {text?.description && showAllTexts && <PortableText value={text?.description} />}
 
-      {props.text?.helpText && (
-        <ReadMore className="my-6" header={props.text?.helpText.title}>
-          <PortableText value={props.text?.helpText.body} />
+      {text?.helpText && showAllTexts && (
+        <ReadMore className="my-6" header={text?.helpText.title}>
+          <PortableText value={text?.helpText.body} />
         </ReadMore>
       )}
     </>

@@ -1,16 +1,16 @@
-import { BodyShort, Label, Radio, RadioGroup } from "@navikt/ds-react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
+import { Radio, RadioGroup } from "@navikt/ds-react";
+import { IFaktum } from "../Faktum";
+import { ISanityAlertText } from "../../../types/sanity.types";
+import { IQuizEnvalgFaktum } from "../../../types/quiz.types";
 import { PortableText } from "@portabletext/react";
-import { forwardRef, Ref, useEffect, useState } from "react";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { IQuizEnvalgFaktum } from "../../types/quiz.types";
-import { ISanityAlertText } from "../../types/sanity.types";
-import { AlertText } from "../alert-text/AlertText";
-import { HelpText } from "../HelpText";
-import { IFaktum } from "./Faktum";
-import styles from "./Faktum.module.css";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { HelpText } from "../../HelpText";
+import { useValidation } from "../../../context/validation-context";
+import { AlertText } from "../../alert-text/AlertText";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export const FaktumEnvalg = forwardRef(FaktumEnvalgComponent);
 
@@ -48,15 +48,6 @@ function FaktumEnvalgComponent(
     onChange ? onChange(faktum, value) : saveFaktumToQuiz(faktum, value);
   }
 
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{getSvaralternativTextById(currentAnswer)?.text || currentAnswer}</BodyShort>
-      </>
-    );
-  }
-
   return (
     <>
       <RadioGroup
@@ -79,9 +70,11 @@ function FaktumEnvalgComponent(
           );
         })}
       </RadioGroup>
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+
       {(alertText?.body || alertText?.title) && <AlertText alertText={alertText} spacingTop />}
     </>
   );

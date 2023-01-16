@@ -21,7 +21,7 @@ export function Dropdown(props: IProps) {
   if (props.readOnly) {
     return (
       <>
-        <Label>{props.label}</Label>
+        <Label as={"p"}>{props.label}</Label>
         <BodyShort>{props.currentValue}</BodyShort>
       </>
     );

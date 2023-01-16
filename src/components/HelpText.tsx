@@ -6,6 +6,7 @@ import { ISanityHelpText } from "../types/sanity.types";
 interface IProps {
   helpText: ISanityHelpText;
   className?: string;
+  defaultOpen?: boolean;
 }
 
 export function HelpText(props: IProps) {
@@ -13,7 +14,7 @@ export function HelpText(props: IProps) {
 
   return (
     <div className={props.className}>
-      <ReadMore header={title}>
+      <ReadMore header={title} defaultOpen={props.defaultOpen}>
         <div>
           <PortableText value={body} />
         </div>

@@ -1,25 +1,18 @@
-import {
-  BodyShort,
-  Fieldset,
-  Label,
-  UNSAFE_DatePicker,
-  UNSAFE_useRangeDatepicker,
-} from "@navikt/ds-react";
+import { Fieldset, UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
-import { useValidateFaktumPeriode } from "../../hooks/faktum/useValidateFaktumPeriode";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../types/quiz.types";
-import { FormattedDate } from "../FormattedDate";
-import { HelpText } from "../HelpText";
-import { IFaktum } from "./Faktum";
-import styles from "./Faktum.module.css";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { useValidation } from "../../../context/validation-context";
+import { useValidateFaktumPeriode } from "../../../hooks/faktum/useValidateFaktumPeriode";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 
 interface IDateRange {
@@ -47,12 +40,9 @@ function FaktumPeriodeComponent(
   const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
 
-  const beskrivendeIdFra = `${faktum.beskrivendeId}.fra`;
-  const beskrivendeIdTil = `${faktum.beskrivendeId}.til`;
-
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const faktumTextFra = getAppText(beskrivendeIdFra);
-  const faktumTextTil = getAppText(beskrivendeIdTil);
+  const faktumTextFra = getAppText(`${faktum.beskrivendeId}.fra`);
+  const faktumTextTil = getAppText(`${faktum.beskrivendeId}.til`);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -144,32 +134,6 @@ function FaktumPeriodeComponent(
     }
   }
 
-  if (faktum.readOnly || props.readonly) {
-    return (
-      <div className={periodeStyles.faktumPeriode}>
-        <Label className={periodeStyles.readOnlyTittel}>
-          {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
-        </Label>
-        {currentAnswer?.fom && (
-          <div className={periodeStyles.faktumPeriodeFra}>
-            <Label>{faktumTextFra}</Label>
-            <BodyShort>
-              <FormattedDate date={currentAnswer?.fom} />
-            </BodyShort>
-          </div>
-        )}
-        {currentAnswer?.tom && (
-          <div>
-            <Label>{faktumTextTil}</Label>
-            <BodyShort>
-              <FormattedDate date={currentAnswer?.tom} />
-            </BodyShort>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
     <div
       className={periodeStyles.faktumPeriode}
@@ -183,9 +147,7 @@ function FaktumPeriodeComponent(
             <PortableText value={faktumTexts.description} />
           </div>
         )}
-        {faktumTexts?.helpText && (
-          <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
-        )}
+
         <UNSAFE_DatePicker
           {...datepickerProps}
           dropdownCaption
@@ -200,6 +162,7 @@ function FaktumPeriodeComponent(
               placeholder={getAppText("datovelger.dato-format")}
               error={fomErrorMessage}
             />
+
             <UNSAFE_DatePicker.Input
               {...toInputProps}
               label={faktumTextTil}
@@ -208,6 +171,10 @@ function FaktumPeriodeComponent(
             />
           </div>
         </UNSAFE_DatePicker>
+
+        {faktumTexts?.helpText && (
+          <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        )}
       </Fieldset>
     </div>
   );

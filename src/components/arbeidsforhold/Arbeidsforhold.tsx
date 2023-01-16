@@ -68,7 +68,7 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
       {faktum?.svar?.map((fakta, svarIndex) => {
@@ -84,7 +84,6 @@ function ArbeidsforholdComponent(
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
-              readOnly={props.readonly}
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"} spacing>
@@ -124,20 +123,16 @@ function ArbeidsforholdComponent(
         );
       })}
 
-      {!props.readonly && (
-        <>
-          <Button
-            variant="secondary"
-            className={"generator-faktum__add-button"}
-            onClick={() => addArbeidsforhold(faktum)}
-            icon={<BriefcaseAdd />}
-          >
-            {getAppText("arbeidsforhold.knapp.legg-til")}
-          </Button>
-          {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
-          )}
-        </>
+      <Button
+        variant="secondary"
+        className={"generator-faktum__add-button"}
+        onClick={() => addArbeidsforhold(faktum)}
+        icon={<BriefcaseAdd />}
+      >
+        {getAppText("arbeidsforhold.knapp.legg-til")}
+      </Button>
+      {unansweredFaktumId === faktum.id && (
+        <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
     </div>
   );

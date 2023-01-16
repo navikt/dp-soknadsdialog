@@ -1,8 +1,0 @@
-.documentedBy {
-  display: flex;
-}
-
-.documentedBy svg {
-  flex-shrink: 0;
-  margin-right: var(--a-spacing-1);
-}

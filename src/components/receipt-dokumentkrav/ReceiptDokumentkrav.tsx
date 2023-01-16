@@ -47,7 +47,10 @@ export function ReceiptDokumentkrav(props: IProps) {
 
           <ol className={styles.dokumentkravList}>
             {missingDocuments.map((dokumentkrav) => (
-              <ReceiptDokumentkravMissingItem key={dokumentkrav.beskrivendeId} {...dokumentkrav} />
+              <ReceiptDokumentkravMissingItem
+                key={dokumentkrav.beskrivendeId}
+                dokumentkrav={dokumentkrav}
+              />
             ))}
 
             {uploadedDocuments.map((dokumentkrav) => (

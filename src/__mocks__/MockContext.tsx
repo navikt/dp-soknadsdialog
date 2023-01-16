@@ -5,13 +5,25 @@ import { SanityProvider } from "../context/sanity-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
-import { sanityMocks } from "./sanity.mocks";
+import { ISanityTexts } from "../types/sanity.types";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
   soknadState?: IQuizState;
   quizSeksjoner?: IQuizSeksjon[];
+  sanityTexts?: ISanityTexts;
 }
+
+export const mockSanityTexts: ISanityTexts = {
+  fakta: [],
+  seksjoner: [],
+  svaralternativer: [],
+  landgrupper: [],
+  apptekster: [],
+  dokumentkrav: [],
+  dokumentkravSvar: [],
+  infosider: [],
+};
 
 export const mockSoknadState: IQuizState = {
   ferdig: false,
@@ -38,11 +50,12 @@ export function MockContext(props: PropsWithChildren<IProps>) {
     dokumentkrav = [],
     quizSeksjoner = [mockSection],
     soknadState = mockSoknadState,
+    sanityTexts = mockSanityTexts,
   } = props;
 
   return (
     <div id="__next">
-      <SanityProvider initialState={sanityMocks}>
+      <SanityProvider initialState={sanityTexts}>
         <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
           <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
             <ValidationProvider>{children}</ValidationProvider>

@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { addDays, format, formatISO } from "date-fns";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../types/quiz.types";
-import { MockContext } from "../../__mocks__/MockContext";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
+import { MockContext } from "../../../__mocks__/MockContext";
 import { FaktumPeriode } from "./FaktumPeriode";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {

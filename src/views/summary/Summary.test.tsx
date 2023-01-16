@@ -3,9 +3,15 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { Summary } from "./Summary";
 import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
-import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
+import { mockSoknadState, MockContext, mockSanityTexts } from "../../__mocks__/MockContext";
 import fetch from "jest-fetch-mock";
 import { IPersonalia } from "../../types/personalia.types";
+import {
+  ISanityFaktum,
+  ISanitySeksjon,
+  ISanitySvaralternativ,
+  ISanityTexts,
+} from "../../types/sanity.types";
 
 jest.mock("../../session.utils", () => {
   return {
@@ -62,24 +68,47 @@ describe("Summary", () => {
   test("Should show questions and answers", async () => {
     const user = userEvent.setup();
 
+    const sanitySection: ISanitySeksjon = {
+      textId: sectionMockdata.beskrivendeId,
+      title: "Tittel for en seksjon i sanity",
+    };
+
+    const sanityFaktum: ISanityFaktum = {
+      textId: faktumMockData.beskrivendeId,
+      text: "Spørsmålstekst for faktum",
+    };
+
+    const sanitySvaralternativ: ISanitySvaralternativ = {
+      textId: faktumMockData.svar as string,
+      text: "Ditt svar",
+    };
+
+    const sanityTexts: ISanityTexts = {
+      ...mockSanityTexts,
+      seksjoner: [sanitySection],
+      fakta: [sanityFaktum],
+      svaralternativer: [sanitySvaralternativ],
+    };
+
     render(
-      <MockContext quizSeksjoner={[sectionMockdata]}>
+      <MockContext quizSeksjoner={[sectionMockdata]} sanityTexts={sanityTexts}>
         <Summary personalia={personalia} />
       </MockContext>
     );
 
     const expandSectionButton = screen.getByRole("button", {
-      name: sectionMockdata.beskrivendeId,
+      name: sanitySection.title,
     });
 
     user.click(expandSectionButton);
 
     await waitFor(() => {
       // Await the accordion animating open
-      screen.findByText(faktumMockData.beskrivendeId);
+      screen.findByText(sanityFaktum.text);
 
-      expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
-      faktumMockData.svar && expect(screen.queryByText(faktumMockData.svar)).toBeInTheDocument();
+      expect(screen.queryByText(sanityFaktum.text)).toBeInTheDocument();
+      faktumMockData.svar &&
+        expect(screen.queryByText(sanitySvaralternativ.text)).toBeInTheDocument();
     });
   });
 

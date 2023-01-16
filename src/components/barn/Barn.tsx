@@ -57,17 +57,19 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
               allFaktumAnswered={!unansweredFaktum}
               editFaktum={() => toggleActiveGeneratorAnswer(svarIndex)}
               deleteFaktum={() => deleteGeneratorAnswer(faktum, svarIndex)}
-              readOnly={props.readonly}
               showValidationMessage={shouldShowValidationMessage}
             >
               <Heading level={"3"} size={"small"}>
                 <BarnNavn barn={fakta} />
               </Heading>
+
               <BodyShort>{getChildBirthDate(fakta)}</BodyShort>
+
               <Detail uppercase spacing>
                 <BarnBostedsland barn={fakta} />
               </Detail>
             </GeneratorFaktumCard>
+
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
@@ -92,20 +94,16 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
         );
       })}
 
-      {!props.readonly && (
-        <>
-          <Button
-            variant="secondary"
-            className={"generator-faktum__add-button"}
-            onClick={() => addNewGeneratorAnswer(faktum)}
-            icon={<ChildAdd />}
-          >
-            {getAppText("barn.knapp.legg-til")}
-          </Button>
-          {unansweredFaktumId === faktum.id && (
-            <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
-          )}
-        </>
+      <Button
+        variant="secondary"
+        className={"generator-faktum__add-button"}
+        onClick={() => addNewGeneratorAnswer(faktum)}
+        icon={<ChildAdd />}
+      >
+        {getAppText("barn.knapp.legg-til")}
+      </Button>
+      {unansweredFaktumId === faktum.id && (
+        <ValidationMessage message={getAppText("validering.faktum.ubesvart")} />
       )}
     </div>
   );

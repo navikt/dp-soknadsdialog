@@ -1,4 +1,6 @@
-export const mockDokumentkravBesvart = {
+import { IDokumentkravList } from "../types/documentation.types";
+
+export const mockDokumentkravBesvart: IDokumentkravList = {
   soknad_uuid: "8fbff721-73d7-456b-bba6-63916a122488",
   krav: [
     {
@@ -1408,4 +1410,4 @@ export const mockDokumentkravBesvart = {
       svar: "dokumentkrav.svar.send.senere",
     },
   ],
-};
+} as unknown as IDokumentkravList;

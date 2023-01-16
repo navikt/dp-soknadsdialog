@@ -1,16 +1,16 @@
-import { BodyShort, Label, TextField } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
 import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidateFaktumNumber } from "../../hooks/faktum/useValidateFaktumNumber";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { IQuizNumberFaktum } from "../../types/quiz.types";
-import { HelpText } from "../HelpText";
-import { IFaktum } from "./Faktum";
-import styles from "./Faktum.module.css";
-import { isNumber } from "./validation/validations.utils";
+import { TextField } from "@navikt/ds-react";
+import { PortableText } from "@portabletext/react";
+import { IQuizNumberFaktum } from "../../../types/quiz.types";
+import { IFaktum } from "../Faktum";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { useValidateFaktumNumber } from "../../../hooks/faktum/useValidateFaktumNumber";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { HelpText } from "../../HelpText";
+import { isNumber } from "../validation/validations.utils";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export const FaktumNumber = forwardRef(FaktumNumberComponent);
 
@@ -83,15 +83,6 @@ function FaktumNumberComponent(
     }
   }
 
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{debouncedValue}</BodyShort>
-      </>
-    );
-  }
-
   // Replace dot with comma
   const displayValue = currentAnswer.replace(/\./g, ",");
 
@@ -112,6 +103,7 @@ function FaktumNumberComponent(
         onBlur={debouncedChange.flush}
         error={errorMessage}
       />
+
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}

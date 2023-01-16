@@ -1,19 +1,18 @@
-import { Alert, BodyShort, Label, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { useEffect, useState, forwardRef, Ref } from "react";
+import { Alert, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { forwardRef, Ref, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useValidation } from "../../context/validation-context";
-import { useValidateFaktumDato } from "../../hooks/faktum/useValidateFaktumDato";
-import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../hooks/useFirstRender";
-import { IQuizDatoFaktum } from "../../types/quiz.types";
-import { FormattedDate } from "../FormattedDate";
-import { HelpText } from "../HelpText";
-import { IFaktum } from "./Faktum";
-import styles from "./Faktum.module.css";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { useValidation } from "../../../context/validation-context";
+import { useValidateFaktumDato } from "../../../hooks/faktum/useValidateFaktumDato";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import { IQuizDatoFaktum } from "../../../types/quiz.types";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
 
 export const FaktumDato = forwardRef(FaktumDatoComponent);
 
@@ -72,15 +71,6 @@ function FaktumDatoComponent(
     if (value && isValid(new Date(value))) {
       saveFaktumToQuiz(faktum, value);
     }
-  }
-
-  if (props.faktum.readOnly || props.readonly) {
-    return (
-      <>
-        <Label>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-        <BodyShort>{currentAnswer ? <FormattedDate date={currentAnswer} /> : ""}</BodyShort>
-      </>
-    );
   }
 
   const datePickerDescription = faktumTexts?.description ? (
