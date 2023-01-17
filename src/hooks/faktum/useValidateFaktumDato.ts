@@ -32,8 +32,11 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     setErrorMessage(undefined);
 
-    // Future date is allowed for faktum.dagpenger-soknadsdato
-    if (faktum.beskrivendeId === "faktum.dagpenger-soknadsdato") {
+    // Future date is allowed for following faktum
+    if (
+      faktum.beskrivendeId === "faktum.dagpenger-soknadsdato" ||
+      faktum.beskrivendeId === "faktum.arbeidsforhold.kontraktfestet-sluttdato"
+    ) {
       if (!isValid) {
         setErrorMessage(getAppText("validering.ugyldig-dato"));
       }
