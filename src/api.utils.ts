@@ -2,6 +2,7 @@ import { v4 as uuidV4 } from "uuid";
 
 export const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
 export const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
+export const audienceVeilarb = `${process.env.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
 
 export default function api(endpoint: string): string {
   return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${
