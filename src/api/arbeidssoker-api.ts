@@ -1,8 +1,8 @@
 import { v4 as uuid } from "uuid";
 import { GetServerSidePropsContext } from "next/types";
 import { formatISO } from "date-fns";
-import { decodeJwt } from "@navikt/dp-auth";
 import { getSession } from "../auth.utils";
+import { audienceVeilarb } from "../api.utils";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 export interface IArbeidssokerperioder {
@@ -16,16 +16,15 @@ export interface IArbeidssokerperioder {
 
 export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
   const today = formatISO(new Date(), { representation: "date" });
-  const { token } = await getSession(req);
-  const payload = decodeJwt(token);
+  const { apiToken } = await getSession(req);
 
   const callId = uuid();
-  const url = `${process.env.VEILARBPROXY_URL}?fnr=${payload?.pid}&fraOgMed=${today}`;
+  const onBehalfOfToken = await apiToken(audienceVeilarb);
+  const url = `${process.env.VEILARBPROXY_URL}/niva3?fraOgMed=${today}`;
 
   return await fetch(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
-      "Downstream-Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${onBehalfOfToken}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",
       "Nav-Call-Id": callId,
     },
