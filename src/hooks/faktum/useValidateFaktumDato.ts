@@ -13,6 +13,17 @@ interface IUseValidateFaktumDato {
   errorMessage: string | undefined;
 }
 
+const furetureDateAllowedList = [
+  "faktum.dagpenger-soknadsdato",
+  "faktum.arbeidsforhold.kontraktfestet-sluttdato",
+  "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
+];
+
+const futureDateAllowedWithWarningList = [
+  "faktum.dagpenger-soknadsdato",
+  "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
+];
+
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -32,11 +43,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     setErrorMessage(undefined);
 
-    // Future date is allowed for following faktum
-    if (
-      faktum.beskrivendeId === "faktum.dagpenger-soknadsdato" ||
-      faktum.beskrivendeId === "faktum.arbeidsforhold.kontraktfestet-sluttdato"
-    ) {
+    if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
         setErrorMessage(getAppText("validering.ugyldig-dato"));
       }
@@ -56,7 +63,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   }
 
   function getHasWarning(date: Date) {
-    return faktum.beskrivendeId === "faktum.dagpenger-soknadsdato" && isOverTwoWeeks(date);
+    return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
   return {
