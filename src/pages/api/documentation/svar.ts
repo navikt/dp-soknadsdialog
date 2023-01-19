@@ -5,6 +5,7 @@ import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
 import { logRequestError } from "../../../sentry.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
+import { getDokumentkrav } from "./[uuid]";
 
 export interface IDokumentkravSvarBody {
   uuid: string;
@@ -13,7 +14,7 @@ export interface IDokumentkravSvarBody {
 }
 
 export interface IDokumentkravSvar {
-  svar: GyldigDokumentkravSvar;
+  svar?: GyldigDokumentkravSvar;
   begrunnelse?: string;
 }
 
@@ -43,7 +44,13 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(response.status).send(response.statusText);
     }
 
-    return res.status(response.status).send(response.body);
+    const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+    if (!dokumentkravResponse.ok) {
+      return res.status(response.status).send(response.statusText);
+    }
+
+    const dokumentkrav = await dokumentkravResponse.json();
+    return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     logRequestError(message);

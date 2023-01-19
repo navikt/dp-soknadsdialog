@@ -1,5 +1,4 @@
 import React from "react";
-import { Documentation } from "../../../views/documentation/Documentation";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
@@ -7,10 +6,12 @@ import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../../types/documentation.types";
-import { mockDokumentkravList } from "../../../localhost-data/dokumentkrav-list";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
+import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 
 interface IProps {
   errorCode: number | null;
@@ -28,7 +29,7 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
-        dokumentkrav: mockDokumentkravList as IDokumentkravList,
+        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         errorCode: null,
       },
     };
@@ -92,7 +93,9 @@ export default function DocumentPage(props: IProps) {
 
   return (
     <QuizProvider initialState={props.soknadState}>
-      <Documentation dokumentkravList={props.dokumentkrav} />
+      <DokumentkravProvider initialState={props.dokumentkrav}>
+        <Dokumentasjon />
+      </DokumentkravProvider>
     </QuizProvider>
   );
 }

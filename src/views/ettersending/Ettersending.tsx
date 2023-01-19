@@ -128,43 +128,39 @@ export function Ettersending({ dokumentkrav }: IProps) {
             {getAppText("ettersending.dokumenter.innsending.tittel")}
           </Heading>
 
-          {missingDokumentkrav.map(
-            (krav: IDokumentkrav): JSX.Element => (
-              <EttersendingDokumentkravSendingItem
-                key={krav.id}
-                dokumentkrav={krav}
-                removeDokumentkrav={removeDokumentkrav}
-                addDokumentkrav={addDokumentkravWithNewFiles}
-                hasBundleError={
-                  !dokumentkravWithBundleError.findIndex(
-                    (dokumentkrav) => dokumentkrav.id === krav.id
-                  )
-                }
-              />
-            )
-          )}
+          {missingDokumentkrav.map((krav) => (
+            <EttersendingDokumentkravSendingItem
+              key={krav.id}
+              dokumentkrav={krav}
+              removeDokumentkrav={removeDokumentkrav}
+              addDokumentkrav={addDokumentkravWithNewFiles}
+              hasBundleError={
+                !dokumentkravWithBundleError.findIndex(
+                  (dokumentkrav) => dokumentkrav.id === krav.id
+                )
+              }
+            />
+          ))}
 
-          {receivedDokumentkrav.map(
-            (krav: IDokumentkrav): JSX.Element => (
-              <EttersendingDokumentkravSendingItem
-                key={krav.id}
-                dokumentkrav={krav}
-                removeDokumentkrav={removeDokumentkrav}
-                addDokumentkrav={addDokumentkravWithNewFiles}
-                hasBundleError={
-                  !dokumentkravWithBundleError.findIndex(
-                    (dokumentkrav) => dokumentkrav.id === krav.id
-                  )
-                }
-              />
-            )
-          )}
+          {receivedDokumentkrav.map((krav) => (
+            <EttersendingDokumentkravSendingItem
+              key={krav.id}
+              dokumentkrav={krav}
+              removeDokumentkrav={removeDokumentkrav}
+              addDokumentkrav={addDokumentkravWithNewFiles}
+              hasBundleError={
+                !dokumentkravWithBundleError.findIndex(
+                  (dokumentkrav) => dokumentkrav.id === krav.id
+                )
+              }
+            />
+          ))}
 
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText("ettersending.validering.ingen-dokumenter")} />
           )}
 
-          <div className="navigation-container">
+          <nav className="navigation-container">
             <Button
               variant="primary"
               onClick={bundleAndSaveAllDokumentkrav}
@@ -179,7 +175,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
                 {getAppText("ettersending.knapp.avbryt")}
               </Button>
             </Link>
-          </div>
+          </nav>
         </>
       )}
 
