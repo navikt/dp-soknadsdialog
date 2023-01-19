@@ -10,12 +10,12 @@ import { useSanity } from "../../context/sanity-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { DokumentkravItem } from "./DokumentkravItem";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
+import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { useUuid } from "../../hooks/useUuid";
 import { useRouter } from "next/router";
 import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
+import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 
@@ -36,7 +36,7 @@ export function Dokumentasjon() {
     removeDokumentkrav,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
-  } = useEttersending();
+  } = useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const dokumentasjonsText = getInfosideText("dokumentasjonskrav");

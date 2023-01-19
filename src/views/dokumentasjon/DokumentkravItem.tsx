@@ -6,7 +6,7 @@ import { IDokumentkravSvar } from "../../pages/api/documentation/svar";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
 import { HelpText } from "../../components/HelpText";
-import { DokumentkravBegrunnelse } from "../../components/dokumentkrav/DokumentkravBegrunnelse";
+import { DokumentkravBegrunnelse } from "./DokumentkravBegrunnelse";
 import { useUuid } from "../../hooks/useUuid";
 import { FileUploader } from "../../components/file-uploader/FileUploader";
 import { useFileUploader } from "../../hooks/useFileUploader";

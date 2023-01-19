@@ -1,7 +1,0 @@
-.dokumentkravContainer {
-  margin: var(--a-spacing-10) 0;
-}
-
-.dokumentkravContainer:last-child {
-  margin-bottom: 0;
-}

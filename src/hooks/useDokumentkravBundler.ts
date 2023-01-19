@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { IDokumentkrav } from "../../types/documentation.types";
-import { usePutRequest } from "../usePutRequest";
-import { IDocumentationBundleBody } from "../../pages/api/documentation/bundle";
-import { useUuid } from "../useUuid";
+import { IDokumentkrav } from "../types/documentation.types";
+import { usePutRequest } from "./usePutRequest";
+import { IDocumentationBundleBody } from "../pages/api/documentation/bundle";
+import { useUuid } from "./useUuid";
 
-export function useEttersending() {
+export function useDokumentkravBundler() {
   const { uuid } = useUuid();
   const [isBundling, setIsBundling] = useState(false);
   const [noDocumentsToSave, setNoDocumentsToSave] = useState(false);

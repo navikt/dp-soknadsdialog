@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Dokumentkrav.module.css";
+import styles from "../../components/dokumentkrav/Dokumentkrav.module.css";
 import { TextField } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";

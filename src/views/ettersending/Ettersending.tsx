@@ -3,7 +3,7 @@ import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.type
 import { EttersendingDokumentkravSendingItem } from "./EttersendingDokumentkravSendingItem";
 import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
+import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { useRouter } from "next/router";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { useUuid } from "../../hooks/useUuid";
@@ -48,7 +48,7 @@ export function Ettersending({ dokumentkrav }: IProps) {
     removeDokumentkrav,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
-  } = useEttersending();
+  } = useDokumentkravBundler();
 
   const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
     (krav: IDokumentkrav): boolean =>
