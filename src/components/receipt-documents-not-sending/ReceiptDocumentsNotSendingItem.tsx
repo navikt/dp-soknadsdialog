@@ -5,6 +5,7 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PdfView } from "../../views/pdf/Pdf";
 import { PortableText } from "@portabletext/react";
+import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -18,7 +19,7 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
   return (
     <li className="my-6">
       <Heading level="3" size="xsmall">
-        {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+        <DokumentkravTitle dokumentkrav={dokumentkrav} />
       </Heading>
 
       {dokumentkravText?.description && pdfView === "brutto" && (

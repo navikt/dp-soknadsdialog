@@ -9,6 +9,7 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
 import React from "react";
+import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -25,7 +26,7 @@ export function ReceiptDokumentkravMissingItem(props: IProps) {
     <li className="my-6">
       <div className={styles.dokumentkravTitle}>
         <Heading level="3" size="xsmall">
-          {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+          <DokumentkravTitle dokumentkrav={dokumentkrav} />
         </Heading>
 
         {!pdfView && (
