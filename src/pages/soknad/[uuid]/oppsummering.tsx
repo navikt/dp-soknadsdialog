@@ -12,10 +12,15 @@ import { getSession } from "../../../auth.utils";
 import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { mockPersonalia } from "../../../localhost-data/personalia";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
+  dokumentkrav: IDokumentkravList | null;
   errorCode: number | null;
 }
 
@@ -30,6 +35,7 @@ export async function getServerSideProps(
       props: {
         soknadState: mockNeste,
         personalia: mockPersonalia,
+        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         errorCode: null,
       },
     };
@@ -48,32 +54,42 @@ export async function getServerSideProps(
   let errorCode = null;
   let soknadState = null;
   let personalia = null;
+  let dokumentkrav = null;
+
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
-  if (!soknadStateResponse.ok) {
-    errorCode = soknadStateResponse.status;
-  } else {
+  if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
+  } else {
+    errorCode = soknadStateResponse.status;
   }
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
   }
 
+  if (dokumentkravResponse.ok) {
+    dokumentkrav = await dokumentkravResponse.json();
+  } else {
+    errorCode = dokumentkravResponse.status;
+  }
+
   return {
     props: {
       soknadState,
       personalia,
+      dokumentkrav,
       errorCode,
     },
   };
 }
 
 export default function SummaryPage(props: IProps) {
-  const { errorCode, soknadState, personalia } = props;
-  if (errorCode || !soknadState) {
+  const { errorCode, soknadState, personalia, dokumentkrav } = props;
+  if (errorCode || !soknadState || !dokumentkrav) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -84,9 +100,11 @@ export default function SummaryPage(props: IProps) {
   }
   return (
     <QuizProvider initialState={soknadState}>
-      <ValidationProvider>
-        <Summary personalia={personalia} />
-      </ValidationProvider>
+      <DokumentkravProvider initialState={dokumentkrav}>
+        <ValidationProvider>
+          <Summary personalia={personalia} />
+        </ValidationProvider>
+      </DokumentkravProvider>
     </QuizProvider>
   );
 }

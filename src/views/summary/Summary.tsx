@@ -22,12 +22,20 @@ import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
 import { trackSkjemaFullført } from "../../amplitude.tracking";
+import {
+  getMissingDokumentkrav,
+  getNotSendingDokumentkrav,
+  getUploadedDokumentkrav,
+} from "../../dokumentkrav.util";
+import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
 interface IProps {
   personalia: IPersonalia | null;
 }
 
 export function Summary(props: IProps) {
   const { personalia } = props;
+  const { dokumentkravList } = useDokumentkrav();
 
   const router = useRouter();
   const { uuid } = useUuid();
@@ -46,8 +54,14 @@ export function Summary(props: IProps) {
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
   const textId = "oppsummering";
   const textPersonaliaId = "personalia";
+  const textDokumentkravId = "oppsummering.seksjon.dokumentkrav";
   const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
+  const dokumentkravTexts = getSeksjonTextById(textDokumentkravId);
+
+  const missingDocuments = dokumentkravList ? getMissingDokumentkrav(dokumentkravList) : [];
+  const uploadedDocuments = dokumentkravList ? getUploadedDokumentkrav(dokumentkravList) : [];
+  const notSendingDocuments = dokumentkravList ? getNotSendingDokumentkrav(dokumentkravList) : [];
 
   useEffect(() => {
     if (showSoknadNotCompleteError) {
@@ -141,6 +155,36 @@ export function Summary(props: IProps) {
             </Accordion.Item>
           );
         })}
+
+        {dokumentkravList && dokumentkravList.krav.length > 0 && (
+          <Accordion.Item>
+            <Accordion.Header>
+              {dokumentkravTexts?.title ? dokumentkravTexts.title : textDokumentkravId}
+            </Accordion.Header>
+            <Accordion.Content>
+              <div className={styles.dokumentkrav}>
+                <ol>
+                  {uploadedDocuments.map((krav) => (
+                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
+                  ))}
+
+                  {missingDocuments.map((krav) => (
+                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
+                  ))}
+
+                  {notSendingDocuments.map((krav) => (
+                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
+                  ))}
+                </ol>
+                <Link href={`/soknad/${uuid}/dokumentasjon`} passHref>
+                  <Button variant="primary" as="a">
+                    {getAppText("oppsummering.knapp.endre-svar")}
+                  </Button>
+                </Link>
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
+        )}
       </Accordion>
 
       <ConfirmationPanel
