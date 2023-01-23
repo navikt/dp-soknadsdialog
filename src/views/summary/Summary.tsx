@@ -57,7 +57,6 @@ export function Summary(props: IProps) {
   const textDokumentkravId = "oppsummering.seksjon.dokumentkrav";
   const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
-  const dokumentkravTexts = getSeksjonTextById(textDokumentkravId);
 
   const missingDocuments = dokumentkravList ? getMissingDokumentkrav(dokumentkravList) : [];
   const uploadedDocuments = dokumentkravList ? getUploadedDokumentkrav(dokumentkravList) : [];
@@ -158,9 +157,7 @@ export function Summary(props: IProps) {
 
         {dokumentkravList && dokumentkravList.krav.length > 0 && (
           <Accordion.Item>
-            <Accordion.Header>
-              {dokumentkravTexts?.title ? dokumentkravTexts.title : textDokumentkravId}
-            </Accordion.Header>
+            <Accordion.Header>{getAppText(textDokumentkravId)}</Accordion.Header>
             <Accordion.Content>
               <div className={styles.dokumentkrav}>
                 <ol>
