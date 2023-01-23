@@ -28,10 +28,8 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
       )}
 
       <BodyShort>
-        <>
-          {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-          {answerText && getAppText(answerText)}
-        </>
+        {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
+        {answerText && getAppText(answerText)}
       </BodyShort>
 
       {pdfView && (
