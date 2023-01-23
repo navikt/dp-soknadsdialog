@@ -1,15 +1,12 @@
 import { BodyShort, Heading, ReadMore, Tag } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import {
-  DOKUMENTKRAV_SVAR_SENDER_SENERE,
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-} from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
 import React from "react";
 import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
+import { getDokumentkravSvarText } from "../../dokumentkrav.util";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -21,6 +18,7 @@ export function ReceiptDokumentkravMissingItem(props: IProps) {
   const { getAppText, getDokumentkravTextById } = useSanity();
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
+  const answerText = getDokumentkravSvarText(dokumentkrav);
 
   return (
     <li className="my-6">
@@ -41,15 +39,8 @@ export function ReceiptDokumentkravMissingItem(props: IProps) {
       )}
 
       <BodyShort>
-        <>
-          {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-          {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE && (
-            <>{getAppText("dokumentkrav.begrunnelse.sendes-av-andre")}</>
-          )}
-          {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE && (
-            <>{getAppText("dokumentkrav.begrunnelse.sendes-av-deg")}</>
-          )}
-        </>
+        {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
+        {answerText && getAppText(answerText)}
       </BodyShort>
 
       {pdfView && (
