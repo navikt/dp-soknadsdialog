@@ -22,11 +22,6 @@ import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
 import { trackSkjemaFullført } from "../../amplitude.tracking";
-import {
-  getMissingDokumentkrav,
-  getNotSendingDokumentkrav,
-  getUploadedDokumentkrav,
-} from "../../dokumentkrav.util";
 import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 interface IProps {
@@ -57,10 +52,6 @@ export function Summary(props: IProps) {
   const textDokumentkravId = "oppsummering.seksjon.dokumentkrav";
   const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
-
-  const missingDocuments = dokumentkravList ? getMissingDokumentkrav(dokumentkravList) : [];
-  const uploadedDocuments = dokumentkravList ? getUploadedDokumentkrav(dokumentkravList) : [];
-  const notSendingDocuments = dokumentkravList ? getNotSendingDokumentkrav(dokumentkravList) : [];
 
   useEffect(() => {
     if (showSoknadNotCompleteError) {
@@ -161,15 +152,7 @@ export function Summary(props: IProps) {
             <Accordion.Content>
               <div className={styles.dokumentkrav}>
                 <ol>
-                  {uploadedDocuments.map((krav) => (
-                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
-                  ))}
-
-                  {missingDocuments.map((krav) => (
-                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
-                  ))}
-
-                  {notSendingDocuments.map((krav) => (
+                  {dokumentkravList.krav.map((krav) => (
                     <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
                   ))}
                 </ol>
