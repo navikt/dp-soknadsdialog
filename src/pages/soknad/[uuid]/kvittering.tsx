@@ -103,9 +103,9 @@ export async function getServerSideProps(
     };
   }
 
-  const missingDocuments = dokumentkrav ? getMissingDokumentkrav(dokumentkrav) : [];
+  const missingDocuments = dokumentkrav && getMissingDokumentkrav(dokumentkrav);
 
-  if (missingDocuments.length > 0) {
+  if (missingDocuments && missingDocuments.length > 0) {
     soknadStatus.status = "ManglerDokumenter";
   }
 
