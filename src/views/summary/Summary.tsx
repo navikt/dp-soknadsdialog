@@ -150,12 +150,12 @@ export function Summary(props: IProps) {
           <Accordion.Item>
             <Accordion.Header>{getAppText(textDokumentkravId)}</Accordion.Header>
             <Accordion.Content>
-              <div className={styles.dokumentkrav}>
-                <ol>
+              <div>
+                <ul className={styles.dokumentkravList}>
                   {dokumentkravList.krav.map((krav) => (
                     <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
                   ))}
-                </ol>
+                </ul>
                 <Link href={`/soknad/${uuid}/dokumentasjon`} passHref>
                   <Button variant="primary" as="a">
                     {getAppText("oppsummering.knapp.endre-svar")}

@@ -2,14 +2,13 @@
   margin-left: var(--a-spacing-4);
 }
 
-.dokumentkrav ul, 
-.dokumentkrav ol {
+.dokumentkravList {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
 
-.dokumentkrav li {
+.dokumentkravList li {
   margin-bottom: var(--a-spacing-10);
 }
