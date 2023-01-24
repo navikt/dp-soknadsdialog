@@ -27,18 +27,3 @@ export function getNotSendingDokumentkrav(dokumentkravList: IDokumentkravList): 
       dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
   );
 }
-
-export function getDokumentkravSvarText(dokumentkrav: IDokumentkrav): string | undefined {
-  switch (dokumentkrav.svar) {
-    case DOKUMENTKRAV_SVAR_SEND_NAA:
-      return "dokumentkrav.begrunnelse.sendt-av-deg";
-    case DOKUMENTKRAV_SVAR_SENDER_SENERE:
-      return "dokumentkrav.begrunnelse.sendes-av-deg";
-    case DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE:
-      return "dokumentkrav.begrunnelse.sendt-tidligere";
-    case DOKUMENTKRAV_SVAR_SENDER_IKKE:
-      return "dokumentkrav.begrunnelse.sender-ikke";
-    case DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE:
-      return "dokumentkrav.begrunnelse.sendes-av-andre";
-  }
-}

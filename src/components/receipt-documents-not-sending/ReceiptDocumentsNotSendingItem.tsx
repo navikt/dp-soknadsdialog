@@ -5,7 +5,7 @@ import { useSanity } from "../../context/sanity-context";
 import { PdfView } from "../../views/pdf/Pdf";
 import { PortableText } from "@portabletext/react";
 import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
-import { getDokumentkravSvarText } from "../../dokumentkrav.util";
+import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -15,7 +15,6 @@ interface IProps {
 export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps) {
   const { getAppText, getDokumentkravTextById } = useSanity();
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-  const answerText = getDokumentkravSvarText(dokumentkrav);
 
   return (
     <li className="my-6">
@@ -29,7 +28,7 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
 
       <BodyShort>
         {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-        {answerText && getAppText(answerText)}
+        <DokumentkravSvar dokumentkrav={dokumentkrav} />
       </BodyShort>
 
       {pdfView && (

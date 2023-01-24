@@ -1,9 +1,8 @@
 import { BodyShort, Label } from "@navikt/ds-react";
 import api from "../../api.utils";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { useSanity } from "../../context/sanity-context";
-import { getDokumentkravSvarText } from "../../dokumentkrav.util";
 import { IDokumentkrav } from "../../types/documentation.types";
+import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
 
 interface IProps {
@@ -11,8 +10,6 @@ interface IProps {
 }
 
 export function SummaryDokumentkrav({ dokumentkrav }: IProps) {
-  const { getAppText } = useSanity();
-  const answerText = getDokumentkravSvarText(dokumentkrav);
   const hasUploadedFiles = dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA;
 
   return (
@@ -35,7 +32,11 @@ export function SummaryDokumentkrav({ dokumentkrav }: IProps) {
         </Label>
       )}
 
-      {answerText && <BodyShort>{getAppText(answerText)}</BodyShort>}
+      {dokumentkrav.svar && (
+        <BodyShort>
+          <DokumentkravSvar dokumentkrav={dokumentkrav} />
+        </BodyShort>
+      )}
 
       {dokumentkrav.begrunnelse && <BodyShort>{dokumentkrav.begrunnelse}</BodyShort>}
     </li>

@@ -7,7 +7,7 @@ import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
 import React from "react";
 import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
-import { getDokumentkravSvarText } from "../../dokumentkrav.util";
+import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -17,7 +17,6 @@ interface IProps {
 export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProps) {
   const { getAppText, getDokumentkravTextById } = useSanity();
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
-  const answerText = getDokumentkravSvarText(dokumentkrav);
 
   return (
     <li className="my-6">
@@ -53,7 +52,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProp
 
       <BodyShort>
         {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-        {answerText && getAppText(answerText)}
+        <DokumentkravSvar dokumentkrav={dokumentkrav} />
       </BodyShort>
 
       {dokumentkravText?.helpText && pdfView !== "netto" && (
