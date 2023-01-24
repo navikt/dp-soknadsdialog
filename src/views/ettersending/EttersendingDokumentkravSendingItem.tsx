@@ -8,7 +8,7 @@ import { useSanity } from "../../context/sanity-context";
 import { FileList } from "../../components/file-list/FileList";
 import { HelpText } from "../../components/HelpText";
 import { EttersendingDokumentkravTitle } from "./EttersendingDokumentkravTitle";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { Alert, Link } from "@navikt/ds-react";
 import api from "../../api.utils";
 import styles from "./Ettersending.module.css";

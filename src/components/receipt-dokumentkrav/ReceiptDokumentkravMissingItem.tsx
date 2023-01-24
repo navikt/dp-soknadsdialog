@@ -5,7 +5,7 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
 import React from "react";
-import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
 import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {

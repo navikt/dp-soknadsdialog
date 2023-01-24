@@ -3,7 +3,7 @@ import api from "../../api.utils";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
-import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;

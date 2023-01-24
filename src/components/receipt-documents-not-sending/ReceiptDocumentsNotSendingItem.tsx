@@ -4,7 +4,7 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PdfView } from "../../views/pdf/Pdf";
 import { PortableText } from "@portabletext/react";
-import { DokumentkravTitle } from "../dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
 import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {

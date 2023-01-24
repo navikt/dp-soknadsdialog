@@ -5,7 +5,7 @@ import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
-import { DokumentkravTitle } from "./DokumentkravTitle";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
 import { useUuid } from "../../hooks/useUuid";
