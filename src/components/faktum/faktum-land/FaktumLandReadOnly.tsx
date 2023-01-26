@@ -9,6 +9,7 @@ import { HelpText } from "../../HelpText";
 import styles from "../Faktum.module.css";
 import { PortableText } from "@portabletext/react";
 import { AlertText } from "../../alert-text/AlertText";
+import { getLandGruppeId } from "../../../faktum.utils";
 
 export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const router = useRouter();
@@ -16,13 +17,7 @@ export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
-  function getLandGruppeId(code: string) {
-    const outsideLandGruppeId = `${faktum.beskrivendeId}.gruppe.utenfor-landgruppe`;
-    const currentLandGruppeId = faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
-    return currentLandGruppeId || outsideLandGruppeId;
-  }
-
-  const landGruppeId = faktum.svar && getLandGruppeId(faktum.svar);
+  const landGruppeId = faktum.svar && getLandGruppeId(faktum, faktum.svar);
   const landGruppeText = getLandGruppeTextById(landGruppeId);
 
   return (

@@ -13,6 +13,7 @@ import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 import { ISanityLandGruppe } from "../../../types/sanity.types";
 import { AlertText } from "../../alert-text/AlertText";
+import { getLandGruppeId } from "../../../faktum.utils";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -62,7 +63,7 @@ function FaktumLandComponent(
 
   useEffect(() => {
     if (currentAnswer) {
-      const landGruppeId = getLandGruppeId(currentAnswer);
+      const landGruppeId = getLandGruppeId(faktum, currentAnswer);
       setLandGruppeText(getLandGruppeTextById(landGruppeId));
     }
   }, [currentAnswer]);
@@ -74,12 +75,6 @@ function FaktumLandComponent(
 
   function saveFaktum(value: string) {
     saveFaktumToQuiz(faktum, value);
-  }
-
-  function getLandGruppeId(code: string) {
-    const outsideLandGruppeId = `${faktum.beskrivendeId}.gruppe.utenfor-landgruppe`;
-    const currentLandGruppeId = faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
-    return currentLandGruppeId || outsideLandGruppeId;
   }
 
   return (
