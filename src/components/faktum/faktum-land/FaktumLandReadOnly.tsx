@@ -8,12 +8,22 @@ import { IFaktumReadOnly } from "../Faktum";
 import { HelpText } from "../../HelpText";
 import styles from "../Faktum.module.css";
 import { PortableText } from "@portabletext/react";
+import { AlertText } from "../../alert-text/AlertText";
 
 export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById, getAppText } = useSanity();
+  const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+
+  function getLandGruppeId(code: string) {
+    const outsideLandGruppeId = `${faktum.beskrivendeId}.gruppe.utenfor-landgruppe`;
+    const currentLandGruppeId = faktum.grupper.find((group) => group.land.includes(code))?.gruppeId;
+    return currentLandGruppeId || outsideLandGruppeId;
+  }
+
+  const landGruppeId = faktum.svar && getLandGruppeId(faktum.svar);
+  const landGruppeText = getLandGruppeTextById(landGruppeId);
 
   return (
     <>
@@ -35,6 +45,11 @@ export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
           defaultOpen={true}
         />
       )}
+
+      {showAllFaktumTexts &&
+        (landGruppeText?.alertText?.title || landGruppeText?.alertText?.body) && (
+          <AlertText alertText={landGruppeText.alertText} />
+        )}
     </>
   );
 }
