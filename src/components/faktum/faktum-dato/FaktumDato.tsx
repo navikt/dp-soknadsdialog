@@ -1,6 +1,6 @@
-import { Alert, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { formatISO, subWeeks } from "date-fns";
+import { formatISO } from "date-fns";
 import { Ref, forwardRef, useEffect, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
@@ -10,10 +10,10 @@ import { useValidateFaktumDato } from "../../../hooks/faktum/useValidateFaktumDa
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
-import { FormattedDate } from "../../FormattedDate";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
+import { FaktumDatoWarning } from "./FaktumDatoWarning";
 
 export const FaktumDato = forwardRef(FaktumDatoComponent);
 
@@ -78,28 +78,7 @@ function FaktumDatoComponent(
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  // Wasning mesage is specific for faktum "faktum.dagpenger-soknadsdato"
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
-
-  function applicationDateWarning() {
-    const earliestApplicationDate = currentAnswer && subWeeks(new Date(currentAnswer), 2);
-
-    return (
-      <Alert
-        data-testid="faktum.soknadsdato-varsel"
-        variant="warning"
-        className={styles.faktumDatoWarningSpacing}
-      >
-        {getAppText("validering.dato-faktum.soknadsdato-varsel.start-tekst")}
-        <div className={styles.faktumDatoWarningSuggestedDate}>
-          <FormattedDate date={earliestApplicationDate as string} short />
-          {" - "}
-          <FormattedDate date={currentAnswer as string} short />
-        </div>
-        {getAppText("validering.dato-faktum.soknadsdato-varsel.slutt-tekst")}
-      </Alert>
-    );
-  }
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
@@ -121,7 +100,7 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && applicationDateWarning()}
+      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
     </div>
   );
 }
