@@ -14,14 +14,12 @@ import { ReceiptDokumentkrav } from "../../components/receipt-dokumentkrav/Recei
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { IPersonalia } from "../../types/personalia.types";
-import {
-  DOKUMENTKRAV_SVAR_SEND_NAA,
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-  DOKUMENTKRAV_SVAR_SENDER_IKKE,
-  DOKUMENTKRAV_SVAR_SENDER_SENERE,
-  DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
-} from "../../constants";
 import styles from "./Receipts.module.css";
+import {
+  getMissingDokumentkrav,
+  getNotSendingDokumentkrav,
+  getUploadedDokumentkrav,
+} from "../../dokumentkrav.util";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
@@ -36,22 +34,10 @@ export function Receipt(props: IProps) {
   const { getAppText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
   const [nagivating, setNavigating] = useState(false);
-  const missingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
-    (dokumentkrav) =>
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE ||
-      (dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !dokumentkrav.bundleFilsti)
-  );
 
-  const uploadedDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
-    (dokumentkrav) => dokumentkrav.bundleFilsti
-  );
-
-  const notSendingDocuments: IDokumentkrav[] = dokumentkravList.krav.filter(
-    (dokumentkrav) =>
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE ||
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE
-  );
+  const missingDocuments: IDokumentkrav[] = getMissingDokumentkrav(dokumentkravList);
+  const uploadedDocuments: IDokumentkrav[] = getUploadedDokumentkrav(dokumentkravList);
+  const notSendingDocuments: IDokumentkrav[] = getNotSendingDokumentkrav(dokumentkravList);
 
   const noDokumentkravTriggered = missingDocuments.length === 0 && uploadedDocuments.length === 0;
 

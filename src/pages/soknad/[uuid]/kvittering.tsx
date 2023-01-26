@@ -17,13 +17,10 @@ import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
-import {
-  DOKUMENTKRAV_SVAR_SENDER_SENERE,
-  DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-} from "../../../constants";
 import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { mockPersonalia } from "../../../localhost-data/personalia";
+import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
 
 interface IProps {
   errorCode: number | null;
@@ -106,11 +103,7 @@ export async function getServerSideProps(
     };
   }
 
-  const missingDocuments = dokumentkrav?.krav.filter(
-    (dokumentkrav) =>
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE ||
-      dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE
-  );
+  const missingDocuments = dokumentkrav && getMissingDokumentkrav(dokumentkrav);
 
   if (missingDocuments && missingDocuments.length > 0) {
     soknadStatus.status = "ManglerDokumenter";

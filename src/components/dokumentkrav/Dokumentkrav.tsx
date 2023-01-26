@@ -17,7 +17,7 @@ import { useFirstRender } from "../../hooks/useFirstRender";
 import styles from "./Dokumentkrav.module.css";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { DokumentkravTitle } from "./DokumentkravTitle";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { AlertText } from "../alert-text/AlertText";

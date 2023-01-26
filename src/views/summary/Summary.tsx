@@ -22,12 +22,15 @@ import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
 import { trackSkjemaFullført } from "../../amplitude.tracking";
+import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
 interface IProps {
   personalia: IPersonalia | null;
 }
 
 export function Summary(props: IProps) {
   const { personalia } = props;
+  const { dokumentkravList } = useDokumentkrav();
 
   const router = useRouter();
   const { uuid } = useUuid();
@@ -46,6 +49,7 @@ export function Summary(props: IProps) {
   const soknadCompleteErrorRef = useRef<HTMLDivElement>(null);
   const textId = "oppsummering";
   const textPersonaliaId = "personalia";
+  const textDokumentkravId = "oppsummering.seksjon.dokumentkrav";
   const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
 
@@ -141,6 +145,26 @@ export function Summary(props: IProps) {
             </Accordion.Item>
           );
         })}
+
+        {dokumentkravList && dokumentkravList.krav.length > 0 && (
+          <Accordion.Item>
+            <Accordion.Header>{getAppText(textDokumentkravId)}</Accordion.Header>
+            <Accordion.Content>
+              <>
+                <ul className={styles.dokumentkravList}>
+                  {dokumentkravList.krav.map((krav) => (
+                    <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
+                  ))}
+                </ul>
+                <Link href={`/soknad/${uuid}/dokumentasjon`} passHref>
+                  <Button variant="primary" as="a">
+                    {getAppText("oppsummering.knapp.endre-svar")}
+                  </Button>
+                </Link>
+              </>
+            </Accordion.Content>
+          </Accordion.Item>
+        )}
       </Accordion>
 
       <ConfirmationPanel

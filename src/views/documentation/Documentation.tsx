@@ -11,7 +11,7 @@ import {
   IDokumentkravChanges,
   IDokumentkravList,
 } from "../../types/documentation.types";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { ErrorList, ErrorListItem } from "../../components/error-list/ErrorList";
 import { DokumentkravBundleErrorModal } from "../../components/dokumentkrav/DokumentkravBundleErrorModal";
 import { useDokumentkravBundler } from "../../hooks/dokumentkrav/useDokumentkravBundler";
