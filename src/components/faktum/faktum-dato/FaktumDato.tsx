@@ -83,7 +83,6 @@ function FaktumDatoComponent(
 
   function applicationDateWarning() {
     const earliestApplicationDate = currentAnswer && subWeeks(new Date(currentAnswer), 2);
-    const latestApplicationDate = currentAnswer && subWeeks(new Date(currentAnswer), 3);
 
     return (
       <Alert
@@ -95,7 +94,7 @@ function FaktumDatoComponent(
         <div className={styles.faktumDatoWarningSuggestedDate}>
           <FormattedDate date={earliestApplicationDate as string} short />
           {" - "}
-          <FormattedDate date={latestApplicationDate as string} short />
+          <FormattedDate date={currentAnswer as string} short />
         </div>
         {getAppText("validering.dato-faktum.soknadsdato-varsel.slutt-tekst")}
       </Alert>
