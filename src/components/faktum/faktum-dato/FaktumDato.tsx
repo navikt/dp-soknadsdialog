@@ -1,8 +1,8 @@
-import { useEffect, useState, forwardRef, Ref } from "react";
-import { Alert, UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
+import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
+import { Ref, forwardRef, useEffect, useState } from "react";
+import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -13,6 +13,7 @@ import { IQuizDatoFaktum } from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
+import { FaktumDatoWarning } from "./FaktumDatoWarning";
 
 export const FaktumDato = forwardRef(FaktumDatoComponent);
 
@@ -77,7 +78,6 @@ function FaktumDatoComponent(
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  // Wasning mesage is specific for faktum "faktum.dagpenger-soknadsdato"
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
   return (
@@ -100,15 +100,7 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && (
-        <Alert
-          data-testid="faktum.soknadsdato-varsel"
-          variant="warning"
-          className={styles.faktumDatoWarningSpacing}
-        >
-          {getAppText("validering.dato-faktum.soknadsdato-varsel")}
-        </Alert>
-      )}
+      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
     </div>
   );
 }

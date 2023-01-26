@@ -18,11 +18,15 @@
   margin-top: var(--a-spacing-4);
 }
 
+.faktumDatoWarningSuggestedDate {
+  margin: var(--a-spacing-4) 0;
+}
+
 .dokumentkravContainer {
   display: flex;
 }
 
 .dokumentkravContainer svg {
   flex-shrink: 0;
-  margin-right: var(--navds-spacing-1);
+  margin-right: var(--a-spacing-1);
 }
