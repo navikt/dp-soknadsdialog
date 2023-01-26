@@ -89,8 +89,8 @@ function FaktumLandComponent(
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
         options={options}
-        currentValue={currentAnswer || "Velg et land"}
-        placeHolderText={"Velg et land"}
+        currentValue={currentAnswer || getAppText("faktum-land.velg-et-land")}
+        placeHolderText={getAppText("faktum-land.velg-et-land")}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
