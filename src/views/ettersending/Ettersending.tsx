@@ -9,7 +9,7 @@ import { usePutRequest } from "../../hooks/usePutRequest";
 import { useUuid } from "../../hooks/useUuid";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { useSanity } from "../../context/sanity-context";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { PortableText } from "@portabletext/react";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import {

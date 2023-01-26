@@ -162,9 +162,7 @@ describe("Receipt", () => {
         </MockContext>
       );
 
-      await waitFor(() => {
-        expect(screen.queryByText(dokumentkrav.beskrivendeId)).toBeInTheDocument();
-      });
+      expect(screen.queryByText(dokumentkrav.beskrivendeId, { exact: false })).toBeInTheDocument();
     });
   });
 });

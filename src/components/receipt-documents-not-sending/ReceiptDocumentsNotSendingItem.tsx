@@ -1,10 +1,11 @@
 import React from "react";
 import { BodyShort, Heading, ReadMore } from "@navikt/ds-react";
-import { DOKUMENTKRAV_SVAR_SENDER_IKKE, DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE } from "../../constants";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import { PdfView } from "../../views/pdf/Pdf";
 import { PortableText } from "@portabletext/react";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
+import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -18,7 +19,7 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
   return (
     <li className="my-6">
       <Heading level="3" size="xsmall">
-        {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+        <DokumentkravTitle dokumentkrav={dokumentkrav} />
       </Heading>
 
       {dokumentkravText?.description && pdfView === "brutto" && (
@@ -26,16 +27,8 @@ export function ReceiptDocumentsNotSendingItem({ dokumentkrav, pdfView }: IProps
       )}
 
       <BodyShort>
-        <>
-          {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-
-          {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE && (
-            <>{getAppText("dokumentkrav.begrunnelse.sendt-tidligere")}</>
-          )}
-          {dokumentkrav.svar === DOKUMENTKRAV_SVAR_SENDER_IKKE && (
-            <>{getAppText("dokumentkrav.begrunnelse.sender-ikke")}</>
-          )}
-        </>
+        {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
+        <DokumentkravSvar dokumentkrav={dokumentkrav} />
       </BodyShort>
 
       {pdfView && (

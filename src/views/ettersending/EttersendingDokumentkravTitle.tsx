@@ -1,7 +1,7 @@
 import React from "react";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { Heading, Tag } from "@navikt/ds-react";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./Ettersending.module.css";
 

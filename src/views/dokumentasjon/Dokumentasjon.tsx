@@ -13,7 +13,7 @@ import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { useUuid } from "../../hooks/useUuid";
 import { useRouter } from "next/router";
-import { DokumentkravTitle } from "../../components/dokumentkrav/DokumentkravTitle";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";

@@ -6,6 +6,8 @@ import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";
 import { PdfView } from "../../views/pdf/Pdf";
 import React from "react";
+import { DokumentkravTitle } from "../dokumentkrav-title/DokumentkravTitle";
+import { DokumentkravSvar } from "../dokumentkrav-svar/DokumentkravSvar";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -21,7 +23,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProp
       <div className={styles.dokumentkravTitle}>
         {pdfView && (
           <Heading level="3" size="xsmall">
-            {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+            <DokumentkravTitle dokumentkrav={dokumentkrav} />
           </Heading>
         )}
 
@@ -33,7 +35,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProp
               target="_blank"
             >
               <Heading level="3" size="xsmall">
-                {dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId}
+                <DokumentkravTitle dokumentkrav={dokumentkrav} />
               </Heading>
             </Link>
 
@@ -50,7 +52,7 @@ export function ReceiptDokumentkravUploadedItem({ dokumentkrav, pdfView }: IProp
 
       <BodyShort>
         {pdfView && <strong>{getAppText("pdf.faktum.svar")}</strong>}
-        {getAppText("kvittering.tekst.sendt-av-deg")}
+        <DokumentkravSvar dokumentkrav={dokumentkrav} />
       </BodyShort>
 
       {dokumentkravText?.helpText && pdfView !== "netto" && (

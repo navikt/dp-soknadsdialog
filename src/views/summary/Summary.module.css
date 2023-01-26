@@ -1,3 +1,14 @@
 .notCompleteTag {
   margin-left: var(--a-spacing-4);
 }
+
+.dokumentkravList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.dokumentkravList li {
+  margin-bottom: var(--a-spacing-10);
+}

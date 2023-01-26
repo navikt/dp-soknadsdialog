@@ -55,8 +55,6 @@ spec:
       value: {{sentry_env}}
     - name: VEILARBPROXY_URL
       value: {{veilarbproxyUrl}}
-    - name: ASSET_PREFIX
-      value: {{cdn.url}}
   idporten:
     enabled: true
     sidecar:

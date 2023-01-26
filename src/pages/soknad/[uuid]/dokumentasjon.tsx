@@ -4,7 +4,6 @@ import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { Alert } from "@navikt/ds-react";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
@@ -12,6 +11,7 @@ import { getSession } from "../../../auth.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import ErrorPage from "../../_error";
 
 interface IProps {
   errorCode: number | null;
@@ -83,17 +83,21 @@ export async function getServerSideProps(
 }
 
 export default function DocumentPage(props: IProps) {
-  if (!props.soknadState) {
-    return <Alert variant="error">Quiz er ducked</Alert>;
-  }
+  const { soknadState, dokumentkrav, errorCode } = props;
 
-  if (!props.dokumentkrav) {
-    return <Alert variant="info">Ingen dokumentasjonskrav tilgjengelig på søknaden</Alert>;
+  if (errorCode || !soknadState || !dokumentkrav) {
+    return (
+      <ErrorPage
+        title="Vi har tekniske problemer akkurat nå"
+        details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
+        statusCode={errorCode || 500}
+      />
+    );
   }
 
   return (
-    <QuizProvider initialState={props.soknadState}>
-      <DokumentkravProvider initialState={props.dokumentkrav}>
+    <QuizProvider initialState={soknadState}>
+      <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>
     </QuizProvider>
