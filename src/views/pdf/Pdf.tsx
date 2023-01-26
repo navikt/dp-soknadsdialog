@@ -32,7 +32,7 @@ export function Pdf(props: IProps) {
   const { soknadState } = useQuiz();
 
   const missingDocuments: IDokumentkrav[] = getMissingDokumentkrav(dokumentkravList);
-  const uploadedDocuments = getUploadedDokumentkrav(dokumentkravList);
+  const uploadedDocuments: IDokumentkrav[] = getUploadedDokumentkrav(dokumentkravList);
   const notSendingDocuments: IDokumentkrav[] = getNotSendingDokumentkrav(dokumentkravList);
 
   return (

@@ -1,4 +1,3 @@
-import React from "react";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { useSanity } from "../../context/sanity-context";
 import {
@@ -16,25 +15,18 @@ interface IProps {
 export function DokumentkravSvar({ dokumentkrav }: IProps) {
   const { getAppText } = useSanity();
 
-  let svarText: string | undefined;
-
   switch (dokumentkrav.svar) {
     case DOKUMENTKRAV_SVAR_SEND_NAA:
-      svarText = "dokumentkrav.begrunnelse.sendt-av-deg";
-      break;
+      return <>{getAppText("dokumentkrav.begrunnelse.sendt-av-deg")}</>;
     case DOKUMENTKRAV_SVAR_SENDER_SENERE:
-      svarText = "dokumentkrav.begrunnelse.sendes-av-deg";
-      break;
+      return <>{getAppText("dokumentkrav.begrunnelse.sendes-av-deg")}</>;
     case DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE:
-      svarText = "dokumentkrav.begrunnelse.sendt-tidligere";
-      break;
+      return <>{getAppText("dokumentkrav.begrunnelse.sendt-tidligere")}</>;
     case DOKUMENTKRAV_SVAR_SENDER_IKKE:
-      svarText = "dokumentkrav.begrunnelse.sender-ikke";
-      break;
+      return <>{getAppText("dokumentkrav.begrunnelse.sender-ikke")}</>;
     case DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE:
-      svarText = "dokumentkrav.begrunnelse.sendes-av-andre";
-      break;
+      return <>{getAppText("dokumentkrav.begrunnelse.sendes-av-andre")}</>;
+    default:
+      return <></>;
   }
-
-  return <>{svarText && getAppText(svarText)}</>;
 }
