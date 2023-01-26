@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { IDokumentkrav } from "../../types/documentation.types";
+import { ISanityAlertText } from "../../types/sanity.types";
 import { IDokumentkravSvar } from "../../pages/api/documentation/svar";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
@@ -15,30 +16,33 @@ import { FileList } from "../../components/file-list/FileList";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { usePrevious } from "../../hooks/usePrevious";
 import { useFirstRender } from "../../hooks/useFirstRender";
-import styles from "./Dokumentasjon.module.css";
-import { ISanityAlertText } from "../../types/sanity.types";
 import { AlertText } from "../../components/alert-text/AlertText";
+import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
+import styles from "./Dokumentasjon.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
   addDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
   removeDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
-  hasError: boolean;
+  missingRequiredAnswers: boolean;
+  hasBundleError: boolean;
   resetError: () => void;
 }
 
-type DokumentkravError = "missingAnswer" | "missingBegrunnelse" | "missingFiles";
+type DokumentkravError = "missingAnswer" | "missingBegrunnelse" | "missingFiles" | "bundleError";
 
 export function DokumentkravItem(props: IProps) {
-  const { uuid } = useUuid();
-  const isFirstRender = useFirstRender();
   const {
     dokumentkrav,
-    hasError,
+    missingRequiredAnswers,
     addDokumentkravToBundle,
     removeDokumentkravToBundle,
+    hasBundleError,
     resetError,
   } = props;
+  const { uuid } = useUuid();
+  const isFirstRender = useFirstRender();
+
   const { saveDokumentkrav, getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { handleUploadedFiles, uploadedFiles } = useFileUploader(dokumentkrav.filer);
@@ -55,7 +59,7 @@ export function DokumentkravItem(props: IProps) {
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   useEffect(() => {
-    if (hasError) {
+    if (missingRequiredAnswers) {
       if (!dokumentkrav.svar) {
         setDokumentkravError("missingAnswer");
       } else if (dokumentkrav.svar === "dokumentkrav.svar.send.naa") {
@@ -63,10 +67,12 @@ export function DokumentkravItem(props: IProps) {
       } else {
         setDokumentkravError("missingBegrunnelse");
       }
+    } else if (hasBundleError) {
+      setDokumentkravError("bundleError");
     } else {
       dokumentkravError && setDokumentkravError(undefined);
     }
-  }, [hasError]);
+  }, [missingRequiredAnswers, hasBundleError]);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -184,7 +190,17 @@ export function DokumentkravItem(props: IProps) {
         />
       )}
 
-      {dokumentkravError === "missingFiles" && <div>TODO(sanity) Du mangler filer</div>}
+      {dokumentkravError === "missingFiles" && (
+        <div>
+          <ValidationMessage message={getAppText("dokumentkrav.feilmelding.mangler-filer")} />
+        </div>
+      )}
+
+      {dokumentkravError === "bundleError" && (
+        <div>
+          <ValidationMessage message={getAppText("dokumentkrav.feilmelding.bundle-error")} />
+        </div>
+      )}
     </div>
   );
 }

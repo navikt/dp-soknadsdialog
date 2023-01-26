@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
+import { Button, Detail, ErrorSummary, Heading } from "@navikt/ds-react";
 import { PageMeta } from "../../components/PageMeta";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
@@ -18,6 +18,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
+import styles from "./Dokumentasjon.module.css";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -39,12 +40,15 @@ export function Dokumentasjon() {
   } = useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
-  const dokumentasjonsText = getInfosideText("dokumentasjonskrav");
   const firstUnansweredDokumentkrav = getFirstUnansweredDokumentkrav();
   const firstUnansweredIndex = dokumentkravList.krav.findIndex(
     (dokumentkrav) => dokumentkrav.id === firstUnansweredDokumentkrav?.id
   );
   const allDokumentkravAnswered = firstUnansweredIndex === -1;
+
+  const dokumentasjonsText = getInfosideText("dokumentasjonskrav");
+  const numberOfDokumentkravText = getAppText("dokumentkrav.antall-krav-av");
+  const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
@@ -110,21 +114,31 @@ export function Dokumentasjon() {
         />
       )}
 
-      <Heading size={"medium"} level={"3"}>
-        TODO(sanity): Dokumenter du skal sende inn
+      <Heading size={"medium"} level={"3"} className={styles.dokumentkravTitle}>
+        {getAppText("dokumentasjon.dokumentkrav.tittel")}
       </Heading>
 
       {dokumentkravList.krav.map((dokumentkrav, index) => {
+        const dokumentkravNumber = index + 1;
+        const hasUnansweredError = dokumentkravError && index === firstUnansweredIndex;
+        const hasBundleError = dokumentkravWithBundleError.some(
+          (krav) => krav.id === dokumentkrav.id
+        );
+
         return (
           (index <= firstUnansweredIndex || allDokumentkravAnswered) && (
-            <DokumentkravItem
-              key={index}
-              dokumentkrav={dokumentkrav}
-              resetError={resetDokumentkravError}
-              removeDokumentkravToBundle={removeDokumentkrav}
-              addDokumentkravToBundle={addDokumentkravWithNewFiles}
-              hasError={dokumentkravError && index === firstUnansweredIndex}
-            />
+            <>
+              <Detail>{`${dokumentkravNumber} ${numberOfDokumentkravText} ${numberOfDokumentkrav}`}</Detail>
+              <DokumentkravItem
+                key={index}
+                dokumentkrav={dokumentkrav}
+                resetError={resetDokumentkravError}
+                removeDokumentkravToBundle={removeDokumentkrav}
+                addDokumentkravToBundle={addDokumentkravWithNewFiles}
+                hasBundleError={hasBundleError}
+                missingRequiredAnswers={hasUnansweredError}
+              />
+            </>
           )
         );
       })}

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../components/dokumentkrav/Dokumentkrav.module.css";
 import { TextField } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { PortableText } from "@portabletext/react";
 import { usePrevious } from "../../hooks/usePrevious";
+import styles from "./Dokumentasjon.module.css";
 
 interface IProps {
   svar?: string;
@@ -14,12 +14,8 @@ interface IProps {
   validationError?: boolean;
 }
 
-export function DokumentkravBegrunnelse({
-  begrunnelse,
-  svar,
-  setBegrunnelse,
-  validationError,
-}: IProps) {
+export function DokumentkravBegrunnelse(props: IProps) {
+  const { begrunnelse, svar, setBegrunnelse, validationError } = props;
   const isFirstRender = useFirstRender();
   const previousAnswer = usePrevious(svar);
   const { getAppText, getDokumentkravTextById } = useSanity();
