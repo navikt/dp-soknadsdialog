@@ -4,7 +4,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useDebouncedCallback } from "../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { PortableText } from "@portabletext/react";
-import { usePrevious } from "../../hooks/usePrevious";
+import { usePreviousValue } from "../../hooks/usePreviousValue";
 import styles from "./Dokumentasjon.module.css";
 
 interface IProps {
@@ -17,7 +17,7 @@ interface IProps {
 export function DokumentkravBegrunnelse(props: IProps) {
   const { begrunnelse, svar, setBegrunnelse, validationError } = props;
   const isFirstRender = useFirstRender();
-  const previousAnswer = usePrevious(svar);
+  const previousAnswer = usePreviousValue(svar);
   const { getAppText, getDokumentkravTextById } = useSanity();
   const [value, setValue] = useState(begrunnelse || "");
   const [debouncedText, setDebouncedText] = useState<string>(value);

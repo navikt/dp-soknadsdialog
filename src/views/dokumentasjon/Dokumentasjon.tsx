@@ -125,8 +125,8 @@ export function Dokumentasjon() {
           (krav) => krav.id === dokumentkrav.id
         );
 
-        return (
-          (index <= firstUnansweredIndex || allDokumentkravAnswered) && (
+        if (index <= firstUnansweredIndex || allDokumentkravAnswered) {
+          return (
             <>
               <Detail>{`${dokumentkravNumber} ${numberOfDokumentkravText} ${numberOfDokumentkrav}`}</Detail>
               <DokumentkravItem
@@ -136,11 +136,11 @@ export function Dokumentasjon() {
                 removeDokumentkravToBundle={removeDokumentkrav}
                 addDokumentkravToBundle={addDokumentkravWithNewFiles}
                 hasBundleError={hasBundleError}
-                missingRequiredAnswers={hasUnansweredError}
+                hasUnansweredError={hasUnansweredError}
               />
             </>
-          )
-        );
+          );
+        }
       })}
 
       <nav className="navigation-container">

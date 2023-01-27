@@ -14,7 +14,7 @@ import { useFileUploader } from "../../hooks/useFileUploader";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { FileList } from "../../components/file-list/FileList";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { usePrevious } from "../../hooks/usePrevious";
+import { usePreviousValue } from "../../hooks/usePreviousValue";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { AlertText } from "../../components/alert-text/AlertText";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
@@ -24,7 +24,7 @@ interface IProps {
   dokumentkrav: IDokumentkrav;
   addDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
   removeDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
-  missingRequiredAnswers: boolean;
+  hasUnansweredError: boolean;
   hasBundleError: boolean;
   resetError: () => void;
 }
@@ -34,7 +34,7 @@ type DokumentkravError = "missingAnswer" | "missingBegrunnelse" | "missingFiles"
 export function DokumentkravItem(props: IProps) {
   const {
     dokumentkrav,
-    missingRequiredAnswers,
+    hasUnansweredError,
     addDokumentkravToBundle,
     removeDokumentkravToBundle,
     hasBundleError,
@@ -55,11 +55,11 @@ export function DokumentkravItem(props: IProps) {
     begrunnelse: dokumentkrav.begrunnelse,
   });
 
-  const previousNumberOfUploadedFiles = usePrevious(uploadedFiles.length);
+  const previousNumberOfUploadedFiles = usePreviousValue(uploadedFiles.length);
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   useEffect(() => {
-    if (missingRequiredAnswers) {
+    if (hasUnansweredError) {
       if (!dokumentkrav.svar) {
         setDokumentkravError("missingAnswer");
       } else if (dokumentkrav.svar === "dokumentkrav.svar.send.naa") {
@@ -72,7 +72,7 @@ export function DokumentkravItem(props: IProps) {
     } else {
       dokumentkravError && setDokumentkravError(undefined);
     }
-  }, [missingRequiredAnswers, hasBundleError]);
+  }, [hasUnansweredError, hasBundleError]);
 
   useEffect(() => {
     if (!isFirstRender) {
@@ -144,7 +144,7 @@ export function DokumentkravItem(props: IProps) {
           legend={getAppText("dokumentkrav.velg-svaralternativ")}
           onChange={(svar) => handleSaveDokumentkrav({ svar, begrunnelse: "" })}
           value={dokumentkravSvar?.svar || ""}
-          error={dokumentkravError === "missingAnswer"}
+          error={dokumentkravError === "missingAnswer" && getAppText("validering.faktum.ubesvart")}
         >
           {dokumentkrav.gyldigeValg.map((textId) => {
             // We need a custom ID since multiple dokumentkrav are shown on the same page.
