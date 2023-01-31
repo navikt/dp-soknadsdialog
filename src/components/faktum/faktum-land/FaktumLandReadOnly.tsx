@@ -8,12 +8,17 @@ import { IFaktumReadOnly } from "../Faktum";
 import { HelpText } from "../../HelpText";
 import styles from "../Faktum.module.css";
 import { PortableText } from "@portabletext/react";
+import { AlertText } from "../../alert-text/AlertText";
+import { getLandGruppeId } from "../../../faktum.utils";
 
 export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const router = useRouter();
   const { faktum, showAllFaktumTexts } = props;
-  const { getFaktumTextById, getAppText } = useSanity();
+  const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+
+  const landGruppeId = faktum.svar && getLandGruppeId(faktum, faktum.svar);
+  const landGruppeText = getLandGruppeTextById(landGruppeId);
 
   return (
     <>
@@ -35,6 +40,11 @@ export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
           defaultOpen={true}
         />
       )}
+
+      {showAllFaktumTexts &&
+        (landGruppeText?.alertText?.title || landGruppeText?.alertText?.body) && (
+          <AlertText alertText={landGruppeText.alertText} />
+        )}
     </>
   );
 }

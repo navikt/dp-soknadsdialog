@@ -11,6 +11,9 @@ import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
+import { ISanityLandGruppe } from "../../../types/sanity.types";
+import { AlertText } from "../../alert-text/AlertText";
+import { getLandGruppeId } from "../../../faktum.utils";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -23,15 +26,17 @@ function FaktumLandComponent(
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { unansweredFaktumId } = useValidation();
-  const { getFaktumTextById, getAppText } = useSanity();
+  const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
+
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+  const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
     return optionA.label > optionB.label ? 1 : -1;
   };
 
-  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const options = faktum.gyldigeLand
     .map((code) => ({
       value: code,
@@ -56,6 +61,13 @@ function FaktumLandComponent(
     }
   }, [faktum.svar]);
 
+  useEffect(() => {
+    if (currentAnswer) {
+      const landGruppeId = getLandGruppeId(faktum, currentAnswer);
+      setLandGruppeText(getLandGruppeTextById(landGruppeId));
+    }
+  }, [currentAnswer]);
+
   function onSelect(value: string) {
     onChange ? onChange(faktum, value) : saveFaktum(value);
     setCurrentAnswer(value);
@@ -72,8 +84,8 @@ function FaktumLandComponent(
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
         options={options}
-        currentValue={currentAnswer || "Velg et land"}
-        placeHolderText={"Velg et land"}
+        currentValue={currentAnswer || getAppText("faktum-land.velg-et-land")}
+        placeHolderText={getAppText("faktum-land.velg-et-land")}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
@@ -81,6 +93,10 @@ function FaktumLandComponent(
 
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+      )}
+
+      {(landGruppeText?.alertText?.title || landGruppeText?.alertText?.body) && (
+        <AlertText alertText={landGruppeText.alertText} />
       )}
     </div>
   );
