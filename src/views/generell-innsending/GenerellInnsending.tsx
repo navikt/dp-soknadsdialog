@@ -13,7 +13,7 @@ import api from "../../api.utils";
 import { IDokumentkravList } from "../../types/documentation.types";
 import { useUuid } from "../../hooks/useUuid";
 import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
-import { useEttersending } from "../../hooks/dokumentkrav/useEttersending";
+import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { usePutRequest } from "../../hooks/usePutRequest";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
@@ -50,7 +50,7 @@ export function GenerellInnsending() {
     isAllDokumentkravValid,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
-  } = useEttersending();
+  } = useDokumentkravBundler();
   const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody>("documentation/svar");
   const [ferdigstillInnsending, ferdigstillInnsendingStatus] =
     usePutRequest<IFerdigstillBody>("soknad/ferdigstill");

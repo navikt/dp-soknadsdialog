@@ -75,7 +75,7 @@ async function sendBundleTilDpSoknad(
   dokumentkravId: string,
   urn: string,
   DPSoknadToken: string,
-  requestId: string
+  requestId?: string
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/bundle`;
   return apiFetch(
@@ -98,7 +98,7 @@ interface IMellomlagringBundle {
 async function bundleFilesMellomlagring(
   body: IMellomlagringBundle,
   mellomlagringToken: string,
-  requestId: string
+  requestId?: string
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
   return apiFetch(
