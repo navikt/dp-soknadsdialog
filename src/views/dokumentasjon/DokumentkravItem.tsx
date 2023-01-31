@@ -19,8 +19,8 @@ import { useFirstRender } from "../../hooks/useFirstRender";
 import { AlertText } from "../../components/alert-text/AlertText";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
-import styles from "./Dokumentasjon.module.css";
 import { useSetFocus } from "../../hooks/useSetFocus";
+import styles from "./Dokumentasjon.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -47,17 +47,19 @@ export function DokumentkravItem(props: IProps) {
   const isFirstRender = useFirstRender();
   const errorRef = useRef(null);
 
-  const { saveDokumentkrav, getDokumentkravList } = useDokumentkrav();
+  const { saveDokumentkravSvar, getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { handleUploadedFiles, uploadedFiles } = useFileUploader(dokumentkrav.filer);
   const { getAppText, getDokumentkravTextById, getDokumentkravSvarTextById } = useSanity();
 
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const [dokumentkravError, setDokumentkravError] = useState<DokumentkravError | undefined>();
-  const [dokumentkravSvar, setDokumentkravSvar] = useState<IDokumentkravSvar | undefined>({
-    svar: dokumentkrav.svar,
-    begrunnelse: dokumentkrav.begrunnelse,
-  });
+  const [dokumentkravSvar, setDokumentkravSvar] = useState<IDokumentkravSvar | undefined>(
+    dokumentkrav.svar && {
+      svar: dokumentkrav.svar,
+      begrunnelse: dokumentkrav.begrunnelse,
+    }
+  );
 
   const previousNumberOfUploadedFiles = usePreviousValue(uploadedFiles.length);
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
@@ -85,10 +87,6 @@ export function DokumentkravItem(props: IProps) {
   }, [dokumentkravError]);
 
   useEffect(() => {
-    if (!isFirstRender) {
-      saveDokumentkrav(uuid, { ...dokumentkrav, filer: uploadedFiles });
-    }
-
     const hasOneNewFile = !previousNumberOfUploadedFiles && uploadedFiles.length > 0;
     const allFilesDeleted =
       previousNumberOfUploadedFiles &&
@@ -128,12 +126,14 @@ export function DokumentkravItem(props: IProps) {
   }, [dokumentkrav.svar]);
 
   useEffect(() => {
-    setDokumentkravSvar({ svar: dokumentkrav.svar, begrunnelse: dokumentkrav.begrunnelse });
-  }, [dokumentkrav]);
+    if (dokumentkrav.svar) {
+      setDokumentkravSvar({ svar: dokumentkrav.svar, begrunnelse: dokumentkrav.begrunnelse });
+    }
+  }, [dokumentkrav.svar]);
 
   async function handleSaveDokumentkrav(value: IDokumentkravSvar) {
     setDokumentkravSvar(value);
-    await saveDokumentkrav(uuid, { ...dokumentkrav, ...value });
+    await saveDokumentkravSvar({ uuid, dokumentkravId: dokumentkrav.id, dokumentkravSvar: value });
   }
 
   return (

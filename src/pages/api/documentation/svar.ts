@@ -14,7 +14,7 @@ export interface IDokumentkravSvarBody {
 }
 
 export interface IDokumentkravSvar {
-  svar?: GyldigDokumentkravSvar;
+  svar: GyldigDokumentkravSvar;
   begrunnelse?: string;
 }
 

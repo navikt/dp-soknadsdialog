@@ -9,7 +9,7 @@ export interface IDokumentkravContext {
   dokumentkravList: IDokumentkravList;
   getDokumentkravList: () => void;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
-  saveDokumentkrav: (uuid: string, dokumentkrav: IDokumentkrav) => Promise<void>;
+  saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
 }
 
 export const DokumentkravContext = createContext<IDokumentkravContext | undefined>(undefined);
@@ -22,7 +22,7 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
   const router = useRouter();
   const { uuid } = router.query;
   const [dokumentkravList, setDokumentkravList] = useState<IDokumentkravList>(props.initialState);
-  const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody, IDokumentkravList>(
+  const [saveDokumentkravSvarAsync] = usePutRequest<IDokumentkravSvarBody, IDokumentkravList>(
     "documentation/svar",
     true
   );
@@ -36,15 +36,8 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     }
   }
 
-  async function saveDokumentkrav(uuid: string, dokumentkrav: IDokumentkrav) {
-    const updatedDokumentkrav = await saveDokumentkravSvar({
-      uuid,
-      dokumentkravId: dokumentkrav.id,
-      dokumentkravSvar: {
-        svar: dokumentkrav.svar,
-        begrunnelse: dokumentkrav.begrunnelse,
-      },
-    });
+  async function saveDokumentkravSvar(value: IDokumentkravSvarBody) {
+    const updatedDokumentkrav = await saveDokumentkravSvarAsync(value);
 
     if (updatedDokumentkrav) {
       setDokumentkravList(updatedDokumentkrav);
@@ -69,7 +62,7 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
         dokumentkravList,
         getDokumentkravList,
         getFirstUnansweredDokumentkrav,
-        saveDokumentkrav,
+        saveDokumentkravSvar,
       }}
     >
       {props.children}
