@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Heading, Radio, RadioGroup } from "@navikt/ds-react";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { IDokumentkrav } from "../../types/documentation.types";
@@ -18,7 +18,9 @@ import { usePreviousValue } from "../../hooks/usePreviousValue";
 import { useFirstRender } from "../../hooks/useFirstRender";
 import { AlertText } from "../../components/alert-text/AlertText";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import styles from "./Dokumentasjon.module.css";
+import { useSetFocus } from "../../hooks/useSetFocus";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -41,7 +43,9 @@ export function DokumentkravItem(props: IProps) {
     resetError,
   } = props;
   const { uuid } = useUuid();
+  const { setFocus } = useSetFocus();
   const isFirstRender = useFirstRender();
+  const errorRef = useRef(null);
 
   const { saveDokumentkrav, getDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
@@ -75,6 +79,12 @@ export function DokumentkravItem(props: IProps) {
   }, [hasUnansweredError, hasBundleError]);
 
   useEffect(() => {
+    if (dokumentkravError) {
+      setFocus(errorRef);
+    }
+  }, [dokumentkravError]);
+
+  useEffect(() => {
     if (!isFirstRender) {
       saveDokumentkrav(uuid, { ...dokumentkrav, filer: uploadedFiles });
     }
@@ -90,7 +100,7 @@ export function DokumentkravItem(props: IProps) {
       getDokumentkravList();
     }
 
-    if (uploadedFiles.length > 0 && dokumentkrav.svar === "dokumentkrav.svar.send.naa") {
+    if (uploadedFiles.length > 0 && dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA) {
       addDokumentkravToBundle({
         ...dokumentkrav,
         filer: [...dokumentkrav.filer, ...uploadedFiles],
@@ -107,7 +117,7 @@ export function DokumentkravItem(props: IProps) {
       setAlertText(getDokumentkravSvarTextById(dokumentkrav.svar)?.alertText);
     }
 
-    if (uploadedFiles.length > 0 && dokumentkrav.svar === "dokumentkrav.svar.send.naa") {
+    if (uploadedFiles.length > 0 && dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA) {
       addDokumentkravToBundle({
         ...dokumentkrav,
         filer: [...dokumentkrav.filer, ...uploadedFiles],
@@ -129,8 +139,7 @@ export function DokumentkravItem(props: IProps) {
   return (
     <div id={dokumentkrav.id} className={styles.dokumentkravItem}>
       <Heading size="small" level="3" spacing>
-        {dokumentkravText ? dokumentkravText.title : dokumentkrav.beskrivendeId}
-        {dokumentkrav.beskrivelse && ` (${dokumentkrav.beskrivelse})`}
+        <DokumentkravTitle dokumentkrav={dokumentkrav} />
       </Heading>
 
       {dokumentkravText?.description && <PortableText value={dokumentkravText.description} />}
@@ -191,13 +200,13 @@ export function DokumentkravItem(props: IProps) {
       )}
 
       {dokumentkravError === "missingFiles" && (
-        <div>
+        <div ref={errorRef}>
           <ValidationMessage message={getAppText("dokumentkrav.feilmelding.mangler-filer")} />
         </div>
       )}
 
       {dokumentkravError === "bundleError" && (
-        <div>
+        <div ref={errorRef}>
           <ValidationMessage message={getAppText("dokumentkrav.feilmelding.bundle-error")} />
         </div>
       )}
