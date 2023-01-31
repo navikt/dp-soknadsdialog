@@ -28,7 +28,7 @@ function FaktumPeriodeComponent(
 ) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
@@ -51,10 +51,10 @@ function FaktumPeriodeComponent(
   }, [debouncedPeriode]);
 
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer(undefined);
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ? faktum.svar : null);
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function getDefaultSelectedValue(): IDateRange | undefined {
     if (currentAnswer?.fom) {
@@ -161,6 +161,7 @@ function FaktumPeriodeComponent(
               label={faktumTextFra}
               placeholder={getAppText("datovelger.dato-format")}
               error={fomErrorMessage}
+              disabled={isLocked}
             />
 
             <UNSAFE_DatePicker.Input
@@ -168,6 +169,7 @@ function FaktumPeriodeComponent(
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
               error={tomDateIsBeforeFomDate ? getTomIsBeforeTomErrorMessage() : tomErrorMessage}
+              disabled={isLocked}
             />
           </div>
         </UNSAFE_DatePicker>

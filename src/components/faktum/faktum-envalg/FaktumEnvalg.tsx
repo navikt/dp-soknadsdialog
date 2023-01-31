@@ -20,10 +20,10 @@ function FaktumEnvalgComponent(
 ) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
@@ -34,10 +34,10 @@ function FaktumEnvalgComponent(
   }, [currentAnswer]);
 
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ?? "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -60,6 +60,7 @@ function FaktumEnvalgComponent(
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        disabled={isLocked}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

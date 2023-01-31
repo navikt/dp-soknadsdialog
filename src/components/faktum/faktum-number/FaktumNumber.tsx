@@ -20,12 +20,12 @@ function FaktumNumberComponent(
 ) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { errorMessage, isValid, updateErrorMessage } = useValidateFaktumNumber(faktum);
 
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() || "");
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar?.toString() ?? "");
   const [debouncedValue, setDebouncedValue] = useState<number | null>(faktum.svar || null);
   const debouncedChange = useDebouncedCallback(setDebouncedValue, 500);
 
@@ -36,10 +36,10 @@ function FaktumNumberComponent(
   }, [debouncedValue]);
 
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== debouncedValue) {
+      setCurrentAnswer(faktum.svar ? faktum.svar.toString() : "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
@@ -102,6 +102,7 @@ function FaktumNumberComponent(
         onChange={onValueChange}
         onBlur={debouncedChange.flush}
         error={errorMessage}
+        disabled={isLocked}
       />
 
       {faktumTexts?.helpText && (

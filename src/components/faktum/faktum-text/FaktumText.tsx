@@ -21,7 +21,7 @@ export function FaktumTextComponent(
 ) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
 
@@ -40,10 +40,10 @@ export function FaktumTextComponent(
   }, [debouncedText]);
 
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ?? "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
@@ -90,6 +90,7 @@ export function FaktumTextComponent(
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
+          disabled={isLocked}
         />
       ) : (
         <TextField
@@ -103,6 +104,7 @@ export function FaktumTextComponent(
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
+          disabled={isLocked}
         />
       )}
 

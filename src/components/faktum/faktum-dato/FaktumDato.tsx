@@ -23,13 +23,13 @@ function FaktumDatoComponent(
 ) {
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
-  const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
+  const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
+  const [debouncedDate, setDebouncedDate] = useState<string>(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
   useEffect(() => {
@@ -39,15 +39,15 @@ function FaktumDatoComponent(
   }, [debouncedDate]);
 
   useEffect(() => {
-    if (!faktum.svar && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ? faktum.svar : "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
+      const debounceValue = value ? formatISO(value, { representation: "date" }) : "";
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
@@ -95,6 +95,7 @@ function FaktumDatoComponent(
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
           error={errorMessage}
+          disabled={isLocked}
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (

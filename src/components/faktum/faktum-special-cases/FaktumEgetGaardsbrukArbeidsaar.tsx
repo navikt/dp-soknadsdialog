@@ -1,10 +1,11 @@
-import { ChangeEvent, forwardRef, Ref, useState } from "react";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
 import { IFaktum } from "../Faktum";
+import { useFirstRender } from "../../../hooks/useFirstRender";
 
 const years: IDropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -21,11 +22,18 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
   ref: Ref<HTMLDivElement> | undefined
 ) {
   const { faktum, onChange } = props;
-  const { saveFaktumToQuiz } = useQuiz();
+  const isFirstRender = useFirstRender();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
+  const [currentAnswer, setCurrentAnswer] = useState<number | undefined>(faktum.svar);
+
+  useEffect(() => {
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ? faktum.svar : undefined);
+    }
+  }, [faktum]);
 
   function handleOnSelect(event: ChangeEvent<HTMLSelectElement>) {
     const value = parseInt(event.target.value);
@@ -48,6 +56,7 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        disabled={isLocked}
       />
     </div>
   );
