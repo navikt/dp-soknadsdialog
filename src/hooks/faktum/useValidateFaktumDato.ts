@@ -8,9 +8,11 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
-  isValid: (date: Date) => boolean | ((date: Date) => boolean);
+  validateDate: (date: Date | null) => void | ((date: Date | null) => void);
   getHasWarning: (date: Date) => boolean;
   errorMessage: string | undefined;
+  clearErrorMessage: () => void;
+  isValidDate: boolean;
 }
 
 const furetureDateAllowedList = [
@@ -27,6 +29,7 @@ const futureDateAllowedWithWarningList = [
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
+  const [isValidDate, setIsValidDate] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -37,38 +40,55 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
   }, [unansweredFaktumId]);
 
-  function isValid(date: Date) {
+  function validateDate(date: Date | null) {
+    setErrorMessage(undefined);
+
+    if (!date) {
+      setErrorMessage(getAppText("validering.ugyldig-dato"));
+      setIsValidDate(false);
+      return;
+    }
+
     const future = isFuture(date);
     const isValid = isWithinValidYearRange(date);
-
-    setErrorMessage(undefined);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
         setErrorMessage(getAppText("validering.ugyldig-dato"));
       }
 
-      return isValid;
+      setIsValidDate(isValid);
+      return;
     }
 
     if (!isValid) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
+      setIsValidDate(false);
+      return;
     }
 
     if (future) {
       setErrorMessage(getAppText("validering.fremtidig-dato"));
+      setIsValidDate(false);
+      return;
     }
 
-    return isValid && !future;
+    setIsValidDate(true);
   }
 
   function getHasWarning(date: Date) {
     return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
+  function clearErrorMessage() {
+    setErrorMessage(undefined);
+  }
+
   return {
     errorMessage,
-    isValid,
+    validateDate,
     getHasWarning,
+    clearErrorMessage,
+    isValidDate,
   };
 }

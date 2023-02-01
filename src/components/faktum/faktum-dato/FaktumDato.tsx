@@ -26,10 +26,11 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
-  const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
+  const { errorMessage, validateDate, getHasWarning, clearErrorMessage, isValidDate } =
+    useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
+  const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
+  const [debouncedDate, setDebouncedDate] = useState<string | null>(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function FaktumDatoComponent(
 
   useEffect(() => {
     if (!faktum.svar && !isFirstRender) {
-      setCurrentAnswer("");
+      setCurrentAnswer(null);
     }
   }, [faktum.svar]);
 
@@ -51,6 +52,12 @@ function FaktumDatoComponent(
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
+    onValidate: (value) => {
+      if (value.isEmpty) {
+        setCurrentAnswer("");
+        debouncedChange("");
+      }
+    },
   });
 
   // Use to prevent Escape key press to close both datepicker and modal simultaneously
@@ -60,17 +67,23 @@ function FaktumDatoComponent(
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function saveFaktum(value: string | undefined | null) {
+  function saveFaktum(value: string | null) {
+    if (value === "") {
+      clearErrorMessage();
+      saveFaktumToQuiz(faktum, null);
+      return;
+    }
+
+    validateDate(value ? new Date(value) : null);
+
     if (!value) {
       saveFaktumToQuiz(faktum, null);
+      return;
     }
 
-    if (value && !isValid(new Date(value))) {
-      saveFaktumToQuiz(faktum, null);
-    }
-
-    if (value && isValid(new Date(value))) {
-      saveFaktumToQuiz(faktum, value);
+    if (value) {
+      saveFaktumToQuiz(faktum, isValidDate ? value : null);
+      return;
     }
   }
 
