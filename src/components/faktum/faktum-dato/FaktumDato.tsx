@@ -28,8 +28,8 @@ function FaktumDatoComponent(
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
-  const [debouncedDate, setDebouncedDate] = useState<string>(currentAnswer);
+  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar);
+  const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ function FaktumDatoComponent(
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : "";
+      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
