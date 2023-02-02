@@ -35,6 +35,7 @@ function FaktumNumberComponent(
     }
   }, [debouncedValue]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (!isFirstRender && faktum.svar !== debouncedValue) {
       setCurrentAnswer(faktum.svar ? faktum.svar.toString() : "");

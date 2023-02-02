@@ -39,6 +39,7 @@ export function FaktumTextComponent(
     }
   }, [debouncedText]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (!isFirstRender && faktum.svar !== currentAnswer) {
       setCurrentAnswer(faktum.svar ?? "");

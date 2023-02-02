@@ -33,6 +33,7 @@ export function Section(props: IProps) {
       />
 
       {props.section?.fakta?.map((faktum, index) => {
+        // We should always only show one unanswered faktum at a time. The backend should ideally do it, but that is not always the case
         if (index <= firstUnansweredIndex || firstUnansweredIndex === -1)
           return (
             <Faktum

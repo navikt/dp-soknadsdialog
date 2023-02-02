@@ -37,13 +37,14 @@ function FaktumFlervalgComponent(
     setAlertTexts(alertTexts);
   }, [currentAnswer]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (!isFirstRender) {
       const previousAnswerString = JSON.stringify(currentAnswer);
       const currentAnswerString = JSON.stringify(faktum.svar);
 
       if (previousAnswerString !== currentAnswerString) {
-        setCurrentAnswer(faktum.svar ? faktum.svar : []);
+        setCurrentAnswer(faktum.svar ?? []);
       }
     }
   }, [faktum]);
