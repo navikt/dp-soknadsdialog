@@ -26,7 +26,7 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
-  const { errorMessage, validateDate, getHasWarning, clearErrorMessage } =
+  const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
     useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
@@ -74,7 +74,7 @@ function FaktumDatoComponent(
       return;
     }
 
-    const isValidDate = validateDate(value ? new Date(value) : null);
+    const isValidDate = validateAndIsValid(value ? new Date(value) : null);
     saveFaktumToQuiz(faktum, isValidDate ? value : null);
   }
 

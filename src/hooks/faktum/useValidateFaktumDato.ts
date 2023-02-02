@@ -8,7 +8,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
-  validateDate: (date: Date | null) => boolean | ((date: Date | null) => boolean);
+  validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
   getHasWarning: (date: Date) => boolean;
   errorMessage: string | undefined;
   clearErrorMessage: () => void;
@@ -38,7 +38,10 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
   }, [unansweredFaktumId]);
 
-  function validateDate(date: Date | null) {
+  // Validate input value
+  // Set or clear validation message based on validation state
+  // Return boolean validation state
+  function validateAndIsValid(date: Date | null): boolean {
     setErrorMessage(undefined);
 
     if (!date) {
@@ -80,7 +83,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
   return {
     errorMessage,
-    validateDate,
+    validateAndIsValid,
     getHasWarning,
     clearErrorMessage,
   };
