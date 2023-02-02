@@ -274,7 +274,6 @@ describe("FaktumDato", () => {
 
         await waitFor(() => {
           expect(onchange).toBeCalledTimes(1);
-          expect(onchange).toBeCalledTimes(1);
           expect(onchange).toBeCalledWith(faktumMockData, "");
           expect(warningMessage).not.toBeInTheDocument();
         });

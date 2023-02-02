@@ -26,7 +26,7 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
-  const { errorMessage, validateDate, getHasWarning, clearErrorMessage, isValidDate } =
+  const { errorMessage, validateDate, getHasWarning, clearErrorMessage } =
     useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
@@ -41,7 +41,7 @@ function FaktumDatoComponent(
 
   useEffect(() => {
     if (!faktum.svar && !isFirstRender) {
-      setCurrentAnswer(null);
+      setCurrentAnswer("");
     }
   }, [faktum.svar]);
 
@@ -61,7 +61,7 @@ function FaktumDatoComponent(
   });
 
   // Use to prevent Escape key press to close both datepicker and modal simultaneously
-  // This is a temporaty fix for ds-react version 2.0.9
+  // This is a temporaty fix for ds-react from version 2.0.9
   // Design system team are working on a better solution
   useEffect(() => {
     setDatePickerIsOpen(!!datepickerProps.open);
@@ -74,17 +74,8 @@ function FaktumDatoComponent(
       return;
     }
 
-    validateDate(value ? new Date(value) : null);
-
-    if (!value) {
-      saveFaktumToQuiz(faktum, null);
-      return;
-    }
-
-    if (value) {
-      saveFaktumToQuiz(faktum, isValidDate ? value : null);
-      return;
-    }
+    const isValidDate = validateDate(value ? new Date(value) : null);
+    saveFaktumToQuiz(faktum, isValidDate ? value : null);
   }
 
   const datePickerDescription = faktumTexts?.description ? (

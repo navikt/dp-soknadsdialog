@@ -8,11 +8,10 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
-  validateDate: (date: Date | null) => void | ((date: Date | null) => void);
+  validateDate: (date: Date | null) => boolean | ((date: Date | null) => boolean);
   getHasWarning: (date: Date) => boolean;
   errorMessage: string | undefined;
   clearErrorMessage: () => void;
-  isValidDate: boolean;
 }
 
 const furetureDateAllowedList = [
@@ -29,7 +28,6 @@ const futureDateAllowedWithWarningList = [
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const [isValidDate, setIsValidDate] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -45,8 +43,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     if (!date) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
-      setIsValidDate(false);
-      return;
+      return false;
     }
 
     const future = isFuture(date);
@@ -57,23 +54,20 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
         setErrorMessage(getAppText("validering.ugyldig-dato"));
       }
 
-      setIsValidDate(isValid);
-      return;
+      return isValid;
     }
 
     if (!isValid) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
-      setIsValidDate(false);
-      return;
+      return false;
     }
 
     if (future) {
       setErrorMessage(getAppText("validering.fremtidig-dato"));
-      setIsValidDate(false);
-      return;
+      return false;
     }
 
-    setIsValidDate(true);
+    return !future && isValid;
   }
 
   function getHasWarning(date: Date) {
@@ -89,6 +83,5 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     validateDate,
     getHasWarning,
     clearErrorMessage,
-    isValidDate,
   };
 }

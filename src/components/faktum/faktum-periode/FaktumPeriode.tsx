@@ -78,7 +78,7 @@ function FaktumPeriodeComponent(
   });
 
   // Use to prevent Escape key press to close both datepicker and modal simultaneously
-  // This is a temporaty fix for ds-react from from version 2.0.9
+  // This is a temporaty fix for ds-react from version 2.0.9
   // Design system team are working on a better solution
   useEffect(() => {
     setDatePickerIsOpen(!!datepickerProps.open);
