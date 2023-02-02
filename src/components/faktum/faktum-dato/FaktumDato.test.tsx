@@ -71,7 +71,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user removes an seleted date", () => {
-    test("Should post null to server", async () => {
+    test("Should call saveFaktum and post null to server", async () => {
       faktumMockData.svar = "2022-08-04";
       const user = userEvent.setup();
       const onchange = jest.fn();
@@ -87,7 +87,7 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, null);
+        expect(onchange).toBeCalledWith(faktumMockData, "");
       });
     });
   });
@@ -167,8 +167,8 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user types in different invalid date formats. Valid format is DDMMYYY or DD.MM.YYYY", () => {
-    test("Types in 10.10.10 should post null to server and show error message", async () => {
+  describe("When user types in different invalid date formats. Valid format is DDMMYYY, DD.MM.YYYY, DDMMYY or DD.MM.YY", () => {
+    test("Types in 10.10 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
 
@@ -182,16 +182,15 @@ describe("FaktumDato", () => {
       const datePickerError = document.querySelector(
         '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
-      await user.type(datepicker, "10.10.10");
+      await user.type(datepicker, "10.10");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
         expect(onchange).toBeCalledWith(faktumMockData, null);
         expect(datePickerError).toBeInTheDocument();
       });
     });
 
-    test("Types in 101010 should post null to server and show error message", async () => {
+    test("Types in 1010 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
       const onchange = jest.fn();
 
@@ -202,7 +201,7 @@ describe("FaktumDato", () => {
       );
 
       const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
-      await user.type(datepicker, "101010");
+      await user.type(datepicker, "1010");
       const datePickerError = document.querySelector(
         '*[id^="datepicker-input-error"]'
       ) as HTMLInputElement;
@@ -275,7 +274,7 @@ describe("FaktumDato", () => {
 
         await waitFor(() => {
           expect(onchange).toBeCalledTimes(1);
-          expect(onchange).toBeCalledWith(faktumMockData, null);
+          expect(onchange).toBeCalledWith(faktumMockData, "");
           expect(warningMessage).not.toBeInTheDocument();
         });
       });

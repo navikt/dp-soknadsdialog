@@ -26,10 +26,11 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
-  const { errorMessage, isValid, getHasWarning } = useValidateFaktumDato(faktum);
+  const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
+    useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar);
-  const [debouncedDate, setDebouncedDate] = useState(currentAnswer);
+  const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
+  const [debouncedDate, setDebouncedDate] = useState<string | null>(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
   useEffect(() => {
@@ -51,27 +52,30 @@ function FaktumDatoComponent(
       setCurrentAnswer(debounceValue);
       debouncedChange(debounceValue);
     },
+    onValidate: (value) => {
+      if (value.isEmpty) {
+        setCurrentAnswer("");
+        debouncedChange("");
+      }
+    },
   });
 
   // Use to prevent Escape key press to close both datepicker and modal simultaneously
-  // This is a temporaty fix for ds-react version 2.0.9
+  // This is a temporaty fix for ds-react from version 2.0.9
   // Design system team are working on a better solution
   useEffect(() => {
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function saveFaktum(value: string | undefined | null) {
-    if (!value) {
+  function saveFaktum(value: string | null) {
+    if (value === "") {
+      clearErrorMessage();
       saveFaktumToQuiz(faktum, null);
+      return;
     }
 
-    if (value && !isValid(new Date(value))) {
-      saveFaktumToQuiz(faktum, null);
-    }
-
-    if (value && isValid(new Date(value))) {
-      saveFaktumToQuiz(faktum, value);
-    }
+    const isValidDate = validateAndIsValid(value ? new Date(value) : null);
+    saveFaktumToQuiz(faktum, isValidDate ? value : null);
   }
 
   const datePickerDescription = faktumTexts?.description ? (

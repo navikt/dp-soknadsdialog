@@ -8,9 +8,10 @@ import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
-  isValid: (date: Date) => boolean | ((date: Date) => boolean);
+  validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
   getHasWarning: (date: Date) => boolean;
   errorMessage: string | undefined;
+  clearErrorMessage: () => void;
 }
 
 const furetureDateAllowedList = [
@@ -37,11 +38,19 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
   }, [unansweredFaktumId]);
 
-  function isValid(date: Date) {
+  // Validate input value
+  // Set or clear validation message based on validation state
+  // Return boolean validation state
+  function validateAndIsValid(date: Date | null): boolean {
+    setErrorMessage(undefined);
+
+    if (!date) {
+      setErrorMessage(getAppText("validering.ugyldig-dato"));
+      return false;
+    }
+
     const future = isFuture(date);
     const isValid = isWithinValidYearRange(date);
-
-    setErrorMessage(undefined);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
@@ -53,22 +62,29 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     if (!isValid) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
+      return false;
     }
 
     if (future) {
       setErrorMessage(getAppText("validering.fremtidig-dato"));
+      return false;
     }
 
-    return isValid && !future;
+    return !future && isValid;
   }
 
   function getHasWarning(date: Date) {
     return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
+  function clearErrorMessage() {
+    setErrorMessage(undefined);
+  }
+
   return {
     errorMessage,
-    isValid,
+    validateAndIsValid,
     getHasWarning,
+    clearErrorMessage,
   };
 }
