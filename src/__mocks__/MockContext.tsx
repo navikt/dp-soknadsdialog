@@ -6,12 +6,14 @@ import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
+import { MockQuizProvider } from "./MockQuizProvider";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
   soknadState?: IQuizState;
   quizSeksjoner?: IQuizSeksjon[];
   sanityTexts?: ISanityTexts;
+  mockQuizContext?: boolean;
 }
 
 export const mockSanityTexts: ISanityTexts = {
@@ -51,16 +53,27 @@ export function MockContext(props: PropsWithChildren<IProps>) {
     quizSeksjoner = [mockSection],
     soknadState = mockSoknadState,
     sanityTexts = mockSanityTexts,
+    mockQuizContext,
   } = props;
 
   return (
     <div id="__next">
       <SanityProvider initialState={sanityTexts}>
-        <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-          <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
-            <ValidationProvider>{children}</ValidationProvider>
-          </DokumentkravProvider>
-        </QuizProvider>
+        {mockQuizContext && (
+          <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
+              <ValidationProvider>{children}</ValidationProvider>
+            </DokumentkravProvider>
+          </MockQuizProvider>
+        )}
+
+        {!mockQuizContext && (
+          <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
+              <ValidationProvider>{children}</ValidationProvider>
+            </DokumentkravProvider>
+          </QuizProvider>
+        )}
       </SanityProvider>
     </div>
   );
