@@ -86,7 +86,7 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
-        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, "");
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
   });
@@ -266,7 +266,7 @@ describe("FaktumDato", () => {
 
         await waitFor(() => {
           expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
-          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, "");
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
           expect(warningMessage).not.toBeInTheDocument();
         });
       });
