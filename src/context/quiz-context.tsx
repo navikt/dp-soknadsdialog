@@ -15,6 +15,7 @@ export interface IQuizContext {
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   isLoading: boolean;
   isError: boolean;
+  isLocked: boolean;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -26,16 +27,28 @@ interface IProps {
 function QuizProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
   const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
   const [saveFaktum, saveFaktumStatus] = usePutRequest<ISaveFaktumBody, IQuizState>(
     "soknad/faktum/save",
     true
   );
 
   async function saveFaktumToQuiz(faktum: QuizFaktum, svar: QuizFaktumSvarType) {
+    if (isLoading) {
+      setIsLocked(true);
+      return;
+    }
+
+    setIsLoading(true);
     const response = await saveFaktum({ uuid, faktum, svar });
+
     if (response) {
       setSoknadState(response);
     }
+
+    setIsLocked(false);
+    setIsLoading(false);
   }
 
   async function saveGeneratorFaktumToQuiz(
@@ -56,6 +69,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         saveGeneratorFaktumToQuiz,
         isLoading: saveFaktumStatus === "pending",
         isError: saveFaktumStatus === "error",
+        isLocked,
       }}
     >
       {props.children}

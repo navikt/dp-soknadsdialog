@@ -15,6 +15,10 @@ interface IProps {
 export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
+  const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);
+  const firstUnansweredIndex = props.section.fakta.findIndex(
+    (faktum) => faktum.id === firstUnansweredFaktum?.id
+  );
 
   if (!props.section.beskrivendeId) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
@@ -28,14 +32,18 @@ export function Section(props: IProps) {
         showAllTexts={props.showAllTexts}
       />
 
-      {props.section?.fakta?.map((faktum) => (
-        <Faktum
-          key={faktum.beskrivendeId}
-          faktum={faktum}
-          readonly={props.readonly}
-          showAllFaktumTexts={props.showAllTexts}
-        />
-      ))}
+      {props.section?.fakta?.map((faktum, index) => {
+        // We should always only show one unanswered faktum at a time. The backend should ideally do it, but that is not always the case
+        if (index <= firstUnansweredIndex || firstUnansweredIndex === -1)
+          return (
+            <Faktum
+              key={faktum.beskrivendeId}
+              faktum={faktum}
+              readonly={props.readonly}
+              showAllFaktumTexts={props.showAllTexts}
+            />
+          );
+      })}
     </>
   );
 }

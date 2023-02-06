@@ -24,10 +24,10 @@ function FaktumLandComponent(
   const router = useRouter();
   const { faktum, onChange } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
-  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar || "");
+  const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
@@ -55,11 +55,12 @@ function FaktumLandComponent(
     }
   }, []);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ?? "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   useEffect(() => {
     if (currentAnswer) {
@@ -89,6 +90,7 @@ function FaktumLandComponent(
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        disabled={isLocked}
       />
 
       {faktumTexts?.helpText && (
