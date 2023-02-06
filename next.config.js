@@ -18,6 +18,9 @@ const myAppDirectives = {
     "https://sentry.gc.nav.no/api/138/security/?sentry_key=1d4d9592b0c4442889ba64e028a16c09",
 };
 
+/**
+ * @type {import("next").NextConfig}
+ */
 const config = {
   reactStrictMode: true,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
@@ -27,6 +30,9 @@ const config = {
   },
   assetPrefix: process.env.ASSET_PREFIX,
   productionBrowserSourceMaps: true,
+  experimental: {
+    largePageDataBytes: 256 * 1000, // Økt fra 128KB til 256K
+  },
   output: "standalone",
   swcMinify: true,
   publicRuntimeConfig: {
