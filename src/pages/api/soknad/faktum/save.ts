@@ -24,7 +24,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const requestId = uuidV4();
+  const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
