@@ -19,7 +19,7 @@ function FaktumFlervalgComponent(
   props: IFaktum<IQuizFlervalgFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
@@ -44,7 +44,7 @@ function FaktumFlervalgComponent(
   }, [faktum.svar]);
 
   function onSelection(value: string[]) {
-    onChange ? onChange(faktum, value) : saveFaktum(value);
+    saveFaktum(value);
     setCurrentAnswer(value);
   }
 

@@ -18,7 +18,7 @@ function FaktumNumberComponent(
   props: IFaktum<IQuizNumberFaktum>,
   ref: Ref<HTMLInputElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
@@ -31,7 +31,7 @@ function FaktumNumberComponent(
 
   useEffect(() => {
     if (!isFirstRender && debouncedValue !== faktum.svar) {
-      onChange ? onChange(faktum, debouncedValue) : saveFaktum(debouncedValue);
+      saveFaktum(debouncedValue);
     }
   }, [debouncedValue]);
 

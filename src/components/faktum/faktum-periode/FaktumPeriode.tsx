@@ -26,7 +26,7 @@ function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
@@ -46,7 +46,7 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      onChange ? onChange(faktum, debouncedPeriode) : saveFaktum(debouncedPeriode);
+      saveFaktum(debouncedPeriode);
     }
   }, [debouncedPeriode]);
 
