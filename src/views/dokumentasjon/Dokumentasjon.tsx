@@ -19,6 +19,7 @@ import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import styles from "./Dokumentasjon.module.css";
+import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -71,6 +72,7 @@ export function Dokumentasjon() {
       setDokumentkravError(true);
       return;
     }
+    const startetBundling = tidStart();
 
     let allBundlesSuccessful = true;
     for (const dokumentkrav of dokumentkravWithNewFiles) {
@@ -81,6 +83,7 @@ export function Dokumentasjon() {
     }
 
     if (allBundlesSuccessful) {
+      trackDokumentasjonLastetOpp(dokumentkravWithNewFiles.length, tidBruktSiden(startetBundling));
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
