@@ -35,7 +35,6 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const antallFiler = Number(req.body.filer?.length);
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
@@ -56,7 +55,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const { urn, storrelse } = await mellomlagringResponse.json();
     Metrics.bundleStørrelse.observe(storrelse);
-    if (!isNaN(antallFiler)) Metrics.bundleAntallFiler.observe(antallFiler);
+    if (!isNaN(fileUrns.length)) Metrics.bundleAntallFiler.observe(fileUrns.length);
 
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,
