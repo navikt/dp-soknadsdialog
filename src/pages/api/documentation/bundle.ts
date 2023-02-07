@@ -55,6 +55,9 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const { urn, storrelse } = await mellomlagringResponse.json();
     Metrics.bundleStørrelse.observe(storrelse);
+    console.info(
+      `Laget bundle urn=${urn} med ${fileUrns.length} filer med totalt ${storrelse} bytes`
+    );
     if (!isNaN(fileUrns.length)) Metrics.bundleAntallFiler.observe(fileUrns.length);
 
     const dpSoknadResponse = await sendBundleTilDpSoknad(
