@@ -37,6 +37,7 @@ export function Dokumentasjon() {
     removeDokumentkrav,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
+    setInitialDokumentkravWithNewFilesState,
   } = useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -49,6 +50,15 @@ export function Dokumentasjon() {
   const dokumentasjonsText = getInfosideText("dokumentasjonskrav");
   const numberOfDokumentkravText = getAppText("dokumentkrav.antall-krav-av");
   const numberOfDokumentkrav = dokumentkravList.krav.length;
+
+  useEffect(() => {
+    const dokumentkravToBundleState = dokumentkravList.krav.filter(
+      (dokumentkrav) =>
+        dokumentkrav.svar === "dokumentkrav.svar.send.naa" && dokumentkrav.filer.length > 0
+    );
+    // console.log("dokumentkravToBundleState: ", dokumentkravToBundleState);
+    setInitialDokumentkravWithNewFilesState(dokumentkravToBundleState);
+  }, []);
 
   useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
