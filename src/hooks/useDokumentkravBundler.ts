@@ -27,6 +27,10 @@ export function useDokumentkravBundler() {
     return true;
   }
 
+  function setInitialDokumentkravWithNewFilesState(dokumentkravList: IDokumentkrav[]) {
+    setDokumentkravWithNewFiles(dokumentkravList);
+  }
+
   function addDokumentkravWithNewFiles(dokumentkrav: IDokumentkrav) {
     const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithNewFiles);
 
@@ -92,6 +96,7 @@ export function useDokumentkravBundler() {
     addDokumentkravWithNewFiles,
     isAllDokumentkravValid,
     bundleAndSaveDokumentkrav,
+    setInitialDokumentkravWithNewFilesState,
   };
 }
 
