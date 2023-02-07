@@ -10,6 +10,7 @@ import {
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
 import { headersWithToken } from "../../../api/quiz-api";
+import Metrics from "../../../metrics";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -34,21 +35,29 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
+  const antallFiler = Number(req.body.filer?.length);
   const DPSoknadToken = await session.apiToken(audienceDPSoknad);
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
   try {
+    const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
       mellomlagringToken,
       requestId
     );
+    bundlingTimer();
+
     if (!mellomlagringResponse.ok) {
       logRequestError(mellomlagringResponse.statusText);
+      Metrics.bundleFeil.inc();
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
-    const { urn } = await mellomlagringResponse.json();
+    const { urn, storrelse } = await mellomlagringResponse.json();
+    Metrics.bundleStørrelse.observe(storrelse);
+    if (!isNaN(antallFiler)) Metrics.bundleAntallFiler.observe(antallFiler);
+
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,
       dokumentkravId,
