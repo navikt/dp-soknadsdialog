@@ -10,6 +10,7 @@ import {
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../sentry.logger";
 import { headersWithToken } from "../../../api/quiz-api";
+import Metrics from "../../../metrics";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -38,17 +39,24 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const mellomlagringToken = await session.apiToken(audienceMellomlagring);
 
   try {
+    const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
       mellomlagringToken,
       requestId
     );
+    bundlingTimer();
+
     if (!mellomlagringResponse.ok) {
       logRequestError(mellomlagringResponse.statusText);
+      Metrics.bundleFeil.inc();
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
-    const { urn } = await mellomlagringResponse.json();
+    const { urn, storrelse } = await mellomlagringResponse.json();
+    Metrics.bundleStørrelse.observe(storrelse);
+    if (!isNaN(fileUrns.length)) Metrics.bundleAntallFiler.observe(fileUrns.length);
+
     const dpSoknadResponse = await sendBundleTilDpSoknad(
       uuid,
       dokumentkravId,

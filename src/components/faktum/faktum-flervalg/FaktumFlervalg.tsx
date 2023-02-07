@@ -19,13 +19,14 @@ function FaktumFlervalgComponent(
   props: IFaktum<IQuizFlervalgFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined
 ) {
+
   const { faktum } = props;
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [alertTexts, setAlertTexts] = useState<ISanityAlertText[]>([]);
-  const [currentAnswer, setCurrentAnswer] = useState(props.faktum.svar || []);
+  const [currentAnswer, setCurrentAnswer] = useState(faktum.svar ?? []);
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
@@ -37,11 +38,17 @@ function FaktumFlervalgComponent(
     setAlertTexts(alertTexts);
   }, [currentAnswer]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer([]);
+    if (!isFirstRender) {
+      const previousAnswerString = JSON.stringify(currentAnswer);
+      const currentAnswerString = JSON.stringify(faktum.svar);
+
+      if (previousAnswerString !== currentAnswerString) {
+        setCurrentAnswer(faktum.svar ?? []);
+      }
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onSelection(value: string[]) {
     saveFaktum(value);
@@ -64,6 +71,7 @@ function FaktumFlervalgComponent(
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
+        disabled={isLocked}
       >
         {faktum.gyldigeValg.map((textId) => {
           const svaralternativText = getSvaralternativTextById(textId);

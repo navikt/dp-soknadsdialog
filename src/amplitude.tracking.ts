@@ -38,3 +38,19 @@ export function trackSkjemaFullført(skjemanavn: string, skjemaId: string) {
     skjemaId,
   });
 }
+
+export function trackDokumentasjonLastetOpp(antallFiler: number, sekundBrukt: number) {
+  track("dokumentasjon lastet opp", {
+    antallFiler,
+    sekundBrukt,
+  });
+}
+
+export function tidStart(): Date {
+  return new Date();
+}
+
+export function tidBruktSiden(start: Date): number {
+  const slutt = new Date().getTime();
+  return (slutt - start.getTime()) / 1000;
+}

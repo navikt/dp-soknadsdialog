@@ -1,5 +1,6 @@
 import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { formatISO, subDays } from "date-fns";
+import { v4 as uuidV4 } from "uuid";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -61,7 +62,12 @@ export function createInnsendingUuid(onBehalfOfToken: string) {
   });
 }
 
-export function getSoknadState(uuid: string, onBehalfOfToken: string, lastSaved?: string) {
+export function getSoknadState(
+  uuid: string,
+  onBehalfOfToken: string,
+  lastSaved?: string,
+  requestId?: string
+) {
   let url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
 
   if (lastSaved) {
@@ -70,7 +76,10 @@ export function getSoknadState(uuid: string, onBehalfOfToken: string, lastSaved?
 
   return fetch(url, {
     method: "GET",
-    headers: headersWithToken(onBehalfOfToken),
+    headers: {
+      ...headersWithToken(onBehalfOfToken),
+      "X-Request-ID": requestId || uuidV4(),
+    },
   });
 }
 

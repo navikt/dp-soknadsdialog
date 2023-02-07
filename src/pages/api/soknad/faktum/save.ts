@@ -24,7 +24,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const requestId = uuidV4();
+  const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
@@ -48,7 +48,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { sistBesvart } = await faktumResponse.json();
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart, requestId);
 
   if (!soknadStateResponse.ok) {
     return res.status(soknadStateResponse.status).send(soknadStateResponse.statusText);

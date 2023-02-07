@@ -19,6 +19,7 @@ import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import styles from "./Dokumentasjon.module.css";
+import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export function Dokumentasjon() {
     removeDokumentkrav,
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
+    setInitialDokumentkravWithNewFilesState,
   } = useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -51,6 +53,15 @@ export function Dokumentasjon() {
   const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
+    const dokumentkravToBundleState = dokumentkravList.krav.filter(
+      (dokumentkrav) =>
+        dokumentkrav.svar === "dokumentkrav.svar.send.naa" && dokumentkrav.filer.length > 0
+    );
+
+    setInitialDokumentkravWithNewFilesState(dokumentkravToBundleState);
+  }, []);
+
+  useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
       scrollIntoView(errorSummaryRef);
     }
@@ -61,6 +72,7 @@ export function Dokumentasjon() {
       setDokumentkravError(true);
       return;
     }
+    const startetBundling = tidStart();
 
     let allBundlesSuccessful = true;
     for (const dokumentkrav of dokumentkravWithNewFiles) {
@@ -71,6 +83,7 @@ export function Dokumentasjon() {
     }
 
     if (allBundlesSuccessful) {
+      trackDokumentasjonLastetOpp(dokumentkravWithNewFiles.length, tidBruktSiden(startetBundling));
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
