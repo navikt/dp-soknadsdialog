@@ -20,6 +20,7 @@ import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import styles from "./Dokumentasjon.module.css";
 import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -35,10 +36,7 @@ export function Dokumentasjon() {
     isBundling,
     dokumentkravWithBundleError,
     dokumentkravWithNewFiles,
-    removeDokumentkrav,
     bundleAndSaveDokumentkrav,
-    addDokumentkravWithNewFiles,
-    setInitialDokumentkravWithNewFilesState,
   } = useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -53,29 +51,31 @@ export function Dokumentasjon() {
   const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
-    const dokumentkravToBundleState = dokumentkravList.krav.filter(
-      (dokumentkrav) =>
-        dokumentkrav.svar === "dokumentkrav.svar.send.naa" && dokumentkrav.filer.length > 0
-    );
-
-    setInitialDokumentkravWithNewFilesState(dokumentkravToBundleState);
-  }, []);
+    if (dokumentkravWithBundleError.length > 0) {
+      scrollIntoView(errorSummaryRef);
+    }
+  }, [dokumentkravWithBundleError.length]);
 
   useEffect(() => {
     if (dokumentkravWithBundleError.length > 0) {
       scrollIntoView(errorSummaryRef);
     }
-  }, [dokumentkravWithBundleError.length]);
+  }, [dokumentkravList]);
 
   async function bundleAndSaveAllDokumentkrav() {
     if (!allDokumentkravAnswered) {
       setDokumentkravError(true);
       return;
     }
-    const startetBundling = tidStart();
 
+    const dokumentkravToBundle = dokumentkravList.krav.filter((dokumentkrav) => {
+      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
+    });
+
+    const startetBundling = tidStart();
     let allBundlesSuccessful = true;
-    for (const dokumentkrav of dokumentkravWithNewFiles) {
+
+    for (const dokumentkrav of dokumentkravToBundle) {
       const res = await bundleAndSaveDokumentkrav(dokumentkrav);
       if (!res) {
         allBundlesSuccessful = false;
@@ -146,8 +146,6 @@ export function Dokumentasjon() {
                 key={index}
                 dokumentkrav={dokumentkrav}
                 resetError={resetDokumentkravError}
-                removeDokumentkravToBundle={removeDokumentkrav}
-                addDokumentkravToBundle={addDokumentkravWithNewFiles}
                 hasBundleError={hasBundleError}
                 hasUnansweredError={hasUnansweredError}
               />

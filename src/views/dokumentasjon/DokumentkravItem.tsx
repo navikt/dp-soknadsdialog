@@ -14,8 +14,6 @@ import { useFileUploader } from "../../hooks/useFileUploader";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { FileList } from "../../components/file-list/FileList";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { usePreviousValue } from "../../hooks/usePreviousValue";
-import { useFirstRender } from "../../hooks/useFirstRender";
 import { AlertText } from "../../components/alert-text/AlertText";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
@@ -24,8 +22,6 @@ import styles from "./Dokumentasjon.module.css";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
-  addDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
-  removeDokumentkravToBundle: (dokumentkrav: IDokumentkrav) => void;
   hasUnansweredError: boolean;
   hasBundleError: boolean;
   resetError: () => void;
@@ -34,20 +30,12 @@ interface IProps {
 type DokumentkravError = "missingAnswer" | "missingBegrunnelse" | "missingFiles" | "bundleError";
 
 export function DokumentkravItem(props: IProps) {
-  const {
-    dokumentkrav,
-    hasUnansweredError,
-    addDokumentkravToBundle,
-    removeDokumentkravToBundle,
-    hasBundleError,
-    resetError,
-  } = props;
+  const { dokumentkrav, hasUnansweredError, hasBundleError, resetError } = props;
   const { uuid } = useUuid();
   const { setFocus } = useSetFocus();
-  const isFirstRender = useFirstRender();
   const errorRef = useRef(null);
 
-  const { saveDokumentkravSvar, getDokumentkravList } = useDokumentkrav();
+  const { saveDokumentkravSvar, updateDokumentkravList } = useDokumentkrav();
   const { remainingFilesize } = useDokumentkravRemainingFilesize(dokumentkrav);
   const { handleUploadedFiles, uploadedFiles } = useFileUploader(dokumentkrav.filer);
   const { getAppText, getDokumentkravTextById, getDokumentkravSvarTextById } = useSanity();
@@ -61,7 +49,6 @@ export function DokumentkravItem(props: IProps) {
     }
   );
 
-  const previousNumberOfUploadedFiles = usePreviousValue(uploadedFiles.length);
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
 
   useEffect(() => {
@@ -87,41 +74,17 @@ export function DokumentkravItem(props: IProps) {
   }, [dokumentkravError]);
 
   useEffect(() => {
-    const hasOneNewFile = !previousNumberOfUploadedFiles && uploadedFiles.length > 0;
-    const allFilesDeleted =
-      previousNumberOfUploadedFiles &&
-      previousNumberOfUploadedFiles > 0 &&
-      uploadedFiles.length === 0;
-
-    // To show/hide next dokumentkrav when uploading/deleting files we need to update the dokumentkrav list in context
-    if (!isFirstRender && (hasOneNewFile || allFilesDeleted)) {
-      getDokumentkravList();
-    }
-
-    if (uploadedFiles.length > 0 && dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA) {
-      addDokumentkravToBundle({
-        ...dokumentkrav,
-        filer: [...dokumentkrav.filer, ...uploadedFiles],
-      });
-    } else {
-      removeDokumentkravToBundle(dokumentkrav);
-    }
-  }, [uploadedFiles.length]);
+    updateDokumentkravList({
+      ...dokumentkrav,
+      filer: [...uploadedFiles],
+    });
+  }, [uploadedFiles]);
 
   useEffect(() => {
     resetError();
 
     if (dokumentkrav.svar) {
       setAlertText(getDokumentkravSvarTextById(dokumentkrav.svar)?.alertText);
-    }
-
-    if (uploadedFiles.length > 0 && dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA) {
-      addDokumentkravToBundle({
-        ...dokumentkrav,
-        filer: [...dokumentkrav.filer, ...uploadedFiles],
-      });
-    } else {
-      removeDokumentkravToBundle(dokumentkrav);
     }
   }, [dokumentkrav.svar]);
 

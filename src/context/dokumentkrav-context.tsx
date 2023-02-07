@@ -10,6 +10,7 @@ export interface IDokumentkravContext {
   getDokumentkravList: () => void;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
   saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
+  updateDokumentkravList: (value: IDokumentkrav) => void;
 }
 
 export const DokumentkravContext = createContext<IDokumentkravContext | undefined>(undefined);
@@ -56,6 +57,16 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     });
   }
 
+  function updateDokumentkravList(dokumentkrav: IDokumentkrav) {
+    const tempList = { ...dokumentkravList };
+    const indexOfKrav = tempList.krav.findIndex((f) => f.id === dokumentkrav.id);
+
+    if (indexOfKrav !== -1) {
+      tempList.krav[indexOfKrav] = { ...dokumentkrav };
+      setDokumentkravList(tempList);
+    }
+  }
+
   return (
     <DokumentkravContext.Provider
       value={{
@@ -63,6 +74,7 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
         getDokumentkravList,
         getFirstUnansweredDokumentkrav,
         saveDokumentkravSvar,
+        updateDokumentkravList,
       }}
     >
       {props.children}

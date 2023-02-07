@@ -16,9 +16,5 @@ export function useFileUploader(files?: IDokumentkravFil[]) {
     }
   }
 
-  function resetUploadFiles() {
-    setUploadedFiles([]);
-  }
-
-  return { uploadedFiles, handleUploadedFiles, resetUploadFiles };
+  return { uploadedFiles, handleUploadedFiles };
 }
