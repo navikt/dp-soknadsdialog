@@ -56,7 +56,7 @@ export function Dokumentasjon() {
       (dokumentkrav) =>
         dokumentkrav.svar === "dokumentkrav.svar.send.naa" && dokumentkrav.filer.length > 0
     );
-    // console.log("dokumentkravToBundleState: ", dokumentkravToBundleState);
+
     setInitialDokumentkravWithNewFilesState(dokumentkravToBundleState);
   }, []);
 
