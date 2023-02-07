@@ -83,7 +83,13 @@ export function Dokumentasjon() {
     }
 
     if (allBundlesSuccessful) {
-      trackDokumentasjonLastetOpp(dokumentkravWithNewFiles.length, tidBruktSiden(startetBundling));
+      if (dokumentkravWithNewFiles.length != 0) {
+        trackDokumentasjonLastetOpp(
+          dokumentkravWithNewFiles.length,
+          tidBruktSiden(startetBundling)
+        );
+      }
+
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
