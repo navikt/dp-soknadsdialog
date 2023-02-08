@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { addDays, format, formatISO } from "date-fns";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 import { FaktumPeriode } from "./FaktumPeriode";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
@@ -63,11 +64,10 @@ describe("FaktumPeriode", () => {
   describe("When user selects from date", () => {
     test("Should post selected from date to the server", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -77,8 +77,8 @@ describe("FaktumPeriode", () => {
       await user.type(datepickerFom, "04.08.2022");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
       });
     });
   });
@@ -89,11 +89,10 @@ describe("FaktumPeriode", () => {
       faktumMockData.svar = svar;
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -112,8 +111,8 @@ describe("FaktumPeriode", () => {
       await user.type(datepickerTom, "06.08.2022");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, {
           fom: "2022-08-04",
           tom: "2022-08-06",
         });
@@ -196,11 +195,10 @@ describe("FaktumPeriode", () => {
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
     test("When types inn 01.01.1800 should show error message and not post to server", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -216,17 +214,16 @@ describe("FaktumPeriode", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(onchange).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).not.toBeCalled();
       });
     });
 
     test("When types in 06.06.2322 should show error message not post to server", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -242,7 +239,7 @@ describe("FaktumPeriode", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(onchange).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).not.toBeCalled();
       });
     });
   });
@@ -257,11 +254,10 @@ describe("FaktumPeriode", () => {
       const isoFormattedDate = formatISO(tenDaysFromNow, { representation: "date" });
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -272,8 +268,8 @@ describe("FaktumPeriode", () => {
       await user.type(datepickerFom, datePickerFormattedDate);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, {
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, {
           fom: isoFormattedDate,
         });
       });
@@ -286,11 +282,10 @@ describe("FaktumPeriode", () => {
       faktumMockData.svar = svar;
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -301,8 +296,8 @@ describe("FaktumPeriode", () => {
       await user.clear(datepickerFom);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, null);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, null);
       });
     });
 
@@ -311,11 +306,10 @@ describe("FaktumPeriode", () => {
       faktumMockData.svar = svar;
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -326,8 +320,8 @@ describe("FaktumPeriode", () => {
       await user.clear(datepickerFom);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, null);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, null);
       });
     });
 
@@ -336,11 +330,10 @@ describe("FaktumPeriode", () => {
       faktumMockData.svar = svar;
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumPeriode faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumPeriode faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -351,8 +344,8 @@ describe("FaktumPeriode", () => {
       await user.clear(datepickerTom);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, { fom: "2022-08-04" });
       });
     });
   });

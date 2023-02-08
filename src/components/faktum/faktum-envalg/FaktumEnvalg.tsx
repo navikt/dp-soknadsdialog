@@ -18,7 +18,7 @@ function FaktumEnvalgComponent(
   props: IFaktum<IQuizEnvalgFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -46,7 +46,7 @@ function FaktumEnvalgComponent(
   }
 
   function saveFaktum(value: string) {
-    onChange ? onChange(faktum, value) : saveFaktumToQuiz(faktum, value);
+    saveFaktumToQuiz(faktum, value);
   }
 
   return (

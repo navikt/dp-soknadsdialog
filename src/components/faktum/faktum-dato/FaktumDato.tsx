@@ -21,7 +21,7 @@ function FaktumDatoComponent(
   props: IFaktum<IQuizDatoFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
@@ -35,7 +35,7 @@ function FaktumDatoComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      onChange ? onChange(faktum, debouncedDate) : saveFaktum(debouncedDate);
+      saveFaktum(debouncedDate);
     }
   }, [debouncedDate]);
 
