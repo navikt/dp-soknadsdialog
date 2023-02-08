@@ -32,37 +32,35 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
     setErrors([]);
     setIsLoading(true);
 
-    await Promise.all(
-      selectedFiles.map(async (file) => {
-        if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
-          setErrors((currentState) => [
-            ...currentState,
-            { fileName: file.name, error: "INVALID_FILE_FORMAT" },
-          ]);
-        } else if (file.size > maxFileSize) {
-          setErrors((currentState) => [
-            ...currentState,
-            { fileName: file.name, error: "INVALID_FILE_SIZE" },
-          ]);
-        } else {
-          try {
-            const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkrav.id);
+    for (const file of selectedFiles) {
+      if (!ALLOWED_FILE_FORMATS.includes(file.type)) {
+        setErrors((currentState) => [
+          ...currentState,
+          { fileName: file.name, error: "INVALID_FILE_FORMAT" },
+        ]);
+      } else if (file.size > maxFileSize) {
+        setErrors((currentState) => [
+          ...currentState,
+          { fileName: file.name, error: "INVALID_FILE_SIZE" },
+        ]);
+      } else {
+        try {
+          const fileResponse = await saveDokumenkravFile(file, uuid, dokumentkrav.id);
 
-            if (fileResponse.ok) {
-              const savedDokumentkravFile = await fileResponse.json();
-              handleUploadedFiles(savedDokumentkravFile);
-            } else {
-              throw Error(fileResponse.statusText);
-            }
-          } catch (error) {
-            setErrors((currentState) => [
-              ...currentState,
-              { fileName: file.name, error: "SERVER_ERROR" },
-            ]);
+          if (fileResponse.ok) {
+            const savedDokumentkravFile = await fileResponse.json();
+            handleUploadedFiles(savedDokumentkravFile);
+          } else {
+            throw Error(fileResponse.statusText);
           }
+        } catch (error) {
+          setErrors((currentState) => [
+            ...currentState,
+            { fileName: file.name, error: "SERVER_ERROR" },
+          ]);
         }
-      })
-    );
+      }
+    }
 
     setIsLoading(false);
   }, []);
