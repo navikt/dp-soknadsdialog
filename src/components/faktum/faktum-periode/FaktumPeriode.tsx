@@ -72,6 +72,7 @@ function FaktumPeriodeComponent(
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = UNSAFE_useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
     onRangeChange: (value?: IDateRange) => {
+      // When user clears `from date input field` or types in invalid date format
       if (!value?.from) {
         setCurrentAnswer(initialPeriodeValue);
         debouncedChange(initialPeriodeValue);
@@ -93,12 +94,14 @@ function FaktumPeriodeComponent(
     },
     onValidate: (value) => {
       if (value.from.isEmpty) {
+        // Empty `to date input field` programmatically when user clears `from date input field`
         setSelected({ from: undefined });
         setCurrentAnswer(initialPeriodeValue);
         debouncedChange(initialPeriodeValue);
         return;
       }
 
+      // When user types in invalid date format on `from date input field`
       if (!value.from.isEmpty && value.from.isInvalid) {
         const periode = { ...currentAnswer, fom: null };
         setCurrentAnswer(periode);
@@ -106,6 +109,7 @@ function FaktumPeriodeComponent(
         return;
       }
 
+      // Only save fom to state when `to date input field` is empty
       if (value.to.isEmpty && value.to.isInvalid) {
         const periode = { fom: currentAnswer.fom };
         setCurrentAnswer(periode);
@@ -113,7 +117,9 @@ function FaktumPeriodeComponent(
         return;
       }
 
+      // When user types in invalid `to date input field`
       if (!value.to.isEmpty && value.to.isInvalid) {
+        // Set tom to null for validation
         const periode = { ...currentAnswer, tom: null };
         setCurrentAnswer(periode);
         debouncedChange(periode);
