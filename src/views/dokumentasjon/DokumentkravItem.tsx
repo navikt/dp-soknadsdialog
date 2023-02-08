@@ -77,8 +77,9 @@ export function DokumentkravItem(props: IProps) {
     updateDokumentkravList({
       ...dokumentkrav,
       filer: [...uploadedFiles],
+      ...dokumentkravSvar,
     });
-  }, [uploadedFiles]);
+  }, [uploadedFiles, dokumentkravSvar]);
 
   useEffect(() => {
     resetError();

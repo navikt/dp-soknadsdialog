@@ -1,15 +1,13 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import api from "../api.utils";
-import { useRouter } from "next/router";
+
 import { usePutRequest } from "../hooks/usePutRequest";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IDokumentkravSvarBody } from "../pages/api/documentation/svar";
 
 export interface IDokumentkravContext {
   dokumentkravList: IDokumentkravList;
-  getDokumentkravList: () => void;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
-  saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
+  saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<IDokumentkravList | undefined>;
   updateDokumentkravList: (value: IDokumentkrav) => void;
 }
 
@@ -20,30 +18,11 @@ interface IProps {
 }
 
 function DokumentkravProvider(props: PropsWithChildren<IProps>) {
-  const router = useRouter();
-  const { uuid } = router.query;
   const [dokumentkravList, setDokumentkravList] = useState<IDokumentkravList>(props.initialState);
-  const [saveDokumentkravSvarAsync] = usePutRequest<IDokumentkravSvarBody, IDokumentkravList>(
+  const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody, IDokumentkravList>(
     "documentation/svar",
     true
   );
-
-  async function getDokumentkravList() {
-    const dokumentkravResponse = await fetch(api(`documentation/${uuid}`));
-
-    if (dokumentkravResponse.ok) {
-      const data = await dokumentkravResponse.json();
-      setDokumentkravList(data);
-    }
-  }
-
-  async function saveDokumentkravSvar(value: IDokumentkravSvarBody) {
-    const updatedDokumentkrav = await saveDokumentkravSvarAsync(value);
-
-    if (updatedDokumentkrav) {
-      setDokumentkravList(updatedDokumentkrav);
-    }
-  }
 
   function getFirstUnansweredDokumentkrav() {
     return dokumentkravList.krav.find((dokumentkrav) => {
@@ -71,7 +50,6 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     <DokumentkravContext.Provider
       value={{
         dokumentkravList,
-        getDokumentkravList,
         getFirstUnansweredDokumentkrav,
         saveDokumentkravSvar,
         updateDokumentkravList,
