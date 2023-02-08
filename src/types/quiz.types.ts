@@ -89,7 +89,7 @@ export interface IQuizSeksjon {
 }
 
 export interface IQuizPeriodeFaktumAnswerType {
-  fom: string;
+  fom: string | null;
   tom?: string | null;
 }
 

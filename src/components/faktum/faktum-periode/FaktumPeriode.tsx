@@ -26,17 +26,24 @@ function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
-  const { isValid, tomErrorMessage, fomErrorMessage, getTomIsBeforeTomErrorMessage } =
-    useValidateFaktumPeriode(faktum);
-  const [currentAnswer, setCurrentAnswer] = useState<
-    IQuizPeriodeFaktumAnswerType | undefined | null
-  >(faktum.svar);
+  const {
+    validateAndIsValidPeriode,
+    tomErrorMessage,
+    fomErrorMessage,
+    getTomIsBeforeTomErrorMessage,
+    clearErrorMessage,
+  } = useValidateFaktumPeriode(faktum);
+
+  const initialPeriodeValue = { fom: "" };
+  const [currentAnswer, setCurrentAnswer] = useState<IQuizPeriodeFaktumAnswerType>(
+    faktum.svar ?? initialPeriodeValue
+  );
   const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
 
@@ -46,13 +53,13 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      onChange ? onChange(faktum, debouncedPeriode) : saveFaktum(debouncedPeriode);
+      saveFaktum(debouncedPeriode);
     }
   }, [debouncedPeriode]);
 
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer(undefined);
+    if (!faktum.svar && !isFirstRender) {
+      setCurrentAnswer(initialPeriodeValue);
     }
   }, [faktum.svar]);
 
@@ -67,12 +74,59 @@ function FaktumPeriodeComponent(
     return undefined;
   }
 
+  // Todo
+  // Gjenstår
+  // - Når man skrive inn en ugyldig dato på fra dato ved begge fra og til er ferdig utfylt
+  // - ble begge inputfeltet tomme.
+
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = UNSAFE_useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
-    onRangeChange: (value?: IDateRange) => handleDateChange(value),
+    onRangeChange: (value?: IDateRange) => {
+      // When user clears from date from answered period, should automatically clear to date
+      if (!value?.from && value?.to) {
+        // Clear to date when from date is empty programmatically
+        setSelected({ from: undefined });
+        setCurrentAnswer(initialPeriodeValue);
+        debouncedChange(initialPeriodeValue);
+      }
+
+      // When user clears from date from answered period without to date
+      if (!value?.from && !value?.to) {
+        setCurrentAnswer(initialPeriodeValue);
+        debouncedChange(initialPeriodeValue);
+      }
+
+      if (value?.from) {
+        // When to date is not speficied or to date is before from date
+        if (!value.to || tomDateIsBeforeFomDate) {
+          const parsedFromDate = formatISO(value.from, { representation: "date" });
+          const period = { fom: parsedFromDate };
+
+          setCurrentAnswer(period);
+          debouncedChange(period);
+        }
+
+        // When both from and to date is provided
+        if (value.to) {
+          const parsedFromDate = formatISO(value.from, { representation: "date" });
+          const parsedToDate = formatISO(value.to, { representation: "date" });
+          const period = { fom: parsedFromDate, tom: parsedToDate };
+          setCurrentAnswer(period);
+          debouncedChange(period);
+        }
+      }
+    },
     onValidate: (value) => {
       if (value.to) {
         setTomDateIsBeforeFomDate(!!value.to?.isBeforeFrom);
+      }
+
+      if (!value.from.isEmpty && value.from.isInvalid) {
+        setCurrentAnswer({ fom: null });
+      }
+
+      if (!value.to.isEmpty && value.to.isInvalid) {
+        setCurrentAnswer({ ...currentAnswer, tom: null });
       }
     },
   });
@@ -84,54 +138,17 @@ function FaktumPeriodeComponent(
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function handleDateChange(value?: IDateRange) {
-    // When user clears from date from answered period, should automatically clear to date
-    if (!value?.from && value?.to) {
-      // Clear to date when from date is empty programmatically
-      setSelected({ from: undefined });
-      setCurrentAnswer(null);
-      debouncedChange(null);
-    }
+  function saveFaktum(value: IQuizPeriodeFaktumAnswerType) {
+    clearErrorMessage();
 
-    // When user clears from date from answered period without to date
-    if (!value?.from && !value?.to) {
-      setCurrentAnswer(null);
-      debouncedChange(null);
-    }
-
-    if (value?.from) {
-      // When to date is not speficied or to date is before from date
-      if (!value.to || tomDateIsBeforeFomDate) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const period = { fom: parsedFromDate };
-
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-
-      // When both from and to date is provided
-      if (value.to) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const parsedToDate = formatISO(value.to, { representation: "date" });
-        const period = { fom: parsedFromDate, tom: parsedToDate };
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-    }
-  }
-
-  function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null | undefined) {
-    if (!value) {
+    if (value.fom === "") {
+      clearErrorMessage();
       saveFaktumToQuiz(faktum, null);
+      return;
     }
 
-    if (value && !isValid(value)) {
-      saveFaktumToQuiz(faktum, null);
-    }
-
-    if (value && isValid(value)) {
-      saveFaktumToQuiz(faktum, value);
-    }
+    const isValidPeriode = validateAndIsValidPeriode(value);
+    saveFaktumToQuiz(faktum, isValidPeriode ? value : null);
   }
 
   return (

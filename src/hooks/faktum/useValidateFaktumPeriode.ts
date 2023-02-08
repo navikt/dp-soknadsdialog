@@ -6,10 +6,11 @@ import { useValidation } from "../../context/validation-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 
 interface IUseValidateFaktumPeriode {
-  isValid: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
+  validateAndIsValidPeriode: (svar: IQuizPeriodeFaktumAnswerType) => boolean;
   fomErrorMessage: string | undefined;
   tomErrorMessage: string | undefined;
   getTomIsBeforeTomErrorMessage: () => string;
+  clearErrorMessage: () => void;
 }
 
 export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
@@ -24,12 +25,21 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     );
   }, [unansweredFaktumId]);
 
-  function isValid(svar: IQuizPeriodeFaktumAnswerType) {
+  function validateAndIsValidPeriode(svar: IQuizPeriodeFaktumAnswerType) {
     const { fom, tom } = svar;
-    let isValidPeriode = true;
+
+    if (!fom) {
+      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
+      return false;
+    }
+
+    if (!tom) {
+      setTomErrorMessage(getAppText("validering.ugyldig-dato"));
+      return false;
+    }
 
     const fomDateIsInfuture = isFuture(new Date(fom));
-    const isValidFromDate = isWithinValidYearRange(new Date(fom));
+    const isValidFromDate = isWithinValidYearRange(new Date(tom));
 
     setFomErrorMessage(undefined);
     setTomErrorMessage(undefined);
@@ -41,34 +51,35 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     // Future date is allowed on those two special cases
     if (specialCase && !isValidFromDate) {
       setFomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (fomDateIsInfuture && !specialCase) {
       setFomErrorMessage(getAppText("validering.fremtidig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (fomDateIsInfuture && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
       setFomErrorMessage(getAppText("validering.arbeidsforhold.varighet-fra"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (!isValidFromDate) {
       setFomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (!tom) {
       setTomErrorMessage(undefined);
+      return true;
     }
 
     if (tom && !isWithinValidYearRange(new Date(tom))) {
       setTomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
-    return isValidPeriode;
+    return true;
   }
 
   function getTomIsBeforeTomErrorMessage() {
@@ -77,10 +88,16 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       : getAppText("validering.sluttdato-kan-ikke-vaere-foor-dato");
   }
 
+  function clearErrorMessage() {
+    setFomErrorMessage(undefined);
+    setTomErrorMessage(undefined);
+  }
+
   return {
-    isValid,
+    validateAndIsValidPeriode,
     fomErrorMessage,
     tomErrorMessage,
     getTomIsBeforeTomErrorMessage,
+    clearErrorMessage,
   };
 }
