@@ -28,7 +28,7 @@ function FaktumPeriodeComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
@@ -51,11 +51,12 @@ function FaktumPeriodeComponent(
     }
   }, [debouncedPeriode]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (!faktum.svar && !isFirstRender) {
       setCurrentAnswer(initialPeriodeValue);
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function getDefaultSelectedValue(): IDateRange | undefined {
     if (currentAnswer?.fom) {
@@ -167,6 +168,7 @@ function FaktumPeriodeComponent(
               label={faktumTextFra}
               placeholder={getAppText("datovelger.dato-format")}
               error={fomErrorMessage}
+              disabled={isLocked}
             />
 
             <UNSAFE_DatePicker.Input
@@ -174,6 +176,7 @@ function FaktumPeriodeComponent(
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
               error={tomErrorMessage}
+              disabled={isLocked}
             />
           </div>
         </UNSAFE_DatePicker>

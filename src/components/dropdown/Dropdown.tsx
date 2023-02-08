@@ -10,6 +10,7 @@ interface IProps {
   description?: ReactNode;
   readOnly?: boolean;
   error?: string;
+  disabled?: boolean;
 }
 
 export interface IDropdownOption {
@@ -35,6 +36,7 @@ export function Dropdown(props: IProps) {
       value={props.currentValue}
       description={props.description && props.description}
       error={props.error}
+      disabled={props.disabled}
     >
       {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (

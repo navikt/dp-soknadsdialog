@@ -48,7 +48,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { sistBesvart } = await faktumResponse.json();
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart, requestId);
 
   if (!soknadStateResponse.ok) {
     return res.status(soknadStateResponse.status).send(soknadStateResponse.statusText);

@@ -4,6 +4,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "3008",
@@ -64,11 +65,10 @@ describe("FaktumFlervalg", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = [faktumMockData.gyldigeValg[1]];
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumFlervalg faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -77,19 +77,18 @@ describe("FaktumFlervalg", () => {
       user.click(svarCheckbox);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
 
     test("Can select multiple answers", async () => {
       const user = userEvent.setup();
       const svar = [faktumMockData.gyldigeValg[1], faktumMockData.gyldigeValg[2]];
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumFlervalg faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumFlervalg faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -100,8 +99,8 @@ describe("FaktumFlervalg", () => {
       user.click(svar2Checkbox);
 
       await waitFor(() => {
-        expect(onchange).toHaveBeenCalledTimes(2);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledTimes(2);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
   });

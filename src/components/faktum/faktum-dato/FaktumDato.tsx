@@ -21,9 +21,9 @@ function FaktumDatoComponent(
   props: IFaktum<IQuizDatoFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
   const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
@@ -35,15 +35,16 @@ function FaktumDatoComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      onChange ? onChange(faktum, debouncedDate) : saveFaktum(debouncedDate);
+      saveFaktum(debouncedDate);
     }
   }, [debouncedDate]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!faktum.svar && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ?? "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
@@ -99,6 +100,7 @@ function FaktumDatoComponent(
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
           error={errorMessage}
+          disabled={isLocked}
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (

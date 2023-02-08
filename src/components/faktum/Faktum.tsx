@@ -2,12 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { FileContent } from "@navikt/ds-icons";
 import { FaktumEnvalg } from "./faktum-envalg/FaktumEnvalg";
 import { FaktumFlervalg } from "./faktum-flervalg/FaktumFlervalg";
-import {
-  IQuizGeneratorFaktum,
-  IQuizNumberFaktum,
-  QuizFaktum,
-  QuizFaktumSvarType,
-} from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, IQuizNumberFaktum, QuizFaktum } from "../../types/quiz.types";
 import { FaktumText } from "./faktum-text/FaktumText";
 import { FaktumNumber } from "./faktum-number/FaktumNumber";
 import { FaktumDato } from "./faktum-dato/FaktumDato";
@@ -35,7 +30,6 @@ import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {
   faktum: P;
-  onChange?: (faktum: QuizFaktum, value: QuizFaktumSvarType) => void;
   readonly?: boolean;
   showAllFaktumTexts?: boolean;
 }
@@ -48,7 +42,7 @@ export interface IFaktumReadOnly<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
-  const { faktum, readonly, showAllFaktumTexts, onChange } = props;
+  const { faktum, readonly, showAllFaktumTexts } = props;
   const { soknadState } = useQuiz();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
@@ -75,11 +69,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
       }
 
       return (
-        <FaktumEgetGaardsbrukArbeidsaar
-          ref={faktumRef}
-          faktum={faktum as IQuizNumberFaktum}
-          onChange={onChange}
-        />
+        <FaktumEgetGaardsbrukArbeidsaar ref={faktumRef} faktum={faktum as IQuizNumberFaktum} />
       );
     }
 
@@ -88,28 +78,28 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumBooleanReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumBoolean ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumBoolean ref={faktumRef} faktum={faktum} />;
         }
 
       case "envalg":
         if (faktum.readOnly || readonly) {
           return <FaktumEnvalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumEnvalg ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumEnvalg ref={faktumRef} faktum={faktum} />;
         }
 
       case "flervalg":
         if (faktum.readOnly || readonly) {
           return <FaktumFlervalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumFlervalg ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumFlervalg ref={faktumRef} faktum={faktum} />;
         }
 
       case "tekst":
         if (faktum.readOnly || readonly) {
           return <FaktumTextReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumText ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumText ref={faktumRef} faktum={faktum} />;
         }
 
       case "double":
@@ -117,28 +107,28 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumNumberReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumNumber ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumNumber ref={faktumRef} faktum={faktum} />;
         }
 
       case "land":
         if (faktum.readOnly || readonly) {
           return <FaktumLandReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumLand ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumLand ref={faktumRef} faktum={faktum} />;
         }
 
       case "localdate":
         if (faktum.readOnly || readonly) {
           return <FaktumDatoReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumDato ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumDato ref={faktumRef} faktum={faktum} />;
         }
 
       case "periode":
         if (faktum.readOnly || readonly) {
           return <FaktumPeriodeReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumPeriode ref={faktumRef} faktum={faktum} onChange={onChange} />;
+          return <FaktumPeriode ref={faktumRef} faktum={faktum} />;
         }
 
       case "generator":

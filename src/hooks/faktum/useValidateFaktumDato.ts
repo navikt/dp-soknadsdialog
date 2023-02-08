@@ -18,6 +18,7 @@ const furetureDateAllowedList = [
   "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.kontraktfestet-sluttdato",
   "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
+  "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
 const futureDateAllowedWithWarningList = [

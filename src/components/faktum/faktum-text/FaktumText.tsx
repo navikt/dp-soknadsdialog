@@ -19,9 +19,9 @@ export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
   ref: Ref<HTMLInputElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
 
@@ -35,15 +35,16 @@ export function FaktumTextComponent(
   useEffect(() => {
     if (!isFirstRender && debouncedText !== faktum.svar) {
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
-      onChange ? onChange(faktum, inputValue) : saveFaktum(inputValue);
+      saveFaktum(inputValue);
     }
   }, [debouncedText]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender && faktum.svar !== currentAnswer) {
+      setCurrentAnswer(faktum.svar ?? "");
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
@@ -90,6 +91,7 @@ export function FaktumTextComponent(
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
+          disabled={isLocked}
         />
       ) : (
         <TextField
@@ -103,6 +105,7 @@ export function FaktumTextComponent(
           onChange={onValueChange}
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
+          disabled={isLocked}
         />
       )}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, forwardRef, Ref } from "react";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { Radio, RadioGroup } from "@navikt/ds-react";
 import { IFaktum } from "../Faktum";
 import { IQuizBooleanFaktum } from "../../../types/quiz.types";
@@ -20,12 +20,12 @@ function FaktumBooleanComponent(
   props: IFaktum<IQuizBooleanFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
-  const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) || "");
+  const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) ?? "");
   const [alertText, setAlertText] = useState<ISanityAlertText>();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
 
@@ -35,11 +35,16 @@ function FaktumBooleanComponent(
     }
   }, [currentAnswer]);
 
+  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar === undefined && !isFirstRender) {
-      setCurrentAnswer("");
+    if (!isFirstRender) {
+      const answer = booleanToTextId(faktum) ?? "";
+
+      if (answer !== currentAnswer) {
+        setCurrentAnswer(answer);
+      }
     }
-  }, [faktum.svar]);
+  }, [faktum]);
 
   function onSelection(value: string) {
     setCurrentAnswer(value);
@@ -55,7 +60,7 @@ function FaktumBooleanComponent(
       console.error("ERROR");
     }
 
-    onChange ? onChange(faktum, mappedAnswer) : saveFaktumToQuiz(faktum, mappedAnswer);
+    saveFaktumToQuiz(faktum, mappedAnswer);
   }
 
   if (!faktum.beskrivendeId) {
@@ -71,6 +76,7 @@ function FaktumBooleanComponent(
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={onSelection}
         value={currentAnswer}
+        disabled={isLocked}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
