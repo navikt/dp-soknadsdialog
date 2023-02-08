@@ -22,6 +22,7 @@ export function MockQuizProvider({ initialState, children }: IProps) {
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,
         isError: false,
+        isLocked: false,
       }}
     >
       {children}
