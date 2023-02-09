@@ -20,6 +20,11 @@ interface IDateRange {
   to?: Date | undefined;
 }
 
+export interface IPeriodeFaktumAnswerType {
+  fom: string | null;
+  tom?: string | null;
+}
+
 export const FaktumPeriode = forwardRef(FaktumPeriodeComponent);
 
 function FaktumPeriodeComponent(
@@ -35,9 +40,9 @@ function FaktumPeriodeComponent(
     useValidateFaktumPeriode(faktum);
 
   const initialPeriodeValue = { fom: "" };
-  const [currentAnswer, setCurrentAnswer] = useState<IQuizPeriodeFaktumAnswerType>(
-    faktum.svar ?? initialPeriodeValue
-  );
+  const [currentAnswer, setCurrentAnswer] = useState<
+    IQuizPeriodeFaktumAnswerType | IPeriodeFaktumAnswerType
+  >(faktum.svar ?? initialPeriodeValue);
   const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
 
@@ -47,7 +52,7 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      saveFaktum(debouncedPeriode);
+      saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
 
@@ -136,7 +141,7 @@ function FaktumPeriodeComponent(
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function saveFaktum(value: IQuizPeriodeFaktumAnswerType) {
+  function saveFaktum(value: IPeriodeFaktumAnswerType) {
     clearErrorMessage();
 
     if (value.fom === "") {
@@ -145,7 +150,7 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? value : null);
+    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
   }
 
   return (
