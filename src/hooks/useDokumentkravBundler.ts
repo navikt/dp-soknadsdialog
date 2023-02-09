@@ -32,9 +32,9 @@ export function useDokumentkravBundler() {
   }
 
   function addDokumentkravWithNewFiles(dokumentkrav: IDokumentkrav) {
-    const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithNewFiles);
-
-    setDokumentkravWithNewFiles(newState);
+    setDokumentkravWithNewFiles((currentState) =>
+      addOrReplaceDokumentkravToState(dokumentkrav, currentState)
+    );
     removeDokumentkravWithError(dokumentkrav);
 
     if (noDocumentsToSave) {
@@ -43,22 +43,21 @@ export function useDokumentkravBundler() {
   }
 
   function removeDokumentkravWithNewFiles(dokumentkrav: IDokumentkrav) {
-    const newState = removeDokumentkravFromState(dokumentkrav, dokumentkravWithNewFiles);
-    if (newState) {
-      setDokumentkravWithNewFiles(newState);
-    }
+    setDokumentkravWithNewFiles((currentState) =>
+      removeDokumentkravFromState(dokumentkrav, currentState)
+    );
   }
 
   function addDokumentkravWithError(dokumentkrav: IDokumentkrav) {
-    const newState = addOrReplaceDokumentkravToState(dokumentkrav, dokumentkravWithBundleError);
-    setDokumentkravWithBundleError(newState);
+    setDokumentkravWithBundleError((currentState) =>
+      addOrReplaceDokumentkravToState(dokumentkrav, currentState)
+    );
   }
 
   function removeDokumentkravWithError(dokumentkrav: IDokumentkrav) {
-    const newState = removeDokumentkravFromState(dokumentkrav, dokumentkravWithBundleError);
-    if (newState) {
-      setDokumentkravWithBundleError(newState);
-    }
+    setDokumentkravWithBundleError((currentState) =>
+      removeDokumentkravFromState(dokumentkrav, currentState)
+    );
   }
 
   function removeDokumentkrav(dokumentkrav: IDokumentkrav) {
@@ -119,7 +118,7 @@ function addOrReplaceDokumentkravToState(
 function removeDokumentkravFromState(
   dokumentkrav: IDokumentkrav,
   dokumentkravArray: IDokumentkrav[]
-): IDokumentkrav[] | undefined {
+): IDokumentkrav[] {
   const dokumentkravIndex = dokumentkravArray.findIndex((krav) => krav.id === dokumentkrav.id);
 
   if (dokumentkravIndex !== -1) {
@@ -129,5 +128,5 @@ function removeDokumentkravFromState(
     return stateCopy;
   }
 
-  return undefined;
+  return dokumentkravArray;
 }

@@ -5,12 +5,10 @@ export function useFileUploader(files?: IDokumentkravFil[]) {
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(files || []);
 
   function handleUploadedFiles(file: IDokumentkravFil) {
-    const fileState = [...uploadedFiles];
-    const indexOfFile = fileState.findIndex((f) => f.filsti === file.filsti);
+    const indexOfFile = uploadedFiles.findIndex((f) => f.filsti === file.filsti);
 
     if (indexOfFile !== -1) {
-      fileState.splice(indexOfFile, 1);
-      setUploadedFiles(fileState);
+      setUploadedFiles((currentState) => currentState.splice(indexOfFile, 1));
     } else {
       setUploadedFiles((currentState) => [...currentState, file]);
     }
