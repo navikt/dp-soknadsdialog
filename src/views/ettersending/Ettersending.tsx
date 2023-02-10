@@ -24,6 +24,7 @@ import { EttersendingDokumentkravNotSending } from "./EttersendingDokumentkravNo
 import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { IEttersendBody } from "../../pages/api/soknad/ettersend";
+import { isDefined } from "../../types/type-guards";
 
 interface IProps {
   dokumentkrav: IDokumentkravList;
@@ -49,6 +50,15 @@ export function Ettersending({ dokumentkrav }: IProps) {
     bundleAndSaveDokumentkrav,
     addDokumentkravWithNewFiles,
   } = useDokumentkravBundler();
+
+  const dokumentkravToBundle = dokumentkrav.krav
+    .map((krav) => {
+      const hasUnbundledFiles = krav.filer.find((fil) => !fil.bundlet);
+      if (hasUnbundledFiles) {
+        return krav;
+      }
+    })
+    .filter(isDefined);
 
   const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkrav.krav.filter(
     (krav: IDokumentkrav): boolean =>
