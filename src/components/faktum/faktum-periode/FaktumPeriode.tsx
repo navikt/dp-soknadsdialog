@@ -59,7 +59,7 @@ function FaktumPeriodeComponent(
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (faktum.svar && !isFirstRender) {
-      setCurrentAnswer({ fom: faktum.svar.fom, tom: faktum.svar.tom });
+      setCurrentAnswer(faktum.svar);
     }
   }, [faktum.svar]);
 
