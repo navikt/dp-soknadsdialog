@@ -58,8 +58,8 @@ function FaktumPeriodeComponent(
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar && !isFirstRender) {
-      setCurrentAnswer(faktum.svar);
+    if (faktum.svar !== currentAnswer && !isFirstRender) {
+      setCurrentAnswer(faktum.svar ?? initialPeriodeValue);
     }
   }, [faktum.svar]);
 
