@@ -58,10 +58,10 @@ function FaktumPeriodeComponent(
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!faktum.svar && !isFirstRender) {
-      setCurrentAnswer(initialPeriodeValue);
+    if (faktum.svar && !isFirstRender) {
+      setCurrentAnswer({ fom: faktum.svar.fom, tom: faktum.svar.tom });
     }
-  }, [faktum]);
+  }, [faktum.svar]);
 
   function getDefaultSelectedValue(): IDateRange | undefined {
     if (currentAnswer?.fom) {
@@ -77,7 +77,6 @@ function FaktumPeriodeComponent(
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = UNSAFE_useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
     onRangeChange: (value?: IDateRange) => {
-      // When user clears `from date input` or types in invalid date format
       if (!value?.from) {
         setCurrentAnswer(initialPeriodeValue);
         debouncedChange(initialPeriodeValue);
@@ -98,12 +97,9 @@ function FaktumPeriodeComponent(
       }
     },
     onValidate: (value) => {
+      // Empty `to date input` programmatically when user clears `from date input`
       if (value.from.isEmpty) {
-        // Empty `to date input` programmatically when user clears `from date input`
         setSelected({ from: undefined });
-        setCurrentAnswer(initialPeriodeValue);
-        debouncedChange(initialPeriodeValue);
-        return;
       }
 
       // When user types in invalid date format on `from date input`
@@ -112,15 +108,6 @@ function FaktumPeriodeComponent(
         const periode = { ...currentAnswer, fom: null };
         setCurrentAnswer(periode);
         debouncedChange(periode);
-        return;
-      }
-
-      // Only save fom to state when `to date input` is empty
-      if (value.to.isEmpty) {
-        const periode = { fom: currentAnswer.fom };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-        return;
       }
 
       // When user types in invalid `to date input`
@@ -129,7 +116,6 @@ function FaktumPeriodeComponent(
         const periode = { ...currentAnswer, tom: null };
         setCurrentAnswer(periode);
         debouncedChange(periode);
-        return;
       }
     },
   });
