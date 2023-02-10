@@ -20,7 +20,7 @@ interface IDateRange {
   to?: Date | undefined;
 }
 
-export interface IPeriodeFaktumAnswerType {
+export interface IPeriodeFaktumAnswerState {
   fom: string | null;
   tom?: string | null;
 }
@@ -41,7 +41,7 @@ function FaktumPeriodeComponent(
 
   const initialPeriodeValue = { fom: "" };
   const [currentAnswer, setCurrentAnswer] = useState<
-    IQuizPeriodeFaktumAnswerType | IPeriodeFaktumAnswerType
+    IQuizPeriodeFaktumAnswerType | IPeriodeFaktumAnswerState
   >(faktum.svar ?? initialPeriodeValue);
   const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
@@ -127,7 +127,7 @@ function FaktumPeriodeComponent(
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function saveFaktum(value: IPeriodeFaktumAnswerType) {
+  function saveFaktum(value: IPeriodeFaktumAnswerState) {
     clearErrorMessage();
 
     if (value.fom === "") {

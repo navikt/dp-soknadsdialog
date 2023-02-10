@@ -1,13 +1,13 @@
 import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
-import { IPeriodeFaktumAnswerType } from "../../components/faktum/faktum-periode/FaktumPeriode";
+import { IPeriodeFaktumAnswerState } from "../../components/faktum/faktum-periode/FaktumPeriode";
 import { isWithinValidYearRange } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 
 interface IUseValidateFaktumPeriode {
-  validateAndIsValidPeriode: (svar: IPeriodeFaktumAnswerType) => boolean;
+  validateAndIsValidPeriode: (svar: IPeriodeFaktumAnswerState) => boolean;
   fomErrorMessage: string | undefined;
   tomErrorMessage: string | undefined;
   clearErrorMessage: () => void;
@@ -25,7 +25,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     );
   }, [unansweredFaktumId]);
 
-  function validateAndIsValidPeriode(svar: IPeriodeFaktumAnswerType) {
+  function validateAndIsValidPeriode(svar: IPeriodeFaktumAnswerState) {
     const { fom, tom } = svar;
 
     if (fom === null) {
