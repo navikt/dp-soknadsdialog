@@ -6,6 +6,7 @@ import { IDokumentkravList } from "../../../types/documentation.types";
 import { getSession } from "../../../auth.utils";
 import { Ettersending } from "../../../views/ettersending/Ettersending";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 
 interface IProps {
   errorCode: number | null;
@@ -57,9 +58,15 @@ export async function getServerSideProps(
 }
 
 export default function EttersendingPage(props: IProps) {
-  if (!props.dokumentkrav) {
+  const { dokumentkrav } = props;
+
+  if (!dokumentkrav) {
     return <Alert variant="info">Ingen dokumentasjonskrav tilgjengelig på søknaden</Alert>;
   }
 
-  return <Ettersending dokumentkrav={props.dokumentkrav} />;
+  return (
+    <DokumentkravProvider initialState={dokumentkrav}>
+      <Ettersending />
+    </DokumentkravProvider>
+  );
 }

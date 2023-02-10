@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import { IDokumentkrav } from "../../types/documentation.types";
@@ -16,8 +16,6 @@ import styles from "./Ettersending.module.css";
 interface IProps {
   dokumentkrav: IDokumentkrav;
   hasBundleError: boolean;
-  addDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
-  removeDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
 }
 
 export function EttersendingDokumentkravSendingItem(props: IProps) {
@@ -26,17 +24,6 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(unbundledFiles);
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
-
-  useEffect(() => {
-    if (uploadedFiles.length > 0) {
-      props.addDokumentkrav({
-        ...props.dokumentkrav,
-        filer: [...props.dokumentkrav.filer, ...uploadedFiles],
-      });
-    } else {
-      props.removeDokumentkrav(props.dokumentkrav);
-    }
-  }, [uploadedFiles.length]);
 
   return (
     <div id={props.dokumentkrav.id} className={styles.dokumentkravContainer}>

@@ -7,7 +7,7 @@ import { IDokumentkravSvarBody } from "../pages/api/documentation/svar";
 
 export interface IDokumentkravContext {
   dokumentkravList: IDokumentkravList;
-  getDokumentkravList: () => void;
+  getDokumentkravList: () => Promise<IDokumentkravList | undefined>;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
   saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
   updateDokumentkravList: (value: IDokumentkrav) => void;
@@ -28,12 +28,13 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     true
   );
 
-  async function getDokumentkravList() {
+  async function getDokumentkravList(): Promise<IDokumentkravList | undefined> {
     const dokumentkravResponse = await fetch(api(`documentation/${uuid}`));
 
     if (dokumentkravResponse.ok) {
-      const data = await dokumentkravResponse.json();
-      setDokumentkravList(data);
+      return dokumentkravResponse.json();
+    } else {
+      Promise.reject();
     }
   }
 

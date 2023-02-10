@@ -8,6 +8,7 @@ export function useDokumentkravBundler() {
   const { uuid } = useUuid();
   const [isBundling, setIsBundling] = useState(false);
   const [noDocumentsToSave, setNoDocumentsToSave] = useState(false);
+
   const [dokumentkravWithNewFiles, setDokumentkravWithNewFiles] = useState<IDokumentkrav[]>([]);
   const [dokumentkravWithNewBundle, setDokumentkravWithNewBundle] = useState<IDokumentkrav[]>([]);
   const [dokumentkravWithBundleError, setDokumentkravWithBundleError] = useState<IDokumentkrav[]>(
@@ -61,6 +62,25 @@ export function useDokumentkravBundler() {
     removeDokumentkravWithNewFiles(dokumentkrav);
   }
 
+  async function bundleDokumentkravList(dokumentkravList: IDokumentkrav[]) {
+    setNoDocumentsToSave(false);
+
+    if (dokumentkravList.length === 0) {
+      setNoDocumentsToSave(true);
+      return;
+    }
+
+    let readyToEttersend = true;
+    for (const dokumentkrav of dokumentkravList) {
+      const res = await bundleAndSaveDokumentkrav(dokumentkrav);
+      if (!res) {
+        readyToEttersend = false;
+      }
+    }
+
+    return readyToEttersend;
+  }
+
   async function bundleAndSaveDokumentkrav(dokumentkrav: IDokumentkrav): Promise<boolean> {
     setIsBundling(true);
     const isRequestOk = await bundleAndSaveDokumentkravPut({
@@ -91,6 +111,7 @@ export function useDokumentkravBundler() {
     addDokumentkravWithNewFiles,
     isAllDokumentkravValid,
     bundleAndSaveDokumentkrav,
+    bundleDokumentkravList,
   };
 }
 
