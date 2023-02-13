@@ -9,10 +9,14 @@ import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
 import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   errorCode: number | null;
+  dokumentkravList: IDokumentkravList | null;
 }
 
 export async function getServerSideProps(
@@ -26,6 +30,7 @@ export async function getServerSideProps(
       props: {
         soknadState: mockGenerellInnsending as IQuizState,
         errorCode: null,
+        dokumentkravList: null,
       },
     };
   }
@@ -42,6 +47,7 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let dokumentkravList = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
@@ -52,16 +58,27 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+
+  if (!dokumentkravResponse.ok) {
+    errorCode = dokumentkravResponse.status;
+  } else {
+    dokumentkravList = await dokumentkravResponse.json();
+  }
+
   return {
     props: {
       soknadState,
       errorCode,
+      dokumentkravList,
     },
   };
 }
 
 export default function GenerellInnsendingPage(props: IProps) {
-  if (props.errorCode || !props.soknadState) {
+  const { soknadState, dokumentkravList, errorCode } = props;
+
+  if (errorCode || !soknadState || !dokumentkravList) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -72,10 +89,12 @@ export default function GenerellInnsendingPage(props: IProps) {
   }
 
   return (
-    <QuizProvider initialState={props.soknadState}>
-      <ValidationProvider>
-        <GenerellInnsending />
-      </ValidationProvider>
+    <QuizProvider initialState={soknadState}>
+      <DokumentkravProvider initialState={dokumentkravList}>
+        <ValidationProvider>
+          <GenerellInnsending />
+        </ValidationProvider>
+      </DokumentkravProvider>
     </QuizProvider>
   );
 }

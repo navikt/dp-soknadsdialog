@@ -1,13 +1,14 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import api from "../api.utils";
-import { useRouter } from "next/router";
 import { usePutRequest } from "../hooks/usePutRequest";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IDokumentkravSvarBody } from "../pages/api/documentation/svar";
+import api from "../api.utils";
+import { useRouter } from "next/router";
 
 export interface IDokumentkravContext {
   dokumentkravList: IDokumentkravList;
   getDokumentkravList: () => Promise<IDokumentkravList | undefined>;
+  setDokumentkravList: (value: IDokumentkravList) => void;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
   saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
   updateDokumentkravList: (value: IDokumentkrav) => void;
@@ -73,6 +74,7 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
       value={{
         dokumentkravList,
         getDokumentkravList,
+        setDokumentkravList,
         getFirstUnansweredDokumentkrav,
         saveDokumentkravSvar,
         updateDokumentkravList,

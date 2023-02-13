@@ -8,9 +8,6 @@ import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import useSWR, { useSWRConfig } from "swr";
-import api from "../../api.utils";
-import { IDokumentkravList } from "../../types/documentation.types";
 import { useUuid } from "../../hooks/useUuid";
 import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
 import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
@@ -25,35 +22,34 @@ import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
 
 export function GenerellInnsending() {
   const router = useRouter();
   const { uuid } = useUuid();
-  const { mutate } = useSWRConfig();
   const { getAppText } = useSanity();
   const isFirstRender = useFirstRender();
   const { soknadState, isError, isLoading } = useQuiz();
+  const { dokumentkravList, getDokumentkravList, setDokumentkravList } = useDokumentkrav();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
-  const { data, error } = useSWR<IDokumentkravList>(
-    !isFirstRender ? api(`/documentation/${uuid}`) : null
-  );
+  const [generalError, setGeneralError] = useState(false);
   // Generell innsending har bare 1 seksjon.
   const currentSection = soknadState.seksjoner[0];
-  const shouldRenderDokumentkrav = data && data.krav?.length > 0;
-  const {
-    isBundling,
-    noDocumentsToSave,
-    dokumentkravWithBundleError,
-    dokumentkravWithNewFiles,
-    removeDokumentkrav,
-    isAllDokumentkravValid,
-    bundleAndSaveDokumentkrav,
-    addDokumentkravWithNewFiles,
-  } = useDokumentkravBundler();
+  const shouldRenderDokumentkrav = dokumentkravList && dokumentkravList.krav.length > 0;
+  const { isBundling, noDocumentsToSave, dokumentkravWithBundleError, bundleDokumentkravList } =
+    useDokumentkravBundler();
   const [saveDokumentkravSvar] = usePutRequest<IDokumentkravSvarBody>("documentation/svar");
   const [ferdigstillInnsending, ferdigstillInnsendingStatus] =
     usePutRequest<IFerdigstillBody>("soknad/ferdigstill");
+
+  async function getDokumentkrav() {
+    const newestDokumentkravList = await getDokumentkravList();
+
+    if (newestDokumentkravList) {
+      setDokumentkravList(newestDokumentkravList);
+    }
+  }
 
   useEffect(() => {
     if (unansweredFaktumId) {
@@ -63,24 +59,26 @@ export function GenerellInnsending() {
 
   useEffect(() => {
     if (!isFirstRender) {
-      mutate(api(`/documentation/${uuid}`));
+      getDokumentkrav();
     }
   }, [soknadState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {
-    if (data) {
-      for (const dokumentkrav of data.krav) {
-        saveDokumentkravSvar({
-          uuid,
-          dokumentkravId: dokumentkrav.id,
-          dokumentkravSvar: {
-            svar: DOKUMENTKRAV_SVAR_SEND_NAA,
-          },
-        });
+    if (dokumentkravList) {
+      for (const dokumentkrav of dokumentkravList.krav) {
+        if (!dokumentkrav.svar) {
+          saveDokumentkravSvar({
+            uuid,
+            dokumentkravId: dokumentkrav.id,
+            dokumentkravSvar: {
+              svar: DOKUMENTKRAV_SVAR_SEND_NAA,
+            },
+          });
+        }
       }
     }
-  }, [data]);
+  }, [dokumentkravList]);
 
   useEffect(() => {
     if (ferdigstillInnsendingStatus === "success") {
@@ -89,19 +87,23 @@ export function GenerellInnsending() {
   }, [ferdigstillInnsendingStatus]);
 
   async function bundleAndSaveAllDokumentkrav() {
-    if (isAllDokumentkravValid()) {
-      let readyToFerdigstill = true;
-      for (const dokumentkrav of dokumentkravWithNewFiles) {
-        const res = await bundleAndSaveDokumentkrav(dokumentkrav);
-        if (!res) {
-          readyToFerdigstill = false;
-        }
-      }
+    setGeneralError(false);
+    const newestDokumentkravList = await getDokumentkravList();
 
-      if (readyToFerdigstill) {
-        const locale = router.locale as Locale | undefined;
-        ferdigstillInnsending({ uuid, locale });
-      }
+    if (!newestDokumentkravList) {
+      setGeneralError(true);
+      return;
+    }
+
+    const dokumentkravToBundle = newestDokumentkravList.krav.filter((dokumentkrav) => {
+      return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
+    });
+
+    const bundlingSuccessful = await bundleDokumentkravList(dokumentkravToBundle);
+
+    if (bundlingSuccessful) {
+      const locale = router.locale as Locale | undefined;
+      ferdigstillInnsending({ uuid, locale });
     }
   }
 
@@ -115,12 +117,10 @@ export function GenerellInnsending() {
         <Section section={currentSection} />
 
         {shouldRenderDokumentkrav &&
-          data.krav.map((dokumentkrav) => (
+          dokumentkravList.krav.map((dokumentkrav) => (
             <GenerellInnsendingDocument
               key={dokumentkrav.id}
               dokumentkrav={dokumentkrav}
-              addDokumentkrav={addDokumentkravWithNewFiles}
-              removeDokumentkrav={removeDokumentkrav}
               hasBundleError={
                 !dokumentkravWithBundleError.findIndex((krav) => krav.id === dokumentkrav.id)
               }
@@ -157,7 +157,7 @@ export function GenerellInnsending() {
           handleClose={() => setDeleteSoknadModalOpen(false)}
         />
 
-        {(isError || error) && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
+        {(isError || generalError) && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
 
         <NoSessionModal />
       </main>

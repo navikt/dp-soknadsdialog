@@ -32,12 +32,8 @@ export function Dokumentasjon() {
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [dokumentkravError, setDokumentkravError] = useState(false);
-  const {
-    isBundling,
-    dokumentkravWithBundleError,
-    dokumentkravWithNewFiles,
-    bundleAndSaveDokumentkrav,
-  } = useDokumentkravBundler();
+  const { isBundling, dokumentkravWithBundleError, bundleAndSaveDokumentkrav } =
+    useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const firstUnansweredDokumentkrav = getFirstUnansweredDokumentkrav();
@@ -83,7 +79,7 @@ export function Dokumentasjon() {
     }
 
     if (allBundlesSuccessful) {
-      trackDokumentasjonLastetOpp(dokumentkravWithNewFiles.length, tidBruktSiden(startetBundling));
+      trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
