@@ -150,7 +150,7 @@ export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
 
   return (
     <>
-      <FormattedDate date={varighetFaktum.fom} />
+      {varighetFaktum.fom && <FormattedDate date={varighetFaktum.fom} />}
       {varighetFaktum.tom && (
         <>
           {`- `}
