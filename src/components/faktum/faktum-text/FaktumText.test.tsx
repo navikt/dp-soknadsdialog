@@ -50,7 +50,7 @@ describe("FaktumText", () => {
     });
   });
 
-  describe.skip("When user inputs an answer", () => {
+  describe("When user inputs an answer", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = "Hei på du";
