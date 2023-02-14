@@ -68,9 +68,6 @@ const config = {
 
     return config;
   },
-  sentry: {
-    hideSourceMaps: true,
-  },
 };
 
 module.exports = withBundleAnalyzer(
