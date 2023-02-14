@@ -17,7 +17,9 @@ export function getMissingDokumentkrav(dokumentkravList: IDokumentkravList): IDo
 }
 
 export function getUploadedDokumentkrav(dokumentkravList: IDokumentkravList): IDokumentkrav[] {
-  return dokumentkravList.krav.filter((dokumentkrav) => dokumentkrav.bundleFilsti);
+  return dokumentkravList.krav.filter(
+    (dokumentkrav) => dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.bundleFilsti
+  );
 }
 
 export function getNotSendingDokumentkrav(dokumentkravList: IDokumentkravList): IDokumentkrav[] {
