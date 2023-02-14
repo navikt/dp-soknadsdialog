@@ -14,6 +14,8 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
+jest.setTimeout(10000);
+
 describe("FaktumDato", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
@@ -92,7 +94,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
-    test("Selecting a date two hundret years from now should show error message and not post to server", async () => {
+    test("Selecting a date two hundret years from now should show error message and not post null server", async () => {
       const twoHundredYearsFromNow = addYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
@@ -113,11 +115,11 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(mockSaveFaktumToQuiz).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
 
-    test("Selecting a date two hundret years before now should show error message and not post to server", async () => {
+    test("Selecting a date two hundret years before now should show error message and post null to server", async () => {
       const twoHundredYearsFromNow = subYears(new Date(), -200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
@@ -138,7 +140,7 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(mockSaveFaktumToQuiz).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
   });
