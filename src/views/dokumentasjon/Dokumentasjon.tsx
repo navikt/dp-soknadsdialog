@@ -32,7 +32,7 @@ export function Dokumentasjon() {
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
   const [dokumentkravError, setDokumentkravError] = useState(false);
-  const { isBundling, dokumentkravWithBundleError, bundleAndSaveDokumentkrav } =
+  const { isBundling, dokumentkravWithBundleError, bundleDokumentkravList } =
     useDokumentkravBundler();
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
@@ -69,16 +69,9 @@ export function Dokumentasjon() {
     });
 
     const startetBundling = tidStart();
-    let allBundlesSuccessful = true;
+    const bundlingSuccessful = await bundleDokumentkravList(dokumentkravToBundle);
 
-    for (const dokumentkrav of dokumentkravToBundle) {
-      const res = await bundleAndSaveDokumentkrav(dokumentkrav);
-      if (!res) {
-        allBundlesSuccessful = false;
-      }
-    }
-
-    if (allBundlesSuccessful) {
+    if (bundlingSuccessful) {
       trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);

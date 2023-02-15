@@ -57,7 +57,6 @@ export function useDokumentkravBundler() {
     isBundling,
     noDocumentsToSave,
     dokumentkravWithBundleError,
-    bundleAndSaveDokumentkrav,
     bundleDokumentkravList,
   };
 }
