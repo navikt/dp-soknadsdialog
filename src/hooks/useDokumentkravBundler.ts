@@ -26,6 +26,7 @@ export function useDokumentkravBundler() {
     const tmpErrorList: IDokumentkrav[] = [];
     let readyToEttersend = true;
 
+    setIsBundling(true);
     await Promise.all(
       dokumentkravList.map(async (dokumentkrav) => {
         const res = await bundleAndSaveDokumentkrav(dokumentkrav);
@@ -35,6 +36,7 @@ export function useDokumentkravBundler() {
         }
       })
     );
+    setIsBundling(false);
 
     if (tmpErrorList.length > 0) {
       setDokumentkravWithBundleError(tmpErrorList);
@@ -44,14 +46,12 @@ export function useDokumentkravBundler() {
   }
 
   async function bundleAndSaveDokumentkrav(dokumentkrav: IDokumentkrav): Promise<boolean> {
-    setIsBundling(true);
     const isRequestOk = await bundleAndSaveDokumentkravPut({
       uuid,
       dokumentkravId: dokumentkrav.id,
       fileUrns: dokumentkrav.filer.map((file) => ({ urn: file.urn })),
     });
 
-    setIsBundling(false);
     return isRequestOk;
   }
 
