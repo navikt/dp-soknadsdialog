@@ -23,16 +23,18 @@ export function useDokumentkravBundler() {
     setNoDocumentsToSave(false);
     setDokumentkravWithBundleError([]);
 
-    const tmpErrorList = [];
+    const tmpErrorList: IDokumentkrav[] = [];
     let readyToEttersend = true;
 
-    for (const dokumentkrav of dokumentkravList) {
-      const res = await bundleAndSaveDokumentkrav(dokumentkrav);
-      if (!res) {
-        tmpErrorList.push(dokumentkrav);
-        readyToEttersend = false;
-      }
-    }
+    await Promise.all(
+      dokumentkravList.map(async (dokumentkrav) => {
+        const res = await bundleAndSaveDokumentkrav(dokumentkrav);
+        if (!res) {
+          tmpErrorList.push(dokumentkrav);
+          readyToEttersend = false;
+        }
+      })
+    );
 
     if (tmpErrorList.length > 0) {
       setDokumentkravWithBundleError(tmpErrorList);
