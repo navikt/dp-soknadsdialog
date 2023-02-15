@@ -50,7 +50,8 @@ export function Ettersending() {
     (krav: IDokumentkrav): boolean => krav.svar === DOKUMENTKRAV_SVAR_SENDER_SENERE
   );
   const receivedDokumentkrav: IDokumentkrav[] = availableDokumentkravForEttersending.filter(
-    (krav: IDokumentkrav): boolean => krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !!krav.bundleFilsti
+    (krav: IDokumentkrav): boolean =>
+      krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !!krav.bundleFilsti
   );
 
   const unavailableDokumentkravForEttersending: IDokumentkrav[] = dokumentkravList.krav.filter(
