@@ -38,7 +38,7 @@ export function Ettersending() {
     usePutRequest<IEttersendBody>("soknad/ettersend");
   const { isBundling, dokumentkravWithBundleError, bundleDokumentkravList, noDocumentsToSave } =
     useDokumentkravBundler();
-  const [generalError, setGeneralError] = useState(false);
+  const [updatedDokumentkravListError, setUpdatedDokumentkravListError] = useState(false);
   const { dokumentkravList, getDokumentkravList } = useDokumentkrav();
 
   const availableDokumentkravForEttersending: IDokumentkrav[] = dokumentkravList.krav.filter(
@@ -75,16 +75,16 @@ export function Ettersending() {
   }, [ettersendSoknadStatus]);
 
   async function bundleAndSaveAllDokumentkrav() {
-    setGeneralError(false);
+    setUpdatedDokumentkravListError(false);
 
-    const newestDokumentkravList = await getDokumentkravList();
+    const updatedDokumentkravList = await getDokumentkravList();
 
-    if (!newestDokumentkravList) {
-      setGeneralError(true);
+    if (!updatedDokumentkravList) {
+      setUpdatedDokumentkravListError(true);
       return;
     }
 
-    const dokumentkravToBundle = newestDokumentkravList.krav.filter((krav) => {
+    const dokumentkravToBundle = updatedDokumentkravList.krav.filter((krav) => {
       const hasUnbundledFiles = krav.filer.find((fil) => !fil.bundlet);
       if (hasUnbundledFiles) {
         return krav;
@@ -152,7 +152,9 @@ export function Ettersending() {
             />
           ))}
 
-          {generalError && <ValidationMessage message={getAppText("ettersending.generell-feil")} />}
+          {updatedDokumentkravListError && (
+            <ValidationMessage message={getAppText("ettersending.generell-feil")} />
+          )}
 
           {noDocumentsToSave && (
             <ValidationMessage message={getAppText("ettersending.validering.ingen-dokumenter")} />

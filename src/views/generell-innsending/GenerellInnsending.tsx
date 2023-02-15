@@ -44,10 +44,10 @@ export function GenerellInnsending() {
     usePutRequest<IFerdigstillBody>("soknad/ferdigstill");
 
   async function getDokumentkrav() {
-    const newestDokumentkravList = await getDokumentkravList();
+    const updatedDokumentkravList = await getDokumentkravList();
 
-    if (newestDokumentkravList) {
-      setDokumentkravList(newestDokumentkravList);
+    if (updatedDokumentkravList) {
+      setDokumentkravList(updatedDokumentkravList);
     }
   }
 
@@ -88,14 +88,14 @@ export function GenerellInnsending() {
 
   async function bundleAndSaveAllDokumentkrav() {
     setGeneralError(false);
-    const newestDokumentkravList = await getDokumentkravList();
+    const updatedDokumentkravList = await getDokumentkravList();
 
-    if (!newestDokumentkravList) {
+    if (!updatedDokumentkravList) {
       setGeneralError(true);
       return;
     }
 
-    const dokumentkravToBundle = newestDokumentkravList.krav.filter((dokumentkrav) => {
+    const dokumentkravToBundle = updatedDokumentkravList.krav.filter((dokumentkrav) => {
       return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
     });
 
