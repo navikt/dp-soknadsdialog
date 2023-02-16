@@ -24,13 +24,14 @@ import styles from "./Summary.module.css";
 import { trackSkjemaFullført } from "../../amplitude.tracking";
 import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 interface IProps {
   personalia: IPersonalia | null;
 }
 
 export function Summary(props: IProps) {
   const { personalia } = props;
-  const { dokumentkravList } = useDokumentkrav();
+  const { dokumentkravList, getFirstUnansweredDokumentkrav } = useDokumentkrav();
 
   const router = useRouter();
   const { uuid } = useUuid();
@@ -53,6 +54,12 @@ export function Summary(props: IProps) {
   const summarySectionText = getSeksjonTextById(textId);
   const personaliaTexts = getSeksjonTextById(textPersonaliaId);
 
+  const dokumentkravWithoutBundle = dokumentkravList.krav.filter((krav) => {
+    return krav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !krav.bundleFilsti;
+  });
+  const invalidDokumentkrav =
+    getFirstUnansweredDokumentkrav() || dokumentkravWithoutBundle.length > 0;
+
   useEffect(() => {
     if (showSoknadNotCompleteError) {
       setFocus(soknadCompleteErrorRef);
@@ -65,7 +72,7 @@ export function Summary(props: IProps) {
       setFocus(consentRef);
       return;
     }
-    if (!soknadState.ferdig) {
+    if (!soknadState.ferdig || invalidDokumentkrav) {
       setshowSoknadNotCompleteError(true);
 
       // If showValidationErrors is false, the async useEffect will trigger
@@ -123,7 +130,7 @@ export function Summary(props: IProps) {
               <Accordion.Header>
                 {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
 
-                {showSoknadNotCompleteError && !section.ferdig && (
+                {!section.ferdig && (
                   <Tag variant="error" className={styles.notCompleteTag}>
                     {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
                   </Tag>
@@ -148,7 +155,14 @@ export function Summary(props: IProps) {
 
         {dokumentkravList && dokumentkravList.krav.length > 0 && (
           <Accordion.Item>
-            <Accordion.Header>{getAppText(textDokumentkravId)}</Accordion.Header>
+            <Accordion.Header>
+              {getAppText(textDokumentkravId)}{" "}
+              {invalidDokumentkrav && (
+                <Tag variant="error" className={styles.notCompleteTag}>
+                  {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
+                </Tag>
+              )}
+            </Accordion.Header>
             <Accordion.Content>
               <>
                 <ul className={styles.dokumentkravList}>

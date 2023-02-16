@@ -4,6 +4,7 @@ import { FaktumText } from "./FaktumText";
 import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
 const faktumMockData: IQuizTekstFaktum = {
   id: "8004.1",
@@ -14,6 +15,8 @@ const faktumMockData: IQuizTekstFaktum = {
   sannsynliggjoresAv: [],
   roller: [],
 };
+
+jest.setTimeout(10000);
 
 describe("FaktumText", () => {
   // Undo any answer after each test
@@ -53,11 +56,10 @@ describe("FaktumText", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = "Hei på du";
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumText faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumText faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -65,21 +67,20 @@ describe("FaktumText", () => {
       await user.type(textInput, svar);
 
       await waitFor(() => {
-        expect(onchange).toHaveBeenCalledTimes(1);
-        expect(onchange).toHaveBeenCalledWith(faktumMockData, svar);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, svar);
       });
     });
 
-    test.skip("Should show error on invalid input", async () => {
+    test("Should show error on too longt text", async () => {
       const inValidTextLengthMock =
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like.";
       const errorTextKey = "validering.text-faktum.for-lang-tekst";
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumText faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumText faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -88,7 +89,7 @@ describe("FaktumText", () => {
 
       await waitFor(() => {
         expect(textInput.value).toEqual(inValidTextLengthMock);
-        expect(onchange).toHaveBeenCalledTimes(0);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledTimes(0);
         const errorText = screen.getByText(errorTextKey);
         expect(errorText).toBeInTheDocument();
       });

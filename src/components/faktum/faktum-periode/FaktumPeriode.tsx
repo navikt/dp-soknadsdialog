@@ -20,23 +20,29 @@ interface IDateRange {
   to?: Date | undefined;
 }
 
+export interface IPeriodeFaktumAnswerState {
+  fom: string | null;
+  tom?: string | null;
+}
+
 export const FaktumPeriode = forwardRef(FaktumPeriodeComponent);
 
 function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
-  const [tomDateIsBeforeFomDate, setTomDateIsBeforeFomDate] = useState(false);
-  const { isValid, tomErrorMessage, fomErrorMessage, getTomIsBeforeTomErrorMessage } =
+  const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
+
+  const initialPeriodeValue = { fom: "" };
   const [currentAnswer, setCurrentAnswer] = useState<
-    IQuizPeriodeFaktumAnswerType | undefined | null
-  >(faktum.svar);
+    IQuizPeriodeFaktumAnswerType | IPeriodeFaktumAnswerState
+  >(faktum.svar ?? initialPeriodeValue);
   const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
   const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
 
@@ -46,16 +52,16 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender) {
-      onChange ? onChange(faktum, debouncedPeriode) : saveFaktum(debouncedPeriode);
+      saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!isFirstRender && faktum.svar !== currentAnswer) {
-      setCurrentAnswer(faktum.svar ?? null);
+    if (faktum.svar !== currentAnswer && !isFirstRender) {
+      setCurrentAnswer(faktum.svar ?? initialPeriodeValue);
     }
-  }, [faktum]);
+  }, [faktum.svar]);
 
   function getDefaultSelectedValue(): IDateRange | undefined {
     if (currentAnswer?.fom) {
@@ -70,10 +76,46 @@ function FaktumPeriodeComponent(
 
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = UNSAFE_useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
-    onRangeChange: (value?: IDateRange) => handleDateChange(value),
+    onRangeChange: (value?: IDateRange) => {
+      if (!value?.from) {
+        setCurrentAnswer(initialPeriodeValue);
+        debouncedChange(initialPeriodeValue);
+        return;
+      }
+
+      if (value?.from) {
+        const parsedFromDate = formatISO(value.from, { representation: "date" });
+        let period: IQuizPeriodeFaktumAnswerType = { fom: parsedFromDate };
+
+        if (value.to) {
+          const parsedToDate = formatISO(value.to, { representation: "date" });
+          period = { ...period, tom: parsedToDate };
+        }
+
+        setCurrentAnswer(period);
+        debouncedChange(period);
+      }
+    },
     onValidate: (value) => {
-      if (value.to) {
-        setTomDateIsBeforeFomDate(!!value.to?.isBeforeFrom);
+      // Empty `to date input` programmatically when user clears `from date input`
+      if (value.from.isEmpty) {
+        setSelected({ from: undefined });
+      }
+
+      // When user types in invalid date format on `from date input`
+      if (!value.from.isEmpty && value.from.isInvalid) {
+        // Set fom to null for validation
+        const periode = { ...currentAnswer, fom: null };
+        setCurrentAnswer(periode);
+        debouncedChange(periode);
+      }
+
+      // When user types in invalid `to date input`
+      if (!value.to.isEmpty && value.to.isInvalid) {
+        // Set tom to null for validation
+        const periode = { ...currentAnswer, tom: null };
+        setCurrentAnswer(periode);
+        debouncedChange(periode);
       }
     },
   });
@@ -85,54 +127,16 @@ function FaktumPeriodeComponent(
     setDatePickerIsOpen(!!datepickerProps.open);
   }, [datepickerProps]);
 
-  function handleDateChange(value?: IDateRange) {
-    // When user clears from date from answered period, should automatically clear to date
-    if (!value?.from && value?.to) {
-      // Clear to date when from date is empty programmatically
-      setSelected({ from: undefined });
-      setCurrentAnswer(null);
-      debouncedChange(null);
-    }
+  function saveFaktum(value: IPeriodeFaktumAnswerState) {
+    clearErrorMessage();
 
-    // When user clears from date from answered period without to date
-    if (!value?.from && !value?.to) {
-      setCurrentAnswer(null);
-      debouncedChange(null);
-    }
-
-    if (value?.from) {
-      // When to date is not speficied or to date is before from date
-      if (!value.to || tomDateIsBeforeFomDate) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const period = { fom: parsedFromDate };
-
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-
-      // When both from and to date is provided
-      if (value.to) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        const parsedToDate = formatISO(value.to, { representation: "date" });
-        const period = { fom: parsedFromDate, tom: parsedToDate };
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-    }
-  }
-
-  function saveFaktum(value: IQuizPeriodeFaktumAnswerType | null | undefined) {
-    if (!value) {
+    if (value.fom === "") {
       saveFaktumToQuiz(faktum, null);
+      return;
     }
 
-    if (value && !isValid(value)) {
-      saveFaktumToQuiz(faktum, null);
-    }
-
-    if (value && isValid(value)) {
-      saveFaktumToQuiz(faktum, value);
-    }
+    const isValidPeriode = validateAndIsValidPeriode(value);
+    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
   }
 
   return (
@@ -169,7 +173,7 @@ function FaktumPeriodeComponent(
               {...toInputProps}
               label={faktumTextTil}
               placeholder={getAppText("datovelger.dato-format")}
-              error={tomDateIsBeforeFomDate ? getTomIsBeforeTomErrorMessage() : tomErrorMessage}
+              error={tomErrorMessage}
               disabled={isLocked}
             />
           </div>

@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 
 import * as SentryLogger from "../../../sentry.logger";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8007.1",
@@ -74,11 +75,10 @@ describe("FaktumBoolean", () => {
       const user = userEvent.setup();
       const svar = faktumMockData.gyldigeValg[1];
       const booleanSvar = textIdToBoolean(svar);
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumBoolean faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumBoolean faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -87,8 +87,8 @@ describe("FaktumBoolean", () => {
       user.click(radioToClick);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, booleanSvar);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, booleanSvar);
       });
     });
   });

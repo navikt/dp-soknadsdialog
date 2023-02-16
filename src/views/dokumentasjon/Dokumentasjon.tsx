@@ -72,7 +72,10 @@ export function Dokumentasjon() {
     const bundlingSuccessful = await bundleDokumentkravList(dokumentkravToBundle);
 
     if (bundlingSuccessful) {
-      trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
+      if (dokumentkravToBundle.length != 0) {
+        trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
+      }
+      
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {

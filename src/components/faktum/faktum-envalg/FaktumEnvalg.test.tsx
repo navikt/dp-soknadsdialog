@@ -4,6 +4,7 @@ import { FaktumEnvalg } from "./FaktumEnvalg";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",
@@ -60,11 +61,10 @@ describe("FaktumEnvalg", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = faktumMockData.gyldigeValg[0];
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumEnvalg faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumEnvalg faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -73,8 +73,8 @@ describe("FaktumEnvalg", () => {
       user.click(firstRadio);
 
       await waitFor(() => {
-        expect(onchange).toHaveBeenCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, svar);
+        expect(mockSaveFaktumToQuiz).toHaveBeenCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, svar);
       });
     });
   });

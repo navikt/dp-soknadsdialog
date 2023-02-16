@@ -22,7 +22,7 @@ function FaktumLandComponent(
   ref: Ref<HTMLDivElement> | undefined
 ) {
   const router = useRouter();
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -70,7 +70,7 @@ function FaktumLandComponent(
   }, [currentAnswer]);
 
   function onSelect(value: string) {
-    onChange ? onChange(faktum, value) : saveFaktum(value);
+    saveFaktum(value);
     setCurrentAnswer(value);
   }
 

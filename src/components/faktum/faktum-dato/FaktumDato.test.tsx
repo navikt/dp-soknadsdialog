@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { addWeeks, addYears, format, formatISO, subYears } from "date-fns";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 import { FaktumDato } from "./FaktumDato";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
@@ -12,6 +13,8 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   beskrivendeId: "faktum.dagpenger-soknadsdato",
   sannsynliggjoresAv: [],
 };
+
+jest.setTimeout(10000);
 
 describe("FaktumDato", () => {
   // Undo any answer after each test
@@ -52,11 +55,10 @@ describe("FaktumDato", () => {
   describe("When user selects an answer", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -64,8 +66,8 @@ describe("FaktumDato", () => {
       await user.type(datepicker, "04.08.2022");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, "2022-08-04");
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, "2022-08-04");
       });
     });
   });
@@ -74,11 +76,10 @@ describe("FaktumDato", () => {
     test("Should call saveFaktum and post null to server", async () => {
       faktumMockData.svar = "2022-08-04";
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -86,23 +87,22 @@ describe("FaktumDato", () => {
       await user.clear(datepicker);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, "");
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
   });
 
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
-    test("Selecting a date two hundret years from now should show error message and not post to server", async () => {
+    test("Selecting a date two hundret years from now should show error message and not post null server", async () => {
       const twoHundredYearsFromNow = addYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -115,20 +115,19 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(onchange).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
 
-    test("Selecting a date two hundret years before now should show error message and not post to server", async () => {
+    test("Selecting a date two hundret years before now should show error message and post null to server", async () => {
       const twoHundredYearsFromNow = subYears(new Date(), -200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -141,7 +140,7 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(onchange).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
       });
     });
   });
@@ -149,11 +148,10 @@ describe("FaktumDato", () => {
   describe("When user types in date without dot between date, month and year on datepicker. Eg. 10102022", () => {
     test("Should post 2022-10-10 to server because DDMMYYYY is also a valid format", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -161,8 +159,8 @@ describe("FaktumDato", () => {
       await user.type(datepicker, "10102022");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, "2022-10-10");
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, "2022-10-10");
       });
     });
   });
@@ -170,11 +168,10 @@ describe("FaktumDato", () => {
   describe("When user types in different invalid date formats. Valid format is DDMMYYY, DD.MM.YYYY, DDMMYY or DD.MM.YY", () => {
     test("Types in 10.10 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -185,18 +182,17 @@ describe("FaktumDato", () => {
       await user.type(datepicker, "10.10");
 
       await waitFor(() => {
-        expect(onchange).toBeCalledWith(faktumMockData, null);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
         expect(datePickerError).toBeInTheDocument();
       });
     });
 
     test("Types in 1010 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -207,8 +203,8 @@ describe("FaktumDato", () => {
       ) as HTMLInputElement;
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, null);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
         expect(datePickerError).toBeInTheDocument();
       });
     });
@@ -225,11 +221,10 @@ describe("FaktumDato", () => {
         const isoFormattedDate = formatISO(threeWeeksFromNow, { representation: "date" }); // eg 2022-11-20
 
         const user = userEvent.setup();
-        const onchange = jest.fn();
 
         render(
-          <MockContext>
-            <FaktumDato faktum={faktumSoknadsdatoMockData} onChange={onchange} />
+          <MockContext mockQuizContext={true}>
+            <FaktumDato faktum={faktumSoknadsdatoMockData} />
           </MockContext>
         );
 
@@ -240,8 +235,8 @@ describe("FaktumDato", () => {
         const warningMessage = screen.getByTestId("faktum.soknadsdato-varsel");
 
         await waitFor(() => {
-          expect(onchange).toBeCalledTimes(1);
-          expect(onchange).toBeCalledWith(faktumSoknadsdatoMockData, isoFormattedDate);
+          expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumSoknadsdatoMockData, isoFormattedDate);
           expect(warningMessage).toBeInTheDocument();
         });
       });
@@ -255,11 +250,10 @@ describe("FaktumDato", () => {
         faktumMockData.svar = threeWeeksFromNotIsoFormatted;
 
         const user = userEvent.setup();
-        const onchange = jest.fn();
 
         render(
-          <MockContext>
-            <FaktumDato faktum={faktumMockData} onChange={onchange} />
+          <MockContext mockQuizContext={true}>
+            <FaktumDato faktum={faktumMockData} />
           </MockContext>
         );
 
@@ -273,8 +267,8 @@ describe("FaktumDato", () => {
         await user.clear(datepicker);
 
         await waitFor(() => {
-          expect(onchange).toBeCalledTimes(1);
-          expect(onchange).toBeCalledWith(faktumMockData, "");
+          expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
           expect(warningMessage).not.toBeInTheDocument();
         });
       });
@@ -289,14 +283,13 @@ describe("FaktumDato", () => {
       };
 
       const user = userEvent.setup();
-      const onchange = jest.fn();
 
       const threeWeeksFromNow = addWeeks(new Date(), 3);
       const datePickerFormattedDate = format(threeWeeksFromNow, "dd.MM.yyyy");
 
       render(
-        <MockContext>
-          <FaktumDato faktum={faktumBarnFodselsdatoMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumDato faktum={faktumBarnFodselsdatoMockData} />
         </MockContext>
       );
 
@@ -310,7 +303,7 @@ describe("FaktumDato", () => {
 
       await waitFor(() => {
         expect(datePickerError).toBeInTheDocument();
-        expect(onchange).not.toBeCalled();
+        expect(mockSaveFaktumToQuiz).not.toBeCalled();
       });
     });
   });

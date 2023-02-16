@@ -20,7 +20,7 @@ function FaktumBooleanComponent(
   props: IFaktum<IQuizBooleanFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -60,7 +60,7 @@ function FaktumBooleanComponent(
       console.error("ERROR");
     }
 
-    onChange ? onChange(faktum, mappedAnswer) : saveFaktumToQuiz(faktum, mappedAnswer);
+    saveFaktumToQuiz(faktum, mappedAnswer);
   }
 
   if (!faktum.beskrivendeId) {

@@ -5,6 +5,7 @@ import { FaktumLand } from "./FaktumLand";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { getCountryName } from "../../../country.utils";
 import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",
@@ -114,11 +115,10 @@ describe("FaktumLand", () => {
     test("Should post it to the server", async () => {
       const user = userEvent.setup();
       const svar = faktumMockDataBostedsland.gyldigeLand[14];
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumLand faktum={faktumMockData} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumLand faktum={faktumMockData} />
         </MockContext>
       );
 
@@ -127,8 +127,8 @@ describe("FaktumLand", () => {
       user.selectOptions(screen.getByLabelText(faktumMockData.beskrivendeId), selectedOptionText);
 
       await waitFor(() => {
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockData, svar);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, svar);
       });
     });
   });
@@ -136,19 +136,18 @@ describe("FaktumLand", () => {
   describe("When is Bodstedsland or Arbeidsforhold and faktum is unanswered", () => {
     test("Should post `NOR` to server", async () => {
       const svar = "NOR";
-      const onchange = jest.fn();
 
       render(
-        <MockContext>
-          <FaktumLand faktum={faktumMockDataBostedsland} onChange={onchange} />
+        <MockContext mockQuizContext={true}>
+          <FaktumLand faktum={faktumMockDataBostedsland} />
         </MockContext>
       );
 
       await waitFor(() => {
         const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
         expect(selectedOption.value).toEqual(svar);
-        expect(onchange).toBeCalledTimes(1);
-        expect(onchange).toBeCalledWith(faktumMockDataBostedsland, svar);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockDataBostedsland, svar);
       });
     });
   });

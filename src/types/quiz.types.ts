@@ -90,7 +90,7 @@ export interface IQuizSeksjon {
 
 export interface IQuizPeriodeFaktumAnswerType {
   fom: string;
-  tom?: string | null;
+  tom?: string;
 }
 
 export type QuizFaktumSvarType =

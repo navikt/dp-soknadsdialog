@@ -19,7 +19,7 @@ export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
   ref: Ref<HTMLInputElement> | undefined
 ) {
-  const { faktum, onChange } = props;
+  const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -35,7 +35,7 @@ export function FaktumTextComponent(
   useEffect(() => {
     if (!isFirstRender && debouncedText !== faktum.svar) {
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
-      onChange ? onChange(faktum, inputValue) : saveFaktum(inputValue);
+      saveFaktum(inputValue);
     }
   }, [debouncedText]);
 
