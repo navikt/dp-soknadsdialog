@@ -1,15 +1,17 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import api from "../api.utils";
-import { useRouter } from "next/router";
 import { usePutRequest } from "../hooks/usePutRequest";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IDokumentkravSvarBody } from "../pages/api/documentation/svar";
+import api from "../api.utils";
+import { useRouter } from "next/router";
 
 export interface IDokumentkravContext {
   dokumentkravList: IDokumentkravList;
-  getDokumentkravList: () => void;
+  getDokumentkravList: () => Promise<IDokumentkravList | undefined>;
+  setDokumentkravList: (value: IDokumentkravList) => void;
   getFirstUnansweredDokumentkrav: () => IDokumentkrav | undefined;
   saveDokumentkravSvar: (value: IDokumentkravSvarBody) => Promise<void>;
+  updateDokumentkravList: (value: IDokumentkrav) => void;
 }
 
 export const DokumentkravContext = createContext<IDokumentkravContext | undefined>(undefined);
@@ -27,12 +29,13 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     true
   );
 
-  async function getDokumentkravList() {
+  async function getDokumentkravList(): Promise<IDokumentkravList | undefined> {
     const dokumentkravResponse = await fetch(api(`documentation/${uuid}`));
 
     if (dokumentkravResponse.ok) {
-      const data = await dokumentkravResponse.json();
-      setDokumentkravList(data);
+      return dokumentkravResponse.json();
+    } else {
+      Promise.reject();
     }
   }
 
@@ -56,13 +59,25 @@ function DokumentkravProvider(props: PropsWithChildren<IProps>) {
     });
   }
 
+  function updateDokumentkravList(dokumentkrav: IDokumentkrav) {
+    const tempList = { ...dokumentkravList };
+    const indexOfKrav = tempList.krav.findIndex((f) => f.id === dokumentkrav.id);
+
+    if (indexOfKrav !== -1) {
+      tempList.krav[indexOfKrav] = { ...dokumentkrav };
+      setDokumentkravList(tempList);
+    }
+  }
+
   return (
     <DokumentkravContext.Provider
       value={{
         dokumentkravList,
         getDokumentkravList,
+        setDokumentkravList,
         getFirstUnansweredDokumentkrav,
         saveDokumentkravSvar,
+        updateDokumentkravList,
       }}
     >
       {props.children}

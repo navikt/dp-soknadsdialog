@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDokumentkravRemainingFilesize } from "../../hooks/useDokumentkravRemainingFilesize";
 import { useFileUploader } from "../../hooks/useFileUploader";
 import { IDokumentkrav } from "../../types/documentation.types";
@@ -12,12 +12,11 @@ import { DokumentkravTitle } from "../../components/dokumentkrav-title/Dokumentk
 import { Alert, Link } from "@navikt/ds-react";
 import api from "../../api.utils";
 import styles from "./Ettersending.module.css";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
   hasBundleError: boolean;
-  addDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
-  removeDokumentkrav: (dokumentkrav: IDokumentkrav) => void;
 }
 
 export function EttersendingDokumentkravSendingItem(props: IProps) {
@@ -26,17 +25,7 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(unbundledFiles);
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
-
-  useEffect(() => {
-    if (uploadedFiles.length > 0) {
-      props.addDokumentkrav({
-        ...props.dokumentkrav,
-        filer: [...props.dokumentkrav.filer, ...uploadedFiles],
-      });
-    } else {
-      props.removeDokumentkrav(props.dokumentkrav);
-    }
-  }, [uploadedFiles.length]);
+  const hasBundle = props.dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !!props.dokumentkrav.bundleFilsti;
 
   return (
     <div id={props.dokumentkrav.id} className={styles.dokumentkravContainer}>
@@ -47,7 +36,7 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
         <HelpText className="my-6" helpText={dokumentkravText.helpText} />
       )}
 
-      {props.dokumentkrav.bundleFilsti && (
+      {hasBundle && (
         <div className="my-3">
           {`${getAppText("ettersending.dokumenter.tekst.tidligere.sendt")} `}
           <Link

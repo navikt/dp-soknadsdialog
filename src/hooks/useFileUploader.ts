@@ -5,20 +5,19 @@ export function useFileUploader(files?: IDokumentkravFil[]) {
   const [uploadedFiles, setUploadedFiles] = useState<IDokumentkravFil[]>(files || []);
 
   function handleUploadedFiles(file: IDokumentkravFil) {
-    const fileState = [...uploadedFiles];
-    const indexOfFile = fileState.findIndex((f) => f.filsti === file.filsti);
+    setUploadedFiles((currentState) => {
+      const indexOfFile = currentState.findIndex((f) => f.filsti === file.filsti);
 
-    if (indexOfFile !== -1) {
-      fileState.splice(indexOfFile, 1);
-      setUploadedFiles(fileState);
-    } else {
-      setUploadedFiles((currentState) => [...currentState, file]);
-    }
+      if (indexOfFile !== -1) {
+        // Splice returns deleted object, need to return mutated array
+        const copy = [...currentState];
+        copy.splice(indexOfFile, 1);
+        return copy;
+      } else {
+        return [...currentState, file];
+      }
+    });
   }
 
-  function resetUploadFiles() {
-    setUploadedFiles([]);
-  }
-
-  return { uploadedFiles, handleUploadedFiles, resetUploadFiles };
+  return { uploadedFiles, handleUploadedFiles };
 }
