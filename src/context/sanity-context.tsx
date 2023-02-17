@@ -46,11 +46,7 @@ function useSanity() {
   }
 
   function getLandGruppeTextById(textId: string | undefined): ISanityLandGruppe | undefined {
-    const text = context?.landgrupper.find((gruppe) => gruppe.textId === textId);
-    if (textId && !text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
-    return text;
+    return context?.landgrupper.find((gruppe) => gruppe.textId === textId);
   }
 
   function getSvaralternativTextById(textId: string): ISanitySvaralternativ | undefined {
