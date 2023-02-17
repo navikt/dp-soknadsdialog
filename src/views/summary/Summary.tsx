@@ -94,8 +94,7 @@ export function Summary(props: IProps) {
     if (dokumentkravList.krav.length > 0) {
       router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
     } else {
-      const lastSection = soknadState.seksjoner.length;
-      router.push(`/soknad/${router.query.uuid}?seksjon=${lastSection}`);
+      router.push(`/soknad/${router.query.uuid}?seksjon=${soknadState.seksjoner.length}`);
     }
   }
 
