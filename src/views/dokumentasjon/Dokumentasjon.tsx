@@ -126,16 +126,15 @@ export function Dokumentasjon() {
 
         if (index <= firstUnansweredIndex || allDokumentkravAnswered) {
           return (
-            <>
+            <div key={index}>
               <Detail>{`${dokumentkravNumber} ${numberOfDokumentkravText} ${numberOfDokumentkrav}`}</Detail>
               <DokumentkravItem
-                key={index}
                 dokumentkrav={dokumentkrav}
                 resetError={resetDokumentkravError}
                 hasBundleError={hasBundleError}
                 hasUnansweredError={hasUnansweredError}
               />
-            </>
+            </div>
           );
         }
       })}
