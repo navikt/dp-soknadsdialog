@@ -47,16 +47,10 @@ export function Dokumentasjon() {
   const numberOfDokumentkrav = dokumentkravList.krav.length;
 
   useEffect(() => {
-    if (dokumentkravWithBundleError.length > 0) {
+    if (showBundleErrorModal && dokumentkravWithBundleError.length > 0) {
       scrollIntoView(errorSummaryRef);
     }
-  }, [dokumentkravWithBundleError.length]);
-
-  useEffect(() => {
-    if (dokumentkravWithBundleError.length > 0) {
-      scrollIntoView(errorSummaryRef);
-    }
-  }, [dokumentkravList]);
+  }, [showBundleErrorModal, dokumentkravWithBundleError]);
 
   async function bundleAndSaveAllDokumentkrav() {
     if (!allDokumentkravAnswered) {
@@ -75,7 +69,7 @@ export function Dokumentasjon() {
       if (dokumentkravToBundle.length != 0) {
         trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
       }
-      
+
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
