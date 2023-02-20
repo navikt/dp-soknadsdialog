@@ -42,7 +42,7 @@ export function Summary(props: IProps) {
 
   const [consentGiven, setConsentGiven] = useState(false);
   const consentRef = useRef(null);
-  const [navigating, setIsNagivating] = useState(false);
+  const [navigating, setIsNavigating] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
@@ -89,9 +89,13 @@ export function Summary(props: IProps) {
     finishSoknad({ uuid, locale });
   }
 
-  function navigateToDocumentation() {
-    setIsNagivating(true);
-    router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
+  function navigateToPreviousStep() {
+    setIsNavigating(true);
+    if (dokumentkravList.krav.length > 0) {
+      router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
+    } else {
+      router.push(`/soknad/${router.query.uuid}?seksjon=${soknadState.seksjoner.length}`);
+    }
   }
 
   useEffect(() => {
@@ -208,7 +212,7 @@ export function Summary(props: IProps) {
       <nav className="navigation-container">
         <Button
           variant={"secondary"}
-          onClick={() => navigateToDocumentation()}
+          onClick={() => navigateToPreviousStep()}
           icon={<Left />}
           loading={navigating}
         >

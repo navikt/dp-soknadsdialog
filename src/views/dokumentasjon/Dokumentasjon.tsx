@@ -21,6 +21,7 @@ import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal
 import styles from "./Dokumentasjon.module.css";
 import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
+import { useQuiz } from "../../context/quiz-context";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export function Dokumentasjon() {
   const { scrollIntoView } = useScrollIntoView();
   const { getAppText, getInfosideText } = useSanity();
   const { totalSteps, documentationStep } = useProgressBarSteps();
+  const { soknadState } = useQuiz();
   const { dokumentkravList, getFirstUnansweredDokumentkrav } = useDokumentkrav();
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -140,7 +142,7 @@ export function Dokumentasjon() {
       })}
 
       <nav className="navigation-container">
-        <Link href={`/soknad/${uuid}/kvittering`} passHref>
+        <Link href={`/soknad/${uuid}?seksjon=${soknadState.seksjoner.length}`} passHref>
           <Button as="a" variant="secondary">
             {getAppText("soknad.knapp.forrige-steg")}
           </Button>
