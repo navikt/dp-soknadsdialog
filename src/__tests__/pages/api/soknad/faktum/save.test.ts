@@ -4,23 +4,14 @@
 
 import { createMocks } from "node-mocks-http";
 import saveFaktumHandler, { ISaveFaktumBody } from "../../../../../pages/api/soknad/faktum/save";
-import { getSession as _getSession } from "../../../../../auth.utils";
 import fetch from "jest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
 import { mockNeste } from "../../../../../localhost-data/mock-neste";
+import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
 
-jest.mock("../../../../../auth.utils");
-const getSession = _getSession as jest.MockedFunction<typeof _getSession>;
-
-beforeEach(() => {
-  getSession.mockResolvedValue({
-    token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJwaWQiOiIxMjMxMjMxMjMifQ.XdPmoIvLFmgz51eH_05WBNOllgWEtp9kYHkWAHqMwEc",
-    apiToken: async () => "access_token",
-    expiresIn: 123,
-  });
-});
-afterEach(() => getSession.mockClear());
+jest.mock("../../../../../auth.utils", () => ({
+  getSession: () => mockGetSession(),
+}));
 
 beforeEach(() => {
   fetch.enableMocks();
