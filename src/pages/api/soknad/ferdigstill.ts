@@ -47,7 +47,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
       logRequestError(ferdigstillResponse.statusText, uuid);
       return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }
-    return res.status(ferdigstillResponse.status).end();
+    return res.status(ferdigstillResponse.status).end(ferdigstillResponse.statusText);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     logRequestError(message, uuid);
