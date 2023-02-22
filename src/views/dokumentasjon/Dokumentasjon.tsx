@@ -65,10 +65,12 @@ export function Dokumentasjon() {
     });
 
     const startetBundling = tidStart();
-    const bundlingSuccessful = await bundleDokumentkravList(dokumentkravToBundle);
+    const shouldBundle = dokumentkravToBundle.length > 0;
+    const bundlingSuccessful = shouldBundle && (await bundleDokumentkravList(dokumentkravToBundle));
 
-    if (bundlingSuccessful) {
-      if (dokumentkravToBundle.length != 0) {
+    // If there are no dokumentkrav to bundle then we automatically want to move on to the next step
+    if (bundlingSuccessful || !shouldBundle) {
+      if (shouldBundle) {
         trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
       }
 
