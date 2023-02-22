@@ -103,11 +103,11 @@ jobs:
       contents: 'read'
       id-token: 'write'
     steps:
-      - uses: actions/cache@v2
-        id: restore-build
+      - uses: actions/cache@v3
         with:
           path: ./.next/static
           key: ${{ github.sha }}
+          fail-on-cache-miss: true
 
       - name: Upload static files
         uses: navikt/frontend/actions/cdn-upload/v1@main
