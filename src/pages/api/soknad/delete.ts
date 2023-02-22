@@ -32,7 +32,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
     }
 
-    return res.json(deleteSoknadResponse);
+    return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, uuid);
