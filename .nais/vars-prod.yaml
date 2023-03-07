@@ -3,3 +3,4 @@ base_path: "/dagpenger/dialog"
 dekorator:
   url: https://www.nav.no/dekoratoren
   env: prod
+veilarbproxyUrl: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder

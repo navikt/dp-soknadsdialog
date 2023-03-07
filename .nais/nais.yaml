@@ -48,7 +48,7 @@ spec:
     - name: DEKORATOR_ENV
       value: {{dekorator.env}}
     - name: VEILARBPROXY_URL
-      value: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder
+      value: {{veilarbproxyUrl}}
   idporten:
     enabled: true
     sidecar:
