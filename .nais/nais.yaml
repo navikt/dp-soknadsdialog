@@ -52,7 +52,7 @@ spec:
     - name: LOGINSERVICE_WELL_KNOWN_URL
       value: {{loginservice.wellKnown}}
     - name: VEILARBPROXY_URL
-      value: {{veilarbproxyUrl}}
+      value: http://veilarbregistrering.paw.svc.cluster.local/veilarbregistrering/api/arbeidssoker/perioder
   idporten:
     enabled: true
     sidecar:
