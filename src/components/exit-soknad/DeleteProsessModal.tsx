@@ -7,6 +7,7 @@ import { useDeleteRequest } from "../../hooks/useDeleteRequest";
 import styles from "./ExitSoknad.module.css";
 import { QuizProsess } from "../../types/quiz.types";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
+import { useRouter } from "next/router";
 
 interface IProps {
   isOpen: boolean;
@@ -16,7 +17,9 @@ interface IProps {
 
 export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps) {
   const { uuid } = useUuid();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
@@ -32,6 +35,16 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
       resetDeleteProsessError();
     }
     handleClose();
+  }
+
+  function createNewProcess() {
+    setIsLoading(true);
+
+    if (prosessType === "Dagpenger") {
+      router.push("/soknad/start-soknad");
+    } else {
+      window.location.replace(`${process.env.NEXT_PUBLIC_BASE_PATH}/generell-innsending`);
+    }
   }
 
   return (
@@ -56,20 +69,9 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
                 {getAppText(getDeletedSuccessPrimaryButtonTextKey(prosessType))}
               </Button>
             </Link>
-
-            <Link
-              href={prosessType === "Dagpenger" ? "/soknad/start-soknad" : "/generell-innsending"}
-              passHref
-            >
-              <Button
-                as="a"
-                variant="tertiary"
-                onClick={() => setIsLoading(true)}
-                loading={isLoading}
-              >
-                {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
-              </Button>
-            </Link>
+            <Button as="a" variant="tertiary" onClick={createNewProcess} loading={isLoading}>
+              {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
+            </Button>
           </div>
         </Modal.Content>
       </Modal>
