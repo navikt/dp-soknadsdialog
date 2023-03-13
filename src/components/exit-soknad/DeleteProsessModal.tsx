@@ -43,6 +43,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
     if (prosessType === "Dagpenger") {
       router.push("/soknad/start-soknad");
     } else {
+      // window.location.replace for fullpage refresh
       window.location.replace(`${process.env.NEXT_PUBLIC_BASE_PATH}/generell-innsending`);
     }
   }
