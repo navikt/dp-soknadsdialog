@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
@@ -82,14 +82,17 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
-    logger.error(soknadStateResponse, "Kvittering: error in soknadState");
+    logger.error(await getErrorDetails(soknadStateResponse), "Kvittering: error in soknadState");
     errorCode = soknadStateResponse.status;
   }
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
-    logger.error(dokumentkravResponse, "Kvittering: error in dokumentkravList");
+    logger.error(
+      await getErrorDetails(dokumentkravResponse),
+      "Kvittering: error in dokumentkravList"
+    );
     errorCode = dokumentkravResponse.status;
   }
 

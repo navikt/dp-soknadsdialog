@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../api.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import { getMineSoknader } from "../../api/quiz-api";
@@ -62,7 +62,7 @@ export async function getServerSideProps(
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {
-    logger.error(mineSoknaderResponse, "Inngang: error in mineSoknader");
+    logger.error(await getErrorDetails(mineSoknaderResponse), "Inngang: error in mineSoknader");
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();

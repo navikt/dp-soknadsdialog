@@ -1,6 +1,6 @@
 import { Alert } from "@navikt/ds-react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { getSession } from "../../../auth.utils";
@@ -46,7 +46,10 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
-    logger.error(dokumentkravResponse, "Ettersending: error in dokumentkravList");
+    logger.error(
+      await getErrorDetails(dokumentkravResponse),
+      "Ettersending: error in dokumentkravList"
+    );
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }

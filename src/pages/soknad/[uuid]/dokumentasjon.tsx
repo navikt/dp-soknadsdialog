@@ -1,7 +1,7 @@
 import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
@@ -54,7 +54,10 @@ export async function getServerSideProps(
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {
-    logger.error(dokumentkravResponse, "Dokumentasjon: error in dokumentkravList");
+    logger.error(
+      await getErrorDetails(dokumentkravResponse),
+      "Dokumentasjon: error in dokumentkravList"
+    );
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkrav = await dokumentkravResponse.json();
@@ -70,7 +73,7 @@ export async function getServerSideProps(
   }
 
   if (!soknadStateResponse.ok) {
-    logger.error(soknadStateResponse, "Dokumentasjon: error in soknadState");
+    logger.error(await getErrorDetails(soknadStateResponse), "Dokumentasjon: error in soknadState");
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();

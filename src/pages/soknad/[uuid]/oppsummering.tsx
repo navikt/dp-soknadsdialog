@@ -2,7 +2,7 @@ import React from "react";
 import { Summary } from "../../../views/summary/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -65,7 +65,7 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
-    logger.error(soknadStateResponse, "Oppsummering: error in soknadState");
+    logger.error(await getErrorDetails(soknadStateResponse), "Oppsummering: error in soknadState");
     errorCode = soknadStateResponse.status;
   }
 
@@ -76,7 +76,10 @@ export async function getServerSideProps(
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
-    logger.error(dokumentkravResponse, "Oppsummering: error in dokumentkravList");
+    logger.error(
+      await getErrorDetails(dokumentkravResponse),
+      "Oppsummering: error in dokumentkravList"
+    );
     errorCode = dokumentkravResponse.status;
   }
 

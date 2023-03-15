@@ -3,7 +3,7 @@ import { Soknad } from "../../../views/soknad/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { IPersonalia } from "../../../types/personalia.types";
@@ -56,7 +56,7 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
-    logger.error(soknadStateResponse, "Soknad: error in soknadState");
+    logger.error(await getErrorDetails(soknadStateResponse), "Soknad: error in soknadState");
   } else {
     soknadState = await soknadStateResponse.json();
   }
