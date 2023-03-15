@@ -8,6 +8,7 @@ import {
   Locale,
   Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { logger } from "@navikt/next-logger";
 
 const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
 
@@ -42,8 +43,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
       ...decoratorProps,
       language: language,
     }).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.error(err);
+      logger.error(err);
       const empty = () => <></>;
       return {
         Footer: empty,

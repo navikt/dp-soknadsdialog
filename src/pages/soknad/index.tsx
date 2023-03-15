@@ -10,6 +10,7 @@ import {
   IArbeidssokerperioder,
   IArbeidssokerStatus,
 } from "../../api/arbeidssoker-api";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -61,6 +62,7 @@ export async function getServerSideProps(
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {
+    logger.error(mineSoknaderResponse, "Inngang: error in mineSoknader");
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();

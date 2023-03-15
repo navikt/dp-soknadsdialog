@@ -12,6 +12,7 @@ import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -55,6 +56,7 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
+    logger.error(soknadStateResponse, "Soknad: error in soknadState");
   } else {
     soknadState = await soknadStateResponse.json();
   }

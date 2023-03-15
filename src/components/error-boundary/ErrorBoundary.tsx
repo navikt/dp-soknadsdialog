@@ -1,5 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 import { ErrorPageContent } from "../error-page-content/errorPageContent";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   children?: ReactNode;
@@ -21,8 +22,7 @@ export default class ErrorBoundary extends Component<IProps, IState> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // eslint-disable-next-line no-console
-    console.log({ error, errorInfo });
+    logger.error({ error, errorInfo });
   }
 
   render() {

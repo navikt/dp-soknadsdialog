@@ -7,6 +7,7 @@ import { getSession } from "../../../auth.utils";
 import { Ettersending } from "../../../views/ettersending/Ettersending";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   errorCode: number | null;
@@ -45,6 +46,7 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
+    logger.error(dokumentkravResponse, "Ettersending: error in dokumentkravList");
   } else {
     dokumentkrav = await dokumentkravResponse.json();
   }

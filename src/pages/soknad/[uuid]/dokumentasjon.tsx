@@ -12,6 +12,7 @@ import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import ErrorPage from "../../_error";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   errorCode: number | null;
@@ -53,6 +54,7 @@ export async function getServerSideProps(
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {
+    logger.error(dokumentkravResponse, "Dokumentasjon: error in dokumentkravList");
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkrav = await dokumentkravResponse.json();
@@ -68,6 +70,7 @@ export async function getServerSideProps(
   }
 
   if (!soknadStateResponse.ok) {
+    logger.error(soknadStateResponse, "Dokumentasjon: error in soknadState");
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();

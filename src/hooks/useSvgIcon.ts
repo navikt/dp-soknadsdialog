@@ -1,3 +1,4 @@
+import { logger } from "@navikt/next-logger";
 import { useEffect, useState } from "react";
 
 export function useSvgIcon(fileName: string) {
@@ -9,8 +10,7 @@ export function useSvgIcon(fileName: string) {
         const response = await import(`@navikt/ds-icons/svg/${fileName}.svg`);
         setSvg(response.default);
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error("Fant ikke icon");
+        logger.error(`Did not find icon with name: ${fileName}`);
       }
     };
 

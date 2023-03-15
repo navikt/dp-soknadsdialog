@@ -21,6 +21,7 @@ import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   errorCode: number | null;
@@ -81,12 +82,14 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
+    logger.error(soknadStateResponse, "Kvittering: error in soknadState");
     errorCode = soknadStateResponse.status;
   }
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
+    logger.error(dokumentkravResponse, "Kvittering: error in dokumentkravList");
     errorCode = dokumentkravResponse.status;
   }
 
@@ -139,16 +142,8 @@ export async function getServerSideProps(
 export default function ReceiptPage(props: IProps) {
   const { personalia, soknadState, soknadStatus, arbeidssokerStatus, errorCode, dokumentkrav } =
     props;
-  // eslint-disable-next-line no-console
-  !soknadStatus && console.error("Mangler soknadStatus");
-  // eslint-disable-next-line no-console
-  !arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
 
   if (!soknadState || !dokumentkrav) {
-    // eslint-disable-next-line no-console
-    !soknadState && console.error("Mangler soknadstate");
-    // eslint-disable-next-line no-console
-    !dokumentkrav && console.error("Mangler dokumentkrav");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"

@@ -16,6 +16,7 @@ import { IDokumentkravList } from "../../../types/documentation.types";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -64,6 +65,7 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
+    logger.error(soknadStateResponse, "Oppsummering: error in soknadState");
     errorCode = soknadStateResponse.status;
   }
 
@@ -74,6 +76,7 @@ export async function getServerSideProps(
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
+    logger.error(dokumentkravResponse, "Oppsummering: error in dokumentkravList");
     errorCode = dokumentkravResponse.status;
   }
 
