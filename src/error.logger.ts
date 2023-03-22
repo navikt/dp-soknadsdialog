@@ -15,7 +15,7 @@ export function logRequestError(error: string, uuid?: string, message?: string) 
     },
   });
 
-  logger.error(`${messageWithFallback} ${error}, uuid: ${uuidWithFallback}`);
+  logger.error(`${messageWithFallback}: ${error}, uuid: ${uuidWithFallback}`);
 }
 
 class MissingTextError extends Error {
