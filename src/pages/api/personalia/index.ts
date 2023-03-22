@@ -27,14 +27,14 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {
-      logRequestError(response.statusText);
+      logRequestError(response.statusText, undefined, "Personalia - Failed to get info");
       return res.status(response.status).send(response.statusText);
     }
 
     return res.status(response.status).json(response);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, undefined, "Personalia - Generic error");
     return res.status(500).send(message);
   }
 };

@@ -7,6 +7,7 @@ import { getSession } from "../../../../auth.utils";
 import { audienceDPSoknad } from "../../../../api.utils";
 import metrics from "../../../../metrics";
 import { getSoknadState } from "../../../../api/quiz-api";
+import { logRequestError } from "../../../../error.logger";
 
 export interface ISaveFaktumBody {
   uuid: string;
@@ -44,6 +45,11 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   stopTimer();
 
   if (!faktumResponse.ok) {
+    logRequestError(
+      faktumResponse.statusText,
+      uuid,
+      "Save faktum - Failed to post faktum to dp-soknad"
+    );
     return res.status(faktumResponse.status).send(faktumResponse.statusText);
   }
 
@@ -51,6 +57,11 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart, requestId);
 
   if (!soknadStateResponse.ok) {
+    logRequestError(
+      soknadStateResponse.statusText,
+      uuid,
+      "Save faktum - Failed to get new soknadState from dp-soknad"
+    );
     return res.status(soknadStateResponse.status).send(soknadStateResponse.statusText);
   }
 

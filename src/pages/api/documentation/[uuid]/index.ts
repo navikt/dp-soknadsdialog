@@ -37,7 +37,7 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid);
+    logRequestError(message, uuid, "Get dokumentkrav - Generic error");
     return res.status(500).send(message);
   }
 }

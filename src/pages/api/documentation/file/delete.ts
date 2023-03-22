@@ -34,7 +34,11 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(dpSoknadResponse.statusText, uuid);
+      logRequestError(
+        dpSoknadResponse.statusText,
+        uuid,
+        "Dokumentkrav delete file - Delete from dp-soknad failed"
+      );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
@@ -45,13 +49,17 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(mellomlagringResponse.statusText, uuid);
+      logRequestError(
+        mellomlagringResponse.statusText,
+        uuid,
+        "Dokumentkrav delete file - Delete from dp-mellomlagring failed"
+      );
     }
 
     return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, uuid, "Dokumentkrav delete file - Generic error");
     return res.status(500).send(message);
   }
 }

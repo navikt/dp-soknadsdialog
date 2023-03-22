@@ -48,7 +48,11 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     bundlingTimer();
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(mellomlagringResponse.statusText);
+      logRequestError(
+        mellomlagringResponse.statusText,
+        uuid,
+        "Bundle dokumentkrav - Could not bundle files in dp-mellomlagring"
+      );
       Metrics.bundleFeil.inc();
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
@@ -66,14 +70,18 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(dpSoknadResponse.statusText);
+      logRequestError(
+        dpSoknadResponse.statusText,
+        uuid,
+        "Bundle dokumentkrav - Could not save bundle info to dp-soknad"
+      );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, uuid, "Bundle dokumentkrav - Generic error");
     return res.status(500).send(message);
   }
 }

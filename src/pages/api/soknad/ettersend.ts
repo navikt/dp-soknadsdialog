@@ -29,13 +29,17 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ettersendResponse.ok) {
-      logRequestError(ettersendResponse.statusText, uuid);
+      logRequestError(
+        ettersendResponse.statusText,
+        uuid,
+        "Ettersend dokumentasjon - Failed to post ettersending"
+      );
       return res.status(ettersendResponse.status).send(ettersendResponse.statusText);
     }
     return res.status(ettersendResponse.status).end();
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid);
+    logRequestError(message, uuid, "Ettersend dokumentasjon - Generic error");
     return res.status(500).send(message);
   }
 }

@@ -40,7 +40,11 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!response.ok) {
-      logRequestError(response.statusText);
+      logRequestError(
+        response.statusText,
+        undefined,
+        "Download dokumentkrav files - Failed to download files from dp-mellomlagring"
+      );
       return res.status(response.status).send(response.statusText);
     }
 
@@ -53,7 +57,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).send(response.body);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
     return res.status(500).send(message);
   }
 }

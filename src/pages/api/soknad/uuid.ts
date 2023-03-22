@@ -20,7 +20,11 @@ async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
     const soknadUuidResponse = await createSoknadUuid(onBehalfOfToken);
 
     if (!soknadUuidResponse.ok) {
-      logRequestError(soknadUuidResponse.statusText);
+      logRequestError(
+        soknadUuidResponse.statusText,
+        undefined,
+        "Get new uuid - Failed to get new uuid from dp-soknad"
+      );
       return res.status(soknadUuidResponse.status).send(soknadUuidResponse.statusText);
     }
 
@@ -28,7 +32,7 @@ async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(soknadUuidResponse.status).send(soknadId);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, undefined, "Get new uuid - Generic error");
     return res.status(500).send(message);
   }
 }

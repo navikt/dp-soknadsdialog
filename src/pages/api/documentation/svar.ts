@@ -53,7 +53,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, uuid, "Dokumentkrav svar - failed to post svar to dp-soknad");
     return res.status(500).send(message);
   }
 }

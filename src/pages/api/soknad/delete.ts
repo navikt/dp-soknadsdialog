@@ -28,14 +28,18 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!deleteSoknadResponse.ok) {
-      logRequestError(deleteSoknadResponse.statusText, uuid);
+      logRequestError(
+        deleteSoknadResponse.statusText,
+        uuid,
+        "Delete faktum - Failed to delete from dp-soknad"
+      );
       return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
     }
 
     return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid);
+    logRequestError(message, uuid, "Delete faktum - Generic error");
     return res.status(500).send(message);
   }
 }
