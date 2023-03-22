@@ -11,6 +11,7 @@ import { logRequestError } from "../../../../../../sentry.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { headersWithToken } from "../../../../../../api/quiz-api";
 import Metrics from "../../../../../../metrics";
+import { logger } from "@navikt/next-logger";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -107,7 +108,7 @@ async function saveFileToMellomlagring(
     Metrics.filOpplastetStørrelse.observe(fileSizeBytes);
   }
 
-  console.log(
+  logger.info(
     `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}, callId=${callId}`
   );
 
@@ -126,7 +127,7 @@ async function saveFileToMellomlagring(
   });
 
   if (!response.ok) {
-    console.error(
+    logger.error(
       `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${response.status}`
     );
     if (!isNaN(fileSizeBytes)) {

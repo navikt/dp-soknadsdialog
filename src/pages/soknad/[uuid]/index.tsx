@@ -3,7 +3,7 @@ import { Soknad } from "../../../views/soknad/Soknad";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { IPersonalia } from "../../../types/personalia.types";
@@ -12,6 +12,7 @@ import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -54,6 +55,8 @@ export async function getServerSideProps(
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
+    const errorData = await getErrorDetails(soknadStateResponse);
+    logger.error(`Soknad: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();

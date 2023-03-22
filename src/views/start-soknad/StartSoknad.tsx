@@ -13,6 +13,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStartet } from "../../amplitude.tracking";
+import { logger } from "@navikt/next-logger";
 
 export function StartSoknad() {
   const router = useRouter();
@@ -56,9 +57,7 @@ export function StartSoknad() {
         throw new Error(uuidResponse.statusText);
       }
     } catch (error) {
-      // TODO Sentry log
-      // eslint-disable-next-line no-console
-      console.error(error);
+      logger.error(error, "StartSoknad: Error creating UUID");
       setIsError(true);
     }
   }

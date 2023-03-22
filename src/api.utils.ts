@@ -1,4 +1,5 @@
 import { v4 as uuidV4 } from "uuid";
+import { logger } from "@navikt/next-logger";
 
 export const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
 export const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
@@ -19,8 +20,8 @@ export function apiFetch(url: string | Request, init: RequestInit | undefined, r
     ...init?.headers,
     "x-request-id": reqId,
   };
-  // eslint-disable-next-line no-console
-  console.log("Starter request " + reqId);
+
+  logger.info("Starter request " + reqId);
   return fetch(url, { ...init, headers });
 }
 
@@ -36,4 +37,12 @@ export function getErrorMessage(error: unknown) {
     return error.message;
   }
   return String(error);
+}
+
+export async function getErrorDetails(response: Response) {
+  try {
+    return await response.json();
+  } catch {
+    return {};
+  }
 }

@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad } from "../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../api.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import { getMineSoknader } from "../../api/quiz-api";
@@ -10,6 +10,7 @@ import {
   IArbeidssokerperioder,
   IArbeidssokerStatus,
 } from "../../api/arbeidssoker-api";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -61,6 +62,8 @@ export async function getServerSideProps(
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {
+    const errorData = await getErrorDetails(mineSoknaderResponse);
+    logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();

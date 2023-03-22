@@ -2,7 +2,7 @@ import React from "react";
 import { Summary } from "../../../views/summary/Summary";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -16,6 +16,7 @@ import { IDokumentkravList } from "../../../types/documentation.types";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -64,6 +65,8 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
+    const errorData = await getErrorDetails(soknadStateResponse);
+    logger.error(`Oppsummering: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   }
 
@@ -74,6 +77,10 @@ export async function getServerSideProps(
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
+    const errorData = await getErrorDetails(dokumentkravResponse);
+    logger.error(
+      `Oppsummering: ${errorData.status} error in dokumentkravList - ${errorData.detail}`
+    );
     errorCode = dokumentkravResponse.status;
   }
 

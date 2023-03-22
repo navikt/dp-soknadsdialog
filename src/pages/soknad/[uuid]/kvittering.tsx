@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad } from "../../../api.utils";
+import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
@@ -21,6 +21,7 @@ import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
+import { logger } from "@navikt/next-logger";
 
 interface IProps {
   errorCode: number | null;
@@ -81,12 +82,16 @@ export async function getServerSideProps(
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
   } else {
+    const errorData = await getErrorDetails(soknadStateResponse);
+    logger.error(`Kvittering: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   }
 
   if (dokumentkravResponse.ok) {
     dokumentkrav = await dokumentkravResponse.json();
   } else {
+    const errorData = await getErrorDetails(dokumentkravResponse);
+    logger.error(`Kvittering: ${errorData.status} error in dokumentkravList - ${errorData.detail}`);
     errorCode = dokumentkravResponse.status;
   }
 
@@ -139,16 +144,8 @@ export async function getServerSideProps(
 export default function ReceiptPage(props: IProps) {
   const { personalia, soknadState, soknadStatus, arbeidssokerStatus, errorCode, dokumentkrav } =
     props;
-  // eslint-disable-next-line no-console
-  !soknadStatus && console.error("Mangler soknadStatus");
-  // eslint-disable-next-line no-console
-  !arbeidssokerStatus && console.error("Mangler arbeidssokerStatus");
 
   if (!soknadState || !dokumentkrav) {
-    // eslint-disable-next-line no-console
-    !soknadState && console.error("Mangler soknadstate");
-    // eslint-disable-next-line no-console
-    !dokumentkrav && console.error("Mangler dokumentkrav");
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"

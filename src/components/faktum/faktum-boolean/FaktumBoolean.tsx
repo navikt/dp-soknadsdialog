@@ -13,6 +13,7 @@ import { useValidation } from "../../../context/validation-context";
 import { AlertText } from "../../alert-text/AlertText";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
+import { logger } from "@navikt/next-logger";
 
 export const FaktumBoolean = forwardRef(FaktumBooleanComponent);
 
@@ -55,9 +56,7 @@ function FaktumBooleanComponent(
     const mappedAnswer = textIdToBoolean(value);
 
     if (mappedAnswer === undefined) {
-      // TODO sentry
-      // eslint-disable-next-line no-console
-      console.error("ERROR");
+      logger.error(`FaktumBoolean saveFaktum: could not map value ${value} to a valid answer`);
     }
 
     saveFaktumToQuiz(faktum, mappedAnswer);
