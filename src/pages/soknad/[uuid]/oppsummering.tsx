@@ -66,7 +66,7 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   } else {
     const errorData = await getErrorDetails(soknadStateResponse);
-    logger.error(errorData, "Oppsummering: error in soknadState");
+    logger.error(`Oppsummering: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   }
 
@@ -78,7 +78,9 @@ export async function getServerSideProps(
     dokumentkrav = await dokumentkravResponse.json();
   } else {
     const errorData = await getErrorDetails(dokumentkravResponse);
-    logger.error(errorData, "Oppsummering: error in dokumentkravList");
+    logger.error(
+      `Oppsummering: ${errorData.status} error in dokumentkravList - ${errorData.detail}`
+    );
     errorCode = dokumentkravResponse.status;
   }
 

@@ -83,7 +83,7 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   } else {
     const errorData = await getErrorDetails(soknadStateResponse);
-    logger.error(errorData, "Kvittering: error in soknadState");
+    logger.error(`Kvittering: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   }
 
@@ -91,7 +91,7 @@ export async function getServerSideProps(
     dokumentkrav = await dokumentkravResponse.json();
   } else {
     const errorData = await getErrorDetails(dokumentkravResponse);
-    logger.error(errorData, "Kvittering: error in dokumentkravList");
+    logger.error(`Kvittering: ${errorData.status} error in dokumentkravList - ${errorData.detail}`);
     errorCode = dokumentkravResponse.status;
   }
 

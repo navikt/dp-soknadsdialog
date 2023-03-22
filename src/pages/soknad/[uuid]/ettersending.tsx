@@ -46,7 +46,9 @@ export async function getServerSideProps(
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);
-    logger.error(errorData, "Ettersending: error in dokumentkravList");
+    logger.error(
+      `Ettersending: ${errorData.status} error in dokumentkravList - ${errorData.detail}`
+    );
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkrav = await dokumentkravResponse.json();

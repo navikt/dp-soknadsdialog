@@ -63,7 +63,7 @@ export async function getServerSideProps(
 
   if (!mineSoknaderResponse.ok) {
     const errorData = await getErrorDetails(mineSoknaderResponse);
-    logger.error(errorData, "Inngang: error in mineSoknader");
+    logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();

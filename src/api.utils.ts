@@ -43,6 +43,6 @@ export async function getErrorDetails(response: Response) {
   try {
     return await response.json();
   } catch {
-    return;
+    return {};
   }
 }

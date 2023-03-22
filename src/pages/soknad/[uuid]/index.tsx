@@ -56,7 +56,7 @@ export async function getServerSideProps(
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
-    logger.error(errorData, "Soknad: error in soknadState");
+    logger.error(`Soknad: ${errorData.status} error in soknadState - ${errorData.detail}`);
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
