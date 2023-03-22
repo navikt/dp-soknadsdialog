@@ -54,10 +54,8 @@ export async function getServerSideProps(
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {
-    logger.error(
-      await getErrorDetails(dokumentkravResponse),
-      "Dokumentasjon: error in dokumentkravList"
-    );
+    const errorData = await getErrorDetails(dokumentkravResponse);
+    logger.error(errorData, "Dokumentasjon: error in dokumentkravList");
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkrav = await dokumentkravResponse.json();
@@ -73,7 +71,8 @@ export async function getServerSideProps(
   }
 
   if (!soknadStateResponse.ok) {
-    logger.error(await getErrorDetails(soknadStateResponse), "Dokumentasjon: error in soknadState");
+    const errorData = await getErrorDetails(soknadStateResponse);
+    logger.error(errorData, "Dokumentasjon: error in soknadState");
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();

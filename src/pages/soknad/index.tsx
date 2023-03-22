@@ -62,7 +62,8 @@ export async function getServerSideProps(
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {
-    logger.error(await getErrorDetails(mineSoknaderResponse), "Inngang: error in mineSoknader");
+    const errorData = await getErrorDetails(mineSoknaderResponse);
+    logger.error(errorData, "Inngang: error in mineSoknader");
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();

@@ -55,8 +55,9 @@ export async function getServerSideProps(
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
+    const errorData = await getErrorDetails(soknadStateResponse);
+    logger.error(errorData, "Soknad: error in soknadState");
     errorCode = soknadStateResponse.status;
-    logger.error(await getErrorDetails(soknadStateResponse), "Soknad: error in soknadState");
   } else {
     soknadState = await soknadStateResponse.json();
   }
