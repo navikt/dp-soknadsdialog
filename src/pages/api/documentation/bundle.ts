@@ -8,7 +8,7 @@ import {
   getErrorMessage,
 } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 import { headersWithToken } from "../../../api/quiz-api";
 import Metrics from "../../../metrics";
 

@@ -1,3 +1,4 @@
+import { logger } from "@navikt/next-logger";
 import * as Sentry from "@sentry/nextjs";
 
 export function logMissingSanityText(textId: string) {
@@ -5,11 +6,14 @@ export function logMissingSanityText(textId: string) {
 }
 
 export function logRequestError(error: string, uuid?: string) {
+  const uuidWithFallback = uuid ?? "Not provided";
   Sentry.captureException(new RequestError(`${error}`), {
     tags: {
-      uuid: uuid ?? "Not provided",
+      uuid: uuidWithFallback,
     },
   });
+
+  logger.error(`RequestError: ${error}, uuid: ${uuidWithFallback}`);
 }
 
 class MissingTextError extends Error {

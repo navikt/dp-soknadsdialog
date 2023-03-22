@@ -3,7 +3,7 @@ import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { createSoknadUuid } from "../../../api/quiz-api";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 
 async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.NEXT_PUBLIC_LOCALHOST) {

@@ -5,7 +5,7 @@ import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 import { ISanityTexts } from "../../../types/sanity.types";
 import { headersWithToken } from "../../../api/quiz-api";
 import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";

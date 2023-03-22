@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);

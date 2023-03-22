@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../sentry.logger";
+import { logRequestError } from "../../../../error.logger";
 import { headersWithToken } from "../../../../api/quiz-api";
 import { audienceDPSoknad, audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
 

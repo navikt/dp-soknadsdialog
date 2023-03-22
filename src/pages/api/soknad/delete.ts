@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
 import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 
 export interface IDeleteSoknadBody {
   uuid: string;

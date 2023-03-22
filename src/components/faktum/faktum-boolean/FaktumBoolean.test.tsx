@@ -4,7 +4,7 @@ import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 
-import * as SentryLogger from "../../../sentry.logger";
+import * as SentryLogger from "../../../error.logger";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
