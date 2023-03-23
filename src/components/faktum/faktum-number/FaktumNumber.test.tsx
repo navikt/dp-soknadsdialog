@@ -1,10 +1,9 @@
-import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { render, waitFor, screen } from "@testing-library/react";
-import { FaktumNumber } from "./FaktumNumber";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { FaktumNumber } from "./FaktumNumber";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   beskrivendeId: "faktum.barn-inntekt",
@@ -48,7 +47,7 @@ describe("FaktumNumber", () => {
     });
   });
 
-  describe("When user selects an answer", () => {
+  describe("When user types an answer", () => {
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
       const svar = 14;
@@ -59,13 +58,53 @@ describe("FaktumNumber", () => {
         </MockContext>
       );
 
-      const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
 
-      await user.type(textInput, svar + "");
+      await user.type(numberInput, svar + "");
 
       await waitFor(() => {
         expect(mockSaveFaktumToQuiz).toHaveBeenCalledTimes(1);
         expect(mockSaveFaktumToQuiz).toHaveBeenCalledWith(faktumMockData, svar);
+      });
+    });
+  });
+
+  describe("When user types an invalid answer", () => {
+    test("Should show error message when typing non-number character", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MockContext>
+          <FaktumNumber faktum={faktumMockData} />
+        </MockContext>
+      );
+
+      const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      await user.type(numberInput, "AAA");
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText("validering.number-faktum.maa-vaere-et-tall")
+        ).toBeInTheDocument();
+      });
+    });
+
+    test("Should show error message when typing negativ number", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <MockContext>
+          <FaktumNumber faktum={faktumMockData} />
+        </MockContext>
+      );
+
+      const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+      await user.type(numberInput, "-30");
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText("validering.number-faktum.ikke-negativt-tall")
+        ).toBeInTheDocument();
       });
     });
   });
