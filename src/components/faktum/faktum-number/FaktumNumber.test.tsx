@@ -69,8 +69,8 @@ describe("FaktumNumber", () => {
     });
   });
 
-  describe("When user tyeps an invalid answer", () => {
-    test("Should show error message when typing none number character", async () => {
+  describe("When user types an invalid answer", () => {
+    test("Should show error message when typing non-number character", async () => {
       const user = userEvent.setup();
 
       render(
