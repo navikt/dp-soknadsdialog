@@ -5,7 +5,7 @@ import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 import { ISanityTexts } from "../../../types/sanity.types";
 import { headersWithToken } from "../../../api/quiz-api";
 import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
@@ -44,13 +44,17 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!ferdigstillResponse.ok) {
-      logRequestError(ferdigstillResponse.statusText, uuid);
+      logRequestError(
+        ferdigstillResponse.statusText,
+        uuid,
+        "Ferdigstill soknad - Failed to post to dp-soknad"
+      );
       return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }
     return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid);
+    logRequestError(message, uuid, "Ferdigstill soknad - Generic error");
     return res.status(500).send(message);
   }
 }

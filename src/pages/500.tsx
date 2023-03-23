@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { sanityClient } from "../../sanity-client";
 import { ErrorPageContent } from "../components/error-page-content/errorPageContent";
 import { allTextsQuery } from "../sanity/groq-queries";
-import * as SentryLogger from "../sentry.logger";
+import * as SentryLogger from "../error.logger";
 import { ISanityTexts } from "../types/sanity.types";
 
 const fallbackErrorText = {

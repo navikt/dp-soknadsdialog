@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import * as Sentry from "@sentry/nextjs";
-import { RequestError } from "../sentry.logger";
+import { RequestError } from "../error.logger";
 
 export interface IErrorDetails {
   message: string;

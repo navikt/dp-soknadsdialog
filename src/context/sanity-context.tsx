@@ -9,7 +9,7 @@ import {
   ISanitySvaralternativ,
   ISanityTexts,
 } from "../types/sanity.types";
-import * as SentryLogger from "../sentry.logger";
+import * as SentryLogger from "../error.logger";
 
 export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
 

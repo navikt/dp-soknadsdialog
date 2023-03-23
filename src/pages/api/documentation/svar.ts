@@ -3,7 +3,7 @@ import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { logRequestError } from "../../../sentry.logger";
+import { logRequestError } from "../../../error.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
 import { getDokumentkrav } from "./[uuid]";
 
@@ -53,7 +53,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message);
+    logRequestError(message, uuid, "Dokumentkrav svar - failed to post svar to dp-soknad");
     return res.status(500).send(message);
   }
 }

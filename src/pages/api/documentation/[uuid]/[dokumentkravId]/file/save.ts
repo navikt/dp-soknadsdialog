@@ -7,7 +7,7 @@ import {
   getErrorMessage,
 } from "../../../../../../api.utils";
 import { getSession } from "../../../../../../auth.utils";
-import { logRequestError } from "../../../../../../sentry.logger";
+import { logRequestError } from "../../../../../../error.logger";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { headersWithToken } from "../../../../../../api/quiz-api";
 import Metrics from "../../../../../../metrics";
@@ -55,7 +55,11 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(mellomlagringResponse.statusText, uuid);
+      logRequestError(
+        mellomlagringResponse.statusText,
+        uuid,
+        "Save dokumentkrav file - Could not save to dp-mellomlagring"
+      );
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
@@ -69,14 +73,18 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(dpSoknadResponse.statusText, uuid);
+      logRequestError(
+        dpSoknadResponse.statusText,
+        uuid,
+        "Save dokumentkrav file - Could not save to dp-soknad"
+      );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     return res.status(dpSoknadResponse.status).send(fileData[0]);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid);
+    logRequestError(message, uuid, "Save dokumentkrav file - Generic error");
     return res.status(500).send(message);
   }
 }
