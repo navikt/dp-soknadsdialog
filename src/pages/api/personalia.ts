@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
+import { audienceDPSoknad, getErrorMessage } from "../../api.utils";
 import { withSentry } from "@sentry/nextjs";
-import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { getSession } from "../../auth.utils";
+import { logRequestError } from "../../error.logger";
 
 export function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;
@@ -31,7 +31,9 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(response.status).send(response.statusText);
     }
 
-    return res.status(response.status).json(response);
+    const data = await response.json();
+
+    return res.status(response.status).json(data);
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Personalia - Generic error");

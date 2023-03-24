@@ -13,6 +13,8 @@ jest.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
 
+jest.mock("@navikt/next-logger");
+
 beforeEach(() => {
   fetch.enableMocks();
 });

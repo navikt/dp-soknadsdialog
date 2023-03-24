@@ -3,11 +3,12 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetSession } from "../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
-import uuidHandler from "../../../../pages/api/soknad/uuid";
+import personaliaHandler from "../../../pages/api/personalia";
+import { mockPersonalia } from "../../../__mocks__/mockdata/personalia";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
 
@@ -21,32 +22,32 @@ afterEach(() => {
   fetch.mockReset();
 });
 
-describe("/api/soknad/uuid", () => {
-  test("Should get a new uuid to start an application", async () => {
+describe("/api/personalia", () => {
+  test("Should get the user personalia", async () => {
     fetch.mockResponses(
-      ["12345", { status: 200 }] // Response from dp-soknad
+      [JSON.stringify(mockPersonalia), { status: 200 }] // Response from dp-soknad
     );
 
     const { req, res } = createMocks({
-      method: "POST",
+      method: "GET",
     });
 
-    await uuidHandler(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
-    expect(res._getData()).toEqual("12345");
+    expect(res._getData()).toEqual(JSON.stringify(mockPersonalia));
   });
 
-  test("Should return error if getting a new uuid fails", async () => {
+  test("Should return error if getting personalia fails", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: false }), { status: 500 }] // Response from dp-soknad on error
     );
 
     const { req, res } = createMocks({
-      method: "POST",
+      method: "GET",
     });
 
-    await uuidHandler(req, res);
+    await personaliaHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
     expect(res._getData()).toEqual("Internal Server Error");
