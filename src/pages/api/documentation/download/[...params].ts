@@ -1,13 +1,8 @@
-import fs from "fs";
-import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
-
-const filePath = path.resolve("src/localhost-data/sample.pdf");
-const imageBuffer = fs.readFileSync(filePath);
 
 export const config = {
   api: {
@@ -16,11 +11,6 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    res.setHeader("Content-Type", "application/pdf");
-    return res.send(imageBuffer);
-  }
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();

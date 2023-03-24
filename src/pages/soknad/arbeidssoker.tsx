@@ -16,14 +16,6 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        arbeidssokerStatus: "UNREGISTERED",
-      },
-    };
-  }
-
   const session = await getSession(context.req);
   if (!session) {
     return {

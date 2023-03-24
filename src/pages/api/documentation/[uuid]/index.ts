@@ -1,4 +1,3 @@
-import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";
@@ -14,10 +13,6 @@ export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
 }
 
 async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(200).json(mockDokumentkravList);
-  }
-
   const session = await getSession(req);
 
   if (!session) {

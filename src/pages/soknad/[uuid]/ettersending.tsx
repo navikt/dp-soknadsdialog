@@ -5,7 +5,6 @@ import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { getSession } from "../../../auth.utils";
 import { Ettersending } from "../../../views/ettersending/Ettersending";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { logger } from "@navikt/next-logger";
 
@@ -19,15 +18,6 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
-
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
-        errorCode: null,
-      },
-    };
-  }
 
   const session = await getSession(context.req);
   if (!session) {

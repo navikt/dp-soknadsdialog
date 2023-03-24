@@ -19,14 +19,6 @@ export interface IDocumentationBundleBody {
 }
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    if (req.body.dokumentkravId === "7002") {
-      return res.status(400).json({ status: "failed" });
-    }
-
-    return res.status(200).json({ status: "ok" });
-  }
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();

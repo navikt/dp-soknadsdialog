@@ -8,7 +8,6 @@ import ErrorPage from "../../_error";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
-import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
@@ -24,16 +23,6 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
-
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        soknadState: mockGenerellInnsending as IQuizState,
-        errorCode: null,
-        dokumentkravList: null,
-      },
-    };
-  }
 
   const session = await getSession(context.req);
   if (!session) {

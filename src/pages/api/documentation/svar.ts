@@ -19,10 +19,6 @@ export interface IDokumentkravSvar {
 }
 
 async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return res.status(201).json({ status: "ok" });
-  }
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();

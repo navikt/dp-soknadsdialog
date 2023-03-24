@@ -8,15 +8,6 @@ import { getSession } from "../../auth.utils";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      redirect: {
-        destination: `/generell-innsending/uuid-innsending`,
-        permanent: false,
-      },
-    };
-  }
-
   const session = await getSession(context.req);
   if (!session) {
     return {

@@ -7,9 +7,7 @@ import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { IPersonalia } from "../../../types/personalia.types";
-import { mockPersonalia } from "../../../localhost-data/personalia";
 import { getPersonalia } from "../../api/personalia";
-import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { logger } from "@navikt/next-logger";
@@ -25,16 +23,6 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
-
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        soknadState: mockNeste,
-        personalia: mockPersonalia,
-        errorCode: null,
-      },
-    };
-  }
 
   const session = await getSession(context.req);
   if (!session) {

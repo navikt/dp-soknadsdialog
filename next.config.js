@@ -36,7 +36,7 @@ const config = {
   output: "standalone",
   swcMinify: true,
   async headers() {
-    const env = process.env.NEXT_PUBLIC_LOCALHOST !== "true" ? "prod" : "dev";
+    const env = "prod";
     const csp = await buildCspHeader(myAppDirectives, { env });
     return [
       {
