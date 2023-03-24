@@ -6,7 +6,7 @@ import { createMocks } from "node-mocks-http";
 import saveFaktumHandler, { ISaveFaktumBody } from "../../../../../pages/api/soknad/faktum/save";
 import fetch from "jest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
-import { mockNeste } from "../../../../../localhost-data/mock-neste";
+import { mockNeste } from "../../../../../__mocks__/mockdata/neste";
 import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
 
 jest.mock("../../../../../auth.utils", () => ({

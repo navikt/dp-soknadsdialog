@@ -1,4 +1,4 @@
-import { IDokumentkravList } from "../types/documentation.types";
+import { IDokumentkravList } from "../../types/documentation.types";
 
 export const mockDokumentkravList: IDokumentkravList = {
   soknad_uuid: "12345",

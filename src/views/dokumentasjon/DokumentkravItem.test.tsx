@@ -2,7 +2,7 @@ import React from "react";
 import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DOKUMENTKRAV_SVAR_SENDER_IKKE, DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
+import { mockDokumentkravList } from "../../__mocks__/mockdata/dokumentkrav-list";
 import fetch from "jest-fetch-mock";
 import { MockContext } from "../../__mocks__/MockContext";
 import { DokumentkravItem } from "./DokumentkravItem";

@@ -7,7 +7,7 @@ import { mockGetSession } from "../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
 import svarHandler, { IDokumentkravSvarBody } from "../../../../pages/api/documentation/svar";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../../constants";
-import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
+import { mockDokumentkravList } from "../../../../__mocks__/mockdata/dokumentkrav-list";
 
 jest.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),

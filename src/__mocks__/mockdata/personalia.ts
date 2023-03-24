@@ -1,4 +1,4 @@
-import { IPersonalia } from "../types/personalia.types";
+import { IPersonalia } from "../../types/personalia.types";
 
 export const mockPersonalia: IPersonalia = {
   folkeregistrertAdresse: {
