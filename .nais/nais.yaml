@@ -66,6 +66,11 @@ spec:
     outbound:
       external:
         - host: dev.dekoratoren.nav.no
+        - host: api.sanity.io
+        - host: apicdn.sanity.io
+        - host: cdn.sanity.io
+        - host: rt6o382n.api.sanity.io
+        - host: rt6o382n.apicdn.sanity.io
       rules:
         - application: dp-soknad
         - application: dp-mellomlagring
