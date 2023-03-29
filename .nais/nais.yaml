@@ -65,9 +65,6 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: api.sanity.io
-        - host: apicdn.sanity.io
-        - host: cdn.sanity.io
         - host: rt6o382n.api.sanity.io
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
