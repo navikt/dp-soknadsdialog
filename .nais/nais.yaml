@@ -65,7 +65,6 @@ spec:
   accessPolicy:
     outbound:
       external:
-        - host: rt6o382n.api.sanity.io
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
