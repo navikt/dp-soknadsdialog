@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
-import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
+import { mockGenerellInnsending } from "../../../../__mocks__/mockdata/generell-innsending";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
 import { getSession } from "../../../../auth.utils";
 import { audienceDPSoknad } from "../../../../api.utils";

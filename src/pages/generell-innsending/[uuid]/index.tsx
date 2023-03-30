@@ -8,7 +8,7 @@ import ErrorPage from "../../_error";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
-import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
+import { mockGenerellInnsending } from "../../../__mocks__/mockdata/generell-innsending";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";

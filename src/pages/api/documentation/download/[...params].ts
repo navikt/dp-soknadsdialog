@@ -6,7 +6,7 @@ import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
-const filePath = path.resolve("src/localhost-data/sample.pdf");
+const filePath = path.resolve("src/__mocks__/mockdata/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
 
 export const config = {

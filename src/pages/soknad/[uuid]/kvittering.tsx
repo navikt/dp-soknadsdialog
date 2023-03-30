@@ -6,8 +6,8 @@ import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
-import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockDokumentkravBesvart } from "../../../__mocks__/mockdata/dokumentkrav-besvart";
+import { mockNeste } from "../../../__mocks__/mockdata/neste";
 import {
   getArbeidssokerperioder,
   IArbeidssokerperioder,
@@ -19,7 +19,7 @@ import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
-import { mockPersonalia } from "../../../localhost-data/personalia";
+import { mockPersonalia } from "../../../__mocks__/mockdata/personalia";
 import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
 import { logger } from "@navikt/next-logger";
 

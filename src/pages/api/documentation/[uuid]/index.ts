@@ -1,4 +1,4 @@
-import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
+import { mockDokumentkravList } from "../../../../__mocks__/mockdata/dokumentkrav-list";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../../api.utils";
 import { withSentry } from "@sentry/nextjs";

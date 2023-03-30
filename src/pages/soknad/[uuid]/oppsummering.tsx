@@ -6,15 +6,15 @@ import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { ValidationProvider } from "../../../context/validation-context";
-import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockNeste } from "../../../__mocks__/mockdata/neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
-import { mockPersonalia } from "../../../localhost-data/personalia";
+import { mockPersonalia } from "../../../__mocks__/mockdata/personalia";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockDokumentkravBesvart } from "../../../__mocks__/mockdata/dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { logger } from "@navikt/next-logger";
 

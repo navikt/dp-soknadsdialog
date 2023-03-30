@@ -1,4 +1,4 @@
-import { quizMalResponse } from "../localhost-data/quiz-mal-response";
+import { quizMalResponse } from "../__mocks__/mockdata/quiz-mal-response";
 import { formatISO, subDays } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
 
