@@ -11,6 +11,15 @@ npm install
 npm run dev
 ```
 
+For å kjøre i localhost med mockede data må man sette en prosess-variabel i `src/.env.local`. Denne fila må sannsynligvis opprettes første gang, og skal ikke sjekkes inn i git.
+```
+NEXT_PUBLIC_LOCALHOST=true
+```
+
+Åpne applikasjonen med å gå til http://localhost:3000/dagpenger/dialog/soknad.
+
+Vi kan også kjøre localhost direkte mot backend-tjenestene i dev-gcp. Dette gjøres ved å [sette opp custom config med gcloud og kubectx](#for-å-teste-mot-dev).
+
 ---
 
 # Henvendelser
@@ -23,10 +32,24 @@ Spørsmål knyttet til koden eller prosjektet kan rettes mot:
 
 Interne henvendelser kan sendes via Slack i kanalen #team-dagpenger-dev.
 
+---
+
 # Testing
 
 ```shell
 npm run test
+```
+
+## Testing med watch
+
+```shell
+npm run test -- --watch
+```
+
+## Code coverage
+
+```shell
+npm run test-coverage
 ```
 
 ## Kode-konvensjoner
