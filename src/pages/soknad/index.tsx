@@ -23,6 +23,26 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {
+        mineSoknader: {
+          paabegynt: {
+            soknadUuid: "localhost-uuid-paabegynt",
+            opprettet: "2022-10-20T15:15:06.913514",
+            sistEndretAvbruker: "2022-11-20T15:15:06.913514",
+          },
+          innsendte: [
+            { soknadUuid: "localhost-uuid-innsendt-1", forstInnsendt: "2022-10-21T09:47:29" },
+            { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
+          ],
+        },
+        arbeidssokerStatus: "REGISTERED",
+        errorCode: null,
+      },
+    };
+  }
+
   const session = await getSession(context.req);
   if (!session) {
     return {

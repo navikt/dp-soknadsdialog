@@ -10,6 +10,10 @@ export interface IEttersendBody {
 }
 
 async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(201).json("Mock content");
+  }
+
   const session = await getSession(req);
   const { uuid } = req.body;
 

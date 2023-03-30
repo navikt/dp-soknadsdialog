@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
+import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
 import { getSession } from "../../../../auth.utils";
 import { audienceDPSoknad } from "../../../../api.utils";
@@ -15,6 +16,10 @@ export interface ISaveFaktumBody {
 }
 
 async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(200).json(mockGenerellInnsending);
+  }
+
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();

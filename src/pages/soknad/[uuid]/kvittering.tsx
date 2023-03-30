@@ -6,6 +6,8 @@ import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../../localhost-data/mock-neste";
 import {
   getArbeidssokerperioder,
   IArbeidssokerperioder,
@@ -17,6 +19,7 @@ import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { getPersonalia } from "../../api/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
 import { logger } from "@navikt/next-logger";
 
@@ -34,6 +37,23 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {
+        soknadState: mockNeste,
+        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
+        personalia: mockPersonalia,
+        soknadStatus: {
+          status: "UnderBehandling",
+          opprettet: "2022-10-21T09:42:37.291157",
+          innsendt: "2022-10-21T09:47:29",
+        },
+        arbeidssokerStatus: "UNREGISTERED",
+        errorCode: null,
+      },
+    };
+  }
 
   const session = await getSession(context.req);
   if (!session) {

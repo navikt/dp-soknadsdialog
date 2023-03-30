@@ -21,6 +21,12 @@ export async function getServerSideProps(
     };
   }
 
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {},
+    };
+  }
+
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 

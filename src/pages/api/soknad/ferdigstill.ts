@@ -16,6 +16,10 @@ export interface IFerdigstillBody {
 }
 
 async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return res.status(201).json("Mock content");
+  }
+
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();

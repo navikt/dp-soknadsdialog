@@ -5,9 +5,11 @@ import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
+import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import ErrorPage from "../../_error";
 import { logger } from "@navikt/next-logger";
@@ -23,6 +25,16 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
+
+  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+    return {
+      props: {
+        soknadState: mockNeste,
+        dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
+        errorCode: null,
+      },
+    };
+  }
 
   const session = await getSession(context.req);
   if (!session) {
