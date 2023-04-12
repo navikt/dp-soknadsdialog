@@ -46,9 +46,10 @@ export function Arbeidssoker(props: IProps) {
                 {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
               </Button>
             </Link>
-            <Link href={`https://www.nav.no/no/ditt-nav`} passHref>
+            <Link href="https://www.nav.no/min-side" passHref>
               <Button
                 variant="secondary"
+                as="a"
                 onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-cancel-button")}
                 loading={currentNagivating === "registrer-som-arbeidssoker-cancel-button"}
               >
@@ -83,9 +84,10 @@ export function Arbeidssoker(props: IProps) {
                 {getAppText("arbeidssoker.sok-dagpenger.knapp")}
               </Button>
             </Link>
-            <Link href={`https://www.nav.no/no/ditt-nav`} passHref>
+            <Link href="https://www.nav.no/min-side" passHref>
               <Button
                 variant="secondary"
+                as="a"
                 onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-button")}
                 loading={currentNagivating === "registrer-som-arbeidssoker-button"}
               >
