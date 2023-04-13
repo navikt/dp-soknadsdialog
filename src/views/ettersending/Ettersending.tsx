@@ -25,6 +25,7 @@ import Link from "next/link";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { IEttersendBody } from "../../pages/api/soknad/ettersend";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 
 export function Ettersending() {
   const router = useRouter();
@@ -118,7 +119,10 @@ export function Ettersending() {
 
       {ettersendingText && (
         <div className="my-12">
-          <PortableText value={ettersendingText.body} />
+          <PortableText
+            value={ettersendingText.body}
+            components={{ types: { readMore: ReadMore } }}
+          />
         </div>
       )}
 
