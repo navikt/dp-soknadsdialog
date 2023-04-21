@@ -37,7 +37,7 @@ export function createSoknadUuid(onBehalfOfToken: string) {
 }
 
 export function getMineSoknader(onBehalfOfToken: string) {
-  const fromDate = subDays(Date.now(), 3);
+  const fromDate = subDays(Date.now(), 30);
   const formattedDate = formatISO(fromDate, { representation: "date" });
 
   const url = `${process.env.API_BASE_URL}/soknad/mine-soknader?fom=${formattedDate}`;
