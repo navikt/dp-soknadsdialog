@@ -55,11 +55,6 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(
-        mellomlagringResponse.statusText,
-        uuid,
-        "Save dokumentkrav file - Could not save to dp-mellomlagring"
-      );
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
     }
 
