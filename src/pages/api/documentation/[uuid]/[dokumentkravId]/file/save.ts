@@ -130,7 +130,7 @@ async function saveFileToMellomlagring(
   });
 
   if (!response.ok) {
-    logger.error(
+    logger.warn(
       `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${response.status}`
     );
     if (!isNaN(fileSizeBytes)) {
