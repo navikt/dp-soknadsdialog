@@ -2,7 +2,7 @@ import Head from "next/head";
 
 interface IProps {
   title: string;
-  description: string;
+  description?: string;
 }
 
 export function PageMeta(props: IProps) {
@@ -11,7 +11,7 @@ export function PageMeta(props: IProps) {
   return (
     <Head>
       <title>{title}</title>
-      <meta property="og:title" content={description} key="title" />
+      {description && <meta property="og:title" content={description} key="title" />}
     </Head>
   );
 }
