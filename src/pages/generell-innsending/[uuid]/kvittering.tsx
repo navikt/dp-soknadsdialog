@@ -11,7 +11,6 @@ import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { QuizProvider } from "../../../context/quiz-context";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { ValidationProvider } from "../../../context/validation-context";
-
 interface IProps {
   soknadState: IQuizState | null;
   errorCode: number | null;
@@ -50,14 +49,13 @@ export async function getServerSideProps(
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
   }
-
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
