@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { GenerellInnsendingKvittering } from "../../../components/generell-innsending-kvittering/GenerellInnsendingKvittering";
+import { GenerellInnsendingKvittering } from "../../../views/generell-innsending/GenerellInnsendingKvittering";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IQuizState } from "../../../types/quiz.types";
 import ErrorPage from "../../_error";
@@ -8,6 +8,9 @@ import { getSession } from "../../../auth.utils";
 import { audienceDPSoknad } from "../../../api.utils";
 import { getSoknadState } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { QuizProvider } from "../../../context/quiz-context";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { ValidationProvider } from "../../../context/validation-context";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -84,5 +87,13 @@ export default function GenerellInnsendingKvitteringPage(props: IProps) {
     );
   }
 
-  return <GenerellInnsendingKvittering />;
+  return (
+    <QuizProvider initialState={soknadState}>
+      <DokumentkravProvider initialState={dokumentkravList}>
+        <ValidationProvider>
+          <GenerellInnsendingKvittering />
+        </ValidationProvider>
+      </DokumentkravProvider>
+    </QuizProvider>
+  );
 }
