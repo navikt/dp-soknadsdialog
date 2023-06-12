@@ -1,14 +1,13 @@
 import React from "react";
 import { useSanity } from "../../context/sanity-context";
 import { PortableText } from "@portabletext/react";
-import { Button, Heading, Tag } from "@navikt/ds-react";
+import { Button, Heading, Label } from "@navikt/ds-react";
 import Link from "next/link";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useQuiz } from "../../context/quiz-context";
 import { Faktum } from "../../components/faktum/Faktum";
 import styles from "./GenerellInnsendingKvittering.module.css";
 import api from "../../api.utils";
-import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { PageMeta } from "../../components/PageMeta";
 
 export function GenerellInnsendingKvittering() {
@@ -35,24 +34,19 @@ export function GenerellInnsendingKvittering() {
             });
           })}
 
+          <Label as="p">{getAppText("generell-innsending.kvittering.vedlagt-dokument")}</Label>
           <ol className={styles.dokumentkravList}>
             {dokumentkravList.krav.map((dokumentkrav) => {
               return (
                 <li key={dokumentkrav.beskrivendeId}>
                   <div className={styles.dokumentkravTitle}>
-                    <Heading level="3" size="xsmall">
-                      <a
-                        href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        <DokumentkravTitle dokumentkrav={dokumentkrav} />
-                      </a>
-                    </Heading>
-
-                    <Tag variant="success" className={styles.dokumentkravTag}>
-                      {getAppText("kvittering.dokumenter.status.mottatt")}
-                    </Tag>
+                    <a
+                      href={api(`/documentation/download/${dokumentkrav.bundleFilsti}`)}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {getAppText("generell-innsending.kvittering.se-vedlagt-dokument")}
+                    </a>
                   </div>
                 </li>
               );
