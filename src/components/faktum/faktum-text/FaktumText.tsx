@@ -40,11 +40,14 @@ export function FaktumTextComponent(
   }, [debouncedText]);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
-  useEffect(() => {
-    if (!isFirstRender && faktum.svar !== currentAnswer) {
-      setCurrentAnswer(faktum.svar ?? "");
-    }
-  }, [faktum]);
+  // Do not use this for debounced text!
+  // It will cause all text written in the input field between the time the save call is initiated and response received to disappear.
+  // Especially noticeable in larger textboxes with a maxdebounce of 2000ms
+  // useEffect(() => {
+  //   if (!isFirstRender && faktum.svar !== currentAnswer) {
+  //     setCurrentAnswer(faktum.svar ?? "");
+  //   }
+  // }, [faktum]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
