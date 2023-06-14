@@ -34,6 +34,12 @@ export function FaktumTextComponent(
 
   useEffect(() => {
     if (!isFirstRender && debouncedText !== faktum.svar) {
+      //backend does not allow a string containing only whitespace, giving us a bad request so do not try to save answer
+      //trim is used to check if the string contains only whitespace. if only whitespace, do nothing.
+      //still need to let the algorithm continue if length is 0 because that indicates to us that we need to null the answer
+      if (debouncedText.length > 0 && !debouncedText.trim()) {
+        return;
+      }
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
       saveFaktum(inputValue);
     }
