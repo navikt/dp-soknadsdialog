@@ -20,7 +20,7 @@ const containsOnlyWhitespace = (debouncedText: string): boolean => {
   // vi skal bare gjøre sjekken hvis det er noe i stringen
   const stringNotEmpty: boolean = debouncedText.length > 0;
 
-  return stringNotEmpty && debouncedText.trim() ? true : false;
+  return stringNotEmpty && !debouncedText.trim() ? true : false;
 };
 
 export function FaktumTextComponent(
