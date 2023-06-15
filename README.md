@@ -90,7 +90,8 @@ Tilleggs info, det er lurt å bruke Chrome i denne løsningen da Firefox ikke fu
 6. Klikk på https://arbeid.intern.dev.nav.no/dagpenger/dialog og logg inn med ID (via Dolly)
 7. Klikk på https://arbeid.intern.dev.nav.no/dagpenger/dialog/api/internal/token og paste inn token i terminalen
 8. `$ npm run dev`
-9. Ferdig!
+9. Gå til http://localhost:3000/dagpenger/dialog/soknad/arbeidssoker
+10. Ferdig!
 
 ## Potensielle errorer
 
