@@ -97,8 +97,10 @@ Tilleggs info, det er lurt å bruke Chrome i denne løsningen da Firefox ikke fu
 
 ### gke-gcloud-auth-plugin error
 
-````Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-Unable to connect to the server: getting credentials: exec: executable gke-gcloud-auth-plugin not found```
+```
+Install gke-gcloud-auth-plugin for use with kubectl by following https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+Unable to connect to the server: getting credentials: exec: executable gke-gcloud-auth-plugin not found
+```
 
 Løsningen er å legge inn `source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"` inn i `.zshrc` på Mac.
 
@@ -106,7 +108,6 @@ Løsningen er å legge inn `source "/opt/homebrew/Caskroom/google-cloud-sdk/late
 
 ### UUID error
 
-```ERROR (14669): Get new uuid - Failed to get new uuid from dp-soknad: Bad Request, uuid: Not provided```
+`ERROR (14669): Get new uuid - Failed to get new uuid from dp-soknad: Bad Request, uuid: Not provided`
 
 Husk å `Flush socket pools` via chrome://net-internals/#sockets. Gjør dette, og gjør hele Vanlig oppstart på nytt
-````
