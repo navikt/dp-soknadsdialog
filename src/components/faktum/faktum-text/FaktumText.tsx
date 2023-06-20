@@ -15,6 +15,14 @@ import styles from "../Faktum.module.css";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
+const containsOnlyWhitespace = (debouncedText: string): boolean => {
+  // trim er brukt for å sjekke om string inneholder kun whitespace. Hvis kun whitespace, gjør ingenting.
+  // vi skal bare gjøre sjekken hvis det er noe i stringen
+  const stringNotEmpty: boolean = debouncedText.length > 0;
+
+  return stringNotEmpty && !debouncedText.trim() ? true : false;
+};
+
 export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
   ref: Ref<HTMLInputElement> | undefined
@@ -34,10 +42,8 @@ export function FaktumTextComponent(
 
   useEffect(() => {
     if (!isFirstRender && debouncedText !== faktum.svar) {
-      //backend does not allow a string containing only whitespace, giving us a bad request so do not try to save answer
-      //trim is used to check if the string contains only whitespace. if only whitespace, do nothing.
-      //still need to let the algorithm continue if length is 0 because that indicates to us that we need to null the answer
-      if (debouncedText.length > 0 && !debouncedText.trim()) {
+      // backend tillater ikke string med bare whitespace, avgir bad request som gir en dårlig tilbakemelding til bruker
+      if (containsOnlyWhitespace(debouncedText)) {
         return;
       }
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
