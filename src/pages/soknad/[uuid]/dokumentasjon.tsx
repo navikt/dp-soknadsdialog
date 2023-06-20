@@ -2,7 +2,7 @@ import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { QuizProvider } from "../../../context/quiz-context";
 import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
-import { getSoknadState } from "../../../api/quiz-api";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { mockNeste } from "../../../localhost-data/mock-neste";
@@ -13,6 +13,7 @@ import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkr
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import ErrorPage from "../../_error";
 import { logger } from "@navikt/next-logger";
+import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 
 interface IProps {
   errorCode: number | null;
@@ -49,9 +50,12 @@ export async function getServerSideProps(
   let errorCode = null;
   let soknadState = null;
   let dokumentkrav = null;
+  let soknadStatus = null;
+
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);
@@ -67,6 +71,19 @@ export async function getServerSideProps(
     return {
       redirect: {
         destination: `/soknad/${uuid}/oppsummering`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (soknadStatusResponse.ok) {
+    soknadStatus = await soknadStatusResponse.json();
+  }
+
+  if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
+    return {
+      redirect: {
+        destination: `/soknad/${uuid}/kvittering`,
         permanent: false,
       },
     };
