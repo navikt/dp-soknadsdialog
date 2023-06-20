@@ -110,4 +110,4 @@ Løsningen er å legge inn `source "/opt/homebrew/Caskroom/google-cloud-sdk/late
 
 `ERROR (14669): Get new uuid - Failed to get new uuid from dp-soknad: Bad Request, uuid: Not provided`
 
-Husk å `Flush socket pools` via chrome://net-internals/#sockets. Gjør dette, og gjør hele Vanlig oppstart på nytt
+Husk å `Flush socket pools` via chrome://net-internals/#sockets. Gjør dette, og gjør hele [Vanlig oppstart](https://github.com/navikt/dp-soknadsdialog/tree/oppdatertDokumentasjon#vanlig-oppstart-av-prosjektet-n%C3%A5r-alt-er-satt-opp) på nytt
