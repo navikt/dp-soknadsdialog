@@ -4,7 +4,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
-import { getSoknadState } from "../../../api/quiz-api";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { IPersonalia } from "../../../types/personalia.types";
 import { mockPersonalia } from "../../../localhost-data/personalia";
@@ -13,6 +13,7 @@ import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
 import { logger } from "@navikt/next-logger";
+import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -49,10 +50,12 @@ export async function getServerSideProps(
   let errorCode = null;
   let soknadState = null;
   let personalia = null;
+  let soknadStatus = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
@@ -64,6 +67,19 @@ export async function getServerSideProps(
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
+  }
+
+  if (soknadStatusResponse.ok) {
+    soknadStatus = await soknadStatusResponse.json();
+  }
+
+  if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
+    return {
+      redirect: {
+        destination: `/soknad/${uuid}/kvittering`,
+        permanent: false,
+      },
+    };
   }
 
   return {

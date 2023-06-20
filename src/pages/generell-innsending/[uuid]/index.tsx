@@ -3,7 +3,7 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadState } from "../../../api/quiz-api";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import ErrorPage from "../../_error";
 import { IQuizState } from "../../../types/quiz.types";
 import { getSession } from "../../../auth.utils";
@@ -12,6 +12,7 @@ import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-in
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -48,9 +49,12 @@ export async function getServerSideProps(
   let errorCode = null;
   let soknadState = null;
   let dokumentkravList = null;
+  let soknadStatus = null;
 
   const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
@@ -58,12 +62,23 @@ export async function getServerSideProps(
     soknadState = await soknadStateResponse.json();
   }
 
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-
   if (!dokumentkravResponse.ok) {
     errorCode = dokumentkravResponse.status;
   } else {
     dokumentkravList = await dokumentkravResponse.json();
+  }
+
+  if (soknadStatusResponse.ok) {
+    soknadStatus = await soknadStatusResponse.json();
+  }
+
+  if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
+    return {
+      redirect: {
+        destination: `/generell-innsending/${uuid}/kvittering`,
+        permanent: false,
+      },
+    };
   }
 
   return {
