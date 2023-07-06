@@ -24,7 +24,7 @@ export function StartSoknad({ preview = false }: IProps) {
   const { setFocus } = useSetFocus();
   const [isError, setIsError] = useState(false);
   const { getAppText, getInfosideText } = useSanity();
-  const [consentGiven, setConsentGiven] = useState<boolean>(false);
+  const [consentGiven, setConsentGiven] = useState<boolean>(preview);
   const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const missingConsentRef = useRef<HTMLInputElement>(null);
@@ -35,12 +35,6 @@ export function StartSoknad({ preview = false }: IProps) {
       setFocus(missingConsentRef);
     }
   }, [showConsentValidation]);
-
-  useEffect(() => {
-    if (preview) {
-      setConsentGiven(true);
-    }
-  }, []);
 
   async function startSoknad() {
     if (!consentGiven) {
