@@ -48,3 +48,9 @@
   margin-top: var(--a-spacing-9);
   gap: var(--a-spacing-6);
 }
+
+.pdf-separator {
+  padding-bottom: var(--a-spacing-12);
+  margin-bottom: var(--a-spacing-12);
+  border-bottom: 3px solid var(--a-gray-400);
+}

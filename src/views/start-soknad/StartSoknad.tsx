@@ -15,7 +15,11 @@ import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStartet } from "../../amplitude.tracking";
 import { logger } from "@navikt/next-logger";
 
-export function StartSoknad() {
+interface IProps {
+  preview?: boolean;
+}
+
+export function StartSoknad({ preview = false }: IProps) {
   const router = useRouter();
   const { setFocus } = useSetFocus();
   const [isError, setIsError] = useState(false);
@@ -31,6 +35,12 @@ export function StartSoknad() {
       setFocus(missingConsentRef);
     }
   }, [showConsentValidation]);
+
+  useEffect(() => {
+    if (preview) {
+      setConsentGiven(true);
+    }
+  }, []);
 
   async function startSoknad() {
     if (!consentGiven) {
@@ -72,7 +82,9 @@ export function StartSoknad() {
         title={getAppText("arbeidssokerstatus.side-metadata.tittel")}
         description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
-      <SoknadHeader />
+
+      {!preview && <SoknadHeader />}
+
       <main>
         {startSideText?.body && (
           <PortableText
