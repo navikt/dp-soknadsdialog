@@ -1,6 +1,6 @@
 name: Build and deploy
 
-on: [ push ]
+on: [push]
 
 jobs:
   install:
@@ -28,7 +28,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
   test:
-    needs: [ install ]
+    needs: [install]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -45,11 +45,12 @@ jobs:
       - run: npm test
 
   build:
-    needs: [ install ]
+    needs: [install]
     runs-on: ubuntu-latest
     permissions:
       contents: "read"
       id-token: "write"
+      packages: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -68,7 +69,7 @@ jobs:
           path: ./.next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-    
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - run: npm run build
 
@@ -93,11 +94,11 @@ jobs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
   upload-cdn:
-    needs: [ test, build ]
+    needs: [test, build]
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      id-token: 'write'
+      contents: "read"
+      id-token: "write"
     steps:
       - uses: actions/cache@v3
         with:
@@ -110,10 +111,10 @@ jobs:
         with:
           cdn-team-name: teamdagpenger
           source: ./.next/static
-          destination: '/dp-soknadsdialog/_next'
+          destination: "/dp-soknadsdialog/_next"
 
   deploy-dev:
-    needs: [ test, build, upload-cdn ]
+    needs: [test, build, upload-cdn]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -140,7 +141,7 @@ jobs:
           set_commits: skip
 
   deploy-prod:
-    needs: [ test, build, upload-cdn ]
+    needs: [test, build, upload-cdn]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
