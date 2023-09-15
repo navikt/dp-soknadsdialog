@@ -1,5 +1,4 @@
 import React from "react";
-import * as Sentry from "@sentry/browser";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
   Components as DecoratorComponents,
@@ -36,8 +35,6 @@ export default class MyDocument extends Document<DecoratorComponents> {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = locale === undefined ? "nb" : (locale as Locale);
-
-    Sentry.setContext("culture", { locale: language });
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,

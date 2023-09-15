@@ -1,7 +1,6 @@
 import fs from "fs";
 import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
-import { withSentry } from "@sentry/nextjs";
 import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
@@ -62,4 +61,4 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(downloadHandler);
+export default downloadHandler;

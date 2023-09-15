@@ -38,7 +38,6 @@
     "@next/bundle-analyzer": "^13.1.6",
     "@portabletext/react": "^2.0.1",
     "@portabletext/to-html": "^1.0.4",
-    "@sentry/nextjs": "^7.11.1",
     "@svgr/webpack": "^7.0.0",
     "@types/js-cookie": "^3.0.2",
     "classnames": "^2.3.2",

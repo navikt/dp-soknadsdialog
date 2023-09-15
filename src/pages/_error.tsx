@@ -1,5 +1,4 @@
 import { NextPageContext } from "next";
-import * as Sentry from "@sentry/nextjs";
 import { ErrorPageContent } from "../components/error-page-content/errorPageContent";
 
 interface IProps {
@@ -23,10 +22,6 @@ export default function ErrorPage({ statusCode, title, details }: IProps) {
 }
 
 ErrorPage.getInitialProps = async (contextData: NextPageContext) => {
-  // In case this is running in a serverless function, await this in order to give Sentry
-  // time to send the error before the lambda exits
-  await Sentry.captureUnderscoreErrorException(contextData);
-
   const statusCode = contextData.res
     ? contextData.res.statusCode
     : contextData.err

@@ -4,7 +4,6 @@ import { booleanToTextId, FaktumBoolean, textIdToBoolean } from "./FaktumBoolean
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 
-import * as SentryLogger from "../../../error.logger";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 
@@ -54,20 +53,6 @@ describe("FaktumBoolean", () => {
       expect(checkedRadio.value).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
       expect(svarLabel).toBe("faktum.arbeidsforhold.kjent-antall-timer-jobbet.svar.ja");
     });
-  });
-
-  xtest("Should not look for empty textId when rendering unanswered readOnly", async () => {
-    const spy = jest.spyOn(SentryLogger, "logMissingSanityText");
-    faktumMockData.svar = undefined;
-    faktumMockData.readOnly = true;
-
-    render(
-      <MockContext>
-        <FaktumBoolean faktum={faktumMockData} />
-      </MockContext>
-    );
-
-    expect(spy).not.toHaveBeenCalledWith("");
   });
 
   describe("When user selects an answer", () => {

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { sanityClient } from "../../sanity-client";
 import { ErrorPageContent } from "../components/error-page-content/errorPageContent";
 import { allTextsQuery } from "../sanity/groq-queries";
-import * as SentryLogger from "../error.logger";
 import { ISanityTexts } from "../types/sanity.types";
 
 const fallbackErrorText = {
@@ -44,9 +43,7 @@ export default function Error500() {
   function getAppTekst(textId: string, sanityText: ISanityTexts): string {
     const text =
       sanityText?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
-    if (!text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
+
     return text;
   }
 

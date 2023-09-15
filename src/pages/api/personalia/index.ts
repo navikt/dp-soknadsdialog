@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
-import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 
@@ -39,4 +38,4 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default withSentry(personaliaHandler);
+export default personaliaHandler;

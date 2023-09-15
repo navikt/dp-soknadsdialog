@@ -1,7 +1,6 @@
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../../api.utils";
-import { withSentry } from "@sentry/nextjs";
 import { headersWithToken } from "../../../../api/quiz-api";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
@@ -42,4 +41,4 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(dokumentkravHandler);
+export default dokumentkravHandler;

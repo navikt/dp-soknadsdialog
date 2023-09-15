@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
 import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
@@ -69,4 +68,4 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(soknadStateResponse.status).send(soknadState);
 }
 
-export default withSentry(saveFaktumHandler);
+export default saveFaktumHandler;

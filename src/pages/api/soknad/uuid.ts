@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { createSoknadUuid } from "../../../api/quiz-api";
-import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 
@@ -37,4 +36,4 @@ async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(uuidHandler);
+export default uuidHandler;

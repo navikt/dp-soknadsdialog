@@ -1,4 +1,3 @@
-import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { getSession } from "../../../auth.utils";
@@ -44,4 +43,4 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(ettersendHandler);
+export default ettersendHandler;
