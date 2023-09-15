@@ -1,4 +1,5 @@
-FROM node:16-alpine AS runtime
+FROM gcr.io/distroless/nodejs18-debian11
+
 WORKDIR /usr/src/app
 
 ENV PORT=3000 \
