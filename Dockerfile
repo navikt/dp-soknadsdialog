@@ -16,4 +16,4 @@ COPY .next/static ./.next/static
 EXPOSE 3000
 USER node
 
-CMD ["server.js"]
+CMD ["node", "server.js"]
