@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { headersWithToken } from "../../../../api/quiz-api";
@@ -89,4 +88,4 @@ async function deleteFileFromMellomlagring(
   });
 }
 
-export default withSentry(deleteFileHandler);
+export default deleteFileHandler;

@@ -1,6 +1,4 @@
 import { useCallback, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
-import { RequestError } from "../error.logger";
 
 export interface IErrorDetails {
   message: string;
@@ -50,14 +48,6 @@ export function useFetchRequest<T, U>(
         setStatus("error");
         setErrorDetails({ ...errorDetails, responseCode: response.status });
 
-        Sentry.captureException(new RequestError(`${url}`), {
-          tags: {
-            message: errorDetails.message,
-            responseCode: errorDetails.responseCode,
-            body: JSON.stringify(body),
-          },
-        });
-
         if (parseResponse) {
           return undefined;
         } else {
@@ -75,12 +65,6 @@ export function useFetchRequest<T, U>(
       setStatus("error");
       setErrorDetails(GENERIC_ERROR_DETAILS);
 
-      Sentry.captureException(new RequestError(`${url}`), {
-        tags: {
-          message: GENERIC_ERROR_DETAILS.message,
-          responseCode: GENERIC_ERROR_DETAILS.responseCode,
-        },
-      });
       return false;
     }
   }

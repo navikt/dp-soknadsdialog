@@ -1,4 +1,3 @@
-import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
@@ -59,4 +58,4 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(ferdigstillHandler);
+export default ferdigstillHandler;

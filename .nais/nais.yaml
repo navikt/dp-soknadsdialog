@@ -69,7 +69,6 @@ spec:
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
         - host: amplitude.nav.no
-        - host: sentry.gc.nav.no
       rules:
         - application: dp-soknad
         - application: dp-mellomlagring

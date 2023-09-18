@@ -127,19 +127,6 @@ jobs:
           VAR: image=${{ needs.build.outputs.image }}
           PRINT_PAYLOAD: true
 
-      - name: Lag deployment i Sentry
-        uses: getsentry/action-release@v1
-        continue-on-error: true
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_URL: https://sentry.gc.nav.no
-          SENTRY_ORG: nav
-          SENTRY_PROJECT: dp-soknadsdialog
-        with:
-          environment: development
-          version: ${{ github.sha }}
-          set_commits: skip
-
   deploy-prod:
     needs: [test, build, upload-cdn]
     if: github.ref == 'refs/heads/main'
@@ -154,16 +141,3 @@ jobs:
           VARS: .nais/vars-prod.yaml
           VAR: image=${{ needs.build.outputs.image }}
           PRINT_PAYLOAD: true
-
-      - name: Lag deployment i Sentry
-        uses: getsentry/action-release@v1
-        continue-on-error: true
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_URL: https://sentry.gc.nav.no
-          SENTRY_ORG: nav
-          SENTRY_PROJECT: dp-soknadsdialog
-        with:
-          environment: production
-          version: ${{ github.sha }}
-          set_commits: skip

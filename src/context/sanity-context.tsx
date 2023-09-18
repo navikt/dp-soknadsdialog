@@ -9,7 +9,6 @@ import {
   ISanitySvaralternativ,
   ISanityTexts,
 } from "../types/sanity.types";
-import * as SentryLogger from "../error.logger";
 
 export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
 
@@ -31,17 +30,11 @@ function useSanity() {
 
   function getSeksjonTextById(textId: string): ISanitySeksjon | undefined {
     const text = context?.seksjoner.find((seksjon) => seksjon.textId === textId);
-    if (!text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
     return text;
   }
 
   function getFaktumTextById(textId: string): ISanityFaktum | undefined {
     const text = context?.fakta.find((faktum) => faktum.textId === textId);
-    if (!text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
     return text;
   }
 
@@ -53,18 +46,14 @@ function useSanity() {
     const text = context?.svaralternativer.find(
       (svaralternativ) => svaralternativ.textId === textId
     );
-    if (!text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
+
     return text;
   }
 
   function getAppText(textId: string): string {
     const text =
       context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
-    if (!text) {
-      SentryLogger.logMissingSanityText(textId);
-    }
+
     return text;
   }
 

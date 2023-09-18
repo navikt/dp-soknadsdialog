@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { withSentry } from "@sentry/nextjs";
 import { getSession } from "../../../auth.utils";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
@@ -58,4 +57,4 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(saveSvarHandler);
+export default saveSvarHandler;

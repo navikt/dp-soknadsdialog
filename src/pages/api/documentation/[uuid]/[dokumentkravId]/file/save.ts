@@ -1,4 +1,3 @@
-import { withSentry } from "@sentry/nextjs";
 import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
 import {
@@ -158,4 +157,4 @@ async function saveFileToDPSoknad(
   });
 }
 
-export default withSentry(saveFileHandler);
+export default saveFileHandler;

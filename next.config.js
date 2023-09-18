@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { withSentryConfig } = require("@sentry/nextjs");
 const { buildCspHeader } = require("@navikt/nav-dekoratoren-moduler/ssr");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
@@ -14,8 +13,6 @@ const myAppDirectives = {
   "script-src-elem": ["'self'"],
   "img-src": ["'self'", "data:"],
   "connect-src": ["'self'", "rt6o382n.apicdn.sanity.io"],
-  "report-uri":
-    "https://sentry.gc.nav.no/api/138/security/?sentry_key=1d4d9592b0c4442889ba64e028a16c09",
 };
 
 /**
@@ -67,11 +64,4 @@ const config = {
   },
 };
 
-module.exports = withBundleAnalyzer(
-  withSentryConfig(config, {
-    silent: true,
-    errorHandler: (err, invokeErr, compilation) => {
-      compilation.warnings.push("Sentry CLI Plugin: " + err.message);
-    },
-  })
-);
+module.exports = withBundleAnalyzer(config);

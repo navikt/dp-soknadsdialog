@@ -1,4 +1,3 @@
-import { withSentry } from "@sentry/nextjs";
 import { NextApiRequest, NextApiResponse } from "next";
 import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
@@ -44,4 +43,4 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export default withSentry(deleteHandler);
+export default deleteHandler;
