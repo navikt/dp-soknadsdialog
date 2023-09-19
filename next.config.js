@@ -26,7 +26,6 @@ const config = {
     defaultLocale: "nb",
   },
   assetPrefix: process.env.ASSET_PREFIX,
-  productionBrowserSourceMaps: true,
   experimental: {
     largePageDataBytes: 256 * 1000, // Økt fra 128KB til 256K
   },
