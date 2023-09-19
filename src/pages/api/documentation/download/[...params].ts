@@ -53,7 +53,11 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     res.setHeader("Content-Disposition", "inline;");
-    return res.status(response.status).send(response.body);
+
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return res.status(response.status).send(buffer);
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Download dokumentkrav files - Generic error");

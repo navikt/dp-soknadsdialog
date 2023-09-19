@@ -1,4 +1,5 @@
-FROM node:16-alpine AS runtime
+FROM node:18-alpine
+
 WORKDIR /usr/src/app
 
 ENV PORT=3000 \
