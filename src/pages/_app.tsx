@@ -15,10 +15,13 @@ import { ISanityTexts } from "../types/sanity.types";
 import { allTextsQuery } from "../sanity/groq-queries";
 import ErrorPage from "./_error";
 import { initAmplitude } from "../amplitude.tracking";
+import { initInstrumentation } from "../faro/faro";
 
 type AppPropsSanityTexts = AppProps & {
   sanityTexts: ISanityTexts;
 };
+
+initInstrumentation();
 
 export default function App({ Component, pageProps, sanityTexts }: AppPropsSanityTexts) {
   const router = useRouter();
