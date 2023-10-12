@@ -29,7 +29,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^1.8.0",
     "@grafana/faro-web-sdk": "^1.2.1",
-    "@navikt/dp-auth": "^0.3.8",
+    "@navikt/dp-auth": "^0.3.15",
     "@navikt/ds-css": "^2.1.7",
     "@navikt/ds-icons": "^2.1.7",
     "@navikt/ds-react": "^2.1.7",
