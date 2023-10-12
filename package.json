@@ -29,7 +29,7 @@
   "dependencies": {
     "@amplitude/analytics-browser": "^1.8.0",
     "@grafana/faro-web-sdk": "^1.2.1",
-    "@navikt/dp-auth": "^0.3.11",
+    "@navikt/dp-auth": "^0.3.12",
     "@navikt/ds-css": "^2.1.7",
     "@navikt/ds-icons": "^2.1.7",
     "@navikt/ds-react": "^2.1.7",
@@ -50,7 +50,7 @@
     "next-intl": "^2.10.2",
     "next-sanity": "^1.1.0",
     "pino": "^8.11.0",
-    "prom-client": "^14.1.1",
+    "prom-client": "^15.0.0",
     "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
