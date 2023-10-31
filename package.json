@@ -11,7 +11,8 @@
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install",
-    "port-forward": "./scripts/local-auth.sh && ./scripts/port-forward.sh"
+    "port-forward": "./scripts/local-auth.sh && ./scripts/port-forward.sh",
+    "generate-token": "chmod +x ./token-generator.sh && ./token-generator.sh"
   },
   "engines": {
     "node": ">=15.0.0",

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../error.logger";
+import { getErrorMessage } from "../../../../api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { audienceDPSoknad, audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
+import { getMellomlagringOboToken, getSession, getSoknadOboToken } from "../../../../auth.utils";
+import { logRequestError } from "../../../../error.logger";
 
 export interface IDeleteFileBody {
   uuid: string;
@@ -21,8 +21,8 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, filsti } = req.body;
-  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
-  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+  const DPSoknadToken = await getSoknadOboToken(session);
+  const mellomlagringToken = await getMellomlagringOboToken(session);
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(
@@ -66,13 +66,13 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 async function deleteFileFromDPSoknad(
   uuid: string,
   dokumentkravId: string,
-  DPSoknadToken: string,
+  soknadOboToken: string,
   filsti: string
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil/${filsti}`;
   return fetch(url, {
     method: "DELETE",
-    headers: headersWithToken(DPSoknadToken),
+    headers: headersWithToken(soknadOboToken),
   });
 }
 

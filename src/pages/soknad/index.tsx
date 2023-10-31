@@ -1,16 +1,16 @@
+import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad, getErrorDetails } from "../../api.utils";
+import { getErrorDetails } from "../../api.utils";
+import {
+  IArbeidssokerStatus,
+  IArbeidssokerperioder,
+  getArbeidssokerperioder,
+} from "../../api/arbeidssoker-api";
+import { getMineSoknader } from "../../api/quiz-api";
+import { getSession, getSoknadOboToken } from "../../auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
-import { getMineSoknader } from "../../api/quiz-api";
 import ErrorPage from "../_error";
-import { getSession } from "../../auth.utils";
-import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
-  IArbeidssokerStatus,
-} from "../../api/arbeidssoker-api";
-import { logger } from "@navikt/next-logger";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -22,26 +22,6 @@ export async function getServerSideProps(
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
-
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    return {
-      props: {
-        mineSoknader: {
-          paabegynt: {
-            soknadUuid: "localhost-uuid-paabegynt",
-            opprettet: "2022-10-20T15:15:06.913514",
-            sistEndretAvbruker: "2022-11-20T15:15:06.913514",
-          },
-          innsendte: [
-            { soknadUuid: "localhost-uuid-innsendt-1", forstInnsendt: "2022-10-21T09:47:29" },
-            { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
-          ],
-        },
-        arbeidssokerStatus: "REGISTERED",
-        errorCode: null,
-      },
-    };
-  }
 
   const session = await getSession(context.req);
   if (!session) {
@@ -57,8 +37,8 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
-  const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
+  const soknadOboToken = await getSoknadOboToken(session);
+  const mineSoknaderResponse = await getMineSoknader(soknadOboToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {

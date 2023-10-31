@@ -1,14 +1,9 @@
-import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  apiFetch,
-  audienceDPSoknad,
-  audienceMellomlagring,
-  getErrorMessage,
-} from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { v4 as uuidV4 } from "uuid";
+import { apiFetch, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
+import { getMellomlagringOboToken, getSession, getSoknadOboToken } from "../../../auth.utils";
+import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
 
 export interface IDocumentationBundleBody {
@@ -34,14 +29,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
-  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+  const soknadOboToken = await getSoknadOboToken(session);
+  const mellomlagringOboToken = await getMellomlagringOboToken(session);
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringToken,
+      mellomlagringOboToken,
       requestId
     );
     bundlingTimer();
@@ -64,7 +59,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       urn,
-      DPSoknadToken,
+      soknadOboToken,
       requestId
     );
 
@@ -112,7 +107,7 @@ interface IMellomlagringBundle {
 
 async function bundleFilesMellomlagring(
   body: IMellomlagringBundle,
-  mellomlagringToken: string,
+  mellomlagringOboToken: string,
   requestId?: string
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
@@ -120,7 +115,7 @@ async function bundleFilesMellomlagring(
     url,
     {
       method: "POST",
-      headers: headersWithToken(mellomlagringToken),
+      headers: headersWithToken(mellomlagringOboToken),
       body: JSON.stringify(body),
     },
     requestId

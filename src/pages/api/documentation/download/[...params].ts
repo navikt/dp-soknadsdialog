@@ -1,8 +1,8 @@
 import fs from "fs";
-import path from "path";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
-import { getSession } from "../../../../auth.utils";
+import path from "path";
+import { getErrorMessage } from "../../../../api.utils";
+import { getMellomlagringOboToken, getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
@@ -31,10 +31,10 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const urn = params.join("/");
 
   try {
-    const onBehalfOfToken = await session.apiToken(audienceMellomlagring);
+    const mellomlagringOboToken = await getMellomlagringOboToken(session);
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
-        Authorization: `Bearer ${onBehalfOfToken}`,
+        Authorization: `Bearer ${mellomlagringOboToken}`,
       },
     });
 
