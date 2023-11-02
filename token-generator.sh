@@ -14,12 +14,6 @@ envFile='.env.development'
 # json config 
 jsonConfig='token-generator.config.json'
 
-# Check if user has `jq` installed
-# https://formulae.brew.sh/formula/jq
-verifyJQ() {
-  brew list jq > /dev/null 2>&1 || brew install jq 
-}
-
 # Main script
 init() {
   # Welcome text
@@ -36,6 +30,32 @@ init() {
   echo -e "🌈 ${Purple}You're good to go! Restart your dev-server."
 }
 
+# Check if user has `jq` installed
+# https://formulae.brew.sh/formula/jq
+verifyJQ() {
+  if brew ls --versions jq > /dev/null; then
+    # jq already installed, continue script
+    :
+  else
+    # jq not found
+    # ask user to install jq
+    echo -e "${Yellow}🟡 jq not found. jq is required for token-generator script."
+    echo -e "${Yellow}🟡 Read more about jq: ${UGreen}https://formulae.brew.sh/formula/jq${Cyan}\n"
+    
+    # ask for user input y or n
+    read -p "Install jq (y/n)?" answer
+
+    if [ "$answer" = "y" ]; then
+      brew install jq 
+      echo -e "\n"
+    else
+      echo -e "🛑 ${Red}Token generator aborted."
+      exit 1
+    fi
+  fi
+}
+
+# Start token generation process
 startTokenGenerator() {
   # First azure-token-generator url from json config
   url=$(jq '.' $jsonConfig | jq '.[0].url' | tr -d '"')
@@ -67,7 +87,6 @@ startTokenGenerator() {
   echo -e "\n"
 }
 
-
 # This function make curl request with `-b` flag to send cookie with the request
 # | jq ".access_token" returns access_token string
 generateAndUpdateEnvFile() {
@@ -75,6 +94,16 @@ generateAndUpdateEnvFile() {
   env=$1
   url=$2 | tr -d '"'
   cookie=$3
+
+  # Add env key if not exits
+  # Example: DP_SOKNAD_TOKEN
+  if grep -q "$env" "$envFile"; then
+    # env already exits, continue script
+    :
+  else
+    # Add missing env key
+    printf "%s\n" '$a' "${env}" . w | ed -s "$envFile"
+  fi
 
   # Store access token in variable
   accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token") 
