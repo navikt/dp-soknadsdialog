@@ -43,7 +43,7 @@ verifyJQ() {
     echo -e "${Yellow}🟡 Read more about jq: ${UGreen}https://formulae.brew.sh/formula/jq${Cyan}\n"
     
     # ask for user input y or n
-    read -p "Install jq (y/n)?" answer
+    read -p "Install jq (y/n)? " answer
 
     if [ "$answer" = "y" ]; then
       brew install jq 
