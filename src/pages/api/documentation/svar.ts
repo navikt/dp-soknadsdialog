@@ -18,7 +18,7 @@ export interface IDokumentkravSvar {
 }
 
 async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCK) {
+  if (process.env.USE_MOCKS) {
     return res.status(201).json({ status: "ok" });
   }
 

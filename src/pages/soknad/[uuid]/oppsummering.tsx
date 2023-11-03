@@ -30,6 +30,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
+
   if (process.env.USE_MOCKS) {
     return {
       props: {

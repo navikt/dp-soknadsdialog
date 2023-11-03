@@ -70,13 +70,13 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 async function deleteFileFromDPSoknad(
   uuid: string,
   dokumentkravId: string,
-  soknadOboToken: string,
+  onBehalfOfToken: string,
   filsti: string
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil/${filsti}`;
   return fetch(url, {
     method: "DELETE",
-    headers: headersWithToken(soknadOboToken),
+    headers: headersWithToken(onBehalfOfToken),
   });
 }
 
