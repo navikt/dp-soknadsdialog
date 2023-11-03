@@ -12,7 +12,7 @@ UGreen='\033[4;32m'       # Green underline
 envFile='.env.development'
 
 # json config 
-jsonConfig='token-generator.config.json'
+jsonConfig='./scripts/token-generator.config.json'
 
 # Main script
 init() {
