@@ -1,7 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../../api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { getMellomlagringOboToken, getSession, getSoknadOboToken } from "../../../../auth.utils";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSession,
+  getSoknadOnBehalfOfToken,
+} from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
 export interface IDeleteFileBody {
@@ -11,7 +15,7 @@ export interface IDeleteFileBody {
 }
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     return res.status(200).json("slettet");
   }
 
@@ -21,8 +25,8 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, filsti } = req.body;
-  const DPSoknadToken = await getSoknadOboToken(session);
-  const mellomlagringToken = await getMellomlagringOboToken(session);
+  const DPSoknadToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringToken = await getMellomlagringOnBehalfOfToken(session);
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(

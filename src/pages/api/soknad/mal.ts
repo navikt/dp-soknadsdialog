@@ -1,24 +1,27 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad } from "../../../api.utils";
 import { getSoknadMal } from "../../../api/quiz-api";
-import { getSession } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 
 async function malHandler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession(req);
-  let soknadMal;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
-    soknadMal = await getSoknadMal("");
-    return res.status(200).json(soknadMal);
+  if (process.env.USE_MOCKS) {
+    const response = await getSoknadMal("");
+    return res.status(200).json(response);
   }
 
-  if (session) {
-    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
-    soknadMal = await getSoknadMal(onBehalfOfToken);
-    return res.status(200).json(soknadMal);
-  } else {
+  if (!session) {
+    return res.status(401).end();
+  }
+
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const response = await getSoknadMal(onBehalfOfToken);
+
+  if (!response.ok) {
     return res.status(401).send({});
   }
+
+  return res.status(200).json(response);
 }
 
 export default malHandler;

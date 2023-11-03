@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
-import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
-import { getSession } from "../../../../auth.utils";
-import { audienceDPSoknad } from "../../../../api.utils";
-import metrics from "../../../../metrics";
 import { getSoknadState } from "../../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
+import metrics from "../../../../metrics";
+import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
+import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
 
 export interface ISaveFaktumBody {
   uuid: string;
@@ -15,10 +14,9 @@ export interface ISaveFaktumBody {
 }
 
 async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     return res.status(200).json(mockGenerellInnsending);
   }
-
   const session = await getSession(req);
   if (!session) {
     return res.status(401).end();
@@ -27,7 +25,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
   const faktumResponse = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktum.id}`,

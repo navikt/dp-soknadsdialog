@@ -2,7 +2,7 @@ import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import { getErrorMessage } from "../../../../api.utils";
-import { getMellomlagringOboToken, getSession } from "../../../../auth.utils";
+import { getMellomlagringOnBehalfOfToken, getSession } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
@@ -15,7 +15,7 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     res.setHeader("Content-Type", "application/pdf");
     return res.send(imageBuffer);
   }
@@ -31,7 +31,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const urn = params.join("/");
 
   try {
-    const mellomlagringOboToken = await getMellomlagringOboToken(session);
+    const mellomlagringOboToken = await getMellomlagringOnBehalfOfToken(session);
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
         Authorization: `Bearer ${mellomlagringOboToken}`,

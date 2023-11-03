@@ -1,19 +1,17 @@
-import React from "react";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getSoknadState } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { audienceDPSoknad } from "../../../api.utils";
-import { getSoknadState } from "../../../api/quiz-api";
-import ErrorPage from "../../_error";
-import { mockNeste } from "../../../localhost-data/mock-neste";
-import { IQuizState } from "../../../types/quiz.types";
-import { getSession } from "../../../auth.utils";
-import { Pdf } from "../../../views/pdf/Pdf";
-import { IPersonalia } from "../../../types/personalia.types";
-import { mockPersonalia } from "../../../localhost-data/personalia";
-import { getPersonalia } from "../../api/personalia";
 import { IDokumentkravList } from "../../../types/documentation.types";
+import { IPersonalia } from "../../../types/personalia.types";
+import { IQuizState } from "../../../types/quiz.types";
+import { Pdf } from "../../../views/pdf/Pdf";
+import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { getPersonalia } from "../../api/personalia";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
@@ -29,7 +27,7 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     return {
       props: {
         soknadState: mockNeste,
@@ -55,7 +53,7 @@ export async function getServerSideProps(
   let soknadState = null;
   let dokumentkrav = null;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);

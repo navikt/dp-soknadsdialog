@@ -21,7 +21,7 @@ if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
   });
 }
 
-export async function getSoknadOboToken(session: SessionWithOboProvider) {
+export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
     return process.env.DP_SOKNAD_TOKEN || fallbackToken;
   }
@@ -29,7 +29,7 @@ export async function getSoknadOboToken(session: SessionWithOboProvider) {
   return session.apiToken(audienceDPSoknad);
 }
 
-export async function getVeilarbregistreringOboToken(session: SessionWithOboProvider) {
+export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
     return process.env.VEILARBPROXY_TOKEN || fallbackToken;
   }
@@ -37,7 +37,7 @@ export async function getVeilarbregistreringOboToken(session: SessionWithOboProv
   return session.apiToken(audienceVeilarb);
 }
 
-export async function getMellomlagringOboToken(session: SessionWithOboProvider) {
+export async function getMellomlagringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
     return process.env.DP_MELLOMLAGRING || fallbackToken;
   }

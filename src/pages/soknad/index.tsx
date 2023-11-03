@@ -7,7 +7,7 @@ import {
   getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
 import { getMineSoknader } from "../../api/quiz-api";
-import { getSession, getSoknadOboToken } from "../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
@@ -37,8 +37,8 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
-  const soknadOboToken = await getSoknadOboToken(session);
-  const mineSoknaderResponse = await getMineSoknader(soknadOboToken);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
   if (!mineSoknaderResponse.ok) {

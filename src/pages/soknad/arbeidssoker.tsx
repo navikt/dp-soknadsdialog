@@ -16,7 +16,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     return {
       props: {
         arbeidssokerStatus: "UNREGISTERED",

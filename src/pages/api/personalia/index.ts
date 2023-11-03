@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
+import { getErrorMessage } from "../../../api.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 
 export function getPersonalia(onBehalfOfToken: string) {
@@ -22,7 +22,7 @@ const personaliaHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(401).end();
     }
 
-    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
     const response = await getPersonalia(onBehalfOfToken);
 
     if (!response.ok) {

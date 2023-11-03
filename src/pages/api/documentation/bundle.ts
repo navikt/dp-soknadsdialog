@@ -2,7 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
 import { apiFetch, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getMellomlagringOboToken, getSession, getSoknadOboToken } from "../../../auth.utils";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSession,
+  getSoknadOnBehalfOfToken,
+} from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
 
@@ -13,7 +17,7 @@ export interface IDocumentationBundleBody {
 }
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS) {
     if (req.body.dokumentkravId === "7002") {
       return res.status(400).json({ status: "failed" });
     }
@@ -29,14 +33,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const soknadOboToken = await getSoknadOboToken(session);
-  const mellomlagringOboToken = await getMellomlagringOboToken(session);
+  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringOboToken,
+      mellomlagringOnBehalfOfToken,
       requestId
     );
     bundlingTimer();
@@ -59,7 +63,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       urn,
-      soknadOboToken,
+      soknadOnBehalfOfToken,
       requestId
     );
 

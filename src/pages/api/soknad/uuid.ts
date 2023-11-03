@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../api.utils";
 import { createSoknadUuid } from "../../../api/quiz-api";
-import { getSession, getSoknadOboToken } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 
 async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,9 +10,9 @@ async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(401).end();
   }
 
-  const soknadOboToken = await getSoknadOboToken(session);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   try {
-    const soknadUuidResponse = await createSoknadUuid(soknadOboToken);
+    const soknadUuidResponse = await createSoknadUuid(onBehalfOfToken);
 
     if (!soknadUuidResponse.ok) {
       logRequestError(
