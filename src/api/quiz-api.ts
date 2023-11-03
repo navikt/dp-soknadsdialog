@@ -11,7 +11,7 @@ export const headersWithToken = (onBehalfOfToken: string) => ({
 export function getSoknadMal(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad/mal`;
 
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return Promise.resolve(quizMalResponse);
   }
 

@@ -15,7 +15,7 @@ export const config = {
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     res.setHeader("Content-Type", "application/pdf");
     return res.send(imageBuffer);
   }

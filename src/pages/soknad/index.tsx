@@ -23,7 +23,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         mineSoknader: {

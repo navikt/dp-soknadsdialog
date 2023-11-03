@@ -19,7 +19,7 @@ export async function getServerSideProps(
     };
   }
 
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {},
     };

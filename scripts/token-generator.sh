@@ -106,7 +106,7 @@ generateAndUpdateEnvFile() {
   fi
 
   # Store access token in variable
-  accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token") 
+  accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token")
 
   if [ -z $accessToken ]; then
     echo -e "❌ ${Yellow}${env} ${Red} error"

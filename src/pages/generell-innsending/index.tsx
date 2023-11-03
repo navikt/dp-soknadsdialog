@@ -6,7 +6,7 @@ import ErrorPage from "../_error";
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
 
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       redirect: {
         destination: `/generell-innsending/uuid-innsending`,

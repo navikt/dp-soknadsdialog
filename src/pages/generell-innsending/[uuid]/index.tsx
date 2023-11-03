@@ -24,7 +24,7 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         soknadState: mockGenerellInnsending as IQuizState,

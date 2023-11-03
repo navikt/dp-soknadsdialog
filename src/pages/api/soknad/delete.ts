@@ -9,7 +9,7 @@ export interface IDeleteSoknadBody {
 }
 
 async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json("slettet");
   }
 

@@ -13,7 +13,7 @@ export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
 }
 
 async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json(mockDokumentkravList);
   }
 

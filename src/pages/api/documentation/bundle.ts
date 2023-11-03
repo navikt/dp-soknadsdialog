@@ -17,7 +17,7 @@ export interface IDocumentationBundleBody {
 }
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     if (req.body.dokumentkravId === "7002") {
       return res.status(400).json({ status: "failed" });
     }

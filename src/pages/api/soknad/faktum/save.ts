@@ -14,7 +14,7 @@ export interface ISaveFaktumBody {
 }
 
 async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json(mockGenerellInnsending);
   }
   const session = await getSession(req);

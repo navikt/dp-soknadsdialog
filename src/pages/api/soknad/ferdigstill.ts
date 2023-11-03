@@ -15,7 +15,7 @@ export interface IFerdigstillBody {
 }
 
 async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(201).json("Mock content");
   }
 

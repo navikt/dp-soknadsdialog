@@ -20,7 +20,7 @@ export const config = {
 };
 
 async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.USE_MOCKS) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json({
       filsti: "path-to-file",
       filnavn: "filnavn",
