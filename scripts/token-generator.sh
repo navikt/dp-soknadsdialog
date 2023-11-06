@@ -106,7 +106,7 @@ generateAndUpdateEnvFile() {
   fi
 
   # Store access token in variable
-  accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token")
+  accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token" | tr -d '"')
 
   if [ -z $accessToken ]; then
     echo -e "❌ ${Yellow}${env} ${Red} error"
@@ -115,7 +115,10 @@ generateAndUpdateEnvFile() {
     generatedEnv="${env}=${accessToken}"
 
     # Update generated env string to env file
-    printf '%s\n' H ",g/^${env}.*/s//${generatedEnv}/" wq | ed -s "$envFile"
+    printf '%s\n' H ,g/^${env}.*/s//${generatedEnv}/ wq | ed -s "$envFile"
+
+    # Use this if you prefer token with quotes eg: "xyz.token"
+    # printf '%s\n' H ",g/^${env}.*/s//${generatedEnv}/" wq | ed -s "$envFile"
 
     echo -e "✅ ${Yellow}${env} ${Cyan}updated"
   fi
