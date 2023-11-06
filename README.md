@@ -11,7 +11,7 @@ npm install
 npm setup
 ```
 
-`npm setup` lage en `.env.development` fil som trenges for å kjøre localhost.
+`npm setup` lage en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
 
 ## Starte opp localhost
 
