@@ -3,7 +3,7 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetSession, mockOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
 import svarHandler, { IDokumentkravSvarBody } from "../../../../pages/api/documentation/svar";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../../constants";
@@ -11,6 +11,8 @@ import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-li
 
 jest.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
+  getSoknadOnBehalfOfToken: () => mockOnBehalfOfToken(),
+  getMellomlagringOnBehalfOfToken: () => mockOnBehalfOfToken(),
 }));
 
 beforeEach(() => {
