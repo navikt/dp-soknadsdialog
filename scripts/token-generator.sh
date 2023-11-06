@@ -45,7 +45,7 @@ verifyJQ() {
     # ask for user input y or n
     read -p "Install jq (y/n)? " answer
 
-    if [ "$answer" = "y" ]; then
+    if [ $answer = "y" ]; then
       brew install jq 
       echo -e "\n"
     else
@@ -79,9 +79,9 @@ startTokenGenerator() {
       }
 
       env=$(_jq '.env')
-      url=$(_jq '.url')
+      url=$(_jq '.url') | tr -d '"'
 
-      generateAndUpdateEnvFile "$env" "$url" "$cookie"
+      generateAndUpdateEnvFile $env $url $cookie
   done
 
   echo -e "\n"
@@ -92,17 +92,17 @@ startTokenGenerator() {
 generateAndUpdateEnvFile() {
   # function parameters
   env=$1
-  url=$2 | tr -d '"'
+  url=$2
   cookie=$3
 
   # Add env key if not exits
   # Example: DP_SOKNAD_TOKEN
-  if grep -q "$env" "$envFile"; then
+  if grep -q $env $envFile; then
     # env already exits, continue script
     :
   else
     # Add missing env key
-    printf "%s\n" '$a' "${env}" . w | ed -s "$envFile"
+    printf "%s\n" '$a' "${env}" . w | ed -s $envFile
   fi
 
   # Store access token in variable
@@ -115,10 +115,7 @@ generateAndUpdateEnvFile() {
     generatedEnv="${env}=${accessToken}"
 
     # Update generated env string to env file
-    printf '%s\n' H ,g/^${env}.*/s//${generatedEnv}/ wq | ed -s "$envFile"
-
-    # Use this if you prefer token with quotes eg: "xyz.token"
-    # printf '%s\n' H ",g/^${env}.*/s//${generatedEnv}/" wq | ed -s "$envFile"
+    printf '%s\n' H ,g/^${env}.*/s//${generatedEnv}/ wq | ed -s $envFile
 
     echo -e "✅ ${Yellow}${env} ${Cyan}updated"
   fi
