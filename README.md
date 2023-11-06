@@ -11,7 +11,7 @@ npm install
 npm setup
 ```
 
-`npm setup` lage en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
+`npm setup` lager en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
 
 ## Starte opp localhost
 
@@ -20,7 +20,7 @@ npm run generate-token
 npm run dev
 ```
 
-`npm run generate-token` vil generere lokal token til `.env.development` filen og bruker tokene å hente data fra dev-miljøet. Toknene er gyldig mellom 30 minutter til en time, kjøre kommandoen på nytt dersom tokene er utløpt.
+`npm run generate-token` genererer lokal token til `.env.development` fil og bruker det til å hente data fra dev-miljøet. Toknene er gyldig mellom 30 minutter til en time, kjør kommandoen på nytt dersom tokene er utløpt.
 
 ## Kjøre localhost med mock data
 
