@@ -6,13 +6,13 @@ import { createMocks } from "node-mocks-http";
 import deleteFileHandler, {
   IDeleteFileBody,
 } from "../../../../../pages/api/documentation/file/delete";
-import { mockGetSession, mockOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
+import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
 
 jest.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
-  getSoknadOnBehalfOfToken: () => mockOnBehalfOfToken(),
-  getMellomlagringOnBehalfOfToken: () => mockOnBehalfOfToken(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
+  getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 beforeEach(() => {

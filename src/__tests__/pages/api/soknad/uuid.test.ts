@@ -4,12 +4,12 @@
 
 import fetch from "jest-fetch-mock";
 import { createMocks } from "node-mocks-http";
-import { mockGetSession, mockOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
+import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import uuidHandler from "../../../../pages/api/soknad/uuid";
 
 jest.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
-  getSoknadOnBehalfOfToken: () => mockOnBehalfOfToken(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 beforeEach(() => {

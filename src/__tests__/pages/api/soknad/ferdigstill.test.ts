@@ -3,14 +3,14 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetSession, mockOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
+import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
 import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
 
 jest.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
-  getSoknadOnBehalfOfToken: () => mockOnBehalfOfToken(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 jest.mock("../../../../../sanity-client", () => ({

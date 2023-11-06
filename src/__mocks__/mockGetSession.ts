@@ -13,6 +13,6 @@ export function mockGetSession(): SessionWithOboProvider {
   return session;
 }
 
-export function mockOnBehalfOfToken() {
+export function mockGetOnBehalfOfToken() {
   return mockToken;
 }
