@@ -4,11 +4,11 @@
     "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-soknad"
   },
   {
-    "env": "VEILARBPROXY_TOKEN",
-    "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:veilarbregistrering"
-  },
-  {
     "env": "DP_MELLOMLAGRING",
     "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-mellomlagring"
+  },
+  {
+    "env": "VEILARBPROXY_TOKEN",
+    "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:veilarbregistrering"
   }
 ]
