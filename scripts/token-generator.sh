@@ -79,7 +79,7 @@ startTokenGenerator() {
       }
 
       env=$(_jq '.env')
-      url=$(_jq '.url') | tr -d '"'
+      url=$(_jq '.url')
 
       generateAndUpdateEnvFile $env $url $cookie
   done
