@@ -11,7 +11,8 @@
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install",
-    "generate-token": "chmod +x ./scripts/token-generator.sh && ./scripts/token-generator.sh"
+    "setup": "cp .env.development.example .env.development && chmod +x ./scripts/token-generator.sh",
+    "generate-token": " ./scripts/token-generator.sh"
   },
   "engines": {
     "node": ">=15.0.0",

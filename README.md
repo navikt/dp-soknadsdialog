@@ -8,6 +8,14 @@ Appen er basert på [Next.js](https://nextjs.org/)
 
 ```shell
 npm install
+npm setup
+```
+
+`npm setup` lage en `.env.development` fil som trenges for å kjøre localhost.
+
+## Starte opp localhost
+
+```shell
 npm run generate-token
 npm run dev
 ```
