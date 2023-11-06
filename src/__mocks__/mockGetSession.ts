@@ -4,7 +4,7 @@ const mockToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJwaWQiOiIxMjMxMjMxMjMifQ.XdPmoIvLFmgz51eH_05WBNOllgWEtp9kYHkWAHqMwEc";
 
 export function mockGetSession(): SessionWithOboProvider {
-  const session: SessionWithOboProvider = {
+  const session = {
     token: mockToken,
     apiToken: async () => "access_token",
     expiresIn: 123,
@@ -13,6 +13,6 @@ export function mockGetSession(): SessionWithOboProvider {
   return session;
 }
 
-export function mockGetOnBehalfOfToken() {
+export function mockGetOnBehalfOfToken(): string {
   return mockToken;
 }
