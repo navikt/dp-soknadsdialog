@@ -59,7 +59,7 @@ verifyJQ() {
 startTokenGenerator() {
   # First azure-token-generator url from json config
   url=$(jq "." $jsonConfig | jq ".environments[0].url" | tr -d '"')
-  configArray=$(jq -r ".[] | @base64" $jsonConfig)
+  configArray=$(jq -r ".environments[] | @base64" $jsonConfig)
 
   # Show link to azureTokenGenerator to user
   echo -e "${Cyan}Visit: ${UGreen}${url}\n"
@@ -98,12 +98,12 @@ generateAndUpdateEnvFile() {
 
   # Add env key if not exits
   # Example: DP_SOKNAD_TOKEN
-  if grep -q "$env" $envFile; then
+  if grep -q $env $envFile; then
     # env already exits, continue script
     :
   else
     # Add missing env key
-    printf "%s\n" "$a" "${env}" . w | ed -s $envFile
+    printf "%s\n" '$a' "${env}" . w | ed -s $envFile
   fi
 
   # Store access token in variable

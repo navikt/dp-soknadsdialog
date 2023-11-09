@@ -8,10 +8,10 @@ Appen er basert på [Next.js](https://nextjs.org/)
 
 ```shell
 npm install
-npm setup
+npm run setup
 ```
 
-`npm setup` lager en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
+`npm run setup` lager en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
 
 ## Starte opp localhost
 
