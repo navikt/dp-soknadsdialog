@@ -98,7 +98,7 @@ generateAndUpdateEnvFile() {
 
   # Add env key if not exits
   # Example: DP_SOKNAD_TOKEN
-  if grep -q $env $envFile; then
+  if grep -q "$env" "$envFile"; then
     # env already exits, continue script
     :
   else
