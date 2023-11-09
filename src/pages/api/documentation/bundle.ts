@@ -111,7 +111,7 @@ interface IMellomlagringBundle {
 
 async function bundleFilesMellomlagring(
   body: IMellomlagringBundle,
-  mellomlagringOboToken: string,
+  mellomlagringOnBehalfOfToken: string,
   requestId?: string
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
@@ -119,7 +119,7 @@ async function bundleFilesMellomlagring(
     url,
     {
       method: "POST",
-      headers: headersWithToken(mellomlagringOboToken),
+      headers: headersWithToken(mellomlagringOnBehalfOfToken),
       body: JSON.stringify(body),
     },
     requestId

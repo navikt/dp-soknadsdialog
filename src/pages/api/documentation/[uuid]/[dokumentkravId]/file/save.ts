@@ -87,7 +87,7 @@ async function saveFileToMellomlagring(
   req: NextApiRequest,
   uuid: string,
   dokumentkravId: string,
-  mellomLagringOboToken: string,
+  mellomlagringOnBehalfOfToken: string,
   callId: string
 ) {
   const buffers: Uint8Array[] = [];
@@ -119,7 +119,7 @@ async function saveFileToMellomlagring(
   const response = await fetch(url, {
     method: "POST",
     headers: {
-      ...headersWithToken(mellomLagringOboToken),
+      ...headersWithToken(mellomlagringOnBehalfOfToken),
       "User-Agent": req.headers["user-agent"] || "",
       "Content-Length": req.headers["content-length"] || "",
       "Content-Type": req.headers["content-type"] || "multipart/form-data",
