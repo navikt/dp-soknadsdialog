@@ -11,8 +11,8 @@
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install",
-    "setup": "cp .env.development.example .env.development && chmod +x ./scripts/token-generator.sh",
-    "generate-token": " ./scripts/token-generator.sh",
+    "setup-env": "cp .env.development.example .env.development",
+    "generate-token": "chmod +x ./scripts/token-generator.sh && ./scripts/token-generator.sh",
     "generate-token-win": "powershell -NoProfile -ExecutionPolicy Unrestricted -Command .\\scripts\\token-generator.ps1"
   },
   "engines": {

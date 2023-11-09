@@ -6,19 +6,25 @@ Frontend-klient for søknad om dagpenger
 
 Appen er basert på [Next.js](https://nextjs.org/)
 
+**For Mac OSX**
+
 ```shell
 npm install
-npm run setup
-```
-
-`npm run setup` lager en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
-
-## Starte opp localhost
-
-```shell
+npm run setup-env
 npm run generate-token
 npm run dev
 ```
+
+**For Windows**
+
+```shell
+npm install
+npm run setup-env
+npm run generate-token-win
+npm run dev
+```
+
+`npm run setup-env` lager en `.env.development` som er nødvendig for kunne kjøre opp applikasjonen lokalt.
 
 `npm run generate-token` genererer lokal token til `.env.development` fil og bruker det til å hente data fra dev-miljøet. Toknene er gyldig mellom 30 minutter til en time, kjør kommandoen på nytt dersom tokene er utløpt.
 
