@@ -40,7 +40,8 @@ function startTokenGenerator {
     Write-Host "Find and copy $cookieName cookie from DevTools > Application > Cookies" -ForegroundColor $Cyan
 
     # Ask for wonderwall cookie
-    $cookie = Read-Host "Paste in cookie"
+    Write-Host "Paste in cookie:"
+    $cookie = Read-Host
     Write-Host ""
 
     # Loop through config list and create environment variable
