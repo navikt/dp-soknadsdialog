@@ -43,9 +43,9 @@ verifyJQ() {
     echo -e "${Yellow}🟡 Read more about jq: ${UGreen}https://formulae.brew.sh/formula/jq${Cyan}\n"
     
     # ask for user input y or n
-    read -p "Install jq (y/n)? " answer
+    read -r -p "Install jq (y/n)? " answer
 
-    if [ $answer = "y" ]; then
+    if [ "$answer" = "y" ]; then
       brew install jq 
       echo -e "\n"
     else
@@ -58,30 +58,29 @@ verifyJQ() {
 # Start token generation process
 startTokenGenerator() {
   # First azure-token-generator url from json config
-  url=$(jq "." $jsonConfig | jq ".[0].url" | tr -d '"')
-  
+  url=$(jq "." $jsonConfig | jq ".environments[0].url" | tr -d '"')
+  configArray=$(jq -r ".[] | @base64" $jsonConfig)
+
   # Show link to azureTokenGenerator to user
   echo -e "${Cyan}Visit: ${UGreen}${url}\n"
-  echo -e "${Cyan}Find and copy ${Yellow}sso-dev.nav.no ${Cyan}cookie from ${Yellow}DevTools > Application > Cookies"
+  echo -e "${Cyan}Find and copy ${Yellow}${cookieName} ${Cyan}cookie from ${Yellow}DevTools > Application > Cookies"
 
   # Ask for wonderwall cookie,
   echo -e "${Cyan}Paste in cookie: "
-  read cookie
+  read -r cookie
   echo -e "\n"
-
-  configArray=$(jq -r ".[] | @base64" $jsonConfig)
 
   # Loop through config list and create environment variable
   for config in $configArray;
     do
       _jq() {
-        echo ${config} | base64 --decode | jq -r ${1}
+        echo "${config}" | base64 --decode | jq -r "${1}"
       }
 
       env=$(_jq ".env")
       url=$(_jq ".url")
 
-      generateAndUpdateEnvFile $env $url $cookie
+      generateAndUpdateEnvFile "$env" "$url" "$cookie"
   done
 
   echo -e "\n"
@@ -95,9 +94,11 @@ generateAndUpdateEnvFile() {
   url=$2
   cookie=$3
 
+  cookieName=$(jq "." $jsonConfig | jq ".cookieName" | tr -d '"')
+
   # Add env key if not exits
   # Example: DP_SOKNAD_TOKEN
-  if grep -q $env $envFile; then
+  if grep -q "$env" $envFile; then
     # env already exits, continue script
     :
   else
@@ -106,9 +107,9 @@ generateAndUpdateEnvFile() {
   fi
 
   # Store access token in variable
-  accessToken=$(curl -s -b "sso-dev.nav.no=${cookie}" ${url}| jq ".access_token" | tr -d '"')
+  accessToken=$(curl -s -b "${cookieName}=${cookie}" "${url}" | jq ".access_token" | tr -d '"')
 
-  if [ -z $accessToken ]; then
+  if [ -z "$accessToken" ]; then
     echo -e "❌ ${Yellow}${env} ${Red} error"
   else
     # Fully generated env string
