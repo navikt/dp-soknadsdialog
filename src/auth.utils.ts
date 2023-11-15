@@ -6,12 +6,9 @@ import { audienceDPSoknad, audienceMellomlagring, audienceVeilarb } from "./api.
 
 export let getSession: GetSessionWithOboProvider;
 
-const fallbackToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-
 if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
   getSession = makeSession({
-    identityProvider: async () => process.env.DP_SOKNAD_TOKEN || fallbackToken,
+    identityProvider: async () => process.env.DP_SOKNAD_TOKEN || "",
     oboProvider: tokenX,
   });
 } else {
@@ -23,7 +20,7 @@ if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
 
 export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.DP_SOKNAD_TOKEN || fallbackToken;
+    return process.env.DP_SOKNAD_TOKEN || "";
   }
 
   return session.apiToken(audienceDPSoknad);
@@ -31,7 +28,7 @@ export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) 
 
 export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.VEILARBPROXY_TOKEN || fallbackToken;
+    return process.env.VEILARBPROXY_TOKEN || "";
   }
 
   return session.apiToken(audienceVeilarb);
@@ -39,7 +36,7 @@ export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWith
 
 export async function getMellomlagringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.DP_MELLOMLAGRING || fallbackToken;
+    return process.env.DP_MELLOMLAGRING || "";
   }
 
   return session.apiToken(audienceMellomlagring);
