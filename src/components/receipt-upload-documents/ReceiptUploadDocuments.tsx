@@ -20,7 +20,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
   return (
     <div className="my-12">
       {canUseEttersending && (
-        <Link href={`/soknad/${uuid}/ettersending`} passHref>
+        <Link href={`/soknad/${uuid}/ettersending`} passHref legacyBehavior>
           <Button as="a" onClick={() => setNavigating(true)} loading={nagivating}>
             {getAppText("kvittering.mangler-dokumenter.go-til-opplasting-knapp")}
           </Button>
@@ -31,7 +31,7 @@ export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
         <>
           <BodyShort>{getAppText("kvittering.ettersending.tekst.frist-utgatt")}</BodyShort>
 
-          <Link href={`/generell-innsending`} passHref>
+          <Link href={`/generell-innsending`} passHref legacyBehavior>
             <Button as="a" className={styles.goToInnsending}>
               {getAppText("kvittering.ettersending.lenke.frist-utgatt")}
             </Button>

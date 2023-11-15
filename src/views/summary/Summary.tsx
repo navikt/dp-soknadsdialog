@@ -146,7 +146,7 @@ export function Summary(props: IProps) {
                     <Faktum key={faktum.id} faktum={faktum} readonly={true} />
                   ))}
 
-                  <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref>
+                  <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref legacyBehavior>
                     <Button variant="primary" as="a">
                       {getAppText("oppsummering.knapp.endre-svar")}
                     </Button>
@@ -174,7 +174,7 @@ export function Summary(props: IProps) {
                     <SummaryDokumentkrav dokumentkrav={krav} key={krav.id} />
                   ))}
                 </ul>
-                <Link href={`/soknad/${uuid}/dokumentasjon`} passHref>
+                <Link href={`/soknad/${uuid}/dokumentasjon`} passHref legacyBehavior>
                   <Button variant="primary" as="a">
                     {getAppText("oppsummering.knapp.endre-svar")}
                   </Button>

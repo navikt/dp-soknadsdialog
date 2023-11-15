@@ -144,7 +144,11 @@ export function Dokumentasjon() {
       })}
 
       <nav className="navigation-container">
-        <Link href={`/soknad/${uuid}?seksjon=${soknadState.seksjoner.length}`} passHref>
+        <Link
+          href={`/soknad/${uuid}?seksjon=${soknadState.seksjoner.length}`}
+          passHref
+          legacyBehavior
+        >
           <Button as="a" variant="secondary">
             {getAppText("soknad.knapp.forrige-steg")}
           </Button>

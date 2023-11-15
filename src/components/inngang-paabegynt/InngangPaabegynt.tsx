@@ -45,7 +45,7 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
       </BodyLong>
 
-      <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref>
+      <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref legacyBehavior>
         <Button variant="primary" as="a" loading={isNagivating} onClick={fortsettSoknad}>
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
