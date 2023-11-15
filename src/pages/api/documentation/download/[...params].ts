@@ -31,10 +31,10 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   const urn = params.join("/");
 
   try {
-    const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+    const onBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
-        Authorization: `Bearer ${mellomlagringOnBehalfOfToken}`,
+        Authorization: `Bearer ${onBehalfOfToken}`,
       },
     });
 

@@ -25,14 +25,14 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, filsti } = req.body;
-  const DPSoknadToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(
       uuid,
       dokumentkravId,
-      DPSoknadToken,
+      soknadOnBehalfOfToken,
       filsti
     );
 
@@ -47,7 +47,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const mellomlagringResponse = await deleteFileFromMellomlagring(
       uuid,
-      mellomlagringToken,
+      mellomlagringOnBehalfOfToken,
       filsti
     );
 
