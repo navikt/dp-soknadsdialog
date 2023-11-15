@@ -22,7 +22,7 @@ export function DokumentkravGenerellInnsending({ classname }: IProps) {
         {getAppText("dokumentkrav.generell-innsending.tekst")}
       </BodyShort>
 
-      <Link href="/generell-innsending" passHref>
+      <Link href="/generell-innsending" passHref legacyBehavior>
         <Button as="a" variant="tertiary" loading={navigating} onClick={() => setNavigating(true)}>
           {getAppText("dokumentkrav.generell-innsending.lenke")}
         </Button>

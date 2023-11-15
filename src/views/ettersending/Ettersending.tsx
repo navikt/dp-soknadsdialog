@@ -174,7 +174,7 @@ export function Ettersending() {
               {getAppText("ettersending.knapp.send-inn-dokumenter")}
             </Button>
 
-            <Link href={`/soknad/${uuid}/kvittering`} passHref>
+            <Link href={`/soknad/${uuid}/kvittering`} passHref legacyBehavior>
               <Button as="a" variant="secondary">
                 {getAppText("ettersending.knapp.avbryt")}
               </Button>

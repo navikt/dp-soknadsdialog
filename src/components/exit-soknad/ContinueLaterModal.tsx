@@ -33,7 +33,7 @@ export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
 
         <p>{getAppText("fortsett-soknad-senere.modal.beskrivelse")}</p>
 
-        <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+        <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref legacyBehavior>
           <Button as="a" variant="primary" onClick={() => setNavigating(true)} loading={navigating}>
             {getAppText("fortsett-soknad-senere.modal.knapp.til-mine-dagpenger")}
           </Button>

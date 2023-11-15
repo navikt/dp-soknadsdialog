@@ -39,7 +39,7 @@ export function Inngang(props: IProps) {
         />
       )}
       {!props.paabegynt && (
-        <Link href={destinationPage} passHref>
+        <Link href={destinationPage} passHref legacyBehavior>
           <Button variant="primary" as="a" loading={navigating} onClick={() => setNavigating(true)}>
             {getAppText("inngang.start-ny-soknad-knapp")}
           </Button>

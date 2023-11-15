@@ -53,7 +53,7 @@ export function GenerellInnsendingKvittering() {
             })}
           </ol>
         </div>
-        <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+        <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref legacyBehavior>
           <Button className="my-6" variant="primary" as="a" size="medium">
             {getAppText("generell-innsending.kvittering.knapp.mine-dagpenger")}
           </Button>
