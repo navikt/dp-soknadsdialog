@@ -1,6 +1,5 @@
 ### dotenv ###
 .env.local
-.env.development
 
 # User-specific stuff
 .idea/
