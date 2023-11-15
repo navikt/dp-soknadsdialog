@@ -65,7 +65,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
           <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
 
           <div className="modal-container__button-container">
-            <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+            <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref legacyBehavior>
               <Button as="a">
                 {getAppText(getDeletedSuccessPrimaryButtonTextKey(prosessType))}
               </Button>
@@ -97,7 +97,11 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               </Alert>
 
               <div className="modal-container__button-container">
-                <Link href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger" passHref>
+                <Link
+                  href="https://www.nav.no/arbeid/dagpenger/mine-dagpenger"
+                  passHref
+                  legacyBehavior
+                >
                   <Button as="a">
                     {getAppText(getDeleteErrorPrimaryButtonTextKey(prosessType))}
                   </Button>

@@ -36,7 +36,7 @@ export function Arbeidssoker(props: IProps) {
           </Heading>
           <BodyLong>{getAppText("arbeidssoker.beskrivelse")}</BodyLong>
           <div className="navigation-container">
-            <Link href="https://arbeidssokerregistrering.nav.no/" passHref>
+            <Link href="https://arbeidssokerregistrering.nav.no/" passHref legacyBehavior>
               <Button
                 variant="primary"
                 as="a"
@@ -46,7 +46,7 @@ export function Arbeidssoker(props: IProps) {
                 {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
               </Button>
             </Link>
-            <Link href="https://www.nav.no/min-side" passHref>
+            <Link href="https://www.nav.no/min-side" passHref legacyBehavior>
               <Button
                 variant="secondary"
                 as="a"
@@ -74,7 +74,7 @@ export function Arbeidssoker(props: IProps) {
             {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
           </Alert>
           <div className="navigation-container">
-            <Link href="/soknad/start-soknad" passHref>
+            <Link href="/soknad/start-soknad" passHref legacyBehavior>
               <Button
                 variant="primary"
                 as="a"
@@ -84,7 +84,7 @@ export function Arbeidssoker(props: IProps) {
                 {getAppText("arbeidssoker.sok-dagpenger.knapp")}
               </Button>
             </Link>
-            <Link href="https://www.nav.no/min-side" passHref>
+            <Link href="https://www.nav.no/min-side" passHref legacyBehavior>
               <Button
                 variant="secondary"
                 as="a"
