@@ -109,8 +109,10 @@ generateAndUpdateEnvFile() {
   # Store access token in variable
   accessToken=$(curl -s -b "${cookieName}=${cookie}" "${url}" | jq ".access_token" | tr -d '"')
 
-  if [ -z "$accessToken" ]; then
+  # Check if accessToken is empty or null
+  if [[ -z "$accessToken" || "$accessToken" == null ]]; then
     echo -e "❌ ${Yellow}${env} ${Red} error"
+    exit 1
   else
     # Fully generated env string
     generatedEnv="${env}=${accessToken}"
