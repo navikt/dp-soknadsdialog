@@ -1,13 +1,13 @@
 import { Alert } from "@navikt/ds-react";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
-import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { IDokumentkravList } from "../../../types/documentation.types";
-import { getSession } from "../../../auth.utils";
-import { Ettersending } from "../../../views/ettersending/Ettersending";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
-import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { logger } from "@navikt/next-logger";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getErrorDetails } from "../../../api.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { Ettersending } from "../../../views/ettersending/Ettersending";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
   errorCode: number | null;
@@ -20,7 +20,7 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
@@ -41,7 +41,7 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let dokumentkrav = null;
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
 
   if (!dokumentkravResponse.ok) {

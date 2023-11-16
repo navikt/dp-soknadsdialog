@@ -1,14 +1,13 @@
-import { v4 as uuidV4 } from "uuid";
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  apiFetch,
-  audienceDPSoknad,
-  audienceMellomlagring,
-  getErrorMessage,
-} from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { v4 as uuidV4 } from "uuid";
+import { apiFetch, getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSession,
+  getSoknadOnBehalfOfToken,
+} from "../../../auth.utils";
+import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
 
 export interface IDocumentationBundleBody {
@@ -18,7 +17,7 @@ export interface IDocumentationBundleBody {
 }
 
 async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     if (req.body.dokumentkravId === "7002") {
       return res.status(400).json({ status: "failed" });
     }
@@ -34,14 +33,14 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
-  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringToken,
+      mellomlagringOnBehalfOfToken,
       requestId
     );
     bundlingTimer();
@@ -64,7 +63,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       urn,
-      DPSoknadToken,
+      soknadOnBehalfOfToken,
       requestId
     );
 
@@ -112,7 +111,7 @@ interface IMellomlagringBundle {
 
 async function bundleFilesMellomlagring(
   body: IMellomlagringBundle,
-  mellomlagringToken: string,
+  mellomlagringOnBehalfOfToken: string,
   requestId?: string
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
@@ -120,7 +119,7 @@ async function bundleFilesMellomlagring(
     url,
     {
       method: "POST",
-      headers: headersWithToken(mellomlagringToken),
+      headers: headersWithToken(mellomlagringOnBehalfOfToken),
       body: JSON.stringify(body),
     },
     requestId

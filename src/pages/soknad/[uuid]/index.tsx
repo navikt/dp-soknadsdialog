@@ -1,19 +1,18 @@
-import React from "react";
-import { Soknad } from "../../../views/soknad/Soknad";
+import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getErrorDetails } from "../../../api.utils";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import ErrorPage from "../../_error";
-import { IPersonalia } from "../../../types/personalia.types";
-import { mockPersonalia } from "../../../localhost-data/personalia";
-import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockPersonalia } from "../../../localhost-data/personalia";
+import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
-import { getSession } from "../../../auth.utils";
-import { logger } from "@navikt/next-logger";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
+import { Soknad } from "../../../views/soknad/Soknad";
+import ErrorPage from "../../_error";
+import { getPersonalia } from "../../api/personalia";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -27,7 +26,7 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         soknadState: mockNeste,
@@ -52,7 +51,7 @@ export async function getServerSideProps(
   let personalia = null;
   let soknadStatus = null;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);

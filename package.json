@@ -11,7 +11,9 @@
     "lint": "next lint",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install",
-    "port-forward": "./scripts/local-auth.sh && ./scripts/port-forward.sh"
+    "setup-env": "cp .env.development.example .env.development",
+    "generate-token": "chmod +x ./scripts/token-generator.sh && ./scripts/token-generator.sh",
+    "generate-token-win": "powershell -NoProfile -ExecutionPolicy Unrestricted -Command .\\scripts\\token-generator.ps1"
   },
   "engines": {
     "node": ">=15.0.0",

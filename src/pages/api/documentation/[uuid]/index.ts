@@ -1,9 +1,9 @@
-import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad, getErrorMessage } from "../../../../api.utils";
+import { getErrorMessage } from "../../../../api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { getSession } from "../../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
+import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 
 export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`, {
@@ -13,7 +13,7 @@ export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
 }
 
 async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json(mockDokumentkravList);
   }
 
@@ -24,7 +24,7 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const uuid = req.query.uuid as string;
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
 
   try {
     const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);

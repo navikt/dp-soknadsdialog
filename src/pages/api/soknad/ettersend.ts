@@ -1,15 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { logRequestError } from "../../../error.logger";
 
 export interface IEttersendBody {
   uuid: string;
 }
 
 async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(201).json("Mock content");
   }
 
@@ -21,7 +21,7 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
     const ettersendResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/ettersend`, {
       method: "PUT",
       headers: headersWithToken(onBehalfOfToken),

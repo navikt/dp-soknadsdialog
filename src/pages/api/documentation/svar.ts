@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../auth.utils";
-import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
+import { getErrorMessage } from "../../../api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
 import { logRequestError } from "../../../error.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
 import { getDokumentkrav } from "./[uuid]";
@@ -18,7 +18,7 @@ export interface IDokumentkravSvar {
 }
 
 async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(201).json({ status: "ok" });
   }
 
@@ -29,7 +29,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const { uuid, dokumentkravId, dokumentkravSvar } = req.body;
   try {
-    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
     const response = await fetch(
       `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/svar`,
       {

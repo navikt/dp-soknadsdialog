@@ -1,13 +1,13 @@
+import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
-import { audienceDPSoknad, getErrorMessage } from "../../../api.utils";
-import { getSession } from "../../../auth.utils";
+import { getErrorMessage } from "../../../api.utils";
+import { headersWithToken } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { logRequestError } from "../../../error.logger";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
-import { logRequestError } from "../../../error.logger";
 import { ISanityTexts } from "../../../types/sanity.types";
-import { headersWithToken } from "../../../api/quiz-api";
-import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 
 export interface IFerdigstillBody {
   uuid: string;
@@ -15,7 +15,7 @@ export interface IFerdigstillBody {
 }
 
 async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(201).json("Mock content");
   }
 
@@ -26,7 +26,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const { uuid, locale } = req.body;
   try {
-    const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
     const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
       baseLang: "nb",
       lang: locale,

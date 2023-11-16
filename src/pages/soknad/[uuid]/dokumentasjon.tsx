@@ -1,19 +1,18 @@
-import React from "react";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { QuizProvider } from "../../../context/quiz-context";
-import { audienceDPSoknad, getErrorDetails } from "../../../api.utils";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { IDokumentkravList } from "../../../types/documentation.types";
-import { mockNeste } from "../../../localhost-data/mock-neste";
-import { IQuizState } from "../../../types/quiz.types";
-import { getSession } from "../../../auth.utils";
-import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
-import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
-import ErrorPage from "../../_error";
 import { logger } from "@navikt/next-logger";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getErrorDetails } from "../../../api.utils";
+import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
+import { QuizProvider } from "../../../context/quiz-context";
+import { IDokumentkravList } from "../../../types/documentation.types";
+import { IQuizState } from "../../../types/quiz.types";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
+import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
+import ErrorPage from "../../_error";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
   errorCode: number | null;
@@ -27,7 +26,7 @@ export async function getServerSideProps(
   const { query, locale } = context;
   const uuid = query.uuid as string;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         soknadState: mockNeste,
@@ -52,7 +51,7 @@ export async function getServerSideProps(
   let dokumentkrav = null;
   let soknadStatus = null;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);

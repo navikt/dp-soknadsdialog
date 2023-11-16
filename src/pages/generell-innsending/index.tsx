@@ -1,14 +1,12 @@
 import { GetServerSidePropsContext } from "next";
-import React from "react";
-import ErrorPage from "../_error";
 import { createInnsendingUuid } from "../../api/quiz-api";
-import { audienceDPSoknad } from "../../api.utils";
-import { getSession } from "../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
+import ErrorPage from "../_error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       redirect: {
         destination: `/generell-innsending/uuid-innsending`,
@@ -27,7 +25,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
 
   if (innsendingUuidResponse.ok) {

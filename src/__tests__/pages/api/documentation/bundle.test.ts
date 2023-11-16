@@ -2,15 +2,17 @@
  * @jest-environment node
  */
 
-import { createMocks } from "node-mocks-http";
-import { mockGetSession } from "../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
+import { createMocks } from "node-mocks-http";
+import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
 
 jest.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
+  getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 jest.mock("@navikt/next-logger");
