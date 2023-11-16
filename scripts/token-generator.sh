@@ -62,7 +62,7 @@ startTokenGenerator() {
   configArray=$(jq -r ".environments[] | @base64" $jsonConfig)
 
   # Show link to azureTokenGenerator to user
-  echo -e "${Cyan}Visit: ${UGreen}${url}\n"
+  echo -e "${Cyan}Visit and sign in with test user: ${UGreen}${url}\n"
   echo -e "${Cyan}Find and copy ${Yellow}${cookieName} ${Cyan}cookie from ${Yellow}DevTools > Application > Cookies"
 
   # Ask for wonderwall cookie,

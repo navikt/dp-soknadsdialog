@@ -28,6 +28,12 @@ npm run dev
 
 `npm run generate-token` genererer lokal token til `.env.development` fil og bruker det til å hente data fra dev-miljøet. Toknene er gyldig mellom 30 minutter til en time, kjør kommandoen på nytt dersom tokene er utløpt.
 
+## Manuelt oppdatering av lokalt tokenX tokens
+
+Logg på med en testbruker. Hent ut verdien fra access_token, rediger .env.developement og endre DP_SOKNAD_TOKEN, DP_MELLOMLAGRING, VEILARBPROXY_TOKEN til det matchende genererte tokenet.
+
+dp-soknad, dp-mellomlagring, veilarbregistrering
+
 ## Kjøre localhost med mock data
 
 For å kjøre localhost med mock data kan du enkelt sette `USE_MOCKS="true"` i `.env.development` filen og restart localhost på nytt.

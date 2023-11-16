@@ -36,7 +36,7 @@ function startTokenGenerator {
     $url = $config.environments[0].url
 
     # Show link to azureTokenGenerator to the user
-    Write-Host "Visit: $url" -ForegroundColor $Cyan
+    Write-Host "Visit and sign in with test user: $url" -ForegroundColor $Cyan
     Write-Host "Find and copy $cookieName cookie from DevTools > Application > Cookies" -ForegroundColor $Cyan
 
     # Ask for wonderwall cookie
