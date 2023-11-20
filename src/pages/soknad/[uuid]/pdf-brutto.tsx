@@ -13,6 +13,7 @@ import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { StartSoknad } from "../../../views/start-soknad/StartSoknad";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -98,11 +99,11 @@ export default function PdfBruttoPage(props: IProps) {
   return (
     <QuizProvider initialState={props.soknadState}>
       <ValidationProvider>
-        <Pdf
-          personalia={props.personalia}
-          dokumentkravList={props.dokumentkrav}
-          pdfView={"brutto"}
-        />
+        <Pdf personalia={props.personalia} dokumentkravList={props.dokumentkrav} pdfView={"brutto"}>
+          <div className="pdf-separator">
+            <StartSoknad preview={true} />
+          </div>
+        </Pdf>
       </ValidationProvider>
     </QuizProvider>
   );

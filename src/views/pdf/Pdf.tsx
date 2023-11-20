@@ -1,4 +1,4 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import { PageMeta } from "../../components/PageMeta";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
@@ -8,7 +8,7 @@ import { Personalia } from "../../components/personalia/Personalia";
 import { IPersonalia } from "../../types/personalia.types";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
-import { Heading } from "@navikt/ds-react";
+import { Alert, Heading } from "@navikt/ds-react";
 import styles from "./Pdf.module.css";
 import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravMissingItem";
 import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSendingItem";
@@ -26,7 +26,7 @@ interface IProps {
 
 export type PdfView = "netto" | "brutto";
 
-export function Pdf(props: IProps) {
+export function Pdf(props: PropsWithChildren<IProps>) {
   const { personalia, dokumentkravList, pdfView } = props;
   const { getAppText } = useSanity();
   const { soknadState } = useQuiz();
@@ -43,6 +43,8 @@ export function Pdf(props: IProps) {
       />
       <SoknadHeader />
       <main>
+        {props.children}
+
         <Personalia personalia={personalia} />
 
         {soknadState.seksjoner.map((section) => (
@@ -60,6 +62,8 @@ export function Pdf(props: IProps) {
           <Heading spacing size="large" level="2">
             Dokumentkrav
           </Heading>
+
+          {dokumentkravList.krav.length === 0 && <Alert variant="info">Ingen dokumentkrav</Alert>}
 
           <ol className={styles.dokumentkravList}>
             {missingDocuments.map((dokumentkrav) => (
