@@ -18,10 +18,10 @@ import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { mockPersonalia } from "../../../localhost-data/personalia";
+import { getPersonalia } from "../../../api/personalia-api";
 
 interface IProps {
   errorCode: number | null;

@@ -9,10 +9,10 @@ import { IQuizState } from "../../../types/quiz.types";
 import { Pdf } from "../../../views/pdf/Pdf";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { getPersonalia } from "../../api/personalia";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { getPersonalia } from "../../../api/personalia-api";
 
 interface IProps {
   soknadState: IQuizState | null;

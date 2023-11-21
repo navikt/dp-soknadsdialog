@@ -12,7 +12,7 @@ import { IQuizState } from "../../../types/quiz.types";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
-import { getPersonalia } from "../../api/personalia";
+import { getPersonalia } from "../../../api/personalia-api";
 
 interface IProps {
   soknadState: IQuizState | null;
