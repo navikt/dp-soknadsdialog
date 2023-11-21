@@ -71,16 +71,17 @@ export async function getServerSideProps(
 
   if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
-      (periode) => periode.tilOgMedDato === null
-    );
 
-    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
+    const arbeidsokerStatusRegistered =
+      data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
+
+    arbeidssokerStatus = arbeidsokerStatusRegistered ? "REGISTERED" : "UNREGISTERED";
   } else {
     arbeidssokerStatus = "UNKNOWN";
   }
 
-  if (mineSoknader && Object.keys(mineSoknader).length === 0) {
+  const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;
+  if (userHasNoApplication) {
     return {
       redirect: {
         destination:
