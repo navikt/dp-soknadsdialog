@@ -18,10 +18,6 @@ export function ErrorRetryModal(props: IProps) {
   const [nagivating, setNagivating] = useState(false);
 
   useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-
     const localStorageErrorsCount = localStorage.getItem("errorsCount");
     if (localStorageErrorsCount) {
       setErrorsCount(parseInt(localStorageErrorsCount));
