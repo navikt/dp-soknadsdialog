@@ -72,10 +72,10 @@ export async function getServerSideProps(
   if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
 
-    const arbeidsokerStatusRegistered =
+    const isRegisteredAsArbeidsoker =
       data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
 
-    arbeidssokerStatus = arbeidsokerStatusRegistered ? "REGISTERED" : "UNREGISTERED";
+    arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
   } else {
     arbeidssokerStatus = "UNKNOWN";
   }
