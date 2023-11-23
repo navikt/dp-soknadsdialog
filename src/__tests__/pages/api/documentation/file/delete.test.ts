@@ -24,7 +24,7 @@ afterEach(() => {
 });
 
 const deleteFileMockData: IDeleteFileBody = {
-  uuid: "1234",
+  uuid: "230c4c8d-afd7-4a50-9701-fdc60f754b12",
   dokumentkravId: "5678",
   filsti: "soknad-uuid/faktumId/file-id-1",
 };

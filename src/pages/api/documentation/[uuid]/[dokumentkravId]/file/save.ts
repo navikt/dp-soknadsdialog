@@ -11,6 +11,7 @@ import {
 import { logRequestError } from "../../../../../../error.logger";
 import Metrics from "../../../../../../metrics";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";
+import { isValidUUID } from "../../../../../../utils/uuid.utils";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -38,6 +39,11 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const callId = uuidV4();
   const uuid = req.query.uuid as string;
+
+  if (!isValidUUID(uuid)) {
+    throw Error("Ugyldig uuid");
+  }
+
   const dokumentkravId = req.query.dokumentkravId as string;
   const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
@@ -91,6 +97,10 @@ async function saveFileToMellomlagring(
   callId: string
 ) {
   const buffers: Uint8Array[] = [];
+
+  if (!isValidUUID(uuid)) {
+    throw Error("Ugyldig uuid");
+  }
 
   await new Promise((resolve) => {
     req
