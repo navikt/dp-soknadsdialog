@@ -7,7 +7,7 @@ import {
   getSoknadOnBehalfOfToken,
 } from "../../../../auth.utils";
 import { logRequestError } from "../../../../error.logger";
-import { isValidUUID } from "../../../../utils/uuid.utils";
+import { validateUUID } from "../../../../utils/uuid.utils";
 
 export interface IDeleteFileBody {
   uuid: string;
@@ -26,10 +26,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, filsti } = req.body;
-
-  if (!isValidUUID(uuid)) {
-    throw Error("Ugyldig uuid");
-  }
+  validateUUID(uuid);
 
   const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
@@ -79,9 +76,7 @@ async function deleteFileFromDPSoknad(
   onBehalfOfToken: string,
   filsti: string
 ) {
-  if (!isValidUUID(uuid)) {
-    throw Error("Ugyldig uuid");
-  }
+  validateUUID(uuid);
 
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil/${filsti}`;
   return fetch(url, {

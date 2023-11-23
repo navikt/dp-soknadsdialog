@@ -1,7 +1,11 @@
 // Prevent Server Side Request Forgery
-export function isValidUUID(uuid: string): boolean {
+export function validateUUID(uuid: string) {
   const uuidPattern =
     /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-  return uuidPattern.test(uuid);
+  const isValidUUID = uuidPattern.test(uuid);
+
+  if (!isValidUUID) {
+    throw Error("Ugyldig uuid");
+  }
 }
