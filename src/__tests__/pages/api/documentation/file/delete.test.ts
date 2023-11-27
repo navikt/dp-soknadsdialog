@@ -6,8 +6,9 @@ import { createMocks } from "node-mocks-http";
 import deleteFileHandler, {
   IDeleteFileBody,
 } from "../../../../../pages/api/documentation/file/delete";
-import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
@@ -35,7 +36,7 @@ describe("/api/documentation/file/delete", () => {
   test("Should delete a documentation file", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-soknad
-      [JSON.stringify({ ok: true }), { status: 200 }] // Delete file from dp-mellomlagring
+      [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-mellomlagring
     );
 
     const { req, res } = createMocks({
@@ -51,7 +52,7 @@ describe("/api/documentation/file/delete", () => {
 
   test("Should return error if deleting the file from dp-soknad fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Delete file from dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }], // Delete file from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -68,7 +69,7 @@ describe("/api/documentation/file/delete", () => {
   test("Should return 200 OK if deleting the file from dp-mellomlagring fails, but dp-soknad works", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-soknad
-      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }] // Delete file from dp-mellomlagring
+      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }], // Delete file from dp-mellomlagring
     );
 
     const { req, res } = createMocks({

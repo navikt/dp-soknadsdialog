@@ -3,11 +3,11 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { vi, beforeEach, afterEach, describe, test, expect } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
-
-import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
+import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 
 vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
@@ -38,7 +38,7 @@ const ferdigstillMockData: IFerdigstillBody = {
 describe("/api/soknad/ferdigstill", () => {
   test("Should send an application", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: true }), { status: 200 }] // Response from dp-soknad
+      [JSON.stringify({ ok: true }), { status: 200 }], // Response from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -54,7 +54,7 @@ describe("/api/soknad/ferdigstill", () => {
 
   test("Should return error if sending in the application fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Response from dp-soknad on error
+      [JSON.stringify({ ok: false }), { status: 500 }], // Response from dp-soknad on error
     );
 
     const { req, res } = createMocks({

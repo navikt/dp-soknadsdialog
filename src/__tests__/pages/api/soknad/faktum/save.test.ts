@@ -4,6 +4,7 @@ import createFetchMock from "vitest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
 import { mockNeste } from "../../../../../localhost-data/mock-neste";
 import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
+import { vi, afterEach, beforeEach, describe, expect, test } from "vitest";
 
 vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
