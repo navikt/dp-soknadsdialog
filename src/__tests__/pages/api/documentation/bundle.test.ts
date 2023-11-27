@@ -9,7 +9,7 @@ import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),

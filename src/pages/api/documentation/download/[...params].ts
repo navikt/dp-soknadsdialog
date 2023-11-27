@@ -1,8 +1,8 @@
 import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
-import { getErrorMessage } from "../../../../api.utils";
-import { getMellomlagringOnBehalfOfToken, getSession } from "../../../../auth.utils";
+import { getErrorMessage } from "../../../../utils/api.utils";
+import { getMellomlagringOnBehalfOfToken, getSession } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");

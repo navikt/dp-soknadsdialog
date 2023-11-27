@@ -6,7 +6,7 @@ import { useSanity } from "../../context/sanity-context";
 import { SectionHeading } from "../section/SectionHeading";
 import styles from "./Personalia.module.css";
 import { useRouter } from "next/router";
-import { getCountryName } from "../../country.utils";
+import { getCountryName } from "../../utils/country.utils";
 import Link from "next/link";
 
 interface IProps {

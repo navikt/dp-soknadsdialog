@@ -9,7 +9,7 @@ import svarHandler, { IDokumentkravSvarBody } from "../../../../pages/api/docume
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../../constants";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),

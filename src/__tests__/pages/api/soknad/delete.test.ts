@@ -7,7 +7,7 @@ import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mo
 import fetch from "jest-fetch-mock";
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

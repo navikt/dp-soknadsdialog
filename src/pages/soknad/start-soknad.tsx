@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { getMineSoknader } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
 

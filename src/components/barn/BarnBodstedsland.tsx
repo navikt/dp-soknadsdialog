@@ -1,6 +1,6 @@
 import { QuizFaktum } from "../../types/quiz.types";
 import { useSanity } from "../../context/sanity-context";
-import { getCountryName } from "../../country.utils";
+import { getCountryName } from "../../utils/country.utils";
 import { useRouter } from "next/router";
 
 interface IProps {

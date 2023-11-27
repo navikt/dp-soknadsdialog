@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getSoknadState } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { IDokumentkravList } from "../../../types/documentation.types";

@@ -1,13 +1,13 @@
 import { logger } from "@navikt/next-logger";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { getErrorMessage } from "../../../../../../api.utils";
+import { getErrorMessage } from "../../../../../../utils/api.utils";
 import { headersWithToken } from "../../../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
   getSession,
   getSoknadOnBehalfOfToken,
-} from "../../../../../../auth.utils";
+} from "../../../../../../utils/auth.utils";
 import { logRequestError } from "../../../../../../error.logger";
 import Metrics from "../../../../../../metrics";
 import { IDokumentkravFil } from "../../../../../../types/documentation.types";

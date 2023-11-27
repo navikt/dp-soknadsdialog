@@ -1,8 +1,8 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../api.utils";
+import { getErrorDetails } from "../../../utils/api.utils";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { IDokumentkravList } from "../../../types/documentation.types";

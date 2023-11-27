@@ -7,7 +7,7 @@ import { createMocks } from "node-mocks-http";
 import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import uuidHandler from "../../../../pages/api/soknad/uuid";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

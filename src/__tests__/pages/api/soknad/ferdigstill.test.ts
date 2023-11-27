@@ -8,7 +8,7 @@ import fetch from "jest-fetch-mock";
 import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
 
-jest.mock("../../../../auth.utils", () => ({
+jest.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

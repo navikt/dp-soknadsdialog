@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { NoSessionError } from "../../svg-icons/NoSessionError";
 import styles from "./NoSessionModal.module.css";
-import { useSession } from "../../session.utils";
+import { useSession } from "../../utils/session.utils";
 
 export function NoSessionModal() {
   const router = useRouter();
@@ -15,6 +15,10 @@ export function NoSessionModal() {
   const [isNagivating, setNavigating] = useState(false);
 
   useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+
     if (!process.env.NEXT_PUBLIC_LOCALHOST) {
       if (isLoading) return;
 

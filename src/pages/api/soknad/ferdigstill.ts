@@ -1,9 +1,9 @@
 import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
-import { getErrorMessage } from "../../../api.utils";
+import { getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
 import { getSoknadState } from "../../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";

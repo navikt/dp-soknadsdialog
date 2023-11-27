@@ -1,13 +1,13 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../api.utils";
+import { getErrorDetails } from "../../utils/api.utils";
 import {
   IArbeidssokerStatus,
   IArbeidssokerperioder,
   getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
 import { getMineSoknader } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";

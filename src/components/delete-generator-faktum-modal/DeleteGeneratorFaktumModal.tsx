@@ -2,6 +2,7 @@ import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
+import { useEffect } from "react";
 
 interface IProps {
   faktumType: generatorFaktumType;
@@ -14,6 +15,12 @@ export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
   const { getAppText } = useSanity();
   const { faktumType, isOpen, handleClose } = props;
   const { isLoading } = useQuiz();
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   return (
     <Modal

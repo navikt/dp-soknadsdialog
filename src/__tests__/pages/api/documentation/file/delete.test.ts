@@ -9,7 +9,7 @@ import deleteFileHandler, {
 import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
 import fetch from "jest-fetch-mock";
 
-jest.mock("../../../../../auth.utils", () => ({
+jest.mock("../../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),

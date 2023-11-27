@@ -1,5 +1,5 @@
-import { ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID } from "./constants";
-import { IQuizLandFaktum, QuizFaktum } from "./types/quiz.types";
+import { ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID } from "../constants";
+import { IQuizLandFaktum, QuizFaktum } from "../types/quiz.types";
 
 export function findEmployerName(fakta: QuizFaktum[]) {
   return fakta.find((faktum) => faktum.beskrivendeId === ARBEIDSFORHOLD_NAVN_BEDRIFT_FAKTUM_ID)

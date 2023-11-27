@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
 import fetch from "jest-fetch-mock";
 
-jest.mock("../../session.utils", () => {
+jest.mock("../../utils/session.utils", () => {
   return {
     useSession: jest.fn(() => ({
       session: { expiresIn: 1234 },

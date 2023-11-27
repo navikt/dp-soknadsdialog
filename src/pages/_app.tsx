@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
-import NextApp, { AppContext, AppProps } from "next/app";
-import styles from "./_app.module.css";
-import "../index.css";
-import "../variables.css";
-import { useRouter } from "next/router";
-import { fetcher } from "../api.utils";
-import { SWRConfig } from "swr";
 import { onLanguageSelect } from "@navikt/nav-dekoratoren-moduler";
-import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
 import Cookies from "js-cookie";
-import { SanityProvider } from "../context/sanity-context";
+import NextApp, { AppContext, AppProps } from "next/app";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { SWRConfig } from "swr";
 import { sanityClient } from "../../sanity-client";
-import { ISanityTexts } from "../types/sanity.types";
-import { allTextsQuery } from "../sanity/groq-queries";
-import ErrorPage from "./_error";
 import { initAmplitude } from "../amplitude.tracking";
+import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
+import { SanityProvider } from "../context/sanity-context";
 import { initInstrumentation } from "../faro/faro";
+import "../index.css";
+import { allTextsQuery } from "../sanity/groq-queries";
+import { ISanityTexts } from "../types/sanity.types";
+import { fetcher } from "../utils/api.utils";
+import "../variables.css";
+import styles from "./_app.module.css";
+import ErrorPage from "./_error";
 
 type AppPropsSanityTexts = AppProps & {
   sanityTexts: ISanityTexts;

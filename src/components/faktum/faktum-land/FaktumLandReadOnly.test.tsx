@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
-import { getCountryName } from "../../../country.utils";
+import { getCountryName } from "../../../utils/country.utils";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { FaktumLandReadOnly } from "./FaktumLandReadOnly";
 

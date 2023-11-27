@@ -7,7 +7,7 @@ import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useQuiz } from "../../context/quiz-context";
 import { Faktum } from "../../components/faktum/Faktum";
 import styles from "./GenerellInnsendingKvittering.module.css";
-import api from "../../api.utils";
+import api from "../../utils/api.utils";
 import { PageMeta } from "../../components/PageMeta";
 
 export function GenerellInnsendingKvittering() {

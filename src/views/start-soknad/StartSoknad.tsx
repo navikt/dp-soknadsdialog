@@ -2,7 +2,7 @@ import { Button, ConfirmationPanel } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import api from "../../api.utils";
+import api from "../../utils/api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";

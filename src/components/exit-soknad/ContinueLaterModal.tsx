@@ -1,6 +1,6 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
@@ -11,6 +11,12 @@ interface IProps {
 export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
   const { getAppText } = useSanity();
   const [navigating, setNavigating] = useState(false);
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   return (
     <Modal

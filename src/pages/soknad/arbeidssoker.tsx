@@ -4,7 +4,7 @@ import {
   IArbeidssokerperioder,
   IArbeidssokerStatus,
 } from "../../api/arbeidssoker-api";
-import { getSession } from "../../auth.utils";
+import { getSession } from "../../utils/auth.utils";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
 
 interface IProps {
