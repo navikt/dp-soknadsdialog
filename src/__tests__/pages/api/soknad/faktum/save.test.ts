@@ -3,10 +3,11 @@ import saveFaktumHandler, { ISaveFaktumBody } from "../../../../../pages/api/sok
 import createFetchMock from "vitest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
 import { mockNeste } from "../../../../../localhost-data/mock-neste";
-import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
+import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
 
 vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 const fetch = createFetchMock(vi);

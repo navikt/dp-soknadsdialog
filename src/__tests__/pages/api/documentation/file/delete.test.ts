@@ -11,6 +11,8 @@ import createFetchMock from "vitest-fetch-mock";
 
 vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
+  getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
+  getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
 const fetch = createFetchMock(vi);
@@ -24,7 +26,7 @@ afterEach(() => {
 });
 
 const deleteFileMockData: IDeleteFileBody = {
-  uuid: "1234",
+  uuid: "230c4c8d-afd7-4a50-9701-fdc60f754b12",
   dokumentkravId: "5678",
   filsti: "soknad-uuid/faktumId/file-id-1",
 };
@@ -33,7 +35,7 @@ describe("/api/documentation/file/delete", () => {
   test("Should delete a documentation file", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-soknad
-      [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-mellomlagring
+      [JSON.stringify({ ok: true }), { status: 200 }] // Delete file from dp-mellomlagring
     );
 
     const { req, res } = createMocks({
@@ -49,7 +51,7 @@ describe("/api/documentation/file/delete", () => {
 
   test("Should return error if deleting the file from dp-soknad fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }], // Delete file from dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }] // Delete file from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -66,7 +68,7 @@ describe("/api/documentation/file/delete", () => {
   test("Should return 200 OK if deleting the file from dp-mellomlagring fails, but dp-soknad works", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Delete file from dp-soknad
-      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }], // Delete file from dp-mellomlagring
+      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }] // Delete file from dp-mellomlagring
     );
 
     const { req, res } = createMocks({

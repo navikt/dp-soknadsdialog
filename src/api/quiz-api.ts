@@ -1,6 +1,6 @@
-import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 import { formatISO, subDays } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
+import { quizMalResponse } from "../localhost-data/quiz-mal-response";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -11,7 +11,7 @@ export const headersWithToken = (onBehalfOfToken: string) => ({
 export function getSoknadMal(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad/mal`;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return Promise.resolve(quizMalResponse);
   }
 

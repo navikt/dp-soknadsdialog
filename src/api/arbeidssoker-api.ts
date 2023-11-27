@@ -1,8 +1,7 @@
-import { v4 as uuid } from "uuid";
-import { GetServerSidePropsContext } from "next/types";
 import { formatISO } from "date-fns";
-import { getSession } from "../auth.utils";
-import { audienceVeilarb } from "../api.utils";
+import { GetServerSidePropsContext } from "next/types";
+import { v4 as uuid } from "uuid";
+import { getSession, getVeilarbregistreringOnBehalfOfToken } from "../auth.utils";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 export interface IArbeidssokerperioder {
@@ -16,13 +15,14 @@ export interface IArbeidssokerperioder {
 
 export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
   const today = formatISO(new Date(), { representation: "date" });
-  const { apiToken } = await getSession(req);
+  const session = await getSession(req);
+  const onBehalfOfToken = await getVeilarbregistreringOnBehalfOfToken(session);
 
   const callId = uuid();
-  const onBehalfOfToken = await apiToken(audienceVeilarb);
-  const url = `${process.env.VEILARBPROXY_URL}/niva3?fraOgMed=${today}`;
+  const url = `${process.env.VEILARBPROXY_URL}/veilarbregistrering/api/arbeidssoker/perioder?fraOgMed=${today}`;
 
   return await fetch(url, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${onBehalfOfToken}`,
       "Nav-Consumer-Id": "dp-soknadsdialog",

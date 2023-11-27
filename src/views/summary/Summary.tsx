@@ -10,7 +10,7 @@ import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PageMeta } from "../../components/PageMeta";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { useUuid } from "../../hooks/useUuid";
-import { usePutRequest } from "../../hooks/usePutRequest";
+import { usePutRequest } from "../../hooks/request/usePutRequest";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";

@@ -1,16 +1,16 @@
+import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { audienceDPSoknad, getErrorDetails } from "../../api.utils";
+import { getErrorDetails } from "../../api.utils";
+import {
+  IArbeidssokerStatus,
+  IArbeidssokerperioder,
+  getArbeidssokerperioder,
+} from "../../api/arbeidssoker-api";
+import { getMineSoknader } from "../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
-import { getMineSoknader } from "../../api/quiz-api";
 import ErrorPage from "../_error";
-import { getSession } from "../../auth.utils";
-import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
-  IArbeidssokerStatus,
-} from "../../api/arbeidssoker-api";
-import { logger } from "@navikt/next-logger";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -23,7 +23,7 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         mineSoknader: {
@@ -57,7 +57,7 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
 
@@ -71,16 +71,17 @@ export async function getServerSideProps(
 
   if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
-      (periode) => periode.tilOgMedDato === null
-    );
 
-    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
+    const isRegisteredAsArbeidsoker =
+      data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
+
+    arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
   } else {
     arbeidssokerStatus = "UNKNOWN";
   }
 
-  if (mineSoknader && Object.keys(mineSoknader).length === 0) {
+  const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;
+  if (userHasNoApplication) {
     return {
       redirect: {
         destination:

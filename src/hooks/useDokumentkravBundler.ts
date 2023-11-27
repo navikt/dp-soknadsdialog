@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IDokumentkrav } from "../types/documentation.types";
-import { usePutRequest } from "./usePutRequest";
+import { usePutRequest } from "./request/usePutRequest";
 import { IDocumentationBundleBody } from "../pages/api/documentation/bundle";
 import { useUuid } from "./useUuid";
 

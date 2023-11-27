@@ -1,8 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../../auth.utils";
-import { logRequestError } from "../../../../error.logger";
+import { getErrorMessage } from "../../../../api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { audienceDPSoknad, audienceMellomlagring, getErrorMessage } from "../../../../api.utils";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSession,
+  getSoknadOnBehalfOfToken,
+} from "../../../../auth.utils";
+import { logRequestError } from "../../../../error.logger";
+import { validateUUID } from "../../../../utils/uuid.utils";
 
 export interface IDeleteFileBody {
   uuid: string;
@@ -11,7 +16,7 @@ export interface IDeleteFileBody {
 }
 
 async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json("slettet");
   }
 
@@ -21,14 +26,16 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, filsti } = req.body;
-  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
-  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+  validateUUID(uuid);
+
+  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(
       uuid,
       dokumentkravId,
-      DPSoknadToken,
+      soknadOnBehalfOfToken,
       filsti
     );
 
@@ -43,7 +50,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const mellomlagringResponse = await deleteFileFromMellomlagring(
       uuid,
-      mellomlagringToken,
+      mellomlagringOnBehalfOfToken,
       filsti
     );
 
@@ -66,13 +73,15 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 async function deleteFileFromDPSoknad(
   uuid: string,
   dokumentkravId: string,
-  DPSoknadToken: string,
+  onBehalfOfToken: string,
   filsti: string
 ) {
+  validateUUID(uuid);
+
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil/${filsti}`;
   return fetch(url, {
     method: "DELETE",
-    headers: headersWithToken(DPSoknadToken),
+    headers: headersWithToken(onBehalfOfToken),
   });
 }
 

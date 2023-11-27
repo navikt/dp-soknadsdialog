@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
 import { BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
+import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { useSanity } from "../../context/sanity-context";
+import { usePutRequest } from "../../hooks/request/usePutRequest";
+import { useUuid } from "../../hooks/useUuid";
+import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
 import { IDokumentkrav } from "../../types/documentation.types";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
-import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
-import { usePutRequest } from "../../hooks/usePutRequest";
-import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
-import { useUuid } from "../../hooks/useUuid";
 
 interface IProps {
   dokumentkravList: IDokumentkrav[];

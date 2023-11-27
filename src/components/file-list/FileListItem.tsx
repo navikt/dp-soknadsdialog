@@ -6,7 +6,7 @@ import api from "../../api.utils";
 import { Delete } from "@navikt/ds-icons";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { useDeleteRequest } from "../../hooks/useDeleteRequest";
+import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { useUuid } from "../../hooks/useUuid";
 import { IDeleteFileBody } from "../../pages/api/documentation/file/delete";
 import { useSanity } from "../../context/sanity-context";

@@ -1,10 +1,8 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import React from "react";
-import { StartSoknad } from "../../views/start-soknad/StartSoknad";
-import { getSession } from "../../auth.utils";
-import { audienceDPSoknad } from "../../api.utils";
 import { getMineSoknader } from "../../api/quiz-api";
+import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
+import { StartSoknad } from "../../views/start-soknad/StartSoknad";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext
@@ -21,13 +19,13 @@ export async function getServerSideProps(
     };
   }
 
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return {
       props: {},
     };
   }
 
-  const onBehalfOfToken = await session.apiToken(audienceDPSoknad);
+  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
 
   if (mineSoknaderResponse.ok) {

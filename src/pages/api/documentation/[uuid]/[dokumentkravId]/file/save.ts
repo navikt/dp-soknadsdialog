@@ -1,16 +1,17 @@
-import { v4 as uuidV4 } from "uuid";
-import { NextApiRequest, NextApiResponse } from "next";
-import {
-  audienceDPSoknad,
-  audienceMellomlagring,
-  getErrorMessage,
-} from "../../../../../../api.utils";
-import { getSession } from "../../../../../../auth.utils";
-import { logRequestError } from "../../../../../../error.logger";
-import { IDokumentkravFil } from "../../../../../../types/documentation.types";
-import { headersWithToken } from "../../../../../../api/quiz-api";
-import Metrics from "../../../../../../metrics";
 import { logger } from "@navikt/next-logger";
+import { NextApiRequest, NextApiResponse } from "next";
+import { v4 as uuidV4 } from "uuid";
+import { getErrorMessage } from "../../../../../../api.utils";
+import { headersWithToken } from "../../../../../../api/quiz-api";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSession,
+  getSoknadOnBehalfOfToken,
+} from "../../../../../../auth.utils";
+import { logRequestError } from "../../../../../../error.logger";
+import Metrics from "../../../../../../metrics";
+import { IDokumentkravFil } from "../../../../../../types/documentation.types";
+import { validateUUID } from "../../../../../../utils/uuid.utils";
 
 // Needed to allow files to be uploaded
 export const config = {
@@ -20,7 +21,7 @@ export const config = {
 };
 
 async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST) {
+  if (process.env.USE_MOCKS === "true") {
     return res.status(200).json({
       filsti: "path-to-file",
       filnavn: "filnavn",
@@ -38,9 +39,11 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const callId = uuidV4();
   const uuid = req.query.uuid as string;
+  validateUUID(uuid);
+
   const dokumentkravId = req.query.dokumentkravId as string;
-  const DPSoknadToken = await session.apiToken(audienceDPSoknad);
-  const mellomlagringToken = await session.apiToken(audienceMellomlagring);
+  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
 
   res.setHeader("X-Request-Id", callId);
 
@@ -49,7 +52,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
       req,
       uuid,
       dokumentkravId,
-      mellomlagringToken,
+      mellomlagringOnBehalfOfToken,
       callId
     );
 
@@ -61,7 +64,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     const dpSoknadResponse = await saveFileToDPSoknad(
       uuid,
       dokumentkravId,
-      DPSoknadToken,
+      soknadOnBehalfOfToken,
       fileData[0],
       callId
     );
@@ -87,10 +90,11 @@ async function saveFileToMellomlagring(
   req: NextApiRequest,
   uuid: string,
   dokumentkravId: string,
-  mellomLagringToken: string,
+  mellomlagringOnBehalfOfToken: string,
   callId: string
 ) {
   const buffers: Uint8Array[] = [];
+  validateUUID(uuid);
 
   await new Promise((resolve) => {
     req
@@ -119,7 +123,7 @@ async function saveFileToMellomlagring(
   const response = await fetch(url, {
     method: "POST",
     headers: {
-      ...headersWithToken(mellomLagringToken),
+      ...headersWithToken(mellomlagringOnBehalfOfToken),
       "User-Agent": req.headers["user-agent"] || "",
       "Content-Length": req.headers["content-length"] || "",
       "Content-Type": req.headers["content-type"] || "multipart/form-data",

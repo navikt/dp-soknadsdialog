@@ -8,7 +8,7 @@ import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { FormattedDate } from "../FormattedDate";
-import { useDeleteRequest } from "../../hooks/useDeleteRequest";
+import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import styles from "./inngangPaabegynt.module.css";
 import { trackSkjemaÅpnet } from "../../amplitude.tracking";

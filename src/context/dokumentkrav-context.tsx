@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { usePutRequest } from "../hooks/usePutRequest";
+import { usePutRequest } from "../hooks/request/usePutRequest";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IDokumentkravSvarBody } from "../pages/api/documentation/svar";
 import api from "../api.utils";
