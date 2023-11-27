@@ -1,6 +1,6 @@
 import { BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { useSanity } from "../../context/sanity-context";
@@ -28,6 +28,12 @@ export function DokumentkravBundleErrorModal({
   const [savingSvarError, setSavingSvarError] = useState(false);
   const [saveDokumentkravSvar, , saveDokumentkravSvarError] =
     usePutRequest<IDokumentkravSvarBody>("documentation/svar");
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   async function sendDocumentsLater() {
     setIsSavingSvar(true);

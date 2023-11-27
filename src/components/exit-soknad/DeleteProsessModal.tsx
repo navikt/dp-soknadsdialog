@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { useUuid } from "../../hooks/useUuid";
@@ -23,6 +23,12 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
+
+  useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+  }, []);
 
   function closeModal() {
     if (deleteProsessStatus === "error") {

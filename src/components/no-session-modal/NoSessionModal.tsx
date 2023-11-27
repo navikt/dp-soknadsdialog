@@ -15,6 +15,10 @@ export function NoSessionModal() {
   const [isNagivating, setNavigating] = useState(false);
 
   useEffect(() => {
+    if (Modal.setAppElement) {
+      Modal.setAppElement("#__next");
+    }
+
     if (!process.env.NEXT_PUBLIC_LOCALHOST) {
       if (isLoading) return;
 
