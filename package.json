@@ -22,7 +22,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "prettier --list-different",
+      "prettier --check",
       "eslint --max-warnings 0"
     ]
   },
