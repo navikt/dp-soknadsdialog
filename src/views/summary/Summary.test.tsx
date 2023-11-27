@@ -13,7 +13,7 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-jest.mock("../../utils/session.utils", () => {
+jest.mock("../../hooks/useSession", () => {
   return {
     useSession: jest.fn(() => ({
       session: { expiresIn: 1234 },

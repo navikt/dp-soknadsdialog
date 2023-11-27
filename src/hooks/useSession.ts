@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { ISessionData } from "../pages/api/auth/session";
-import api from "./api.utils";
+import api from "../utils/api.utils";
 
 export interface IUseSession {
   session: ISessionData | undefined;
