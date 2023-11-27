@@ -11,7 +11,7 @@ import { useValidation } from "../../context/validation-context";
 import { useUuid } from "../../hooks/useUuid";
 import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
 import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
-import { usePutRequest } from "../../hooks/usePutRequest";
+import { usePutRequest } from "../../hooks/request/usePutRequest";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";

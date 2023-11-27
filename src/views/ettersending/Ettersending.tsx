@@ -5,7 +5,7 @@ import { Button, ErrorSummary, Heading } from "@navikt/ds-react";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { useRouter } from "next/router";
-import { usePutRequest } from "../../hooks/usePutRequest";
+import { usePutRequest } from "../../hooks/request/usePutRequest";
 import { useUuid } from "../../hooks/useUuid";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { useSanity } from "../../context/sanity-context";

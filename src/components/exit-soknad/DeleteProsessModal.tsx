@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useSanity } from "../../context/sanity-context";
-import { useDeleteRequest } from "../../hooks/useDeleteRequest";
+import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { useUuid } from "../../hooks/useUuid";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import { QuizProsess } from "../../types/quiz.types";

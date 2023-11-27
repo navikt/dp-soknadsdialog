@@ -6,7 +6,7 @@ import {
   QuizFaktumSvarType,
 } from "../types/quiz.types";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { usePutRequest } from "../hooks/usePutRequest";
+import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 
 export interface IQuizContext {

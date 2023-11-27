@@ -5,7 +5,7 @@ import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { IFaktum } from "../Faktum";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
-import { useValidateFaktumNumber } from "../../../hooks/faktum/useValidateFaktumNumber";
+import { useValidateFaktumNumber } from "../../../hooks/validation/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { HelpText } from "../../HelpText";
 import { isNumber } from "../validation/validations.utils";

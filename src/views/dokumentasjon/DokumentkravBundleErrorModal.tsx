@@ -4,7 +4,7 @@ import { useState } from "react";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { useSanity } from "../../context/sanity-context";
-import { usePutRequest } from "../../hooks/usePutRequest";
+import { usePutRequest } from "../../hooks/request/usePutRequest";
 import { useUuid } from "../../hooks/useUuid";
 import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
 import { IDokumentkrav } from "../../types/documentation.types";

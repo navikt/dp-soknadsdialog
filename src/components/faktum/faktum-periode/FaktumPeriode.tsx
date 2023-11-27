@@ -6,7 +6,7 @@ import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
-import { useValidateFaktumPeriode } from "../../../hooks/faktum/useValidateFaktumPeriode";
+import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
