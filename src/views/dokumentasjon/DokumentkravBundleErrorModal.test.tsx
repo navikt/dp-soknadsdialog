@@ -1,11 +1,13 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from "react";
 import fetch from "jest-fetch-mock";
-import { mockSanityTexts } from "../../__mocks__/MockContext";
+import userEvent from "@testing-library/user-event";
+import { Modal } from "@navikt/ds-react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { SanityProvider } from "../../context/sanity-context";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
-import { IDokumentkrav } from "../../types/documentation.types";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
+import { IDokumentkrav } from "../../types/documentation.types";
+import { mockSanityTexts } from "../../__mocks__/MockContext";
 
 describe("DokumentkravBundleErrorModal", () => {
   beforeAll(() => {
@@ -13,6 +15,9 @@ describe("DokumentkravBundleErrorModal", () => {
     app.id = "__next";
 
     document.getElementsByTagName("body").item(0)?.appendChild(app);
+
+    // @ts-ignore:next-line
+    Modal.setAppElement("#__next");
   });
 
   beforeEach(() => {

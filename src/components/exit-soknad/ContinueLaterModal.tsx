@@ -1,6 +1,6 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Button, Heading, Modal } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 
 interface IProps {

@@ -1,8 +1,8 @@
 import { Button, Heading, Modal } from "@navikt/ds-react";
+import { useEffect } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
-import { useEffect } from "react";
 
 interface IProps {
   faktumType: generatorFaktumType;
