@@ -7,18 +7,20 @@ import deleteFileHandler, {
   IDeleteFileBody,
 } from "../../../../../pages/api/documentation/file/delete";
 import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
 
-jest.mock("../../../../../auth.utils", () => ({
+vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
 
 const deleteFileMockData: IDeleteFileBody = {

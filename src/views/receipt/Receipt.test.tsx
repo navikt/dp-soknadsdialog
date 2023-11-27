@@ -13,9 +13,9 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-jest.mock("../../session.utils", () => {
+vi.mock("../../session.utils", () => {
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,

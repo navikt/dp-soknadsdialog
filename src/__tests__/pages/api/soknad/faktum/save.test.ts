@@ -1,24 +1,22 @@
-/**
- * @jest-environment node
- */
-
 import { createMocks } from "node-mocks-http";
 import saveFaktumHandler, { ISaveFaktumBody } from "../../../../../pages/api/soknad/faktum/save";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
 import { mockNeste } from "../../../../../localhost-data/mock-neste";
 import { mockGetSession } from "../../../../../__mocks__/mockGetSession";
 
-jest.mock("../../../../../auth.utils", () => ({
+vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
 
 const faktumMockData: QuizFaktum = {

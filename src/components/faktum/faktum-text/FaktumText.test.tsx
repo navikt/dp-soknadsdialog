@@ -16,8 +16,6 @@ const faktumMockData: IQuizTekstFaktum = {
   roller: [],
 };
 
-jest.setTimeout(10000);
-
 describe("FaktumText", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));

@@ -3,11 +3,11 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { StartSoknad } from "./StartSoknad";
 import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
 
-jest.mock("../../session.utils", () => {
+vi.mock("../../session.utils", () => {
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,
@@ -16,12 +16,14 @@ jest.mock("../../session.utils", () => {
 });
 
 describe("StartSoknad", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   test("Should show error message if user tries to start application without consenting", async () => {

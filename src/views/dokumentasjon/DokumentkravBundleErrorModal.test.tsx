@@ -1,5 +1,6 @@
 import React from "react";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import userEvent from "@testing-library/user-event";
 import { Modal } from "@navikt/ds-react";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -20,12 +21,14 @@ describe("DokumentkravBundleErrorModal", () => {
     Modal.setAppElement("#__next");
   });
 
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   test("Should show which dokumentkrav has bundle errors", async () => {

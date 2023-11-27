@@ -2,7 +2,8 @@ import React from "react";
 import { render, screen, fireEvent, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import { MockContext } from "../../__mocks__/MockContext";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../../components/file-list/FileList";
@@ -31,12 +32,14 @@ const FileTestContainer = () => {
 };
 
 describe("FileList", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   describe("Upload file", () => {

@@ -4,25 +4,26 @@
 
 import { createMocks } from "node-mocks-http";
 import { mockGetSession } from "../../../../__mocks__/mockGetSession";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
 import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
 
-jest.mock("../../../../auth.utils", () => ({
+vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
 
-jest.mock("@navikt/next-logger");
+vi.mock("@navikt/next-logger");
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
-
 const dokumentkravBundleMockData: IDocumentationBundleBody = {
   uuid: "1234",
   dokumentkravId: "5678",

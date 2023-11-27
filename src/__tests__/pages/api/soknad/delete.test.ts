@@ -4,21 +4,23 @@
 
 import { createMocks } from "node-mocks-http";
 import { mockGetSession } from "../../../../__mocks__/mockGetSession";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
 
-jest.mock("../../../../auth.utils", () => ({
+vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
-
 const deleteSoknadMockdata: IDeleteSoknadBody = {
   uuid: "1234",
 };

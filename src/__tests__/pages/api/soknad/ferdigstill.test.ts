@@ -4,26 +4,29 @@
 
 import { createMocks } from "node-mocks-http";
 import { mockGetSession } from "../../../../__mocks__/mockGetSession";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
 
-jest.mock("../../../../auth.utils", () => ({
+vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
 }));
 
-jest.mock("../../../../../sanity-client", () => ({
+vi.mock("../../../../../sanity-client", () => ({
   sanityClient: {
     fetch: () => Promise.resolve(mockSanityTexts),
   },
 }));
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
 
 const ferdigstillMockData: IFerdigstillBody = {

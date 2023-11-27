@@ -4,7 +4,8 @@ import { Summary } from "./Summary";
 import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext, mockSanityTexts } from "../../__mocks__/MockContext";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import { IPersonalia } from "../../types/personalia.types";
 import {
   ISanityFaktum,
@@ -13,9 +14,9 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-jest.mock("../../session.utils", () => {
+vi.mock("../../session.utils", () => {
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,
@@ -53,17 +54,19 @@ const personalia: IPersonalia = {
 };
 
 describe("Summary", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   // To fix ref scrollIntoView is not a function error
   // https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
-  Element.prototype.scrollIntoView = jest.fn();
+  Element.prototype.scrollIntoView = vi.fn();
 
   test("Should show questions and answers", async () => {
     const user = userEvent.setup();

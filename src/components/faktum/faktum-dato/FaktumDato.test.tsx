@@ -14,8 +14,6 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   sannsynliggjoresAv: [],
 };
 
-jest.setTimeout(10000);
-
 describe("FaktumDato", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));

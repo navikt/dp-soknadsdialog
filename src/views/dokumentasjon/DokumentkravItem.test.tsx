@@ -3,18 +3,21 @@ import { render, waitFor, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { DOKUMENTKRAV_SVAR_SENDER_IKKE, DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import { MockContext } from "../../__mocks__/MockContext";
 import { DokumentkravItem } from "./DokumentkravItem";
 import { GyldigDokumentkravSvar } from "../../types/documentation.types";
 
 describe("DokumentkravItem", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   test("Should show dokumentkrav title", async () => {
@@ -24,7 +27,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={mockDokumentkravList.krav[0]}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
@@ -43,7 +46,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={mockDokumentkravList.krav[0]}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
@@ -69,7 +72,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={testDokumentkrav}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
@@ -90,7 +93,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={mockDokumentkravList.krav[0]}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
@@ -111,7 +114,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={mockDokumentkravList.krav[0]}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
@@ -144,7 +147,7 @@ describe("DokumentkravItem", () => {
           dokumentkrav={testDokumentkrav}
           hasBundleError={false}
           hasUnansweredError={false}
-          resetError={jest.fn()}
+          resetError={vi.fn()}
         />
       </MockContext>
     );
