@@ -44,7 +44,7 @@ describe("/api/documentation/bundle", () => {
         }),
         { status: 200 },
       ], // Post the file urns to dp-mellomlagring
-      [JSON.stringify({ ok: true }), { status: 201 }] // Post the new bundle urn to dp-soknad
+      [JSON.stringify({ ok: true }), { status: 201 }], // Post the new bundle urn to dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -59,7 +59,7 @@ describe("/api/documentation/bundle", () => {
 
   test("Should return error if posting the answer to dp-mellomlagring fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Post the file urns to dp-mellomlagring
+      [JSON.stringify({ ok: false }), { status: 500 }], // Post the file urns to dp-mellomlagring
     );
 
     const { req, res } = createMocks({
@@ -82,7 +82,7 @@ describe("/api/documentation/bundle", () => {
         }),
         { status: 200 },
       ], // Post the file urns to dp-mellomlagring
-      [JSON.stringify({ ok: false }), { status: 500 }] // Post the new bundle urn to dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }], // Post the new bundle urn to dp-soknad
     );
 
     const { req, res } = createMocks({

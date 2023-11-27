@@ -29,12 +29,12 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
       expect(screen.getByRole("heading")).toHaveTextContent(
-        mockDokumentkravList.krav[0].beskrivendeId
+        mockDokumentkravList.krav[0].beskrivendeId,
       );
     });
   });
@@ -48,7 +48,7 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -59,7 +59,7 @@ describe("DokumentkravItem", () => {
 
   test("Should post answer when user answers dokumentkrav question", async () => {
     fetch.mockResponses(
-      [JSON.stringify(mockDokumentkravList), { status: 200 }] // New dokumentkrav state from dp-soknad when user posts answer
+      [JSON.stringify(mockDokumentkravList), { status: 200 }], // New dokumentkrav state from dp-soknad when user posts answer
     );
 
     const testDokumentkrav = { ...mockDokumentkravList.krav[0], svar: undefined };
@@ -74,7 +74,7 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -95,7 +95,7 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SEND_NAA));
@@ -116,21 +116,21 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await user.click(screen.getByLabelText(DOKUMENTKRAV_SVAR_SENDER_IKKE));
 
     await waitFor(() => {
       expect(
-        screen.getByLabelText("faktum.dokument.dokumentkrav.svar.sender.ikke.begrunnelse")
+        screen.getByLabelText("faktum.dokument.dokumentkrav.svar.sender.ikke.begrunnelse"),
       ).toBeInTheDocument();
     });
   });
 
   test("Should post begrunnelse when user answers dokumentkrav begrunnelse", async () => {
     fetch.mockResponses(
-      [JSON.stringify(mockDokumentkravList), { status: 200 }] // New dokumentkrav state from dp-soknad when user posts begrunnelse
+      [JSON.stringify(mockDokumentkravList), { status: 200 }], // New dokumentkrav state from dp-soknad when user posts begrunnelse
     );
 
     const testDokumentkrav = {
@@ -149,12 +149,12 @@ describe("DokumentkravItem", () => {
           hasUnansweredError={false}
           resetError={vi.fn()}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await user.type(
       screen.getByLabelText("faktum.dokument.dokumentkrav.svar.sender.ikke.begrunnelse"),
-      "En begrunnelse her"
+      "En begrunnelse her",
     );
 
     await waitFor(() => {

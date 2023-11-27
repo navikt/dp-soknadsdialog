@@ -19,7 +19,7 @@ test("Should show link to ettersending if soknad is sent in within 12 weeks", as
       <ReceiptUploadDocuments
         soknadStatus={{ ...soknadStatusMock, innsendt: formatISO(innsendt) }}
       />
-    </MockContext>
+    </MockContext>,
   );
 
   await waitFor(() => {
@@ -37,7 +37,7 @@ describe("ReceiptUploadDocuments", () => {
         <ReceiptUploadDocuments
           soknadStatus={{ ...soknadStatusMock, innsendt: formatISO(outsideEttersendingBoundary) }}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {

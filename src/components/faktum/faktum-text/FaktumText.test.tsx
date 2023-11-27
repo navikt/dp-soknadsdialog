@@ -24,7 +24,7 @@ describe("FaktumText", () => {
     render(
       <MockContext>
         <FaktumText faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -39,7 +39,7 @@ describe("FaktumText", () => {
     render(
       <MockContext>
         <FaktumText faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -58,7 +58,7 @@ describe("FaktumText", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumText faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -79,7 +79,7 @@ describe("FaktumText", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumText faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const textInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;

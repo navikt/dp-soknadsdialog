@@ -76,7 +76,7 @@ describe("FaktumLand", () => {
     render(
       <MockContext>
         <FaktumLand faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     const option1 = getCountryName(faktumMockData.gyldigeLand[0], "no");
@@ -98,7 +98,7 @@ describe("FaktumLand", () => {
     render(
       <MockContext>
         <FaktumLand faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -119,7 +119,7 @@ describe("FaktumLand", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumLand faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const selectedOptionText = getCountryName(svar, "no");
@@ -140,7 +140,7 @@ describe("FaktumLand", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumLand faktum={faktumMockDataBostedsland} />
-        </MockContext>
+        </MockContext>,
       );
 
       await waitFor(() => {

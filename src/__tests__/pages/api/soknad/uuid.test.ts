@@ -25,7 +25,7 @@ afterEach(() => {
 describe("/api/soknad/uuid", () => {
   test("Should get a new uuid to start an application", async () => {
     fetch.mockResponses(
-      ["12345", { status: 200 }] // Response from dp-soknad
+      ["12345", { status: 200 }], // Response from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -40,7 +40,7 @@ describe("/api/soknad/uuid", () => {
 
   test("Should return error if getting a new uuid fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Response from dp-soknad on error
+      [JSON.stringify({ ok: false }), { status: 500 }], // Response from dp-soknad on error
     );
 
     const { req, res } = createMocks({

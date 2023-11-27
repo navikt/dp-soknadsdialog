@@ -21,7 +21,7 @@ describe("FaktumNumber", () => {
     render(
       <MockContext>
         <FaktumNumber faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -36,7 +36,7 @@ describe("FaktumNumber", () => {
     render(
       <MockContext>
         <FaktumNumber faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -55,7 +55,7 @@ describe("FaktumNumber", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumNumber faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -76,7 +76,7 @@ describe("FaktumNumber", () => {
       render(
         <MockContext>
           <FaktumNumber faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -84,7 +84,7 @@ describe("FaktumNumber", () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText("validering.number-faktum.maa-vaere-et-tall")
+          screen.queryByText("validering.number-faktum.maa-vaere-et-tall"),
         ).toBeInTheDocument();
       });
     });
@@ -95,7 +95,7 @@ describe("FaktumNumber", () => {
       render(
         <MockContext>
           <FaktumNumber faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const numberInput = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
@@ -103,7 +103,7 @@ describe("FaktumNumber", () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText("validering.number-faktum.ikke-negativt-tall")
+          screen.queryByText("validering.number-faktum.ikke-negativt-tall"),
         ).toBeInTheDocument();
       });
     });

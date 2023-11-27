@@ -32,7 +32,7 @@ describe("StartSoknad", () => {
     render(
       <MockContext>
         <StartSoknad />
-      </MockContext>
+      </MockContext>,
     );
 
     const startApplicationButton = screen.getByRole("button", {
@@ -43,7 +43,7 @@ describe("StartSoknad", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
+        screen.queryByText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -60,7 +60,7 @@ describe("StartSoknad", () => {
     render(
       <MockContext soknadState={quizState}>
         <StartSoknad />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");

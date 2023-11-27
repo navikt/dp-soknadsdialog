@@ -39,7 +39,7 @@ describe("Faktum", () => {
     render(
       <MockContext>
         <Faktum faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -55,7 +55,7 @@ describe("Faktum", () => {
     render(
       <MockContext>
         <Faktum faktum={{ ...faktumMockData, sannsynliggjoresAv: dokumentasjonskravMockdata }} />
-      </MockContext>
+      </MockContext>,
     );
 
     const dokumentationTitle = dokumentasjonskravMockdata[0].beskrivendeId;

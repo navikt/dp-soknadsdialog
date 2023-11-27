@@ -1,11 +1,11 @@
 /**
  * @jest-environment node
  */
+// Test lint-staged prettier list-different
 
 import { createMocks } from "node-mocks-http";
 import { mockGetSession } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
-
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
 
 vi.mock("../../../../auth.utils", () => ({
@@ -28,7 +28,7 @@ const deleteSoknadMockdata: IDeleteSoknadBody = {
 describe("/api/soknad/delete", () => {
   test("Should delete an application", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: true }), { status: 200 }] // Delete from dp-soknad
+      [JSON.stringify({ ok: true }), { status: 200 }], // Delete from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -44,7 +44,7 @@ describe("/api/soknad/delete", () => {
 
   test("Should return error if deleting the application fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Delete application from dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }], // Delete application from dp-soknad
     );
 
     const { req, res } = createMocks({

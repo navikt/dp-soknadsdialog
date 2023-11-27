@@ -28,7 +28,7 @@ describe("FaktumFlervalg", () => {
     render(
       <MockContext>
         <FaktumFlervalg faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -49,7 +49,7 @@ describe("FaktumFlervalg", () => {
     render(
       <MockContext>
         <FaktumFlervalg faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -69,7 +69,7 @@ describe("FaktumFlervalg", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumFlervalg faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const svarCheckbox = screen.getByLabelText(svar[0]);
@@ -89,7 +89,7 @@ describe("FaktumFlervalg", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumFlervalg faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const svar1Checkbox = screen.getByLabelText(svar[0]);

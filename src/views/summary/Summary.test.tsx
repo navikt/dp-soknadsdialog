@@ -96,7 +96,7 @@ describe("Summary", () => {
     render(
       <MockContext quizSeksjoner={[sectionMockdata]} sanityTexts={sanityTexts}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const expandSectionButton = screen.getByRole("button", {
@@ -121,7 +121,7 @@ describe("Summary", () => {
     render(
       <MockContext>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const sendApplicationButton = screen.getByRole("button", {
@@ -132,7 +132,7 @@ describe("Summary", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst")
+        screen.queryByText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -148,7 +148,7 @@ describe("Summary", () => {
     render(
       <MockContext soknadState={quizState}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");
@@ -162,7 +162,7 @@ describe("Summary", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("oppsummering.feilmelding.soknad-ikke-ferdig-utfylt")
+        screen.queryByText("oppsummering.feilmelding.soknad-ikke-ferdig-utfylt"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -179,7 +179,7 @@ describe("Summary", () => {
     render(
       <MockContext soknadState={quizState}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");

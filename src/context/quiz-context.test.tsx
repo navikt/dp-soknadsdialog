@@ -51,7 +51,7 @@ describe("Quiz context", () => {
             <ContextSpion />
           </ValidationProvider>
         </QuizProvider>
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     const user = userEvent.setup();
@@ -84,7 +84,7 @@ describe("Quiz context", () => {
             <ContextSpion />
           </ValidationProvider>
         </QuizProvider>
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     const user = userEvent.setup();

@@ -17,7 +17,7 @@ describe("FaktumPeriodeReadOnly", () => {
     render(
       <MockContext>
         <FaktumPeriodeReadOnly faktum={{ ...faktumMockData, svar }} />
-      </MockContext>
+      </MockContext>,
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();

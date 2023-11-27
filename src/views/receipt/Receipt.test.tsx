@@ -109,7 +109,7 @@ describe("Receipt", () => {
           sections={[sectionMockdata]}
           personalia={personalia}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     const expandSummaryButton = screen.getByRole("button", {
@@ -138,12 +138,12 @@ describe("Receipt", () => {
             sections={[]}
             personalia={personalia}
           />
-        </MockContext>
+        </MockContext>,
       );
 
       await waitFor(() => {
         expect(
-          screen.queryByText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")
+          screen.queryByText("kvittering.arbeidssokerstatus.info-tekst.uregistrert"),
         ).toBeInTheDocument();
       });
     });
@@ -159,7 +159,7 @@ describe("Receipt", () => {
             sections={[]}
             personalia={personalia}
           />
-        </MockContext>
+        </MockContext>,
       );
 
       expect(screen.queryByText(dokumentkrav.beskrivendeId, { exact: false })).toBeInTheDocument();

@@ -30,7 +30,7 @@ describe("FaktumEnvalgReadOnly", () => {
         sanityTexts={{ ...mockSanityTexts, svaralternativer: [mockedSvaralternativText] }}
       >
         <FaktumEnvalgReadOnly faktum={{ ...faktumMockData, svar }} />
-      </MockContext>
+      </MockContext>,
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();

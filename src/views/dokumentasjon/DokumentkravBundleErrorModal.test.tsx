@@ -41,14 +41,14 @@ describe("DokumentkravBundleErrorModal", () => {
           isOpen={true}
           toggleVisibility={() => ""}
         />
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     await waitFor(() => {
       expect(
         screen.getByText(mockDokumentkravList.krav[0].beskrivendeId, {
           exact: false,
-        })
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -61,7 +61,7 @@ describe("DokumentkravBundleErrorModal", () => {
     fetch.mockResponseOnce(
       JSON.stringify({
         ok: true,
-      })
+      }),
     );
 
     render(
@@ -71,7 +71,7 @@ describe("DokumentkravBundleErrorModal", () => {
           isOpen={true}
           toggleVisibility={() => ""}
         />{" "}
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     await user.click(screen.getByText("dokumentkrav.bundle-error-modal.knapp.send-senere"));

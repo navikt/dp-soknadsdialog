@@ -36,7 +36,7 @@ describe("/api/documentation/svar", () => {
   test("Should post a dokumentkrav svar", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Post the answer to dp-soknad
-      [JSON.stringify(mockDokumentkravList), { status: 200 }] // Get new state on all dokumentkrav from dp-soknad
+      [JSON.stringify(mockDokumentkravList), { status: 200 }], // Get new state on all dokumentkrav from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -53,7 +53,7 @@ describe("/api/documentation/svar", () => {
   test("Should return error if posting the answer to dp-soknad fails", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: false }), { status: 500 }], // Post the answer to dp-soknad
-      [JSON.stringify(mockDokumentkravList), { status: 200 }] // Get new state on all dokumentkrav from dp-soknad
+      [JSON.stringify(mockDokumentkravList), { status: 200 }], // Get new state on all dokumentkrav from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -70,7 +70,7 @@ describe("/api/documentation/svar", () => {
   test("Should return 200 OK if getting the new dokumentkrav state fails after posting the answer", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Post the answer to dp-soknad
-      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }] // Get the new state on all dokumentkrav from dp-soknad
+      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }], // Get the new state on all dokumentkrav from dp-soknad
     );
 
     const { req, res } = createMocks({
