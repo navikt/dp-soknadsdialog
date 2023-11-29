@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../auth.utils";
+import { getSession } from "../../../utils/auth.utils";
 
 export interface ISessionData {
   expiresIn: number;

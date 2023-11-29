@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { apiFetch, getErrorMessage } from "../../../api.utils";
+import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
   getSession,
   getSoknadOnBehalfOfToken,
-} from "../../../auth.utils";
+} from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
 

@@ -1,6 +1,6 @@
 import { BodyShort, Heading, Link, ReadMore, Tag } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import api from "../../api.utils";
+import api from "../../utils/api.utils";
 import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav } from "../../types/documentation.types";
 import styles from "./ReceiptDokumentkrav.module.css";

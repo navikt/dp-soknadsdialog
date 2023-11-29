@@ -6,14 +6,14 @@ import { IQuizLandFaktum } from "../../../types/quiz.types";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useRouter } from "next/router";
-import { getCountryName } from "../../../country.utils";
+import { getCountryName } from "../../../utils/country.utils";
 import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 import { ISanityLandGruppe } from "../../../types/sanity.types";
 import { AlertText } from "../../alert-text/AlertText";
-import { getLandGruppeId } from "../../../faktum.utils";
+import { getLandGruppeId } from "../../../utils/faktum.utils";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 

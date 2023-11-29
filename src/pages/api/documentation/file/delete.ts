@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getErrorMessage } from "../../../../api.utils";
+import { getErrorMessage } from "../../../../utils/api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
   getSession,
   getSoknadOnBehalfOfToken,
-} from "../../../../auth.utils";
+} from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { validateUUID } from "../../../../utils/uuid.utils";
 

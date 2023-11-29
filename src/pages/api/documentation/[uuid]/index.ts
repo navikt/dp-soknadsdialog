@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getErrorMessage } from "../../../../api.utils";
+import { getErrorMessage } from "../../../../utils/api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 

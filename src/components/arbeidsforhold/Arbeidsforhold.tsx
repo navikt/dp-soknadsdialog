@@ -6,7 +6,7 @@ import { getUnansweredFaktumId } from "../../components/faktum/validation/valida
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { findEmployerName } from "../../faktum.utils";
+import { findEmployerName } from "../../utils/faktum.utils";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import {

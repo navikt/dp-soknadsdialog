@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from "next";
 import { createInnsendingUuid } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import ErrorPage from "../_error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {

@@ -1,8 +1,8 @@
 import { Alert } from "@navikt/ds-react";
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../api.utils";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { getErrorDetails } from "../../../utils/api.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { Ettersending } from "../../../views/ettersending/Ettersending";

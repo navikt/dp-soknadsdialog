@@ -2,14 +2,14 @@ import React from "react";
 import { useSanity } from "../../../context/sanity-context";
 import { BodyShort, Label } from "@navikt/ds-react";
 import { IQuizLandFaktum } from "../../../types/quiz.types";
-import { getCountryName } from "../../../country.utils";
+import { getCountryName } from "../../../utils/country.utils";
 import { useRouter } from "next/router";
 import { IFaktumReadOnly } from "../Faktum";
 import { HelpText } from "../../HelpText";
 import styles from "../Faktum.module.css";
 import { PortableText } from "@portabletext/react";
 import { AlertText } from "../../alert-text/AlertText";
-import { getLandGruppeId } from "../../../faktum.utils";
+import { getLandGruppeId } from "../../../utils/faktum.utils";
 
 export function FaktumLandReadOnly(props: IFaktumReadOnly<IQuizLandFaktum>) {
   const router = useRouter();

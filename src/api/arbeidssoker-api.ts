@@ -1,7 +1,7 @@
 import { formatISO } from "date-fns";
 import { GetServerSidePropsContext } from "next/types";
 import { v4 as uuid } from "uuid";
-import { getSession, getVeilarbregistreringOnBehalfOfToken } from "../auth.utils";
+import { getSession, getVeilarbregistreringOnBehalfOfToken } from "../utils/auth.utils";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "UNKNOWN";
 export interface IArbeidssokerperioder {

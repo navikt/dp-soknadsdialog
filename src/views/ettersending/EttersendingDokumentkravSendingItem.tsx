@@ -10,7 +10,7 @@ import { HelpText } from "../../components/HelpText";
 import { EttersendingDokumentkravTitle } from "./EttersendingDokumentkravTitle";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { Alert, Link } from "@navikt/ds-react";
-import api from "../../api.utils";
+import api from "../../utils/api.utils";
 import styles from "./Ettersending.module.css";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 
@@ -25,7 +25,8 @@ export function EttersendingDokumentkravSendingItem(props: IProps) {
   const { uploadedFiles, handleUploadedFiles } = useFileUploader(unbundledFiles);
   const { remainingFilesize } = useDokumentkravRemainingFilesize(props.dokumentkrav);
   const dokumentkravText = getDokumentkravTextById(props.dokumentkrav.beskrivendeId);
-  const hasBundle = props.dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !!props.dokumentkrav.bundleFilsti;
+  const hasBundle =
+    props.dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && !!props.dokumentkrav.bundleFilsti;
 
   return (
     <div id={props.dokumentkrav.id} className={styles.dokumentkravContainer}>

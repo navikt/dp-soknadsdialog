@@ -16,7 +16,7 @@ import {
   getMissingDokumentkrav,
   getNotSendingDokumentkrav,
   getUploadedDokumentkrav,
-} from "../../dokumentkrav.util";
+} from "../../utils/dokumentkrav.util";
 
 interface IProps {
   personalia: IPersonalia;

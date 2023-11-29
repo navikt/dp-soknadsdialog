@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../auth.utils";
+import { getSession } from "../../../utils/auth.utils";
 
 async function tokenHandler(req: NextApiRequest, res: NextApiResponse<string>) {
   const session = await getSession(req);

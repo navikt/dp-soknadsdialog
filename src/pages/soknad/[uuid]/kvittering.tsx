@@ -1,17 +1,17 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../api.utils";
+import { getErrorDetails } from "../../../utils/api.utils";
 import {
   IArbeidssokerStatus,
   IArbeidssokerperioder,
   getArbeidssokerperioder,
 } from "../../../api/arbeidssoker-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../auth.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { getMissingDokumentkrav } from "../../../dokumentkrav.util";
+import { getMissingDokumentkrav } from "../../../utils/dokumentkrav.util";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";

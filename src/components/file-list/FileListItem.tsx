@@ -2,7 +2,7 @@ import React from "react";
 import { BodyShort, Button, Link } from "@navikt/ds-react";
 import { IDokumentkravFil } from "../../types/documentation.types";
 import styles from "./FileListItem.module.css";
-import api from "../../api.utils";
+import api from "../../utils/api.utils";
 import { Delete } from "@navikt/ds-icons";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { ErrorTypesEnum } from "../../types/error.types";

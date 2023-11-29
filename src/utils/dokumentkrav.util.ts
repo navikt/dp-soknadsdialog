@@ -4,8 +4,8 @@ import {
   DOKUMENTKRAV_SVAR_SENDT_TIDLIGERE,
   DOKUMENTKRAV_SVAR_SEND_NAA,
   DOKUMENTKRAV_SVAR_SEND_NOEN_ANDRE,
-} from "./constants";
-import { IDokumentkrav, IDokumentkravList } from "./types/documentation.types";
+} from "../constants";
+import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 
 export function getMissingDokumentkrav(dokumentkravList: IDokumentkravList): IDokumentkrav[] {
   return dokumentkravList.krav.filter(
