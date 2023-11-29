@@ -8,7 +8,7 @@ import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mo
 import createFetchMock from "vitest-fetch-mock";
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
 
-vi.mock("../../../../auth.utils", () => ({
+vi.mock("../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

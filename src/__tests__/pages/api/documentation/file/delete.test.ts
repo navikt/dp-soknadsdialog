@@ -9,7 +9,7 @@ import deleteFileHandler, {
 import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 
-vi.mock("../../../../../auth.utils", () => ({
+vi.mock("../../../../../utils/auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),

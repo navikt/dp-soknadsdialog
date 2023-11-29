@@ -13,7 +13,7 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-vi.mock("../../session.utils", () => {
+vi.mock("../../hooks/useSession", () => {
   return {
     useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
