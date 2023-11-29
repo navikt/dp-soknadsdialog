@@ -13,9 +13,9 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-jest.mock("../../hooks/useSession", () => {
+vi.mock("../../session.utils", () => {
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,
@@ -109,7 +109,7 @@ describe("Receipt", () => {
           sections={[sectionMockdata]}
           personalia={personalia}
         />
-      </MockContext>
+      </MockContext>,
     );
 
     const expandSummaryButton = screen.getByRole("button", {
@@ -138,12 +138,12 @@ describe("Receipt", () => {
             sections={[]}
             personalia={personalia}
           />
-        </MockContext>
+        </MockContext>,
       );
 
       await waitFor(() => {
         expect(
-          screen.queryByText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")
+          screen.queryByText("kvittering.arbeidssokerstatus.info-tekst.uregistrert"),
         ).toBeInTheDocument();
       });
     });
@@ -159,7 +159,7 @@ describe("Receipt", () => {
             sections={[]}
             personalia={personalia}
           />
-        </MockContext>
+        </MockContext>,
       );
 
       expect(screen.queryByText(dokumentkrav.beskrivendeId, { exact: false })).toBeInTheDocument();

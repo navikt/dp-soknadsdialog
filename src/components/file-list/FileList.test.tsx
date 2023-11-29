@@ -2,7 +2,8 @@ import React from "react";
 import { render, screen, fireEvent, waitForElementToBeRemoved } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { mockDokumentkravList } from "../../localhost-data/dokumentkrav-list";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import { MockContext } from "../../__mocks__/MockContext";
 import { FileUploader } from "../file-uploader/FileUploader";
 import { FileList } from "../../components/file-list/FileList";
@@ -11,7 +12,7 @@ import { useFileUploader } from "../../hooks/useFileUploader";
 const FileTestContainer = () => {
   // Need to have a custom hook here to test the dynamic between FileUploader and FileList
   const { handleUploadedFiles, uploadedFiles } = useFileUploader(
-    mockDokumentkravList.krav[0].filer
+    mockDokumentkravList.krav[0].filer,
   );
 
   return (
@@ -31,12 +32,14 @@ const FileTestContainer = () => {
 };
 
 describe("FileList", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   describe("Upload file", () => {
@@ -59,7 +62,7 @@ describe("FileList", () => {
             urn: "1234",
             filnavn: "image.jpg",
             filsti: "1234/5678",
-          })
+          }),
         );
       });
 
@@ -67,7 +70,7 @@ describe("FileList", () => {
         render(
           <MockContext>
             <FileTestContainer />
-          </MockContext>
+          </MockContext>,
         );
 
         const file = new File(["file"], "image.jpg", {
@@ -85,7 +88,7 @@ describe("FileList", () => {
       render(
         <MockContext>
           <FileTestContainer />
-        </MockContext>
+        </MockContext>,
       );
 
       const file = new File(["file"], "image.json", {
@@ -96,7 +99,7 @@ describe("FileList", () => {
 
       expect(await screen.findByText(file.name)).toBeInTheDocument();
       expect(
-        await screen.findByText("filopplaster.feilmelding.format-storrelse-beskrivelse")
+        await screen.findByText("filopplaster.feilmelding.format-storrelse-beskrivelse"),
       ).toBeInTheDocument();
       expect(fetch.mock.calls.length).toEqual(0);
     });
@@ -110,7 +113,7 @@ describe("FileList", () => {
       fetch.mockResponseOnce(
         JSON.stringify({
           ok: true,
-        })
+        }),
       );
 
       const user = userEvent.setup();
@@ -118,7 +121,7 @@ describe("FileList", () => {
       render(
         <MockContext>
           <FileTestContainer />
-        </MockContext>
+        </MockContext>,
       );
 
       const deleteButton = screen.getByRole("button", { description: fileToTest.filnavn });

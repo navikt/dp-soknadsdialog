@@ -18,7 +18,7 @@ describe("FaktumEgetGaardsbrukArbeidsaar", () => {
     render(
       <MockContext>
         <FaktumEgetGaardsbrukArbeidsaar faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -30,7 +30,7 @@ describe("FaktumEgetGaardsbrukArbeidsaar", () => {
     render(
       <MockContext>
         <FaktumEgetGaardsbrukArbeidsaar faktum={{ ...faktumMockData, svar: 20323 }} />
-      </MockContext>
+      </MockContext>,
     );
 
     const dropdown = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLSelectElement;
@@ -48,7 +48,7 @@ describe("FaktumEgetGaardsbrukArbeidsaar", () => {
     render(
       <MockContext>
         <FaktumEgetGaardsbrukArbeidsaar faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     const currentYear = new Date().getUTCFullYear();

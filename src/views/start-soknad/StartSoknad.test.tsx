@@ -3,11 +3,15 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { StartSoknad } from "./StartSoknad";
 import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
 
+<<<<<<< HEAD
 jest.mock("../../hooks/useSession", () => {
+=======
+vi.mock("../../session.utils", () => {
+>>>>>>> main
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,
@@ -16,12 +20,14 @@ jest.mock("../../hooks/useSession", () => {
 });
 
 describe("StartSoknad", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   test("Should show error message if user tries to start application without consenting", async () => {
@@ -30,7 +36,7 @@ describe("StartSoknad", () => {
     render(
       <MockContext>
         <StartSoknad />
-      </MockContext>
+      </MockContext>,
     );
 
     const startApplicationButton = screen.getByRole("button", {
@@ -41,7 +47,7 @@ describe("StartSoknad", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst")
+        screen.queryByText("start-soknad.checkbox.samtykke-innhenting-data.validering-tekst"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -58,7 +64,7 @@ describe("StartSoknad", () => {
     render(
       <MockContext soknadState={quizState}>
         <StartSoknad />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");

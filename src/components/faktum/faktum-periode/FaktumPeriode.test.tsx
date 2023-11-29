@@ -22,7 +22,7 @@ describe("FaktumPeriode", () => {
     render(
       <MockContext>
         <FaktumPeriode faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     const datepickerFom = screen.getByLabelText(faktumMockData.beskrivendeId + ".fra");
@@ -44,15 +44,15 @@ describe("FaktumPeriode", () => {
     render(
       <MockContext>
         <FaktumPeriode faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
     const datepickerFom = screen.getByLabelText(
-      faktumMockData.beskrivendeId + ".fra"
+      faktumMockData.beskrivendeId + ".fra",
     ) as HTMLInputElement;
     const datepickerTom = screen.getByLabelText(
-      faktumMockData.beskrivendeId + ".til"
+      faktumMockData.beskrivendeId + ".til",
     ) as HTMLInputElement;
 
     await waitFor(() => {
@@ -68,7 +68,7 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(faktumMockData.beskrivendeId + ".fra");
@@ -93,15 +93,15 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       const datepickerTom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".til"
+        faktumMockData.beskrivendeId + ".til",
       ) as HTMLInputElement;
 
       await waitFor(() => {
@@ -130,19 +130,19 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       const datepickerTom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".til"
+        faktumMockData.beskrivendeId + ".til",
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        '*[id^="datepicker-input-error"]'
+        '*[id^="datepicker-input-error"]',
       ) as HTMLInputElement;
 
       await waitFor(() => {
@@ -173,15 +173,15 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext>
           <FaktumPeriode faktum={faktumArbeidsforholdMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumArbeidsforholdMockData.beskrivendeId + ".fra"
+        faktumArbeidsforholdMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        '*[id^="datepicker-input-error"]'
+        '*[id^="datepicker-input-error"]',
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, datePickerFormattedDate);
@@ -199,15 +199,15 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        '*[id^="datepicker-input-error"]'
+        '*[id^="datepicker-input-error"]',
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, "01.01.1800");
@@ -224,15 +224,15 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       const datePickerError = document.querySelector(
-        '*[id^="datepicker-input-error"]'
+        '*[id^="datepicker-input-error"]',
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, "06.08.2322");
@@ -258,11 +258,11 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       await user.type(datepickerFom, datePickerFormattedDate);
@@ -286,11 +286,11 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       await user.clear(datepickerFom);
@@ -310,11 +310,11 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerFom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".fra"
+        faktumMockData.beskrivendeId + ".fra",
       ) as HTMLInputElement;
 
       await user.clear(datepickerFom);
@@ -334,11 +334,11 @@ describe("FaktumPeriode", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumPeriode faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const datepickerTom = screen.getByLabelText(
-        faktumMockData.beskrivendeId + ".til"
+        faktumMockData.beskrivendeId + ".til",
       ) as HTMLInputElement;
 
       await user.clear(datepickerTom);

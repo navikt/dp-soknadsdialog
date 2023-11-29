@@ -4,7 +4,8 @@ import { Summary } from "./Summary";
 import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext, mockSanityTexts } from "../../__mocks__/MockContext";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import { IPersonalia } from "../../types/personalia.types";
 import {
   ISanityFaktum,
@@ -13,9 +14,9 @@ import {
   ISanityTexts,
 } from "../../types/sanity.types";
 
-jest.mock("../../hooks/useSession", () => {
+vi.mock("../../session.utils", () => {
   return {
-    useSession: jest.fn(() => ({
+    useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
       isLoading: false,
       isError: false,
@@ -53,17 +54,19 @@ const personalia: IPersonalia = {
 };
 
 describe("Summary", () => {
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   // To fix ref scrollIntoView is not a function error
   // https://github.com/jsdom/jsdom/issues/1695#issuecomment-449931788
-  Element.prototype.scrollIntoView = jest.fn();
+  Element.prototype.scrollIntoView = vi.fn();
 
   test("Should show questions and answers", async () => {
     const user = userEvent.setup();
@@ -93,7 +96,7 @@ describe("Summary", () => {
     render(
       <MockContext quizSeksjoner={[sectionMockdata]} sanityTexts={sanityTexts}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const expandSectionButton = screen.getByRole("button", {
@@ -118,7 +121,7 @@ describe("Summary", () => {
     render(
       <MockContext>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const sendApplicationButton = screen.getByRole("button", {
@@ -129,7 +132,7 @@ describe("Summary", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst")
+        screen.queryByText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -145,7 +148,7 @@ describe("Summary", () => {
     render(
       <MockContext soknadState={quizState}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");
@@ -159,7 +162,7 @@ describe("Summary", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText("oppsummering.feilmelding.soknad-ikke-ferdig-utfylt")
+        screen.queryByText("oppsummering.feilmelding.soknad-ikke-ferdig-utfylt"),
       ).toBeInTheDocument();
 
       expect(fetch.mock.calls.length).toBe(0);
@@ -176,7 +179,7 @@ describe("Summary", () => {
     render(
       <MockContext soknadState={quizState}>
         <Summary personalia={personalia} />
-      </MockContext>
+      </MockContext>,
     );
 
     const consentCheckbox = screen.getByRole("checkbox");
