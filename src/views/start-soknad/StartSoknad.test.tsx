@@ -5,11 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { mockSoknadState, MockContext } from "../../__mocks__/MockContext";
 import createFetchMock from "vitest-fetch-mock";
 
-<<<<<<< HEAD
-jest.mock("../../hooks/useSession", () => {
-=======
 vi.mock("../../session.utils", () => {
->>>>>>> main
   return {
     useSession: vi.fn(() => ({
       session: { expiresIn: 1234 },
