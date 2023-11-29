@@ -3,7 +3,6 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { vi, beforeEach, afterEach, describe, test, expect } from "vitest";
 import createFetchMock from "vitest-fetch-mock";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
 import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";

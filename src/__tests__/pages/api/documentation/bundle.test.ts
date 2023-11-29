@@ -8,7 +8,6 @@ import createFetchMock from "vitest-fetch-mock";
 import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
-import { expect, vi } from "vitest";
 
 vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),

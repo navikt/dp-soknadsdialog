@@ -1,4 +1,3 @@
-import { beforeAll, vi } from "vitest";
 import "@testing-library/jest-dom";
 
 vi.mock("uuid", () => {

@@ -5,7 +5,6 @@
 import { createMocks } from "node-mocks-http";
 import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
-import { afterEach, beforeEach, expect, describe, test, vi } from "vitest";
 import uuidHandler from "../../../../pages/api/soknad/uuid";
 
 vi.mock("../../../../auth.utils", () => ({

@@ -7,7 +7,6 @@ import { createMocks } from "node-mocks-http";
 import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
-import { afterEach, beforeEach, expect, vi, describe, test } from "vitest";
 
 vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),

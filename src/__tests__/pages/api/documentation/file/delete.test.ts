@@ -8,7 +8,6 @@ import deleteFileHandler, {
 } from "../../../../../pages/api/documentation/file/delete";
 import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
-import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 vi.mock("../../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
