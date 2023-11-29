@@ -28,7 +28,7 @@ describe("FaktumEnvalg", () => {
     render(
       <MockContext>
         <FaktumEnvalg faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {
@@ -46,7 +46,7 @@ describe("FaktumEnvalg", () => {
     render(
       <MockContext>
         <FaktumEnvalg faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -65,7 +65,7 @@ describe("FaktumEnvalg", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumEnvalg faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const firstRadio = screen.getByLabelText(svar);

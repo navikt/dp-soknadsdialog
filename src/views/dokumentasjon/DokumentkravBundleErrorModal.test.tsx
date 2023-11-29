@@ -1,5 +1,6 @@
 import React from "react";
-import fetch from "jest-fetch-mock";
+import createFetchMock from "vitest-fetch-mock";
+
 import userEvent from "@testing-library/user-event";
 import { Modal } from "@navikt/ds-react";
 import { render, screen, waitFor } from "@testing-library/react";
@@ -20,12 +21,14 @@ describe("DokumentkravBundleErrorModal", () => {
     Modal.setAppElement("#__next");
   });
 
+  const fetch = createFetchMock(vi);
+
   beforeEach(() => {
     fetch.enableMocks();
   });
 
   afterEach(() => {
-    fetch.mockReset();
+    fetch.resetMocks();
   });
 
   test("Should show which dokumentkrav has bundle errors", async () => {
@@ -38,14 +41,14 @@ describe("DokumentkravBundleErrorModal", () => {
           isOpen={true}
           toggleVisibility={() => ""}
         />
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     await waitFor(() => {
       expect(
         screen.getByText(mockDokumentkravList.krav[0].beskrivendeId, {
           exact: false,
-        })
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -58,7 +61,7 @@ describe("DokumentkravBundleErrorModal", () => {
     fetch.mockResponseOnce(
       JSON.stringify({
         ok: true,
-      })
+      }),
     );
 
     render(
@@ -68,7 +71,7 @@ describe("DokumentkravBundleErrorModal", () => {
           isOpen={true}
           toggleVisibility={() => ""}
         />{" "}
-      </SanityProvider>
+      </SanityProvider>,
     );
 
     await user.click(screen.getByText("dokumentkrav.bundle-error-modal.knapp.send-senere"));

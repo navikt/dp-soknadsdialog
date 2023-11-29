@@ -29,7 +29,7 @@ describe("Section", () => {
     render(
       <MockContext quizSeksjoner={[sectionMockData]}>
         <Section section={sectionMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     await waitFor(() => {

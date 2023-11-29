@@ -18,7 +18,7 @@ describe("FaktumDatoReadOnly", () => {
     render(
       <MockContext>
         <FaktumDatoReadOnly faktum={faktumToTest} />
-      </MockContext>
+      </MockContext>,
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();

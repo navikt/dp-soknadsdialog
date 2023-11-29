@@ -43,7 +43,7 @@ describe("FaktumFlervalgReadOnly", () => {
         }}
       >
         <FaktumFlervalgReadOnly faktum={{ ...faktumMockData, svar }} />
-      </MockContext>
+      </MockContext>,
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();

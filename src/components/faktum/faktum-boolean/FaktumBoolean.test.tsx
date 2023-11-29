@@ -27,7 +27,7 @@ describe("FaktumBoolean", () => {
     render(
       <MockContext>
         <FaktumBoolean faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
     await waitFor(() => {
       expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe("FaktumBoolean", () => {
     render(
       <MockContext>
         <FaktumBoolean faktum={faktumMockData} />
-      </MockContext>
+      </MockContext>,
     );
 
     // Casting it to access the value attribute
@@ -64,7 +64,7 @@ describe("FaktumBoolean", () => {
       render(
         <MockContext mockQuizContext={true}>
           <FaktumBoolean faktum={faktumMockData} />
-        </MockContext>
+        </MockContext>,
       );
 
       const radioToClick = screen.getByLabelText(svar);

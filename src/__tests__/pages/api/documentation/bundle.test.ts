@@ -2,29 +2,30 @@
  * @jest-environment node
  */
 
-import fetch from "jest-fetch-mock";
 import { createMocks } from "node-mocks-http";
-import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import createFetchMock from "vitest-fetch-mock";
 import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
 
-jest.mock("../../../../auth.utils", () => ({
+vi.mock("../../../../auth.utils", () => ({
   getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
-jest.mock("@navikt/next-logger");
+vi.mock("@navikt/next-logger");
+
+const fetch = createFetchMock(vi);
 
 beforeEach(() => {
   fetch.enableMocks();
 });
 
 afterEach(() => {
-  fetch.mockReset();
+  fetch.resetMocks();
 });
-
 const dokumentkravBundleMockData: IDocumentationBundleBody = {
   uuid: "1234",
   dokumentkravId: "5678",
@@ -45,7 +46,7 @@ describe("/api/documentation/bundle", () => {
         }),
         { status: 200 },
       ], // Post the file urns to dp-mellomlagring
-      [JSON.stringify({ ok: true }), { status: 201 }] // Post the new bundle urn to dp-soknad
+      [JSON.stringify({ ok: true }), { status: 201 }], // Post the new bundle urn to dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -60,7 +61,7 @@ describe("/api/documentation/bundle", () => {
 
   test("Should return error if posting the answer to dp-mellomlagring fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Post the file urns to dp-mellomlagring
+      [JSON.stringify({ ok: false }), { status: 500 }], // Post the file urns to dp-mellomlagring
     );
 
     const { req, res } = createMocks({
@@ -83,7 +84,7 @@ describe("/api/documentation/bundle", () => {
         }),
         { status: 200 },
       ], // Post the file urns to dp-mellomlagring
-      [JSON.stringify({ ok: false }), { status: 500 }] // Post the new bundle urn to dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }], // Post the new bundle urn to dp-soknad
     );
 
     const { req, res } = createMocks({

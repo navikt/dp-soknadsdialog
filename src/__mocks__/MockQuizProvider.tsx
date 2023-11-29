@@ -7,8 +7,8 @@ interface IProps {
   initialState: IQuizState;
 }
 
-export const mockSaveFaktumToQuiz = jest.fn();
-export const mockSaveGeneratorFaktumToQuiz = jest.fn();
+export const mockSaveFaktumToQuiz = vi.fn();
+export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
 export function MockQuizProvider({ initialState, children }: IProps) {
   mockSaveFaktumToQuiz.mockReset();
