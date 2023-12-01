@@ -28,14 +28,13 @@ spec:
   replicas:
     min: 4
     max: 6
-    cpuThresholdPercentage: 75
+    cpuThresholdPercentage: 80
   resources:
     limits:
-      cpu: 1200m
-      memory: 1280Mi
-    requests:
-      cpu: 600m
       memory: 1024Mi
+    requests:
+      cpu: 50m
+      memory: 512Mi
   ingresses:
     - {{ingress}}
   env:
