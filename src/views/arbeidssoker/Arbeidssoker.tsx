@@ -19,11 +19,11 @@ type currentNagivatingType =
 export function Arbeidssoker(props: IProps) {
   const { getAppText } = useSanity();
   const [currentNagivating, setCurrentNavigating] = useState<currentNagivatingType | undefined>(
-    undefined
+    undefined,
   );
 
   return (
-    <>
+    <main>
       <PageMeta
         title={getAppText("arbeidssoker.side-metadata.tittel")}
         description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}
@@ -97,6 +97,6 @@ export function Arbeidssoker(props: IProps) {
           </div>
         </>
       )}
-    </>
+    </main>
   );
 }
