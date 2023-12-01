@@ -3,6 +3,22 @@
   margin-bottom: 8px;
 }
 
+.timelineItem dl {
+  margin: 0;
+}
+
+.timelineItem dt {
+  font-size: var(--a-font-size-large);
+  font-weight: var(--a-font-weight-bold);
+  letter-spacing: 0;
+  line-height: var(--a-font-line-height-large);
+  margin: 0;
+}
+
+.timelineItem dd {
+  margin-left: 0;
+}
+
 .iconWrapper {
   width: 34px;
   margin-right: 12px;
@@ -20,6 +36,7 @@
   background-color: var(--a-gray-500);
   height: 100%;
 }
+
 .icon {
   width: 24px;
   height: 24px;

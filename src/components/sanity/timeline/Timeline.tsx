@@ -1,5 +1,4 @@
 import React from "react";
-import { Label } from "@navikt/ds-react";
 import { TypedObject } from "@portabletext/types";
 import { PortableText } from "@portabletext/react";
 import { PortableTextComponentProps } from "@portabletext/react/src/types";
@@ -22,11 +21,15 @@ function TimelineItem(props: ITimelineItem) {
 
   return (
     <div key={props._key} className={styles.timelineItem}>
-      <div className={styles.iconWrapper}>{svg && <span className={styles.icon}>{svg}</span>}</div>
-      <div>
-        <Label size={"medium"}>{props.title}</Label>
-        <PortableText value={props.body} />
+      <div className={styles.iconWrapper} aria-hidden>
+        {svg && <span className={styles.icon}>{svg}</span>}
       </div>
+      <dl>
+        <dt className={styles.timeLineItemTitle}>{props.title}</dt>
+        <dd>
+          <PortableText value={props.body} />
+        </dd>
+      </dl>
     </div>
   );
 }
