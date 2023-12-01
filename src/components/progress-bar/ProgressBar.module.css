@@ -5,6 +5,14 @@
   margin: var(--a-spacing-10) 0;
 }
 
+.progressBarText {
+  margin: 0;
+  font-size: var(--a-font-size-large);
+  font-weight: var(--a-font-weight-bold);
+  letter-spacing: 0;
+  line-height: var(--a-font-line-height-large);
+}
+
 .progressBar:focus-visible {
   outline: none;
 }
@@ -51,7 +59,8 @@
   display: inline-block;
   flex-basis: var(--progress-bar-height);
   border: 3px solid var(--a-gray-600);
-  transition: border-width var(--progress-bar-animation-duration),
+  transition:
+    border-width var(--progress-bar-animation-duration),
     border-color var(--progress-bar-animation-duration);
   box-sizing: border-box;
   border-radius: 100px;
