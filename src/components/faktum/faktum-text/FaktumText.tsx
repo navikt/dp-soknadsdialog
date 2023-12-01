@@ -25,7 +25,7 @@ const containsOnlyWhitespace = (debouncedText: string): boolean => {
 
 export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
-  ref: Ref<HTMLInputElement> | undefined
+  ref: Ref<HTMLInputElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
@@ -97,6 +97,7 @@ export function FaktumTextComponent(
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
           disabled={isLocked}
+          autoComplete="off"
         />
       ) : (
         <TextField
@@ -111,6 +112,7 @@ export function FaktumTextComponent(
           onBlur={debouncedChange.flush}
           error={getErrorMessage()}
           disabled={isLocked}
+          autoComplete="off"
         />
       )}
 

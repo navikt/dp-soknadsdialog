@@ -19,7 +19,7 @@ export const FaktumDato = forwardRef(FaktumDatoComponent);
 
 function FaktumDatoComponent(
   props: IFaktum<IQuizDatoFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
@@ -86,7 +86,7 @@ function FaktumDatoComponent(
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
   return (
-    <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
+    <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <UNSAFE_DatePicker
         {...datepickerProps}
         dropdownCaption
@@ -101,6 +101,7 @@ function FaktumDatoComponent(
           description={datePickerDescription}
           error={errorMessage}
           disabled={isLocked}
+          autoComplete="off"
         />
       </UNSAFE_DatePicker>
       {faktumTexts?.helpText && (

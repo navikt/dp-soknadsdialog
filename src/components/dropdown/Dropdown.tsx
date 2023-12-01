@@ -37,6 +37,7 @@ export function Dropdown(props: IProps) {
       description={props.description && props.description}
       error={props.error}
       disabled={props.disabled}
+      autoComplete="off"
     >
       {props.placeHolderText && <option value="">{props.placeHolderText}</option>}
       {props.options.map((option) => (
