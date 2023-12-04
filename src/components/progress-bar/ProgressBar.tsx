@@ -1,4 +1,3 @@
-import { Label } from "@navikt/ds-react";
 import { useEffect, useRef } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
@@ -59,9 +58,9 @@ export function ProgressBar(props: IProgressBar) {
 
   return (
     <div className={styles.progressBar}>
-      <Label ref={progressbarRef} tabIndex={-1} spacing>
+      <span className={styles.progressBarText} ref={progressbarRef} tabIndex={-1}>
         {stepText}
-      </Label>
+      </span>
       <div className={styles.barContainer} aria-hidden>
         {renderCompletedSteps()}
         {renderRemaining()}

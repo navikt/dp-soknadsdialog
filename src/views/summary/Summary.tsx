@@ -213,7 +213,7 @@ export function Summary(props: IProps) {
         <Button
           variant={"secondary"}
           onClick={() => navigateToPreviousStep()}
-          icon={<Left />}
+          icon={<Left aria-hidden />}
           loading={navigating}
         >
           {getAppText("soknad.knapp.forrige-steg")}

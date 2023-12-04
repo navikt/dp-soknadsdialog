@@ -29,7 +29,7 @@ export const FaktumPeriode = forwardRef(FaktumPeriodeComponent);
 
 function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
@@ -167,6 +167,7 @@ function FaktumPeriodeComponent(
               placeholder={getAppText("datovelger.dato-format")}
               error={fomErrorMessage}
               disabled={isLocked}
+              autoComplete="off"
             />
 
             <UNSAFE_DatePicker.Input
@@ -175,6 +176,7 @@ function FaktumPeriodeComponent(
               placeholder={getAppText("datovelger.dato-format")}
               error={tomErrorMessage}
               disabled={isLocked}
+              autoComplete="off"
             />
           </div>
         </UNSAFE_DatePicker>

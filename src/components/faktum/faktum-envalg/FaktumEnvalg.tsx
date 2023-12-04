@@ -16,7 +16,7 @@ export const FaktumEnvalg = forwardRef(FaktumEnvalgComponent);
 
 function FaktumEnvalgComponent(
   props: IFaktum<IQuizEnvalgFaktum>,
-  ref: Ref<HTMLFieldSetElement> | undefined
+  ref: Ref<HTMLFieldSetElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();

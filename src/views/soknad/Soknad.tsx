@@ -128,7 +128,7 @@ export function Soknad(props: IProps) {
             <Button
               variant={"secondary"}
               onClick={() => navigateToPreviousSection()}
-              icon={<Left />}
+              icon={<Left aria-hidden />}
             >
               {getAppText("soknad.knapp.forrige-steg")}
             </Button>
@@ -139,7 +139,11 @@ export function Soknad(props: IProps) {
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>
           ) : (
-            <Button onClick={() => navigateToNextSection()} icon={<Right />} iconPosition={"right"}>
+            <Button
+              onClick={() => navigateToNextSection()}
+              icon={<Right aria-hidden />}
+              iconPosition={"right"}
+            >
               {getAppText("soknad.knapp.neste-steg")}
             </Button>
           )}
@@ -147,7 +151,7 @@ export function Soknad(props: IProps) {
 
         {!isError && (
           <p className={styles.autoSaveText}>
-            <FileSuccess />
+            <FileSuccess aria-hidden />
             {getAppText("soknad.auto-lagret.tekst")}
           </p>
         )}

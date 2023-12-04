@@ -155,7 +155,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
           const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
           return (
             <p className={styles.dokumentkravContainer} key={dokumentkrav.beskrivendeId}>
-              <FileContent />
+              <FileContent aria-hidden />
               {getAppText("soknad.faktum-maa-dokumenteres.del-1")}
               {` ${
                 dokumentkravText?.title ? dokumentkravText.title : dokumentkrav.beskrivendeId

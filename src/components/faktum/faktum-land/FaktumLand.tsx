@@ -19,7 +19,7 @@ export const FaktumLand = forwardRef(FaktumLandComponent);
 
 function FaktumLandComponent(
   props: IFaktum<IQuizLandFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const router = useRouter();
   const { faktum } = props;
