@@ -28,6 +28,9 @@ const config = {
   assetPrefix: process.env.ASSET_PREFIX,
   experimental: {
     largePageDataBytes: 256 * 1000, // Økt fra 128KB til 256K
+    // Enable OpenTelemetry instrumentation for Next.js
+    // https://nextjs.org/docs/pages/building-your-application/optimizing/open-telemetry
+    instrumentationHook: true,
   },
   output: "standalone",
   swcMinify: true,
