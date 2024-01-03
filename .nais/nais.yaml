@@ -25,6 +25,9 @@ spec:
   prometheus:
     enabled: true
     path: "{{base_path}}/api/internal/metrics"
+  observability:
+    tracing:
+      enabled: true
   replicas:
     min: 4
     max: 6
