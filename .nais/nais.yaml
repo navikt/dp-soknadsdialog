@@ -61,6 +61,8 @@ spec:
       value: "false"
     - name: OTEL_METRICS_EXEMPLAR_FILTER
       value: ALWAYS_ON
+    - name: NEXT_TELEMETRY_DISABLED
+      value: 1
   idporten:
     enabled: true
     sidecar:
