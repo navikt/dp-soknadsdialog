@@ -45,6 +45,7 @@ describe("/api/soknad/ferdigstill", () => {
       body: ferdigstillMockData,
     });
 
+    // @ts-ignore
     await ferdigstillHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -61,6 +62,7 @@ describe("/api/soknad/ferdigstill", () => {
       body: ferdigstillMockData,
     });
 
+    // @ts-ignore
     await ferdigstillHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);

@@ -37,6 +37,7 @@ describe("/api/soknad/delete", () => {
       body: deleteSoknadMockdata,
     });
 
+    // @ts-ignore
     await deleteHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -53,6 +54,7 @@ describe("/api/soknad/delete", () => {
       body: deleteSoknadMockdata,
     });
 
+    // @ts-ignore
     await deleteHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);

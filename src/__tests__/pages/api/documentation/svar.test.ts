@@ -46,6 +46,7 @@ describe("/api/documentation/svar", () => {
       body: dokumentkravSvarMockdata,
     });
 
+    // @ts-ignore
     await svarHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -63,6 +64,7 @@ describe("/api/documentation/svar", () => {
       body: dokumentkravSvarMockdata,
     });
 
+    // @ts-ignore
     await svarHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
@@ -80,6 +82,7 @@ describe("/api/documentation/svar", () => {
       body: dokumentkravSvarMockdata,
     });
 
+    // @ts-ignore
     await svarHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);

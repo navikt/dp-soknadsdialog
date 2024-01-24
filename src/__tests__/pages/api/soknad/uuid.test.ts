@@ -32,6 +32,7 @@ describe("/api/soknad/uuid", () => {
       method: "POST",
     });
 
+    // @ts-ignore
     await uuidHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -47,6 +48,7 @@ describe("/api/soknad/uuid", () => {
       method: "POST",
     });
 
+    // @ts-ignore
     await uuidHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);

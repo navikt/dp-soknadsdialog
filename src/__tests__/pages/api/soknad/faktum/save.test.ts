@@ -53,6 +53,7 @@ describe("/api/soknad/faktum/save", () => {
       body: saveFaktumMockData,
     });
 
+    // @ts-ignore
     await saveFaktumHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -70,6 +71,7 @@ describe("/api/soknad/faktum/save", () => {
       body: saveFaktumMockData,
     });
 
+    // @ts-ignore
     await saveFaktumHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
@@ -87,6 +89,7 @@ describe("/api/soknad/faktum/save", () => {
       body: saveFaktumMockData,
     });
 
+    // @ts-ignore
     await saveFaktumHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);

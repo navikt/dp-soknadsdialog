@@ -54,6 +54,7 @@ describe("/api/documentation/bundle", () => {
       body: dokumentkravBundleMockData,
     });
 
+    // @ts-ignore
     await bundleHandler(req, res);
 
     expect(res._getStatusCode()).toBe(201);
@@ -69,6 +70,7 @@ describe("/api/documentation/bundle", () => {
       body: dokumentkravBundleMockData,
     });
 
+    // @ts-ignore
     await bundleHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
@@ -92,6 +94,7 @@ describe("/api/documentation/bundle", () => {
       body: dokumentkravBundleMockData,
     });
 
+    // @ts-ignore
     await bundleHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);

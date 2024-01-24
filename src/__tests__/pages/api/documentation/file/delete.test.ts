@@ -43,6 +43,7 @@ describe("/api/documentation/file/delete", () => {
       body: deleteFileMockData,
     });
 
+    // @ts-ignore
     await deleteFileHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
@@ -59,6 +60,7 @@ describe("/api/documentation/file/delete", () => {
       body: deleteFileMockData,
     });
 
+    // @ts-ignore
     await deleteFileHandler(req, res);
 
     expect(res._getStatusCode()).toBe(500);
@@ -76,6 +78,7 @@ describe("/api/documentation/file/delete", () => {
       body: deleteFileMockData,
     });
 
+    // @ts-ignore
     await deleteFileHandler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
