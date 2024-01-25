@@ -21,9 +21,11 @@ import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStegFullført } from "../../amplitude.tracking";
+import { Aareg, IAareg } from "../../components/arbeidsforhold/Aareg";
 
 interface IProps {
   personalia: IPersonalia | null;
+  arbeidsforhold: IAareg[] | null;
 }
 
 export function Soknad(props: IProps) {
@@ -112,6 +114,8 @@ export function Soknad(props: IProps) {
             <Personalia personalia={props.personalia} />
           </div>
         )}
+
+        {props.arbeidsforhold && <Aareg arbeidsforhold={props.arbeidsforhold} />}
 
         <Section section={currentSection} />
 

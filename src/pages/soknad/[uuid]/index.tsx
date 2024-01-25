@@ -13,15 +13,18 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
 import { getPersonalia } from "../../../api/personalia-api";
+import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
+import { IAareg } from "../../../components/arbeidsforhold/Aareg";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
+  arbeidsforhold: IAareg[] | null;
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -31,6 +34,7 @@ export async function getServerSideProps(
       props: {
         soknadState: mockNeste,
         personalia: mockPersonalia,
+        arbeidsforhold: [],
         errorCode: null,
       },
     };
@@ -50,11 +54,13 @@ export async function getServerSideProps(
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
+  let arbeidsforhold = null;
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
@@ -72,6 +78,10 @@ export async function getServerSideProps(
     soknadStatus = await soknadStatusResponse.json();
   }
 
+  if (arbeidsforholdResponse.ok) {
+    arbeidsforhold = await arbeidsforholdResponse.json();
+  }
+
   if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
     return {
       redirect: {
@@ -86,12 +96,13 @@ export async function getServerSideProps(
       soknadState,
       personalia,
       errorCode,
+      arbeidsforhold,
     },
   };
 }
 
 export default function SoknadPage(props: IProps) {
-  const { errorCode, soknadState, personalia } = props;
+  const { errorCode, soknadState, personalia, arbeidsforhold } = props;
 
   if (errorCode || !soknadState) {
     return (
@@ -106,7 +117,7 @@ export default function SoknadPage(props: IProps) {
   return (
     <QuizProvider initialState={soknadState}>
       <ValidationProvider>
-        <Soknad personalia={personalia} />
+        <Soknad personalia={personalia} arbeidsforhold={arbeidsforhold} />
       </ValidationProvider>
     </QuizProvider>
   );
