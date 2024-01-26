@@ -19,16 +19,19 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { useUserInformation } from "../../context/user-information-context";
+import { Aareg } from "./Aareg";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
 function ArbeidsforholdComponent(
   props: IFaktum<IQuizGeneratorFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
+  const { arbeidsforhold } = useUserInformation();
   const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
@@ -71,10 +74,12 @@ function ArbeidsforholdComponent(
       <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
+      {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
+
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
-          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId,
         );
 
         return (
@@ -122,7 +127,6 @@ function ArbeidsforholdComponent(
           </div>
         );
       })}
-
       <Button
         variant="secondary"
         className={"generator-faktum__add-button"}
@@ -144,7 +148,7 @@ export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
 
 export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
-    (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet"
+    (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet",
   )?.svar as IQuizPeriodeFaktumAnswerType;
   if (!varighetFaktum) return <></>;
 

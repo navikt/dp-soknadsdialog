@@ -21,8 +21,6 @@ import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStegFullført } from "../../amplitude.tracking";
-import { Aareg } from "../../components/arbeidsforhold/Aareg";
-import { useUserInformation } from "../../context/user-information-context";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -33,7 +31,6 @@ export function Soknad(props: IProps) {
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
   const { soknadState, isError, isLoading } = useQuiz();
-  const { arbeidsforhold } = useUserInformation();
 
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
@@ -116,8 +113,6 @@ export function Soknad(props: IProps) {
             <Personalia personalia={props.personalia} />
           </div>
         )}
-
-        {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
 
         <Section section={currentSection} />
 

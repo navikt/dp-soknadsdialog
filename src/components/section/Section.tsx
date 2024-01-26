@@ -12,12 +12,14 @@ interface IProps {
   showAllTexts?: boolean;
 }
 
+// {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
+
 export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
   const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);
   const firstUnansweredIndex = props.section.fakta.findIndex(
-    (faktum) => faktum.id === firstUnansweredFaktum?.id
+    (faktum) => faktum.id === firstUnansweredFaktum?.id,
   );
 
   if (!props.section.beskrivendeId) {
