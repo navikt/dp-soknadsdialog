@@ -1,6 +1,6 @@
 import { logRequestError } from "../error.logger";
 
-export async function getArbeidsforhold(onBehalfOfToken: string) {
+export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/arbeidsforhold`;
   const response = await fetch(url, {
     method: "GET",
@@ -18,6 +18,5 @@ export async function getArbeidsforhold(onBehalfOfToken: string) {
       status: response.status,
     });
   }
-
   return response;
 }

@@ -1,6 +1,6 @@
 export interface IAareg {
   id: string;
-  organisasjonsnummer: string;
+  organisasjonsnavn: string;
   startdato: string;
   sluttdato?: string;
 }
@@ -10,13 +10,16 @@ export interface IAaregProps {
 }
 
 export function Aareg(props: IAaregProps) {
-  const arbeidsforhold = props.arbeidsforhold;
+  const { arbeidsforhold } = props;
 
   return (
     <ul>
-      {arbeidsforhold.map((forhold) => (
-        <li key={forhold.id}>{forhold.organisasjonsnummer}</li>
-      ))}
+      {arbeidsforhold.map((forhold) => {
+        const text = `${forhold.organisasjonsnavn} (${forhold.startdato} - ${
+          forhold.sluttdato ?? "pågående"
+        })`;
+        return <li key={forhold.id}>{text}</li>;
+      })}
     </ul>
   );
 }

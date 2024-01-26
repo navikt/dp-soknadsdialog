@@ -21,7 +21,7 @@ interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
-  arbeidsforhold: IAareg[] | null;
+  arbeidsforhold: IAareg[];
 }
 
 export async function getServerSideProps(
@@ -55,7 +55,7 @@ export async function getServerSideProps(
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
-  let arbeidsforhold = null;
+  let arbeidsforhold = [];
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
@@ -117,7 +117,7 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <UserInformationProvider initialState={arbeidsforhold}>
+      <UserInformationProvider initialState={{ arbeidsforhold }}>
         <ValidationProvider>
           <Soknad personalia={personalia} />
         </ValidationProvider>
