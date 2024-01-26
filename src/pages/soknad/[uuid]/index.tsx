@@ -15,6 +15,7 @@ import ErrorPage from "../../_error";
 import { getPersonalia } from "../../../api/personalia-api";
 import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
 import { IAareg } from "../../../components/arbeidsforhold/Aareg";
+import { UserInformationProvider } from "../../../context/user-information-context";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -104,7 +105,7 @@ export async function getServerSideProps(
 export default function SoknadPage(props: IProps) {
   const { errorCode, soknadState, personalia, arbeidsforhold } = props;
 
-  if (errorCode || !soknadState) {
+  if (errorCode || !soknadState || !arbeidsforhold) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -116,9 +117,11 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <ValidationProvider>
-        <Soknad personalia={personalia} arbeidsforhold={arbeidsforhold} />
-      </ValidationProvider>
+      <UserInformationProvider initialState={arbeidsforhold}>
+        <ValidationProvider>
+          <Soknad personalia={personalia} />
+        </ValidationProvider>
+      </UserInformationProvider>
     </QuizProvider>
   );
 }

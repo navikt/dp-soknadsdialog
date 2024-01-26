@@ -21,11 +21,11 @@ import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStegFullført } from "../../amplitude.tracking";
-import { Aareg, IAareg } from "../../components/arbeidsforhold/Aareg";
+import { Aareg } from "../../components/arbeidsforhold/Aareg";
+import { useUserInformation } from "../../context/user-information-context";
 
 interface IProps {
   personalia: IPersonalia | null;
-  arbeidsforhold: IAareg[] | null;
 }
 
 export function Soknad(props: IProps) {
@@ -33,6 +33,8 @@ export function Soknad(props: IProps) {
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
   const { soknadState, isError, isLoading } = useQuiz();
+  const arbeidsforhold = useUserInformation();
+
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
@@ -115,7 +117,7 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        {props.arbeidsforhold && <Aareg arbeidsforhold={props.arbeidsforhold} />}
+        {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
 
         <Section section={currentSection} />
 

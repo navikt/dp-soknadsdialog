@@ -5,7 +5,7 @@ export interface IAareg {
   sluttdato?: string;
 }
 
-interface IAaregProps {
+export interface IAaregProps {
   arbeidsforhold: IAareg[];
 }
 
