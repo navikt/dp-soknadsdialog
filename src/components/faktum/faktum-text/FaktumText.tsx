@@ -29,7 +29,7 @@ export function FaktumTextComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked, soknadState } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
 
@@ -50,6 +50,10 @@ export function FaktumTextComponent(
       saveFaktum(inputValue);
     }
   }, [debouncedText]);
+
+  useEffect(() => {
+    setCurrentAnswer(faktum.svar ?? "");
+  }, [soknadState]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
