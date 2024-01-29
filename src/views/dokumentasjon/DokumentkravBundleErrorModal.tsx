@@ -1,6 +1,6 @@
 import { BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { useSanity } from "../../context/sanity-context";
@@ -28,12 +28,6 @@ export function DokumentkravBundleErrorModal({
   const [savingSvarError, setSavingSvarError] = useState(false);
   const [saveDokumentkravSvar, , saveDokumentkravSvarError] =
     usePutRequest<IDokumentkravSvarBody>("documentation/svar");
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   async function sendDocumentsLater() {
     setIsSavingSvar(true);
@@ -66,12 +60,10 @@ export function DokumentkravBundleErrorModal({
     <>
       <Modal
         className="modal-container modal-container--error"
-        closeButton={false}
         onClose={() => toggleVisibility(false)}
         open={isOpen}
-        shouldCloseOnOverlayClick={false}
       >
-        <Modal.Content>
+        <Modal.Body>
           <Heading size={"medium"} spacing>
             {getAppText("dokumentkrav.bundle-error-modal.tittel")}
           </Heading>
@@ -93,7 +85,7 @@ export function DokumentkravBundleErrorModal({
               {getAppText("dokumentkrav.bundle-error-modal.knapp.send-senere")}
             </Button>
           </nav>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
 
       {savingSvarError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}

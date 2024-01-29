@@ -24,7 +24,7 @@ export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
 function ArbeidsforholdComponent(
   props: IFaktum<IQuizGeneratorFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const router = useRouter();
   const { faktum } = props;
@@ -37,12 +37,6 @@ function ArbeidsforholdComponent(
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const currentSection = soknadState.seksjoner[sectionIndex];
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
@@ -74,7 +68,7 @@ function ArbeidsforholdComponent(
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
-          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId,
         );
 
         return (
@@ -98,11 +92,10 @@ function ArbeidsforholdComponent(
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
-              shouldCloseOnOverlayClick={false}
-              shouldCloseOnEsc={!datePickerIsOpen}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
+              closeOnBackdropClick={!datePickerIsOpen}
             >
-              <Modal.Content>
+              <Modal.Body>
                 <Heading size={"large"} spacing>
                   {getAppText("arbeidsforhold.knapp.legg-til")}
                 </Heading>
@@ -117,7 +110,7 @@ function ArbeidsforholdComponent(
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
-              </Modal.Content>
+              </Modal.Body>
             </Modal>
           </div>
         );
@@ -144,7 +137,7 @@ export function getArbeidsforholdName(arbeidsforhold: QuizFaktum[]): string {
 
 export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
-    (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet"
+    (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet",
   )?.svar as IQuizPeriodeFaktumAnswerType;
   if (!varighetFaktum) return <></>;
 

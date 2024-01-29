@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Button, Heading, Modal } from "@navikt/ds-react";
+import Link from "next/link";
+import { useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
@@ -12,21 +12,10 @@ export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
   const { getAppText } = useSanity();
   const [navigating, setNavigating] = useState(false);
 
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
-
   return (
-    <Modal
-      className="modal-container"
-      open={isOpen}
-      onClose={handleClose}
-      closeButton={true}
-      shouldCloseOnOverlayClick={true}
-    >
-      <Modal.Content>
+    <Modal className="modal-container" open={isOpen} onClose={handleClose} closeOnBackdropClick>
+      <Modal.Header closeButton />
+      <Modal.Body>
         <Heading size={"medium"} spacing>
           {getAppText("fortsett-soknad-senere.modal.tittel")}
         </Heading>
@@ -38,7 +27,7 @@ export function ContinueLaterModal({ isOpen, handleClose }: IProps) {
             {getAppText("fortsett-soknad-senere.modal.knapp.til-mine-dagpenger")}
           </Button>
         </Link>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }

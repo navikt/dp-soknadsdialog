@@ -1,7 +1,7 @@
 import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { useUuid } from "../../hooks/useUuid";
@@ -23,12 +23,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   function closeModal() {
     if (deleteProsessStatus === "error") {
@@ -54,10 +48,8 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
         className="modal-container"
         open={isOpen && deleteProsessStatus === "success"}
         onClose={() => undefined}
-        closeButton={false}
-        shouldCloseOnOverlayClick={false}
       >
-        <Modal.Content>
+        <Modal.Body>
           <Heading size={"medium"} spacing>
             {getAppText(getDeletedSuccessTitleTextKey(prosessType))}
           </Heading>
@@ -74,16 +66,14 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
             </Button>
           </div>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
       <Modal
         className="modal-container"
         open={isOpen && deleteProsessStatus !== "success"}
         onClose={closeModal}
-        closeButton={true}
-        shouldCloseOnOverlayClick={true}
       >
-        <Modal.Content>
+        <Modal.Body>
           <Heading size={"medium"} spacing>
             {getAppText(getTitleTextKey(prosessType))}
           </Heading>
@@ -128,7 +118,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               </Button>
             </div>
           )}
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
     </>
   );
