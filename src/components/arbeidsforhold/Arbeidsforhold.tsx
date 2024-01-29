@@ -1,4 +1,4 @@
-import { BodyShort, Button, Detail, Heading, Label, Modal, Select } from "@navikt/ds-react";
+import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { forwardRef, Ref, useEffect } from "react";
@@ -21,6 +21,7 @@ import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { useUserInformation } from "../../context/user-information-context";
 import { Aareg } from "./Aareg";
+import { FyllUt } from "./FyllUt";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -30,7 +31,7 @@ function ArbeidsforholdComponent(
 ) {
   const router = useRouter();
   const { faktum } = props;
-  const { isLoading, soknadState, saveFaktumToQuiz } = useQuiz();
+  const { isLoading, soknadState } = useQuiz();
   const { arbeidsforhold } = useUserInformation();
   const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
@@ -67,10 +68,6 @@ function ArbeidsforholdComponent(
     } else {
       addNewGeneratorAnswer(faktum);
     }
-  }
-
-  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    saveFaktumToQuiz(faktum, event.target.value);
   }
 
   return (
@@ -116,31 +113,9 @@ function ArbeidsforholdComponent(
                   {getAppText("arbeidsforhold.knapp.legg-til")}
                 </Heading>
 
-                {fakta.map((faktum) => {
-                  if (
-                    faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-                    arbeidsforhold?.length
-                  ) {
-                    return (
-                      <>
-                        <Select
-                          label="Velg arbeidsgiver"
-                          onChange={(event) => selectArbeidsforhold(faktum, event)}
-                        >
-                          <option value={undefined}></option>
-                          {arbeidsforhold.map((forhold) => (
-                            <option value={forhold.organisasjonsnavn} key={forhold.id}>
-                              {forhold.organisasjonsnavn}
-                            </option>
-                          ))}
-                        </Select>
-
-                        <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-                      </>
-                    );
-                  }
-                  return <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />;
-                })}
+                <FyllUt fakta={fakta}>
+                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
+                </FyllUt>
 
                 <FetchIndicator isLoading={isLoading} />
 
