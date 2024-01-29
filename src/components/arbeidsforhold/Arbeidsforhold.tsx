@@ -1,4 +1,4 @@
-import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
+import { BodyShort, Button, Detail, Heading, Label, Modal, Select } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { forwardRef, Ref, useEffect } from "react";
@@ -30,7 +30,7 @@ function ArbeidsforholdComponent(
 ) {
   const router = useRouter();
   const { faktum } = props;
-  const { isLoading, soknadState } = useQuiz();
+  const { isLoading, soknadState, saveFaktumToQuiz } = useQuiz();
   const { arbeidsforhold } = useUserInformation();
   const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
@@ -67,6 +67,10 @@ function ArbeidsforholdComponent(
     } else {
       addNewGeneratorAnswer(faktum);
     }
+  }
+
+  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
+    saveFaktumToQuiz(faktum, event.target.value);
   }
 
   return (
@@ -111,9 +115,32 @@ function ArbeidsforholdComponent(
                 <Heading size={"large"} spacing>
                   {getAppText("arbeidsforhold.knapp.legg-til")}
                 </Heading>
-                {fakta.map((faktum) => (
-                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-                ))}
+
+                {fakta.map((faktum) => {
+                  if (
+                    faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
+                    arbeidsforhold?.length
+                  ) {
+                    return (
+                      <>
+                        <Select
+                          label="Velg arbeidsgiver"
+                          onChange={(event) => selectArbeidsforhold(faktum, event)}
+                        >
+                          <option value={undefined}></option>
+                          {arbeidsforhold.map((forhold) => (
+                            <option value={forhold.organisasjonsnavn} key={forhold.id}>
+                              {forhold.organisasjonsnavn}
+                            </option>
+                          ))}
+                        </Select>
+
+                        <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
+                      </>
+                    );
+                  }
+                  return <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />;
+                })}
 
                 <FetchIndicator isLoading={isLoading} />
 
