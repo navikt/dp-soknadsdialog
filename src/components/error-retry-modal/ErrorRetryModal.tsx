@@ -62,9 +62,12 @@ export function ErrorRetryModal(props: IProps) {
       open={errorsCount <= 2}
     >
       <Modal.Body>
-        <Heading size={"medium"} spacing>
-          {getAppText("teknisk-feil.modal.tittel")}
-        </Heading>
+        <Modal.Header closeButton={false} className="modal-container__custom-header">
+          <Heading size={"medium"} spacing>
+            {getAppText("teknisk-feil.modal.tittel")}
+          </Heading>
+        </Modal.Header>
+
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <Button
           className={styles.errorRetryModalButton}

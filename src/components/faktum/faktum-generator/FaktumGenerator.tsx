@@ -49,7 +49,7 @@ const StandardGenerator = forwardRef(StandardGeneratorComponent);
 
 function StandardGeneratorComponent(
   props: IFaktum<IQuizGeneratorFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -74,7 +74,7 @@ function StandardGeneratorComponent(
       {props.faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
-          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId,
         );
 
         return (
@@ -92,12 +92,11 @@ function StandardGeneratorComponent(
             </GeneratorFaktumCard>
 
             <Modal
-              shouldCloseOnOverlayClick={false}
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
-              <Modal.Content>
+              <Modal.Body>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
@@ -109,7 +108,7 @@ function StandardGeneratorComponent(
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
-              </Modal.Content>
+              </Modal.Body>
             </Modal>
           </div>
         );

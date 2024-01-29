@@ -1,4 +1,4 @@
-import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { Alert, Button, Modal } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -46,14 +46,12 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
     <>
       <Modal
         className="modal-container"
+        header={{ heading: getAppText(getDeletedSuccessTitleTextKey(prosessType)) }}
         open={isOpen && deleteProsessStatus === "success"}
         onClose={() => undefined}
+        closeOnBackdropClick
       >
         <Modal.Body>
-          <Heading size={"medium"} spacing>
-            {getAppText(getDeletedSuccessTitleTextKey(prosessType))}
-          </Heading>
-
           <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
 
           <div className="modal-container__button-container">
@@ -70,14 +68,12 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
       </Modal>
       <Modal
         className="modal-container"
+        header={{ heading: getAppText(getTitleTextKey(prosessType)) }}
         open={isOpen && deleteProsessStatus !== "success"}
         onClose={closeModal}
+        closeOnBackdropClick
       >
         <Modal.Body>
-          <Heading size={"medium"} spacing>
-            {getAppText(getTitleTextKey(prosessType))}
-          </Heading>
-
           <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
 
           {deleteProsessStatus === "error" && (
@@ -96,7 +92,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
                     {getAppText(getDeleteErrorPrimaryButtonTextKey(prosessType))}
                   </Button>
                 </Link>
-
                 <Button variant={"tertiary"} onClick={closeModal}>
                   {getAppText(getDeleteErrorSecondaryButtonTextKey(prosessType))}
                 </Button>

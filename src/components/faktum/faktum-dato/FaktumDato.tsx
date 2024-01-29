@@ -1,4 +1,4 @@
-import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from "@navikt/ds-react";
+import { DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { Ref, forwardRef, useEffect, useState } from "react";
@@ -25,7 +25,7 @@ function FaktumDatoComponent(
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { setDatePickerIsOpen, unansweredFaktumId } = useValidation();
+  const { unansweredFaktumId } = useValidation();
   const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
     useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
@@ -46,7 +46,7 @@ function FaktumDatoComponent(
     }
   }, [faktum]);
 
-  const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
+  const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
       const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
@@ -60,13 +60,6 @@ function FaktumDatoComponent(
       }
     },
   });
-
-  // Use to prevent Escape key press to close both datepicker and modal simultaneously
-  // This is a temporaty fix for ds-react from version 2.0.9
-  // Design system team are working on a better solution
-  useEffect(() => {
-    setDatePickerIsOpen(!!datepickerProps.open);
-  }, [datepickerProps]);
 
   function saveFaktum(value: string | null) {
     if (value === "") {
@@ -87,14 +80,14 @@ function FaktumDatoComponent(
 
   return (
     <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <UNSAFE_DatePicker
+      <DatePicker
         {...datepickerProps}
         dropdownCaption
         fromDate={DATEPICKER_MIN_DATE}
         toDate={DATEPICKER_MAX_DATE}
         strategy="fixed"
       >
-        <UNSAFE_DatePicker.Input
+        <DatePicker.Input
           {...inputProps}
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
@@ -103,7 +96,7 @@ function FaktumDatoComponent(
           disabled={isLocked}
           autoComplete="off"
         />
-      </UNSAFE_DatePicker>
+      </DatePicker>
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}

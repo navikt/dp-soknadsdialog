@@ -63,10 +63,12 @@ export function DokumentkravBundleErrorModal({
         onClose={() => toggleVisibility(false)}
         open={isOpen}
       >
-        <Modal.Body>
+        <Modal.Header closeButton={false} className="modal-container--custom-header">
           <Heading size={"medium"} spacing>
             {getAppText("dokumentkrav.bundle-error-modal.tittel")}
           </Heading>
+        </Modal.Header>
+        <Modal.Body>
           <BodyLong>{getAppText("dokumentkrav.bundle-error-modal.beskrivelse")}</BodyLong>
 
           <ul>

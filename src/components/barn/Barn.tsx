@@ -69,7 +69,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
               open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
-              <Modal.Header closeButton />
+              <Modal.Header closeButton className="modal-container__custom-header" />
               <Modal.Body>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />

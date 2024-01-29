@@ -29,7 +29,7 @@ function ArbeidsforholdComponent(
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
-  const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
+  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -91,14 +91,12 @@ function ArbeidsforholdComponent(
 
             <Modal
               className="modal-container modal-container--generator"
+              header={{ heading: getAppText("arbeidsforhold.knapp.legg-til") }}
               open={activeIndex === svarIndex}
               onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
-              closeOnBackdropClick={!datePickerIsOpen}
+              closeOnBackdropClick
             >
               <Modal.Body>
-                <Heading size={"large"} spacing>
-                  {getAppText("arbeidsforhold.knapp.legg-til")}
-                </Heading>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
