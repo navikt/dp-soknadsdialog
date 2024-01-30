@@ -47,9 +47,8 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
       <Modal
         className="modal-container"
         header={{ heading: getAppText(getDeletedSuccessTitleTextKey(prosessType)) }}
-        open={isOpen && deleteProsessStatus === "success"}
-        onClose={() => undefined}
-        closeOnBackdropClick
+        open={deleteProsessStatus === "success"}
+        onClose={() => window.location.assign("https://www.nav.no/arbeid/dagpenger/mine-dagpenger")}
       >
         <Modal.Body>
           <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
@@ -75,7 +74,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
       >
         <Modal.Body>
           <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
-
           {deleteProsessStatus === "error" && (
             <>
               <Alert variant="error" className={styles.alertContainer}>
