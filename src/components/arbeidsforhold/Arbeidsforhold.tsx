@@ -74,7 +74,7 @@ function ArbeidsforholdComponent(
       <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
-      {arbeidsforhold?.length && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />}
+      {arbeidsforhold?.length > 0 && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />}
 
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
