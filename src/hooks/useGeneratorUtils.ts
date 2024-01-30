@@ -5,6 +5,7 @@ import { useQuiz } from "../context/quiz-context";
 interface IGeneratorUtils {
   activeIndex: number | undefined;
   toggleActiveGeneratorAnswer: (index: number) => void;
+  closeGeneratorAnswer: () => void;
   addNewGeneratorAnswer: (faktum: IQuizGeneratorFaktum) => void;
   deleteGeneratorAnswer: (faktum: IQuizGeneratorFaktum, answerIndex: number) => void;
 }
@@ -27,6 +28,10 @@ export function useGeneratorUtils(): IGeneratorUtils {
     saveGeneratorFaktumToQuiz(faktum, [...existingAnswers, []]);
   }
 
+  function closeGeneratorAnswer() {
+    setActiveIndex(undefined);
+  }
+
   function deleteGeneratorAnswer(faktum: IQuizGeneratorFaktum, answerIndex: number) {
     if (faktum.svar) {
       // Save null as answer when deleting last genetor answer.
@@ -47,5 +52,6 @@ export function useGeneratorUtils(): IGeneratorUtils {
     addNewGeneratorAnswer,
     deleteGeneratorAnswer,
     toggleActiveGeneratorAnswer,
+    closeGeneratorAnswer,
   };
 }
