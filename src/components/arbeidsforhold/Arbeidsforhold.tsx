@@ -14,7 +14,7 @@ import {
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
 } from "../../types/quiz.types";
-import { Faktum, IFaktum } from "../faktum/Faktum";
+import { IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { FormattedDate } from "../FormattedDate";
@@ -33,7 +33,7 @@ function ArbeidsforholdComponent(
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { arbeidsforhold } = useUserInformation();
-  const { unansweredFaktumId, setUnansweredFaktumId, datePickerIsOpen } = useValidation();
+  const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
@@ -41,12 +41,6 @@ function ArbeidsforholdComponent(
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const currentSection = soknadState.seksjoner[sectionIndex];
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
@@ -103,19 +97,12 @@ function ArbeidsforholdComponent(
 
             <Modal
               className="modal-container modal-container--generator"
+              header={{ heading: getAppText("arbeidsforhold.knapp.legg-til") }}
               open={activeIndex === svarIndex}
-              shouldCloseOnOverlayClick={false}
-              shouldCloseOnEsc={!datePickerIsOpen}
-              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
+              closeOnBackdropClick
             >
-              <Modal.Content>
-                <Heading size={"large"} spacing>
-                  {getAppText("arbeidsforhold.knapp.legg-til")}
-                </Heading>
-
-                <FyllUt fakta={fakta}>
-                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-                </FyllUt>
+              <Modal.Body>
+                <FyllUt fakta={fakta} />
 
                 <FetchIndicator isLoading={isLoading} />
 
@@ -124,7 +111,7 @@ function ArbeidsforholdComponent(
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
-              </Modal.Content>
+              </Modal.Body>
             </Modal>
           </div>
         );

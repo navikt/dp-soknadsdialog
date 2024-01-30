@@ -1,5 +1,4 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
-import { useEffect } from "react";
+import { Button, Modal } from "@navikt/ds-react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
@@ -16,25 +15,15 @@ export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
   const { faktumType, isOpen, handleClose } = props;
   const { isLoading } = useQuiz();
 
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
-
   return (
     <Modal
       className="modal-container"
+      header={{ heading: getAppText(`slett-faktum-${faktumType}.modal.tittel`) }}
       open={isOpen}
       onClose={handleClose}
-      closeButton={true}
-      shouldCloseOnOverlayClick={true}
+      closeOnBackdropClick
     >
-      <Modal.Content>
-        <Heading size={"medium"} spacing>
-          {getAppText(`slett-faktum-${faktumType}.modal.tittel`)}
-        </Heading>
-
+      <Modal.Body>
         <p>{getAppText(`slett-faktum-${faktumType}.modal.beskrivelse`)}</p>
 
         <nav className="modal-container__button-container">
@@ -45,7 +34,7 @@ export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
             {getAppText(`slett-faktum-${faktumType}.modal.knapp.avbryt`)}
           </Button>
         </nav>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }

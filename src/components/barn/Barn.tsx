@@ -24,12 +24,6 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
 
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
-
   // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
     if (faktum?.svar) {
@@ -47,7 +41,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
-          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId
+          (faktum: QuizFaktum) => faktum.id === unansweredFaktumId,
         );
 
         return (
@@ -73,10 +67,9 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
-              shouldCloseOnOverlayClick={false}
-              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
-              <Modal.Content>
+              <Modal.Header closeButton className="modal-container__custom-header" />
+              <Modal.Body>
                 {fakta.map((faktum) => (
                   <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
                 ))}
@@ -88,7 +81,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
-              </Modal.Content>
+              </Modal.Body>
             </Modal>
           </div>
         );
