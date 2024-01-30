@@ -51,7 +51,7 @@ function FaktumPeriodeComponent(
   const faktumTextTil = getAppText(`${faktum.beskrivendeId}.til`);
 
   useEffect(() => {
-    if (!isFirstRender) {
+    if (!isFirstRender && JSON.stringify(faktum.svar) !== JSON.stringify(currentAnswer)) {
       saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);

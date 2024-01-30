@@ -2,9 +2,9 @@ import { Select } from "@navikt/ds-react";
 import { useQuiz } from "../../context/quiz-context";
 import { useUserInformation } from "../../context/user-information-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
-import { Faktum } from "../faktum/Faktum";
+import { Faktum } from "./Faktum";
 import { useEffect, useState } from "react";
-import { IArbeidsforhold } from "./ArbeidsforholdList";
+import { IArbeidsforhold } from "../arbeidsforhold/ArbeidsforholdList";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -42,6 +42,7 @@ export function FaktumWrapper(props: IProps) {
       if (currentSelectedArbeidsforhold.sluttdato) {
         periode.tom = currentSelectedArbeidsforhold.sluttdato;
       }
+
       saveFaktumToQuiz(varighet, periode);
     }
   }, [fakta]);
@@ -50,7 +51,7 @@ export function FaktumWrapper(props: IProps) {
     <>
       {fakta.map((faktum) => {
         return (
-          <>
+          <div key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
               arbeidsforhold?.length && (
                 <Select
@@ -66,8 +67,8 @@ export function FaktumWrapper(props: IProps) {
                 </Select>
               )}
 
-            <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-          </>
+            <Faktum faktum={faktum} readonly={props.readonly} />
+          </div>
         );
       })}
     </>

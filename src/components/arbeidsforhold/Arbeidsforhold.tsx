@@ -21,7 +21,7 @@ import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { useUserInformation } from "../../context/user-information-context";
 import { ArbeidsforholdList } from "./ArbeidsforholdList";
-import { FaktumWrapper } from "./FaktumWrapper";
+import { FaktumWrapper } from "../faktum/FaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
