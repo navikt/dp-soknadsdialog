@@ -16,13 +16,11 @@ export function ExitSoknad() {
       <Button variant="tertiary" onClick={() => setDeleteSoknadModalOpen(!deleteSoknadModalOpen)}>
         {getAppText("soknad.knapp.slett")}
       </Button>
-
       <DeleteProsessModal
         prosessType={"Dagpenger"}
         isOpen={deleteSoknadModalOpen}
         handleClose={() => setDeleteSoknadModalOpen(false)}
       />
-
       <ContinueLaterModal
         isOpen={continueLaterModalOpen}
         handleClose={() => setContinueLaterModalOpen(false)}

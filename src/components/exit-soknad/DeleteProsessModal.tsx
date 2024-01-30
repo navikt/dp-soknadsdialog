@@ -1,7 +1,7 @@
-import { Alert, Button, Heading, Modal } from "@navikt/ds-react";
+import { Alert, Button, Modal } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { useUuid } from "../../hooks/useUuid";
@@ -23,12 +23,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
   const { getAppText } = useSanity();
   const [deleteProsess, deleteProsessStatus, , resetDeleteProsessError] =
     useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
-
-  useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-  }, []);
 
   function closeModal() {
     if (deleteProsessStatus === "error") {
@@ -52,16 +46,11 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
     <>
       <Modal
         className="modal-container"
-        open={isOpen && deleteProsessStatus === "success"}
-        onClose={() => undefined}
-        closeButton={false}
-        shouldCloseOnOverlayClick={false}
+        header={{ heading: getAppText(getDeletedSuccessTitleTextKey(prosessType)) }}
+        open={deleteProsessStatus === "success"}
+        onClose={() => window.location.assign("https://www.nav.no/arbeid/dagpenger/mine-dagpenger")}
       >
-        <Modal.Content>
-          <Heading size={"medium"} spacing>
-            {getAppText(getDeletedSuccessTitleTextKey(prosessType))}
-          </Heading>
-
+        <Modal.Body>
           <p>{getAppText(getDeletedSuccessDescriptionTextKey(prosessType))}</p>
 
           <div className="modal-container__button-container">
@@ -74,22 +63,17 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               {getAppText(getDeletedSuccessSecondaryButtonTextKey(prosessType))}
             </Button>
           </div>
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
       <Modal
         className="modal-container"
+        header={{ heading: getAppText(getTitleTextKey(prosessType)) }}
         open={isOpen && deleteProsessStatus !== "success"}
         onClose={closeModal}
-        closeButton={true}
-        shouldCloseOnOverlayClick={true}
+        closeOnBackdropClick
       >
-        <Modal.Content>
-          <Heading size={"medium"} spacing>
-            {getAppText(getTitleTextKey(prosessType))}
-          </Heading>
-
+        <Modal.Body>
           <p>{getAppText(getDescriptionTextKey(prosessType))}</p>
-
           {deleteProsessStatus === "error" && (
             <>
               <Alert variant="error" className={styles.alertContainer}>
@@ -106,7 +90,6 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
                     {getAppText(getDeleteErrorPrimaryButtonTextKey(prosessType))}
                   </Button>
                 </Link>
-
                 <Button variant={"tertiary"} onClick={closeModal}>
                   {getAppText(getDeleteErrorSecondaryButtonTextKey(prosessType))}
                 </Button>
@@ -128,7 +111,7 @@ export function DeleteProsessModal({ isOpen, handleClose, prosessType }: IProps)
               </Button>
             </div>
           )}
-        </Modal.Content>
+        </Modal.Body>
       </Modal>
     </>
   );

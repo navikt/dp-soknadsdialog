@@ -18,10 +18,6 @@ export function ErrorRetryModal(props: IProps) {
   const [nagivating, setNagivating] = useState(false);
 
   useEffect(() => {
-    if (Modal.setAppElement) {
-      Modal.setAppElement("#__next");
-    }
-
     const localStorageErrorsCount = localStorage.getItem("errorsCount");
     if (localStorageErrorsCount) {
       setErrorsCount(parseInt(localStorageErrorsCount));
@@ -64,13 +60,14 @@ export function ErrorRetryModal(props: IProps) {
         return;
       }}
       open={errorsCount <= 2}
-      closeButton={false}
-      shouldCloseOnOverlayClick={false}
     >
-      <Modal.Content>
-        <Heading size={"medium"} spacing>
-          {getAppText("teknisk-feil.modal.tittel")}
-        </Heading>
+      <Modal.Body>
+        <Modal.Header closeButton={false} className="modal-container__custom-header">
+          <Heading size={"medium"} spacing>
+            {getAppText("teknisk-feil.modal.tittel")}
+          </Heading>
+        </Modal.Header>
+
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <Button
           className={styles.errorRetryModalButton}
@@ -80,7 +77,7 @@ export function ErrorRetryModal(props: IProps) {
         >
           {getAppText("teknisk-feil.modal.knapp.prov-paa-nytt")}
         </Button>
-      </Modal.Content>
+      </Modal.Body>
     </Modal>
   );
 }
