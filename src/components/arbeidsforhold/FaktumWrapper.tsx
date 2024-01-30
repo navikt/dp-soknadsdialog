@@ -11,7 +11,7 @@ interface IProps {
   readonly?: boolean;
 }
 
-export function PrefilledFaktum(props: IProps) {
+export function FaktumWrapper(props: IProps) {
   const { fakta } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { arbeidsforhold } = useUserInformation();

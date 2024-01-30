@@ -21,7 +21,7 @@ import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { useUserInformation } from "../../context/user-information-context";
 import { ArbeidsforholdList } from "./ArbeidsforholdList";
-import { PrefilledFaktum } from "./PrefilledFaktum";
+import { FaktumWrapper } from "./FaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -108,7 +108,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <PrefilledFaktum fakta={fakta} />
+                <FaktumWrapper fakta={fakta} />
 
                 <FetchIndicator isLoading={isLoading} />
 
