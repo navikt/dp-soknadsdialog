@@ -33,7 +33,7 @@ function FaktumPeriodeComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked, soknadState } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
@@ -73,6 +73,14 @@ function FaktumPeriodeComponent(
 
     return undefined;
   }
+
+  useEffect(() => {
+    if (faktum.svar) {
+      const from = new Date(faktum.svar.fom);
+      const to = faktum.svar.tom ? new Date(faktum.svar.tom) : undefined;
+      setSelected({ from, to });
+    }
+  }, [soknadState]);
 
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
