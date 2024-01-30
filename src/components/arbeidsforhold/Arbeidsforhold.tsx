@@ -31,8 +31,13 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
-  const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
-    useGeneratorUtils();
+  const {
+    addNewGeneratorAnswer,
+    deleteGeneratorAnswer,
+    toggleActiveGeneratorAnswer,
+    activeIndex,
+    closeGeneratorAnswer,
+  } = useGeneratorUtils();
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
@@ -93,6 +98,7 @@ function ArbeidsforholdComponent(
               className="modal-container modal-container--generator"
               header={{ heading: getAppText("arbeidsforhold.knapp.legg-til") }}
               open={activeIndex === svarIndex}
+              onClose={closeGeneratorAnswer}
               closeOnBackdropClick
             >
               <Modal.Body>
@@ -103,7 +109,7 @@ function ArbeidsforholdComponent(
                 <FetchIndicator isLoading={isLoading} />
 
                 <div className={"modal-container__button-container"}>
-                  <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                  <Button onClick={closeGeneratorAnswer}>
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>

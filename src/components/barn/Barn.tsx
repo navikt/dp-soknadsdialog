@@ -21,8 +21,13 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
   const { isLoading } = useQuiz();
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
-    useGeneratorUtils();
+  const {
+    addNewGeneratorAnswer,
+    deleteGeneratorAnswer,
+    toggleActiveGeneratorAnswer,
+    activeIndex,
+    closeGeneratorAnswer,
+  } = useGeneratorUtils();
 
   // Set active index to open modal when adding a new child. Quiz returns an array with 1 faktum after adding a new child.
   useEffect(() => {
@@ -67,6 +72,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
+              onClose={closeGeneratorAnswer}
             >
               <Modal.Header closeButton className="modal-container__custom-header" />
               <Modal.Body>
@@ -77,7 +83,7 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
                 <FetchIndicator isLoading={isLoading} />
 
                 <div className={"modal-container__button-container"}>
-                  <Button onClick={() => toggleActiveGeneratorAnswer(svarIndex)}>
+                  <Button onClick={closeGeneratorAnswer}>
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}
                   </Button>
                 </div>
