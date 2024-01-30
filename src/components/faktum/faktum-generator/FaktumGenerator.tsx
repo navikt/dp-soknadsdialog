@@ -94,7 +94,6 @@ function StandardGeneratorComponent(
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
-              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Body>
                 {fakta.map((faktum) => (

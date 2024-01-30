@@ -67,7 +67,6 @@ function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivEle
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
-              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
             >
               <Modal.Header closeButton className="modal-container__custom-header" />
               <Modal.Body>

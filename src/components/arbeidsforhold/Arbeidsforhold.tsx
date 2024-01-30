@@ -93,7 +93,6 @@ function ArbeidsforholdComponent(
               className="modal-container modal-container--generator"
               header={{ heading: getAppText("arbeidsforhold.knapp.legg-til") }}
               open={activeIndex === svarIndex}
-              onClose={() => toggleActiveGeneratorAnswer(svarIndex)}
               closeOnBackdropClick
             >
               <Modal.Body>
