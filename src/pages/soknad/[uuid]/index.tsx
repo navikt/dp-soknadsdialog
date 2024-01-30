@@ -14,14 +14,14 @@ import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
 import { getPersonalia } from "../../../api/personalia-api";
 import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
-import { IAareg } from "../../../components/arbeidsforhold/Aareg";
+import { IArbeidsforhold } from "../../../components/arbeidsforhold/ArbeidsforholdList";
 import { UserInformationProvider } from "../../../context/user-information-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
-  arbeidsforhold: IAareg[];
+  arbeidsforhold: IArbeidsforhold[];
 }
 
 export async function getServerSideProps(

@@ -1,15 +1,15 @@
-export interface IAareg {
+export interface IArbeidsforhold {
   id: string;
   organisasjonsnavn: string;
   startdato: string;
   sluttdato?: string;
 }
 
-export interface IAaregProps {
-  arbeidsforhold: IAareg[];
+interface IProps {
+  arbeidsforhold: IArbeidsforhold[];
 }
 
-export function Aareg(props: IAaregProps) {
+export function ArbeidsforholdList(props: IProps) {
   const { arbeidsforhold } = props;
 
   return (

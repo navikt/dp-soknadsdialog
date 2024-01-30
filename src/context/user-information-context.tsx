@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, createContext, useState } from "react";
-import type { IAareg } from "../components/arbeidsforhold/Aareg";
+import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
 
-const UserInformationContext = createContext<{ arbeidsforhold: IAareg[] } | null>(null);
+const UserInformationContext = createContext<{ arbeidsforhold: IArbeidsforhold[] } | null>(null);
 
 interface IProps {
-  initialState: { arbeidsforhold: IAareg[] };
+  initialState: { arbeidsforhold: IArbeidsforhold[] };
 }
 
 function UserInformationProvider(props: PropsWithChildren<IProps>) {

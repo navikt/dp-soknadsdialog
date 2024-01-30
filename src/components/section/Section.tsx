@@ -12,8 +12,6 @@ interface IProps {
   showAllTexts?: boolean;
 }
 
-// {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
-
 export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);

@@ -20,8 +20,8 @@ import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { useUserInformation } from "../../context/user-information-context";
-import { Aareg } from "./Aareg";
-import { FyllUt } from "./FyllUt";
+import { ArbeidsforholdList } from "./ArbeidsforholdList";
+import { PrefilledFaktum } from "./PrefilledFaktum";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -74,7 +74,7 @@ function ArbeidsforholdComponent(
       <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
-      {arbeidsforhold?.length && <Aareg arbeidsforhold={arbeidsforhold} />}
+      {arbeidsforhold?.length && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />}
 
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
@@ -108,7 +108,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <FyllUt fakta={fakta} />
+                <PrefilledFaktum fakta={fakta} />
 
                 <FetchIndicator isLoading={isLoading} />
 
