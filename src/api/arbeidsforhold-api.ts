@@ -18,5 +18,6 @@ export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Respon
       status: response.status,
     });
   }
+
   return response;
 }

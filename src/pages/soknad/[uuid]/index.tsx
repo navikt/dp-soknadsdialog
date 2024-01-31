@@ -117,7 +117,7 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <UserInformationProvider initialState={{ arbeidsforhold }}>
+      <UserInformationProvider arbeidsforhold={arbeidsforhold}>
         <ValidationProvider>
           <Soknad personalia={personalia} />
         </ValidationProvider>

@@ -29,7 +29,7 @@ export function FaktumTextComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked, soknadState } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
 
@@ -53,7 +53,7 @@ export function FaktumTextComponent(
 
   useEffect(() => {
     setCurrentAnswer(faktum.svar ?? "");
-  }, [soknadState]);
+  }, [faktum]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
