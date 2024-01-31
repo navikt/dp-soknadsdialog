@@ -18,17 +18,32 @@ export function FaktumWrapper(props: IProps) {
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
+  const [showFaktum, setShowFaktum] = useState<boolean>(true);
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
     const selectedArbeidsforhold = arbeidsforhold.find(
       (forhold) => forhold.id === event.target.value,
     );
 
+    setShowFaktum(true);
+
+    // TODO: Hvis selectedArbeidsforhold er undefined, resett bedriftsnavn og periode
+
     if (!selectedArbeidsforhold) return;
 
     setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
     saveFaktumToQuiz(faktum, selectedArbeidsforhold.organisasjonsnavn);
   }
+
+  useEffect(() => {
+    const bedriftsnavn = fakta.find(
+      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
+    );
+
+    if (bedriftsnavn && !bedriftsnavn.svar && !currentSelectedArbeidsforhold) {
+      setShowFaktum(false);
+    }
+  }, [fakta]);
 
   useEffect(() => {
     const periode: IQuizPeriodeFaktumAnswerType = {
@@ -71,10 +86,11 @@ export function FaktumWrapper(props: IProps) {
                       {forhold.organisasjonsnavn}
                     </option>
                   ))}
+                  <option value={undefined}>Legg til annet arbeidsforhold</option>
                 </Select>
               )}
 
-            <Faktum faktum={faktum} readonly={props.readonly} />
+            {showFaktum && <Faktum faktum={faktum} readonly={props.readonly} />}
           </Fragment>
         );
       })}
