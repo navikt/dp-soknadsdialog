@@ -3,7 +3,7 @@ import { useQuiz } from "../../context/quiz-context";
 import { useUserInformation } from "../../context/user-information-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "./Faktum";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { IArbeidsforhold } from "../arbeidsforhold/ArbeidsforholdList";
 
 interface IProps {
@@ -31,27 +31,34 @@ export function FaktumWrapper(props: IProps) {
   }
 
   useEffect(() => {
+    const periode: IQuizPeriodeFaktumAnswerType = {
+      fom: "",
+    };
+
+    if (currentSelectedArbeidsforhold) {
+      periode.fom = currentSelectedArbeidsforhold.startdato;
+    }
+
+    if (currentSelectedArbeidsforhold?.sluttdato) {
+      periode.tom = currentSelectedArbeidsforhold.sluttdato;
+    }
+
     const varighet = fakta.find(
-      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet" && !faktum.svar,
+      (faktum) =>
+        faktum.beskrivendeId === "faktum.arbeidsforhold.varighet" &&
+        (!faktum.svar || JSON.stringify(faktum.svar) !== JSON.stringify(periode)),
     );
+
     if (currentSelectedArbeidsforhold && varighet) {
-      const periode: IQuizPeriodeFaktumAnswerType = {
-        fom: currentSelectedArbeidsforhold.startdato,
-      };
-
-      if (currentSelectedArbeidsforhold.sluttdato) {
-        periode.tom = currentSelectedArbeidsforhold.sluttdato;
-      }
-
       saveFaktumToQuiz(varighet, periode);
     }
-  }, [fakta]);
+  }, [fakta, currentSelectedArbeidsforhold]);
 
   return (
     <>
       {fakta.map((faktum) => {
         return (
-          <div key={faktum.id}>
+          <Fragment key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
               arbeidsforhold?.length && (
                 <Select
@@ -68,7 +75,7 @@ export function FaktumWrapper(props: IProps) {
               )}
 
             <Faktum faktum={faktum} readonly={props.readonly} />
-          </div>
+          </Fragment>
         );
       })}
     </>

@@ -12,6 +12,8 @@ interface ITimelineItem {
   _key: string;
 }
 
+// TODO: Logger ut advarselen "Invalid value for prop `$$typeof` on <svg> tag"
+
 export function Timeline(props: PortableTextComponentProps<{ elements: ITimelineItem[] }>) {
   return <>{props.value.elements.map(TimelineItem)}</>;
 }
