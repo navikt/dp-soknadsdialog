@@ -15,9 +15,8 @@ export function FaktumWrapper(props: IProps) {
   const { fakta } = props;
   const { saveFaktumToQuiz } = useQuiz();
   const { arbeidsforhold } = useUserInformation();
-  const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
-    IArbeidsforhold | undefined
-  >(undefined);
+  const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] =
+    useState<IArbeidsforhold | null>(null);
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
@@ -27,23 +26,34 @@ export function FaktumWrapper(props: IProps) {
 
     setShowFaktum(true);
 
-    // TODO: Hvis selectedArbeidsforhold er undefined, resett bedriftsnavn og periode
-
-    if (!selectedArbeidsforhold) return;
+    if (!selectedArbeidsforhold) {
+      const varighetFaktum = fakta.find(
+        ({ beskrivendeId }) => beskrivendeId === "faktum.arbeidsforhold.varighet",
+      );
+      if (varighetFaktum) saveFaktumToQuiz(varighetFaktum, null);
+      setCurrentSelectedArbeidsforhold(null);
+      saveFaktumToQuiz(faktum, null);
+      return;
+    }
 
     setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
     saveFaktumToQuiz(faktum, selectedArbeidsforhold.organisasjonsnavn);
   }
 
-  useEffect(() => {
-    const bedriftsnavn = fakta.find(
-      (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
-    );
+  // useEffect(() => {
+  //   const bedriftsnavn = fakta.find(
+  //     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
+  //   );
 
-    if (bedriftsnavn && !bedriftsnavn.svar && !currentSelectedArbeidsforhold) {
-      setShowFaktum(false);
-    }
-  }, [fakta]);
+  //   if (
+  //     arbeidsforhold?.length &&
+  //     bedriftsnavn &&
+  //     !bedriftsnavn.svar &&
+  //     !currentSelectedArbeidsforhold
+  //   ) {
+  //     setShowFaktum(false);
+  //   }
+  // }, [fakta]);
 
   useEffect(() => {
     const periode: IQuizPeriodeFaktumAnswerType = {
@@ -68,25 +78,28 @@ export function FaktumWrapper(props: IProps) {
       saveFaktumToQuiz(varighet, periode);
     }
   }, [fakta, currentSelectedArbeidsforhold]);
-
   return (
     <>
       {fakta.map((faktum) => {
         return (
           <Fragment key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-              arbeidsforhold?.length && (
+              arbeidsforhold?.length > 0 && (
                 <Select
-                  label="Velg arbeidsgiver"
+                  className="mb-10"
+                  label="Velg arbeidsforhold"
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
-                  <option key="undefined" value={undefined}></option>
+                  <option key="undefined" value={undefined}>
+                    Velg arbeidsforhold
+                  </option>
                   {arbeidsforhold.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
                     </option>
                   ))}
-                  <option value={undefined}>Legg til annet arbeidsforhold</option>
+
+                  <option value={undefined}>Legg til annet</option>
                 </Select>
               )}
 

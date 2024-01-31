@@ -19,8 +19,8 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { useUserInformation } from "../../context/user-information-context";
-import { ArbeidsforholdList } from "./ArbeidsforholdList";
+// import { useUserInformation } from "../../context/user-information-context";
+// import { ArbeidsforholdList } from "./ArbeidsforholdList";
 import { FaktumWrapper } from "../faktum/FaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
@@ -32,7 +32,7 @@ function ArbeidsforholdComponent(
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
-  const { arbeidsforhold } = useUserInformation();
+  // const { arbeidsforhold } = useUserInformation();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const {
@@ -74,7 +74,8 @@ function ArbeidsforholdComponent(
       <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
       {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
 
-      {arbeidsforhold?.length > 0 && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />}
+      {/* TODO: Bruk denne når vi skal vise listen med arbeidsforhold i søknaden */}
+      {/* {arbeidsforhold?.length > 0 && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />} */}
 
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
@@ -145,6 +146,7 @@ export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
     (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet",
   )?.svar as IQuizPeriodeFaktumAnswerType;
+
   if (!varighetFaktum) return <></>;
 
   return (
