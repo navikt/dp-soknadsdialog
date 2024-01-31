@@ -1,6 +1,6 @@
-import { Button, Heading, Modal, BodyLong } from "@navikt/ds-react";
+import { BodyLong, Button, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { ErrorTypesEnum } from "../../types/error.types";
 import styles from "./ErrorRetryModal.module.css";
@@ -63,9 +63,7 @@ export function ErrorRetryModal(props: IProps) {
     >
       <Modal.Body>
         <Modal.Header closeButton={false} className="modal-container__custom-header">
-          <Heading size={"medium"} spacing>
-            {getAppText("teknisk-feil.modal.tittel")}
-          </Heading>
+          {getAppText("teknisk-feil.modal.tittel")}
         </Modal.Header>
 
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
