@@ -32,11 +32,12 @@ export function FaktumWrapper(props: IProps) {
     setShowFaktum(true);
     setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
 
-    if (selectedArbeidsforhold) {
-      saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+    if (!selectedArbeidsforhold) {
+      saveFaktumToQuiz(faktum, null);
+      return;
     }
 
-    saveFaktumToQuiz(faktum, null);
+    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
   }
 
   // useEffect(() => {
