@@ -31,7 +31,6 @@ export function Soknad(props: IProps) {
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
   const { soknadState, isError, isLoading } = useQuiz();
-
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
