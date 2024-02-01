@@ -32,7 +32,6 @@ export interface IFaktum<P> {
   faktum: P;
   readonly?: boolean;
   showAllFaktumTexts?: boolean;
-  preFilled?: any;
 }
 
 export interface IFaktumReadOnly<P> {
@@ -43,7 +42,7 @@ export interface IFaktumReadOnly<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
-  const { faktum, readonly, showAllFaktumTexts, preFilled } = props;
+  const { faktum, readonly, showAllFaktumTexts } = props;
   const { soknadState } = useQuiz();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
@@ -100,7 +99,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumTextReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumText ref={faktumRef} faktum={faktum} preFilled={preFilled} />;
+          return <FaktumText ref={faktumRef} faktum={faktum} />;
         }
 
       case "double":

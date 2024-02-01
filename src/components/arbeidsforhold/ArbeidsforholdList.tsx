@@ -12,13 +12,16 @@ interface IProps {
 export function ArbeidsforholdList(props: IProps) {
   const { arbeidsforhold } = props;
 
+  function getArbeidsforholdText(forhold: IArbeidsforhold) {
+    return `${forhold.organisasjonsnavn} (${forhold.startdato} - ${
+      forhold.sluttdato ?? "pågående"
+    })`;
+  }
+
   return (
     <ul>
       {arbeidsforhold.map((forhold) => {
-        const text = `${forhold.organisasjonsnavn} (${forhold.startdato} - ${
-          forhold.sluttdato ?? "pågående"
-        })`;
-        return <li key={forhold.id}>{text}</li>;
+        return <li key={forhold.id}>{getArbeidsforholdText(forhold)}</li>;
       })}
     </ul>
   );

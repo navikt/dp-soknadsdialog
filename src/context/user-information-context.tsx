@@ -1,17 +1,17 @@
 import React, { PropsWithChildren, createContext, useState } from "react";
 import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
 
-const UserInformationContext = createContext<{ arbeidsforhold: IArbeidsforhold[] } | null>(null);
-
-interface IProps {
-  initialState: { arbeidsforhold: IArbeidsforhold[] };
+interface IUserInformationContext {
+  arbeidsforhold: IArbeidsforhold[];
 }
 
-function UserInformationProvider(props: PropsWithChildren<IProps>) {
-  const [userInformation] = useState(props.initialState || []);
+export const UserInformationContext = createContext<IUserInformationContext | undefined>(undefined);
+
+function UserInformationProvider(props: PropsWithChildren<IUserInformationContext>) {
+  const [arbeidsforhold] = useState<IArbeidsforhold[]>(props.arbeidsforhold || []);
 
   return (
-    <UserInformationContext.Provider value={userInformation}>
+    <UserInformationContext.Provider value={{ arbeidsforhold }}>
       {props.children}
     </UserInformationContext.Provider>
   );
