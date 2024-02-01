@@ -49,7 +49,7 @@ spec:
     - name: VEILARBPROXY_URL
       value: {{veilarbproxyUrl}}
     - name: NEXT_PUBLIC_SANITY_DATASET
-      value: sanity_dataset
+      value: {{sanity_dataset}}
   idporten:
     enabled: true
     sidecar:
