@@ -24,22 +24,6 @@ export function FaktumWrapper(props: IProps) {
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
   );
 
-  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedArbeidsforhold = arbeidsforhold.find(
-      (forhold) => forhold.id === event.target.value,
-    );
-
-    setShowFaktum(true);
-    setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
-
-    if (!selectedArbeidsforhold) {
-      saveFaktumToQuiz(faktum, null);
-      return;
-    }
-
-    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
-  }
-
   // useEffect(() => {
   //   const bedriftsnavn = fakta.find(
   //     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
@@ -56,6 +40,16 @@ export function FaktumWrapper(props: IProps) {
   // }, [fakta]);
 
   useEffect(() => {
+    const periode = getPeriode();
+    const varighetChanged =
+      arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
+
+    if (currentSelectedArbeidsforhold && varighetChanged) {
+      saveFaktumToQuiz(arbeidsforholdVarighet, periode);
+    }
+  }, [fakta, currentSelectedArbeidsforhold]);
+
+  function getPeriode() {
     const periode: IQuizPeriodeFaktumAnswerType = {
       fom: "",
     };
@@ -68,15 +62,28 @@ export function FaktumWrapper(props: IProps) {
       periode.tom = currentSelectedArbeidsforhold.sluttdato;
     }
 
-    const shouldSaveArbeidsforholdVarighet =
-      arbeidsforholdVarighet &&
-      (!arbeidsforholdVarighet.svar ||
-        JSON.stringify(arbeidsforholdVarighet.svar) !== JSON.stringify(periode));
+    return periode;
+  }
 
-    if (currentSelectedArbeidsforhold && shouldSaveArbeidsforholdVarighet) {
-      saveFaktumToQuiz(arbeidsforholdVarighet, periode);
+  function objectsNotEqual(object1: any, object2: any) {
+    return JSON.stringify(object1) !== JSON.stringify(object2);
+  }
+
+  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedArbeidsforhold = arbeidsforhold.find(
+      (forhold) => forhold.id === event.target.value,
+    );
+
+    setShowFaktum(true);
+    setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
+
+    if (!selectedArbeidsforhold) {
+      saveFaktumToQuiz(faktum, null);
+      return;
     }
-  }, [fakta, currentSelectedArbeidsforhold]);
+
+    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+  }
 
   return (
     <>
