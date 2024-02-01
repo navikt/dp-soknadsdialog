@@ -40,31 +40,6 @@ export function FaktumWrapper(props: IProps) {
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
   );
 
-  // useEffect(() => {
-  //   const bedriftsnavn = fakta.find(
-  //     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
-  //   );
-
-  //   if (
-  //     arbeidsforhold?.length &&
-  //     bedriftsnavn &&
-  //     !bedriftsnavn.svar &&
-  //     !currentSelectedArbeidsforhold
-  //   ) {
-  //     setShowFaktum(false);
-  //   }
-  // }, [fakta]);
-
-  useEffect(() => {
-    const periode = getPeriode();
-    const varighetChanged =
-      arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
-
-    if (currentSelectedArbeidsforhold && varighetChanged) {
-      saveFaktumToQuiz(arbeidsforholdVarighet, periode);
-    }
-  }, [fakta, currentSelectedArbeidsforhold]);
-
   function getPeriode() {
     const periode: IQuizPeriodeFaktumAnswerType = {
       fom: "",
@@ -84,6 +59,22 @@ export function FaktumWrapper(props: IProps) {
   function objectsNotEqual(object1: any, object2: any) {
     return JSON.stringify(object1) !== JSON.stringify(object2);
   }
+
+  useEffect(() => {
+    if (arbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
+      setShowFaktum(false);
+    }
+  }, [currentSelectedArbeidsforhold]);
+
+  useEffect(() => {
+    const periode = getPeriode();
+    const varighetChanged =
+      arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
+
+    if (currentSelectedArbeidsforhold && varighetChanged) {
+      saveFaktumToQuiz(arbeidsforholdVarighet, periode);
+    }
+  }, [fakta, currentSelectedArbeidsforhold]);
 
   return (
     <>
