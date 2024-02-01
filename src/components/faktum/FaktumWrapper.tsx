@@ -20,6 +20,22 @@ export function FaktumWrapper(props: IProps) {
   >(undefined);
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
 
+  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
+    const selectedArbeidsforhold = arbeidsforhold.find(
+      (forhold) => forhold.id === event.target.value,
+    );
+
+    setShowFaktum(true);
+    setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
+
+    if (!selectedArbeidsforhold) {
+      saveFaktumToQuiz(faktum, null);
+      return;
+    }
+
+    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+  }
+
   const arbeidsforholdVarighet = fakta.find(
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
   );
@@ -67,22 +83,6 @@ export function FaktumWrapper(props: IProps) {
 
   function objectsNotEqual(object1: any, object2: any) {
     return JSON.stringify(object1) !== JSON.stringify(object2);
-  }
-
-  function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedArbeidsforhold = arbeidsforhold.find(
-      (forhold) => forhold.id === event.target.value,
-    );
-
-    setShowFaktum(true);
-    setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
-
-    if (!selectedArbeidsforhold) {
-      saveFaktumToQuiz(faktum, null);
-      return;
-    }
-
-    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
   }
 
   return (
