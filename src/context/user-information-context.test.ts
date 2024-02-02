@@ -1,8 +1,8 @@
 import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
 
-export function FiltrerJobber(jobs: IArbeidsforhold[], maksAlderIMåneder: number): IArbeidsforhold[] {
-  const nåværendeDato = new Date();
-  const kappDato = new Date(nåværendeDato.getFullYear(), nåværendeDato.getMonth() - maksAlderIMåneder, nåværendeDato.getDate());
+export function FiltrerJobber(jobs: IArbeidsforhold[], maksAlderIManeder: number): IArbeidsforhold[] {
+  const naverendeDato = new Date();
+  const kappDato = new Date(naverendeDato.getFullYear(), naverendeDato.getMonth() - maksAlderIManeder, naverendeDato.getDate());
   kappDato.setHours(0, 0, 0, 0);
 
   const filtrerteJobber = jobs.filter(job => {
