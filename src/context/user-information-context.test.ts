@@ -1,59 +1,246 @@
-import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
+import { subMonths } from "date-fns";
+import {
+  filterArbeidsforhold,
+  getPeriode,
+  findArbeidstid,
+  sortArbeidsforhold,
+} from "./user-information-context";
 
-export function FiltrerJobber(jobs: IArbeidsforhold[], maksAlderIManeder: number): IArbeidsforhold[] {
-  const naverendeDato = new Date();
-  const kappDato = new Date(naverendeDato.getFullYear(), naverendeDato.getMonth() - maksAlderIManeder, naverendeDato.getDate());
-  kappDato.setHours(0, 0, 0, 0);
-
-  const filtrerteJobber = jobs.filter(job => {
-    if (!job.sluttdato) {
-      return true;
-    }
-    const sluttDato = new Date(job.sluttdato);
-    return sluttDato >= kappDato;
+describe("filterArbeidsforhold", () => {
+  test("liste med 0 arbeidsforhold", () => {
+    expect(filterArbeidsforhold([], 6)).toStrictEqual([]);
   });
 
-  console.log("Filtrerte jobber:", filtrerteJobber);
-
-  return filtrerteJobber;
-}
-
-
-describe('FiltrerJobber', () => {
-  test('skal returnere tomt array for tom input', () => {
-    const jobs:any = [];
-    const resultat = FiltrerJobber(jobs, 6);
-    expect(resultat).toEqual([]);
-  });
-
-  test('skal returnere samme input for jobb uten sluttdato', () => {
-    const jobs = [{ id: "1", startdato: "2021-11-01", organisasjonsnavn: "Jeg jobber her AS" }];
-    const resultat = FiltrerJobber(jobs, 6);
-    expect(resultat).toEqual(jobs);
-  });
-
-  test('skal returnere samme input for jobb som avsluttet for 3 måneder siden', () => {
-    const jobs = [{ id: "1", startdato: "2021-11-01", sluttdato: "2023-10-31", organisasjonsnavn: "Jeg jobbet her AS" }];
-    const resultat = FiltrerJobber(jobs, 6);
-    expect(resultat).toEqual(jobs);
-  });
-
-  test('skal returnere bare det nyeste jobbet for flere jobber', () => {
-    const jobs = [
-      { id: "1", startdato: "2020-01-01", sluttdato: "2021-10-31", organisasjonsnavn: "Ingen jobber her AS" },
-      { id: "2", startdato: "2021-11-01", sluttdato: "2023-10-31", organisasjonsnavn: "Jeg jobbet her AS" }
+  test("liste med 1 arbeidsforhold uten sluttdato", () => {
+    const arbeidsforhold = [
+      { id: "1", startdato: "2021-11-01", organisasjonsnavn: "Jeg jobber her AS" },
     ];
-    const resultat = FiltrerJobber(jobs, 6);
-    expect(resultat).toEqual([jobs[1]]);
+    expect(filterArbeidsforhold(arbeidsforhold, 6)).toStrictEqual(arbeidsforhold);
   });
 
-  test('skal returnere bare det nyeste jobbet for flere jobber med 12 måneder', () => {
-    const jobs = [
-      { id: "1", startdato: "2020-01-01", sluttdato: "2021-10-31", organisasjonsnavn: "Ingen jobber her AS" },
-      { id: "2", startdato: "2021-11-01", sluttdato: "2023-03-31", organisasjonsnavn: "Jeg jobbet her AS" }
+  test("liste med 1 arbeidsforhold der sluttdato er for to måneder siden, og grense på 6 måneder", () => {
+    const today = new Date();
+    const twoMonthsAgo = subMonths(today, 2);
+    // yyyy-mm-dd
+    const sluttdato = twoMonthsAgo.toLocaleDateString("fr-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const arbeidsforhold = [
+      { id: "1", startdato: "2021-11-01", sluttdato, organisasjonsnavn: "Jeg jobbet her AS" },
     ];
-    
-    const resultat = FiltrerJobber(jobs, 12);
-    expect(resultat).toEqual([jobs[1]]);
+    expect(filterArbeidsforhold(arbeidsforhold, 6)).toStrictEqual(arbeidsforhold);
+  });
+
+  test("liste med 2 arbeidsforhold (1 innenfor og 1 utenfor grensa på 6 måneder)", () => {
+    const today = new Date();
+    const twoMonthsAgo = subMonths(today, 2);
+    // yyyy-mm-dd
+    const sluttdato = twoMonthsAgo.toLocaleDateString("fr-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const arbeidsforhold = [
+      {
+        id: "1",
+        startdato: "2020-01-01",
+        sluttdato: "2021-10-31",
+        organisasjonsnavn: "Ingen jobber her AS",
+      },
+      { id: "1", startdato: "2021-11-01", sluttdato, organisasjonsnavn: "Jeg jobbet her AS" },
+    ];
+    expect(filterArbeidsforhold(arbeidsforhold, 6)).toStrictEqual([arbeidsforhold[1]]);
+  });
+
+  test("liste med 2 arbeidsforhold, der sluttdato er for åtte måneder siden og grense på 6 måneder", () => {
+    const today = new Date();
+    const eightMonthsAgo = subMonths(today, 8);
+    // yyyy-mm-dd
+    const sluttdato = eightMonthsAgo.toLocaleDateString("fr-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const arbeidsforhold = [
+      {
+        id: "1",
+        startdato: "2020-01-01",
+        sluttdato: "2021-10-31",
+        organisasjonsnavn: "Ingen jobber her AS",
+      },
+      { id: "1", startdato: "2021-11-01", sluttdato, organisasjonsnavn: "Jeg jobbet her AS" },
+    ];
+    expect(filterArbeidsforhold(arbeidsforhold, 6)).toStrictEqual([]);
+  });
+
+  test("liste med arbeidsforhold, 1 med sluttdato for åtte måneder siden, og grense på 12 måneder", () => {
+    const today = new Date();
+    const eightMonthsAgo = subMonths(today, 8);
+    // yyyy-mm-dd
+    const sluttdato = eightMonthsAgo.toLocaleDateString("fr-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const arbeidsforhold = [
+      {
+        id: "1",
+        startdato: "2020-01-01",
+        sluttdato: "2021-10-31",
+        organisasjonsnavn: "Ingen jobber her AS",
+      },
+      { id: "1", startdato: "2021-11-01", sluttdato, organisasjonsnavn: "Jeg jobbet her AS" },
+    ];
+    expect(filterArbeidsforhold(arbeidsforhold, 12)).toStrictEqual([arbeidsforhold[1]]);
+  });
+});
+
+describe("getPeriode", () => {
+  test("tom tekststreng", () => {
+    expect(getPeriode("")).toBe(6);
+  });
+
+  test("faktum.type-arbeidstid.svar.fast", () => {
+    expect(getPeriode("faktum.type-arbeidstid.svar.fast")).toBe(6);
+  });
+
+  test("faktum.type-arbeidstid.svar.varierende", () => {
+    expect(getPeriode("faktum.type-arbeidstid.svar.varierende")).toBe(12);
+  });
+
+  test("faktum.type-arbeidstid.svar.kombinasjon", () => {
+    expect(getPeriode("faktum.type-arbeidstid.svar.kombinasjon")).toBe(12);
+  });
+
+  test("faktum.type-arbeidstid.svar.ingen-passer", () => {
+    expect(getPeriode("faktum.type-arbeidstid.svar.ingen-passer")).toBe(6);
+  });
+});
+
+describe("findArbeidstid", () => {
+  const soknadState = {
+    seksjoner: [
+      {
+        fakta: [
+          {
+            id: "107",
+            svar: "faktum.type-arbeidstid.svar.fast",
+            type: "envalg",
+            roller: ["søker"],
+            readOnly: false,
+            gyldigeValg: [
+              "faktum.type-arbeidstid.svar.fast",
+              "faktum.type-arbeidstid.svar.varierende",
+              "faktum.type-arbeidstid.svar.kombinasjon",
+              "faktum.type-arbeidstid.svar.ingen-passer",
+            ],
+            beskrivendeId: "faktum.type-arbeidstid",
+            sannsynliggjoresAv: [],
+          },
+        ],
+        beskrivendeId: "din-situasjon",
+      },
+    ],
+  };
+
+  test("tom state", () => {
+    // @ts-ignore
+    expect(findArbeidstid({})).toBe("");
+  });
+
+  test("faktum.type-arbeidstid.svar.fast", () => {
+    // @ts-ignore
+    expect(findArbeidstid(soknadState)).toBe("faktum.type-arbeidstid.svar.fast");
+  });
+
+  test("soknadState uten seksjonen 'din-situasjon'", () => {
+    // @ts-ignore
+    expect(findArbeidstid({ seksjoner: [] })).toBe("");
+  });
+});
+
+describe("sortArbeidsforhold", () => {
+  test("Bare aktive forhold, sorter på startdato", () => {
+    const arbeidsforhold = [
+      {
+        id: "1",
+        startdato: "2020-01-01",
+        organisasjonsnavn: "Jeg startet her først",
+      },
+      {
+        id: "2",
+        startdato: "2023-01-01",
+        organisasjonsnavn: "Jeg starter her sist",
+      },
+    ];
+
+    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
+      [...arbeidsforhold].reverse(),
+    );
+  });
+
+  test("Første forhold er  aktivt", () => {
+    const arbeidsforhold = [
+      {
+        id: "2",
+        startdato: "2023-01-01",
+        organisasjonsnavn: "Jeg jobber her",
+      },
+      {
+        id: "3",
+        startdato: "2020-01-01",
+        sluttdato: "2022-12-31",
+        organisasjonsnavn: "Jeg slutta her",
+      },
+    ];
+
+    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual([...arbeidsforhold]);
+  });
+
+  test("Andre forhold er  aktivt", () => {
+    const arbeidsforhold = [
+      {
+        id: "2",
+        startdato: "2023-01-01",
+        sluttdato: "2022-12-31",
+        organisasjonsnavn: "Jeg jobber her",
+      },
+      {
+        id: "3",
+        startdato: "2020-01-01",
+        organisasjonsnavn: "Jeg slutta her",
+      },
+    ];
+
+    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
+      [...arbeidsforhold].reverse(),
+    );
+  });
+
+  test("Ingen aktive forhold", () => {
+    const arbeidsforhold = [
+      {
+        id: "2",
+        startdato: "2023-01-01",
+        sluttdato: "2023-10-31",
+        organisasjonsnavn: "Jeg slutta her sist",
+      },
+      {
+        id: "3",
+        startdato: "2020-01-01",
+        sluttdato: "2023-06-03",
+        organisasjonsnavn: "Jeg slutta her først",
+      },
+    ];
+
+    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
+      [...arbeidsforhold].reverse(),
+    );
   });
 });
