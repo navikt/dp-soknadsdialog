@@ -1,6 +1,6 @@
 import { Select } from "@navikt/ds-react";
 import { useQuiz } from "../../context/quiz-context";
-import { useUserInformation } from "../../context/user-information-context";
+import { findArbeidstid, useUserInformation } from "../../context/user-information-context";
 import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "./Faktum";
 import { Fragment, useEffect, useState } from "react";
@@ -13,8 +13,9 @@ interface IProps {
 
 export function FaktumWrapper(props: IProps) {
   const { fakta } = props;
-  const { saveFaktumToQuiz } = useQuiz();
-  const { arbeidsforhold } = useUserInformation();
+  const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const arbeidstid = findArbeidstid(soknadState);
+  const { arbeidsforhold } = useUserInformation(arbeidstid);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);

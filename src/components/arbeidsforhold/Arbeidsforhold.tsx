@@ -19,7 +19,6 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-// import { useUserInformation } from "../../context/user-information-context";
 // import { ArbeidsforholdList } from "./ArbeidsforholdList";
 import { FaktumWrapper } from "../faktum/FaktumWrapper";
 
@@ -32,7 +31,6 @@ function ArbeidsforholdComponent(
   const router = useRouter();
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
-  // const { arbeidsforhold } = useUserInformation();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const {
@@ -109,7 +107,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <FaktumWrapper fakta={fakta} />
+                <FaktumWrapper fakta={fakta} readonly={props.readonly} />
 
                 <FetchIndicator isLoading={isLoading} />
 
