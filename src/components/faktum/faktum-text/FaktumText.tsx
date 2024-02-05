@@ -12,6 +12,7 @@ import { isValidTextLength } from "../validation/validations.utils";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
+import { AlertText } from "../../alert-text/AlertText";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
@@ -123,6 +124,8 @@ export function FaktumTextComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+
+      {faktumTexts?.alertText && <AlertText alertText={faktumTexts.alertText} spacingTop />}
     </>
   );
 }

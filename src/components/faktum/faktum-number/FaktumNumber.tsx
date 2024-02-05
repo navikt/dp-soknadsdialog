@@ -11,12 +11,13 @@ import { HelpText } from "../../HelpText";
 import { isNumber } from "../validation/validations.utils";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
+import { AlertText } from "../../alert-text/AlertText";
 
 export const FaktumNumber = forwardRef(FaktumNumberComponent);
 
 function FaktumNumberComponent(
   props: IFaktum<IQuizNumberFaktum>,
-  ref: Ref<HTMLInputElement> | undefined
+  ref: Ref<HTMLInputElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
@@ -109,6 +110,8 @@ function FaktumNumberComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
+
+      {faktumTexts?.alertText && <AlertText alertText={faktumTexts.alertText} spacingTop />}
     </>
   );
 }

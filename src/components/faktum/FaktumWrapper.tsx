@@ -5,6 +5,7 @@ import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types
 import { Faktum } from "./Faktum";
 import { Fragment, useEffect, useState } from "react";
 import { IArbeidsforhold } from "../arbeidsforhold/ArbeidsforholdList";
+import { useSanity } from "../../context/sanity-context";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -14,6 +15,7 @@ interface IProps {
 export function FaktumWrapper(props: IProps) {
   const { fakta } = props;
   const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const { getAppText } = useSanity();
   const arbeidstid = findArbeidstid(soknadState);
   const { arbeidsforhold } = useUserInformation(arbeidstid);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
@@ -86,17 +88,17 @@ export function FaktumWrapper(props: IProps) {
               arbeidsforhold?.length > 0 && (
                 <Select
                   className="mb-10"
-                  label="Velg arbeidsforhold"
+                  label={getAppText("arbeidsforhold.velg.liste")}
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
-                  <option value="">Velg arbeidsforhold</option>
+                  <option value="">{getAppText("arbeidsforhold.velg.liste")}</option>
                   {arbeidsforhold.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
                     </option>
                   ))}
 
-                  <option value="">Legg til annet</option>
+                  <option value="">{getAppText("arbeidsforhold.velg.liste.annet")}</option>
                 </Select>
               )}
 

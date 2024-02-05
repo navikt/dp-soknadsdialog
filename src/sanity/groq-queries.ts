@@ -13,7 +13,8 @@ const faktumFields = `{
   description,
   helpText,
   errorMessage,
-  unit
+  unit,
+  alertText,
 }`;
 
 const svaralternativFields = `{
