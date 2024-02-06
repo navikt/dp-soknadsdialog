@@ -14,6 +14,7 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
+import { AlertText } from "../../alert-text/AlertText";
 
 interface IDateRange {
   from: Date | undefined;
@@ -185,6 +186,7 @@ function FaktumPeriodeComponent(
         {faktumTexts?.helpText && (
           <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
         )}
+        {faktumTexts?.alertText && <AlertText alertText={faktumTexts.alertText} spacingTop />}
       </Fieldset>
     </div>
   );
