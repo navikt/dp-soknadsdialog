@@ -16,15 +16,18 @@ export function FaktumWrapper(props: IProps) {
   const { fakta } = props;
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { getAppText } = useSanity();
-  const arbeidstid = findArbeidstid(soknadState);
-  const { arbeidsforhold } = useUserInformation(arbeidstid);
+  const { filteredArbeidsforhold, setArbeidstid } = useUserInformation();
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
 
+  useEffect(() => {
+    setArbeidstid(findArbeidstid(soknadState));
+  }, [soknadState]);
+
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedArbeidsforhold = arbeidsforhold.find(
+    const selectedArbeidsforhold = filteredArbeidsforhold.find(
       (forhold) => forhold.id === event.target.value,
     );
 
@@ -64,7 +67,7 @@ export function FaktumWrapper(props: IProps) {
   }
 
   useEffect(() => {
-    if (arbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
+    if (filteredArbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
       setShowFaktum(false);
     }
   }, [currentSelectedArbeidsforhold]);
@@ -85,14 +88,14 @@ export function FaktumWrapper(props: IProps) {
         return (
           <Fragment key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-              arbeidsforhold?.length > 0 && (
+              filteredArbeidsforhold?.length > 0 && (
                 <Select
                   className="mb-10"
                   label={getAppText("arbeidsforhold.velg.liste")}
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
                   <option value="">{getAppText("arbeidsforhold.velg.liste")}</option>
-                  {arbeidsforhold.map((forhold) => (
+                  {filteredArbeidsforhold.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
                     </option>
