@@ -14,7 +14,6 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import { FaktumDatoWarning } from "./FaktumDatoWarning";
-import { AlertText } from "../../alert-text/AlertText";
 
 export const FaktumDato = forwardRef(FaktumDatoComponent);
 
@@ -101,7 +100,6 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {faktumTexts?.alertText && <AlertText alertText={faktumTexts.alertText} spacingTop />}
       {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
     </div>
   );
