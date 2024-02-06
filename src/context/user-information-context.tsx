@@ -1,10 +1,14 @@
-import React, { PropsWithChildren, createContext, useState } from "react";
+import React, { PropsWithChildren, createContext, useEffect, useState } from "react";
 import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
 import { subMonths } from "date-fns";
 import { IQuizState } from "../types/quiz.types";
 
 interface IUserInformationContext {
-  arbeidsforhold: IArbeidsforhold[];
+  filteredArbeidsforhold: IArbeidsforhold[];
+  setArbeidstid: (arbeidstid: string | null) => void;
+}
+interface IProps {
+  unfilteredArbeidsforhold: IArbeidsforhold[];
 }
 
 export const UserInformationContext = createContext<IUserInformationContext | undefined>(undefined);
@@ -51,7 +55,9 @@ function findArbeidstid(soknad: IQuizState): string {
   );
 }
 
-function getPeriode(arbeidstid?: string) {
+function getPeriode(arbeidstid?: string | null): number {
+  if (!arbeidstid) return 6;
+
   const twelveMonths = ["varierende", "kombinasjon"];
   const type = arbeidstid?.split(".").pop();
 
@@ -60,27 +66,37 @@ function getPeriode(arbeidstid?: string) {
   return twelveMonths.includes(type) ? 12 : 6;
 }
 
-function UserInformationProvider(props: PropsWithChildren<IUserInformationContext>) {
-  const [arbeidsforhold] = useState<IArbeidsforhold[]>(props.arbeidsforhold || []);
+function UserInformationProvider(props: PropsWithChildren<IProps>) {
+  const [filteredArbeidsforhold, setFilteredArbeidsforhold] = useState<IArbeidsforhold[]>([]);
+  const [arbeidstid, setArbeidstid] = useState<string | null>(null);
+
+  const periode = getPeriode(arbeidstid);
+
+  const filtered = filterArbeidsforhold(props.unfilteredArbeidsforhold, periode).sort(
+    sortArbeidsforhold,
+  );
+
+  useEffect(() => {
+    setFilteredArbeidsforhold(filtered);
+  }, []);
 
   return (
-    <UserInformationContext.Provider value={{ arbeidsforhold }}>
+    <UserInformationContext.Provider value={{ filteredArbeidsforhold, setArbeidstid }}>
       {props.children}
     </UserInformationContext.Provider>
   );
 }
 
-function useUserInformation(arbeidstid: string) {
+function useUserInformation() {
   const context = React.useContext(UserInformationContext);
 
   if (!context) {
     throw new Error("useUserInformation must be used within a UserInformationProvider");
   }
 
-  const periode = getPeriode(arbeidstid);
-  const arbeidsforhold = context?.arbeidsforhold ?? [];
+  // const periode = getPeriode(arbeidstid);
 
-  context.arbeidsforhold = filterArbeidsforhold(arbeidsforhold, periode).sort(sortArbeidsforhold);
+  // context.arbeidsforhold =
 
   return context;
 }
