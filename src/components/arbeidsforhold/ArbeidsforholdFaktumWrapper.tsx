@@ -1,33 +1,37 @@
 import { Select } from "@navikt/ds-react";
-import { useQuiz } from "../../context/quiz-context";
-import { findArbeidstid, useUserInformation } from "../../context/user-information-context";
-import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
-import { Faktum } from "./Faktum";
 import { Fragment, useEffect, useState } from "react";
-import { IArbeidsforhold } from "../arbeidsforhold/ArbeidsforholdList";
+import {
+  filterArbeidsforhold,
+  findArbeidstid,
+  getPeriodeLength,
+  sortArbeidsforhold,
+} from "../../context/arbeidsforhold.utils";
+import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useUserInformation } from "../../context/user-information-context";
+import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
+import { IArbeidsforhold } from "./ArbeidsforholdList";
+import { Faktum } from "../faktum/Faktum";
 
 interface IProps {
   fakta: QuizFaktum[];
   readonly?: boolean;
 }
 
-export function FaktumWrapper(props: IProps) {
+export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta } = props;
-  const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const { saveFaktumToQuiz } = useQuiz();
   const { getAppText } = useSanity();
-  const { filteredArbeidsforhold, setArbeidstid } = useUserInformation();
+  const { arbeidsforhold, arbeidstid, setArbeidstid } = useUserInformation();
+
+  const [arbeidsforholdList, setArbeidsforholdList] = useState(arbeidsforhold);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
 
-  useEffect(() => {
-    setArbeidstid(findArbeidstid(soknadState));
-  }, [soknadState]);
-
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedArbeidsforhold = filteredArbeidsforhold.find(
+    const selectedArbeidsforhold = arbeidsforholdList.find(
       (forhold) => forhold.id === event.target.value,
     );
 
@@ -62,12 +66,12 @@ export function FaktumWrapper(props: IProps) {
     return periode;
   }
 
-  function objectsNotEqual(object1: any, object2: any) {
+  function objectsNotEqual<T>(object1: T, object2: T) {
     return JSON.stringify(object1) !== JSON.stringify(object2);
   }
 
   useEffect(() => {
-    if (filteredArbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
+    if (arbeidsforholdList.length > 0 && !currentSelectedArbeidsforhold) {
       setShowFaktum(false);
     }
   }, [currentSelectedArbeidsforhold]);
@@ -82,20 +86,35 @@ export function FaktumWrapper(props: IProps) {
     }
   }, [fakta, currentSelectedArbeidsforhold]);
 
+  // Her skal trigges hvis verdien til faktum: faktum.type-arbeidstid har endret
+  useEffect(() => {
+    setArbeidstid(arbeidstid);
+
+    const periodeLength = getPeriodeLength(arbeidstid);
+    const filteredArbeidsforhold = filterArbeidsforhold(arbeidsforholdList, periodeLength);
+
+    const filteredAndSortedArbeidsforhold = filteredArbeidsforhold.sort(
+      (forhold1: IArbeidsforhold, forhold2: IArbeidsforhold) =>
+        sortArbeidsforhold(forhold1, forhold2),
+    );
+
+    setArbeidsforholdList(filteredAndSortedArbeidsforhold);
+  }, []);
+
   return (
     <>
       {fakta.map((faktum) => {
         return (
           <Fragment key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-              filteredArbeidsforhold?.length > 0 && (
+              arbeidsforholdList?.length > 0 && (
                 <Select
                   className="mb-10"
                   label={getAppText("arbeidsforhold.velg.liste")}
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
                   <option value="">{getAppText("arbeidsforhold.velg.liste")}</option>
-                  {filteredArbeidsforhold.map((forhold) => (
+                  {arbeidsforholdList.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
                     </option>

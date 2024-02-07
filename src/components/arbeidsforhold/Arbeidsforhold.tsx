@@ -1,12 +1,11 @@
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
-import { forwardRef, Ref, useEffect } from "react";
+import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { findEmployerName } from "../../utils/faktum.utils";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import {
@@ -14,13 +13,13 @@ import {
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
 } from "../../types/quiz.types";
+import { findEmployerName } from "../../utils/faktum.utils";
+import { FormattedDate } from "../FormattedDate";
 import { IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-// import { ArbeidsforholdList } from "./ArbeidsforholdList";
-import { FaktumWrapper } from "../faktum/FaktumWrapper";
+import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -107,7 +106,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <FaktumWrapper fakta={fakta} readonly={props.readonly} />
+                <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
 
                 <FetchIndicator isLoading={isLoading} />
 
