@@ -67,7 +67,7 @@
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.55",
     "@types/uuid": "^9.0.8",
-    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.20.0",
     "@vitest/coverage-v8": "^1.2.2",
     "dotenv": "^16.4.1",
