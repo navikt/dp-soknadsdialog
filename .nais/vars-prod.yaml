@@ -4,3 +4,5 @@ dekorator:
   url: https://www.nav.no/dekoratoren
   env: prod
 veilarbproxyUrl: https://veilarbregistrering.intern.nav.no
+unleash:
+  environment: production

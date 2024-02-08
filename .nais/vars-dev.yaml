@@ -4,3 +4,5 @@ dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
 veilarbproxyUrl: https://veilarbregistrering.intern.dev.nav.no
+unleash:
+  environment: development
