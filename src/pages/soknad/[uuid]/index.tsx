@@ -13,15 +13,17 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
 import { getPersonalia } from "../../../api/personalia-api";
+import { getFrontendFlags, flagsClient } from "@unleash/nextjs";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
+  isEnabled: boolean;
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -32,6 +34,7 @@ export async function getServerSideProps(
         soknadState: mockNeste,
         personalia: mockPersonalia,
         errorCode: null,
+        isEnabled: false,
       },
     };
   }
@@ -45,6 +48,10 @@ export async function getServerSideProps(
       },
     };
   }
+
+  const { toggles } = await getFrontendFlags();
+  const flags = flagsClient(toggles);
+  const isEnabled = flags.isEnabled("dp-soknadsdialog-test");
 
   let errorCode = null;
   let soknadState = null;
@@ -86,6 +93,7 @@ export async function getServerSideProps(
       soknadState,
       personalia,
       errorCode,
+      isEnabled,
     },
   };
 }
