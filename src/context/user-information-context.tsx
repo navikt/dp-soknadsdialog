@@ -3,8 +3,6 @@ import type { IArbeidsforhold } from "../components/arbeidsforhold/Arbeidsforhol
 
 interface IUserInformationContext {
   arbeidsforhold: IArbeidsforhold[];
-  setArbeidstid: (arbeidstid: string | null) => void;
-  arbeidstid: string | null;
 }
 interface IProps {
   arbeidsforhold: IArbeidsforhold[];
@@ -14,10 +12,9 @@ export const UserInformationContext = createContext<IUserInformationContext | un
 
 function UserInformationProvider(props: PropsWithChildren<IProps>) {
   const [arbeidsforhold] = useState<IArbeidsforhold[]>(props.arbeidsforhold || []);
-  const [arbeidstid, setArbeidstid] = useState<string | null>(null);
 
   return (
-    <UserInformationContext.Provider value={{ arbeidsforhold, arbeidstid, setArbeidstid }}>
+    <UserInformationContext.Provider value={{ arbeidsforhold }}>
       {props.children}
     </UserInformationContext.Provider>
   );

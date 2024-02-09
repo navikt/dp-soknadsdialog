@@ -24,7 +24,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { getAppText } = useSanity();
-  const { arbeidsforhold, setArbeidstid } = useUserInformation();
+  const { arbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
@@ -56,7 +56,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     const filteredArbeidsforhold = filterArbeidsforhold(arbeidsforhold, periodeLength);
     const filteredAndSortedArbeidsforhold = sortArbeidsforhold(filteredArbeidsforhold);
 
-    setArbeidstid(arbeidstid);
     setArbeidsforholdSelectList(filteredAndSortedArbeidsforhold);
   }, [soknadState]);
 

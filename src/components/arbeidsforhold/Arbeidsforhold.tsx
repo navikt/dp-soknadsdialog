@@ -1,5 +1,5 @@
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
+// import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
@@ -20,6 +20,7 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
+import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -43,6 +44,7 @@ function ArbeidsforholdComponent(
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const currentSection = soknadState.seksjoner[sectionIndex];
+  const arbeidstid = findArbeidstid(soknadState);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
@@ -68,12 +70,9 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
+      {/* {faktumTexts?.description && <PortableText value={faktumTexts.description} />} */}
       <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-
-      {/* TODO: Bruk denne når vi skal vise listen med arbeidsforhold i søknaden */}
-      {/* {arbeidsforhold?.length > 0 && <ArbeidsforholdList arbeidsforhold={arbeidsforhold} />} */}
-
+      {arbeidstid && <p>{getAppText(`${arbeidstid}.description`)}</p>}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
