@@ -1,6 +1,6 @@
 import { subMonths } from "date-fns";
 import { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
-import { IQuizPeriodeFaktumAnswerType, IQuizSeksjon, IQuizState } from "../types/quiz.types";
+import { IQuizPeriodeFaktumAnswerType, IQuizState } from "../types/quiz.types";
 
 export function filterArbeidsforhold(
   arbeidsforhold: IArbeidsforhold[],
@@ -38,7 +38,7 @@ export function sortArbeidsforhold(arbeidsforhold: IArbeidsforhold[]): IArbeidsf
   });
 }
 
-export function findArbeidstid(soknad?: IQuizState | { seksjoner: IQuizSeksjon[] }): string | null {
+export function findArbeidstid(soknad: IQuizState): string | null {
   return (
     (soknad?.seksjoner
       ?.find((seksjon) => seksjon.beskrivendeId === "din-situasjon")
@@ -47,15 +47,17 @@ export function findArbeidstid(soknad?: IQuizState | { seksjoner: IQuizSeksjon[]
   );
 }
 
-export function getPeriodeLength(arbeidstid?: string | null): number {
-  if (!arbeidstid) return 6;
+export function getPeriodeLength(arbeidstid: string | null): number {
+  const defaultPeriodeLength = 6;
+
+  if (!arbeidstid) return defaultPeriodeLength;
 
   const twelveMonths = ["varierende", "kombinasjon"];
   const type = arbeidstid?.split(".").pop();
 
-  if (!type) return 6;
+  if (!type) return defaultPeriodeLength;
 
-  return twelveMonths.includes(type) ? 12 : 6;
+  return twelveMonths.includes(type) ? 12 : defaultPeriodeLength;
 }
 
 export function getPeriodeObject(arbeidsforhold?: IArbeidsforhold): IQuizPeriodeFaktumAnswerType {

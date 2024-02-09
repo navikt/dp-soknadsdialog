@@ -103,8 +103,8 @@ describe("filterArbeidsforhold", () => {
 });
 
 describe("getPeriodeLength", () => {
-  test("tom tekststreng", () => {
-    expect(getPeriodeLength()).toBe(6);
+  test("arbeidsperiode er null", () => {
+    expect(getPeriodeLength(null)).toBe(6);
   });
 
   test("faktum.type-arbeidstid.svar.fast", () => {
@@ -163,6 +163,7 @@ describe("findArbeidstid", () => {
   });
 
   test("soknadState uten seksjonen 'din-situasjon'", () => {
+    // @ts-ignore
     expect(findArbeidstid({ seksjoner: [] })).toBe(null);
   });
 });
