@@ -1,10 +1,11 @@
 import { subMonths } from "date-fns";
+import { IQuizState } from "../types/quiz.types";
 import {
   filterArbeidsforhold,
-  getPeriode,
   findArbeidstid,
+  getPeriodeLength,
   sortArbeidsforhold,
-} from "./user-information-context";
+} from "../utils/arbeidsforhold.utils";
 
 describe("filterArbeidsforhold", () => {
   test("liste med 0 arbeidsforhold", () => {
@@ -101,30 +102,32 @@ describe("filterArbeidsforhold", () => {
   });
 });
 
-describe("getPeriode", () => {
+describe("getPeriodeLength", () => {
   test("tom tekststreng", () => {
-    expect(getPeriode("")).toBe(6);
+    expect(getPeriodeLength()).toBe(6);
   });
 
   test("faktum.type-arbeidstid.svar.fast", () => {
-    expect(getPeriode("faktum.type-arbeidstid.svar.fast")).toBe(6);
+    expect(getPeriodeLength("faktum.type-arbeidstid.svar.fast")).toBe(6);
   });
 
   test("faktum.type-arbeidstid.svar.varierende", () => {
-    expect(getPeriode("faktum.type-arbeidstid.svar.varierende")).toBe(12);
+    expect(getPeriodeLength("faktum.type-arbeidstid.svar.varierende")).toBe(12);
   });
 
   test("faktum.type-arbeidstid.svar.kombinasjon", () => {
-    expect(getPeriode("faktum.type-arbeidstid.svar.kombinasjon")).toBe(12);
+    expect(getPeriodeLength("faktum.type-arbeidstid.svar.kombinasjon")).toBe(12);
   });
 
   test("faktum.type-arbeidstid.svar.ingen-passer", () => {
-    expect(getPeriode("faktum.type-arbeidstid.svar.ingen-passer")).toBe(6);
+    expect(getPeriodeLength("faktum.type-arbeidstid.svar.ingen-passer")).toBe(6);
   });
 });
 
 describe("findArbeidstid", () => {
-  const soknadState = {
+  const soknadState: IQuizState = {
+    ferdig: false,
+    antallSeksjoner: 1,
     seksjoner: [
       {
         fakta: [
@@ -145,23 +148,22 @@ describe("findArbeidstid", () => {
           },
         ],
         beskrivendeId: "din-situasjon",
+        ferdig: false,
       },
     ],
   };
 
   test("tom state", () => {
     // @ts-ignore
-    expect(findArbeidstid({})).toBe("");
+    expect(findArbeidstid({})).toBe(null);
   });
 
   test("faktum.type-arbeidstid.svar.fast", () => {
-    // @ts-ignore
     expect(findArbeidstid(soknadState)).toBe("faktum.type-arbeidstid.svar.fast");
   });
 
   test("soknadState uten seksjonen 'din-situasjon'", () => {
-    // @ts-ignore
-    expect(findArbeidstid({ seksjoner: [] })).toBe("");
+    expect(findArbeidstid({ seksjoner: [] })).toBe(null);
   });
 });
 
@@ -180,9 +182,8 @@ describe("sortArbeidsforhold", () => {
       },
     ];
 
-    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
-      [...arbeidsforhold].reverse(),
-    );
+    const sortedArbeidsforhold = sortArbeidsforhold(arbeidsforhold);
+    expect(sortedArbeidsforhold).toStrictEqual([...arbeidsforhold].reverse());
   });
 
   test("Første forhold er  aktivt", () => {
@@ -200,7 +201,8 @@ describe("sortArbeidsforhold", () => {
       },
     ];
 
-    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual([...arbeidsforhold]);
+    const sortedArbeidsforhold = sortArbeidsforhold(arbeidsforhold);
+    expect(sortedArbeidsforhold).toStrictEqual([...arbeidsforhold]);
   });
 
   test("Andre forhold er  aktivt", () => {
@@ -218,9 +220,8 @@ describe("sortArbeidsforhold", () => {
       },
     ];
 
-    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
-      [...arbeidsforhold].reverse(),
-    );
+    const sortedArbeidsforhold = sortArbeidsforhold(arbeidsforhold);
+    expect(sortedArbeidsforhold).toStrictEqual([...arbeidsforhold].reverse());
   });
 
   test("Ingen aktive forhold", () => {
@@ -239,8 +240,7 @@ describe("sortArbeidsforhold", () => {
       },
     ];
 
-    expect([...arbeidsforhold].sort(sortArbeidsforhold)).toStrictEqual(
-      [...arbeidsforhold].reverse(),
-    );
+    const sortedArbeidsforhold = sortArbeidsforhold(arbeidsforhold);
+    expect(sortedArbeidsforhold).toStrictEqual([...arbeidsforhold].reverse());
   });
 });
