@@ -1,33 +1,42 @@
 import { Select } from "@navikt/ds-react";
-import { useQuiz } from "../../context/quiz-context";
-import { findArbeidstid, useUserInformation } from "../../context/user-information-context";
-import { IQuizPeriodeFaktumAnswerType, QuizFaktum } from "../../types/quiz.types";
-import { Faktum } from "./Faktum";
 import { Fragment, useEffect, useState } from "react";
-import { IArbeidsforhold } from "../arbeidsforhold/ArbeidsforholdList";
+import {
+  filterArbeidsforhold,
+  findArbeidstid,
+  getPeriodeLength,
+  getPeriodeObject,
+  objectsNotEqual,
+  sortArbeidsforhold,
+} from "../../utils/arbeidsforhold.utils";
+import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useUserInformation } from "../../context/user-information-context";
+import { QuizFaktum } from "../../types/quiz.types";
+import { Faktum } from "../faktum/Faktum";
+import { IArbeidsforhold } from "./ArbeidsforholdList";
 
 interface IProps {
   fakta: QuizFaktum[];
   readonly?: boolean;
 }
 
-export function FaktumWrapper(props: IProps) {
-  const { fakta } = props;
+export function ArbeidsforholdFaktumWrapper(props: IProps) {
+  const { fakta, readonly } = props;
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { getAppText } = useSanity();
-  const { filteredArbeidsforhold, setArbeidstid } = useUserInformation();
+  const { arbeidsforhold, setArbeidstid } = useUserInformation();
+  const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
-
-  useEffect(() => {
-    setArbeidstid(findArbeidstid(soknadState));
-  }, [soknadState]);
+  const arbeidstid = findArbeidstid(soknadState);
+  const arbeidsforholdVarighet = fakta.find(
+    (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
+  );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    const selectedArbeidsforhold = filteredArbeidsforhold.find(
+    const selectedArbeidsforhold = arbeidsforholdSelectList.find(
       (forhold) => forhold.id === event.target.value,
     );
 
@@ -42,38 +51,23 @@ export function FaktumWrapper(props: IProps) {
     saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
   }
 
-  const arbeidsforholdVarighet = fakta.find(
-    (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
-  );
+  useEffect(() => {
+    const periodeLength = getPeriodeLength(arbeidstid);
+    const filteredArbeidsforhold = filterArbeidsforhold(arbeidsforhold, periodeLength);
+    const filteredAndSortedArbeidsforhold = sortArbeidsforhold(filteredArbeidsforhold);
 
-  function getPeriode() {
-    const periode: IQuizPeriodeFaktumAnswerType = {
-      fom: "",
-    };
-
-    if (currentSelectedArbeidsforhold) {
-      periode.fom = currentSelectedArbeidsforhold.startdato;
-    }
-
-    if (currentSelectedArbeidsforhold?.sluttdato) {
-      periode.tom = currentSelectedArbeidsforhold.sluttdato;
-    }
-
-    return periode;
-  }
-
-  function objectsNotEqual(object1: any, object2: any) {
-    return JSON.stringify(object1) !== JSON.stringify(object2);
-  }
+    setArbeidstid(arbeidstid);
+    setArbeidsforholdSelectList(filteredAndSortedArbeidsforhold);
+  }, [soknadState]);
 
   useEffect(() => {
-    if (filteredArbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
+    if (arbeidsforholdSelectList.length > 0 && !currentSelectedArbeidsforhold) {
       setShowFaktum(false);
     }
   }, [currentSelectedArbeidsforhold]);
 
   useEffect(() => {
-    const periode = getPeriode();
+    const periode = getPeriodeObject(currentSelectedArbeidsforhold);
     const varighetChanged =
       arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
 
@@ -88,14 +82,14 @@ export function FaktumWrapper(props: IProps) {
         return (
           <Fragment key={faktum.id}>
             {faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-              filteredArbeidsforhold?.length > 0 && (
+              arbeidsforholdSelectList?.length > 0 && (
                 <Select
                   className="mb-10"
                   label={getAppText("arbeidsforhold.velg.liste")}
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
                   <option value="">{getAppText("arbeidsforhold.velg.liste")}</option>
-                  {filteredArbeidsforhold.map((forhold) => (
+                  {arbeidsforholdSelectList.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
                     </option>
@@ -105,7 +99,7 @@ export function FaktumWrapper(props: IProps) {
                 </Select>
               )}
 
-            {showFaktum && <Faktum faktum={faktum} readonly={props.readonly} />}
+            {showFaktum && <Faktum faktum={faktum} readonly={readonly} />}
           </Fragment>
         );
       })}
