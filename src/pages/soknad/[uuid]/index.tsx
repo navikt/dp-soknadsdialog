@@ -1,19 +1,19 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../utils/api.utils";
+import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getFeatureToggles } from "../../../api/unleash-api";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
+import { getErrorDetails } from "../../../utils/api.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
-import { getPersonalia } from "../../../api/personalia-api";
-import { flagsClient, getDefinitions, evaluateFlags } from "@unleash/nextjs";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -53,24 +53,12 @@ export async function getServerSideProps(
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
-  const featureToggles = {
-    arbeidsforholdIsEnabled: false,
-  };
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
-
-  try {
-    const definitions = await getDefinitions();
-    const { toggles } = evaluateFlags(definitions);
-    const flags = flagsClient(toggles);
-
-    featureToggles.arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
-  } catch (error) {
-    logger.error(`Unleash error: ${error}`);
-  }
+  const featureToggles = await getFeatureToggles();
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
