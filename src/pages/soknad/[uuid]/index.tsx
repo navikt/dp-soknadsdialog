@@ -13,7 +13,7 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
 import { getPersonalia } from "../../../api/personalia-api";
-// import { flagsClient, getDefinitions, evaluateFlags } from "@unleash/nextjs";
+import { flagsClient, getDefinitions, evaluateFlags } from "@unleash/nextjs";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -49,11 +49,11 @@ export async function getServerSideProps(
     };
   }
 
-  // const definitions = await getDefinitions();
-  // const { toggles } = evaluateFlags(definitions);
+  const definitions = await getDefinitions();
+  const { toggles } = evaluateFlags(definitions);
 
-  // const flags = flagsClient(toggles);
-  // const arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
+  const flags = flagsClient(toggles);
+  const arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
 
   let errorCode = null;
   let soknadState = null;
@@ -96,7 +96,7 @@ export async function getServerSideProps(
       personalia,
       errorCode,
       featureToggles: {
-        arbeidsforholdIsEnabled: false,
+        arbeidsforholdIsEnabled,
       },
     },
   };
