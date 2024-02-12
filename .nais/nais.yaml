@@ -48,8 +48,6 @@ spec:
       value: {{dekorator.env}}
     - name: VEILARBPROXY_URL
       value: {{veilarbproxyUrl}}
-    - name: UNLEASH_SERVER_API_URL
-      value: 'https://dagpenger-unleash-api.nav.cloud.nais.io/api'
   envFrom:
     - secret: dp-soknadsdialog-unleash-api-token
   idporten:
