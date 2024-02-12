@@ -19,7 +19,7 @@ interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
-  isEnabled: boolean;
+  featureToggles: { [key: string]: boolean };
 }
 
 export async function getServerSideProps(
@@ -34,7 +34,7 @@ export async function getServerSideProps(
         soknadState: mockNeste,
         personalia: mockPersonalia,
         errorCode: null,
-        isEnabled: false,
+        featureToggles: {},
       },
     };
   }
@@ -53,7 +53,7 @@ export async function getServerSideProps(
   const { toggles } = evaluateFlags(definitions);
 
   const flags = flagsClient(toggles);
-  const isEnabled = flags.isEnabled("dp-soknadsdialog-test");
+  const arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
 
   let errorCode = null;
   let soknadState = null;
@@ -95,7 +95,9 @@ export async function getServerSideProps(
       soknadState,
       personalia,
       errorCode,
-      isEnabled,
+      featureToggles: {
+        arbeidsforholdIsEnabled,
+      },
     },
   };
 }
