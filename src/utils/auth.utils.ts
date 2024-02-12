@@ -1,7 +1,7 @@
-import { GetSessionWithOboProvider, SessionWithOboProvider, makeSession } from "@navikt/dp-auth";
-import { idporten } from "@navikt/dp-auth/identity-providers";
-import { tokenX, withInMemoryCache } from "@navikt/dp-auth/obo-providers";
-import { withPrometheus } from "@navikt/dp-auth/obo-providers/withPrometheus";
+import { GetSessionWithOboProvider, SessionWithOboProvider, makeSession } from "@navikt/oasis";
+import { idporten } from "@navikt/oasis/identity-providers";
+import { tokenX, withInMemoryCache } from "@navikt/oasis/obo-providers";
+import { withPrometheus } from "@navikt/oasis/obo-providers/withPrometheus";
 import { audienceDPSoknad, audienceMellomlagring, audienceVeilarb } from "./api.utils";
 
 export let getSession: GetSessionWithOboProvider;
