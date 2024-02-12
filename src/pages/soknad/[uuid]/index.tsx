@@ -49,21 +49,28 @@ export async function getServerSideProps(
     };
   }
 
-  const definitions = await getDefinitions();
-  const { toggles } = evaluateFlags(definitions);
-
-  const flags = flagsClient(toggles);
-  const arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
-
   let errorCode = null;
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
+  const featureToggles = {
+    arbeidsforholdIsEnabled: false,
+  };
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+
+  try {
+    const definitions = await getDefinitions();
+    const { toggles } = evaluateFlags(definitions);
+    const flags = flagsClient(toggles);
+
+    featureToggles.arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
+  } catch (error) {
+    logger.error(`Unleash error: ${error}`);
+  }
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
@@ -95,9 +102,7 @@ export async function getServerSideProps(
       soknadState,
       personalia,
       errorCode,
-      featureToggles: {
-        arbeidsforholdIsEnabled,
-      },
+      featureToggles,
     },
   };
 }
