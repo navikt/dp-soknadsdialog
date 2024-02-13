@@ -12,9 +12,9 @@ export async function getPersonalia(onBehalfOfToken: string) {
   });
 
   if (!response.ok) {
-    logRequestError(response.statusText, undefined, "Personalia - Failed to get info");
+    logRequestError(response.statusText, undefined, "Feil i uthenting av personalia");
 
-    return new Response("Feil i uthenting av gjeldende periode", {
+    return new Response("Feil i uthenting av personalia", {
       status: response.status,
     });
   }

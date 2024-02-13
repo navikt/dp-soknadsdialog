@@ -12,7 +12,7 @@ export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Respon
   });
 
   if (!response.ok) {
-    logRequestError(response.statusText, undefined, "Arbeidsforhold - Failed to get info");
+    logRequestError(response.statusText, undefined, "Feil i uthenting av arbeidsforhold");
 
     return new Response("Feil i uthenting av arbeidsforhold", {
       status: response.status,
