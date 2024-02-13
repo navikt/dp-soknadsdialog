@@ -1,0 +1,18 @@
+apiVersion: unleash.nais.io/v1
+kind: ApiToken
+metadata:
+  name: dp-soknadsdialog
+  namespace: teamdagpenger
+  labels:
+    team: teamdagpenger
+    app: dp-soknadsdialog
+spec:
+    unleashInstance:
+      apiVersion: unleash.nais.io/v1
+      kind: RemoteUnleash
+      name: dagpenger # unleash team, not nais team
+    secretName: dp-soknadsdialog-unleash-api-token
+
+    # Specify which environment the API token should be created for.
+    # Can be one of: development, or production.
+    environment: {{unleash.environment}}

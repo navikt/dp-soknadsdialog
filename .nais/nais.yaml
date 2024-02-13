@@ -48,6 +48,10 @@ spec:
       value: {{dekorator.env}}
     - name: VEILARBPROXY_URL
       value: {{veilarbproxyUrl}}
+    - name: UNLEASH_SERVER_API_URL
+      value: {{unleash.url}}
+  envFrom:
+    - secret: dp-soknadsdialog-unleash-api-token
   idporten:
     enabled: true
     sidecar:
@@ -68,6 +72,8 @@ spec:
         - host: www.nav.no
         - host: dekoratoren.dev.nav.no
         - host: amplitude.nav.no
+        - host: dagpenger-unleash-api.nav.cloud.nais.io
+
       rules:
         - application: dp-soknad
         - application: dp-mellomlagring
