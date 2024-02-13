@@ -4,7 +4,7 @@ import nynorskLocale from "i18n-iso-countries/langs/nn.json";
 import englishLocale from "i18n-iso-countries/langs/en.json";
 
 export function getCountryName(code: string, locale: string | undefined) {
-  return getName(code, setLocale(locale));
+  return getName(code, setLocale(locale)) || "";
 }
 
 function setLocale(locale: string | undefined): string {

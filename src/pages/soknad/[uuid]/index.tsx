@@ -1,27 +1,29 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../utils/api.utils";
+import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
+import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getFeatureToggles } from "../../../api/unleash-api";
+import { IArbeidsforhold } from "../../../components/arbeidsforhold/ArbeidsforholdList";
 import { QuizProvider } from "../../../context/quiz-context";
+import { UserInformationProvider } from "../../../context/user-information-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
+import { getErrorDetails } from "../../../utils/api.utils";
+import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
-import { getPersonalia } from "../../../api/personalia-api";
-import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
-import { IArbeidsforhold } from "../../../components/arbeidsforhold/ArbeidsforholdList";
-import { UserInformationProvider } from "../../../context/user-information-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
+  featureToggles: { [key: string]: boolean };
 }
 
 export async function getServerSideProps(
@@ -37,6 +39,7 @@ export async function getServerSideProps(
         personalia: mockPersonalia,
         arbeidsforhold: [],
         errorCode: null,
+        featureToggles: {},
       },
     };
   }
@@ -61,6 +64,7 @@ export async function getServerSideProps(
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const featureToggles = await getFeatureToggles();
   const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
 
   if (!soknadStateResponse.ok) {
@@ -98,6 +102,7 @@ export async function getServerSideProps(
       personalia,
       errorCode,
       arbeidsforhold,
+      featureToggles,
     },
   };
 }
