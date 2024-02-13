@@ -5,4 +5,5 @@ dekorator:
   env: dev
 veilarbproxyUrl: https://veilarbregistrering.intern.dev.nav.no
 unleash:
+  url : https://dagpenger-unleash-api.nav.cloud.nais.io/api
   environment: development
