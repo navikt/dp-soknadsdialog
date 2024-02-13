@@ -1,5 +1,4 @@
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
-// import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
@@ -70,9 +69,14 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      {/* {faktumTexts?.description && <PortableText value={faktumTexts.description} />} */}
-      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-      {arbeidstid && <p>{getAppText(`${arbeidstid}.description`)}</p>}
+      <Label as={"p"} spacing>
+        {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+      </Label>
+      {arbeidstid && (
+        <BodyShort className="navds-fieldset__description" spacing>
+          {getAppText(`${arbeidstid}.description`)}
+        </BodyShort>
+      )}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
