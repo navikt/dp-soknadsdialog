@@ -84,7 +84,7 @@
     "husky": "^9.0.10",
     "identity-obj-proxy": "^3.0.0",
     "jsdom": "^23.0.0",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^15.2.2",
     "next-router-mock": "^0.9.12",
     "node-mocks-http": "^1.14.1",
     "pino-pretty": "^10.3.1",
