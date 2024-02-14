@@ -67,6 +67,19 @@ function ArbeidsforholdComponent(
     }
   }
 
+  function getArbeidsforholdDescriptionBySelectedArbeidstid() {
+    switch (arbeidstid) {
+      case "faktum.type-arbeidstid.svar.fast":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+      case "faktum.type-arbeidstid.svar.varierende":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+      case "faktum.type-arbeidstid.svar.kombinasjon":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+      default:
+        return "";
+    }
+  }
+
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Label as={"p"} spacing>
@@ -74,7 +87,7 @@ function ArbeidsforholdComponent(
       </Label>
       {arbeidstid && (
         <BodyShort className="navds-fieldset__description" spacing>
-          {getAppText(`${arbeidstid}.description`)}
+          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
         </BodyShort>
       )}
       {faktum?.svar?.map((fakta, svarIndex) => {
