@@ -48,6 +48,8 @@ spec:
       value: {{dekorator.env}}
     - name: VEILARBPROXY_URL
       value: {{veilarbproxyUrl}}
+    - name: NEXT_PUBLIC_SANITY_DATASET
+      value: {{sanity_dataset}}
     - name: UNLEASH_SERVER_API_URL
       value: {{unleash.url}}
   envFrom:

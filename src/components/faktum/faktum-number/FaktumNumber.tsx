@@ -16,7 +16,7 @@ export const FaktumNumber = forwardRef(FaktumNumberComponent);
 
 function FaktumNumberComponent(
   props: IFaktum<IQuizNumberFaktum>,
-  ref: Ref<HTMLInputElement> | undefined
+  ref: Ref<HTMLInputElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();

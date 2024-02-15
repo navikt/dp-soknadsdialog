@@ -51,6 +51,10 @@ export function FaktumTextComponent(
     }
   }, [debouncedText]);
 
+  useEffect(() => {
+    setCurrentAnswer(faktum.svar ?? "");
+  }, [faktum]);
+
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
 

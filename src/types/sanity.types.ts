@@ -18,6 +18,7 @@ export interface ISanityFaktum {
   errorMessage?: string;
   helpText?: ISanityHelpText;
   unit?: string;
+  alertText?: ISanityAlertText;
 }
 
 export interface ISanitySeksjon {

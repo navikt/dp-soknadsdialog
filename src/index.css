@@ -42,6 +42,10 @@
   margin: var(--a-spacing-3) 0;
 }
 
+.mb-10 {
+  margin-bottom: var(--a-spacing-10);
+}
+
 .navigation-container {
   display: flex;
   margin-top: var(--a-spacing-9);

@@ -17,7 +17,7 @@ export function Section(props: IProps) {
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
   const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);
   const firstUnansweredIndex = props.section.fakta.findIndex(
-    (faktum) => faktum.id === firstUnansweredFaktum?.id
+    (faktum) => faktum.id === firstUnansweredFaktum?.id,
   );
 
   if (!props.section.beskrivendeId) {

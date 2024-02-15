@@ -14,6 +14,9 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
+import { AlertText } from "../../alert-text/AlertText";
+import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { useFeatureToggles } from "../../../context/feature-toggle-context";
 
 interface IDateRange {
   from: Date | undefined;
@@ -35,6 +38,7 @@ function FaktumPeriodeComponent(
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { unansweredFaktumId } = useValidation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
@@ -51,7 +55,7 @@ function FaktumPeriodeComponent(
   const faktumTextTil = getAppText(`${faktum.beskrivendeId}.til`);
 
   useEffect(() => {
-    if (!isFirstRender) {
+    if (!isFirstRender && objectsNotEqual(faktum.svar, currentAnswer)) {
       saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
@@ -73,6 +77,14 @@ function FaktumPeriodeComponent(
 
     return undefined;
   }
+
+  useEffect(() => {
+    if (faktum.svar) {
+      const from = new Date(faktum.svar.fom);
+      const to = faktum.svar.tom ? new Date(faktum.svar.tom) : undefined;
+      setSelected({ from, to });
+    }
+  }, [faktum]);
 
   const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
@@ -176,6 +188,10 @@ function FaktumPeriodeComponent(
 
         {faktumTexts?.helpText && (
           <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+        )}
+
+        {arbeidsforholdIsEnabled && faktumTexts?.alertText && (
+          <AlertText alertText={faktumTexts.alertText} spacingTop />
         )}
       </Fieldset>
     </div>

@@ -1,12 +1,10 @@
 import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
-import { forwardRef, Ref, useEffect } from "react";
+import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { findEmployerName } from "../../utils/faktum.utils";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
 import {
@@ -14,11 +12,16 @@ import {
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
 } from "../../types/quiz.types";
+import { findEmployerName } from "../../utils/faktum.utils";
+import { FormattedDate } from "../FormattedDate";
 import { Faktum, IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { FormattedDate } from "../FormattedDate";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
+import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
+import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
+import { PortableText } from "@portabletext/react";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -30,6 +33,7 @@ function ArbeidsforholdComponent(
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -42,6 +46,7 @@ function ArbeidsforholdComponent(
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const currentSection = soknadState.seksjoner[sectionIndex];
+  const arbeidstid = findArbeidstid(soknadState);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {
@@ -65,11 +70,38 @@ function ArbeidsforholdComponent(
     }
   }
 
+  function getArbeidsforholdDescriptionBySelectedArbeidstid() {
+    switch (arbeidstid) {
+      case "faktum.type-arbeidstid.svar.fast":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+      case "faktum.type-arbeidstid.svar.varierende":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+      case "faktum.type-arbeidstid.svar.kombinasjon":
+        return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+      default:
+        return "";
+    }
+  }
+
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-      {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-
+      {arbeidsforholdIsEnabled ? (
+        <>
+          <Label as={"p"} spacing>
+            {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+          </Label>
+          {arbeidstid && (
+            <BodyShort className="navds-fieldset__description" spacing>
+              {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
+            </BodyShort>
+          )}
+        </>
+      ) : (
+        <>
+          <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+          {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+        </>
+      )}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -102,9 +134,15 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                {fakta.map((faktum) => (
-                  <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-                ))}
+                {arbeidsforholdIsEnabled ? (
+                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                ) : (
+                  <>
+                    {fakta.map((faktum) => (
+                      <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
+                    ))}
+                  </>
+                )}
 
                 <FetchIndicator isLoading={isLoading} />
 
@@ -118,7 +156,6 @@ function ArbeidsforholdComponent(
           </div>
         );
       })}
-
       <Button
         variant="secondary"
         className={"generator-faktum__add-button"}
@@ -142,6 +179,7 @@ export function getArbeidsforholdVarighet(arbeidsforhold: QuizFaktum[]) {
   const varighetFaktum = arbeidsforhold.find(
     (answer) => answer.beskrivendeId === "faktum.arbeidsforhold.varighet",
   )?.svar as IQuizPeriodeFaktumAnswerType;
+
   if (!varighetFaktum) return <></>;
 
   return (

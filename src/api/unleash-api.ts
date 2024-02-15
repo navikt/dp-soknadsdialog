@@ -2,13 +2,15 @@ import { logger } from "@navikt/next-logger";
 import { evaluateFlags, flagsClient, getDefinitions } from "@unleash/nextjs";
 
 export interface IFeatureToggles {
-  featureToggles: { [key: string]: boolean };
+  arbeidsforholdIsEnabled: boolean;
 }
 
-export async function getFeatureToggles() {
-  const featureToggles = {
-    arbeidsforholdIsEnabled: false,
-  };
+export const defaultFeatureToggles = {
+  arbeidsforholdIsEnabled: false,
+};
+
+export async function getFeatureToggles(): Promise<IFeatureToggles> {
+  const featureToggles = { ...defaultFeatureToggles };
 
   try {
     const definitions = await getDefinitions();

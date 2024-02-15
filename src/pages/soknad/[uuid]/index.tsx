@@ -1,9 +1,18 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
 import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getFeatureToggles } from "../../../api/unleash-api";
+import {
+  IFeatureToggles,
+  defaultFeatureToggles,
+  getFeatureToggles,
+} from "../../../api/unleash-api";
 import { QuizProvider } from "../../../context/quiz-context";
+import {
+  UserInformationProvider,
+  IArbeidsforhold,
+} from "../../../context/user-information-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
@@ -14,12 +23,14 @@ import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils"
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
+import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
-  featureToggles: { [key: string]: boolean };
+  arbeidsforhold: IArbeidsforhold[];
+  featureToggles: IFeatureToggles;
 }
 
 export async function getServerSideProps(
@@ -33,8 +44,11 @@ export async function getServerSideProps(
       props: {
         soknadState: mockNeste,
         personalia: mockPersonalia,
+        arbeidsforhold: [],
         errorCode: null,
-        featureToggles: {},
+        featureToggles: {
+          ...defaultFeatureToggles,
+        },
       },
     };
   }
@@ -53,12 +67,20 @@ export async function getServerSideProps(
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
+  let arbeidsforhold = [];
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const featureToggles = await getFeatureToggles();
+
+  if (featureToggles.arbeidsforholdIsEnabled) {
+    const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
+    if (arbeidsforholdResponse.ok) {
+      arbeidsforhold = await arbeidsforholdResponse.json();
+    }
+  }
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
@@ -90,15 +112,16 @@ export async function getServerSideProps(
       soknadState,
       personalia,
       errorCode,
+      arbeidsforhold,
       featureToggles,
     },
   };
 }
 
 export default function SoknadPage(props: IProps) {
-  const { errorCode, soknadState, personalia } = props;
+  const { errorCode, soknadState, personalia, arbeidsforhold, featureToggles } = props;
 
-  if (errorCode || !soknadState) {
+  if (errorCode || !soknadState || !arbeidsforhold) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -110,9 +133,13 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <ValidationProvider>
-        <Soknad personalia={personalia} />
-      </ValidationProvider>
+      <FeatureTogglesProvider featureToggles={featureToggles}>
+        <UserInformationProvider arbeidsforhold={arbeidsforhold}>
+          <ValidationProvider>
+            <Soknad personalia={personalia} />
+          </ValidationProvider>
+        </UserInformationProvider>
+      </FeatureTogglesProvider>
     </QuizProvider>
   );
 }
