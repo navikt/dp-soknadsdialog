@@ -14,12 +14,14 @@ import {
 } from "../../types/quiz.types";
 import { findEmployerName } from "../../utils/faktum.utils";
 import { FormattedDate } from "../FormattedDate";
-import { IFaktum } from "../faktum/Faktum";
+import { Faktum, IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
+import { PortableText } from "@portabletext/react";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -31,6 +33,7 @@ function ArbeidsforholdComponent(
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -82,13 +85,22 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Label as={"p"} spacing>
-        {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
-      </Label>
-      {arbeidstid && (
-        <BodyShort className="navds-fieldset__description" spacing>
-          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
-        </BodyShort>
+      {arbeidsforholdIsEnabled ? (
+        <>
+          <Label as={"p"} spacing>
+            {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+          </Label>
+          {arbeidstid && (
+            <BodyShort className="navds-fieldset__description" spacing>
+              {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
+            </BodyShort>
+          )}
+        </>
+      ) : (
+        <>
+          <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
+          {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
+        </>
       )}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
@@ -122,7 +134,15 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                {arbeidsforholdIsEnabled ? (
+                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                ) : (
+                  <>
+                    {fakta.map((faktum) => (
+                      <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
+                    ))}
+                  </>
+                )}
 
                 <FetchIndicator isLoading={isLoading} />
 

@@ -3,7 +3,11 @@ import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types"
 import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
 import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getFeatureToggles } from "../../../api/unleash-api";
+import {
+  IFeatureToggles,
+  defaultFeatureToggles,
+  getFeatureToggles,
+} from "../../../api/unleash-api";
 import { IArbeidsforhold } from "../../../components/arbeidsforhold/ArbeidsforholdList";
 import { QuizProvider } from "../../../context/quiz-context";
 import { UserInformationProvider } from "../../../context/user-information-context";
@@ -17,13 +21,14 @@ import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils"
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
+import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
-  featureToggles: { [key: string]: boolean };
+  featureToggles: IFeatureToggles;
 }
 
 export async function getServerSideProps(
@@ -39,7 +44,9 @@ export async function getServerSideProps(
         personalia: mockPersonalia,
         arbeidsforhold: [],
         errorCode: null,
-        featureToggles: {},
+        featureToggles: {
+          ...defaultFeatureToggles,
+        },
       },
     };
   }
@@ -65,7 +72,13 @@ export async function getServerSideProps(
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const featureToggles = await getFeatureToggles();
-  const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
+
+  if (featureToggles.arbeidsforholdIsEnabled) {
+    const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
+    if (arbeidsforholdResponse.ok) {
+      arbeidsforhold = await arbeidsforholdResponse.json();
+    }
+  }
 
   if (!soknadStateResponse.ok) {
     const errorData = await getErrorDetails(soknadStateResponse);
@@ -81,10 +94,6 @@ export async function getServerSideProps(
 
   if (soknadStatusResponse.ok) {
     soknadStatus = await soknadStatusResponse.json();
-  }
-
-  if (arbeidsforholdResponse.ok) {
-    arbeidsforhold = await arbeidsforholdResponse.json();
   }
 
   if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
@@ -108,7 +117,7 @@ export async function getServerSideProps(
 }
 
 export default function SoknadPage(props: IProps) {
-  const { errorCode, soknadState, personalia, arbeidsforhold } = props;
+  const { errorCode, soknadState, personalia, arbeidsforhold, featureToggles } = props;
 
   if (errorCode || !soknadState || !arbeidsforhold) {
     return (
@@ -122,11 +131,13 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <UserInformationProvider arbeidsforhold={arbeidsforhold}>
-        <ValidationProvider>
-          <Soknad personalia={personalia} />
-        </ValidationProvider>
-      </UserInformationProvider>
+      <FeatureTogglesProvider featureToggles={featureToggles}>
+        <UserInformationProvider arbeidsforhold={arbeidsforhold}>
+          <ValidationProvider>
+            <Soknad personalia={personalia} />
+          </ValidationProvider>
+        </UserInformationProvider>
+      </FeatureTogglesProvider>
     </QuizProvider>
   );
 }
