@@ -15,6 +15,7 @@ import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
+import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 
 interface IDateRange {
   from: Date | undefined;
@@ -52,7 +53,7 @@ function FaktumPeriodeComponent(
   const faktumTextTil = getAppText(`${faktum.beskrivendeId}.til`);
 
   useEffect(() => {
-    if (!isFirstRender && JSON.stringify(faktum.svar) !== JSON.stringify(currentAnswer)) {
+    if (!isFirstRender && objectsNotEqual(faktum.svar, currentAnswer)) {
       saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
