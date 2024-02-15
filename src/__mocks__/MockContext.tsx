@@ -7,6 +7,8 @@ import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
+import { FeatureTogglesProvider } from "../context/feature-toggle-context";
+import { UserInformationProvider } from "../context/user-information-context";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -61,17 +63,29 @@ export function MockContext(props: PropsWithChildren<IProps>) {
       <SanityProvider initialState={sanityTexts}>
         {mockQuizContext && (
           <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
-              <ValidationProvider>{children}</ValidationProvider>
-            </DokumentkravProvider>
+            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+              <UserInformationProvider arbeidsforhold={[]}>
+                <DokumentkravProvider
+                  initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
+                >
+                  <ValidationProvider>{children}</ValidationProvider>
+                </DokumentkravProvider>
+              </UserInformationProvider>
+            </FeatureTogglesProvider>
           </MockQuizProvider>
         )}
 
         {!mockQuizContext && (
           <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <DokumentkravProvider initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}>
-              <ValidationProvider>{children}</ValidationProvider>
-            </DokumentkravProvider>
+            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+              <UserInformationProvider arbeidsforhold={[]}>
+                <DokumentkravProvider
+                  initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
+                >
+                  <ValidationProvider>{children}</ValidationProvider>
+                </DokumentkravProvider>
+              </UserInformationProvider>
+            </FeatureTogglesProvider>
           </QuizProvider>
         )}
       </SanityProvider>

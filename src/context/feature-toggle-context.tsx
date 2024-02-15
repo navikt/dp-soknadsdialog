@@ -19,7 +19,7 @@ function useFeatureToggles() {
   const context = React.useContext(FeatureTogglesContext);
 
   if (!context) {
-    throw new Error("useUserInformation must be used within a UserInformationProvider");
+    throw new Error("useFeatureToggles must be used within a FeatureTogglesProvider");
   }
 
   return context;
