@@ -16,6 +16,7 @@ import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { useFeatureToggles } from "../../../context/feature-toggle-context";
 
 interface IDateRange {
   from: Date | undefined;
@@ -37,6 +38,7 @@ function FaktumPeriodeComponent(
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { unansweredFaktumId } = useValidation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
@@ -187,7 +189,10 @@ function FaktumPeriodeComponent(
         {faktumTexts?.helpText && (
           <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
         )}
-        {faktumTexts?.alertText && <AlertText alertText={faktumTexts.alertText} spacingTop />}
+
+        {arbeidsforholdIsEnabled && faktumTexts?.alertText && (
+          <AlertText alertText={faktumTexts.alertText} spacingTop />
+        )}
       </Fieldset>
     </div>
   );
