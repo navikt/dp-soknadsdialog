@@ -59,7 +59,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   }, [soknadState]);
 
   useEffect(() => {
-    if (arbeidsforholdSelectList.length > 0 && !currentSelectedArbeidsforhold) {
+    if (arbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
       setShowFaktum(false);
     }
   }, [currentSelectedArbeidsforhold]);
