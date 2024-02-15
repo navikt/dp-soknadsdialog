@@ -7,8 +7,13 @@ import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
+<<<<<<< HEAD
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInformationProvider } from "../context/user-information-context";
+=======
+import { MockUserInformationProvider } from "./MockUserInformationProvider";
+import { MockFeatureTogglesProvider } from "./MockFeatureTogglesProvider";
+>>>>>>> ba9735a (Mock nye contexter)
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
