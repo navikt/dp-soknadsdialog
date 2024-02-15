@@ -1,5 +1,5 @@
 import { subMonths } from "date-fns";
-import { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
+import { IArbeidsforhold } from "../context/user-information-context";
 import { IQuizPeriodeFaktumAnswerType, IQuizState } from "../types/quiz.types";
 
 export function filterArbeidsforhold(

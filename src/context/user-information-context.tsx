@@ -1,5 +1,11 @@
 import React, { PropsWithChildren, createContext, useState } from "react";
-import type { IArbeidsforhold } from "../components/arbeidsforhold/ArbeidsforholdList";
+
+export interface IArbeidsforhold {
+  id: string;
+  organisasjonsnavn: string;
+  startdato: string;
+  sluttdato?: string;
+}
 
 interface IUserInformationContext {
   arbeidsforhold: IArbeidsforhold[];

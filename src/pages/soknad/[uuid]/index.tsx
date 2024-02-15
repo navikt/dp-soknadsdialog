@@ -8,9 +8,11 @@ import {
   defaultFeatureToggles,
   getFeatureToggles,
 } from "../../../api/unleash-api";
-import { IArbeidsforhold } from "../../../components/arbeidsforhold/ArbeidsforholdList";
 import { QuizProvider } from "../../../context/quiz-context";
-import { UserInformationProvider } from "../../../context/user-information-context";
+import {
+  UserInformationProvider,
+  IArbeidsforhold,
+} from "../../../context/user-information-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";

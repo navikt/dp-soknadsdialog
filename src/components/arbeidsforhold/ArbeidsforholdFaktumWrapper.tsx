@@ -10,10 +10,9 @@ import {
 } from "../../utils/arbeidsforhold.utils";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useUserInformation } from "../../context/user-information-context";
+import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
-import { IArbeidsforhold } from "./ArbeidsforholdList";
 
 interface IProps {
   fakta: QuizFaktum[];
