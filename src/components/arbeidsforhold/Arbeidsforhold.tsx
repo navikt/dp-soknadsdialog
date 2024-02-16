@@ -1,4 +1,13 @@
-import { BodyShort, Button, Detail, Heading, Label, Modal } from "@navikt/ds-react";
+import {
+  BodyLong,
+  BodyShort,
+  Button,
+  Detail,
+  Heading,
+  Label,
+  Modal,
+  ReadMore,
+} from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
@@ -22,6 +31,7 @@ import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 import { useFeatureToggles } from "../../context/feature-toggle-context";
 import { PortableText } from "@portabletext/react";
+import styles from "./Arbeidsforhold.module.css";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -91,7 +101,7 @@ function ArbeidsforholdComponent(
             {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
           </Label>
           {arbeidstid && (
-            <BodyShort className="navds-fieldset__description" spacing>
+            <BodyShort className={styles.dynamicText}>
               {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
             </BodyShort>
           )}
@@ -135,7 +145,19 @@ function ArbeidsforholdComponent(
             >
               <Modal.Body>
                 {arbeidsforholdIsEnabled ? (
-                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                  <>
+                    <BodyLong className={styles.description}>
+                      {getAppText("arbeidsforhold.modal.beskrivelse")}
+                    </BodyLong>
+                    <ReadMore
+                      header={getAppText("arbeidsforhold.modal.readmore-header")}
+                      className={styles.modalReadmore}
+                      defaultOpen={false}
+                    >
+                      {getAppText("arbeidsforhold.modal.readmore-innhold")}
+                    </ReadMore>
+                    <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                  </>
                 ) : (
                   <>
                     {fakta.map((faktum) => (
