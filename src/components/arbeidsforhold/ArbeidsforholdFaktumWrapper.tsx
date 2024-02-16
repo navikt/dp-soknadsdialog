@@ -13,6 +13,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
+import { trackAAREGArbeidsforholdBleValgt } from "../../amplitude.tracking";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -35,6 +36,8 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
+    trackAAREGArbeidsforholdBleValgt();
+
     const selectedArbeidsforhold = arbeidsforholdSelectList.find(
       (forhold) => forhold.id === event.target.value,
     );

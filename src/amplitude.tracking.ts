@@ -54,3 +54,31 @@ export function tidBruktSiden(start: Date): number {
   const slutt = new Date().getTime();
   return (slutt - start.getTime()) / 1000;
 }
+
+// Arbeidsforhold
+
+export function trackLeggTilArbeidsforholdManuelt() {
+  track("lagt til arbeidsforhold manuelt");
+}
+
+export function trackAAREGArbeidsforholdBleValgt() {
+  track("aareg arbeidsforhold ble valgt");
+}
+
+export function trackAAREGArbeidsforholdBedriftsnavnKorigert(bedriftsnavn: string) {
+  track("aareg arbeidsforhold bedriftsnavn korrigert", {
+    bedriftsnavn,
+  });
+}
+
+export function trackAAREGArbeidsforholdFOMKorigert(bedriftsnavn: string) {
+  track("aareg arbeidsforhold tom dato korrigert", {
+    bedriftsnavn,
+  });
+}
+
+export function trackAAREGArbeidsforholdTOMKorigert(bedriftsnavn: string) {
+  track("aareg arbeidsforhold tom dato korrigert", {
+    bedriftsnavn,
+  });
+}
