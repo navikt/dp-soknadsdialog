@@ -86,7 +86,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
                   label={getAppText("arbeidsforhold.velg.liste")}
                   onChange={(event) => selectArbeidsforhold(faktum, event)}
                 >
-                  <option value="">{getAppText("arbeidsforhold.velg.liste")}</option>
+                  <option value="">{getAppText("arbeidsforhold.velg.liste.ikke-valgt")}</option>
                   {arbeidsforholdSelectList.map((forhold) => (
                     <option value={forhold.id} key={forhold.id}>
                       {forhold.organisasjonsnavn}
