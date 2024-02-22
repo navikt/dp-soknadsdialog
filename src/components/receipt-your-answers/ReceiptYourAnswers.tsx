@@ -24,32 +24,34 @@ export function ReceiptYourAnswers(props: IProps) {
         className={styles.receiptYourAnswersHeader}
         header={getAppText("kvittering.dine-svar.header")}
       >
-        {personalia && (
-          <Accordion.Item>
-            <Accordion.Header>
-              {personaliaTexts?.title ? personaliaTexts.title : textPersonaliaId}
-            </Accordion.Header>
-            <Accordion.Content>
-              <Personalia personalia={personalia} mode="summary" />
-            </Accordion.Content>
-          </Accordion.Item>
-        )}
-        {sections?.map((section) => {
-          const sectionTexts = getSeksjonTextById(section.beskrivendeId);
-
-          return (
-            <Accordion.Item key={section.beskrivendeId}>
+        <Accordion>
+          {personalia && (
+            <Accordion.Item>
               <Accordion.Header>
-                {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
+                {personaliaTexts?.title ? personaliaTexts.title : textPersonaliaId}
               </Accordion.Header>
               <Accordion.Content>
-                {section.fakta.map((faktum) => {
-                  return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
-                })}
+                <Personalia personalia={personalia} mode="summary" />
               </Accordion.Content>
             </Accordion.Item>
-          );
-        })}
+          )}
+          {sections?.map((section) => {
+            const sectionTexts = getSeksjonTextById(section.beskrivendeId);
+
+            return (
+              <Accordion.Item key={section.beskrivendeId}>
+                <Accordion.Header>
+                  {sectionTexts?.title ? sectionTexts?.title : section.beskrivendeId}
+                </Accordion.Header>
+                <Accordion.Content>
+                  {section.fakta.map((faktum) => {
+                    return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
+            );
+          })}
+        </Accordion>
       </ReadMore>
     </div>
   );
