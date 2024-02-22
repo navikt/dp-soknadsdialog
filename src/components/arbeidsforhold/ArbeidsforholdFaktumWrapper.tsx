@@ -13,7 +13,10 @@ import { useSanity } from "../../context/sanity-context";
 import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
-import { trackAAREGArbeidsforholdBleValgt } from "../../amplitude.tracking";
+import {
+  trackAAREGArbeidsforholdBleValgt,
+  trackLagtTilArbeidsforholdManuelt,
+} from "../../amplitude.tracking";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -36,21 +39,26 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    trackAAREGArbeidsforholdBleValgt();
-
-    const selectedArbeidsforhold = arbeidsforholdSelectList.find(
-      (forhold) => forhold.id === event.target.value,
-    );
-
-    setShowFaktum(true);
-    setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
-
-    if (!selectedArbeidsforhold) {
+    if (!event.target.value) {
+      setShowFaktum(false);
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
-    saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+    if (event.target.value === "add-manually") {
+      setShowFaktum(true);
+      saveFaktumToQuiz(faktum, null);
+      trackLagtTilArbeidsforholdManuelt();
+    } else {
+      const selectedArbeidsforhold = arbeidsforholdSelectList.find(
+        (forhold) => forhold.id === event.target.value,
+      );
+
+      setShowFaktum(true);
+      trackAAREGArbeidsforholdBleValgt();
+      setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
+      saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+    }
   }
 
   useEffect(() => {
@@ -95,7 +103,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
                       {forhold.organisasjonsnavn}
                     </option>
                   ))}
-                  <option value="" onClick={() => setShowFaktum(true)}>
+                  <option value="add-manually">
                     {getAppText("arbeidsforhold.velg.liste.annet")}
                   </option>
                 </Select>

@@ -31,7 +31,6 @@ import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 import { useFeatureToggles } from "../../context/feature-toggle-context";
 import { PortableText } from "@portabletext/react";
-import { trackLeggTilArbeidsforholdManuelt } from "../../amplitude.tracking";
 import styles from "./Arbeidsforhold.module.css";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
@@ -72,10 +71,6 @@ function ArbeidsforholdComponent(
   }, [faktum?.svar?.length]);
 
   function addArbeidsforhold(faktum: IQuizGeneratorFaktum) {
-    if (arbeidsforholdIsEnabled) {
-      trackLeggTilArbeidsforholdManuelt();
-    }
-
     const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
     if (faktum?.svar && hasUnansweredFaktumId) {

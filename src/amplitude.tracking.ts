@@ -57,7 +57,7 @@ export function tidBruktSiden(start: Date): number {
 
 // Arbeidsforhold
 
-export function trackLeggTilArbeidsforholdManuelt() {
+export function trackLagtTilArbeidsforholdManuelt() {
   track("lagt til arbeidsforhold manuelt");
 }
 
