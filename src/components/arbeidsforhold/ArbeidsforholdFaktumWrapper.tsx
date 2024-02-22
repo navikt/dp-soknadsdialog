@@ -92,8 +92,9 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
                       {forhold.organisasjonsnavn}
                     </option>
                   ))}
-
-                  <option value="">{getAppText("arbeidsforhold.velg.liste.annet")}</option>
+                  <option value="" onClick={() => setShowFaktum(true)}>
+                    {getAppText("arbeidsforhold.velg.liste.annet")}
+                  </option>
                 </Select>
               )}
 
