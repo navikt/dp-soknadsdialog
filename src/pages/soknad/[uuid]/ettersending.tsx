@@ -2,7 +2,7 @@ import { Alert } from "@navikt/ds-react";
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getErrorDetails } from "../../../utils/api.utils";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { Ettersending } from "../../../views/ettersending/Ettersending";
@@ -29,8 +29,10 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  let errorCode = null;
+  let dokumentkrav = null;
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -38,11 +40,7 @@ export async function getServerSideProps(
       },
     };
   }
-
-  let errorCode = null;
-  let dokumentkrav = null;
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);

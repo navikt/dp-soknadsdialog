@@ -1,21 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSoknadMal } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 
 async function malHandler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession(req);
-
   if (process.env.USE_MOCKS === "true") {
     const response = await getSoknadMal("");
     return res.status(200).json(response);
   }
 
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+  if (!onBehalfOf.ok) {
     return res.status(401).end();
   }
-
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const response = await getSoknadMal(onBehalfOfToken);
+  const response = await getSoknadMal(onBehalfOf.token);
 
   if (!response.ok) {
     return res.status(401).send({});

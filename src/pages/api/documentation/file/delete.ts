@@ -3,7 +3,6 @@ import { getErrorMessage } from "../../../../utils/api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
-  getSession,
   getSoknadOnBehalfOfToken,
 } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
@@ -20,22 +19,20 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json("slettet");
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, dokumentkravId, filsti } = req.body;
   validateUUID(uuid);
 
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(
       uuid,
       dokumentkravId,
-      soknadOnBehalfOfToken,
+      soknadOnBehalfOf.token,
       filsti
     );
 
@@ -50,7 +47,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const mellomlagringResponse = await deleteFileFromMellomlagring(
       uuid,
-      mellomlagringOnBehalfOfToken,
+      mellomlagringOnBehalfOf.token,
       filsti
     );
 

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 
 export interface IDeleteSoknadBody {
@@ -13,17 +13,15 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json("slettet");
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid } = req.body;
   try {
-    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+    const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+    if (!onBehalfOf.ok) {
+      return res.status(401).end();
+    }
     const deleteSoknadResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}`, {
       method: "DELETE",
-      headers: headersWithToken(onBehalfOfToken),
+      headers: headersWithToken(onBehalfOf.token),
     });
 
     if (!deleteSoknadResponse.ok) {

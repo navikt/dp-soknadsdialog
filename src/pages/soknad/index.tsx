@@ -7,7 +7,10 @@ import {
   getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
 import { getMineSoknader } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getVeilarbregistreringOnBehalfOfToken,
+} from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
@@ -43,8 +46,13 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  let mineSoknader = null;
+  let arbeidssokerStatus: IArbeidssokerStatus;
+  let errorCode = null;
+
+  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
+  const verilarbObo = await getVeilarbregistreringOnBehalfOfToken(context.req);
+  if (!soknadObo.ok || !verilarbObo.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -53,13 +61,8 @@ export async function getServerSideProps(
     };
   }
 
-  let mineSoknader = null;
-  let arbeidssokerStatus: IArbeidssokerStatus;
-  let errorCode = null;
-
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const mineSoknaderResponse = await getMineSoknader(soknadObo.token);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(verilarbObo.token);
 
   if (!mineSoknaderResponse.ok) {
     const errorData = await getErrorDetails(mineSoknaderResponse);

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 
@@ -17,17 +17,14 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json(mockDokumentkravList);
   }
 
-  const session = await getSession(req);
-
-  if (!session) {
+  const uuid = req.query.uuid as string;
+  const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+  if (!onBehalfOf.ok) {
     return res.status(401).end();
   }
 
-  const uuid = req.query.uuid as string;
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-
   try {
-    const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+    const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
     if (!dokumentkravResponse.ok) {
       throw new Error(dokumentkravResponse.statusText);
     }

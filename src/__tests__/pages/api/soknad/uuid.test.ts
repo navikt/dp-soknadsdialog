@@ -3,12 +3,11 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 import uuidHandler from "../../../../pages/api/soknad/uuid";
 
 vi.mock("../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
@@ -25,7 +24,7 @@ afterEach(() => {
 describe("/api/soknad/uuid", () => {
   test("Should get a new uuid to start an application", async () => {
     fetch.mockResponses(
-      ["12345", { status: 200 }], // Response from dp-soknad
+      ["12345", { status: 200 }] // Response from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -41,7 +40,7 @@ describe("/api/soknad/uuid", () => {
 
   test("Should return error if getting a new uuid fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }], // Response from dp-soknad on error
+      [JSON.stringify({ ok: false }), { status: 500 }] // Response from dp-soknad on error
     );
 
     const { req, res } = createMocks({

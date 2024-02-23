@@ -3,10 +3,9 @@ import saveFaktumHandler, { ISaveFaktumBody } from "../../../../../pages/api/sok
 import createFetchMock from "vitest-fetch-mock";
 import { QuizFaktum } from "../../../../../types/quiz.types";
 import { mockNeste } from "../../../../../localhost-data/mock-neste";
-import { mockGetSession, mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
 
 vi.mock("../../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 
@@ -45,7 +44,7 @@ describe("/api/soknad/faktum/save", () => {
   test("Should post answer and get new application state back", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Post answer "send later"
-      [JSON.stringify(mockNeste), { status: 200 }], // Fetch new application state
+      [JSON.stringify(mockNeste), { status: 200 }] // Fetch new application state
     );
 
     const { req, res } = createMocks({
@@ -63,7 +62,7 @@ describe("/api/soknad/faktum/save", () => {
   test("Should return error if answering the question fails", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: false }), { status: 500 }], // Post answer "send later"
-      [JSON.stringify(mockNeste), { status: 200 }], // Fetch new application state
+      [JSON.stringify(mockNeste), { status: 200 }] // Fetch new application state
     );
 
     const { req, res } = createMocks({
@@ -81,7 +80,7 @@ describe("/api/soknad/faktum/save", () => {
   test("Should return error if getting the new application state fails", async () => {
     fetch.mockResponses(
       [JSON.stringify({ ok: true }), { status: 200 }], // Post answer "send later"
-      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }], // Fetch new application state
+      [JSON.stringify({ status: 500, statusText: "Something bad happened" }), { status: 500 }] // Fetch new application state
     );
 
     const { req, res } = createMocks({

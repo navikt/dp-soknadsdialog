@@ -1,17 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../utils/auth.utils";
+import { expiresIn, getToken, validateToken } from "@navikt/oasis";
 
 export interface ISessionData {
   expiresIn: number;
 }
 
 async function session(req: NextApiRequest, res: NextApiResponse<ISessionData>) {
-  const session = await getSession(req);
-
-  if (!session) return res.status(401).end();
+  const token = getToken(req);
+  if (!token) return res.status(401).end();
+  const validation = await validateToken(token);
+  if (!validation.ok) return res.status(401).end();
 
   res.json({
-    expiresIn: session.expiresIn,
+    expiresIn: expiresIn(token),
   });
 }
 

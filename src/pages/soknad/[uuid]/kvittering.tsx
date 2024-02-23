@@ -7,7 +7,10 @@ import {
   getArbeidssokerperioder,
 } from "../../../api/arbeidssoker-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getVeilarbregistreringOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -55,8 +58,17 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  let errorCode = null;
+  let soknadState = null;
+  let arbeidssokerStatus: IArbeidssokerStatus;
+  let dokumentkrav: IDokumentkravList | null = null;
+  let soknadStatus: ISoknadStatus = { status: "Ukjent" };
+  let personalia = null;
+
+  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
+  const veilarbObo = await getVeilarbregistreringOnBehalfOfToken(context.req);
+
+  if (!soknadObo.ok || !veilarbObo.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -65,19 +77,12 @@ export async function getServerSideProps(
     };
   }
 
-  let errorCode = null;
-  let soknadState = null;
-  let arbeidssokerStatus: IArbeidssokerStatus;
-  let dokumentkrav: IDokumentkravList | null = null;
-  let soknadStatus: ISoknadStatus = { status: "Ukjent" };
-  let personalia = null;
+  const soknadStateResponse = await getSoknadState(uuid, soknadObo.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadObo.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadObo.token);
+  const personaliaResponse = await getPersonalia(soknadObo.token);
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(veilarbObo.token);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();

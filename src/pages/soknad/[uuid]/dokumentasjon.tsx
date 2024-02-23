@@ -2,7 +2,7 @@ import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getErrorDetails } from "../../../utils/api.utils";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { IDokumentkravList } from "../../../types/documentation.types";
@@ -36,8 +36,13 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  let errorCode = null;
+  let soknadState = null;
+  let dokumentkrav = null;
+  let soknadStatus = null;
+
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -46,15 +51,9 @@ export async function getServerSideProps(
     };
   }
 
-  let errorCode = null;
-  let soknadState = null;
-  let dokumentkrav = null;
-  let soknadStatus = null;
-
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);

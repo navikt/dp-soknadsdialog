@@ -4,7 +4,6 @@ import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
-  getSession,
   getSoknadOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
@@ -25,22 +24,20 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringOnBehalfOfToken,
+      mellomlagringOnBehalfOf.token,
       requestId
     );
     bundlingTimer();
@@ -63,7 +60,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       urn,
-      soknadOnBehalfOfToken,
+      soknadOnBehalfOf.token,
       requestId
     );
 
