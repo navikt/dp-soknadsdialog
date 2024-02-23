@@ -56,29 +56,28 @@ export function tidBruktSiden(start: Date): number {
 }
 
 // Arbeidsforhold
-
 export function trackLagtTilArbeidsforholdManuelt() {
   track("lagt til arbeidsforhold manuelt");
 }
 
-export function trackAAREGArbeidsforholdBleValgt() {
-  track("aareg arbeidsforhold ble valgt");
+export function trackValgtArbeidsforholdFraAAREG() {
+  track("valgt arbeidsforhold fra aareg");
 }
 
-export function trackAAREGArbeidsforholdBedriftsnavnKorigert(bedriftsnavn: string) {
-  track("aareg arbeidsforhold bedriftsnavn korrigert", {
+export function trackKorigertBedriftsnavnFraAAREG(bedriftsnavn: string) {
+  track("korrigert bedriftsnavn fra aareg", {
     bedriftsnavn,
   });
 }
 
-export function trackAAREGArbeidsforholdFOMKorigert(bedriftsnavn: string) {
-  track("aareg arbeidsforhold tom dato korrigert", {
+export function trackKorrigertStartdatoFraAAREG(bedriftsnavn: string) {
+  track("korrigert startdato fra aareg", {
     bedriftsnavn,
   });
 }
 
-export function trackAAREGArbeidsforholdTOMKorigert(bedriftsnavn: string) {
-  track("aareg arbeidsforhold tom dato korrigert", {
+export function trackKorrigertSluttdatoFraAAREG(bedriftsnavn: string) {
+  track("korrigert sluttdato fra aareg", {
     bedriftsnavn,
   });
 }

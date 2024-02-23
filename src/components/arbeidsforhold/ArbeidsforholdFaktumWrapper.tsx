@@ -14,7 +14,7 @@ import { useUserInformation, IArbeidsforhold } from "../../context/user-informat
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 import {
-  trackAAREGArbeidsforholdBleValgt,
+  trackValgtArbeidsforholdFraAAREG,
   trackLagtTilArbeidsforholdManuelt,
 } from "../../amplitude.tracking";
 
@@ -55,7 +55,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       );
 
       setShowFaktum(true);
-      trackAAREGArbeidsforholdBleValgt();
+      trackValgtArbeidsforholdFraAAREG();
       setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }
