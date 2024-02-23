@@ -19,7 +19,7 @@ import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
@@ -34,7 +34,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext,
+  context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -53,8 +53,14 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  let errorCode = null;
+  let soknadState = null;
+  let personalia = null;
+  let soknadStatus = null;
+  let arbeidsforhold = [];
+
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -62,21 +68,13 @@ export async function getServerSideProps(
       },
     };
   }
-
-  let errorCode = null;
-  let soknadState = null;
-  let personalia = null;
-  let soknadStatus = null;
-  let arbeidsforhold = [];
-
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
+  const personaliaResponse = await getPersonalia(onBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
   const featureToggles = await getFeatureToggles();
 
   if (featureToggles.arbeidsforholdIsEnabled) {
-    const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
+    const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOf.token);
     if (arbeidsforholdResponse.ok) {
       arbeidsforhold = await arbeidsforholdResponse.json();
     }

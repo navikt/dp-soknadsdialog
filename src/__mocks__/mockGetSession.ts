@@ -1,18 +1,8 @@
-import { SessionWithOboProvider } from "@navikt/oasis/index/";
+import { OboResult } from "@navikt/oasis";
 
 const mockToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJwaWQiOiIxMjMxMjMxMjMifQ.XdPmoIvLFmgz51eH_05WBNOllgWEtp9kYHkWAHqMwEc";
 
-export function mockGetSession(): SessionWithOboProvider {
-  const session = {
-    token: mockToken,
-    apiToken: async () => "access_token",
-    expiresIn: 123,
-  };
-
-  return session;
-}
-
-export function mockGetOnBehalfOfToken(): string {
-  return mockToken;
+export function mockGetOnBehalfOfToken(): Promise<OboResult> {
+  return Promise.resolve(OboResult.Ok(mockToken));
 }

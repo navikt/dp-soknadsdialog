@@ -4,12 +4,11 @@
 // Test lint-staged prettier list-different
 
 import { createMocks } from "node-mocks-http";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 import deleteHandler, { IDeleteSoknadBody } from "../../../../pages/api/soknad/delete";
 
 vi.mock("../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 

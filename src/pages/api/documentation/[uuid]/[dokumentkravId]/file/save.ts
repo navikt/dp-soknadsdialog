@@ -5,7 +5,6 @@ import { getErrorMessage } from "../../../../../../utils/api.utils";
 import { headersWithToken } from "../../../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
-  getSession,
   getSoknadOnBehalfOfToken,
 } from "../../../../../../utils/auth.utils";
 import { logRequestError } from "../../../../../../error.logger";
@@ -31,19 +30,16 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const session = await getSession(req);
-
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const callId = uuidV4();
   const uuid = req.query.uuid as string;
   validateUUID(uuid);
 
   const dokumentkravId = req.query.dokumentkravId as string;
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   res.setHeader("X-Request-Id", callId);
 
@@ -52,7 +48,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
       req,
       uuid,
       dokumentkravId,
-      mellomlagringOnBehalfOfToken,
+      mellomlagringOnBehalfOf.token,
       callId
     );
 
@@ -64,7 +60,7 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     const dpSoknadResponse = await saveFileToDPSoknad(
       uuid,
       dokumentkravId,
-      soknadOnBehalfOfToken,
+      soknadOnBehalfOf.token,
       fileData[0],
       callId
     );

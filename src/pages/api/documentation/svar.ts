@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
 import { getDokumentkrav } from "./[uuid]";
@@ -22,20 +22,18 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json({ status: "ok" });
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, dokumentkravId, dokumentkravSvar } = req.body;
   try {
-    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+    const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+    if (!onBehalfOf.ok) {
+      return res.status(401).end();
+    }
     const response = await fetch(
       `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/svar`,
       {
         method: "PUT",
         body: JSON.stringify(dokumentkravSvar),
-        headers: headersWithToken(onBehalfOfToken),
+        headers: headersWithToken(onBehalfOf.token),
       }
     );
 
@@ -43,7 +41,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(response.status).send(response.statusText);
     }
 
-    const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+    const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
     if (!dokumentkravResponse.ok) {
       return res.status(response.status).send(response.statusText);
     }

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
 import { getSoknadState } from "../../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
@@ -17,15 +17,14 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.USE_MOCKS === "true") {
     return res.status(200).json(mockGenerellInnsending);
   }
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
 
   const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+  const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+  if (!onBehalfOf.ok) {
+    return res.status(401).end();
+  }
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
   const faktumResponse = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktum.id}`,
@@ -33,7 +32,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
       method: "Put",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${onBehalfOfToken}`,
+        Authorization: `Bearer ${onBehalfOf.token}`,
         "X-Request-ID": requestId,
       },
       body: JSON.stringify({ ...faktum, svar }),
@@ -51,7 +50,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { sistBesvart } = await faktumResponse.json();
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken, sistBesvart, requestId);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token, sistBesvart, requestId);
 
   if (!soknadStateResponse.ok) {
     logRequestError(

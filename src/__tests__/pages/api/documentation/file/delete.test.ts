@@ -6,11 +6,10 @@ import { createMocks } from "node-mocks-http";
 import deleteFileHandler, {
   IDeleteFileBody,
 } from "../../../../../pages/api/documentation/file/delete";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 
 vi.mock("../../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
