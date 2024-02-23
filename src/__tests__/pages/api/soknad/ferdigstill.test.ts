@@ -36,7 +36,7 @@ const ferdigstillMockData: IFerdigstillBody = {
 describe("/api/soknad/ferdigstill", () => {
   test("Should send an application", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: true }), { status: 200 }] // Response from dp-soknad
+      [JSON.stringify({ ok: true }), { status: 200 }], // Response from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -53,7 +53,7 @@ describe("/api/soknad/ferdigstill", () => {
 
   test("Should return error if sending in the application fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Response from dp-soknad on error
+      [JSON.stringify({ ok: false }), { status: 500 }], // Response from dp-soknad on error
     );
 
     const { req, res } = createMocks({

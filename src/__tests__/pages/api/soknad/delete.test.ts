@@ -28,7 +28,7 @@ const deleteSoknadMockdata: IDeleteSoknadBody = {
 describe("/api/soknad/delete", () => {
   test("Should delete an application", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: true }), { status: 200 }] // Delete from dp-soknad
+      [JSON.stringify({ ok: true }), { status: 200 }], // Delete from dp-soknad
     );
 
     const { req, res } = createMocks({
@@ -45,7 +45,7 @@ describe("/api/soknad/delete", () => {
 
   test("Should return error if deleting the application fails", async () => {
     fetch.mockResponses(
-      [JSON.stringify({ ok: false }), { status: 500 }] // Delete application from dp-soknad
+      [JSON.stringify({ ok: false }), { status: 500 }], // Delete application from dp-soknad
     );
 
     const { req, res } = createMocks({
