@@ -95,7 +95,7 @@ function StandardGeneratorComponent(
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
               onClose={() => {}}
-              header={{ heading: "" }}
+              header={{ heading: "", closeButton: false }}
             >
               <Modal.Body>
                 {fakta.map((faktum) => (
