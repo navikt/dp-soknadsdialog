@@ -55,9 +55,8 @@ export function NoSessionModal() {
   return (
     <Modal
       className="modal-container modal-container--error"
-      onClose={() => {
-        return;
-      }}
+      onClose={() => {}}
+      header={{ heading: "" }}
       open={modalOpen}
     >
       <Modal.Body>

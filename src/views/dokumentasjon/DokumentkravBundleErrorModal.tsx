@@ -62,6 +62,7 @@ export function DokumentkravBundleErrorModal({
         className="modal-container modal-container--error"
         onClose={() => toggleVisibility(false)}
         open={isOpen}
+        header={{ heading: "" }}
       >
         <Modal.Header closeButton={false} className="modal-container--custom-header">
           <Heading size={"medium"} spacing>

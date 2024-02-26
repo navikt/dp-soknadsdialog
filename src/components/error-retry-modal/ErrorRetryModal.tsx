@@ -56,10 +56,9 @@ export function ErrorRetryModal(props: IProps) {
   return (
     <Modal
       className="modal-container modal-container--error"
-      onClose={() => {
-        return;
-      }}
+      onClose={() => {}}
       open={errorsCount <= 2}
+      header={{ heading: "" }}
     >
       <Modal.Body>
         <Modal.Header closeButton={false} className="modal-container__custom-header">

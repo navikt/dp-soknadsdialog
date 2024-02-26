@@ -94,6 +94,8 @@ function StandardGeneratorComponent(
             <Modal
               className="modal-container modal-container--generator"
               open={activeIndex === svarIndex}
+              onClose={() => {}}
+              header={{ heading: "" }}
             >
               <Modal.Body>
                 {fakta.map((faktum) => (
