@@ -1,4 +1,4 @@
-import { Button, Heading, Modal } from "@navikt/ds-react";
+import { Button, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
@@ -55,18 +55,14 @@ export function NoSessionModal() {
   return (
     <Modal
       className="modal-container modal-container--error"
-      onClose={() => {
-        return;
-      }}
+      onClose={() => {}}
+      header={{ heading: getAppText("utlopt-sessjon.modal.tittel") }}
       open={modalOpen}
     >
       <Modal.Body>
         <div className={styles.iconContainer}>
           <NoSessionError />
         </div>
-        <Heading size={"medium"} spacing>
-          {getAppText("utlopt-sessjon.modal.tittel")}
-        </Heading>
         <p>{getAppText("utlopt-sessjon.modal.detaljer")}</p>
         <div className={styles.actionButtonsContainer}>
           <Button variant={"primary"} onClick={login}>

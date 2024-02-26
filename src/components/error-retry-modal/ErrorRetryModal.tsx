@@ -56,16 +56,11 @@ export function ErrorRetryModal(props: IProps) {
   return (
     <Modal
       className="modal-container modal-container--error"
-      onClose={() => {
-        return;
-      }}
+      onClose={() => {}}
       open={errorsCount <= 2}
+      header={{ heading: getAppText("teknisk-feil.modal.tittel"), closeButton: false }}
     >
       <Modal.Body>
-        <Modal.Header closeButton={false} className="modal-container__custom-header">
-          {getAppText("teknisk-feil.modal.tittel")}
-        </Modal.Header>
-
         <BodyLong className={styles.body}>{errorMessage}</BodyLong>
         <Button
           className={styles.errorRetryModalButton}

@@ -1,4 +1,4 @@
-import { BodyLong, Button, Heading, Modal } from "@navikt/ds-react";
+import { BodyLong, Button, Modal } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
@@ -62,12 +62,11 @@ export function DokumentkravBundleErrorModal({
         className="modal-container modal-container--error"
         onClose={() => toggleVisibility(false)}
         open={isOpen}
+        header={{
+          heading: getAppText("dokumentkrav.bundle-error-modal.tittel"),
+          closeButton: false,
+        }}
       >
-        <Modal.Header closeButton={false} className="modal-container--custom-header">
-          <Heading size={"medium"} spacing>
-            {getAppText("dokumentkrav.bundle-error-modal.tittel")}
-          </Heading>
-        </Modal.Header>
         <Modal.Body>
           <BodyLong>{getAppText("dokumentkrav.bundle-error-modal.beskrivelse")}</BodyLong>
 
