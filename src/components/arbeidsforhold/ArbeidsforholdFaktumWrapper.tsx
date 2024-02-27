@@ -33,6 +33,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { getAppText } = useSanity();
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
+  const [hasSetPeriod, setHasSetPeriod] = useState(false);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
@@ -96,7 +97,8 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     const varighetChanged =
       arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
 
-    if (currentSelectedArbeidsforhold && varighetChanged) {
+    if (currentSelectedArbeidsforhold && varighetChanged && !hasSetPeriod) {
+      setHasSetPeriod(true);
       saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
   }, [fakta, currentSelectedArbeidsforhold]);
