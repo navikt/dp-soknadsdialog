@@ -13,7 +13,6 @@ import {
   findArbeidstid,
   getPeriodeLength,
   getPeriodeObject,
-  objectsNotEqual,
   sortArbeidsforhold,
 } from "../../utils/arbeidsforhold.utils";
 import { Faktum } from "../faktum/Faktum";
@@ -28,7 +27,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { getAppText } = useSanity();
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const [showFaktum, setShowFaktum] = useState(true);
-  const [hasSetPeriod, setHasSetPeriod] = useState(false);
   const { arbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
@@ -80,14 +78,10 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     }
   }, [selectedArbeidsforhold]);
 
+  // Preutfyll arbeidsforhold startdato og sluttdato
   useEffect(() => {
-    const periode = getPeriodeObject(selectedArbeidsforhold);
-
-    const quizPeriodAnswerAndSelectedPeriodNotEqual =
-      arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
-
-    if (selectedArbeidsforhold && quizPeriodAnswerAndSelectedPeriodNotEqual && hasSetPeriod) {
-      setHasSetPeriod(true);
+    if (arbeidsforholdVarighet && !arbeidsforholdVarighet?.svar && selectedArbeidsforhold) {
+      const periode = getPeriodeObject(selectedArbeidsforhold);
       saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
   }, [fakta, selectedArbeidsforhold]);
