@@ -34,9 +34,9 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [hasSetPeriod, setHasSetPeriod] = useState(false);
-  const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
-    IArbeidsforhold | undefined
-  >(undefined);
+  const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
+    undefined,
+  );
   const [showFaktum, setShowFaktum] = useState<boolean>(true);
   const arbeidstid = findArbeidstid(soknadState);
   const arbeidsforholdVarighet = fakta.find(
@@ -44,37 +44,38 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
-    setContextSelectedArbeidsforhold(null);
+    const selectedArbeidsforhold = arbeidsforholdSelectList.find(
+      (forhold) => forhold.id === event.target.value,
+    );
 
     if (!event.target.value) {
+      setContextSelectedArbeidsforhold(null);
       setShowFaktum(false);
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
     if (event.target.value === "add-manually") {
+      setContextSelectedArbeidsforhold(null);
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
       trackLagtTilArbeidsforholdManuelt();
       return;
     }
 
-    if (event.target.value !== "add-manually") {
-      const selectedArbeidsforhold = arbeidsforholdSelectList.find(
-        (forhold) => forhold.id === event.target.value,
-      );
-
+    if (event.target.value !== "add-manually" && selectedArbeidsforhold) {
+      const { organisasjonsnavn, startdato, sluttdato } = selectedArbeidsforhold;
       const contextArbeidsforhold: IContextSelectedArbeidsforhold = {
-        organisasjonsnavn: selectedArbeidsforhold?.organisasjonsnavn || "",
-        startdato: selectedArbeidsforhold?.startdato || "",
-        sluttdato: selectedArbeidsforhold?.sluttdato,
+        organisasjonsnavn,
+        startdato,
+        sluttdato,
       };
 
       setShowFaktum(true);
       setContextSelectedArbeidsforhold(contextArbeidsforhold);
       trackValgtArbeidsforholdFraAAREG();
-      setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
-      saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+      setSelectedArbeidsforhold(selectedArbeidsforhold);
+      saveFaktumToQuiz(faktum, organisasjonsnavn);
     }
   }
 
@@ -87,21 +88,21 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   }, [soknadState]);
 
   useEffect(() => {
-    if (arbeidsforhold.length > 0 && !currentSelectedArbeidsforhold) {
+    if (arbeidsforhold.length > 0 && !selectedArbeidsforhold) {
       setShowFaktum(false);
     }
-  }, [currentSelectedArbeidsforhold]);
+  }, [selectedArbeidsforhold]);
 
   useEffect(() => {
-    const periode = getPeriodeObject(currentSelectedArbeidsforhold);
+    const periode = getPeriodeObject(selectedArbeidsforhold);
     const varighetChanged =
       arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
 
-    if (currentSelectedArbeidsforhold && varighetChanged && !hasSetPeriod) {
+    if (selectedArbeidsforhold && varighetChanged && !hasSetPeriod) {
       setHasSetPeriod(true);
       saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
-  }, [fakta, currentSelectedArbeidsforhold]);
+  }, [fakta, selectedArbeidsforhold]);
 
   return (
     <>
