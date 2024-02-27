@@ -132,8 +132,6 @@ function FaktumPeriodeComponent(
     },
   });
 
-  // Bug med fom tom bug dato ble resatt tilbake på når jeg skriver manuelt
-
   function saveFaktum(value: IPeriodeFaktumAnswerState) {
     clearErrorMessage();
 

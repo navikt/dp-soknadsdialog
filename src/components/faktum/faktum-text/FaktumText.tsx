@@ -1,17 +1,17 @@
+import React, { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { Textarea, TextField } from "@navikt/ds-react";
-import { PortableText } from "@portabletext/react";
-import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { TEXTAREA_FAKTUM_IDS } from "../../../constants";
+import { IFaktum } from "../Faktum";
+import { IQuizTekstFaktum } from "../../../types/quiz.types";
+import { PortableText } from "@portabletext/react";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
-import { useValidation } from "../../../context/validation-context";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../../hooks/useFirstRender";
-import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
-import { IFaktum } from "../Faktum";
-import styles from "../Faktum.module.css";
 import { isValidTextLength } from "../validation/validations.utils";
+import { useValidation } from "../../../context/validation-context";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import styles from "../Faktum.module.css";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
@@ -46,7 +46,6 @@ export function FaktumTextComponent(
       if (containsOnlyWhitespace(debouncedText)) {
         return;
       }
-
       const inputValue = debouncedText.length === 0 ? null : debouncedText;
       saveFaktum(inputValue);
     }
