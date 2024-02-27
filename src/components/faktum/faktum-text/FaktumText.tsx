@@ -1,7 +1,6 @@
 import { Textarea, TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
-import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude.tracking";
 import { TEXTAREA_FAKTUM_IDS } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
@@ -13,7 +12,6 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import { isValidTextLength } from "../validation/validations.utils";
-import { useUserInformation } from "../../../context/user-information-context";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
@@ -32,7 +30,6 @@ export function FaktumTextComponent(
   const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
-  const { contextSelectedArbeidsforhold } = useUserInformation();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
 
@@ -48,14 +45,6 @@ export function FaktumTextComponent(
       // backend tillater ikke string med bare whitespace, avgir bad request som gir en dårlig tilbakemelding til bruker
       if (containsOnlyWhitespace(debouncedText)) {
         return;
-      }
-
-      // Amplitude tracking for AAREG arbeidsforhold
-      if (
-        faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
-        contextSelectedArbeidsforhold?.organisasjonsnavn !== debouncedText
-      ) {
-        trackKorigertBedriftsnavnFraAAREG();
       }
 
       const inputValue = debouncedText.length === 0 ? null : debouncedText;

@@ -29,7 +29,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const [showFaktum, setShowFaktum] = useState(true);
   const [hasSetPeriod, setHasSetPeriod] = useState(false);
-  const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
+  const { arbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,
@@ -46,14 +46,12 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     );
 
     if (!event.target.value) {
-      setContextSelectedArbeidsforhold(null);
       setShowFaktum(false);
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
     if (event.target.value === "add-manually") {
-      setContextSelectedArbeidsforhold(null);
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
       trackLagtTilArbeidsforholdManuelt();
@@ -61,18 +59,10 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     }
 
     if (event.target.value !== "add-manually" && selectedArbeidsforhold) {
-      const { organisasjonsnavn, startdato, sluttdato } = selectedArbeidsforhold;
-
       setShowFaktum(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
-      setContextSelectedArbeidsforhold({
-        organisasjonsnavn,
-        startdato,
-        sluttdato,
-      });
-
       trackValgtArbeidsforholdFraAAREG();
-      saveFaktumToQuiz(faktum, organisasjonsnavn);
+      saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }
   }
 
