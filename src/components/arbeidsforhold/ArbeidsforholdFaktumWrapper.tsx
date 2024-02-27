@@ -1,6 +1,14 @@
 import { Select } from "@navikt/ds-react";
 import { Fragment, useEffect, useState } from "react";
 import {
+  trackLagtTilArbeidsforholdManuelt,
+  trackValgtArbeidsforholdFraAAREG,
+} from "../../amplitude.tracking";
+import { useQuiz } from "../../context/quiz-context";
+import { useSanity } from "../../context/sanity-context";
+import { IArbeidsforhold, useUserInformation } from "../../context/user-information-context";
+import { QuizFaktum } from "../../types/quiz.types";
+import {
   filterArbeidsforhold,
   findArbeidstid,
   getPeriodeLength,
@@ -8,19 +16,7 @@ import {
   objectsNotEqual,
   sortArbeidsforhold,
 } from "../../utils/arbeidsforhold.utils";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import {
-  useUserInformation,
-  IArbeidsforhold,
-  IContextSelectedArbeidsforhold,
-} from "../../context/user-information-context";
-import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
-import {
-  trackValgtArbeidsforholdFraAAREG,
-  trackLagtTilArbeidsforholdManuelt,
-} from "../../amplitude.tracking";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -65,16 +61,16 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
     if (event.target.value !== "add-manually" && selectedArbeidsforhold) {
       const { organisasjonsnavn, startdato, sluttdato } = selectedArbeidsforhold;
-      const contextArbeidsforhold: IContextSelectedArbeidsforhold = {
+
+      setShowFaktum(true);
+      setSelectedArbeidsforhold(selectedArbeidsforhold);
+      setContextSelectedArbeidsforhold({
         organisasjonsnavn,
         startdato,
         sluttdato,
-      };
+      });
 
-      setShowFaktum(true);
-      setContextSelectedArbeidsforhold(contextArbeidsforhold);
       trackValgtArbeidsforholdFraAAREG();
-      setSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, organisasjonsnavn);
     }
   }
