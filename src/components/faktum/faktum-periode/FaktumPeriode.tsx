@@ -1,22 +1,22 @@
-import { DatePicker, Fieldset, useRangeDatepicker } from "@navikt/ds-react";
+import { Fieldset, DatePicker, useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
-import { Ref, forwardRef, useEffect, useState } from "react";
+import { forwardRef, Ref, useEffect, useState } from "react";
 import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
-import { useFeatureToggles } from "../../../context/feature-toggle-context";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
+import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
-import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 import { HelpText } from "../../HelpText";
-import { AlertText } from "../../alert-text/AlertText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
+import { AlertText } from "../../alert-text/AlertText";
+import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { useFeatureToggles } from "../../../context/feature-toggle-context";
 
 interface IDateRange {
   from: Date | undefined;
