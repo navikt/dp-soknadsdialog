@@ -10,7 +10,11 @@ import {
 } from "../../utils/arbeidsforhold.utils";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
+import {
+  useUserInformation,
+  IArbeidsforhold,
+  IContextSelectedArbeidsforhold,
+} from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 import {
@@ -27,7 +31,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { getAppText } = useSanity();
-  const { arbeidsforhold } = useUserInformation();
+  const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
@@ -39,6 +43,8 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
+    setContextSelectedArbeidsforhold(null);
+
     if (!event.target.value) {
       setShowFaktum(false);
       saveFaktumToQuiz(faktum, null);
@@ -49,12 +55,22 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
       trackLagtTilArbeidsforholdManuelt();
-    } else {
+      return;
+    }
+
+    if (event.target.value !== "add-manually") {
       const selectedArbeidsforhold = arbeidsforholdSelectList.find(
         (forhold) => forhold.id === event.target.value,
       );
 
+      const contextArbeidsforhold: IContextSelectedArbeidsforhold = {
+        organisasjonsnavn: selectedArbeidsforhold?.organisasjonsnavn || "",
+        startdato: selectedArbeidsforhold?.startdato || "",
+        sluttdato: selectedArbeidsforhold?.sluttdato,
+      };
+
       setShowFaktum(true);
+      setContextSelectedArbeidsforhold(contextArbeidsforhold);
       trackValgtArbeidsforholdFraAAREG();
       setCurrentSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);

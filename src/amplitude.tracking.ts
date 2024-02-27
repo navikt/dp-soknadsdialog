@@ -64,20 +64,14 @@ export function trackValgtArbeidsforholdFraAAREG() {
   track("valgt arbeidsforhold fra aareg");
 }
 
-export function trackKorigertBedriftsnavnFraAAREG(bedriftsnavn: string) {
-  track("korrigert bedriftsnavn fra aareg", {
-    bedriftsnavn,
-  });
+export function trackKorigertBedriftsnavnFraAAREG() {
+  track("korrigert bedriftsnavn fra aareg");
 }
 
-export function trackKorrigertStartdatoFraAAREG(bedriftsnavn: string) {
-  track("korrigert startdato fra aareg", {
-    bedriftsnavn,
-  });
+export function trackKorrigertStartdatoFraAAREG() {
+  track("korrigert startdato fra aareg");
 }
 
-export function trackKorrigertSluttdatoFraAAREG(bedriftsnavn: string) {
-  track("korrigert sluttdato fra aareg", {
-    bedriftsnavn,
-  });
+export function trackKorrigertSluttdatoFraAAREG() {
+  track("korrigert sluttdato fra aareg");
 }

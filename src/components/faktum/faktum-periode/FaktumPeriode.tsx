@@ -17,6 +17,11 @@ import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 import { useFeatureToggles } from "../../../context/feature-toggle-context";
+import {
+  trackKorrigertSluttdatoFraAAREG,
+  trackKorrigertStartdatoFraAAREG,
+} from "../../../amplitude.tracking";
+import { useUserInformation } from "../../../context/user-information-context";
 
 interface IDateRange {
   from: Date | undefined;
@@ -37,6 +42,7 @@ function FaktumPeriodeComponent(
   const { faktum } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { contextSelectedArbeidsforhold } = useUserInformation();
   const { getFaktumTextById, getAppText } = useSanity();
   const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { unansweredFaktumId } = useValidation();
@@ -56,6 +62,17 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender && objectsNotEqual(faktum.svar, currentAnswer)) {
+      // Amplitude tracking for AAREG arbeidsforhold
+      if (faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
+        if (contextSelectedArbeidsforhold?.startdato !== currentAnswer.fom) {
+          trackKorrigertStartdatoFraAAREG();
+        }
+
+        if (contextSelectedArbeidsforhold?.sluttdato !== currentAnswer.tom) {
+          trackKorrigertSluttdatoFraAAREG();
+        }
+      }
+
       saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
@@ -131,6 +148,8 @@ function FaktumPeriodeComponent(
       }
     },
   });
+
+  // Bug med fom tom bug dato ble resatt tilbake på når jeg skriver manuelt
 
   function saveFaktum(value: IPeriodeFaktumAnswerState) {
     clearErrorMessage();
