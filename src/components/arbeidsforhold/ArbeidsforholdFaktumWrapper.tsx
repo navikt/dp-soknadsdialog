@@ -25,15 +25,16 @@ interface IProps {
 
 export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
-  const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { getAppText } = useSanity();
+  const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const [showFaktum, setShowFaktum] = useState(true);
+  const [hasSetPeriod, setHasSetPeriod] = useState(false);
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
-  const [hasSetPeriod, setHasSetPeriod] = useState(false);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,
   );
-  const [showFaktum, setShowFaktum] = useState<boolean>(true);
+
   const arbeidstid = findArbeidstid(soknadState);
   const arbeidsforholdVarighet = fakta.find(
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
@@ -91,6 +92,8 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
   useEffect(() => {
     const periode = getPeriodeObject(selectedArbeidsforhold);
+
+    // Denne linjen er litt forvirrende, se på den
     const varighetChanged =
       arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
 
