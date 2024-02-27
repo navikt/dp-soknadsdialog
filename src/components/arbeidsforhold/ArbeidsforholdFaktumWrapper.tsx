@@ -83,11 +83,10 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   useEffect(() => {
     const periode = getPeriodeObject(selectedArbeidsforhold);
 
-    // Denne linjen er litt forvirrende, se på den
-    const varighetChanged =
+    const quizPeriodAnswerAndSelectedPeriodNotEqual =
       arbeidsforholdVarighet && objectsNotEqual(arbeidsforholdVarighet.svar, periode);
 
-    if (selectedArbeidsforhold && varighetChanged && !hasSetPeriod) {
+    if (selectedArbeidsforhold && quizPeriodAnswerAndSelectedPeriodNotEqual && hasSetPeriod) {
       setHasSetPeriod(true);
       saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
