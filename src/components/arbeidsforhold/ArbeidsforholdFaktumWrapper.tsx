@@ -56,7 +56,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       return;
     }
 
-    if (event.target.value !== "add-manually" && selectedArbeidsforhold) {
+    if (selectedArbeidsforhold) {
       setShowFaktum(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
       trackValgtArbeidsforholdFraAAREG();
