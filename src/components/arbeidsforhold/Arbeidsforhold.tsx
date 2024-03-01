@@ -30,7 +30,6 @@ import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCar
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 import { useFeatureToggles } from "../../context/feature-toggle-context";
-import { PortableText } from "@portabletext/react";
 import styles from "./Arbeidsforhold.module.css";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
@@ -95,22 +94,13 @@ function ArbeidsforholdComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      {arbeidsforholdIsEnabled ? (
-        <>
-          <Label as={"p"} spacing>
-            {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
-          </Label>
-          {arbeidstid && (
-            <BodyShort className={styles.dynamicText}>
-              {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
-            </BodyShort>
-          )}
-        </>
-      ) : (
-        <>
-          <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-          {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        </>
+      <Label as={"p"} spacing>
+        {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+      </Label>
+      {arbeidstid && (
+        <BodyShort className={styles.dynamicText}>
+          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
+        </BodyShort>
       )}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
