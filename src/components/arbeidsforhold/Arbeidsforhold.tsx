@@ -31,6 +31,7 @@ import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 import { useFeatureToggles } from "../../context/feature-toggle-context";
 import styles from "./Arbeidsforhold.module.css";
+import { useUserInformation } from "../../context/user-information-context";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -43,6 +44,8 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforholdIsEnabled } = useFeatureToggles();
+  const { arbeidsforhold } = useUserInformation();
+
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -136,16 +139,18 @@ function ArbeidsforholdComponent(
               <Modal.Body>
                 {arbeidsforholdIsEnabled ? (
                   <>
-                    <BodyLong className={styles.description}>
+                    <BodyLong className={styles.description} spacing={arbeidsforhold.length === 0}>
                       {getAppText("arbeidsforhold.modal.beskrivelse")}
                     </BodyLong>
-                    <ReadMore
-                      header={getAppText("arbeidsforhold.modal.readmore-header")}
-                      className={styles.modalReadmore}
-                      defaultOpen={false}
-                    >
-                      {getAppText("arbeidsforhold.modal.readmore-innhold")}
-                    </ReadMore>
+                    {arbeidsforhold.length > 0 && (
+                      <ReadMore
+                        header={getAppText("arbeidsforhold.modal.readmore-header")}
+                        className={styles.modalReadmore}
+                        defaultOpen={false}
+                      >
+                        {getAppText("arbeidsforhold.modal.readmore-innhold")}
+                      </ReadMore>
+                    )}
                     <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
                   </>
                 ) : (
