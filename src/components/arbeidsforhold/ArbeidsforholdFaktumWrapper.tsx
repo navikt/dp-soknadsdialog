@@ -13,6 +13,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -26,6 +27,8 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { arbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [hasSetPeriod, setHasSetPeriod] = useState(false);
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
+
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
   >(undefined);
@@ -55,6 +58,14 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
     setForceUpdate(true);
     saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
+  }
+
+  function hideAlertText(faktum: QuizFaktum): boolean {
+    return (
+      arbeidsforholdIsEnabled &&
+      ["faktum.arbeidsforhold.varighet"].includes(faktum.beskrivendeId) &&
+      arbeidsforholdSelectList.length === 0
+    );
   }
 
   useEffect(() => {
@@ -116,7 +127,14 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
                 </Select>
               )}
 
-            {showFaktum && <Faktum faktum={faktum} readonly={readonly} forceUpdate={forceUpdate} />}
+            {showFaktum && (
+              <Faktum
+                faktum={faktum}
+                readonly={readonly}
+                forceUpdate={forceUpdate}
+                hideAlertText={hideAlertText(faktum)}
+              />
+            )}
           </Fragment>
         );
       })}
