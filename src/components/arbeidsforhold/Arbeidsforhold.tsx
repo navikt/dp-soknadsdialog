@@ -35,6 +35,19 @@ import { useUserInformation } from "../../context/user-information-context";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
+function getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid: string): string {
+  switch (arbeidstid) {
+    case "faktum.type-arbeidstid.svar.fast":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+    case "faktum.type-arbeidstid.svar.varierende":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+    case "faktum.type-arbeidstid.svar.kombinasjon":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+    default:
+      return "";
+  }
+}
+
 function ArbeidsforholdComponent(
   props: IFaktum<IQuizGeneratorFaktum>,
   ref: Ref<HTMLDivElement> | undefined,
@@ -82,19 +95,6 @@ function ArbeidsforholdComponent(
     }
   }
 
-  function getArbeidsforholdDescriptionBySelectedArbeidstid() {
-    switch (arbeidstid) {
-      case "faktum.type-arbeidstid.svar.fast":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
-      case "faktum.type-arbeidstid.svar.varierende":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
-      case "faktum.type-arbeidstid.svar.kombinasjon":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
-      default:
-        return "";
-    }
-  }
-
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <Label as={"p"} spacing>
@@ -102,7 +102,7 @@ function ArbeidsforholdComponent(
       </Label>
       {arbeidstid && (
         <BodyShort className={styles.dynamicText}>
-          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
+          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
         </BodyShort>
       )}
       {faktum?.svar?.map((fakta, svarIndex) => {
@@ -123,9 +123,7 @@ function ArbeidsforholdComponent(
               <Heading level={"3"} size={"small"} spacing>
                 {getArbeidsforholdName(fakta)}
               </Heading>
-
               <BodyShort>{getArbeidsforholdVarighet(fakta)}</BodyShort>
-
               <ArbeidsforholdEndret fakta={fakta}></ArbeidsforholdEndret>
             </GeneratorFaktumCard>
 
@@ -139,17 +137,24 @@ function ArbeidsforholdComponent(
               <Modal.Body>
                 {arbeidsforholdIsEnabled ? (
                   <>
-                    <BodyLong className={styles.description} spacing={arbeidsforhold.length === 0}>
-                      {getAppText("arbeidsforhold.modal.beskrivelse")}
-                    </BodyLong>
+                    {arbeidstid && arbeidsforhold.length === 0 && (
+                      <BodyLong className={styles.description} spacing>
+                        {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
+                      </BodyLong>
+                    )}
                     {arbeidsforhold.length > 0 && (
-                      <ReadMore
-                        header={getAppText("arbeidsforhold.modal.readmore-header")}
-                        className={styles.modalReadmore}
-                        defaultOpen={false}
-                      >
-                        {getAppText("arbeidsforhold.modal.readmore-innhold")}
-                      </ReadMore>
+                      <>
+                        <BodyLong className={styles.description}>
+                          {getAppText("arbeidsforhold.modal.beskrivelse")}
+                        </BodyLong>
+                        <ReadMore
+                          header={getAppText("arbeidsforhold.modal.readmore-header")}
+                          className={styles.modalReadmore}
+                          defaultOpen={false}
+                        >
+                          {getAppText("arbeidsforhold.modal.readmore-innhold")}
+                        </ReadMore>
+                      </>
                     )}
                     <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
                   </>
