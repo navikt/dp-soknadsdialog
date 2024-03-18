@@ -74,12 +74,10 @@ export async function getServerSideProps(
   const personaliaResponse = await getPersonalia(onBehalfOfToken);
   const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
   const featureToggles = await getFeatureToggles();
+  const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
 
-  if (featureToggles.arbeidsforholdIsEnabled) {
-    const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
-    if (arbeidsforholdResponse.ok) {
-      arbeidsforhold = await arbeidsforholdResponse.json();
-    }
+  if (arbeidsforholdResponse.ok) {
+    arbeidsforhold = await arbeidsforholdResponse.json();
   }
 
   if (!soknadStateResponse.ok) {
