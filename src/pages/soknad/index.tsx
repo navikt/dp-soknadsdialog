@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
@@ -72,10 +72,12 @@ export async function getServerSideProps(
   if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
 
-    const isRegisteredAsArbeidsoker =
-      data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
+    console.log(`🔥 data :`, data);
+    // const isRegisteredAsArbeidsoker =
+    //   data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
 
-    arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
+    // arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
+    arbeidssokerStatus = false ? "REGISTERED" : "UNREGISTERED";
   } else {
     arbeidssokerStatus = "UNKNOWN";
   }

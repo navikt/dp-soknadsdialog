@@ -12,7 +12,7 @@
     },
     {
       "env": "VEILARBPROXY_TOKEN",
-      "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:veilarbregistrering"
+      "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag"
     }
   ]
 }

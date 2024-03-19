@@ -3,7 +3,7 @@ base_path: "/dagpenger/dialog"
 dekorator:
   url: https://dekoratoren.dev.nav.no/
   env: dev
-veilarbproxyUrl: https://veilarbregistrering.intern.dev.nav.no
+veilarbproxyUrl: https://oppslag-arbeidssoekerregisteret.intern.dev.nav.no
 sanity_dataset: development
 unleash:
   url : https://dagpenger-unleash-api.nav.cloud.nais.io/api
