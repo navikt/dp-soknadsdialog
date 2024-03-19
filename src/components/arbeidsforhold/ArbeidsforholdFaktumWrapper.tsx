@@ -28,7 +28,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const [showFaktum, setShowFaktum] = useState(true);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
-  const { arbeidsforhold } = useUserInformation();
+  const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
@@ -53,6 +53,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     if (!event.target.value) {
       setShowFaktum(false);
       saveFaktumToQuiz(faktum, null);
+      setContextSelectedArbeidsforhold(undefined);
       return;
     }
 
@@ -60,6 +61,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
       trackLagtTilArbeidsforholdManuelt();
+      setContextSelectedArbeidsforhold(undefined);
       return;
     }
 
@@ -68,6 +70,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       setForceUpdate(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
       trackValgtArbeidsforholdFraAAREG();
+      setContextSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }
   }
