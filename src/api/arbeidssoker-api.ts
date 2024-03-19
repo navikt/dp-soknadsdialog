@@ -15,7 +15,7 @@ export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext
   const session = await getSession(req);
   const onBehalfOfToken = await getVeilarbregistreringOnBehalfOfToken(session);
 
-  const url = `${process.env.VEILARBPROXY_URL}/api/v1/arbeidssoekerperioder`;
+  const url = `${process.env.ARBEIDSSOEKERREGISTERET_URL}/api/v1/arbeidssoekerperioder`;
 
   return await fetch(url, {
     method: "GET",
