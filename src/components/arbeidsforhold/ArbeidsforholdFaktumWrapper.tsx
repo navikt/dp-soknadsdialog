@@ -47,6 +47,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     const selectedArbeidsforhold = arbeidsforholdSelectList.find(
       (forhold) => forhold.id === event.target.value,
     );
+
     setForceUpdate(true);
 
     if (!event.target.value) {
@@ -82,6 +83,10 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   }
 
   useEffect(() => {
+    if (forceUpdate) setForceUpdate(false);
+  }, [soknadState]);
+
+  useEffect(() => {
     const periodeLength = getPeriodeLength(arbeidstid);
     const filteredArbeidsforhold = filterArbeidsforhold(arbeidsforhold, periodeLength);
     const filteredAndSortedArbeidsforhold = sortArbeidsforhold(filteredArbeidsforhold);
@@ -101,10 +106,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
   }, [fakta, selectedArbeidsforhold]);
-
-  useEffect(() => {
-    if (forceUpdate) setForceUpdate(false);
-  }, [soknadState]);
 
   return (
     <>
