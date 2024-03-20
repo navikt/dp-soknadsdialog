@@ -2,11 +2,10 @@ import { GetSessionWithOboProvider, SessionWithOboProvider, makeSession } from "
 import { idporten } from "@navikt/oasis/identity-providers";
 import { tokenX, withInMemoryCache } from "@navikt/oasis/obo-providers";
 import { withPrometheus } from "@navikt/oasis/obo-providers/withPrometheus";
-import {
-  audienceDPSoknad,
-  audienceMellomlagring,
-  audienceArbeidsoekkerregisteret,
-} from "./api.utils";
+
+const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
+const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
+const audienceArbeidsoekkerregisteret = `${process.env.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
 
 export let getSession: GetSessionWithOboProvider;
 
@@ -30,7 +29,7 @@ export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) 
   return session.apiToken(audienceDPSoknad);
 }
 
-export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWithOboProvider) {
+export async function getArbeidsoekkerregisteretOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
     return process.env.ARBEIDSSOEKERREGISTERET_TOKEN || "";
   }

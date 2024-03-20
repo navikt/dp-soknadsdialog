@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next/types";
-import { getSession, getVeilarbregistreringOnBehalfOfToken } from "../utils/auth.utils";
+import { getSession, getArbeidsoekkerregisteretOnBehalfOfToken } from "../utils/auth.utils";
 
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "ERROR";
 type brukerTypeResponse = "UKJENT_VERDI" | "UDEFINERT" | "VEILEDER" | "SYSTEM" | "SLUTTBRUKER";
@@ -19,7 +19,7 @@ interface IArbeidssoekkerMetaResponse {
 
 export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
   const session = await getSession(req);
-  const onBehalfOfToken = await getVeilarbregistreringOnBehalfOfToken(session);
+  const onBehalfOfToken = await getArbeidsoekkerregisteretOnBehalfOfToken(session);
 
   const url = `${process.env.ARBEIDSSOEKERREGISTERET_URL}/api/v1/arbeidssoekerperioder`;
 
