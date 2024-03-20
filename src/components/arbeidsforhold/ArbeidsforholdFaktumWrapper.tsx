@@ -30,7 +30,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
-  const [forceUpdate, setForceUpdate] = useState<boolean>(false);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,
   );
