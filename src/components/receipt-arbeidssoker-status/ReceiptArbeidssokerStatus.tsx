@@ -8,7 +8,7 @@ interface IProps {
   status: IArbeidssokerStatus;
 }
 
-export function ArbeidssokerStatus(props: IProps) {
+export function ReceiptArbeidssokerStatus(props: IProps) {
   const { getAppText } = useSanity();
 
   switch (props.status) {
@@ -26,7 +26,7 @@ export function ArbeidssokerStatus(props: IProps) {
         </BodyShort>
       );
 
-    case "UNKNOWN":
+    case "ERROR":
       return (
         <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
           {getAppText("kvittering.arbeidssokerstatus.info-tekst.registrert")}

@@ -28,7 +28,7 @@ export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) 
 
 export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.VEILARBPROXY_TOKEN || "";
+    return process.env.ARBEIDSSOEKERREGISTERET_TOKEN || "";
   }
 
   return session.apiToken(audienceVeilarb);
@@ -36,7 +36,7 @@ export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWith
 
 export async function getMellomlagringOnBehalfOfToken(session: SessionWithOboProvider) {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.DP_MELLOMLAGRING || "";
+    return process.env.DP_MELLOMLAGRING_TOKEN || "";
   }
 
   return session.apiToken(audienceMellomlagring);

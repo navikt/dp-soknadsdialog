@@ -65,7 +65,7 @@ export function Arbeidssoker(props: IProps) {
           </BodyLong>
         </>
       )}
-      {props.arbeidssokerStatus === "UNKNOWN" && (
+      {props.arbeidssokerStatus === "ERROR" && (
         <>
           <Heading level="2" size="small">
             {getAppText("arbeidssoker.header")}

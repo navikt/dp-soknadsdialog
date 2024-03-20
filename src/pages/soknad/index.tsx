@@ -19,7 +19,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
@@ -70,14 +70,14 @@ export async function getServerSideProps(
   }
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
+    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
 
     const isRegisteredAsArbeidsoker =
-      data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
+      data.findIndex((periode) => periode.avsluttet === null) !== -1;
 
     arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
   } else {
-    arbeidssokerStatus = "UNKNOWN";
+    arbeidssokerStatus = "ERROR";
   }
 
   const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;
