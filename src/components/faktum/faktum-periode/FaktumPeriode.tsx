@@ -1,4 +1,4 @@
-import { Fieldset, DatePicker, useRangeDatepicker, useDatepicker } from "@navikt/ds-react";
+import { Fieldset, DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
@@ -18,11 +18,6 @@ import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 import { DateValidationT } from "@navikt/ds-react/src/date/hooks/useDatepicker";
 import { useUserInformation } from "../../../context/user-information-context";
-
-interface IDateRange {
-  from: Date | undefined;
-  to?: Date | undefined;
-}
 
 export interface IPeriodeFaktumAnswerState {
   fom: string | null;
@@ -68,17 +63,6 @@ function FaktumPeriodeComponent(
     }
   }, [faktum.svar]);
 
-  function getDefaultSelectedValue(): IDateRange | undefined {
-    if (currentAnswer?.fom) {
-      return {
-        from: new Date(currentAnswer.fom),
-        to: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
-      };
-    }
-
-    return undefined;
-  }
-
   useEffect(() => {
     if (faktum.svar) {
       const fromDate = new Date(faktum.svar.fom);
@@ -89,18 +73,15 @@ function FaktumPeriodeComponent(
   }, [faktum.svar]);
 
   function updatePeriode(date: Date | undefined, variant: "fom" | "tom") {
-    console.log("date: ", date);
     if (date) {
       const parsedDate = formatISO(date, { representation: "date" });
       const newPeriode = { ...currentAnswer, [variant]: parsedDate };
-      console.log(newPeriode);
       setCurrentAnswer(newPeriode);
       setDebouncedPeriode(newPeriode);
     }
   }
 
   function validateInput(validation: DateValidationT, variant: "fom" | "tom") {
-    console.log("validate: ", validation);
     // Empty `to date input` programmatically when user clears `from date input`
     if (validation.isEmpty) {
       if (variant === "fom") {
@@ -230,7 +211,7 @@ function FaktumPeriodeComponent(
         <DatePicker
           {...fromInput.datepickerProps}
           fromDate={DATEPICKER_MIN_DATE}
-          toDate={DATEPICKER_MAX_DATE}
+          toDate={currentAnswer.tom ? new Date(currentAnswer.tom) : DATEPICKER_MAX_DATE}
           dropdownCaption
           strategy="fixed"
         >
@@ -246,7 +227,7 @@ function FaktumPeriodeComponent(
 
         <DatePicker
           {...toInput.datepickerProps}
-          fromDate={DATEPICKER_MIN_DATE}
+          fromDate={currentAnswer.fom ? new Date(currentAnswer.fom) : DATEPICKER_MIN_DATE}
           toDate={DATEPICKER_MAX_DATE}
           dropdownCaption
           strategy="fixed"
@@ -259,34 +240,6 @@ function FaktumPeriodeComponent(
             disabled={isLocked}
             autoComplete="off"
           />
-        </DatePicker>
-
-        <DatePicker
-          {...datepickerProps}
-          dropdownCaption
-          fromDate={DATEPICKER_MIN_DATE}
-          toDate={DATEPICKER_MAX_DATE}
-          strategy="fixed"
-        >
-          <div className={periodeStyles.datePickerSpacing}>
-            <DatePicker.Input
-              {...fromInputProps}
-              label={faktumTextFra}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={fomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
-
-            <DatePicker.Input
-              {...toInputProps}
-              label={faktumTextTil}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={tomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
-          </div>
         </DatePicker>
 
         {faktumTexts?.helpText && (
