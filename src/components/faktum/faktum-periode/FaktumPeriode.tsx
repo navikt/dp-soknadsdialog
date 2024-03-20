@@ -9,7 +9,10 @@ import { useValidation } from "../../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
+import {
+  IQuizPeriodeFaktum,
+  IQuizPeriodeFaktumAnswerType,
+} from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
@@ -35,9 +38,12 @@ function FaktumPeriodeComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { contextSelectedArbeidsforhold } = useUserInformation();
-  const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
-    useValidateFaktumPeriode(faktum);
+  const {
+    validateAndIsValidPeriode,
+    tomErrorMessage,
+    fomErrorMessage,
+    clearErrorMessage,
+  } = useValidateFaktumPeriode(faktum);
 
   const initialPeriodeValue = { fom: "" };
   const [currentAnswer, setCurrentAnswer] = useState<
@@ -109,17 +115,24 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+    saveFaktumToQuiz(
+      faktum,
+      isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null,
+    );
   }
 
   const fromInput = useDatepicker({
-    defaultSelected: currentAnswer.fom ? new Date(currentAnswer.fom) : undefined,
+    defaultSelected: currentAnswer.fom
+      ? new Date(currentAnswer.fom)
+      : undefined,
     onDateChange: (value) => updatePeriode(value, "fom"),
     onValidate: (validation) => validateInput(validation, "fom"),
   });
 
   const toInput = useDatepicker({
-    defaultSelected: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
+    defaultSelected: currentAnswer.tom
+      ? new Date(currentAnswer.tom)
+      : undefined,
     onDateChange: (value) => updatePeriode(value, "tom"),
     onValidate: (validation) => validateInput(validation, "tom"),
   });
@@ -211,7 +224,11 @@ function FaktumPeriodeComponent(
         <DatePicker
           {...fromInput.datepickerProps}
           fromDate={DATEPICKER_MIN_DATE}
-          toDate={currentAnswer.tom ? new Date(currentAnswer.tom) : DATEPICKER_MAX_DATE}
+          toDate={
+            currentAnswer.tom
+              ? new Date(currentAnswer.tom)
+              : DATEPICKER_MAX_DATE
+          }
           dropdownCaption
           strategy="fixed"
         >
@@ -227,7 +244,11 @@ function FaktumPeriodeComponent(
 
         <DatePicker
           {...toInput.datepickerProps}
-          fromDate={currentAnswer.fom ? new Date(currentAnswer.fom) : DATEPICKER_MIN_DATE}
+          fromDate={
+            currentAnswer.fom
+              ? new Date(currentAnswer.fom)
+              : DATEPICKER_MIN_DATE
+          }
           toDate={DATEPICKER_MAX_DATE}
           dropdownCaption
           strategy="fixed"
@@ -243,7 +264,10 @@ function FaktumPeriodeComponent(
         </DatePicker>
 
         {faktumTexts?.helpText && (
-          <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
+          <HelpText
+            className={styles.helpTextSpacing}
+            helpText={faktumTexts.helpText}
+          />
         )}
 
         {faktumTexts?.alertText && !hideAlertText && (
