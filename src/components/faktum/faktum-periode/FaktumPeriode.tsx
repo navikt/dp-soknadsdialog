@@ -16,6 +16,11 @@ import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { useUserInformation } from "../../../context/user-information-context";
+import {
+  trackKorrigertSluttdatoFraAAREG,
+  trackKorrigertStartdatoFraAAREG,
+} from "../../../amplitude.tracking";
 
 interface IDateRange {
   from: Date | undefined;
@@ -38,6 +43,7 @@ function FaktumPeriodeComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
+  const { contextSelectedArbeidsforhold } = useUserInformation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
 
@@ -136,6 +142,17 @@ function FaktumPeriodeComponent(
     if (value.fom === "") {
       saveFaktumToQuiz(faktum, null);
       return;
+    }
+
+    const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
+    if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
+      if (value.fom !== contextSelectedArbeidsforhold.startdato) {
+        trackKorrigertStartdatoFraAAREG();
+      }
+
+      if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
+        trackKorrigertSluttdatoFraAAREG();
+      }
     }
 
     const isValidPeriode = validateAndIsValidPeriode(value);

@@ -46,6 +46,27 @@ export function trackDokumentasjonLastetOpp(antallFiler: number, sekundBrukt: nu
   });
 }
 
+// Arbeidsforhold
+export function trackLagtTilArbeidsforholdManuelt() {
+  track("lagt til arbeidsforhold manuelt");
+}
+
+export function trackValgtArbeidsforholdFraAAREG() {
+  track("valgt arbeidsforhold fra aareg");
+}
+
+export function trackKorigertBedriftsnavnFraAAREG() {
+  track("korrigert bedriftsnavn fra aareg");
+}
+
+export function trackKorrigertStartdatoFraAAREG() {
+  track("korrigert startdato fra aareg");
+}
+
+export function trackKorrigertSluttdatoFraAAREG() {
+  track("korrigert sluttdato fra aareg");
+}
+
 export function tidStart(): Date {
   return new Date();
 }

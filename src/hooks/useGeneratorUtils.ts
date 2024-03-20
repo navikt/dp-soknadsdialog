@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { IQuizGeneratorFaktum } from "../types/quiz.types";
 import { useQuiz } from "../context/quiz-context";
+import { useUserInformation } from "../context/user-information-context";
 
 interface IGeneratorUtils {
   activeIndex: number | undefined;
@@ -12,6 +13,7 @@ interface IGeneratorUtils {
 
 export function useGeneratorUtils(): IGeneratorUtils {
   const { saveGeneratorFaktumToQuiz } = useQuiz();
+  const { setContextSelectedArbeidsforhold } = useUserInformation();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 
   function toggleActiveGeneratorAnswer(index: number | undefined) {
@@ -30,6 +32,7 @@ export function useGeneratorUtils(): IGeneratorUtils {
 
   function closeGeneratorAnswer() {
     setActiveIndex(undefined);
+    setContextSelectedArbeidsforhold(undefined);
   }
 
   function deleteGeneratorAnswer(faktum: IQuizGeneratorFaktum, answerIndex: number) {
