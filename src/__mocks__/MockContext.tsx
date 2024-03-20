@@ -64,7 +64,10 @@ export function MockContext(props: PropsWithChildren<IProps>) {
         {mockQuizContext && (
           <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
             <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
-              <UserInformationProvider arbeidsforhold={[]}>
+              <UserInformationProvider
+                arbeidsforhold={[]}
+                contextSelectedArbeidsforhold={undefined}
+              >
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
                 >
@@ -78,7 +81,10 @@ export function MockContext(props: PropsWithChildren<IProps>) {
         {!mockQuizContext && (
           <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
             <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
-              <UserInformationProvider arbeidsforhold={[]}>
+              <UserInformationProvider
+                arbeidsforhold={[]}
+                contextSelectedArbeidsforhold={undefined}
+              >
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
                 >
