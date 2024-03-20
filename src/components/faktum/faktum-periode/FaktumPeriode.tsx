@@ -16,8 +16,17 @@ import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
-// import { DateValidationT } from "@navikt/ds-react/src/date/hooks/useDatepicker";
 import { useUserInformation } from "../../../context/user-information-context";
+
+interface IDateValidationT {
+  isDisabled: boolean;
+  isWeekend: boolean;
+  isEmpty: boolean;
+  isInvalid: boolean;
+  isValidDate: boolean;
+  isBefore: boolean;
+  isAfter: boolean;
+}
 
 export interface IPeriodeFaktumAnswerState {
   fom: string | null;
@@ -81,7 +90,7 @@ function FaktumPeriodeComponent(
     }
   }
 
-  function validateInput(validation: any, variant: "fom" | "tom") {
+  function validateInput(validation: IDateValidationT, variant: "fom" | "tom") {
     // Empty `to date input` programmatically when user clears `from date input`
     if (validation.isEmpty) {
       if (variant === "fom") {
