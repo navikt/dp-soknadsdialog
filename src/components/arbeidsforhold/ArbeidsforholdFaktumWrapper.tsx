@@ -13,7 +13,6 @@ import { useSanity } from "../../context/sanity-context";
 import { useUserInformation, IArbeidsforhold } from "../../context/user-information-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
-import { useFeatureToggles } from "../../context/feature-toggle-context";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -27,7 +26,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { arbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [hasSetPeriod, setHasSetPeriod] = useState(false);
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
 
   const [currentSelectedArbeidsforhold, setCurrentSelectedArbeidsforhold] = useState<
     IArbeidsforhold | undefined
@@ -62,7 +60,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
   function hideAlertText(faktum: QuizFaktum): boolean {
     return (
-      arbeidsforholdIsEnabled &&
       ["faktum.arbeidsforhold.varighet"].includes(faktum.beskrivendeId) &&
       arbeidsforholdSelectList.length === 0
     );
