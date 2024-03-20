@@ -3,7 +3,7 @@ import { logger } from "@navikt/next-logger";
 
 export const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
 export const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
-export const audienceVeilarb = `${process.env.NAIS_CLUSTER_NAME}:paw:veilarbregistrering`;
+export const audienceArbeidsoekkerregisteret = `${process.env.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
 
 export default function api(endpoint: string): string {
   return `${process.env.NEXT_PUBLIC_BASE_PATH}/api${

@@ -2,7 +2,11 @@ import { GetSessionWithOboProvider, SessionWithOboProvider, makeSession } from "
 import { idporten } from "@navikt/oasis/identity-providers";
 import { tokenX, withInMemoryCache } from "@navikt/oasis/obo-providers";
 import { withPrometheus } from "@navikt/oasis/obo-providers/withPrometheus";
-import { audienceDPSoknad, audienceMellomlagring, audienceVeilarb } from "./api.utils";
+import {
+  audienceDPSoknad,
+  audienceMellomlagring,
+  audienceArbeidsoekkerregisteret,
+} from "./api.utils";
 
 export let getSession: GetSessionWithOboProvider;
 
@@ -31,7 +35,7 @@ export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWith
     return process.env.ARBEIDSSOEKERREGISTERET_TOKEN || "";
   }
 
-  return session.apiToken(audienceVeilarb);
+  return session.apiToken(audienceArbeidsoekkerregisteret);
 }
 
 export async function getMellomlagringOnBehalfOfToken(session: SessionWithOboProvider) {
