@@ -10,3 +10,19 @@
   color: var(--a-text-subtle);
   margin: var(--a-spacing-4) 0 var(--a-spacing-6);
 }
+
+.arbeidsforholdAccordion {
+  margin-bottom: var(--a-spacing-4);
+}
+
+.arbeidsforholdAccordionHeader {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid red;
+}
+
+.arbeidsforholdAccordionButtonContainer {
+  display: flex;
+  gap: var(--a-spacing-2);
+  margin-top: var(--a-spacing-4);
+}

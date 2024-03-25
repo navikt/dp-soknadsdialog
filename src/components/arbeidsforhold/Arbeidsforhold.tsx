@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useUserInformation } from "../../context/user-information-context";
@@ -30,6 +31,7 @@ import { ValidationMessage } from "../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import styles from "./Arbeidsforhold.module.css";
+import { ArbeidsforholdAccordion } from "./ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
@@ -56,6 +58,7 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInformation();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
 
   const { getAppText, getFaktumTextById } = useSanity();
   const {
@@ -103,6 +106,13 @@ function ArbeidsforholdComponent(
           {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
         </BodyShort>
       )}
+
+      {arbeidsforholdIsEnabled && arbeidsforhold.length && (
+        <div className={styles.arbeidsforholdAccordion}>
+          <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
+        </div>
+      )}
+
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
