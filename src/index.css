@@ -22,6 +22,12 @@
   margin-right: var(--a-spacing-6);
 }
 
+.navds-accordion__header.arbeidsforhold__accordion > span:last-of-type {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .generator-faktum__add-button {
   margin: var(--a-spacing-4) 0 var(--a-spacing-1);
 }

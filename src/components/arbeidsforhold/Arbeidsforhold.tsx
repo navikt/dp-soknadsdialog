@@ -107,8 +107,8 @@ function ArbeidsforholdComponent(
         </BodyShort>
       )}
 
-      {arbeidsforholdIsEnabled && arbeidsforhold.length && (
-        <div className={styles.arbeidsforholdAccordion}>
+      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
+        <div className={styles.accordion}>
           <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
         </div>
       )}
