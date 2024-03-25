@@ -10,32 +10,29 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
-import { useFeatureToggles } from "../../context/feature-toggle-context";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useUserInformation } from "../../context/user-information-context";
-import { useValidation } from "../../context/validation-context";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { useUserInformation } from "../../../context/user-information-context";
+import { useValidation } from "../../../context/validation-context";
+import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
+import { BriefcaseAdd } from "../../../svg-icons/BriefcaseAdd";
 import {
   IQuizGeneratorFaktum,
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
-} from "../../types/quiz.types";
-import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
-import { findEmployerName } from "../../utils/faktum.utils";
-import { FormattedDate } from "../FormattedDate";
-import { IFaktum } from "../faktum/Faktum";
-import { ValidationMessage } from "../faktum/validation/ValidationMessage";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import styles from "./Arbeidsforhold.module.css";
-import { ArbeidsforholdAccordion } from "./ArbeidsforholdAccordion";
-import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
-import { OldArbeidsforholdFaktumWrapper } from "./old-arbeidsforhold/OldArbeidsforholdFaktumWrapper";
+} from "../../../types/quiz.types";
+import { findArbeidstid } from "../../../utils/arbeidsforhold.utils";
+import { findEmployerName } from "../../../utils/faktum.utils";
+import { FormattedDate } from "../../FormattedDate";
+import { IFaktum } from "../../faktum/Faktum";
+import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
+import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
+import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
+import { OldArbeidsforholdFaktumWrapper } from "./OldArbeidsforholdFaktumWrapper";
+import styles from "../Arbeidsforhold.module.css";
 
-export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
+export const OldArbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
 function getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid: string): string {
   switch (arbeidstid) {
@@ -59,7 +56,6 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInformation();
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
 
   const { getAppText, getFaktumTextById } = useSanity();
   const {
@@ -103,32 +99,10 @@ function ArbeidsforholdComponent(
         {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
       </Label>
 
-      {!arbeidsforholdIsEnabled && arbeidstid && (
+      {arbeidstid && (
         <BodyShort className={styles.dynamicText}>
           {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
         </BodyShort>
-      )}
-
-      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
-        <>
-          <BodyLong className={styles.description}>
-            Fyll ut opplysninger om arbeidsforholdene dine. Hvis du mener at et arbeidsforhold ikke
-            er relevant for søknaden kan du fjerne det fra denne listen.
-          </BodyLong>
-          <ReadMore
-            header={getAppText("arbeidsforhold.modal.readmore-header")}
-            className={styles.modalReadmore}
-            defaultOpen={false}
-          >
-            {getAppText("arbeidsforhold.modal.readmore-innhold")}
-          </ReadMore>
-        </>
-      )}
-
-      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
-        <div className={styles.accordion}>
-          <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
-        </div>
       )}
 
       {faktum?.svar?.map((fakta, svarIndex) => {
@@ -162,12 +136,12 @@ function ArbeidsforholdComponent(
             >
               <Modal.Body>
                 <>
-                  {!arbeidsforholdIsEnabled && arbeidstid && arbeidsforhold.length === 0 && (
+                  {arbeidstid && arbeidsforhold.length === 0 && (
                     <BodyLong className={styles.description} spacing>
                       {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
                     </BodyLong>
                   )}
-                  {!arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
+                  {arbeidsforhold.length > 0 && (
                     <>
                       <BodyLong className={styles.description}>
                         {getAppText("arbeidsforhold.modal.beskrivelse")}
@@ -181,12 +155,7 @@ function ArbeidsforholdComponent(
                       </ReadMore>
                     </>
                   )}
-                  {!arbeidsforholdIsEnabled && (
-                    <OldArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
-                  )}
-                  {arbeidsforholdIsEnabled && (
-                    <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
-                  )}
+                  <OldArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
                 </>
                 <FetchIndicator isLoading={isLoading} />
                 <div className={"modal-container__button-container"}>

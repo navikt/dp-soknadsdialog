@@ -10,7 +10,7 @@ import { Faktum, IFaktum } from "../Faktum";
 import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
 import { useScrollIntoView } from "../../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../../hooks/useSetFocus";
-import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
+import { OldArbeidsforhold } from "../../arbeidsforhold/old-arbeidsforhold/OldArbeidsforhold";
 import { Barn } from "../../barn/Barn";
 import { useSanity } from "../../../context/sanity-context";
 import { BarnRegister } from "../../barn/BarnRegister";
@@ -19,11 +19,14 @@ import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../../context/quiz-context";
 import { useValidation } from "../../../context/validation-context";
 import { ValidationMessage } from "../validation/ValidationMessage";
+import { useFeatureToggles } from "../../../context/feature-toggle-context";
+import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const generatorFaktumRef = useRef(null);
   const { unansweredFaktumId } = useValidation();
   const { scrollIntoView } = useScrollIntoView();
+  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { setFocus } = useSetFocus();
 
   useEffect(() => {
@@ -35,7 +38,11 @@ export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
 
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
-      return <Arbeidsforhold ref={generatorFaktumRef} {...props} />;
+      return arbeidsforholdIsEnabled ? (
+        <Arbeidsforhold ref={generatorFaktumRef} {...props} />
+      ) : (
+        <OldArbeidsforhold ref={generatorFaktumRef} {...props} />
+      );
     case BARN_LISTE_REGISTER_FAKTUM_ID:
       return <BarnRegister {...props} />;
     case BARN_LISTE_FAKTUM_ID:

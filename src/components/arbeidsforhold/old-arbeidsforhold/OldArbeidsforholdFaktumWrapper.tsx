@@ -3,19 +3,19 @@ import { Fragment, useEffect, useState } from "react";
 import {
   trackLagtTilArbeidsforholdManuelt,
   trackValgtArbeidsforholdFraAAREG,
-} from "../../amplitude.tracking";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { IArbeidsforhold, useUserInformation } from "../../context/user-information-context";
-import { QuizFaktum } from "../../types/quiz.types";
+} from "../../../amplitude.tracking";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { IArbeidsforhold, useUserInformation } from "../../../context/user-information-context";
+import { QuizFaktum } from "../../../types/quiz.types";
 import {
   filterArbeidsforhold,
   findArbeidstid,
   getPeriodeLength,
   getPeriodeObject,
   sortArbeidsforhold,
-} from "../../utils/arbeidsforhold.utils";
-import { Faktum } from "../faktum/Faktum";
+} from "../../../utils/arbeidsforhold.utils";
+import { Faktum } from "../../faktum/Faktum";
 
 interface IProps {
   fakta: QuizFaktum[];
