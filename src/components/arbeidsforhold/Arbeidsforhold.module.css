@@ -12,7 +12,7 @@
 }
 
 .accordion {
-  margin-bottom: var(--a-spacing-4);
+  margin-bottom: var(--a-spacing-8);
 }
 
 .accordionHeader {
@@ -20,7 +20,7 @@
   justify-content: space-between;
 }
 
-.accordionButtonContainer {
+.buttonContainer {
   display: flex;
   gap: var(--a-spacing-2);
   margin-top: var(--a-spacing-4);

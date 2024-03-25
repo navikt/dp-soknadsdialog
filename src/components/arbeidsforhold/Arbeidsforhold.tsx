@@ -33,6 +33,7 @@ import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCar
 import styles from "./Arbeidsforhold.module.css";
 import { ArbeidsforholdAccordion } from "./ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
+import { OldArbeidsforholdFaktumWrapper } from "./OldArbeidsforholdFaktumWrapper";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
@@ -109,6 +110,22 @@ function ArbeidsforholdComponent(
       )}
 
       {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
+        <>
+          <BodyLong className={styles.description}>
+            Fyll ut opplysninger om arbeidsforholdene dine. Hvis du mener at et arbeidsforhold ikke
+            er relevant for søknaden kan du fjerne det fra denne listen.
+          </BodyLong>
+          <ReadMore
+            header={getAppText("arbeidsforhold.modal.readmore-header")}
+            className={styles.modalReadmore}
+            defaultOpen={false}
+          >
+            {getAppText("arbeidsforhold.modal.readmore-innhold")}
+          </ReadMore>
+        </>
+      )}
+
+      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
         <div className={styles.accordion}>
           <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
         </div>
@@ -145,12 +162,12 @@ function ArbeidsforholdComponent(
             >
               <Modal.Body>
                 <>
-                  {arbeidstid && arbeidsforhold.length === 0 && (
+                  {!arbeidsforholdIsEnabled && arbeidstid && arbeidsforhold.length === 0 && (
                     <BodyLong className={styles.description} spacing>
                       {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
                     </BodyLong>
                   )}
-                  {arbeidsforhold.length > 0 && (
+                  {!arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
                     <>
                       <BodyLong className={styles.description}>
                         {getAppText("arbeidsforhold.modal.beskrivelse")}
@@ -164,7 +181,12 @@ function ArbeidsforholdComponent(
                       </ReadMore>
                     </>
                   )}
-                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                  {!arbeidsforholdIsEnabled && (
+                    <OldArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                  )}
+                  {arbeidsforholdIsEnabled && (
+                    <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                  )}
                 </>
                 <FetchIndicator isLoading={isLoading} />
                 <div className={"modal-container__button-container"}>
