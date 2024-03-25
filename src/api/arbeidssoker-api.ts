@@ -11,7 +11,7 @@ export interface IArbeidssokerperioder {
 }
 
 interface IArbeidssoekkerMetaResponse {
-  tidspunk: string;
+  tidspunkt: string;
   utfoetAv: brukerTypeResponse;
   kilde: string;
   aarsak: string;
