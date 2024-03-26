@@ -3,6 +3,7 @@ import { useQuiz } from "../../../context/quiz-context";
 import { useUserInformation } from "../../../context/user-information-context";
 import { QuizFaktum } from "../../../types/quiz.types";
 import { Faktum } from "../../faktum/Faktum";
+import { getPeriodeObject } from "../../../utils/arbeidsforhold.utils";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -14,6 +15,9 @@ export function ArbeidsforholdFaktumWrapper_V2(props: IProps) {
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const { contextSelectedArbeidsforhold } = useUserInformation();
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
+  const arbeidsforholdVarighet = fakta.find(
+    (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
+  );
 
   const arbeidsforholdBedriftsnavn = fakta.find(
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
@@ -23,6 +27,7 @@ export function ArbeidsforholdFaktumWrapper_V2(props: IProps) {
     if (forceUpdate) setForceUpdate(false);
   }, [soknadState]);
 
+  // Save arbeidsforhold bedriftsnavn
   useEffect(() => {
     if (
       arbeidsforholdBedriftsnavn &&
@@ -34,6 +39,14 @@ export function ArbeidsforholdFaktumWrapper_V2(props: IProps) {
         contextSelectedArbeidsforhold?.organisasjonsnavn,
       );
       setForceUpdate(true);
+    }
+  }, [fakta]);
+
+  // Save arbeidsforhold varighet
+  useEffect(() => {
+    if (arbeidsforholdVarighet && !arbeidsforholdVarighet?.svar) {
+      const periode = getPeriodeObject(contextSelectedArbeidsforhold);
+      saveFaktumToQuiz(arbeidsforholdVarighet, periode);
     }
   }, [fakta]);
 
