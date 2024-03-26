@@ -10,7 +10,7 @@ import { Faktum, IFaktum } from "../Faktum";
 import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
 import { useScrollIntoView } from "../../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../../hooks/useSetFocus";
-import { OldArbeidsforhold } from "../../arbeidsforhold/old-arbeidsforhold/OldArbeidsforhold";
+import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
 import { Barn } from "../../barn/Barn";
 import { useSanity } from "../../../context/sanity-context";
 import { BarnRegister } from "../../barn/BarnRegister";
@@ -20,7 +20,7 @@ import { useQuiz } from "../../../context/quiz-context";
 import { useValidation } from "../../../context/validation-context";
 import { ValidationMessage } from "../validation/ValidationMessage";
 import { useFeatureToggles } from "../../../context/feature-toggle-context";
-import { Arbeidsforhold } from "../../arbeidsforhold/Arbeidsforhold";
+import { Arbeidsforhold_V2 } from "../../arbeidsforhold/arbeidsforhold-v2/Arbeidsforhold_V2";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const generatorFaktumRef = useRef(null);
@@ -39,9 +39,9 @@ export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
       return arbeidsforholdIsEnabled ? (
-        <Arbeidsforhold ref={generatorFaktumRef} {...props} />
+        <Arbeidsforhold_V2 ref={generatorFaktumRef} {...props} />
       ) : (
-        <OldArbeidsforhold ref={generatorFaktumRef} {...props} />
+        <Arbeidsforhold ref={generatorFaktumRef} {...props} />
       );
     case BARN_LISTE_REGISTER_FAKTUM_ID:
       return <BarnRegister {...props} />;
