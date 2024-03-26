@@ -123,7 +123,7 @@ function ArbeidsforholdComponent(
 
       {arbeidsforhold.length > 0 && (
         <div className={styles.accordion}>
-          <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
+          <ArbeidsforholdAccordion />
         </div>
       )}
 
