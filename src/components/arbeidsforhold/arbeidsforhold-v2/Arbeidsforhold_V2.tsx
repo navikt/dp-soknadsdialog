@@ -30,10 +30,10 @@ import { IFaktum } from "../../faktum/Faktum";
 import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
-import styles from "./Arbeidsforhold.module.css";
 import { ArbeidsforholdAccordion } from "../ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper_V2 } from "./ArbeidsforholdFaktumWrapper_V2";
 import { ArbeidsforholdFaktumWrapper } from "../ArbeidsforholdFaktumWrapper";
+import styles from "../Arbeidsforhold.module.css";
 
 export const Arbeidsforhold_V2 = forwardRef(ArbeidsforholdComponent);
 

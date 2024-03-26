@@ -30,7 +30,7 @@ import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
-import styles from "../Arbeidsforhold.module.css";
+import styles from "./Arbeidsforhold.module.css";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 
