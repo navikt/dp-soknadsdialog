@@ -10,8 +10,6 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
-import { useFeatureToggles } from "../../../context/feature-toggle-context";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useUserInformation } from "../../../context/user-information-context";
@@ -28,23 +26,23 @@ import { findEmployerName } from "../../../utils/faktum.utils";
 import { FormattedDate } from "../../FormattedDate";
 import { IFaktum } from "../../faktum/Faktum";
 import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
+import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
 import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
+import styles from "../Arbeidsforhold.module.css";
 import { ArbeidsforholdAccordion } from "../ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper_V2 } from "./ArbeidsforholdFaktumWrapper_V2";
-import { ArbeidsforholdFaktumWrapper } from "../ArbeidsforholdFaktumWrapper";
-import styles from "../Arbeidsforhold.module.css";
 
 export const Arbeidsforhold_V2 = forwardRef(ArbeidsforholdComponent);
 
 function getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid: string): string {
   switch (arbeidstid) {
     case "faktum.type-arbeidstid.svar.fast":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months-v2";
     case "faktum.type-arbeidstid.svar.varierende":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months-v2";
     case "faktum.type-arbeidstid.svar.kombinasjon":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months-v2";
     default:
       return "";
   }
@@ -59,8 +57,6 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInformation();
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
-
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -103,17 +99,17 @@ function ArbeidsforholdComponent(
         {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
       </Label>
 
-      {!arbeidsforholdIsEnabled && arbeidstid && (
+      {arbeidstid && (
         <BodyShort className={styles.dynamicText}>
           {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
         </BodyShort>
       )}
 
-      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
+      {arbeidsforhold.length > 0 && (
         <>
           <BodyLong className={styles.description}>
-            Fyll ut opplysninger om arbeidsforholdene dine. Hvis du mener at et arbeidsforhold ikke
-            er relevant for søknaden kan du fjerne det fra denne listen.
+            Hvis du mener at et arbeidsforhold ikke er relevant for søknaden kan du fjerne det fra
+            denne listen.
           </BodyLong>
           <ReadMore
             header={getAppText("arbeidsforhold.modal.readmore-header")}
@@ -125,7 +121,7 @@ function ArbeidsforholdComponent(
         </>
       )}
 
-      {arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
+      {arbeidsforhold.length > 0 && (
         <div className={styles.accordion}>
           <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
         </div>
@@ -161,33 +157,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <>
-                  {!arbeidsforholdIsEnabled && arbeidstid && arbeidsforhold.length === 0 && (
-                    <BodyLong className={styles.description} spacing>
-                      {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
-                    </BodyLong>
-                  )}
-                  {!arbeidsforholdIsEnabled && arbeidsforhold.length > 0 && (
-                    <>
-                      <BodyLong className={styles.description}>
-                        {getAppText("arbeidsforhold.modal.beskrivelse")}
-                      </BodyLong>
-                      <ReadMore
-                        header={getAppText("arbeidsforhold.modal.readmore-header")}
-                        className={styles.modalReadmore}
-                        defaultOpen={false}
-                      >
-                        {getAppText("arbeidsforhold.modal.readmore-innhold")}
-                      </ReadMore>
-                    </>
-                  )}
-                  {!arbeidsforholdIsEnabled && (
-                    <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
-                  )}
-                  {arbeidsforholdIsEnabled && (
-                    <ArbeidsforholdFaktumWrapper_V2 fakta={fakta} readonly={props.readonly} />
-                  )}
-                </>
+                <ArbeidsforholdFaktumWrapper_V2 fakta={fakta} readonly={props.readonly} />
                 <FetchIndicator isLoading={isLoading} />
                 <div className={"modal-container__button-container"}>
                   <Button onClick={closeGeneratorAnswer}>
