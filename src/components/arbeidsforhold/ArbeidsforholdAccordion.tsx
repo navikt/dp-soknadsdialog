@@ -27,30 +27,34 @@ export function ArbeidsforholdAccordion() {
     );
 
     setArbeidsforholdList(initialArbeidsforholdList);
-  }, [arbeidsforholdList]);
+  }, []);
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
     const storageKey = router?.query?.uuid?.toString().replace(/-/g, "");
     const storageRemovedArbeidsforhold = localStorage?.getItem(`${storageKey}`);
+    const removedList: string[] = storageRemovedArbeidsforhold
+      ? JSON.parse(storageRemovedArbeidsforhold)
+      : [];
 
     // Init storage with key
     if (!storageRemovedArbeidsforhold) {
       localStorage.setItem(`${storageKey}`, JSON.stringify([`${selectedArbeidsforhold.id}`]));
+      const newArbeidsforholdList = [...arbeidsforhold].filter(
+        (forhold) => forhold.id !== selectedArbeidsforhold.id,
+      );
+
+      setArbeidsforholdList(newArbeidsforholdList);
     }
 
     if (storageRemovedArbeidsforhold) {
-      const removedList = JSON.parse(storageRemovedArbeidsforhold);
       removedList.push(selectedArbeidsforhold.id);
-
       localStorage.setItem(`${storageKey}`, JSON.stringify(removedList));
+      const newArbeidsforholdList = [...arbeidsforhold].filter(
+        (forhold) => !removedList.includes(forhold.id),
+      );
+
+      setArbeidsforholdList(newArbeidsforholdList);
     }
-
-    // Remove arbeidsforhold from the list
-    const newArbeidsforholdList = [...arbeidsforhold].filter(
-      (forhold) => forhold.id !== selectedArbeidsforhold.id,
-    );
-
-    setArbeidsforholdList(newArbeidsforholdList);
   }
 
   return (
