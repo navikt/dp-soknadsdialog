@@ -40,7 +40,7 @@
     "@navikt/next-logger": "^1.21.0",
     "@navikt/oasis": "^1.0.3",
     "@next/bundle-analyzer": "^14.1.4",
-    "@portabletext/react": "^3.0.13",
+    "@portabletext/react": "^3.0.15",
     "@portabletext/to-html": "^2.0.10",
     "@svgr/webpack": "^8.1.0",
     "@types/js-cookie": "^3.0.6",
