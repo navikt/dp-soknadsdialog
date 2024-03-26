@@ -10,38 +10,39 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { useQuiz } from "../../context/quiz-context";
-import { useSanity } from "../../context/sanity-context";
-import { useUserInformation } from "../../context/user-information-context";
-import { useValidation } from "../../context/validation-context";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
+import { useQuiz } from "../../../context/quiz-context";
+import { useSanity } from "../../../context/sanity-context";
+import { useUserInformation } from "../../../context/user-information-context";
+import { useValidation } from "../../../context/validation-context";
+import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
+import { BriefcaseAdd } from "../../../svg-icons/BriefcaseAdd";
 import {
   IQuizGeneratorFaktum,
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
-} from "../../types/quiz.types";
-import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
-import { findEmployerName } from "../../utils/faktum.utils";
-import { FormattedDate } from "../FormattedDate";
-import { IFaktum } from "../faktum/Faktum";
-import { ValidationMessage } from "../faktum/validation/ValidationMessage";
-import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
-import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
-import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
-import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
-import styles from "./Arbeidsforhold.module.css";
+} from "../../../types/quiz.types";
+import { findArbeidstid } from "../../../utils/arbeidsforhold.utils";
+import { findEmployerName } from "../../../utils/faktum.utils";
+import { FormattedDate } from "../../FormattedDate";
+import { IFaktum } from "../../faktum/Faktum";
+import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
+import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
+import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
+import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
+import styles from "../Arbeidsforhold.module.css";
+import { ArbeidsforholdAccordion } from "../ArbeidsforholdAccordion";
+import { ArbeidsforholdFaktumWrapper_V2 } from "./ArbeidsforholdFaktumWrapper_V2";
 
-export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
+export const Arbeidsforhold_V2 = forwardRef(ArbeidsforholdComponent);
 
 function getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid: string): string {
   switch (arbeidstid) {
     case "faktum.type-arbeidstid.svar.fast":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months-v2";
     case "faktum.type-arbeidstid.svar.varierende":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months-v2";
     case "faktum.type-arbeidstid.svar.kombinasjon":
-      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months-v2";
     default:
       return "";
   }
@@ -56,7 +57,6 @@ function ArbeidsforholdComponent(
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInformation();
-
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -105,6 +105,28 @@ function ArbeidsforholdComponent(
         </BodyShort>
       )}
 
+      {arbeidsforhold.length > 0 && (
+        <>
+          <BodyLong className={styles.description}>
+            Hvis du mener at et arbeidsforhold ikke er relevant for søknaden kan du fjerne det fra
+            denne listen.
+          </BodyLong>
+          <ReadMore
+            header={getAppText("arbeidsforhold.modal.readmore-header")}
+            className={styles.modalReadmore}
+            defaultOpen={false}
+          >
+            {getAppText("arbeidsforhold.modal.readmore-innhold")}
+          </ReadMore>
+        </>
+      )}
+
+      {arbeidsforhold.length > 0 && (
+        <div className={styles.accordion}>
+          <ArbeidsforholdAccordion arbeidsforhold={arbeidsforhold} />
+        </div>
+      )}
+
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
@@ -135,28 +157,7 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                <>
-                  {arbeidstid && arbeidsforhold.length === 0 && (
-                    <BodyLong className={styles.description} spacing>
-                      {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
-                    </BodyLong>
-                  )}
-                  {arbeidsforhold.length > 0 && (
-                    <>
-                      <BodyLong className={styles.description}>
-                        {getAppText("arbeidsforhold.modal.beskrivelse")}
-                      </BodyLong>
-                      <ReadMore
-                        header={getAppText("arbeidsforhold.modal.readmore-header")}
-                        className={styles.modalReadmore}
-                        defaultOpen={false}
-                      >
-                        {getAppText("arbeidsforhold.modal.readmore-innhold")}
-                      </ReadMore>
-                    </>
-                  )}
-                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
-                </>
+                <ArbeidsforholdFaktumWrapper_V2 fakta={fakta} readonly={props.readonly} />
                 <FetchIndicator isLoading={isLoading} />
                 <div className={"modal-container__button-container"}>
                   <Button onClick={closeGeneratorAnswer}>
