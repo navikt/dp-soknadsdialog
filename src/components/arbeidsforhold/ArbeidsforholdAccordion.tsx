@@ -2,28 +2,48 @@ import { PencilIcon, TrashIcon } from "@navikt/aksel-icons";
 import { Accordion, Button } from "@navikt/ds-react";
 import { IArbeidsforhold, useUserInformation } from "../../context/user-information-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { IQuizGeneratorFaktum } from "../../types/quiz.types";
+import { IQuizGeneratorFaktum, IQuizSeksjon } from "../../types/quiz.types";
 import { FormattedDate } from "../FormattedDate";
 import styles from "./Arbeidsforhold.module.css";
 import { CheckmarkIcon } from "./arbeidsforhold-v2/CheckmarkIcon";
+import { WarningIcon } from "./arbeidsforhold-v2/WarningIcon";
+import { useState } from "react";
+import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
+import { useValidation } from "../../context/validation-context";
 
 interface IProps {
   faktum: IQuizGeneratorFaktum;
-  arbeidsforhold: IArbeidsforhold[];
+  currentSection: IQuizSeksjon;
 }
 
-export function ArbeidsforholdAccordion({ arbeidsforhold, faktum }: IProps) {
+export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
+  const [disabled, setDisabled] = useState(false);
   const { addNewGeneratorAnswer } = useGeneratorUtils();
-  const { setContextSelectedArbeidsforhold } = useUserInformation();
+  const { setUnansweredFaktumId } = useValidation();
+  const { arbeidsforhold, setContextSelectedArbeidsforhold, updateContextArbeidsforhold } =
+    useUserInformation();
 
-  function addArbeidsforhold(arbeidsforhold: IArbeidsforhold) {
-    addNewGeneratorAnswer(faktum);
-    setContextSelectedArbeidsforhold(arbeidsforhold);
+  function addArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
+    const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
+
+    if (faktum?.svar && hasUnansweredFaktumId) {
+      setUnansweredFaktumId(hasUnansweredFaktumId);
+    } else {
+      addNewGeneratorAnswer(faktum);
+    }
+
+    setDisabled(true);
+    setContextSelectedArbeidsforhold(selectedArbeidsforhold);
+
+    const arbeidsforholdWithStatus: IArbeidsforhold[] = [...arbeidsforhold].map((forhold) =>
+      forhold.id === selectedArbeidsforhold.id
+        ? { ...forhold, utfyllingStatus: "påbegynt" }
+        : forhold,
+    );
+
+    updateContextArbeidsforhold(arbeidsforholdWithStatus);
   }
 
-  // Dette er status til et arbeidsforhold, om det er ferdig eller delvis utført.
-  // Her bør vi bygge et struktur som lever i context
-  const status = true;
   return (
     <div className={styles.accordion}>
       <Accordion>
@@ -31,11 +51,9 @@ export function ArbeidsforholdAccordion({ arbeidsforhold, faktum }: IProps) {
           <Accordion.Item key={arbeidsforhold.id} defaultOpen={index === 0}>
             <Accordion.Header className="arbeidsforhold__accordion">
               <div>{arbeidsforhold.organisasjonsnavn}</div>
-              <div
-                className={styles.iconContainer}
-                aria-label={status ? "Ferdig utfylt" : "Delvis utfylt"}
-              >
-                <CheckmarkIcon />
+              <div className={styles.iconContainer}>
+                {arbeidsforhold.utfyllingStatus === "fullført" && <CheckmarkIcon />}
+                {arbeidsforhold.utfyllingStatus === "påbegynt" && <WarningIcon />}
               </div>
             </Accordion.Header>
             <Accordion.Content>
@@ -45,8 +63,9 @@ export function ArbeidsforholdAccordion({ arbeidsforhold, faktum }: IProps) {
               </>
               <div className={styles.buttonContainer}>
                 <Button
-                  icon={<PencilIcon title="a11y-title" fontSize="1.5rem" />}
+                  icon={<PencilIcon fontSize="1.5rem" />}
                   onClick={() => addArbeidsforhold(arbeidsforhold)}
+                  disabled={disabled && arbeidsforhold.utfyllingStatus !== "påbegynt"}
                 >
                   Fyll ut
                 </Button>

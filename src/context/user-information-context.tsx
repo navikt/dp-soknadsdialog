@@ -5,10 +5,12 @@ export interface IArbeidsforhold {
   organisasjonsnavn: string;
   startdato: string;
   sluttdato?: string;
+  utfyllingStatus?: "idle" | "påbegynt" | "fullført";
 }
 
 interface IUserInformationContext {
   arbeidsforhold: IArbeidsforhold[];
+  updateContextArbeidsforhold: (arbeidsforhold: IArbeidsforhold[]) => void;
   contextSelectedArbeidsforhold?: IArbeidsforhold;
   setContextSelectedArbeidsforhold: (arbeidsforhold?: IArbeidsforhold) => void;
 }
@@ -20,7 +22,9 @@ interface IProps {
 export const UserInformationContext = createContext<IUserInformationContext | undefined>(undefined);
 
 function UserInformationProvider(props: PropsWithChildren<IProps>) {
-  const [arbeidsforhold] = useState<IArbeidsforhold[]>(props.arbeidsforhold || []);
+  const [arbeidsforhold, setArbeidsforhold] = useState<IArbeidsforhold[]>(
+    props.arbeidsforhold || [],
+  );
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,
   );
@@ -29,12 +33,17 @@ function UserInformationProvider(props: PropsWithChildren<IProps>) {
     setSelectedArbeidsforhold(arbeidsforhold);
   }
 
+  function updateContextArbeidsforhold(arbeidsforhold: IArbeidsforhold[]) {
+    setArbeidsforhold(arbeidsforhold);
+  }
+
   return (
     <UserInformationContext.Provider
       value={{
         arbeidsforhold,
         setContextSelectedArbeidsforhold,
         contextSelectedArbeidsforhold: selectedArbeidsforhold,
+        updateContextArbeidsforhold,
       }}
     >
       {props.children}
