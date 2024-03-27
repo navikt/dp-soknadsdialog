@@ -80,11 +80,11 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   return (
     <div className={styles.accordion}>
       <Accordion>
-        {accordionArbeidsforhold?.map((arbeidsforhold) => {
+        {accordionArbeidsforhold?.map((arbeidsforhold, index) => {
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
 
           return (
-            <Accordion.Item key={id}>
+            <Accordion.Item key={id} defaultOpen={index === 0}>
               <Accordion.Header className="arbeidsforhold__accordion">
                 <div>{organisasjonsnavn}</div>
                 <div className={styles.iconContainer}>
