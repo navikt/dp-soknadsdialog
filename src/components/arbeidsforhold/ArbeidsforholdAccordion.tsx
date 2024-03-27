@@ -21,15 +21,20 @@ interface IProps {
 export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const router = useRouter();
   const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
+  const [filledArbeidsforhold, setFilledArbeidsforhold] = useState<string[]>([]);
   const { addNewGeneratorAnswer } = useGeneratorUtils();
   const { setUnansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
-
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
 
   const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
   useEffect(() => {
+    initLocalStorageAAREGArbeidsforholdRemovedList();
+    initLocalStorageAAREGArbeidsforholdFilledList();
+  }, []);
+
+  function initLocalStorageAAREGArbeidsforholdRemovedList() {
     // Init arbeidsforhold removed list on localStorage
     const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
     const removedArbeidsforhold = localStorage?.getItem(`${removedListStorageKey}`);
@@ -46,9 +51,22 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
       (forhold) => !removedArbeidsforholdList.includes(forhold.id),
     );
 
-    // Update arbeidsforhold accordion with filtered data
     setAccordionArbeidsforhold(filteredArbeidsforhold);
-  }, []);
+  }
+
+  function initLocalStorageAAREGArbeidsforholdFilledList() {
+    // Init arbeidsforhold removed list on localStorage
+    const filledListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
+    const filledArbeidsforhold = localStorage?.getItem(`${filledListStorageKey}`);
+    if (!filledArbeidsforhold) {
+      localStorage.setItem(`${filledListStorageKey}`, JSON.stringify([]));
+    }
+
+    const filledArbeidsforholdList = filledArbeidsforhold ? JSON.parse(filledArbeidsforhold) : [];
+
+    // Set filled list from localStorage to local state
+    setFilledArbeidsforhold(filledArbeidsforholdList);
+  }
 
   function addArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
     if (faktum?.svar && hasUnansweredFaktumId) {
@@ -56,8 +74,19 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     } else {
       addNewGeneratorAnswer(faktum);
     }
-
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
+
+    const filletListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
+    const filledArbeidsforhold = localStorage?.getItem(`${filletListStorageKey}`);
+    const filledArbeidsforholdList: string[] = filledArbeidsforhold
+      ? JSON.parse(filledArbeidsforhold)
+      : [];
+
+    if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
+      filledArbeidsforholdList.push(selectedArbeidsforhold.id);
+      localStorage.setItem(`${filletListStorageKey}`, JSON.stringify(filledArbeidsforholdList));
+      setFilledArbeidsforhold(filledArbeidsforholdList);
+    }
   }
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
@@ -82,21 +111,22 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
       <Accordion>
         {accordionArbeidsforhold?.map((arbeidsforhold, index) => {
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
+          const editing = filledArbeidsforhold.includes(id);
 
           return (
             <Accordion.Item key={id} defaultOpen={index === 0}>
               <Accordion.Header className="arbeidsforhold__accordion">
                 <div>{organisasjonsnavn}</div>
                 <div className={styles.iconContainer}>
-                  {true && <CheckmarkIcon />}
-                  {false && <WarningColored />}
+                  {false && <CheckmarkIcon />}
+                  {editing && <WarningColored />}
                 </div>
               </Accordion.Header>
               <Accordion.Content>
                 <>
                   <FormattedDate date={startdato} /> -{" "}
                   {sluttdato && <FormattedDate date={sluttdato} />}
-                  {false && (
+                  {editing && (
                     <Detail uppercase>
                       <WarningColored />
                       {getAppText("generator-faktum-kort.delvis-utfylt.varsel")}
