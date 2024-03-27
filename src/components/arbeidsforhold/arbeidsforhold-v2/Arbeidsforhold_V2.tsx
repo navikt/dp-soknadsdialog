@@ -29,9 +29,9 @@ import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
 import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
 import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
-import styles from "../Arbeidsforhold.module.css";
 import { ArbeidsforholdAccordion } from "../ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper_V2 } from "./ArbeidsforholdFaktumWrapper_V2";
+import styles from "../Arbeidsforhold.module.css";
 
 export const Arbeidsforhold_V2 = forwardRef(ArbeidsforholdComponent);
 
