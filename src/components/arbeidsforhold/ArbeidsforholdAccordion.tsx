@@ -25,8 +25,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const { setUnansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
 
-  const { arbeidsforhold, setContextSelectedArbeidsforhold, updateContextArbeidsforhold } =
-    useUserInformation();
+  const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
 
   const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
@@ -59,14 +58,6 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     }
 
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
-
-    const arbeidsforholdWithStatus: IArbeidsforhold[] = [...arbeidsforhold].map((forhold) =>
-      forhold.id === selectedArbeidsforhold.id
-        ? { ...forhold, utfyllingStatus: "påbegynt" }
-        : forhold,
-    );
-
-    updateContextArbeidsforhold(arbeidsforholdWithStatus);
   }
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
