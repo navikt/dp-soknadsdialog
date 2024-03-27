@@ -54,28 +54,18 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   }, [dinSituasjon]);
 
   useEffect(() => {
-    initLocalStorageAAREGArbeidsforholdRemovedList();
-    initLocalStorageAAREGArbeidsforholdFilledList();
-    initLocalStorageAAREGArbeidsforholdFinishedList();
-  }, []);
+    const filledArbeidsforhold = getArbeidsforholdStorageData(filledListStorageKey);
+    setFilledArbeidsforhold(filledArbeidsforhold);
 
-  function initLocalStorageAAREGArbeidsforholdRemovedList() {
+    const finishedArbeidsforhold = getArbeidsforholdStorageData(finishedListStorageKey);
+    setFinishedArbeidsforhold(finishedArbeidsforhold);
+
     const removedArbeidsforhold = getArbeidsforholdStorageData(removedListStorageKey);
     const filteredArbeidsforhold = arbeidsforhold.filter(
       (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
     setAccordionArbeidsforhold(filteredArbeidsforhold);
-  }
-
-  function initLocalStorageAAREGArbeidsforholdFilledList() {
-    const filledArbeidsforhold = getArbeidsforholdStorageData(filledListStorageKey);
-    setFilledArbeidsforhold(filledArbeidsforhold);
-  }
-
-  function initLocalStorageAAREGArbeidsforholdFinishedList() {
-    const finishedArbeidsforhold = getArbeidsforholdStorageData(finishedListStorageKey);
-    setFinishedArbeidsforhold(finishedArbeidsforhold);
-  }
+  }, []);
 
   function addArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
     if (faktum?.svar && hasUnansweredFaktumId) {
