@@ -109,7 +109,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
               <Accordion.Header className="arbeidsforhold__accordion">
                 <div>{organisasjonsnavn}</div>
                 <div className={styles.iconContainer}>
-                  {finished && !editing && <CheckmarkIcon />}
+                  {finished && <CheckmarkIcon />}
                   {editing && !finished && <WarningColored />}
                 </div>
               </Accordion.Header>
