@@ -98,13 +98,11 @@ function ArbeidsforholdComponent(
       <Label as={"p"} spacing>
         {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
       </Label>
-
       {arbeidstid && (
         <BodyShort className={styles.dynamicText}>
           {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
         </BodyShort>
       )}
-
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
         const shouldShowValidationMessage = fakta.some(
