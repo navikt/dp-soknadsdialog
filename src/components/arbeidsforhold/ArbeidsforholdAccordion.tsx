@@ -9,58 +9,47 @@ import styles from "./Arbeidsforhold.module.css";
 export function ArbeidsforholdAccordion() {
   const router = useRouter();
   const { arbeidsforhold } = useUserInformation();
-  const [arbeidsforholdList, setArbeidsforholdList] = useState<IArbeidsforhold[]>([]);
+  const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
 
   useEffect(() => {
-    // use UUID without dashes as localstorage key
-    const storageKey = router?.query?.uuid?.toString().replace(/-/g, "");
-    const storageRemovedArbeidsforhold = localStorage?.getItem(`${storageKey}`);
+    const storageKey = router?.query?.uuid;
+    const removedArbeidsforhold = localStorage?.getItem(`${storageKey}`);
 
-    // parse stored removed arbeidsforhold as array
-    const storageRemovedArbeidsforholdArray = storageRemovedArbeidsforhold
-      ? JSON.parse(storageRemovedArbeidsforhold)
+    if (!removedArbeidsforhold) {
+      localStorage.setItem(`${storageKey}`, JSON.stringify([]));
+    }
+
+    const removedArbeidsforholdList = removedArbeidsforhold
+      ? JSON.parse(removedArbeidsforhold)
       : [];
 
-    // filter AAREG list with localStorage list
-    const initialArbeidsforholdList = arbeidsforhold.filter(
-      (forhold) => !storageRemovedArbeidsforholdArray.includes(forhold.id),
+    const filteredArbeidsforhold = arbeidsforhold.filter(
+      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
     );
 
-    setArbeidsforholdList(initialArbeidsforholdList);
+    setAccordionArbeidsforhold(filteredArbeidsforhold);
   }, []);
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
-    const storageKey = router?.query?.uuid?.toString().replace(/-/g, "");
-    const storageRemovedArbeidsforhold = localStorage?.getItem(`${storageKey}`);
-    const removedList: string[] = storageRemovedArbeidsforhold
-      ? JSON.parse(storageRemovedArbeidsforhold)
+    const storageKey = router?.query?.uuid;
+    const removedArbeidsforhold = localStorage?.getItem(`${storageKey}`);
+    const removedArbeidsforholdList: string[] = removedArbeidsforhold
+      ? JSON.parse(removedArbeidsforhold)
       : [];
 
-    // Init storage with key
-    if (!storageRemovedArbeidsforhold) {
-      localStorage.setItem(`${storageKey}`, JSON.stringify([`${selectedArbeidsforhold.id}`]));
-      const newArbeidsforholdList = [...arbeidsforhold].filter(
-        (forhold) => forhold.id !== selectedArbeidsforhold.id,
-      );
+    removedArbeidsforholdList.push(selectedArbeidsforhold.id);
+    localStorage.setItem(`${storageKey}`, JSON.stringify(removedArbeidsforholdList));
+    const filteredArbeidsforhold = [...arbeidsforhold].filter(
+      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
+    );
 
-      setArbeidsforholdList(newArbeidsforholdList);
-    }
-
-    if (storageRemovedArbeidsforhold) {
-      removedList.push(selectedArbeidsforhold.id);
-      localStorage.setItem(`${storageKey}`, JSON.stringify(removedList));
-      const newArbeidsforholdList = [...arbeidsforhold].filter(
-        (forhold) => !removedList.includes(forhold.id),
-      );
-
-      setArbeidsforholdList(newArbeidsforholdList);
-    }
+    setAccordionArbeidsforhold(filteredArbeidsforhold);
   }
 
   return (
     <div className={styles.accordion}>
       <Accordion>
-        {arbeidsforholdList?.map((arbeidsforhold) => {
+        {accordionArbeidsforhold?.map((arbeidsforhold) => {
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
 
           return (
