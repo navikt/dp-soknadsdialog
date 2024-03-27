@@ -67,7 +67,7 @@ export async function getServerSideProps(
   let soknadState = null;
   let personalia = null;
   let soknadStatus = null;
-  let arbeidsforhold: IArbeidsforhold[] = [];
+  let arbeidsforhold = [];
 
   const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
@@ -77,12 +77,7 @@ export async function getServerSideProps(
   const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOfToken);
 
   if (arbeidsforholdResponse.ok) {
-    const arbeidsforholdList = await arbeidsforholdResponse.json();
-
-    arbeidsforhold = [...arbeidsforholdList].map((forhold: IArbeidsforhold) => ({
-      ...forhold,
-      utfyllingStatus: "idle",
-    }));
+    arbeidsforhold = await arbeidsforholdResponse.json();
   }
 
   if (!soknadStateResponse.ok) {

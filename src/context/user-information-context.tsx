@@ -5,7 +5,6 @@ export interface IArbeidsforhold {
   organisasjonsnavn: string;
   startdato: string;
   sluttdato?: string;
-  utfyllingStatus?: "idle" | "påbegynt" | "fullført";
 }
 
 interface IUserInformationContext {
