@@ -48,7 +48,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
       const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
 
       finishedArbeidsforhold.push(contextSelectedArbeidsforhold.id);
-      localStorage.setItem(`${finishedListStorageKey}`, JSON.stringify(finishedArbeidsforhold));
+      localStorage.setItem(finishedListStorageKey, JSON.stringify(finishedArbeidsforhold));
       setFinishedArbeidsforhold(finishedArbeidsforhold);
     }
   }, [dinSituasjon]);
@@ -79,7 +79,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
 
     if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
       filledArbeidsforhold.push(selectedArbeidsforhold.id);
-      localStorage.setItem(`${filledListStorageKey}`, JSON.stringify(filledArbeidsforhold));
+      localStorage.setItem(filledListStorageKey, JSON.stringify(filledArbeidsforhold));
       setFilledArbeidsforhold(filledArbeidsforhold);
     }
   }
@@ -87,7 +87,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
     const removedArbeidsforhold = getStorageArrayByKey(removedListStorageKey);
     removedArbeidsforhold.push(selectedArbeidsforhold.id);
-    localStorage.setItem(`${removedListStorageKey}`, JSON.stringify(removedArbeidsforhold));
+    localStorage.setItem(removedListStorageKey, JSON.stringify(removedArbeidsforhold));
 
     const filteredArbeidsforhold = [...arbeidsforhold].filter(
       (forhold) => !removedArbeidsforhold.includes(forhold.id),
