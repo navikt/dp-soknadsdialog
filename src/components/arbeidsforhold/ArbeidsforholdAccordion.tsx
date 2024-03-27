@@ -13,6 +13,7 @@ import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
 import styles from "./Arbeidsforhold.module.css";
 import { CheckmarkIcon } from "./arbeidsforhold-v2/CheckmarkIcon";
 import { useQuiz } from "../../context/quiz-context";
+import { useArbeidsforholdLocalStorage } from "../../hooks/useArbeidsforholdLocalStorage";
 
 interface IProps {
   faktum: IQuizGeneratorFaktum;
@@ -22,14 +23,20 @@ interface IProps {
 export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const router = useRouter();
   const { soknadState } = useQuiz();
+  const { getAppText } = useSanity();
+  const { setUnansweredFaktumId } = useValidation();
+  const { addNewGeneratorAnswer } = useGeneratorUtils();
   const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
   const [filledArbeidsforhold, setFilledArbeidsforhold] = useState<string[]>([]);
   const [finishedArbeidsforhold, setFinishedArbeidsforhold] = useState<string[]>([]);
-  const { addNewGeneratorAnswer } = useGeneratorUtils();
-  const { setUnansweredFaktumId } = useValidation();
-  const { getAppText } = useSanity();
+  const { getArbeidsforholdStorageData } = useArbeidsforholdLocalStorage();
   const { arbeidsforhold, setContextSelectedArbeidsforhold, contextSelectedArbeidsforhold } =
     useUserInformation();
+
+  const filledListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
+  const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
+  const finishedListStorageKey = `aareg-finished-list-${router?.query?.uuid}`;
+
   const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
   const dinSituasjon = soknadState.seksjoner.find(
@@ -38,15 +45,11 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
 
   useEffect(() => {
     if (dinSituasjon?.ferdig && contextSelectedArbeidsforhold) {
-      const finishedListStorageKey = `aareg-finished-list-${router?.query?.uuid}`;
-      const finishedArbeidsforhold = localStorage?.getItem(`${finishedListStorageKey}`);
-      const finishedArbeidsforholdList = finishedArbeidsforhold
-        ? JSON.parse(finishedArbeidsforhold)
-        : [];
+      const finishedArbeidsforhold = getArbeidsforholdStorageData(finishedListStorageKey);
 
-      finishedArbeidsforholdList.push(contextSelectedArbeidsforhold.id);
-      localStorage.setItem(`${finishedListStorageKey}`, JSON.stringify(finishedArbeidsforholdList));
-      setFinishedArbeidsforhold(finishedArbeidsforholdList);
+      finishedArbeidsforhold.push(contextSelectedArbeidsforhold.id);
+      localStorage.setItem(`${finishedListStorageKey}`, JSON.stringify(finishedArbeidsforhold));
+      setFinishedArbeidsforhold(finishedArbeidsforhold);
     }
   }, [dinSituasjon]);
 
@@ -57,53 +60,21 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   }, []);
 
   function initLocalStorageAAREGArbeidsforholdRemovedList() {
-    // Init arbeidsforhold removed list to localStorage
-    const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
-    const removedArbeidsforhold = localStorage?.getItem(`${removedListStorageKey}`);
-    if (!removedArbeidsforhold) {
-      localStorage.setItem(`${removedListStorageKey}`, JSON.stringify([]));
-    }
-
-    const removedArbeidsforholdList = removedArbeidsforhold
-      ? JSON.parse(removedArbeidsforhold)
-      : [];
-
-    // Filter arbeidsforhold from aareg with localStorage arbeisforhold removed list
+    const removedArbeidsforhold = getArbeidsforholdStorageData(removedListStorageKey);
     const filteredArbeidsforhold = arbeidsforhold.filter(
-      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
+      (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
-
     setAccordionArbeidsforhold(filteredArbeidsforhold);
   }
 
   function initLocalStorageAAREGArbeidsforholdFilledList() {
-    // Init arbeidsforhold removed list to localStorage
-    const filledListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
-    const filledArbeidsforhold = localStorage?.getItem(`${filledListStorageKey}`);
-    if (!filledArbeidsforhold) {
-      localStorage.setItem(`${filledListStorageKey}`, JSON.stringify([]));
-    }
-
-    const filledArbeidsforholdList = filledArbeidsforhold ? JSON.parse(filledArbeidsforhold) : [];
-
-    // Set filled list from localStorage to local state
-    setFilledArbeidsforhold(filledArbeidsforholdList);
+    const filledArbeidsforhold = getArbeidsforholdStorageData(filledListStorageKey);
+    setFilledArbeidsforhold(filledArbeidsforhold);
   }
 
   function initLocalStorageAAREGArbeidsforholdFinishedList() {
-    // Init arbeidsforhold finished list to localStorage
-    const finishedListStorageKey = `aareg-finished-list-${router?.query?.uuid}`;
-    const finishedArbeidsforhold = localStorage?.getItem(`${finishedListStorageKey}`);
-    if (!finishedArbeidsforhold) {
-      localStorage.setItem(`${finishedListStorageKey}`, JSON.stringify([]));
-    }
-
-    const finishedArbeidsforholdList = finishedArbeidsforhold
-      ? JSON.parse(finishedArbeidsforhold)
-      : [];
-
-    // Set finished list from localStorage to local state
-    setFinishedArbeidsforhold(finishedArbeidsforholdList);
+    const finishedArbeidsforhold = getArbeidsforholdStorageData(finishedListStorageKey);
+    setFinishedArbeidsforhold(finishedArbeidsforhold);
   }
 
   function addArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
@@ -114,31 +85,22 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     }
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
 
-    const filletListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
-    const filledArbeidsforhold = localStorage?.getItem(`${filletListStorageKey}`);
-    const filledArbeidsforholdList: string[] = filledArbeidsforhold
-      ? JSON.parse(filledArbeidsforhold)
-      : [];
+    const filledArbeidsforhold = getArbeidsforholdStorageData(filledListStorageKey);
 
     if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
-      filledArbeidsforholdList.push(selectedArbeidsforhold.id);
-      localStorage.setItem(`${filletListStorageKey}`, JSON.stringify(filledArbeidsforholdList));
-      setFilledArbeidsforhold(filledArbeidsforholdList);
+      filledArbeidsforhold.push(selectedArbeidsforhold.id);
+      localStorage.setItem(`${filledListStorageKey}`, JSON.stringify(filledArbeidsforhold));
+      setFilledArbeidsforhold(filledArbeidsforhold);
     }
   }
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
-    const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
-    const removedArbeidsforhold = localStorage?.getItem(`${removedListStorageKey}`);
-    const removedArbeidsforholdList: string[] = removedArbeidsforhold
-      ? JSON.parse(removedArbeidsforhold)
-      : [];
-
-    removedArbeidsforholdList.push(selectedArbeidsforhold.id);
-    localStorage.setItem(`${removedListStorageKey}`, JSON.stringify(removedArbeidsforholdList));
+    const removedArbeidsforhold = getArbeidsforholdStorageData(removedListStorageKey);
+    removedArbeidsforhold.push(selectedArbeidsforhold.id);
+    localStorage.setItem(`${removedListStorageKey}`, JSON.stringify(removedArbeidsforhold));
 
     const filteredArbeidsforhold = [...arbeidsforhold].filter(
-      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
+      (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
 
     setAccordionArbeidsforhold(filteredArbeidsforhold);
