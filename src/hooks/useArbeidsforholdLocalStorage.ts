@@ -1,5 +1,5 @@
 export function useArbeidsforholdLocalStorage() {
-  function getArbeidsforholdStorageArrayByKey(key: string) {
+  function getStorageArrayByKey(key: string) {
     const storage = localStorage?.getItem(`${key}`);
 
     if (!storage) {
@@ -9,5 +9,5 @@ export function useArbeidsforholdLocalStorage() {
     return storage ? JSON.parse(storage) : [];
   }
 
-  return { getArbeidsforholdStorageArrayByKey };
+  return { getStorageArrayByKey };
 }
