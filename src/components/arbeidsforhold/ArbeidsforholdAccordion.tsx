@@ -12,6 +12,8 @@ import { FormattedDate } from "../FormattedDate";
 import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
 import styles from "./Arbeidsforhold.module.css";
 import { CheckmarkIcon } from "./arbeidsforhold-v2/CheckmarkIcon";
+import { useQuiz } from "../../context/quiz-context";
+import { useArbeidsforholdLocalStorage } from "../../hooks/useArbeidsforholdLocalStorage";
 
 interface IProps {
   faktum: IQuizGeneratorFaktum;
@@ -20,33 +22,48 @@ interface IProps {
 
 export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const router = useRouter();
-  const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
-  const { addNewGeneratorAnswer } = useGeneratorUtils();
-  const { setUnansweredFaktumId } = useValidation();
+  const { soknadState } = useQuiz();
   const { getAppText } = useSanity();
+  const { setUnansweredFaktumId } = useValidation();
+  const { addNewGeneratorAnswer } = useGeneratorUtils();
+  const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
+  const [filledArbeidsforhold, setFilledArbeidsforhold] = useState<string[]>([]);
+  const [finishedArbeidsforhold, setFinishedArbeidsforhold] = useState<string[]>([]);
+  const { getStorageArrayByKey } = useArbeidsforholdLocalStorage();
+  const { arbeidsforhold, setContextSelectedArbeidsforhold, contextSelectedArbeidsforhold } =
+    useUserInformation();
 
-  const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
+  const startedListStorageKey = `aareg-started-list-${router?.query?.uuid}`;
+  const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
+  const finishedListStorageKey = `aareg-finished-list-${router?.query?.uuid}`;
 
   const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
+  const dinSituasjonSection = soknadState.seksjoner.find(
+    (seksjon) => seksjon.beskrivendeId === "din-situasjon",
+  );
+
   useEffect(() => {
-    // Init arbeidsforhold removed list on localStorage
-    const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
-    const removedArbeidsforhold = localStorage?.getItem(`${removedListStorageKey}`);
-    if (!removedArbeidsforhold) {
-      localStorage.setItem(`${removedListStorageKey}`, JSON.stringify([]));
+    if (dinSituasjonSection?.ferdig && contextSelectedArbeidsforhold) {
+      const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
+
+      finishedArbeidsforhold.push(contextSelectedArbeidsforhold.id);
+      localStorage.setItem(finishedListStorageKey, JSON.stringify(finishedArbeidsforhold));
+      setFinishedArbeidsforhold(finishedArbeidsforhold);
     }
+  }, [dinSituasjonSection]);
 
-    const removedArbeidsforholdList = removedArbeidsforhold
-      ? JSON.parse(removedArbeidsforhold)
-      : [];
+  useEffect(() => {
+    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
+    setFilledArbeidsforhold(filledArbeidsforhold);
 
-    // Filter arbeidsforhold from aareg with localStorage arbeisforhold removed list
+    const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
+    setFinishedArbeidsforhold(finishedArbeidsforhold);
+
+    const removedArbeidsforhold = getStorageArrayByKey(removedListStorageKey);
     const filteredArbeidsforhold = arbeidsforhold.filter(
-      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
+      (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
-
-    // Update arbeidsforhold accordion with filtered data
     setAccordionArbeidsforhold(filteredArbeidsforhold);
   }, []);
 
@@ -56,22 +73,24 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     } else {
       addNewGeneratorAnswer(faktum);
     }
-
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
+
+    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
+
+    if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
+      filledArbeidsforhold.push(selectedArbeidsforhold.id);
+      localStorage.setItem(startedListStorageKey, JSON.stringify(filledArbeidsforhold));
+      setFilledArbeidsforhold(filledArbeidsforhold);
+    }
   }
 
   function removeArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
-    const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
-    const removedArbeidsforhold = localStorage?.getItem(`${removedListStorageKey}`);
-    const removedArbeidsforholdList: string[] = removedArbeidsforhold
-      ? JSON.parse(removedArbeidsforhold)
-      : [];
-
-    removedArbeidsforholdList.push(selectedArbeidsforhold.id);
-    localStorage.setItem(`${removedListStorageKey}`, JSON.stringify(removedArbeidsforholdList));
+    const removedArbeidsforhold = getStorageArrayByKey(removedListStorageKey);
+    removedArbeidsforhold.push(selectedArbeidsforhold.id);
+    localStorage.setItem(removedListStorageKey, JSON.stringify(removedArbeidsforhold));
 
     const filteredArbeidsforhold = [...arbeidsforhold].filter(
-      (forhold) => !removedArbeidsforholdList.includes(forhold.id),
+      (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
 
     setAccordionArbeidsforhold(filteredArbeidsforhold);
@@ -82,21 +101,23 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
       <Accordion>
         {accordionArbeidsforhold?.map((arbeidsforhold, index) => {
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
+          const editing = filledArbeidsforhold.includes(id) && hasUnansweredFaktumId;
+          const finished = finishedArbeidsforhold.includes(id);
 
           return (
             <Accordion.Item key={id} defaultOpen={index === 0}>
               <Accordion.Header className="arbeidsforhold__accordion">
                 <div>{organisasjonsnavn}</div>
                 <div className={styles.iconContainer}>
-                  {true && <CheckmarkIcon />}
-                  {false && <WarningColored />}
+                  {finished && <CheckmarkIcon />}
+                  {editing && !finished && <WarningColored />}
                 </div>
               </Accordion.Header>
               <Accordion.Content>
                 <>
                   <FormattedDate date={startdato} /> -{" "}
                   {sluttdato && <FormattedDate date={sluttdato} />}
-                  {false && (
+                  {editing && !finished && (
                     <Detail uppercase>
                       <WarningColored />
                       {getAppText("generator-faktum-kort.delvis-utfylt.varsel")}
