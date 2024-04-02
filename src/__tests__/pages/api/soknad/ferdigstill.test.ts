@@ -5,11 +5,10 @@
 import { createMocks } from "node-mocks-http";
 import createFetchMock from "vitest-fetch-mock";
 import { mockSanityTexts } from "../../../../__mocks__/MockContext";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import ferdigstillHandler, { IFerdigstillBody } from "../../../../pages/api/soknad/ferdigstill";
 
 vi.mock("../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));
 

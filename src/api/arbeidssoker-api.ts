@@ -1,6 +1,3 @@
-import { GetServerSidePropsContext } from "next/types";
-import { getSession, getArbeidsoekkerregisteretOnBehalfOfToken } from "../utils/auth.utils";
-
 export type IArbeidssokerStatus = "UNREGISTERED" | "REGISTERED" | "ERROR";
 type brukerTypeResponse = "UKJENT_VERDI" | "UDEFINERT" | "VEILEDER" | "SYSTEM" | "SLUTTBRUKER";
 
@@ -17,10 +14,7 @@ interface IArbeidssoekkerMetaResponse {
   aarsak: string;
 }
 
-export async function getArbeidssokerperioder({ req }: GetServerSidePropsContext) {
-  const session = await getSession(req);
-  const onBehalfOfToken = await getArbeidsoekkerregisteretOnBehalfOfToken(session);
-
+export async function getArbeidssokerperioder(onBehalfOfToken: string) {
   const url = `${process.env.ARBEIDSSOEKERREGISTERET_URL}/api/v1/arbeidssoekerperioder`;
 
   return await fetch(url, {

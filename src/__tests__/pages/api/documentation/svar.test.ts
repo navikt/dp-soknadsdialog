@@ -3,14 +3,13 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 import svarHandler, { IDokumentkravSvarBody } from "../../../../pages/api/documentation/svar";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../../../constants";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 
 vi.mock("../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

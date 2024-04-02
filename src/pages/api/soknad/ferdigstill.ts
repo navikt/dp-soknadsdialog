@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
@@ -19,14 +19,13 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json("Mock content");
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, locale } = req.body;
   try {
-    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+    const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+    if (!onBehalfOf.ok) {
+      return res.status(401).end();
+    }
+
     const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
       baseLang: "nb",
       lang: locale,
@@ -37,16 +36,16 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
       `${process.env.API_BASE_URL}/soknad/${uuid}/ferdigstill`,
       {
         method: "PUT",
-        headers: headersWithToken(onBehalfOfToken),
+        headers: headersWithToken(onBehalfOf.token),
         body: JSON.stringify({ sanityTexts: sanityTextsWithHTML }),
-      }
+      },
     );
 
     if (!ferdigstillResponse.ok) {
       logRequestError(
         ferdigstillResponse.statusText,
         uuid,
-        "Ferdigstill soknad - Failed to post to dp-soknad"
+        "Ferdigstill soknad - Failed to post to dp-soknad",
       );
       return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
     }

@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
+import { getErrorMessage } from "../../../utils/api.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 
 export interface IEttersendBody {
   uuid: string;
@@ -13,25 +13,24 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(201).json("Mock content");
   }
 
-  const session = await getSession(req);
   const { uuid } = req.body;
 
-  if (!session) {
-    return res.status(401).end();
-  }
-
   try {
-    const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
+    const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+    if (!onBehalfOf.ok) {
+      return res.status(401).end();
+    }
+
     const ettersendResponse = await fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/ettersend`, {
       method: "PUT",
-      headers: headersWithToken(onBehalfOfToken),
+      headers: headersWithToken(onBehalfOf.token),
     });
 
     if (!ettersendResponse.ok) {
       logRequestError(
         ettersendResponse.statusText,
         uuid,
-        "Ettersend dokumentasjon - Failed to post ettersending"
+        "Ettersend dokumentasjon - Failed to post ettersending",
       );
       return res.status(ettersendResponse.status).send(ettersendResponse.statusText);
     }

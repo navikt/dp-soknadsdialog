@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
   IArbeidssokerStatus,
+  IArbeidssokerperioder,
+  getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
-import { getSession } from "../../utils/auth.utils";
+import { getArbeidsoekkerregisteretOnBehalfOfToken } from "../../utils/auth.utils";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
 
 interface IProps {
@@ -24,8 +24,8 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -36,7 +36,7 @@ export async function getServerSideProps(
 
   let arbeidssokerStatus: IArbeidssokerStatus;
 
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(onBehalfOf.token);
 
   if (arbeidssokerStatusResponse.ok) {
     const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
