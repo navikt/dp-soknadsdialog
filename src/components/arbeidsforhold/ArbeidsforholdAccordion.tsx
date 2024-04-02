@@ -33,28 +33,28 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const { arbeidsforhold, setContextSelectedArbeidsforhold, contextSelectedArbeidsforhold } =
     useUserInformation();
 
-  const filledListStorageKey = `aareg-filled-list-${router?.query?.uuid}`;
+  const startedListStorageKey = `aareg-started-list-${router?.query?.uuid}`;
   const removedListStorageKey = `aareg-removed-list-${router?.query?.uuid}`;
   const finishedListStorageKey = `aareg-finished-list-${router?.query?.uuid}`;
 
   const hasUnansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
 
-  const dinSituasjon = soknadState.seksjoner.find(
+  const dinSituasjonSection = soknadState.seksjoner.find(
     (seksjon) => seksjon.beskrivendeId === "din-situasjon",
   );
 
   useEffect(() => {
-    if (dinSituasjon?.ferdig && contextSelectedArbeidsforhold) {
+    if (dinSituasjonSection?.ferdig && contextSelectedArbeidsforhold) {
       const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
 
       finishedArbeidsforhold.push(contextSelectedArbeidsforhold.id);
       localStorage.setItem(finishedListStorageKey, JSON.stringify(finishedArbeidsforhold));
       setFinishedArbeidsforhold(finishedArbeidsforhold);
     }
-  }, [dinSituasjon]);
+  }, [dinSituasjonSection]);
 
   useEffect(() => {
-    const filledArbeidsforhold = getStorageArrayByKey(filledListStorageKey);
+    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
     setFilledArbeidsforhold(filledArbeidsforhold);
 
     const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
@@ -75,11 +75,11 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     }
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
 
-    const filledArbeidsforhold = getStorageArrayByKey(filledListStorageKey);
+    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
 
     if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
       filledArbeidsforhold.push(selectedArbeidsforhold.id);
-      localStorage.setItem(filledListStorageKey, JSON.stringify(filledArbeidsforhold));
+      localStorage.setItem(startedListStorageKey, JSON.stringify(filledArbeidsforhold));
       setFilledArbeidsforhold(filledArbeidsforhold);
     }
   }
