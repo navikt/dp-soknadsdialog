@@ -29,7 +29,7 @@ import { ValidationMessage } from "../../faktum/validation/ValidationMessage";
 import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
 import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
-import { ArbeidsforholdAccordion } from "../ArbeidsforholdAccordion";
+import { ArbeidsforholdAccordion } from "./ArbeidsforholdAccordion";
 import { ArbeidsforholdFaktumWrapper_V2 } from "./ArbeidsforholdFaktumWrapper_V2";
 import styles from "../Arbeidsforhold.module.css";
 
@@ -213,7 +213,7 @@ export function getArbeidsforholdEndret(arbeidsforhold: QuizFaktum[]): string {
     ?.svar as string;
 }
 
-function ArbeidsforholdEndret({ fakta }: { fakta: QuizFaktum[] }) {
+export function ArbeidsforholdEndret({ fakta }: { fakta: QuizFaktum[] }) {
   const { getSvaralternativTextById } = useSanity();
 
   const arbeidsforholdEndret = getArbeidsforholdEndret(fakta);

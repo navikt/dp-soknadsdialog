@@ -1,19 +1,24 @@
 import { PencilIcon, TrashIcon } from "@navikt/aksel-icons";
 import { WarningColored } from "@navikt/ds-icons";
-import { Accordion, Button, Detail } from "@navikt/ds-react";
+import { Accordion, BodyShort, Button, Detail } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSanity } from "../../context/sanity-context";
-import { IArbeidsforhold, useUserInformation } from "../../context/user-information-context";
-import { useValidation } from "../../context/validation-context";
-import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
-import { IQuizGeneratorFaktum, IQuizSeksjon } from "../../types/quiz.types";
-import { FormattedDate } from "../FormattedDate";
-import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
-import styles from "./Arbeidsforhold.module.css";
-import { CheckmarkIcon } from "./arbeidsforhold-v2/CheckmarkIcon";
-import { useQuiz } from "../../context/quiz-context";
-import { useArbeidsforholdLocalStorage } from "../../hooks/useArbeidsforholdLocalStorage";
+import { useSanity } from "../../../context/sanity-context";
+import { IArbeidsforhold, useUserInformation } from "../../../context/user-information-context";
+import { useValidation } from "../../../context/validation-context";
+import { useGeneratorUtils } from "../../../hooks/useGeneratorUtils";
+import { IQuizGeneratorFaktum, IQuizSeksjon } from "../../../types/quiz.types";
+import { FormattedDate } from "../../FormattedDate";
+import { getUnansweredFaktumId } from "../../faktum/validation/validations.utils";
+import styles from "../Arbeidsforhold.module.css";
+import { CheckmarkIcon } from "./CheckmarkIcon";
+import { useQuiz } from "../../../context/quiz-context";
+import { useArbeidsforholdLocalStorage } from "../../../hooks/useArbeidsforholdLocalStorage";
+import {
+  ArbeidsforholdEndret,
+  getArbeidsforholdName,
+  getArbeidsforholdVarighet,
+} from "./Arbeidsforhold_V2";
 
 interface IProps {
   faktum: IQuizGeneratorFaktum;
@@ -27,7 +32,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const { setUnansweredFaktumId } = useValidation();
   const { addNewGeneratorAnswer } = useGeneratorUtils();
   const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
-  const [filledArbeidsforhold, setFilledArbeidsforhold] = useState<string[]>([]);
+  const [startedArbeidsforhold, setStartedArbeidsforhold] = useState<string[]>([]);
   const [finishedArbeidsforhold, setFinishedArbeidsforhold] = useState<string[]>([]);
   const { getStorageArrayByKey } = useArbeidsforholdLocalStorage();
   const { arbeidsforhold, setContextSelectedArbeidsforhold, contextSelectedArbeidsforhold } =
@@ -45,19 +50,29 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
 
   useEffect(() => {
     if (dinSituasjonSection?.ferdig && contextSelectedArbeidsforhold) {
-      const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
+      const finishedArbeidsforhold = getStorageArrayByKey<string>(finishedListStorageKey);
 
       finishedArbeidsforhold.push(contextSelectedArbeidsforhold.id);
       localStorage.setItem(finishedListStorageKey, JSON.stringify(finishedArbeidsforhold));
       setFinishedArbeidsforhold(finishedArbeidsforhold);
+
+      const startedArbeidsforholdFromLocaleStorage =
+        getStorageArrayByKey<string>(startedListStorageKey);
+      const filteredStartedArbeidsforhold = startedArbeidsforholdFromLocaleStorage.filter(
+        (id) => id !== contextSelectedArbeidsforhold.id,
+      );
+
+      setStartedArbeidsforhold(filteredStartedArbeidsforhold);
+      localStorage.setItem(startedListStorageKey, JSON.stringify(filteredStartedArbeidsforhold));
     }
   }, [dinSituasjonSection]);
 
   useEffect(() => {
-    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
-    setFilledArbeidsforhold(filledArbeidsforhold);
+    const startedArbeidsforholdFromLocaleStorage =
+      getStorageArrayByKey<string>(startedListStorageKey);
+    setStartedArbeidsforhold(startedArbeidsforholdFromLocaleStorage);
 
-    const finishedArbeidsforhold = getStorageArrayByKey(finishedListStorageKey);
+    const finishedArbeidsforhold = getStorageArrayByKey<string>(finishedListStorageKey);
     setFinishedArbeidsforhold(finishedArbeidsforhold);
 
     const removedArbeidsforhold = getStorageArrayByKey(removedListStorageKey);
@@ -75,12 +90,22 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     }
     setContextSelectedArbeidsforhold(selectedArbeidsforhold);
 
-    const filledArbeidsforhold = getStorageArrayByKey(startedListStorageKey);
+    const startedArbeidsforholdFromLocaleStorage =
+      getStorageArrayByKey<string>(startedListStorageKey);
 
-    if (filledArbeidsforhold && !filledArbeidsforhold.includes(selectedArbeidsforhold.id)) {
-      filledArbeidsforhold.push(selectedArbeidsforhold.id);
-      localStorage.setItem(startedListStorageKey, JSON.stringify(filledArbeidsforhold));
-      setFilledArbeidsforhold(filledArbeidsforhold);
+    if (
+      startedArbeidsforholdFromLocaleStorage &&
+      !startedArbeidsforholdFromLocaleStorage.includes(selectedArbeidsforhold.id)
+    ) {
+      startedArbeidsforholdFromLocaleStorage.push(selectedArbeidsforhold.id);
+      localStorage.setItem(
+        startedListStorageKey,
+        JSON.stringify(startedArbeidsforholdFromLocaleStorage),
+      );
+      setStartedArbeidsforhold(startedArbeidsforholdFromLocaleStorage);
+      setAccordionArbeidsforhold(
+        accordionArbeidsforhold.filter((forhold) => forhold.id !== selectedArbeidsforhold.id),
+      );
     }
   }
 
@@ -99,9 +124,25 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   return (
     <div className={styles.accordion}>
       <Accordion>
-        {accordionArbeidsforhold?.map((arbeidsforhold, index) => {
+        {[...(faktum?.svar ?? []), ...accordionArbeidsforhold]?.map((arbeidsforhold, index) => {
+          if (Array.isArray(arbeidsforhold)) {
+            return (
+              <Accordion.Item key={index} defaultOpen={index === 0}>
+                <Accordion.Header className="arbeidsforhold__accordion">
+                  <div>{getArbeidsforholdName(arbeidsforhold)}</div>
+                </Accordion.Header>
+                <Accordion.Content>
+                  <>
+                    <BodyShort>{getArbeidsforholdVarighet(arbeidsforhold)}</BodyShort>
+                    <ArbeidsforholdEndret fakta={arbeidsforhold}></ArbeidsforholdEndret>
+                  </>
+                </Accordion.Content>
+              </Accordion.Item>
+            );
+          }
+
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
-          const editing = filledArbeidsforhold.includes(id) && hasUnansweredFaktumId;
+          const editing = startedArbeidsforhold.includes(id) && hasUnansweredFaktumId;
           const finished = finishedArbeidsforhold.includes(id);
 
           return (

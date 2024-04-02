@@ -1,5 +1,5 @@
 export function useArbeidsforholdLocalStorage() {
-  function getStorageArrayByKey(key: string) {
+  function getStorageArrayByKey<T>(key: string): Array<T> {
     const storage = localStorage?.getItem(key);
 
     if (!storage) {
