@@ -26,7 +26,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
   const { getAppText } = useSanity();
   const { setUnansweredFaktumId } = useValidation();
   const { addNewGeneratorAnswer } = useGeneratorUtils();
-  const [accordionArbeidsforhold, setAccordionArbeidsforhold] = useState<IArbeidsforhold[]>([]);
+  const [aaregArbeidsforhold, setAaregArbeidsforhold] = useState<IArbeidsforhold[]>([]);
   const [filledArbeidsforhold, setFilledArbeidsforhold] = useState<string[]>([]);
   const [finishedArbeidsforhold, setFinishedArbeidsforhold] = useState<string[]>([]);
   const { getStorageArrayByKey } = useArbeidsforholdLocalStorage();
@@ -64,7 +64,7 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
     const filteredArbeidsforhold = arbeidsforhold.filter(
       (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
-    setAccordionArbeidsforhold(filteredArbeidsforhold);
+    setAaregArbeidsforhold(filteredArbeidsforhold);
   }, []);
 
   function addArbeidsforhold(selectedArbeidsforhold: IArbeidsforhold) {
@@ -93,13 +93,13 @@ export function ArbeidsforholdAccordion({ faktum, currentSection }: IProps) {
       (forhold) => !removedArbeidsforhold.includes(forhold.id),
     );
 
-    setAccordionArbeidsforhold(filteredArbeidsforhold);
+    setAaregArbeidsforhold(filteredArbeidsforhold);
   }
 
   return (
     <div className={styles.accordion}>
       <Accordion>
-        {accordionArbeidsforhold?.map((arbeidsforhold, index) => {
+        {aaregArbeidsforhold?.map((arbeidsforhold, index) => {
           const { id, organisasjonsnavn, startdato, sluttdato } = arbeidsforhold;
           const editing = filledArbeidsforhold.includes(id) && hasUnansweredFaktumId;
           const finished = finishedArbeidsforhold.includes(id);

@@ -107,10 +107,6 @@ function ArbeidsforholdComponent(
 
       {arbeidsforhold.length > 0 && (
         <>
-          <BodyLong className={styles.description}>
-            Hvis du mener at et arbeidsforhold ikke er relevant for søknaden kan du fjerne det fra
-            denne listen.
-          </BodyLong>
           <ReadMore
             header={getAppText("arbeidsforhold.modal.readmore-header")}
             className={styles.modalReadmore}
@@ -169,6 +165,11 @@ function ArbeidsforholdComponent(
           </div>
         );
       })}
+
+      <BodyLong className={styles.description}>
+        {getAppText("arbeidsforhold.savner-du-en-arbeidsgiver.legg-til-selv.description")}
+      </BodyLong>
+
       <Button
         variant="secondary"
         className={"generator-faktum__add-button"}
