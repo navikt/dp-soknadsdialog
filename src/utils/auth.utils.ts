@@ -31,7 +31,7 @@ export async function getArbeidsoekkerregisteretOnBehalfOfToken(
   req: IncomingMessage,
 ): Promise<OboResult> {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return OboResult.Ok(process.env.VEILARBPROXY_TOKEN || "");
+    return OboResult.Ok(process.env.ARBEIDSSOEKERREGISTERET_TOKEN || "");
   }
 
   return getOnBehalfOfToken(req, audienceArbeidsoekkerregisteret);
