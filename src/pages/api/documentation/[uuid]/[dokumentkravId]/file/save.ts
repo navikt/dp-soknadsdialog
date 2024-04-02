@@ -5,7 +5,6 @@ import { getErrorMessage } from "../../../../../../utils/api.utils";
 import { headersWithToken } from "../../../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
-  getSession,
   getSoknadOnBehalfOfToken,
 } from "../../../../../../utils/auth.utils";
 import { logRequestError } from "../../../../../../error.logger";
@@ -31,19 +30,17 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const session = await getSession(req);
-
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const callId = uuidV4();
   const uuid = req.query.uuid as string;
   validateUUID(uuid);
 
   const dokumentkravId = req.query.dokumentkravId as string;
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   res.setHeader("X-Request-Id", callId);
 
@@ -52,8 +49,8 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
       req,
       uuid,
       dokumentkravId,
-      mellomlagringOnBehalfOfToken,
-      callId
+      mellomlagringOnBehalfOf.token,
+      callId,
     );
 
     if (!mellomlagringResponse.ok) {
@@ -64,16 +61,16 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
     const dpSoknadResponse = await saveFileToDPSoknad(
       uuid,
       dokumentkravId,
-      soknadOnBehalfOfToken,
+      soknadOnBehalfOf.token,
       fileData[0],
-      callId
+      callId,
     );
 
     if (!dpSoknadResponse.ok) {
       logRequestError(
         dpSoknadResponse.statusText,
         uuid,
-        "Save dokumentkrav file - Could not save to dp-soknad"
+        "Save dokumentkrav file - Could not save to dp-soknad",
       );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
@@ -91,7 +88,7 @@ async function saveFileToMellomlagring(
   uuid: string,
   dokumentkravId: string,
   mellomlagringOnBehalfOfToken: string,
-  callId: string
+  callId: string,
 ) {
   const buffers: Uint8Array[] = [];
   validateUUID(uuid);
@@ -115,7 +112,7 @@ async function saveFileToMellomlagring(
   }
 
   logger.info(
-    `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}, callId=${callId}`
+    `Begynner å ta imot fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes}, callId=${callId}`,
   );
 
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${uuid}/${dokumentkravId}`;
@@ -134,7 +131,7 @@ async function saveFileToMellomlagring(
 
   if (!response.ok) {
     logger.warn(
-      `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${response.status}`
+      `Mottak av fil for uuid=${uuid}, dokumentkravId=${dokumentkravId}, bytes=${fileSizeBytes} feilet, callId=${callId}, status=${response.status}`,
     );
     if (!isNaN(fileSizeBytes)) {
       Metrics.filOpplastetFeilet.observe(fileSizeBytes);
@@ -148,7 +145,7 @@ async function saveFileToDPSoknad(
   dokumentkravId: string,
   DPSoknadToken: string,
   fil: IDokumentkravFil,
-  callId: string
+  callId: string,
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/fil`;
   return fetch(url, {

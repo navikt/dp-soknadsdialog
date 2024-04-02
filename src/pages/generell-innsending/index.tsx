@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from "next";
 import { createInnsendingUuid } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import ErrorPage from "../_error";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -15,8 +15,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -25,8 +25,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const innsendingUuidResponse = await createInnsendingUuid(onBehalfOfToken);
+  const innsendingUuidResponse = await createInnsendingUuid(onBehalfOf.token);
 
   if (innsendingUuidResponse.ok) {
     const innsendingUuid = await innsendingUuidResponse.text();

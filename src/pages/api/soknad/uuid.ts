@@ -1,24 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { createSoknadUuid } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 
 async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession(req);
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(req);
+  if (!onBehalfOf.ok) {
     return res.status(401).end();
   }
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
   try {
-    const soknadUuidResponse = await createSoknadUuid(onBehalfOfToken);
+    const soknadUuidResponse = await createSoknadUuid(onBehalfOf.token);
 
     if (!soknadUuidResponse.ok) {
       logRequestError(
         soknadUuidResponse.statusText,
         undefined,
-        "Get new uuid - Failed to get new uuid from dp-soknad"
+        "Get new uuid - Failed to get new uuid from dp-soknad",
       );
       return res.status(soknadUuidResponse.status).send(soknadUuidResponse.statusText);
     }

@@ -1,12 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getErrorMessage } from "../../../../utils/api.utils";
 import { headersWithToken } from "../../../../api/quiz-api";
+import { logRequestError } from "../../../../error.logger";
+import { getErrorMessage } from "../../../../utils/api.utils";
 import {
   getMellomlagringOnBehalfOfToken,
-  getSession,
   getSoknadOnBehalfOfToken,
 } from "../../../../utils/auth.utils";
-import { logRequestError } from "../../../../error.logger";
 import { validateUUID } from "../../../../utils/uuid.utils";
 
 export interface IDeleteFileBody {
@@ -20,45 +19,43 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json("slettet");
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, dokumentkravId, filsti } = req.body;
   validateUUID(uuid);
 
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   try {
     const dpSoknadResponse = await deleteFileFromDPSoknad(
       uuid,
       dokumentkravId,
-      soknadOnBehalfOfToken,
-      filsti
+      soknadOnBehalfOf.token,
+      filsti,
     );
 
     if (!dpSoknadResponse.ok) {
       logRequestError(
         dpSoknadResponse.statusText,
         uuid,
-        "Dokumentkrav delete file - Delete from dp-soknad failed"
+        "Dokumentkrav delete file - Delete from dp-soknad failed",
       );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
 
     const mellomlagringResponse = await deleteFileFromMellomlagring(
       uuid,
-      mellomlagringOnBehalfOfToken,
-      filsti
+      mellomlagringOnBehalfOf.token,
+      filsti,
     );
 
     if (!mellomlagringResponse.ok) {
       logRequestError(
         mellomlagringResponse.statusText,
         uuid,
-        "Dokumentkrav delete file - Delete from dp-mellomlagring failed"
+        "Dokumentkrav delete file - Delete from dp-mellomlagring failed",
       );
     }
 
@@ -74,7 +71,7 @@ async function deleteFileFromDPSoknad(
   uuid: string,
   dokumentkravId: string,
   onBehalfOfToken: string,
-  filsti: string
+  filsti: string,
 ) {
   validateUUID(uuid);
 
@@ -88,7 +85,7 @@ async function deleteFileFromDPSoknad(
 async function deleteFileFromMellomlagring(
   uuid: string,
   mellomlagringToken: string,
-  filsti: string
+  filsti: string,
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${filsti}`;
   return fetch(url, {

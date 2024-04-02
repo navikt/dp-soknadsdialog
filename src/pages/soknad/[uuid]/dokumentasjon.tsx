@@ -1,18 +1,18 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../utils/api.utils";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IQuizState } from "../../../types/quiz.types";
+import { getErrorDetails } from "../../../utils/api.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { mockNeste } from "../../../localhost-data/mock-neste";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 
 interface IProps {
   errorCode: number | null;
@@ -21,7 +21,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -36,8 +36,8 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -51,15 +51,14 @@ export async function getServerSideProps(
   let dokumentkrav = null;
   let soknadStatus = null;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);
     logger.error(
-      `Dokumentasjon: ${errorData.status} error in dokumentkravList - ${errorData.detail}`
+      `Dokumentasjon: ${errorData.status} error in dokumentkravList - ${errorData.detail}`,
     );
     errorCode = dokumentkravResponse.status;
   } else {

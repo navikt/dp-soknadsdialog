@@ -1,14 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
 import { headersWithToken } from "../../../api/quiz-api";
-import {
-  getMellomlagringOnBehalfOfToken,
-  getSession,
-  getSoknadOnBehalfOfToken,
-} from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
+import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
+import {
+  getMellomlagringOnBehalfOfToken,
+  getSoknadOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -25,23 +24,21 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({ status: "ok" });
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { uuid, dokumentkravId, fileUrns } = req.body;
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
-  const soknadOnBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mellomlagringOnBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
+  const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+  if (!soknadOnBehalfOf.ok || !mellomlagringOnBehalfOf.ok) {
+    return res.status(401).end();
+  }
 
   try {
     const bundlingTimer = Metrics.bundleTidBrukt.startTimer();
     const mellomlagringResponse = await bundleFilesMellomlagring(
       { soknadId: uuid, bundleNavn: dokumentkravId, filer: fileUrns },
-      mellomlagringOnBehalfOfToken,
-      requestId
+      mellomlagringOnBehalfOf.token,
+      requestId,
     );
     bundlingTimer();
 
@@ -49,7 +46,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       logRequestError(
         mellomlagringResponse.statusText,
         uuid,
-        "Bundle dokumentkrav - Could not bundle files in dp-mellomlagring"
+        "Bundle dokumentkrav - Could not bundle files in dp-mellomlagring",
       );
       Metrics.bundleFeil.inc();
       return res.status(mellomlagringResponse.status).send(mellomlagringResponse.statusText);
@@ -63,15 +60,15 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
       uuid,
       dokumentkravId,
       urn,
-      soknadOnBehalfOfToken,
-      requestId
+      soknadOnBehalfOf.token,
+      requestId,
     );
 
     if (!dpSoknadResponse.ok) {
       logRequestError(
         dpSoknadResponse.statusText,
         uuid,
-        "Bundle dokumentkrav - Could not save bundle info to dp-soknad"
+        "Bundle dokumentkrav - Could not save bundle info to dp-soknad",
       );
       return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
     }
@@ -89,7 +86,7 @@ async function sendBundleTilDpSoknad(
   dokumentkravId: string,
   urn: string,
   DPSoknadToken: string,
-  requestId?: string
+  requestId?: string,
 ) {
   const url = `${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav/${dokumentkravId}/bundle`;
   return apiFetch(
@@ -99,7 +96,7 @@ async function sendBundleTilDpSoknad(
       headers: headersWithToken(DPSoknadToken),
       body: JSON.stringify({ urn }),
     },
-    requestId
+    requestId,
   );
 }
 
@@ -112,7 +109,7 @@ interface IMellomlagringBundle {
 async function bundleFilesMellomlagring(
   body: IMellomlagringBundle,
   mellomlagringOnBehalfOfToken: string,
-  requestId?: string
+  requestId?: string,
 ) {
   const url = `${process.env.MELLOMLAGRING_BASE_URL}/pdf/bundle`;
   return apiFetch(
@@ -122,7 +119,7 @@ async function bundleFilesMellomlagring(
       headers: headersWithToken(mellomlagringOnBehalfOfToken),
       body: JSON.stringify(body),
     },
-    requestId
+    requestId,
   );
 }
 
