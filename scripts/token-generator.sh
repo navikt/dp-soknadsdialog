@@ -57,7 +57,7 @@ verifyJQ() {
 
 # Start token generation process
 startTokenGenerator() {
-  # First tokend-token-generator url from json config
+  # First tokenx-token-generator url from json config
   url=$(jq "." $jsonConfig | jq ".environments[0].url" | tr -d '"')
   cookieName=$(jq "." $jsonConfig | jq ".cookieName"  | tr -d '"')
   configArray=$(jq -r ".environments[] | @base64" $jsonConfig)
