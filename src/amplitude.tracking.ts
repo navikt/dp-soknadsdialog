@@ -47,24 +47,34 @@ export function trackDokumentasjonLastetOpp(antallFiler: number, sekundBrukt: nu
 }
 
 // Arbeidsforhold
-export function trackLagtTilArbeidsforholdManuelt() {
-  track("lagt til arbeidsforhold manuelt");
+export function trackLagtTilArbeidsforholdManuelt(skjemanavn: string) {
+  /* eslint-disable no-console */
+  console.log(`🚀 lagt til arbeidsforhold manuelt`);
+  track("lagt til arbeidsforhold manuelt", { skjemanavn });
 }
 
-export function trackValgtArbeidsforholdFraAAREG() {
-  track("valgt arbeidsforhold fra aareg");
+export function trackValgtArbeidsforholdFraAAREG(skjemanavn: string) {
+  /* eslint-disable no-console */
+  console.log(`🚀 valgt arbeidsforhold fra aareg`);
+  track("valgt arbeidsforhold fra aareg", { skjemanavn });
 }
 
-export function trackKorigertBedriftsnavnFraAAREG() {
-  track("korrigert bedriftsnavn fra aareg");
+export function trackKorigertBedriftsnavnFraAAREG(skjemanavn: string) {
+  /* eslint-disable no-console */
+  console.log(`🚀 korrigert bedriftsnavn fra aareg`);
+  track("korrigert bedriftsnavn fra aareg", { skjemanavn });
 }
 
-export function trackKorrigertStartdatoFraAAREG() {
-  track("korrigert startdato fra aareg");
+export function trackKorrigertStartdatoFraAAREG(skjemanavn: string) {
+  /* eslint-disable no-console */
+  console.log(`🚀 korrigert startdato fra aareg`);
+  track("korrigert startdato fra aareg", { skjemanavn });
 }
 
-export function trackKorrigertSluttdatoFraAAREG() {
-  track("korrigert sluttdato fra aareg");
+export function trackKorrigertSluttdatoFraAAREG(skjemanavn: string) {
+  /* eslint-disable no-console */
+  console.log(`🚀 korrigert sluttdato fra aareg`);
+  track("korrigert sluttdato fra aareg", { skjemanavn });
 }
 
 export function tidStart(): Date {

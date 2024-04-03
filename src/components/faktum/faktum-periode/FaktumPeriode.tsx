@@ -147,11 +147,11 @@ function FaktumPeriodeComponent(
     const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
     if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
       if (value.fom !== contextSelectedArbeidsforhold.startdato) {
-        trackKorrigertStartdatoFraAAREG();
+        trackKorrigertStartdatoFraAAREG("dagpenger");
       }
 
       if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
-        trackKorrigertSluttdatoFraAAREG();
+        trackKorrigertSluttdatoFraAAREG("dagpenger");
       }
     }
 

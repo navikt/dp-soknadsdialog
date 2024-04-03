@@ -98,7 +98,7 @@ export function FaktumTextComponent(
       faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
       contextSelectedArbeidsforhold?.organisasjonsnavn !== debouncedText
     ) {
-      trackKorigertBedriftsnavnFraAAREG();
+      trackKorigertBedriftsnavnFraAAREG("dagpenger");
     }
   }
 

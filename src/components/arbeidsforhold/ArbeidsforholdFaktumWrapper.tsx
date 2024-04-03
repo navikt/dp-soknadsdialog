@@ -60,7 +60,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     if (event.target.value === "add-manually") {
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
-      trackLagtTilArbeidsforholdManuelt();
+      trackLagtTilArbeidsforholdManuelt("dagpenger");
       setContextSelectedArbeidsforhold(undefined);
       return;
     }
@@ -69,7 +69,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       setShowFaktum(true);
       setForceUpdate(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
-      trackValgtArbeidsforholdFraAAREG();
+      trackValgtArbeidsforholdFraAAREG("dagpenger");
       setContextSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }
