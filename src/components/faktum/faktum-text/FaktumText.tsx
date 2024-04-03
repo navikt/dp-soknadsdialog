@@ -14,6 +14,7 @@ import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
 import { useUserInformation } from "../../../context/user-information-context";
 import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude.tracking";
+import { useUuid } from "../../../hooks/useUuid";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
@@ -30,6 +31,7 @@ export function FaktumTextComponent(
   ref: Ref<HTMLInputElement> | undefined,
 ) {
   const { faktum, forceUpdate } = props;
+  const { uuid } = useUuid();
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
@@ -98,7 +100,7 @@ export function FaktumTextComponent(
       faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
       contextSelectedArbeidsforhold?.organisasjonsnavn !== debouncedText
     ) {
-      trackKorigertBedriftsnavnFraAAREG("dagpenger");
+      trackKorigertBedriftsnavnFraAAREG("dagpenger", uuid);
     }
   }
 

@@ -21,6 +21,7 @@ import {
   trackKorrigertSluttdatoFraAAREG,
   trackKorrigertStartdatoFraAAREG,
 } from "../../../amplitude.tracking";
+import { useUuid } from "../../../hooks/useUuid";
 
 interface IDateRange {
   from: Date | undefined;
@@ -39,6 +40,7 @@ function FaktumPeriodeComponent(
   ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { faktum, hideAlertText } = props;
+  const { uuid } = useUuid();
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
@@ -147,11 +149,11 @@ function FaktumPeriodeComponent(
     const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
     if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
       if (value.fom !== contextSelectedArbeidsforhold.startdato) {
-        trackKorrigertStartdatoFraAAREG("dagpenger");
+        trackKorrigertStartdatoFraAAREG("dagpenger", uuid);
       }
 
       if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
-        trackKorrigertSluttdatoFraAAREG("dagpenger");
+        trackKorrigertSluttdatoFraAAREG("dagpenger", uuid);
       }
     }
 

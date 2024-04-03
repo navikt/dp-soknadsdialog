@@ -16,6 +16,7 @@ import {
   sortArbeidsforhold,
 } from "../../utils/arbeidsforhold.utils";
 import { Faktum } from "../faktum/Faktum";
+import { useUuid } from "../../hooks/useUuid";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -24,6 +25,7 @@ interface IProps {
 
 export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
+  const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const { saveFaktumToQuiz, soknadState } = useQuiz();
   const [showFaktum, setShowFaktum] = useState(true);
@@ -60,7 +62,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     if (event.target.value === "add-manually") {
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
-      trackLagtTilArbeidsforholdManuelt("dagpenger");
+      trackLagtTilArbeidsforholdManuelt("dagpenger", uuid);
       setContextSelectedArbeidsforhold(undefined);
       return;
     }
@@ -69,7 +71,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
       setShowFaktum(true);
       setForceUpdate(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
-      trackValgtArbeidsforholdFraAAREG("dagpenger");
+      trackValgtArbeidsforholdFraAAREG("dagpenger", uuid);
       setContextSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }

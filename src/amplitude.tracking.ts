@@ -47,34 +47,24 @@ export function trackDokumentasjonLastetOpp(antallFiler: number, sekundBrukt: nu
 }
 
 // Arbeidsforhold
-export function trackLagtTilArbeidsforholdManuelt(skjemanavn: string) {
-  /* eslint-disable no-console */
-  console.log(`🚀 lagt til arbeidsforhold manuelt`);
-  track("lagt til arbeidsforhold manuelt", { skjemanavn });
+export function trackLagtTilArbeidsforholdManuelt(skjemaNavn: string, skjemaId: string) {
+  track("lagt til arbeidsforhold manuelt", { skjemaNavn, skjemaId });
 }
 
-export function trackValgtArbeidsforholdFraAAREG(skjemanavn: string) {
-  /* eslint-disable no-console */
-  console.log(`🚀 valgt arbeidsforhold fra aareg`);
-  track("valgt arbeidsforhold fra aareg", { skjemanavn });
+export function trackValgtArbeidsforholdFraAAREG(skjemaNavn: string, skjemaId: string) {
+  track("valgt arbeidsforhold fra aareg", { skjemaNavn, skjemaId });
 }
 
-export function trackKorigertBedriftsnavnFraAAREG(skjemanavn: string) {
-  /* eslint-disable no-console */
-  console.log(`🚀 korrigert bedriftsnavn fra aareg`);
-  track("korrigert bedriftsnavn fra aareg", { skjemanavn });
+export function trackKorigertBedriftsnavnFraAAREG(skjemaNavn: string, skjemaId: string) {
+  track("korrigert bedriftsnavn fra aareg", { skjemaNavn, skjemaId });
 }
 
-export function trackKorrigertStartdatoFraAAREG(skjemanavn: string) {
-  /* eslint-disable no-console */
-  console.log(`🚀 korrigert startdato fra aareg`);
-  track("korrigert startdato fra aareg", { skjemanavn });
+export function trackKorrigertStartdatoFraAAREG(skjemaNavn: string, skjemaId: string) {
+  track("korrigert startdato fra aareg", { skjemaNavn, skjemaId });
 }
 
-export function trackKorrigertSluttdatoFraAAREG(skjemanavn: string) {
-  /* eslint-disable no-console */
-  console.log(`🚀 korrigert sluttdato fra aareg`);
-  track("korrigert sluttdato fra aareg", { skjemanavn });
+export function trackKorrigertSluttdatoFraAAREG(skjemaNavn: string, skjemaId: string) {
+  track("korrigert sluttdato fra aareg", { skjemaNavn, skjemaId });
 }
 
 export function tidStart(): Date {
