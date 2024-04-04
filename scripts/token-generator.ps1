@@ -18,7 +18,7 @@ function init {
     Write-Host "::: dp-soknadsdialog token generator ::: " -ForegroundColor $Cyan
     Write-Host ""
 
-    # Generate azure-token-generator token
+    # Start token generation
     startTokenGenerator
 
     # Finished
@@ -32,10 +32,10 @@ function startTokenGenerator {
     $baseUrl = $config.baseUrl
     $cookieName = $config.cookieName
 
-    # First azure-token-generator url from json config
+    # First tokenx-token-generator url from json config
     $url = $config.environments[0].url
 
-    # Show link to azureTokenGenerator to the user
+    # Show link to tokenx-token-generator to the user
     Write-Host "Visit and sign in with test user: $url" -ForegroundColor $Cyan
     Write-Host "Find and copy $cookieName cookie from DevTools > Application > Cookies" -ForegroundColor $Cyan
 
