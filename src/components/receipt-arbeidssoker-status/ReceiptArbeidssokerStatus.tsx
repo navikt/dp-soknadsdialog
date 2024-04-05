@@ -28,9 +28,9 @@ export function ReceiptArbeidssokerStatus(props: IProps) {
 
     case "ERROR":
       return (
-        <BodyShort className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText("kvittering.arbeidssokerstatus.info-tekst.registrert")}
-        </BodyShort>
+        <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
+          {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
+        </Alert>
       );
   }
 }

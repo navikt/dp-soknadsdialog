@@ -1,11 +1,7 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getErrorDetails } from "../../utils/api.utils";
-import {
-  IArbeidssokerStatus,
-  IArbeidssokerperioder,
-  getArbeidssokerperioder,
-} from "../../api/arbeidssoker-api";
+import { IArbeidssokerStatus, getArbeidssokerperioder } from "../../api/arbeidssoker-api";
 import { getMineSoknader } from "../../api/quiz-api";
 import {
   getArbeidsoekkerregisteretOnBehalfOfToken,
@@ -59,7 +55,7 @@ export async function getServerSideProps(
   }
 
   let mineSoknader = null;
-  let arbeidssokerStatus: IArbeidssokerStatus;
+  const arbeidssokerStatus: IArbeidssokerStatus = "ERROR";
   let errorCode = null;
 
   const mineSoknaderResponse = await getMineSoknader(soknadObo.token);
@@ -74,22 +70,21 @@ export async function getServerSideProps(
   }
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
-
-    const isRegisteredAsArbeidsoker =
-      data.findIndex((periode) => periode.avsluttet === null) !== -1;
-
-    arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
-  } else {
-    arbeidssokerStatus = "ERROR";
+    // const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
+    // const isRegisteredAsArbeidsoker =
+    //   data.findIndex((periode) => periode.avsluttet === null) !== -1;
+    // arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
   }
+
+  // else {
+  //   arbeidssokerStatus = "ERROR";
+  // }
 
   const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;
   if (userHasNoApplication) {
     return {
       redirect: {
-        destination:
-          arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker",
+        destination: "/soknad/arbeidssoker",
         permanent: false,
       },
     };

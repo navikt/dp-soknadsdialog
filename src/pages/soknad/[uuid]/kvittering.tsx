@@ -1,10 +1,6 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import {
-  IArbeidssokerStatus,
-  IArbeidssokerperioder,
-  getArbeidssokerperioder,
-} from "../../../api/arbeidssoker-api";
+import { IArbeidssokerStatus, getArbeidssokerperioder } from "../../../api/arbeidssoker-api";
 import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
@@ -72,7 +68,7 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
-  let arbeidssokerStatus: IArbeidssokerStatus;
+  const arbeidssokerStatus: IArbeidssokerStatus = "ERROR";
   let dokumentkrav: IDokumentkravList | null = null;
   let soknadStatus: ISoknadStatus = { status: "Ukjent" };
   let personalia = null;
@@ -119,13 +115,14 @@ export async function getServerSideProps(
   }
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.findIndex((periode) => periode.avsluttet === null);
-
-    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
-  } else {
-    arbeidssokerStatus = "ERROR";
+    // const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
+    // const currentArbeidssokerperiodeIndex = data.findIndex((periode) => periode.avsluttet === null);
+    // arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
   }
+
+  // else {
+  //   arbeidssokerStatus = "ERROR";
+  // }
 
   if (personaliaResponse.ok) {
     personalia = await personaliaResponse.json();
