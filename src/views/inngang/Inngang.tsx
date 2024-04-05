@@ -19,8 +19,7 @@ export function Inngang(props: IProps) {
   const { getAppText } = useSanity();
   const [navigating, setNavigating] = useState(false);
 
-  const destinationPage =
-    props.arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
+  const destinationPage = "/soknad/start-soknad";
 
   return (
     <main>

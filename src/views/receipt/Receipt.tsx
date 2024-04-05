@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
-import { ReceiptArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
 import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
@@ -29,7 +28,7 @@ interface IProps {
 }
 
 export function Receipt(props: IProps) {
-  const { soknadStatus, sections, arbeidssokerStatus, personalia } = props;
+  const { soknadStatus, sections, personalia } = props;
 
   const { getAppText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
@@ -54,7 +53,6 @@ export function Receipt(props: IProps) {
       />
       <SoknadHeader />
       <ReceiptSoknadStatus {...soknadStatus} />
-      <ReceiptArbeidssokerStatus status={arbeidssokerStatus} />
 
       <ReceiptDokumentkrav
         soknadStatus={soknadStatus}
