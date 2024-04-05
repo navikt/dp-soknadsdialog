@@ -88,7 +88,8 @@ export async function getServerSideProps(
   if (userHasNoApplication) {
     return {
       redirect: {
-        destination: "/soknad/start-soknad",
+        destination:
+          arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker",
         permanent: false,
       },
     };

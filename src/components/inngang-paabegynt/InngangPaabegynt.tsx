@@ -18,7 +18,7 @@ interface IProps {
   arbeidssokerStatus: IArbeidssokerStatus;
 }
 
-export function InngangPaabegynt({ paabegynt }: IProps) {
+export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
@@ -26,7 +26,8 @@ export function InngangPaabegynt({ paabegynt }: IProps) {
 
   useEffect(() => {
     if (deleteSoknadStatus === "success") {
-      const destinationPage = "/soknad/start-soknad";
+      const destinationPage =
+        arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
       router.push(destinationPage);
     }
   }, [deleteSoknadStatus]);
