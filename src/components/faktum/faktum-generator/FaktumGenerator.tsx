@@ -19,14 +19,11 @@ import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
 import { useQuiz } from "../../../context/quiz-context";
 import { useValidation } from "../../../context/validation-context";
 import { ValidationMessage } from "../validation/ValidationMessage";
-import { useFeatureToggles } from "../../../context/feature-toggle-context";
-import { Arbeidsforhold_V2 } from "../../arbeidsforhold/arbeidsforhold-v2/Arbeidsforhold_V2";
 
 export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
   const generatorFaktumRef = useRef(null);
   const { unansweredFaktumId } = useValidation();
   const { scrollIntoView } = useScrollIntoView();
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { setFocus } = useSetFocus();
 
   useEffect(() => {
@@ -38,11 +35,7 @@ export function FaktumGenerator(props: IFaktum<IQuizGeneratorFaktum>) {
 
   switch (props.faktum.beskrivendeId) {
     case ARBEIDSFORHOLD_FAKTUM_ID:
-      return arbeidsforholdIsEnabled ? (
-        <Arbeidsforhold_V2 ref={generatorFaktumRef} {...props} />
-      ) : (
-        <Arbeidsforhold ref={generatorFaktumRef} {...props} />
-      );
+      return <Arbeidsforhold ref={generatorFaktumRef} {...props} />;
     case BARN_LISTE_REGISTER_FAKTUM_ID:
       return <BarnRegister {...props} />;
     case BARN_LISTE_FAKTUM_ID:
