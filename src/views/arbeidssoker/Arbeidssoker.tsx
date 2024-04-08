@@ -74,6 +74,11 @@ export function Arbeidssoker(props: IProps) {
             {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
           </Alert>
           <div className="navigation-container">
+            <Link href="https://arbeidssokerregistrering.nav.no/">
+              {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+            </Link>
+          </div>
+          <div className="navigation-container">
             <Link href="/soknad/start-soknad" passHref legacyBehavior>
               <Button
                 variant="primary"

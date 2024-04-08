@@ -1,5 +1,5 @@
-import React from "react";
 import { Alert, BodyShort } from "@navikt/ds-react";
+import Link from "next/link";
 import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptArbeidssokerStatus.module.css";
@@ -14,9 +14,14 @@ export function ReceiptArbeidssokerStatus(props: IProps) {
   switch (props.status) {
     case "UNREGISTERED":
       return (
-        <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")}
-        </Alert>
+        <div>
+          <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
+            {getAppText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")}
+          </Alert>
+          <Link href="https://arbeidssokerregistrering.nav.no/">
+            {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+          </Link>
+        </div>
       );
 
     case "REGISTERED":
@@ -28,9 +33,14 @@ export function ReceiptArbeidssokerStatus(props: IProps) {
 
     case "ERROR":
       return (
-        <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-          {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
-        </Alert>
+        <div>
+          <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
+            {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
+          </Alert>
+          <Link href="https://arbeidssokerregistrering.nav.no/">
+            {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+          </Link>
+        </div>
       );
   }
 }
