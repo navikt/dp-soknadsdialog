@@ -1,4 +1,4 @@
-import { Fieldset, DatePicker, useRangeDatepicker } from "@navikt/ds-react";
+import { Fieldset, DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
@@ -22,9 +22,14 @@ import {
   trackKorrigertStartdatoFraAAREG,
 } from "../../../amplitude.tracking";
 
-interface IDateRange {
-  from: Date | undefined;
-  to?: Date | undefined;
+interface IDateValidationT {
+  isDisabled: boolean;
+  isWeekend: boolean;
+  isEmpty: boolean;
+  isInvalid: boolean;
+  isValidDate: boolean;
+  isBefore: boolean;
+  isAfter: boolean;
 }
 
 export interface IPeriodeFaktumAnswerState {
@@ -71,69 +76,53 @@ function FaktumPeriodeComponent(
     }
   }, [faktum.svar]);
 
-  function getDefaultSelectedValue(): IDateRange | undefined {
-    if (currentAnswer?.fom) {
-      return {
-        from: new Date(currentAnswer.fom),
-        to: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
-      };
-    }
-
-    return undefined;
-  }
-
   useEffect(() => {
     if (faktum.svar) {
-      const from = new Date(faktum.svar.fom);
-      const to = faktum.svar.tom ? new Date(faktum.svar.tom) : undefined;
-      setSelected({ from, to });
+      const fromDate = new Date(faktum.svar.fom);
+      const toDate = faktum.svar.tom ? new Date(faktum.svar.tom) : undefined;
+      fromInput.setSelected(fromDate);
+      toInput.setSelected(toDate);
     }
-  }, [faktum]);
+  }, [faktum.svar]);
 
-  const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
-    defaultSelected: getDefaultSelectedValue(),
-    onRangeChange: (value?: IDateRange) => {
-      if (!value?.from) {
-        setCurrentAnswer(initialPeriodeValue);
-        debouncedChange(initialPeriodeValue);
-        return;
+  function updatePeriode(date: Date | undefined, variant: "fom" | "tom") {
+    if (date) {
+      const parsedDate = formatISO(date, { representation: "date" });
+      const newPeriode = { ...currentAnswer, [variant]: parsedDate };
+      setCurrentAnswer(newPeriode);
+      setDebouncedPeriode(newPeriode);
+    }
+  }
+
+  function validateInput(validation: IDateValidationT, variant: "fom" | "tom") {
+    // Empty `to date input` programmatically when user clears `from date input`
+    if (validation.isEmpty) {
+      if (variant === "fom") {
+        fromInput.setSelected(undefined);
+      } else {
+        toInput.setSelected(undefined);
       }
+    }
 
-      if (value?.from) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        let period: IQuizPeriodeFaktumAnswerType = { fom: parsedFromDate };
+    // When user types in invalid date format
+    if (!validation.isEmpty && validation.isInvalid) {
+      // Set fom to null for validation
+      const periode = { ...currentAnswer, [variant]: null };
+      setCurrentAnswer(periode);
+      debouncedChange(periode);
+    }
+  }
 
-        if (value.to) {
-          const parsedToDate = formatISO(value.to, { representation: "date" });
-          period = { ...period, tom: parsedToDate };
-        }
+  const fromInput = useDatepicker({
+    defaultSelected: currentAnswer.fom ? new Date(currentAnswer.fom) : undefined,
+    onDateChange: (value) => updatePeriode(value, "fom"),
+    onValidate: (validation) => validateInput(validation, "fom"),
+  });
 
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-    },
-    onValidate: (value) => {
-      // Empty `to date input` programmatically when user clears `from date input`
-      if (value.from.isEmpty) {
-        setSelected({ from: undefined });
-      }
-
-      // When user types in invalid date format on `from date input`
-      if (!value.from.isEmpty && value.from.isInvalid) {
-        // Set fom to null for validation
-        const periode = { ...currentAnswer, fom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-      }
-
-      // When user types in invalid `to date input`
-      if (!value.to.isEmpty && value.to.isInvalid) {
-        // Set tom to null for validation
-        const periode = { ...currentAnswer, tom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-      }
-    },
+  const toInput = useDatepicker({
+    defaultSelected: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
+    onDateChange: (value) => updatePeriode(value, "tom"),
+    onValidate: (validation) => validateInput(validation, "tom"),
   });
 
   function saveFaktum(value: IPeriodeFaktumAnswerState) {
@@ -174,31 +163,37 @@ function FaktumPeriodeComponent(
         )}
 
         <DatePicker
-          {...datepickerProps}
-          dropdownCaption
+          {...fromInput.datepickerProps}
           fromDate={DATEPICKER_MIN_DATE}
-          toDate={DATEPICKER_MAX_DATE}
+          toDate={currentAnswer.tom ? new Date(currentAnswer.tom) : DATEPICKER_MAX_DATE}
+          dropdownCaption
           strategy="fixed"
         >
-          <div className={periodeStyles.datePickerSpacing}>
-            <DatePicker.Input
-              {...fromInputProps}
-              label={faktumTextFra}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={fomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
+          <DatePicker.Input
+            {...fromInput.inputProps}
+            label={faktumTextFra}
+            placeholder={getAppText("datovelger.dato-format")}
+            error={fomErrorMessage}
+            disabled={isLocked}
+            autoComplete="off"
+          />
+        </DatePicker>
 
-            <DatePicker.Input
-              {...toInputProps}
-              label={faktumTextTil}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={tomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
-          </div>
+        <DatePicker
+          {...toInput.datepickerProps}
+          fromDate={currentAnswer.fom ? new Date(currentAnswer.fom) : DATEPICKER_MIN_DATE}
+          toDate={DATEPICKER_MAX_DATE}
+          dropdownCaption
+          strategy="fixed"
+        >
+          <DatePicker.Input
+            {...toInput.inputProps}
+            label={faktumTextTil}
+            placeholder={getAppText("datovelger.dato-format")}
+            error={tomErrorMessage}
+            disabled={isLocked}
+            autoComplete="off"
+          />
         </DatePicker>
 
         {faktumTexts?.helpText && (
