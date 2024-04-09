@@ -17,6 +17,10 @@ import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 import { useUserInformation } from "../../../context/user-information-context";
+import {
+  trackKorrigertSluttdatoFraAAREG,
+  trackKorrigertStartdatoFraAAREG,
+} from "../../../amplitude.tracking";
 
 interface IDateValidationT {
   isDisabled: boolean;
@@ -109,29 +113,6 @@ function FaktumPeriodeComponent(
     }
   }
 
-  function saveFaktum(value: IPeriodeFaktumAnswerState) {
-    clearErrorMessage();
-
-    if (value.fom === "") {
-      saveFaktumToQuiz(faktum, null);
-      return;
-    }
-
-    const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
-    if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
-      if (value.fom !== contextSelectedArbeidsforhold.startdato) {
-        trackKorrigertStartdatoFraAAREG();
-      }
-
-      if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
-        trackKorrigertSluttdatoFraAAREG();
-      }
-    }
-
-    const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
-  }
-
   const fromInput = useDatepicker({
     defaultSelected: currentAnswer.fom ? new Date(currentAnswer.fom) : undefined,
     onDateChange: (value) => updatePeriode(value, "fom"),
@@ -142,53 +123,6 @@ function FaktumPeriodeComponent(
     defaultSelected: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
     onDateChange: (value) => updatePeriode(value, "tom"),
     onValidate: (validation) => validateInput(validation, "tom"),
-  });
-
-  const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
-    defaultSelected: getDefaultSelectedValue(),
-    onRangeChange: (value?: IDateRange) => {
-      if (!value?.from) {
-        setCurrentAnswer(initialPeriodeValue);
-        debouncedChange(initialPeriodeValue);
-        return;
-      }
-
-      if (value?.from) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        let period: IQuizPeriodeFaktumAnswerType = { fom: parsedFromDate };
-
-        if (value.to) {
-          const parsedToDate = formatISO(value.to, { representation: "date" });
-          period = { ...period, tom: parsedToDate };
-        }
-
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-    },
-    onValidate: (value) => {
-      console.log(value);
-      // Empty `to date input` programmatically when user clears `from date input`
-      if (value.from.isEmpty) {
-        setSelected({ from: undefined });
-      }
-
-      // When user types in invalid date format on `from date input`
-      if (!value.from.isEmpty && value.from.isInvalid) {
-        // Set fom to null for validation
-        const periode = { ...currentAnswer, fom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-      }
-
-      // When user types in invalid `to date input`
-      if (!value.to.isEmpty && value.to.isInvalid) {
-        // Set tom to null for validation
-        const periode = { ...currentAnswer, tom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-      }
-    },
   });
 
   function saveFaktum(value: IPeriodeFaktumAnswerState) {
