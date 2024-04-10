@@ -65,6 +65,7 @@ function FaktumPeriodeComponent(
 
   useEffect(() => {
     if (!isFirstRender && objectsNotEqual(faktum.svar, currentAnswer)) {
+      console.log("saveFaktum useEffect", debouncedPeriode);
       saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
     }
   }, [debouncedPeriode]);
@@ -90,6 +91,7 @@ function FaktumPeriodeComponent(
       const parsedDate = formatISO(date, { representation: "date" });
       const newPeriode = { ...currentAnswer, [variant]: parsedDate };
       setCurrentAnswer(newPeriode);
+      console.log("updatePeriode", newPeriode);
       setDebouncedPeriode(newPeriode);
     }
   }
@@ -126,6 +128,7 @@ function FaktumPeriodeComponent(
   });
 
   function saveFaktum(value: IPeriodeFaktumAnswerState) {
+    console.log("saveFaktum", value);
     clearErrorMessage();
 
     if (value.fom === "") {

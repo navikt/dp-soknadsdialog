@@ -62,7 +62,8 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects from date", () => {
-    test("Should post selected from date to the server", async () => {
+    // FAILS
+    test.only("Should post selected from date to the server", async () => {
       const user = userEvent.setup();
 
       render(
@@ -84,6 +85,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user adds tom date to existing periode answer", () => {
+    // FAILS
     test("Should post fom and tom date to server", async () => {
       const svar = { fom: "2022-08-04" };
       faktumMockData.svar = svar;
@@ -193,6 +195,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
+    // FAILS
     test("When types inn 01.01.1800 should show error message and not post to server", async () => {
       const user = userEvent.setup();
 
@@ -218,6 +221,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
+    // FAILS
     test("When types in 06.06.2322 should show error message not post to server", async () => {
       const user = userEvent.setup();
 
@@ -246,6 +250,7 @@ describe("FaktumPeriode", () => {
 
   describe("When user selects future date for specialCase faktum", () => {
     // faktum.arbeidsforhold.naar-var-lonnsplikt-periode or faktum.arbeidsforhold.permittert-periode
+    // FAILS
     test("Should post selected date to server", async () => {
       faktumMockData.beskrivendeId = "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
 
@@ -277,6 +282,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user clears selected date from datepicker", () => {
+    // FAILS
     test("When user clears fom date from selected periode that contains fom only should post null to server", async () => {
       const svar = { fom: "2022-08-04" };
       faktumMockData.svar = svar;
@@ -301,6 +307,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
+    // FAILS
     test("When user clears fom date from selected periode that contains both fom and tom should post null to server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
@@ -325,6 +332,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
+    // FAILS
     test("When user clears tom date from selected periode that contains both fom and tom should post fom to server alone", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
