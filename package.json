@@ -41,7 +41,7 @@
     "@navikt/oasis": "^3.2.2",
     "@next/bundle-analyzer": "^14.1.4",
     "@portabletext/react": "^3.0.13",
-    "@portabletext/to-html": "^2.0.10",
+    "@portabletext/to-html": "^2.0.12",
     "@svgr/webpack": "^8.1.0",
     "@types/js-cookie": "^3.0.6",
     "@unleash/nextjs": "^1.4.2",
