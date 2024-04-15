@@ -91,14 +91,22 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     const filteredArbeidsforhold = filterArbeidsforhold(arbeidsforhold, periodeLength);
     const filteredAndSortedArbeidsforhold = sortArbeidsforhold(filteredArbeidsforhold);
 
+    if (filteredAndSortedArbeidsforhold.length === 0) {
+      setShowFaktum(true);
+    }
+
     setArbeidsforholdSelectList(filteredAndSortedArbeidsforhold);
   }, [soknadState]);
 
   useEffect(() => {
-    if (arbeidsforhold.length > 0 && !selectedArbeidsforhold && !arbeidsforholdBedriftsnavn?.svar) {
+    if (
+      arbeidsforholdSelectList.length !== 0 &&
+      !selectedArbeidsforhold &&
+      !arbeidsforholdBedriftsnavn?.svar
+    ) {
       setShowFaktum(false);
     }
-  }, [selectedArbeidsforhold]);
+  }, [selectedArbeidsforhold, arbeidsforholdSelectList]);
 
   useEffect(() => {
     if (arbeidsforholdVarighet && !arbeidsforholdVarighet?.svar && selectedArbeidsforhold) {
