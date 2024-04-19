@@ -26,7 +26,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
   const { getAppText } = useSanity();
   const { saveFaktumToQuiz, soknadState } = useQuiz();
-  const [showFaktum, setShowFaktum] = useState(true);
+  const [showFaktum, setShowFaktum] = useState(false);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
   const { arbeidsforhold, setContextSelectedArbeidsforhold } = useUserInformation();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
@@ -37,10 +37,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const arbeidstid = findArbeidstid(soknadState);
   const arbeidsforholdVarighet = fakta.find(
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
-  );
-
-  const arbeidsforholdBedriftsnavn = fakta.find(
-    (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift",
   );
 
   function selectArbeidsforhold(faktum: QuizFaktum, event: React.ChangeEvent<HTMLSelectElement>) {
@@ -97,16 +93,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
     setArbeidsforholdSelectList(filteredAndSortedArbeidsforhold);
   }, [soknadState]);
-
-  useEffect(() => {
-    if (
-      arbeidsforholdSelectList.length !== 0 &&
-      !selectedArbeidsforhold &&
-      !arbeidsforholdBedriftsnavn?.svar
-    ) {
-      setShowFaktum(false);
-    }
-  }, [selectedArbeidsforhold, arbeidsforholdSelectList]);
 
   useEffect(() => {
     if (arbeidsforholdVarighet && !arbeidsforholdVarighet?.svar && selectedArbeidsforhold) {
