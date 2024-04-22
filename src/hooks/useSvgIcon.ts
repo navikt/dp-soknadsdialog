@@ -17,6 +17,15 @@ export function useSvgIcon(fileName: string) {
     fetchSvg();
   }, [fileName]);
 
+  // Invalid value for prop `$$typeof` on <svg> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM.
+  // For details, see https://reactjs.org/link/attribute-behavior
+  if (svg) {
+    //@ts-ignore
+    // eslint-disable-next-line
+    let { ["$$typeof"]: _, ...rest } = svg;
+    return { rest };
+  }
+
   return {
     svg,
   };
