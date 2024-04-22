@@ -128,6 +128,7 @@ export function Soknad(props: IProps) {
             <Button
               variant={"secondary"}
               onClick={() => navigateToPreviousSection()}
+              disabled={isLoading || isLocked}
               icon={<Left aria-hidden />}
             >
               {getAppText("soknad.knapp.forrige-steg")}
