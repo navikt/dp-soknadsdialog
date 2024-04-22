@@ -143,7 +143,7 @@ export function Soknad(props: IProps) {
               onClick={() => navigateToNextSection()}
               icon={<Right aria-hidden />}
               iconPosition={"right"}
-              loading={isLoading || isLocked}
+              disabled={isLoading || isLocked}
             >
               {getAppText("soknad.knapp.neste-steg")}
             </Button>
