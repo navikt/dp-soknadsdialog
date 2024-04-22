@@ -6,9 +6,9 @@ export interface ISessionData {
 }
 
 async function session(req: NextApiRequest, res: NextApiResponse<ISessionData>) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true" && process.env.DP_SOKNAD_TOKEN) {
     res.json({
-      expiresIn: 3600,
+      expiresIn: expiresIn(process.env.DP_SOKNAD_TOKEN),
     });
   }
 
