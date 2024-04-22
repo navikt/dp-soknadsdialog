@@ -14,6 +14,8 @@ export function NoSessionModal() {
   const [modalOpen, setModalOpen] = useState(false);
   const [isNagivating, setNavigating] = useState(false);
 
+  console.log(`🔥 session :`, session);
+
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_LOCALHOST) {
       if (isLoading) return;

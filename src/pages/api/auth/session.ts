@@ -6,8 +6,15 @@ export interface ISessionData {
 }
 
 async function session(req: NextApiRequest, res: NextApiResponse<ISessionData>) {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+    res.json({
+      expiresIn: 3600,
+    });
+  }
+
   const token = getToken(req);
   if (!token) return res.status(401).end();
+
   const validation = await validateToken(token);
   if (!validation.ok) return res.status(401).end();
 
