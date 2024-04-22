@@ -1,6 +1,8 @@
 import { init, track } from "@amplitude/analytics-browser";
 
 export const initAmplitude = () => {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") return;
+
   init("default", undefined, {
     useBatch: true,
     serverUrl: "https://amplitude.nav.no/collect-auto",
