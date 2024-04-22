@@ -15,17 +15,15 @@ export function NoSessionModal() {
   const [isNagivating, setNavigating] = useState(false);
 
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_LOCALHOST) {
-      if (isLoading) return;
+    if (isLoading) return;
 
-      if (!session || isError) {
-        setTimeLeft(1);
-        setModalOpen(true);
-      }
+    if (!session || isError) {
+      setTimeLeft(1);
+      setModalOpen(true);
+    }
 
-      if (session?.expiresIn) {
-        setTimeLeft(session?.expiresIn);
-      }
+    if (session?.expiresIn) {
+      setTimeLeft(session?.expiresIn);
     }
   }, [session, isLoading, isError]);
 
