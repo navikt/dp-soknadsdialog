@@ -30,7 +30,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { soknadState, isError, isLoading, isLocked } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
@@ -143,6 +143,7 @@ export function Soknad(props: IProps) {
               onClick={() => navigateToNextSection()}
               icon={<Right aria-hidden />}
               iconPosition={"right"}
+              disabled={isLoading || isLocked}
             >
               {getAppText("soknad.knapp.neste-steg")}
             </Button>
