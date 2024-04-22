@@ -66,8 +66,13 @@ function FaktumPeriodeComponent(
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar !== currentAnswer && !isFirstRender) {
-      setCurrentAnswer(faktum.svar ?? initialPeriodeValue);
+    if (!faktum.svar && !isFirstRender) {
+      reset();
+      setCurrentAnswer(initialPeriodeValue);
+    }
+
+    if (faktum.svar && faktum.svar !== currentAnswer && !isFirstRender) {
+      setCurrentAnswer(faktum.svar);
     }
   }, [faktum.svar]);
 
@@ -90,7 +95,7 @@ function FaktumPeriodeComponent(
     }
   }, [faktum]);
 
-  const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
+  const { datepickerProps, toInputProps, fromInputProps, setSelected, reset } = useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
     onRangeChange: (value?: IDateRange) => {
       if (!value?.from) {
