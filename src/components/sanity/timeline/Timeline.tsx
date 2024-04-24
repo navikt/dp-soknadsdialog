@@ -19,10 +19,23 @@ export function Timeline(props: PortableTextComponentProps<{ elements: ITimeline
 function TimelineItem(props: ITimelineItem) {
   const { svg } = useSvgIcon(props.iconName);
 
+  function renderSVG() {
+    return (
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <path
+          fill="#23262a"
+          fillRule="evenodd"
+          //@ts-ignore
+          d={svg.props.children.props.d}
+        />
+      </svg>
+    );
+  }
+
   return (
     <div key={props._key} className={styles.timelineItem}>
       <div className={styles.iconWrapper} aria-hidden>
-        {svg && <span className={styles.icon}>{svg}</span>}
+        {svg && <span className={styles.icon}>{renderSVG()}</span>}
       </div>
       <dl>
         <dt className={styles.timeLineItemTitle}>{props.title}</dt>
