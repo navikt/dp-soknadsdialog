@@ -47,7 +47,7 @@
     "@unleash/nextjs": "^1.4.2",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
-    "i18n-iso-countries": "^7.11.0",
+    "i18n-iso-countries": "^7.11.1",
     "js-cookie": "^3.0.5",
     "next": "^14.2.2",
     "next-intl": "^3.11.3",
