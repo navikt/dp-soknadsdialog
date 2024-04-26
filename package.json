@@ -55,7 +55,7 @@
     "pino": "^8.21.0",
     "prom-client": "^15.1.2",
     "react": "^18.3.0",
-    "react-dom": "18.2.0",
+    "react-dom": "18.3.0",
     "react-dropzone": "^14.2.3",
     "swr": "^2.2.5",
     "uuid": "^9.0.1"
