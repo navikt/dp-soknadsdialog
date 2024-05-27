@@ -51,7 +51,7 @@
     "js-cookie": "^3.0.5",
     "next": "^14.2.3",
     "next-intl": "^3.14.1",
-    "next-sanity": "^9.2.1",
+    "next-sanity": "^9.3.0",
     "pino": "^8.21.0",
     "prom-client": "^15.1.2",
     "react": "^18.3.1",
