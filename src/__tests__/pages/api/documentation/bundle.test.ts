@@ -3,14 +3,13 @@
  */
 
 import { createMocks } from "node-mocks-http";
-import { mockGetOnBehalfOfToken, mockGetSession } from "../../../../__mocks__/mockGetSession";
+import { mockGetOnBehalfOfToken } from "../../../../__mocks__/mockGetSession";
 import createFetchMock from "vitest-fetch-mock";
 import bundleHandler, {
   IDocumentationBundleBody,
 } from "../../../../pages/api/documentation/bundle";
 
 vi.mock("../../../../utils/auth.utils", () => ({
-  getSession: () => mockGetSession(),
   getSoknadOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
   getMellomlagringOnBehalfOfToken: () => mockGetOnBehalfOfToken(),
 }));

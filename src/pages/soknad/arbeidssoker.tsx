@@ -1,10 +1,10 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
   IArbeidssokerStatus,
+  IArbeidssokerperioder,
+  getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
-import { getSession } from "../../utils/auth.utils";
+import { getArbeidsoekkerregisteretOnBehalfOfToken } from "../../utils/auth.utils";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
 
 interface IProps {
@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
@@ -24,8 +24,8 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -36,17 +36,14 @@ export async function getServerSideProps(
 
   let arbeidssokerStatus: IArbeidssokerStatus;
 
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(onBehalfOf.token);
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
-      (periode) => periode.tilOgMedDato === null
-    );
-
+    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
+    const currentArbeidssokerperiodeIndex = data.findIndex((periode) => periode.avsluttet === null);
     arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
   } else {
-    arbeidssokerStatus = "UNKNOWN";
+    arbeidssokerStatus = "ERROR";
   }
 
   if (arbeidssokerStatus === "REGISTERED") {

@@ -1,27 +1,30 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getErrorDetails } from "../../../utils/api.utils";
 import {
   IArbeidssokerStatus,
   IArbeidssokerperioder,
   getArbeidssokerperioder,
 } from "../../../api/arbeidssoker-api";
+import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
-import { getMissingDokumentkrav } from "../../../utils/dokumentkrav.util";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
+import { getErrorDetails } from "../../../utils/api.utils";
+import {
+  getArbeidsoekkerregisteretOnBehalfOfToken,
+  getSoknadOnBehalfOfToken,
+} from "../../../utils/auth.utils";
+import { getMissingDokumentkrav } from "../../../utils/dokumentkrav.util";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { mockNeste } from "../../../localhost-data/mock-neste";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
-import { mockPersonalia } from "../../../localhost-data/personalia";
-import { getPersonalia } from "../../../api/personalia-api";
 
 interface IProps {
   errorCode: number | null;
@@ -33,7 +36,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -55,8 +58,10 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
+  const arbeidsoekkerObo = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+
+  if (!soknadObo.ok || !arbeidsoekkerObo.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -72,12 +77,11 @@ export async function getServerSideProps(
   let soknadStatus: ISoknadStatus = { status: "Ukjent" };
   let personalia = null;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
+  const soknadStateResponse = await getSoknadState(uuid, soknadObo.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadObo.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadObo.token);
+  const personaliaResponse = await getPersonalia(soknadObo.token);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidsoekkerObo.token);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
@@ -115,14 +119,11 @@ export async function getServerSideProps(
   }
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.arbeidssokerperioder.findIndex(
-      (periode) => periode.tilOgMedDato === null
-    );
-
+    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
+    const currentArbeidssokerperiodeIndex = data.findIndex((periode) => periode.avsluttet === null);
     arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
   } else {
-    arbeidssokerStatus = "UNKNOWN";
+    arbeidssokerStatus = "ERROR";
   }
 
   if (personaliaResponse.ok) {

@@ -7,7 +7,10 @@ import {
   getArbeidssokerperioder,
 } from "../../api/arbeidssoker-api";
 import { getMineSoknader } from "../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
+import {
+  getArbeidsoekkerregisteretOnBehalfOfToken,
+  getSoknadOnBehalfOfToken,
+} from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
@@ -19,7 +22,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { locale } = context;
 
@@ -43,8 +46,10 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
+  const arbeidsoekerObo = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+
+  if (!soknadObo.ok || !arbeidsoekerObo.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -57,9 +62,8 @@ export async function getServerSideProps(
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const mineSoknaderResponse = await getMineSoknader(onBehalfOfToken);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(context);
+  const mineSoknaderResponse = await getMineSoknader(soknadObo.token);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidsoekerObo.token);
 
   if (!mineSoknaderResponse.ok) {
     const errorData = await getErrorDetails(mineSoknaderResponse);
@@ -70,14 +74,12 @@ export async function getServerSideProps(
   }
 
   if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder = await arbeidssokerStatusResponse.json();
-
+    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
     const isRegisteredAsArbeidsoker =
-      data.arbeidssokerperioder.findIndex((periode) => periode.tilOgMedDato === null) !== -1;
-
+      data.findIndex((periode) => periode.avsluttet === null) !== -1;
     arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
   } else {
-    arbeidssokerStatus = "UNKNOWN";
+    arbeidssokerStatus = "ERROR";
   }
 
   const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;

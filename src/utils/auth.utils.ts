@@ -1,43 +1,46 @@
-import { GetSessionWithOboProvider, SessionWithOboProvider, makeSession } from "@navikt/oasis";
-import { idporten } from "@navikt/oasis/identity-providers";
-import { tokenX, withInMemoryCache } from "@navikt/oasis/obo-providers";
-import { withPrometheus } from "@navikt/oasis/obo-providers/withPrometheus";
-import { audienceDPSoknad, audienceMellomlagring, audienceVeilarb } from "./api.utils";
+import { OboResult, getToken, requestOboToken, validateToken } from "@navikt/oasis";
+import { IncomingMessage } from "http";
 
-export let getSession: GetSessionWithOboProvider;
+const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
+const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
+const audienceArbeidsoekkerregisteret = `${process.env.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
 
-if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-  getSession = makeSession({
-    identityProvider: async () => process.env.DP_SOKNAD_TOKEN || "",
-    oboProvider: tokenX,
-  });
-} else {
-  getSession = makeSession({
-    identityProvider: idporten,
-    oboProvider: withInMemoryCache(withPrometheus(tokenX)),
-  });
-}
-
-export async function getSoknadOnBehalfOfToken(session: SessionWithOboProvider) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.DP_SOKNAD_TOKEN || "";
+async function getOnBehalfOfToken(req: IncomingMessage, audience: string): Promise<OboResult> {
+  const token = getToken(req);
+  if (!token) {
+    return OboResult.Error("missing token");
   }
 
-  return session.apiToken(audienceDPSoknad);
-}
-
-export async function getVeilarbregistreringOnBehalfOfToken(session: SessionWithOboProvider) {
-  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.VEILARBPROXY_TOKEN || "";
+  const validation = await validateToken(token);
+  if (!validation.ok) {
+    return OboResult.Error("token validation failed");
   }
 
-  return session.apiToken(audienceVeilarb);
+  return requestOboToken(token, audience);
 }
 
-export async function getMellomlagringOnBehalfOfToken(session: SessionWithOboProvider) {
+export async function getSoknadOnBehalfOfToken(req: IncomingMessage): Promise<OboResult> {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
-    return process.env.DP_MELLOMLAGRING || "";
+    return OboResult.Ok(process.env.DP_SOKNAD_TOKEN || "");
   }
 
-  return session.apiToken(audienceMellomlagring);
+  return getOnBehalfOfToken(req, audienceDPSoknad);
+}
+
+export async function getArbeidsoekkerregisteretOnBehalfOfToken(
+  req: IncomingMessage,
+): Promise<OboResult> {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+    return OboResult.Ok(process.env.ARBEIDSSOEKERREGISTERET_TOKEN || "");
+  }
+
+  return getOnBehalfOfToken(req, audienceArbeidsoekkerregisteret);
+}
+
+export async function getMellomlagringOnBehalfOfToken(req: IncomingMessage): Promise<OboResult> {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+    return OboResult.Ok(process.env.DP_MELLOMLAGRING || "");
+  }
+
+  return getOnBehalfOfToken(req, audienceMellomlagring);
 }

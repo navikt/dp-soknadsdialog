@@ -30,11 +30,11 @@ npm run dev
 
 ## Manuelt oppdatering av lokalt tokenX tokens
 
-Logg på med en testbruker. Hent ut verdien fra `access_token`, rediger `.env.developement` og endre `DP_SOKNAD_TOKEN`, `DP_SOKNAD_TOKEN`, `VEILARBPROXY_TOKEN` til det matchende genererte tokenet.
+Logg på med en testbruker. Hent ut verdien fra `access_token`, rediger `.env.developement` og endre `DP_SOKNAD_TOKEN`, `DP_MELLOMLAGRING_TOKEN`, `ARBEIDSSOEKERREGISTERET_TOKEN` til det matchende genererte tokenet.
 
 [dp-soknad](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-soknad),
 [dp-mellomlagring](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-mellomlagring),
-[veilarbregistrering](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:veilarbregistrering)
+[arbeidssoekerregisteret](https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag)
 
 ## Kjøre localhost med mock data
 

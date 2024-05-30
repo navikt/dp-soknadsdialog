@@ -1,18 +1,18 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { getPersonalia } from "../../../api/personalia-api";
 import { getSoknadState } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
+import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
+import { mockNeste } from "../../../localhost-data/mock-neste";
+import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { Pdf } from "../../../views/pdf/Pdf";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { mockNeste } from "../../../localhost-data/mock-neste";
-import { mockPersonalia } from "../../../localhost-data/personalia";
-import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
-import { getPersonalia } from "../../../api/personalia-api";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -22,7 +22,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -38,8 +38,8 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -53,10 +53,9 @@ export async function getServerSideProps(
   let soknadState = null;
   let dokumentkrav = null;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const personaliaResponse = await getPersonalia(onBehalfOfToken);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
+  const personaliaResponse = await getPersonalia(onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;

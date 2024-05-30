@@ -2,7 +2,7 @@ import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import { getErrorMessage } from "../../../../utils/api.utils";
-import { getMellomlagringOnBehalfOfToken, getSession } from "../../../../utils/auth.utils";
+import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
@@ -20,21 +20,20 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.send(imageBuffer);
   }
 
-  const session = await getSession(req);
-  if (!session) {
-    return res.status(401).end();
-  }
-
   const { params } = req.query;
   // params will always be an array when [...] is used https://nextjs.org/docs/api-routes/dynamic-api-routes
   // @ts-ignore
   const urn = params.join("/");
 
   try {
-    const onBehalfOfToken = await getMellomlagringOnBehalfOfToken(session);
+    const onBehalfOf = await getMellomlagringOnBehalfOfToken(req);
+    if (!onBehalfOf.ok) {
+      return res.status(401).end();
+    }
+
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
-        Authorization: `Bearer ${onBehalfOfToken}`,
+        Authorization: `Bearer ${onBehalfOf.token}`,
       },
     });
 
@@ -42,7 +41,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       logRequestError(
         response.statusText,
         undefined,
-        "Download dokumentkrav files - Failed to download files from dp-mellomlagring"
+        "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
       );
       return res.status(response.status).send(response.statusText);
     }

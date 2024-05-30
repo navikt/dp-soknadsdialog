@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import { getSession, getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -11,6 +11,8 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
+import { UserInformationProvider } from "../../../context/user-information-context";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -19,7 +21,7 @@ interface IProps {
 }
 
 export async function getServerSideProps(
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<IProps>> {
   const { query, locale } = context;
   const uuid = query.uuid as string;
@@ -34,8 +36,8 @@ export async function getServerSideProps(
     };
   }
 
-  const session = await getSession(context.req);
-  if (!session) {
+  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  if (!onBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -49,10 +51,9 @@ export async function getServerSideProps(
   let dokumentkravList = null;
   let soknadStatus = null;
 
-  const onBehalfOfToken = await getSoknadOnBehalfOfToken(session);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOfToken);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOfToken);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOfToken);
+  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
@@ -103,11 +104,15 @@ export default function GenerellInnsendingPage(props: IProps) {
 
   return (
     <QuizProvider initialState={soknadState}>
-      <DokumentkravProvider initialState={dokumentkravList}>
-        <ValidationProvider>
-          <GenerellInnsending />
-        </ValidationProvider>
-      </DokumentkravProvider>
+      <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+        <UserInformationProvider arbeidsforhold={[]}>
+          <DokumentkravProvider initialState={dokumentkravList}>
+            <ValidationProvider>
+              <GenerellInnsending />
+            </ValidationProvider>
+          </DokumentkravProvider>
+        </UserInformationProvider>
+      </FeatureTogglesProvider>
     </QuizProvider>
   );
 }

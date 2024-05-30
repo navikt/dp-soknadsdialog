@@ -12,6 +12,8 @@ import { isValidTextLength } from "../validation/validations.utils";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
+import { useUserInformation } from "../../../context/user-information-context";
+import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude.tracking";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 
@@ -27,11 +29,12 @@ export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
   ref: Ref<HTMLInputElement> | undefined,
 ) {
-  const { faktum } = props;
+  const { faktum, forceUpdate } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
+  const { contextSelectedArbeidsforhold } = useUserInformation();
 
   const [hasError, setHasError] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
@@ -52,8 +55,8 @@ export function FaktumTextComponent(
   }, [debouncedText]);
 
   useEffect(() => {
-    setCurrentAnswer(faktum.svar ?? "");
-  }, [faktum]);
+    if (forceUpdate) setCurrentAnswer(faktum.svar ?? "");
+  }, [faktum.svar]);
 
   function onValueChange(event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) {
     const { value } = event.target;
@@ -88,6 +91,17 @@ export function FaktumTextComponent(
     }
   }
 
+  function onBlur() {
+    debouncedChange.flush;
+
+    if (
+      faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&
+      contextSelectedArbeidsforhold?.organisasjonsnavn !== debouncedText
+    ) {
+      trackKorigertBedriftsnavnFraAAREG("dagpenger");
+    }
+  }
+
   return (
     <>
       {TEXTAREA_FAKTUM_IDS.includes(props.faktum.beskrivendeId) ? (
@@ -113,7 +127,7 @@ export function FaktumTextComponent(
           size="medium"
           type="text"
           onChange={onValueChange}
-          onBlur={debouncedChange.flush}
+          onBlur={onBlur}
           error={getErrorMessage()}
           disabled={isLocked}
           autoComplete="off"

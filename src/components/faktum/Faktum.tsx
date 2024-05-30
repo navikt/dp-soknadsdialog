@@ -32,6 +32,8 @@ export interface IFaktum<P> {
   faktum: P;
   readonly?: boolean;
   showAllFaktumTexts?: boolean;
+  forceUpdate?: boolean;
+  hideAlertText?: boolean;
 }
 
 export interface IFaktumReadOnly<P> {
@@ -42,7 +44,7 @@ export interface IFaktumReadOnly<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
-  const { faktum, readonly, showAllFaktumTexts } = props;
+  const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText } = props;
   const { soknadState } = useQuiz();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
@@ -99,7 +101,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumTextReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumText ref={faktumRef} faktum={faktum} />;
+          return <FaktumText ref={faktumRef} faktum={faktum} forceUpdate={forceUpdate} />;
         }
 
       case "double":
@@ -128,7 +130,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumPeriodeReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumPeriode ref={faktumRef} faktum={faktum} />;
+          return <FaktumPeriode ref={faktumRef} faktum={faktum} hideAlertText={hideAlertText} />;
         }
 
       case "generator":

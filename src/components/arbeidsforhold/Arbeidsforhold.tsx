@@ -10,9 +10,9 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useUserInformation } from "../../context/user-information-context";
 import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
@@ -21,19 +21,31 @@ import {
   IQuizPeriodeFaktumAnswerType,
   QuizFaktum,
 } from "../../types/quiz.types";
+import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
 import { findEmployerName } from "../../utils/faktum.utils";
 import { FormattedDate } from "../FormattedDate";
-import { Faktum, IFaktum } from "../faktum/Faktum";
+import { IFaktum } from "../faktum/Faktum";
 import { ValidationMessage } from "../faktum/validation/ValidationMessage";
+import { getUnansweredFaktumId } from "../faktum/validation/validations.utils";
 import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
-import { findArbeidstid } from "../../utils/arbeidsforhold.utils";
-import { useFeatureToggles } from "../../context/feature-toggle-context";
-import { PortableText } from "@portabletext/react";
 import styles from "./Arbeidsforhold.module.css";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
+
+function getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid: string): string {
+  switch (arbeidstid) {
+    case "faktum.type-arbeidstid.svar.fast":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
+    case "faktum.type-arbeidstid.svar.varierende":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
+    case "faktum.type-arbeidstid.svar.kombinasjon":
+      return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
+    default:
+      return "";
+  }
+}
 
 function ArbeidsforholdComponent(
   props: IFaktum<IQuizGeneratorFaktum>,
@@ -43,7 +55,8 @@ function ArbeidsforholdComponent(
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
+  const { arbeidsforhold } = useUserInformation();
+
   const { getAppText, getFaktumTextById } = useSanity();
   const {
     addNewGeneratorAnswer,
@@ -80,37 +93,15 @@ function ArbeidsforholdComponent(
     }
   }
 
-  function getArbeidsforholdDescriptionBySelectedArbeidstid() {
-    switch (arbeidstid) {
-      case "faktum.type-arbeidstid.svar.fast":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-6-months";
-      case "faktum.type-arbeidstid.svar.varierende":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-12-months";
-      case "faktum.type-arbeidstid.svar.kombinasjon":
-        return "arbeidsforhold.dynamic-description.arbeidstid-last-36-months";
-      default:
-        return "";
-    }
-  }
-
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      {arbeidsforholdIsEnabled ? (
-        <>
-          <Label as={"p"} spacing>
-            {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
-          </Label>
-          {arbeidstid && (
-            <BodyShort className={styles.dynamicText}>
-              {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid())}
-            </BodyShort>
-          )}
-        </>
-      ) : (
-        <>
-          <Label as={"p"}>{faktumTexts ? faktumTexts.text : faktum.beskrivendeId}</Label>
-          {faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        </>
+      <Label as={"p"} spacing>
+        {faktumTexts ? faktumTexts.text : faktum.beskrivendeId}
+      </Label>
+      {arbeidstid && (
+        <BodyShort className={styles.dynamicText}>
+          {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
+        </BodyShort>
       )}
       {faktum?.svar?.map((fakta, svarIndex) => {
         const unansweredFaktum = fakta.find((faktum) => faktum?.svar === undefined);
@@ -130,9 +121,7 @@ function ArbeidsforholdComponent(
               <Heading level={"3"} size={"small"} spacing>
                 {getArbeidsforholdName(fakta)}
               </Heading>
-
               <BodyShort>{getArbeidsforholdVarighet(fakta)}</BodyShort>
-
               <ArbeidsforholdEndret fakta={fakta}></ArbeidsforholdEndret>
             </GeneratorFaktumCard>
 
@@ -144,30 +133,29 @@ function ArbeidsforholdComponent(
               closeOnBackdropClick
             >
               <Modal.Body>
-                {arbeidsforholdIsEnabled ? (
-                  <>
-                    <BodyLong className={styles.description}>
-                      {getAppText("arbeidsforhold.modal.beskrivelse")}
+                <>
+                  {arbeidstid && arbeidsforhold.length === 0 && (
+                    <BodyLong className={styles.description} spacing>
+                      {getAppText(getArbeidsforholdDescriptionBySelectedArbeidstid(arbeidstid))}
                     </BodyLong>
-                    <ReadMore
-                      header={getAppText("arbeidsforhold.modal.readmore-header")}
-                      className={styles.modalReadmore}
-                      defaultOpen={false}
-                    >
-                      {getAppText("arbeidsforhold.modal.readmore-innhold")}
-                    </ReadMore>
-                    <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
-                  </>
-                ) : (
-                  <>
-                    {fakta.map((faktum) => (
-                      <Faktum key={faktum.id} faktum={faktum} readonly={props.readonly} />
-                    ))}
-                  </>
-                )}
-
+                  )}
+                  {arbeidsforhold.length > 0 && (
+                    <>
+                      <BodyLong className={styles.description}>
+                        {getAppText("arbeidsforhold.modal.beskrivelse")}
+                      </BodyLong>
+                      <ReadMore
+                        header={getAppText("arbeidsforhold.modal.readmore-header")}
+                        className={styles.modalReadmore}
+                        defaultOpen={false}
+                      >
+                        {getAppText("arbeidsforhold.modal.readmore-innhold")}
+                      </ReadMore>
+                    </>
+                  )}
+                  <ArbeidsforholdFaktumWrapper fakta={fakta} readonly={props.readonly} />
+                </>
                 <FetchIndicator isLoading={isLoading} />
-
                 <div className={"modal-container__button-container"}>
                   <Button onClick={closeGeneratorAnswer}>
                     {getAppText("soknad.generator.lagre-og-lukk-knapp")}

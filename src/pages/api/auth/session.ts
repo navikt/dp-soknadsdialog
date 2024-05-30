@@ -1,17 +1,25 @@
+import { expiresIn, getToken, validateToken } from "@navikt/oasis";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "../../../utils/auth.utils";
 
 export interface ISessionData {
   expiresIn: number;
 }
 
 async function session(req: NextApiRequest, res: NextApiResponse<ISessionData>) {
-  const session = await getSession(req);
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true" && process.env.DP_SOKNAD_TOKEN) {
+    res.json({
+      expiresIn: expiresIn(process.env.DP_SOKNAD_TOKEN),
+    });
+  }
 
-  if (!session) return res.status(401).end();
+  const token = getToken(req);
+  if (!token) return res.status(401).end();
+
+  const validation = await validateToken(token);
+  if (!validation.ok) return res.status(401).end();
 
   res.json({
-    expiresIn: session.expiresIn,
+    expiresIn: expiresIn(token),
   });
 }
 

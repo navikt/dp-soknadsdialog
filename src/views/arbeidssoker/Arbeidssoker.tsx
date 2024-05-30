@@ -65,7 +65,7 @@ export function Arbeidssoker(props: IProps) {
           </BodyLong>
         </>
       )}
-      {props.arbeidssokerStatus === "UNKNOWN" && (
+      {props.arbeidssokerStatus === "ERROR" && (
         <>
           <Heading level="2" size="small">
             {getAppText("arbeidssoker.header")}
@@ -73,6 +73,11 @@ export function Arbeidssoker(props: IProps) {
           <Alert variant="warning" className={styles.arbeidssokerStatusErrorWarning}>
             {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
           </Alert>
+          <div className="navigation-container">
+            <Link href="https://arbeidssokerregistrering.nav.no/">
+              {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+            </Link>
+          </div>
           <div className="navigation-container">
             <Link href="/soknad/start-soknad" passHref legacyBehavior>
               <Button

@@ -22,7 +22,7 @@ init() {
   # Check if jq package is installed 
   verifyJQ
 
-  # Generate azure-token-generator token
+  # Start token generation
   startTokenGenerator
 
   # Finished
@@ -57,12 +57,12 @@ verifyJQ() {
 
 # Start token generation process
 startTokenGenerator() {
-  # First azure-token-generator url from json config
+  # First tokenx-token-generator url from json config
   url=$(jq "." $jsonConfig | jq ".environments[0].url" | tr -d '"')
   cookieName=$(jq "." $jsonConfig | jq ".cookieName"  | tr -d '"')
   configArray=$(jq -r ".environments[] | @base64" $jsonConfig)
 
-  # Show link to azureTokenGenerator to user
+  # Show link to tokenx-token-generator to user
   echo -e "${Cyan}Visit and sign in with test user: ${UGreen}${url}\n"
   echo -e "${Cyan}Find and copy ${Yellow}${cookieName} ${Cyan}cookie from ${Yellow}DevTools > Application > Cookies"
 

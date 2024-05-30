@@ -16,7 +16,11 @@ import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
-import { useFeatureToggles } from "../../../context/feature-toggle-context";
+import { useUserInformation } from "../../../context/user-information-context";
+import {
+  trackKorrigertSluttdatoFraAAREG,
+  trackKorrigertStartdatoFraAAREG,
+} from "../../../amplitude.tracking";
 
 interface IDateRange {
   from: Date | undefined;
@@ -34,12 +38,12 @@ function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined,
 ) {
-  const { faktum } = props;
+  const { faktum, hideAlertText } = props;
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
-  const { arbeidsforholdIsEnabled } = useFeatureToggles();
   const { unansweredFaktumId } = useValidation();
+  const { contextSelectedArbeidsforhold } = useUserInformation();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
 
@@ -62,8 +66,13 @@ function FaktumPeriodeComponent(
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (faktum.svar !== currentAnswer && !isFirstRender) {
-      setCurrentAnswer(faktum.svar ?? initialPeriodeValue);
+    if (!faktum.svar && !isFirstRender) {
+      reset();
+      setCurrentAnswer(initialPeriodeValue);
+    }
+
+    if (faktum.svar && faktum.svar !== currentAnswer && !isFirstRender) {
+      setCurrentAnswer(faktum.svar);
     }
   }, [faktum.svar]);
 
@@ -86,7 +95,7 @@ function FaktumPeriodeComponent(
     }
   }, [faktum]);
 
-  const { datepickerProps, toInputProps, fromInputProps, setSelected } = useRangeDatepicker({
+  const { datepickerProps, toInputProps, fromInputProps, setSelected, reset } = useRangeDatepicker({
     defaultSelected: getDefaultSelectedValue(),
     onRangeChange: (value?: IDateRange) => {
       if (!value?.from) {
@@ -140,6 +149,17 @@ function FaktumPeriodeComponent(
       return;
     }
 
+    const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
+    if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
+      if (value.fom !== contextSelectedArbeidsforhold.startdato) {
+        trackKorrigertStartdatoFraAAREG("dagpenger");
+      }
+
+      if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
+        trackKorrigertSluttdatoFraAAREG("dagpenger");
+      }
+    }
+
     const isValidPeriode = validateAndIsValidPeriode(value);
     saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
   }
@@ -190,7 +210,7 @@ function FaktumPeriodeComponent(
           <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
         )}
 
-        {arbeidsforholdIsEnabled && faktumTexts?.alertText && (
+        {faktumTexts?.alertText && !hideAlertText && (
           <AlertText alertText={faktumTexts.alertText} spacingTop />
         )}
       </Fieldset>
