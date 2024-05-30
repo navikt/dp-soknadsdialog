@@ -1,4 +1,6 @@
-ingress: https://arbeid.intern.dev.nav.no/dagpenger/dialog
+ingresses:
+  - https://arbeid.intern.dev.nav.no/dagpenger/dialog
+  - https://arbeid.ansatt.dev.nav.no/dagpenger/dialog
 base_path: "/dagpenger/dialog"
 dekorator:
   url: https://dekoratoren.dev.nav.no/
