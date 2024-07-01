@@ -44,7 +44,7 @@
     "@portabletext/to-html": "^2.0.13",
     "@svgr/webpack": "^8.1.0",
     "@types/js-cookie": "^3.0.6",
-    "@unleash/nextjs": "^1.4.3",
+    "@unleash/nextjs": "^1.4.4",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "i18n-iso-countries": "^7.11.2",
