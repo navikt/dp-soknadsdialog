@@ -28,7 +28,7 @@ const decoratorProps: DecoratorFetchProps = {
     redirectToApp: true,
     level: "Level4",
     language: "nb",
-    availableLanguages: availableLanguages,
+    availableLanguages,
   },
 };
 
