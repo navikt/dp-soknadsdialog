@@ -1,4 +1,4 @@
-import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { getErrorMessage } from "../../../utils/api.utils";
@@ -11,7 +11,7 @@ import { ISanityTexts } from "../../../types/sanity.types";
 
 export interface IFerdigstillBody {
   uuid: string;
-  locale?: Locale;
+  locale?: DecoratorLocale;
 }
 
 async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {

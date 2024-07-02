@@ -21,7 +21,7 @@ import { useFirstRender } from "../../hooks/useFirstRender";
 import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
-import { type Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 
 export function GenerellInnsending() {
@@ -102,7 +102,7 @@ export function GenerellInnsending() {
     const bundlingSuccessful = await bundleDokumentkravList(dokumentkravToBundle);
 
     if (bundlingSuccessful) {
-      const locale = router.locale as Locale | undefined;
+      const locale = router.locale as DecoratorLocale | undefined;
       ferdigstillInnsending({ uuid, locale });
     }
   }
