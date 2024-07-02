@@ -4,7 +4,6 @@
   height: 96px;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-
   margin-top: calc(var(--app-padding) * -1);
   margin-bottom: var(--app-padding);
 }
