@@ -1,44 +1,45 @@
-import React from "react";
-import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 import {
-  Components as DecoratorComponents,
-  Env,
+  DecoratorComponents,
+  DecoratorEnvProps,
+  DecoratorFetchProps,
+  DecoratorParams,
   fetchDecoratorReact,
-  Locale,
-  Props as DecoratorProps,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { logger } from "@navikt/next-logger";
+import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
-const dekoratorEnv = process.env.DEKORATOR_ENV as Exclude<Env, "localhost">;
+const dekoratorEnv = (process.env.DEKORATOR_ENV || "localhost") as DecoratorEnvProps["env"];
 
-// TODO: Legg til "en" når vi får alle tekster inn i Sanity;
 const supportedLocales = ["nb"];
 const availableLanguages = supportedLocales.map((locale) => ({
   locale,
   url: `https://www.nav.no/dagpenger/dialog/${locale}`,
   handleInApp: true,
-})) as DecoratorProps["availableLanguages"];
+})) as DecoratorParams["availableLanguages"];
 
-const decoratorProps: DecoratorProps = {
-  env: dekoratorEnv ?? "prod",
-  chatbot: false,
-  simple: true,
-  context: "privatperson",
-  enforceLogin: false,
-  redirectToApp: true,
-  level: "Level4",
-  availableLanguages,
+const decoratorProps: DecoratorFetchProps = {
+  env: dekoratorEnv,
+  localUrl: "https://dekoratoren.ekstern.dev.nav.no",
+  params: {
+    chatbot: false,
+    simple: true,
+    context: "privatperson",
+    enforceLogin: false,
+    redirectToApp: true,
+    level: "Level4",
+    language: "nb",
+    availableLanguages,
+  },
 };
 
 export default class MyDocument extends Document<DecoratorComponents> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
-    const language = locale === undefined ? "nb" : (locale as Locale);
+    const language = locale || "nb";
 
     const Dekorator: DecoratorComponents = await fetchDecoratorReact({
       ...decoratorProps,
-      language: language,
     }).catch((err) => {
       logger.error(err);
       const empty = () => <></>;
