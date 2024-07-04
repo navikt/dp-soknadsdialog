@@ -15,7 +15,7 @@ import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
-import { Locale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { useQuiz } from "../../context/quiz-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
@@ -84,7 +84,7 @@ export function Summary(props: IProps) {
       return;
     }
 
-    const locale = router.locale as Locale | undefined;
+    const locale = router.locale as DecoratorLocale | undefined;
     trackSkjemaFullført("dagpenger", uuid);
     finishSoknad({ uuid, locale });
   }
