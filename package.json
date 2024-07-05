@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@amplitude/analytics-browser": "^2.9.3",
-    "@grafana/faro-web-sdk": "^1.8.0",
+    "@grafana/faro-web-sdk": "^1.8.1",
     "@navikt/aksel-icons": "^6.6.0",
     "@navikt/ds-css": "^6.6.0",
     "@navikt/ds-icons": "^3.4.3",
