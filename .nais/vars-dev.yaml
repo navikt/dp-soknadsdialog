@@ -3,7 +3,6 @@ ingresses:
   - https://arbeid.ansatt.dev.nav.no/dagpenger/dialog
 base_path: "/dagpenger/dialog"
 dekorator:
-  url: https://dekoratoren.dev.nav.no/
   env: dev
 arbeidssoekerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.dev.nav.no
 sanity_dataset: development

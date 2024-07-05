@@ -44,8 +44,6 @@ spec:
       value: {{ingress}}
     - name: NEXT_PUBLIC_BASE_PATH
       value: {{base_path}}
-    - name: DEKORATOR_URL
-      value: {{dekorator.url}}
     - name: DEKORATOR_ENV
       value: {{dekorator.env}}
     - name: ARBEIDSSOEKERREGISTERET_URL
@@ -74,7 +72,6 @@ spec:
       external:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
-        - host: dekoratoren.dev.nav.no
         - host: amplitude.nav.no
         - host: dagpenger-unleash-api.nav.cloud.nais.io
 
@@ -83,3 +80,5 @@ spec:
         - application: dp-mellomlagring
         - application: paw-arbeidssoekerregisteret-api-oppslag
           namespace: paw
+        - application: nav-dekoratoren
+          namespace: personbruker
