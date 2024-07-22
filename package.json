@@ -82,7 +82,7 @@
     "eslint-plugin-testing-library": "^6.2.2",
     "husky": "^9.1.1",
     "identity-obj-proxy": "^3.0.0",
-    "jsdom": "^24.1.0",
+    "jsdom": "^24.1.1",
     "lint-staged": "^15.2.7",
     "next-router-mock": "^0.9.13",
     "node-mocks-http": "^1.15.0",
