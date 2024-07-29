@@ -65,7 +65,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^20.14.13",
+    "@types/node": "^22.0.0",
     "@types/react": "^18.3.3",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^7.17.0",
@@ -92,6 +92,6 @@
     "typescript": "^5.5.4",
     "vite": "^5.3.5",
     "vitest": "^2.0.4",
-    "vitest-fetch-mock": "^0.2.2"
+    "vitest-fetch-mock": "^0.3.0"
   }
 }
