@@ -1,14 +1,12 @@
 version: 2
+registries:
+  npm-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{ secrets.READER_TOKEN }}
 updates:
   # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "10:05"
-      timezone: "Europe/Oslo"
-  # Maintain dependencies for gradle
-  - package-ecosystem: "gradle"
     directory: "/"
     schedule:
       interval: "daily"
@@ -24,6 +22,7 @@ updates:
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
     directory: "/"
+    registries: "*"
     schedule:
       interval: "daily"
       time: "10:05"
