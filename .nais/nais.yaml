@@ -48,8 +48,8 @@ spec:
       value: {{dekorator.env}}
     - name: OPPSLAG_ARBEIDSSOKERREGISTERET_URL
       value: {{opppslagArbeidssokerregisteretUrl}}
-    - name: ARBEIDSSOKERREGISTERET_URL
-      value: {{arbeidssokerregisteretUrl}}
+    - name: ARBEIDSSOKERREGISTRERING_URL
+      value: {{arbeidssokerregistreringUrl}}
     - name: NEXT_PUBLIC_SANITY_DATASET
       value: {{sanity_dataset}}
     - name: UNLEASH_SERVER_API_URL
