@@ -57,12 +57,10 @@ export async function getServerSideProps(
     };
   }
 
-  console.log(`🔥 arbeidssokerregistreringUrl :`, process.env.ARBEIDSSOKERREGISTRERING_URL);
-
   return {
     props: {
       arbeidssokerStatus,
-      arbeidssokerregistreringUrl: process.env.ARBEIDSSOKERREGISTRERING_URL,
+      arbeidssokerregistreringUrl: process.env.ARBEIDSSOKERREGISTERET_URL,
     },
   };
 }
