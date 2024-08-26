@@ -69,6 +69,7 @@ App.getInitialProps = async function getInitialProps(context: AppContext) {
     baseLang: "nb",
     lang: locale,
   });
+
   return {
     ...(await NextApp.getInitialProps(context)),
     sanityTexts,

@@ -3,20 +3,16 @@ import { Alert, BodyLong, Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
 import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import styles from "./Arbeidssoker.module.css";
-
-interface IProps {
-  arbeidssokerStatus: IArbeidssokerStatus;
-}
+import { IArbeidssokerProps } from "../../pages/soknad/arbeidssoker";
 
 type currentNagivatingType =
   | "registrer-som-arbeidssoker-button"
   | "registrer-som-arbeidssoker-cancel-button"
   | "start-soknad-button";
 
-export function Arbeidssoker(props: IProps) {
+export function Arbeidssoker(props: IArbeidssokerProps) {
   const { getAppText } = useSanity();
   const [currentNagivating, setCurrentNavigating] = useState<currentNagivatingType | undefined>(
     undefined,
@@ -36,7 +32,11 @@ export function Arbeidssoker(props: IProps) {
           </Heading>
           <BodyLong>{getAppText("arbeidssoker.beskrivelse")}</BodyLong>
           <div className="navigation-container">
-            <Link href="https://arbeidssokerregistrering.nav.no/" passHref legacyBehavior>
+            <Link
+              href={props.arbeidssokerregistreringUrl || "https://arbeidssokerregistrering.nav.no/"}
+              passHref
+              legacyBehavior
+            >
               <Button
                 variant="primary"
                 as="a"

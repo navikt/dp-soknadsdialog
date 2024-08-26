@@ -3,7 +3,8 @@ ingresses:
 base_path: "/dagpenger/dialog"
 dekorator:
   env: prod
-arbeidssoekerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.nav.no
+opppslagArbeidssoekerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.nav.no
+arbeidssoekerregisteretUrl: https://arbeidssokerregistrering.nav.no/
 sanity_dataset: production
 unleash:
   url : https://dagpenger-unleash-api.nav.cloud.nais.io/api
