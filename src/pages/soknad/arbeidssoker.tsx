@@ -7,19 +7,21 @@ import {
 import { getArbeidsoekkerregisteretOnBehalfOfToken } from "../../utils/auth.utils";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
 
-interface IProps {
+export interface IArbeidssokerProps {
   arbeidssokerStatus: IArbeidssokerStatus;
+  arbeidssokerregistreringUrl: string | undefined;
 }
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<IProps>> {
+): Promise<GetServerSidePropsResult<IArbeidssokerProps>> {
   const { locale } = context;
 
   if (process.env.USE_MOCKS === "true") {
     return {
       props: {
         arbeidssokerStatus: "UNREGISTERED",
+        arbeidssokerregistreringUrl: process.env.ARBEIDSSOKERREGISTRERING_URL,
       },
     };
   }
@@ -58,10 +60,16 @@ export async function getServerSideProps(
   return {
     props: {
       arbeidssokerStatus,
+      arbeidssokerregistreringUrl: process.env.ARBEIDSSOKERREGISTRERING_URL,
     },
   };
 }
 
-export default function InngangPage(props: IProps) {
-  return <Arbeidssoker arbeidssokerStatus={props.arbeidssokerStatus} />;
+export default function InngangPage(props: IArbeidssokerProps) {
+  return (
+    <Arbeidssoker
+      arbeidssokerStatus={props.arbeidssokerStatus}
+      arbeidssokerregistreringUrl={props.arbeidssokerregistreringUrl}
+    />
+  );
 }
