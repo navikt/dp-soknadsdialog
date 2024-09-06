@@ -36,6 +36,17 @@ export function createSoknadUuid(onBehalfOfToken: string) {
   });
 }
 
+export function createSoknadWithUuid(onBehalfOfToken: string, uuid: string) {
+  const url = `${process.env.API_BASE_URL}/soknad?søknadId=${uuid}`;
+
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
 export function getMineSoknader(onBehalfOfToken: string) {
   const fromDate = subDays(Date.now(), 30);
   const formattedDate = formatISO(fromDate, { representation: "date" });
@@ -66,7 +77,7 @@ export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
   lastSaved?: string,
-  requestId?: string
+  requestId?: string,
 ) {
   let url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
 

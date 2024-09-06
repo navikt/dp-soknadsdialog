@@ -13,6 +13,10 @@
     {
       "env": "ARBEIDSSOEKERREGISTERET_TOKEN",
       "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag"
+    },
+    {
+      "env": "DP_SOKNAD_ORKESTRATOR_TOKEN",
+      "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:teamdagpenger:dp-soknad-orkestrator"
     }
   ]
 }

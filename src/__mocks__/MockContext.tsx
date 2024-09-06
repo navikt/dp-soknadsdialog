@@ -63,7 +63,9 @@ export function MockContext(props: PropsWithChildren<IProps>) {
       <SanityProvider initialState={sanityTexts}>
         {mockQuizContext && (
           <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+            <FeatureTogglesProvider
+              featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}
+            >
               <UserInformationProvider
                 arbeidsforhold={[]}
                 contextSelectedArbeidsforhold={undefined}
@@ -80,7 +82,9 @@ export function MockContext(props: PropsWithChildren<IProps>) {
 
         {!mockQuizContext && (
           <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+            <FeatureTogglesProvider
+              featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}
+            >
               <UserInformationProvider
                 arbeidsforhold={[]}
                 contextSelectedArbeidsforhold={undefined}

@@ -3,6 +3,12 @@ import { getMineSoknader } from "../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
+import { FeatureTogglesProvider } from "../../context/feature-toggle-context";
+import { getFeatureToggles, IFeatureToggles } from "../../api/unleash-api";
+
+interface IProps {
+  featureToggles: IFeatureToggles;
+}
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -21,11 +27,16 @@ export async function getServerSideProps(
 
   if (process.env.USE_MOCKS === "true") {
     return {
-      props: {},
+      props: {
+        featureToggles: {
+          soknadsdialogMedOrkestratorIsEnabled: false,
+        },
+      },
     };
   }
 
   const mineSoknaderResponse = await getMineSoknader(onBehalfOf.token);
+  const featureToggles = await getFeatureToggles();
 
   if (mineSoknaderResponse.ok) {
     const mineSoknader: IMineSoknader = await mineSoknaderResponse.json();
@@ -41,10 +52,14 @@ export async function getServerSideProps(
   }
 
   return {
-    props: {},
+    props: { featureToggles },
   };
 }
 
-export default function Soknad() {
-  return <StartSoknad />;
+export default function Soknad(props: IProps) {
+  return (
+    <FeatureTogglesProvider featureToggles={props.featureToggles}>
+      <StartSoknad />
+    </FeatureTogglesProvider>
+  );
 }
