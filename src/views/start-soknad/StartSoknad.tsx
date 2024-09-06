@@ -13,10 +13,12 @@ import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStartet } from "../../amplitude.tracking";
 import { logger } from "@navikt/next-logger";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
 
 export function StartSoknad() {
   const router = useRouter();
   const { setFocus } = useSetFocus();
+  const { soknadsdialogMedOrkestratorIsEnabled } = useFeatureToggles();
   const [isError, setIsError] = useState(false);
   const { getAppText, getInfosideText } = useSanity();
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
@@ -44,20 +46,40 @@ export function StartSoknad() {
       return;
     }
 
-    try {
-      setIsCreatingSoknadUUID(true);
-      const uuidResponse = await fetch(api("soknad/uuid"));
+    if (!soknadsdialogMedOrkestratorIsEnabled) {
+      try {
+        setIsCreatingSoknadUUID(true);
+        const uuidResponse = await fetch(api("soknad/uuid"));
 
-      if (uuidResponse.ok) {
-        const uuid = await uuidResponse.text();
-        trackSkjemaStartet("dagpenger", uuid);
-        router.push(`/soknad/${uuid}`);
-      } else {
-        throw new Error(uuidResponse.statusText);
+        if (uuidResponse.ok) {
+          const uuid = await uuidResponse.text();
+          trackSkjemaStartet("dagpenger", uuid);
+          router.push(`/soknad/${uuid}`);
+        } else {
+          throw new Error(uuidResponse.statusText);
+        }
+      } catch (error) {
+        logger.error(error, "StartSoknad: Error creating UUID");
+        setIsError(true);
       }
-    } catch (error) {
-      logger.error(error, "StartSoknad: Error creating UUID");
-      setIsError(true);
+    }
+
+    if (soknadsdialogMedOrkestratorIsEnabled) {
+      try {
+        const soknadIdResponse = await fetch(api("soknad-orkestrator"));
+
+        if (soknadIdResponse.ok) {
+          const uuid = await soknadIdResponse.json();
+
+          trackSkjemaStartet("dagpenger", uuid);
+          router.push(`/soknad/${uuid}`);
+        } else {
+          throw new Error(soknadIdResponse.statusText);
+        }
+      } catch (error) {
+        logger.error(error, "StartSoknad: Error creating UUID");
+        setIsError(true);
+      }
     }
   }
 

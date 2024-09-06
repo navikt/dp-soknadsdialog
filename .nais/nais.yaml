@@ -79,6 +79,7 @@ spec:
 
       rules:
         - application: dp-soknad
+        - application: dp-soknad-orkestrator
         - application: dp-mellomlagring
         - application: paw-arbeidssoekerregisteret-api-oppslag
           namespace: paw
