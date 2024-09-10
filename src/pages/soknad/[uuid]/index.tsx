@@ -126,14 +126,14 @@ export default function SoknadPage(props: IProps) {
   }
 
   return (
-    <QuizProvider initialState={soknadState}>
-      <FeatureTogglesProvider featureToggles={featureToggles}>
+    <FeatureTogglesProvider featureToggles={featureToggles}>
+      <QuizProvider initialState={soknadState}>
         <UserInfoProvider arbeidsforhold={arbeidsforhold}>
           <ValidationProvider>
             <Soknad personalia={personalia} />
           </ValidationProvider>
         </UserInfoProvider>
-      </FeatureTogglesProvider>
-    </QuizProvider>
+      </QuizProvider>
+    </FeatureTogglesProvider>
   );
 }

@@ -61,9 +61,9 @@ export function MockContext(props: PropsWithChildren<IProps>) {
   return (
     <div id="__next">
       <SanityProvider initialState={sanityTexts}>
-        {mockQuizContext && (
-          <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+        <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+          {mockQuizContext && (
+            <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -71,13 +71,11 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </FeatureTogglesProvider>
-          </MockQuizProvider>
-        )}
+            </MockQuizProvider>
+          )}
 
-        {!mockQuizContext && (
-          <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+          {!mockQuizContext && (
+            <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -85,9 +83,9 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </FeatureTogglesProvider>
-          </QuizProvider>
-        )}
+            </QuizProvider>
+          )}
+        </FeatureTogglesProvider>
       </SanityProvider>
     </div>
   );
