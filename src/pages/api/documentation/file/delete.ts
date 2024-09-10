@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../../api/quiz-api";
 import { logRequestError } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import {
@@ -7,6 +6,7 @@ import {
   getSoknadOnBehalfOfToken,
 } from "../../../../utils/auth.utils";
 import { validateUUID } from "../../../../utils/uuid.utils";
+import { headersWithToken } from "../../common/quiz-api";
 
 export interface IDeleteFileBody {
   uuid: string;

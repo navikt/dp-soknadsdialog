@@ -1,8 +1,8 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { getMineSoknader } from "../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
+import { getMineSoknader } from "../api/common/quiz-api";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,

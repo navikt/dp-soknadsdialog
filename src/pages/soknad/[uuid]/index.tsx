@@ -1,13 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getArbeidsforhold } from "../../../api/arbeidsforhold-api";
-import { getPersonalia } from "../../../api/personalia-api";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
-import {
-  IFeatureToggles,
-  defaultFeatureToggles,
-  getFeatureToggles,
-} from "../../../api/unleash-api";
 import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import {
@@ -24,6 +16,14 @@ import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
+import {
+  defaultFeatureToggles,
+  getFeatureToggles,
+  IFeatureToggles,
+} from "../../api/common/unleash-api";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { getPersonalia } from "../../api/common/personalia-api";
+import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
 
 interface IProps {
   soknadState: IQuizState | null;

@@ -1,5 +1,4 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
@@ -13,6 +12,7 @@ import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 import { UserInformationProvider } from "../../../context/user-information-context";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 
 interface IProps {
   soknadState: IQuizState | null;

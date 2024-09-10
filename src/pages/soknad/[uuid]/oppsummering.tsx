@@ -1,7 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getPersonalia } from "../../../api/personalia-api";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -17,6 +15,8 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Summary } from "../../../views/summary/Summary";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { getPersonalia } from "../../api/common/personalia-api";
 
 interface IProps {
   soknadState: IQuizState | null;

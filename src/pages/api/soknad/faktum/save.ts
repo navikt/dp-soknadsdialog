@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { getSoknadState } from "../../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
 import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
+import { getSoknadState } from "../../common/quiz-api";
 
 export interface ISaveFaktumBody {
   uuid: string;

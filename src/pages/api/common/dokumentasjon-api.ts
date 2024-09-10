@@ -1,4 +1,4 @@
-import api from "../utils/api.utils";
+import api from "../../../utils/api.utils";
 
 export async function saveDokumenkravFile(file: File, uuid: string, dokumentkravId: string) {
   const requestData = new FormData();
