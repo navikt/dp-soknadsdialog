@@ -12,7 +12,7 @@ import { GenerellInnsending } from "../../../views/generell-innsending/GenerellI
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
-import { UserInformationProvider } from "../../../context/user-information-context";
+import { UserInfoProvider } from "../../../context/user-info-context";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -105,13 +105,13 @@ export default function GenerellInnsendingPage(props: IProps) {
   return (
     <QuizProvider initialState={soknadState}>
       <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
-        <UserInformationProvider arbeidsforhold={[]}>
+        <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
             <ValidationProvider>
               <GenerellInnsending />
             </ValidationProvider>
           </DokumentkravProvider>
-        </UserInformationProvider>
+        </UserInfoProvider>
       </FeatureTogglesProvider>
     </QuizProvider>
   );

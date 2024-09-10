@@ -6,7 +6,7 @@ import {
 } from "../../amplitude.tracking";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidsforhold, useUserInformation } from "../../context/user-information-context";
+import { IArbeidsforhold, useUserInfo } from "../../context/user-info-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import {
   filterArbeidsforhold,
@@ -30,7 +30,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const [shouldSaveVarighet, setShouldSaveVarighet] = useState(false);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
   const { arbeidsforhold, setContextSelectedArbeidsforhold, contextSelectedArbeidsforhold } =
-    useUserInformation();
+    useUserInfo();
   const [arbeidsforholdSelectList, setArbeidsforholdSelectList] = useState<IArbeidsforhold[]>([]);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,

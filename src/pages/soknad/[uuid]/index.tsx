@@ -10,10 +10,7 @@ import {
 } from "../../../api/unleash-api";
 import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 import { QuizProvider } from "../../../context/quiz-context";
-import {
-  IArbeidsforhold,
-  UserInformationProvider,
-} from "../../../context/user-information-context";
+import { IArbeidsforhold, UserInfoProvider } from "../../../context/user-info-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
@@ -131,11 +128,11 @@ export default function SoknadPage(props: IProps) {
   return (
     <QuizProvider initialState={soknadState}>
       <FeatureTogglesProvider featureToggles={featureToggles}>
-        <UserInformationProvider arbeidsforhold={arbeidsforhold}>
+        <UserInfoProvider arbeidsforhold={arbeidsforhold}>
           <ValidationProvider>
             <Soknad personalia={personalia} />
           </ValidationProvider>
-        </UserInformationProvider>
+        </UserInfoProvider>
       </FeatureTogglesProvider>
     </QuizProvider>
   );
