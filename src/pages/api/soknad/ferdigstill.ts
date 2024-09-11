@@ -27,8 +27,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-      baseLang: "nb",
-      lang: locale,
+      language: locale || "nb",
     });
 
     const sanityTextsWithHTML = textStructureToHtml(sanityTexts);

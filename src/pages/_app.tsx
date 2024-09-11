@@ -66,8 +66,7 @@ App.getInitialProps = async function getInitialProps(context: AppContext) {
   }
 
   const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-    baseLang: "nb",
-    lang: locale,
+    language: locale || "nb",
   });
 
   return {

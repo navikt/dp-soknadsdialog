@@ -27,8 +27,7 @@ export default function Error500() {
   async function getSanityText() {
     try {
       const sanityTexts = await sanityClient.fetch<ISanityTexts>(allTextsQuery, {
-        baseLang: "nb",
-        lang: locale,
+        language: locale || "nb",
       });
 
       const title = getAppTekst("teknisk-feil.helside.tittel", sanityTexts);

@@ -6,7 +6,7 @@ dekorator:
   env: dev
 opppslagArbeidssokerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.dev.nav.no
 arbeidssokerregistreringUrl: https://arbeid.ansatt.dev.nav.no/arbeid/registrering
-sanity_dataset: development
+sanity_dataset: migrering-test
 unleash:
   url : https://dagpenger-unleash-api.nav.cloud.nais.io/api
   environment: development

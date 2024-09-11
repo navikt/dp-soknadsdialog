@@ -51,36 +51,36 @@ const dokumentkravSvarFields = `{
   alertText,
 }`;
 
-const seksjonerGroq = `* [_type=="seksjon" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${seksjonFields}, ${seksjonFields})
+const seksjonerGroq = `* [_type=="seksjon" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${seksjonFields}, ${seksjonFields})
 }`;
 
-const faktaGroq = `* [_type=="faktum" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${faktumFields}, ${faktumFields})
+const faktaGroq = `* [_type=="faktum" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${faktumFields}, ${faktumFields})
 }`;
 
-const svaralternativerGroq = `* [_type=="svaralternativ" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${svaralternativFields}, ${svaralternativFields})
+const svaralternativerGroq = `* [_type=="svaralternativ" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${svaralternativFields}, ${svaralternativFields})
 }`;
 
-const landGrupperGroq = `* [_type=="landgruppe" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${landGruppeFields}, ${landGruppeFields})
+const landGrupperGroq = `* [_type=="landgruppe" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${landGruppeFields}, ${landGruppeFields})
 }`;
 
-const appTextsGroq = `* [_type=="apptekst" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${appTextsFields}, ${appTextsFields})
+const appTextsGroq = `* [_type=="apptekst" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${appTextsFields}, ${appTextsFields})
 }`;
 
-const infosiderGroq = `* [_type=="infopage"  && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${infosideFields}, ${infosideFields})
+const infosiderGroq = `* [_type=="infopage"  && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${infosideFields}, ${infosideFields})
 }`;
 
-const dokumentkravGroq = `* [_type=="dokumentkrav" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${dokumentkravFields}, ${dokumentkravFields})
+const dokumentkravGroq = `* [_type=="dokumentkrav" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${dokumentkravFields}, ${dokumentkravFields})
 }`;
 
-const dokumentkravSvarGroq = `* [_type=="dokumentkravSvar" && language==$baseLang]{
-  ...coalesce(* [_id==^._id + language==$lang][0]${dokumentkravFields}, ${dokumentkravSvarFields})
+const dokumentkravSvarGroq = `* [_type=="dokumentkravSvar" && language==$language]{
+  ...coalesce(* [_id==^._id + language==$language][0]${dokumentkravFields}, ${dokumentkravSvarFields})
 }`;
 
 export const allTextsQuery = groq`{
