@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { useUserInformation } from "../../context/user-information-context";
+import { useUserInfo } from "../../context/user-info-context";
 import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { BriefcaseAdd } from "../../svg-icons/BriefcaseAdd";
@@ -55,7 +55,7 @@ function ArbeidsforholdComponent(
   const { faktum } = props;
   const { isLoading, soknadState } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
-  const { arbeidsforhold } = useUserInformation();
+  const { arbeidsforhold } = useUserInfo();
 
   const { getAppText, getFaktumTextById } = useSanity();
   const {
