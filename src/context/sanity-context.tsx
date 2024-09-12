@@ -7,7 +7,7 @@ import {
   ISanityLandGruppe,
   ISanitySeksjon,
   ISanitySvaralternativ,
-  ISanityTexts
+  ISanityTexts,
 } from "../types/sanity.types";
 
 export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
@@ -51,11 +51,16 @@ function useSanity() {
   }
 
   function getAppText(textId: string): string {
-    return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+    const text =
+      context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
+
+    return text;
   }
 
-  function getInfosideText(textId: string): ISanityInfoside | undefined {
-    return context?.infosider.find((side) => side.textId === textId);
+  function getInfosideText(slug: string): ISanityInfoside | undefined {
+    return context?.infosider.find((side) => {
+      return side.slug === slug;
+    });
   }
 
   function getDokumentkravTextById(textId: string): ISanityDokumentkrav | undefined {

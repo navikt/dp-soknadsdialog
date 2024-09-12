@@ -5,7 +5,7 @@ dekorator:
   env: prod
 opppslagArbeidssokerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.nav.no
 arbeidssokerregistreringUrl: https://arbeidssokerregistrering.nav.no/
-sanity_dataset: kopi-av-prod
+sanity_dataset: production
 unleash:
   url : https://dagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production

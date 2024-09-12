@@ -45,7 +45,7 @@ export interface ISanityAppTekst {
 }
 
 export interface ISanityInfoside {
-  textId: string;
+  slug: string;
   body: TypedObject | TypedObject[];
 }
 
