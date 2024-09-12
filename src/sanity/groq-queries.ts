@@ -80,7 +80,7 @@ const dokumentkravGroq = `* [_type=="dokumentkrav" && language==$baseLang]{
   }`;
 
 const dokumentkravSvarGroq = `* [_type=="dokumentkravSvar" && language==$baseLang]{
-  ...coalesce(* [textId==^.textId && language==$lang][0]${dokumentkravFields}, ${dokumentkravSvarFields})
+  ...coalesce(* [textId==^.textId && language==$lang][0]${dokumentkravSvarFields}, ${dokumentkravSvarFields})
   }`;
 
 export const allTextsQuery = groq`{
