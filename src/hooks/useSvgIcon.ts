@@ -9,7 +9,8 @@ export function useSvgIcon(fileName: string) {
       try {
         const response = await import(`@navikt/ds-icons/svg/${fileName}.svg`);
         setSvg(response.default);
-      } catch (err) {
+        /* eslint-disable @typescript-eslint/no-unused-vars */
+      } catch (error: unknown) {
         logger.error(`Did not find icon with name: ${fileName}`);
       }
     };

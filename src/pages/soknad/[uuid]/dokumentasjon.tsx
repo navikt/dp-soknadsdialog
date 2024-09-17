@@ -1,6 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
@@ -13,6 +12,7 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 
 interface IProps {
   errorCode: number | null;

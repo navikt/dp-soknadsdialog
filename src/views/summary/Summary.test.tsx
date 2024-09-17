@@ -110,8 +110,10 @@ describe("Summary", () => {
       screen.findByText(sanityFaktum.text);
 
       expect(screen.queryByText(sanityFaktum.text)).toBeInTheDocument();
-      faktumMockData.svar &&
+
+      if (faktumMockData.svar) {
         expect(screen.queryByText(sanitySvaralternativ.text)).toBeInTheDocument();
+      }
     });
   });
 

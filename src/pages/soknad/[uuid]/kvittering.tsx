@@ -1,12 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import {
-  IArbeidssokerStatus,
-  IArbeidssokerperioder,
-  getArbeidssokerperioder,
-} from "../../../api/arbeidssoker-api";
-import { getPersonalia } from "../../../api/personalia-api";
-import { getSoknadState, getSoknadStatus } from "../../../api/quiz-api";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -25,6 +18,13 @@ import { getMissingDokumentkrav } from "../../../utils/dokumentkrav.util";
 import { Receipt } from "../../../views/receipt/Receipt";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import {
+  getArbeidssokerperioder,
+  IArbeidssokerperioder,
+  IArbeidssokerStatus,
+} from "../../api/common/arbeidssoker-api";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { getPersonalia } from "../../api/common/personalia-api";
 
 interface IProps {
   errorCode: number | null;

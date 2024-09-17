@@ -35,7 +35,8 @@ export default function Error500() {
       const details = getAppTekst("teknisk-feil.helside.detaljer", sanityTexts);
 
       setErrorMessage({ title, details });
-    } catch (err) {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+    } catch (error: unknown) {
       setErrorMessage(fallbackErrorText);
     }
   }

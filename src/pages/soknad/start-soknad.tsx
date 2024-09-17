@@ -1,14 +1,10 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { getMineSoknader } from "../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
+import { getMineSoknader } from "../api/common/quiz-api";
+import { getFeatureToggles, IFeatureToggles } from "../api/common/unleash-api";
 import { FeatureTogglesProvider } from "../../context/feature-toggle-context";
-import { getFeatureToggles, IFeatureToggles } from "../../api/unleash-api";
-
-interface IProps {
-  featureToggles: IFeatureToggles;
-}
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -54,6 +50,10 @@ export async function getServerSideProps(
   return {
     props: { featureToggles },
   };
+}
+
+interface IProps {
+  featureToggles: IFeatureToggles;
 }
 
 export default function Soknad(props: IProps) {

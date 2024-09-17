@@ -92,7 +92,7 @@ export function FaktumTextComponent(
   }
 
   function onBlur() {
-    debouncedChange.flush;
+    debouncedChange.flush();
 
     if (
       faktum.beskrivendeId === "faktum.arbeidsforhold.navn-bedrift" &&

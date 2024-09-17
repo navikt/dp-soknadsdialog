@@ -123,8 +123,10 @@ describe("Receipt", () => {
       screen.findByText(sanitySection.title);
 
       expect(screen.queryByText(sanityFaktum.text)).toBeInTheDocument();
-      faktumMockData.svar &&
+
+      if (faktumMockData.svar) {
         expect(screen.queryByText(sanitySvaralternativ.text)).toBeInTheDocument();
+      }
     });
   });
 

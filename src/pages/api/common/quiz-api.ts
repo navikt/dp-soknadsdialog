@@ -1,6 +1,6 @@
 import { formatISO, subDays } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
-import { quizMalResponse } from "../localhost-data/quiz-mal-response";
+import { quizMalResponse } from "../../../localhost-data/quiz-mal-response";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",

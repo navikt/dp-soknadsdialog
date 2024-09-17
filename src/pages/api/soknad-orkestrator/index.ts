@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { createSoknadOrkestrator } from "../../../api/orkestrator-api";
 import {
   getSoknadOnBehalfOfToken,
   getSoknadOrkestratorOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
 import { getErrorMessage } from "../../../utils/api.utils";
-import { createSoknadWithUuid } from "../../../api/quiz-api";
+import { createSoknadOrkestrator } from "../common/orkestrator-api";
+import { createSoknadWithUuid } from "../common/quiz-api";
 
 async function createSoknadOrkestratorHandler(req: NextApiRequest, res: NextApiResponse) {
   const soknadOrkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(req);
