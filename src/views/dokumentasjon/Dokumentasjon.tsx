@@ -17,7 +17,6 @@ import { DokumentkravTitle } from "../../components/dokumentkrav-title/Dokumentk
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import styles from "./Dokumentasjon.module.css";
 import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
@@ -40,7 +39,7 @@ export function Dokumentasjon() {
   const errorSummaryRef = useRef<HTMLDivElement>(null);
   const firstUnansweredDokumentkrav = getFirstUnansweredDokumentkrav();
   const firstUnansweredIndex = dokumentkravList.krav.findIndex(
-    (dokumentkrav) => dokumentkrav.id === firstUnansweredDokumentkrav?.id
+    (dokumentkrav) => dokumentkrav.id === firstUnansweredDokumentkrav?.id,
   );
   const allDokumentkravAnswered = firstUnansweredIndex === -1;
 
@@ -125,7 +124,7 @@ export function Dokumentasjon() {
         const dokumentkravNumber = index + 1;
         const hasUnansweredError = dokumentkravError && index === firstUnansweredIndex;
         const hasBundleError = dokumentkravWithBundleError.some(
-          (krav) => krav.id === dokumentkrav.id
+          (krav) => krav.id === dokumentkrav.id,
         );
 
         if (index <= firstUnansweredIndex || allDokumentkravAnswered) {
@@ -172,8 +171,6 @@ export function Dokumentasjon() {
       <div className="my-6">
         <ExitSoknad />
       </div>
-
-      <NoSessionModal />
     </main>
   );
 }

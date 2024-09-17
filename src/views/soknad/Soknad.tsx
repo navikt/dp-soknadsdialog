@@ -6,7 +6,6 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
@@ -160,7 +159,6 @@ export function Soknad(props: IProps) {
         {isError && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
 
         <ExitSoknad />
-        <NoSessionModal />
       </main>
     </>
   );

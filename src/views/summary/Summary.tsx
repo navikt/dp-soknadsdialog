@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import { Faktum } from "../../components/faktum/Faktum";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PageMeta } from "../../components/PageMeta";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -238,7 +237,6 @@ export function Summary(props: IProps) {
       <div className="my-6">
         <ExitSoknad />
       </div>
-      <NoSessionModal />
     </main>
   );
 }

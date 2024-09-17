@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import api from "../../utils/api.utils";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
 import { ReadMore } from "../../components/sanity/readmore/ReadMore";
 import { Timeline } from "../../components/sanity/timeline/Timeline";
@@ -104,8 +103,6 @@ export function StartSoknad() {
         >
           {getAppText("start-soknad.knapp.start")}
         </Button>
-
-        <NoSessionModal />
       </main>
     </>
   );
