@@ -1,4 +1,4 @@
-import { OboResult, getToken, requestOboToken, validateToken } from "@navikt/oasis";
+import { OboResult, expiresIn, getToken, requestOboToken, validateToken } from "@navikt/oasis";
 import { IncomingMessage } from "http";
 
 const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
@@ -22,6 +22,10 @@ async function getOnBehalfOfToken(req: IncomingMessage, audience: string): Promi
 
 export async function getSoknadOnBehalfOfToken(req: IncomingMessage): Promise<OboResult> {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+    if (process.env.DP_SOKNAD_TOKEN && expiresIn(process.env.DP_SOKNAD_TOKEN) <= 0) {
+      console.log("\n ⛔️ Lokalt sessjon utløpt! Kjør: npm run generate-token på nytt.");
+    }
+
     return OboResult.Ok(process.env.DP_SOKNAD_TOKEN || "");
   }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { PageMeta } from "../../components/PageMeta";
 import { Section } from "../../components/section/Section";
 import { useQuiz } from "../../context/quiz-context";
@@ -158,8 +157,6 @@ export function GenerellInnsending() {
         />
 
         {(isError || generalError) && <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />}
-
-        <NoSessionModal />
       </main>
     </>
   );

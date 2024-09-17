@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { NoSessionModal } from "../../components/no-session-modal/NoSessionModal";
 import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
 import { ReceiptArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
@@ -74,7 +73,6 @@ export function Receipt(props: IProps) {
       >
         {getAppText("kvittering.mine-dagpenger.knapp")}
       </Button>
-      <NoSessionModal />
     </main>
   );
 }
