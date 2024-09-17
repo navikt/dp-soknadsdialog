@@ -16,7 +16,7 @@ import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { AlertText } from "../../alert-text/AlertText";
 import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
-import { useUserInformation } from "../../../context/user-information-context";
+import { useUserInfo } from "../../../context/user-info-context";
 import {
   trackKorrigertSluttdatoFraAAREG,
   trackKorrigertStartdatoFraAAREG,
@@ -43,7 +43,7 @@ function FaktumPeriodeComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { contextSelectedArbeidsforhold } = useUserInformation();
+  const { contextSelectedArbeidsforhold } = useUserInfo();
   const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
     useValidateFaktumPeriode(faktum);
 
