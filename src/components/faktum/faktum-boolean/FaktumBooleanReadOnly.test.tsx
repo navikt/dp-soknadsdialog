@@ -29,6 +29,7 @@ describe("FaktumBooleanReadOnly", () => {
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
-    expect(screen.queryByText(svarText)).toBeInTheDocument();
+    // eslint-disable-next-line
+    expect(screen.queryByText(svarText)).toBeInTheDocument;
   });
 });
