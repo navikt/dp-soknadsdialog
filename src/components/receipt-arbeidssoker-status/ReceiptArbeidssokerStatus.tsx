@@ -1,8 +1,8 @@
 import { Alert, BodyShort } from "@navikt/ds-react";
 import Link from "next/link";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./ReceiptArbeidssokerStatus.module.css";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 
 interface IProps {
   status: IArbeidssokerStatus;

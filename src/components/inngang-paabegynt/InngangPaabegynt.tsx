@@ -3,7 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
@@ -12,6 +11,7 @@ import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import styles from "./inngangPaabegynt.module.css";
 import { trackSkjemaÅpnet } from "../../amplitude.tracking";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 
 interface IProps {
   paabegynt: IPaabegyntSoknad;

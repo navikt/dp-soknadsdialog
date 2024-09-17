@@ -1,6 +1,6 @@
 import { formatISO, subDays } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
-import { quizMalResponse } from "../localhost-data/quiz-mal-response";
+import { quizMalResponse } from "../../../localhost-data/quiz-mal-response";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -27,6 +27,17 @@ export function getSoknadMal(onBehalfOfToken: string) {
 
 export function createSoknadUuid(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/soknad`;
+
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
+export function createSoknadWithUuid(onBehalfOfToken: string, uuid: string) {
+  const url = `${process.env.API_BASE_URL}/soknad?søknadId=${uuid}`;
 
   return fetch(url, {
     method: "POST",
@@ -66,7 +77,7 @@ export function getSoknadState(
   uuid: string,
   onBehalfOfToken: string,
   lastSaved?: string,
-  requestId?: string
+  requestId?: string,
 ) {
   let url = `${process.env.API_BASE_URL}/soknad/${uuid}/neste`;
 

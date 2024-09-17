@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSoknadMal } from "../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { getSoknadMal } from "../common/quiz-api";
 
 async function malHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.USE_MOCKS === "true") {

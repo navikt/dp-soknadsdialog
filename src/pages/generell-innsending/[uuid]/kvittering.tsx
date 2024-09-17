@@ -1,5 +1,4 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getSoknadState } from "../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
@@ -10,6 +9,7 @@ import { GenerellInnsendingKvittering } from "../../../views/generell-innsending
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
+import { getSoknadState } from "../../api/common/quiz-api";
 interface IProps {
   soknadState: IQuizState | null;
   errorCode: number | null;

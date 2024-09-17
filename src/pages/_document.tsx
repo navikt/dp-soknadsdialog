@@ -2,7 +2,7 @@ import {
   DecoratorComponents,
   DecoratorEnvProps,
   DecoratorFetchProps,
-  DecoratorParams,
+  // DecoratorParams,
   fetchDecoratorReact,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { logger } from "@navikt/next-logger";
@@ -10,12 +10,12 @@ import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/do
 
 const dekoratorEnv = (process.env.DEKORATOR_ENV || "localhost") as DecoratorEnvProps["env"];
 
-const supportedLocales = ["nb"];
-const availableLanguages = supportedLocales.map((locale) => ({
-  locale,
-  url: `https://www.nav.no/dagpenger/dialog/${locale}`,
-  handleInApp: true,
-})) as DecoratorParams["availableLanguages"];
+// const supportedLocales = ["nb"];
+// const availableLanguages = supportedLocales.map((locale) => ({
+//   locale,
+//   url: `https://www.nav.no/dagpenger/dialog/${locale}`,
+//   handleInApp: true,
+// })) as DecoratorParams["availableLanguages"];
 
 const decoratorProps: DecoratorFetchProps = {
   env: dekoratorEnv,
@@ -28,7 +28,7 @@ const decoratorProps: DecoratorFetchProps = {
     redirectToApp: true,
     level: "Level4",
     language: "nb",
-    availableLanguages,
+    // availableLanguages,
   },
 };
 

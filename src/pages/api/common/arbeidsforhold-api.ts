@@ -1,4 +1,4 @@
-import { logRequestError } from "../error.logger";
+import { logRequestError } from "../../../error.logger";
 
 export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/arbeidsforhold`;

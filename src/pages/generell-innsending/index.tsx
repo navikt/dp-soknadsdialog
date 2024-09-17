@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
-import { createInnsendingUuid } from "../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import ErrorPage from "../_error";
+import { createInnsendingUuid } from "../api/common/quiz-api";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { locale } = context;

@@ -2,18 +2,18 @@ import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getErrorDetails } from "../../utils/api.utils";
 import {
-  IArbeidssokerStatus,
-  IArbeidssokerperioder,
-  getArbeidssokerperioder,
-} from "../../api/arbeidssoker-api";
-import { getMineSoknader } from "../../api/quiz-api";
-import {
   getArbeidsoekkerregisteretOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
 } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
+import {
+  getArbeidssokerperioder,
+  IArbeidssokerperioder,
+  IArbeidssokerStatus,
+} from "../api/common/arbeidssoker-api";
+import { getMineSoknader } from "../api/common/quiz-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;

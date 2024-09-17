@@ -3,10 +3,10 @@ import { useDropzone } from "react-dropzone";
 import { Alert, Button } from "@navikt/ds-react";
 import { IDokumentkrav, IDokumentkravFil } from "../../types/documentation.types";
 import { useRouter } from "next/router";
-import { saveDokumenkravFile } from "../../api/dokumentasjon-api";
 import { ALLOWED_FILE_FORMATS } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 import styles from "./FileUploader.module.css";
+import { saveDokumenkravFile } from "../../pages/api/common/dokumentasjon-api";
 
 interface IProps {
   dokumentkrav: IDokumentkrav;
@@ -61,7 +61,7 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
             ]);
           }
         }
-      })
+      }),
     );
 
     setIsLoading(false);
