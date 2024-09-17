@@ -9,7 +9,7 @@
     "test": "vitest",
     "test-coverage": "vitest --coverage",
     "lint": "next lint",
-    "type-check": "tsc --project tsconfig.json --pretty --noEmit",
+    "typecheck": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky",
     "setup-env": "cp .env.development.example .env.development",
     "generate-token": "chmod +x ./scripts/token-generator.sh && ./scripts/token-generator.sh",
