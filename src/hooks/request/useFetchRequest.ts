@@ -16,18 +16,18 @@ export const GENERIC_ERROR_DETAILS: IErrorDetails = {
 export function useFetchRequest<T, U>(
   url: string,
   method: FetchMethod,
-  parseResponse?: boolean
+  parseResponse?: boolean,
 ): [(body?: T) => Promise<boolean | U>, FetchStatus, IErrorDetails, () => void];
 
 export function useFetchRequest<T, U>(
   url: string,
   method: FetchMethod,
-  parseResponse?: boolean
+  parseResponse?: boolean,
 ): [
   (body?: T) => Promise<boolean | U | undefined>,
   FetchStatus,
   IErrorDetails | undefined,
-  () => void
+  () => void,
 ] {
   const [errorDetails, setErrorDetails] = useState<IErrorDetails>();
   const [status, setStatus] = useState<FetchStatus>("idle");
@@ -61,7 +61,8 @@ export function useFetchRequest<T, U>(
       }
 
       return true;
-    } catch (e: unknown) {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+    } catch (_err: unknown) {
       setStatus("error");
       setErrorDetails(GENERIC_ERROR_DETAILS);
 

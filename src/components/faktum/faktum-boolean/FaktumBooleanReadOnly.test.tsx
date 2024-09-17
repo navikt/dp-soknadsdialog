@@ -29,6 +29,6 @@ describe("FaktumBooleanReadOnly", () => {
     );
 
     expect(screen.queryByText(faktumMockData.beskrivendeId)).toBeInTheDocument();
-    expect(screen.queryByText(svarText)).toBeInTheDocument;
+    expect(screen.queryByText(svarText)).toBeInTheDocument();
   });
 });

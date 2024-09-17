@@ -54,7 +54,8 @@ export function FileUploader({ dokumentkrav, handleUploadedFiles, maxFileSize }:
             } else {
               throw Error(fileResponse.statusText);
             }
-          } catch (error) {
+            /* eslint-disable @typescript-eslint/no-unused-vars */
+          } catch (error: unknown) {
             setErrors((currentState) => [
               ...currentState,
               { fileName: file.name, error: "SERVER_ERROR" },

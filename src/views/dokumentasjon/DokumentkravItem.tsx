@@ -46,7 +46,7 @@ export function DokumentkravItem(props: IProps) {
     dokumentkrav.svar && {
       svar: dokumentkrav.svar,
       begrunnelse: dokumentkrav.begrunnelse,
-    }
+    },
   );
 
   const dokumentkravText = getDokumentkravTextById(dokumentkrav.beskrivendeId);
@@ -63,6 +63,7 @@ export function DokumentkravItem(props: IProps) {
     } else if (hasBundleError) {
       setDokumentkravError("bundleError");
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       dokumentkravError && setDokumentkravError(undefined);
     }
   }, [hasUnansweredError, hasBundleError]);
