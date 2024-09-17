@@ -7,7 +7,7 @@ export interface IArbeidsforhold {
   sluttdato?: string;
 }
 
-interface IUserInformationContext {
+interface IUserInfoContext {
   arbeidsforhold: IArbeidsforhold[];
   contextSelectedArbeidsforhold?: IArbeidsforhold;
   setContextSelectedArbeidsforhold: (arbeidsforhold?: IArbeidsforhold) => void;
@@ -17,9 +17,9 @@ interface IProps {
   contextSelectedArbeidsforhold?: IArbeidsforhold;
 }
 
-export const UserInformationContext = createContext<IUserInformationContext | undefined>(undefined);
+export const UserInfoContext = createContext<IUserInfoContext | undefined>(undefined);
 
-function UserInformationProvider(props: PropsWithChildren<IProps>) {
+function UserInfoProvider(props: PropsWithChildren<IProps>) {
   const [arbeidsforhold] = useState<IArbeidsforhold[]>(props.arbeidsforhold || []);
   const [selectedArbeidsforhold, setSelectedArbeidsforhold] = useState<IArbeidsforhold | undefined>(
     undefined,
@@ -30,7 +30,7 @@ function UserInformationProvider(props: PropsWithChildren<IProps>) {
   }
 
   return (
-    <UserInformationContext.Provider
+    <UserInfoContext.Provider
       value={{
         arbeidsforhold,
         setContextSelectedArbeidsforhold,
@@ -38,18 +38,18 @@ function UserInformationProvider(props: PropsWithChildren<IProps>) {
       }}
     >
       {props.children}
-    </UserInformationContext.Provider>
+    </UserInfoContext.Provider>
   );
 }
 
-function useUserInformation() {
-  const context = useContext(UserInformationContext);
+function useUserInfo() {
+  const context = useContext(UserInfoContext);
 
   if (!context) {
-    throw new Error("useUserInformation must be used within a UserInformationProvider");
+    throw new Error("useUserInfo must be used within a UserInfoProvider");
   }
 
   return context;
 }
 
-export { UserInformationProvider, useUserInformation };
+export { UserInfoProvider, useUserInfo };

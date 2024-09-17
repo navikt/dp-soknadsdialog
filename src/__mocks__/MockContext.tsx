@@ -8,7 +8,7 @@ import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
-import { UserInformationProvider } from "../context/user-information-context";
+import { UserInfoProvider } from "../context/user-info-context";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -61,43 +61,31 @@ export function MockContext(props: PropsWithChildren<IProps>) {
   return (
     <div id="__next">
       <SanityProvider initialState={sanityTexts}>
-        {mockQuizContext && (
-          <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider
-              featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}
-            >
-              <UserInformationProvider
-                arbeidsforhold={[]}
-                contextSelectedArbeidsforhold={undefined}
-              >
+        <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
+          {mockQuizContext && (
+            <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+              <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
                 >
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
-              </UserInformationProvider>
-            </FeatureTogglesProvider>
-          </MockQuizProvider>
-        )}
+              </UserInfoProvider>
+            </MockQuizProvider>
+          )}
 
-        {!mockQuizContext && (
-          <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
-            <FeatureTogglesProvider
-              featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}
-            >
-              <UserInformationProvider
-                arbeidsforhold={[]}
-                contextSelectedArbeidsforhold={undefined}
-              >
+          {!mockQuizContext && (
+            <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+              <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
                 >
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
-              </UserInformationProvider>
-            </FeatureTogglesProvider>
-          </QuizProvider>
-        )}
+              </UserInfoProvider>
+            </QuizProvider>
+          )}
+        </FeatureTogglesProvider>
       </SanityProvider>
     </div>
   );

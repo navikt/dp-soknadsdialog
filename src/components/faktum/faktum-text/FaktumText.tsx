@@ -12,7 +12,7 @@ import { isValidTextLength } from "../validation/validations.utils";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import styles from "../Faktum.module.css";
-import { useUserInformation } from "../../../context/user-information-context";
+import { useUserInfo } from "../../../context/user-info-context";
 import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude.tracking";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
@@ -34,7 +34,7 @@ export function FaktumTextComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
-  const { contextSelectedArbeidsforhold } = useUserInformation();
+  const { contextSelectedArbeidsforhold } = useUserInfo();
 
   const [hasError, setHasError] = useState(false);
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");

@@ -44,23 +44,18 @@ function useSanity() {
 
   function getSvaralternativTextById(textId: string): ISanitySvaralternativ | undefined {
     const text = context?.svaralternativer.find(
-      (svaralternativ) => svaralternativ.textId === textId
+      (svaralternativ) => svaralternativ.textId === textId,
     );
 
     return text;
   }
 
   function getAppText(textId: string): string {
-    const text =
-      context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
-
-    return text;
+    return context?.apptekster.find((apptekst) => apptekst.textId === textId)?.valueText || textId;
   }
 
-  function getInfosideText(slug: string): ISanityInfoside | undefined {
-    return context?.infosider.find((side) => {
-      return side.slug === slug;
-    });
+  function getInfosideText(textId: string): ISanityInfoside | undefined {
+    return context?.infosider.find((side) => side.textId === textId);
   }
 
   function getDokumentkravTextById(textId: string): ISanityDokumentkrav | undefined {
