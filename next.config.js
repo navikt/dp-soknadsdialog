@@ -6,7 +6,7 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 
 // TODO: Denne bør deles med _document.tsx
 // TODO: Legg til "en" når vi får alle tekster inn i Sanity;
-// const supportedLocales = ["nb"];
+const supportedLocales = ["nb"];
 
 // Direktiver appen din benytter
 const myAppDirectives = {
@@ -21,10 +21,10 @@ const myAppDirectives = {
 const config = {
   reactStrictMode: true,
   basePath: process.env.NEXT_PUBLIC_BASE_PATH,
-  // i18n: {
-  //   locales: supportedLocales,
-  //   defaultLocale: "nb",
-  // },
+  i18n: {
+    locales: supportedLocales,
+    defaultLocale: "nb",
+  },
   assetPrefix: process.env.ASSET_PREFIX,
   experimental: {
     largePageDataBytes: 256 * 1000, // Økt fra 128KB til 256K
