@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
-import { headersWithToken } from "../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
+import { headersWithToken } from "../common/quiz-api";
 
 export interface IDeleteSoknadBody {
   uuid: string;

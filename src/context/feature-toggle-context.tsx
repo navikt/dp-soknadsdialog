@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, createContext, useState } from "react";
-import { IFeatureToggles, defaultFeatureToggles } from "../api/unleash-api";
+import { defaultFeatureToggles, IFeatureToggles } from "../pages/api/common/unleash-api";
 
 export const FeatureTogglesContext = createContext<IFeatureToggles | null>(null);
 

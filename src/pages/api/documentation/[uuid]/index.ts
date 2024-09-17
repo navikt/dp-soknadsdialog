@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../../api/quiz-api";
 import { logRequestError } from "../../../../error.logger";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
+import { headersWithToken } from "../../common/quiz-api";
 
 export function getDokumentkrav(uuid: string, onBehalfOfToken: string) {
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/dokumentasjonskrav`, {

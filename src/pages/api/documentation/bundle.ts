@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { headersWithToken } from "../../../api/quiz-api";
 import { logRequestError } from "../../../error.logger";
 import Metrics from "../../../metrics";
 import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
@@ -8,6 +7,7 @@ import {
   getMellomlagringOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
 } from "../../../utils/auth.utils";
+import { headersWithToken } from "../common/quiz-api";
 
 export interface IDocumentationBundleBody {
   uuid: string;

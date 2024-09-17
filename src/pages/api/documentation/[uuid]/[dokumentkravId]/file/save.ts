@@ -1,16 +1,16 @@
 import { logger } from "@navikt/next-logger";
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
+import { logRequestError } from "../../../../../../error.logger";
+import Metrics from "../../../../../../metrics";
+import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { getErrorMessage } from "../../../../../../utils/api.utils";
-import { headersWithToken } from "../../../../../../api/quiz-api";
 import {
   getMellomlagringOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
 } from "../../../../../../utils/auth.utils";
-import { logRequestError } from "../../../../../../error.logger";
-import Metrics from "../../../../../../metrics";
-import { IDokumentkravFil } from "../../../../../../types/documentation.types";
 import { validateUUID } from "../../../../../../utils/uuid.utils";
+import { headersWithToken } from "../../../../common/quiz-api";
 
 // Needed to allow files to be uploaded
 export const config = {

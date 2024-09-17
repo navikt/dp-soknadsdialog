@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../api/quiz-api";
 import { logRequestError } from "../../../error.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { getDokumentkrav } from "./[uuid]";
+import { headersWithToken } from "../common/quiz-api";
 
 export interface IDokumentkravSvarBody {
   uuid: string;

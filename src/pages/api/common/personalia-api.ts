@@ -1,4 +1,4 @@
-import { logRequestError } from "../error.logger";
+import { logRequestError } from "../../../error.logger";
 
 export async function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;

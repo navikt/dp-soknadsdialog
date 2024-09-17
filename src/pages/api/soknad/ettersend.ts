@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { headersWithToken } from "../../../api/quiz-api";
 import { logRequestError } from "../../../error.logger";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import { headersWithToken } from "../common/quiz-api";
 
 export interface IEttersendBody {
   uuid: string;

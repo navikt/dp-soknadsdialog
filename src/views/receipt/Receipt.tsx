@@ -5,7 +5,6 @@ import { ReceiptArbeidssokerStatus } from "../../components/receipt-arbeidssoker
 import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
 import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { PageMeta } from "../../components/PageMeta";
@@ -20,6 +19,7 @@ import {
   getNotSendingDokumentkrav,
   getUploadedDokumentkrav,
 } from "../../utils/dokumentkrav.util";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 
 interface IProps {
   soknadStatus: ISoknadStatus;

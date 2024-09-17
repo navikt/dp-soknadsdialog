@@ -5,9 +5,9 @@ import { InngangPaabegynt } from "../../components/inngang-paabegynt/InngangPaab
 import { InngangSendDocument } from "../../components/inngang-send-document/InngangSendDocument";
 import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
-import { IArbeidssokerStatus } from "../../api/arbeidssoker-api";
 import { IInnsentSoknad, IPaabegyntSoknad } from "../../types/quiz.types";
 import styles from "./Inngang.module.css";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 
 interface IProps {
   paabegynt?: IPaabegyntSoknad;

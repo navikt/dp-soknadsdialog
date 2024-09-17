@@ -7,7 +7,7 @@ import {
   ISanityLandGruppe,
   ISanitySeksjon,
   ISanitySvaralternativ,
-  ISanityTexts
+  ISanityTexts,
 } from "../types/sanity.types";
 
 export const SanityContext = React.createContext<ISanityTexts | undefined>(undefined);
@@ -44,7 +44,7 @@ function useSanity() {
 
   function getSvaralternativTextById(textId: string): ISanitySvaralternativ | undefined {
     const text = context?.svaralternativer.find(
-      (svaralternativ) => svaralternativ.textId === textId
+      (svaralternativ) => svaralternativ.textId === textId,
     );
 
     return text;

@@ -1,6 +1,4 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getPersonalia } from "../../../api/personalia-api";
-import { getSoknadState } from "../../../api/quiz-api";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
@@ -13,6 +11,8 @@ import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { Pdf } from "../../../views/pdf/Pdf";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
+import { getPersonalia } from "../../api/common/personalia-api";
+import { getSoknadState } from "../../api/common/quiz-api";
 
 interface IProps {
   soknadState: IQuizState | null;

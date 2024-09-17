@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
-import { createSoknadUuid } from "../../../api/quiz-api";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { logRequestError } from "../../../error.logger";
+import { createSoknadUuid } from "../common/quiz-api";
 
 async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
   const onBehalfOf = await getSoknadOnBehalfOfToken(req);
