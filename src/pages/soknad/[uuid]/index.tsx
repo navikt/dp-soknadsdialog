@@ -9,7 +9,10 @@ import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
-import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
@@ -21,9 +24,12 @@ import {
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
+import { ISpørsmålGruppe, OrkestratorProvider } from "../../../context/orkestrator-context";
+import { getNesteOrkestratorSporsmal } from "../../api/common/orkestrator-api";
 
 interface IProps {
   soknadState: IQuizState | null;
+  orkestratorState: ISpørsmålGruppe | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
@@ -40,6 +46,7 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        orkestratorState: null,
         personalia: mockPersonalia,
         arbeidsforhold: [],
         errorCode: null,
@@ -50,8 +57,9 @@ export async function getServerSideProps(
     };
   }
 
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
+  if (!soknadOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -62,15 +70,20 @@ export async function getServerSideProps(
 
   let errorCode = null;
   let soknadState = null;
+  let orkestratorState = null;
   let personalia = null;
   let soknadStatus = null;
   let arbeidsforhold = [];
 
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
-  const personaliaResponse = await getPersonalia(onBehalfOf.token);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const orkestratorStateResponse = await getNesteOrkestratorSporsmal(
+    uuid,
+    orkestratorOnBehalfOf.token,
+  );
+  const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
   const featureToggles = await getFeatureToggles();
-  const arbeidsforholdResponse = await getArbeidsforhold(onBehalfOf.token);
+  const arbeidsforholdResponse = await getArbeidsforhold(soknadOnBehalfOf.token);
 
   if (arbeidsforholdResponse.ok) {
     arbeidsforhold = await arbeidsforholdResponse.json();
@@ -92,6 +105,10 @@ export async function getServerSideProps(
     soknadStatus = await soknadStatusResponse.json();
   }
 
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  }
+
   if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
     return {
       redirect: {
@@ -104,6 +121,7 @@ export async function getServerSideProps(
   return {
     props: {
       soknadState,
+      orkestratorState,
       personalia,
       errorCode,
       arbeidsforhold,
@@ -113,27 +131,30 @@ export async function getServerSideProps(
 }
 
 export default function SoknadPage(props: IProps) {
-  const { errorCode, soknadState, personalia, arbeidsforhold, featureToggles } = props;
+  const { errorCode, soknadState, personalia, arbeidsforhold, orkestratorState, featureToggles } =
+    props;
 
-  if (errorCode || !soknadState || !arbeidsforhold) {
+  if (errorCode || !soknadState || !arbeidsforhold || !orkestratorState) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
         details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
-        statusCode={errorCode || 500}
+        statusCode={props.errorCode || 500}
       />
     );
   }
 
   return (
     <FeatureTogglesProvider featureToggles={featureToggles}>
-      <SoknadProvider initialState={soknadState}>
-        <UserInfoProvider arbeidsforhold={arbeidsforhold}>
-          <ValidationProvider>
-            <Soknad personalia={personalia} />
-          </ValidationProvider>
-        </UserInfoProvider>
-      </SoknadProvider>
+      <QuizProvider initialState={soknadState}>
+        <OrkestratorProvider initialState={orkestratorState}>
+          <UserInfoProvider arbeidsforhold={arbeidsforhold}>
+            <ValidationProvider>
+              <Soknad personalia={personalia} />
+            </ValidationProvider>
+          </UserInfoProvider>
+        </OrkestratorProvider>
+      </QuizProvider>
     </FeatureTogglesProvider>
   );
 }
