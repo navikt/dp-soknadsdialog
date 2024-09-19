@@ -93,7 +93,7 @@
     "vitest-fetch-mock": "^0.3.0"
   },
   "optionalDependencies": {
-    "@esbuild/linux-x64": "^0.20.2",
+    "@esbuild/linux-x64": "^0.23.1",
     "@rollup/rollup-linux-x64-gnu": "^4.9.6"
   }
 }
