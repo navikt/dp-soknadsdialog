@@ -44,16 +44,16 @@ function FaktumLandComponent(
     }))
     .sort(sortByLabel);
 
-  useEffect(() => {
-    const shouldPreSelectNorway =
-      !currentAnswer &&
-      (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-        faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+  // useEffect(() => {
+  //   const shouldPreSelectNorway =
+  //     !currentAnswer &&
+  //     (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+  //       faktum.beskrivendeId === "faktum.arbeidsforhold.land");
 
-    if (shouldPreSelectNorway) {
-      onSelect("NOR");
-    }
-  }, []);
+  //   if (shouldPreSelectNorway) {
+  //     onSelect("NOR");
+  //   }
+  // }, []);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
