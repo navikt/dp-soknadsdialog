@@ -1,12 +1,11 @@
-import React from "react";
-import { Faktum } from "../faktum/Faktum";
-import { IQuizLandFaktum, IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
-import { useSanity } from "../../context/sanity-context";
-import { SectionHeading } from "./SectionHeading";
-import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
-import { ErrorTypesEnum } from "../../types/error.types";
-import { ISpørsmal, useOrkestrator } from "../../context/orkestrator-context";
 import { useFeatureToggles } from "../../context/feature-toggle-context";
+import { ISpørsmal, useOrkestrator } from "../../context/orkestrator-context";
+import { useSanity } from "../../context/sanity-context";
+import { ErrorTypesEnum } from "../../types/error.types";
+import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
+import { Faktum } from "../faktum/Faktum";
+import { SectionHeading } from "./SectionHeading";
 
 interface IProps {
   section: IQuizSeksjon;
@@ -36,8 +35,8 @@ export function Section(props: IProps) {
     const nesteSporsmal = orkestratorState.nesteSpørsmål;
 
     const nesteSporsmalToFaktum: QuizFaktum = {
-      type: "land",
-      grupper: [],
+      //@ts-ignore
+      type: nesteSporsmal.type.toLowerCase(),
       gyldigeLand: nesteSporsmal.gyldigeSvar,
       id: nesteSporsmal.id,
       beskrivendeId: nesteSporsmal.tekstnøkkel,
@@ -53,9 +52,9 @@ export function Section(props: IProps) {
         />
 
         {orkestratorState.besvarteSpørsmål.map((sporsmal: ISpørsmal) => {
-          const sporsmalToFaktum: IQuizLandFaktum = {
-            type: "land",
-            grupper: [],
+          const sporsmalToFaktum: QuizFaktum = {
+            //@ts-ignore
+            type: sporsmal.type.toLowerCase(),
             gyldigeLand: sporsmal.gyldigeSvar,
             id: sporsmal.id,
             beskrivendeId: sporsmal.tekstnøkkel,
