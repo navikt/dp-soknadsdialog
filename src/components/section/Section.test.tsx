@@ -25,7 +25,7 @@ const sectionMockData: IQuizSeksjon = {
 };
 
 describe("Section", () => {
-  test.skip("Should show section info and the first unanswered question", async () => {
+  test("Should show section info and the first unanswered question", async () => {
     render(
       <MockContext quizSeksjoner={[sectionMockData]}>
         <Section section={sectionMockData} />

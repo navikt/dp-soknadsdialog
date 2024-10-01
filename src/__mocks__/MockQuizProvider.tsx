@@ -1,23 +1,26 @@
 import React from "react";
 import { QuizContext } from "../context/quiz-context";
 import { IQuizState } from "../types/quiz.types";
+import { IOrkestratorState } from "../pages/api/common/orkestrator-api";
 
 interface IProps {
   children: React.ReactElement;
-  initialState: IQuizState;
+  quizState: IQuizState;
+  orkestratorState: IOrkestratorState;
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
-export function MockQuizProvider({ initialState, children }: IProps) {
+export function MockQuizProvider({ quizState, orkestratorState, children }: IProps) {
   mockSaveFaktumToQuiz.mockReset();
   mockSaveGeneratorFaktumToQuiz.mockReset();
 
   return (
     <QuizContext.Provider
       value={{
-        soknadState: initialState,
+        soknadState: quizState,
+        orkestratorState: orkestratorState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,

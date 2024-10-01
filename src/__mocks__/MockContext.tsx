@@ -9,6 +9,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInfoProvider } from "../context/user-info-context";
+import { IOrkestratorState } from "../pages/api/common/orkestrator-api";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -37,6 +38,19 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
+export const mockOrkestratorState: IOrkestratorState = {
+  navn: "bostedsland",
+  besvarteSpørsmål: [],
+  erFullført: false,
+  nesteSpørsmål: {
+    id: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
+    tekstnøkkel: "faktum.hvilket-land-bor-du-i",
+    type: "land",
+    svar: null,
+    gyldigeSvar: ["NOR", "SWE", "FIN"],
+  },
+};
+
 export const mockSection: IQuizSeksjon = {
   fakta: [],
   beskrivendeId: "din-situasjon",
@@ -63,7 +77,10 @@ export function MockContext(props: PropsWithChildren<IProps>) {
       <SanityProvider initialState={sanityTexts}>
         <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
           {mockQuizContext && (
-            <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <MockQuizProvider
+              quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
+              orkestratorState={mockOrkestratorState}
+            >
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -75,7 +92,10 @@ export function MockContext(props: PropsWithChildren<IProps>) {
           )}
 
           {!mockQuizContext && (
-            <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <QuizProvider
+              quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
+              orkestratorState={mockOrkestratorState}
+            >
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}

@@ -9,23 +9,19 @@ export function createSoknadOrkestrator(onBehalfOfToken: string) {
   });
 }
 
-export type SpørsmålTypes = "LAND" | "PERIODE" | "DATO" | "TEKST" | "BOOLEAN";
-
 export interface ISpørsmal {
   id: string;
   tekstnøkkel: string;
-  type: SpørsmålTypes;
-  /* eslint-disable */
+  type: "land" | "periode" | "dato" | "tekst" | "boolean";
   svar: any;
   gyldigeSvar: any;
-  /* eslint-enable */
 }
 
-export interface ISpørsmålGruppe {
-  id: number;
+export interface IOrkestratorState {
   navn: string;
   nesteSpørsmål: ISpørsmal;
   besvarteSpørsmål: ISpørsmal[];
+  erFullført: boolean;
 }
 
 export function getNesteOrkestratorSporsmal(uuid: string, onBehalfOfToken: string) {

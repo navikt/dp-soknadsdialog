@@ -24,12 +24,11 @@ import {
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
-import { ISpørsmålGruppe, OrkestratorProvider } from "../../../context/orkestrator-context";
-import { getNesteOrkestratorSporsmal } from "../../api/common/orkestrator-api";
+import { getNesteOrkestratorSporsmal, IOrkestratorState } from "../../api/common/orkestrator-api";
 
 interface IProps {
   soknadState: IQuizState | null;
-  orkestratorState: ISpørsmålGruppe | null;
+  orkestratorState: IOrkestratorState | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
@@ -146,14 +145,12 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <FeatureTogglesProvider featureToggles={featureToggles}>
-      <QuizProvider initialState={soknadState}>
-        <OrkestratorProvider initialState={orkestratorState}>
-          <UserInfoProvider arbeidsforhold={arbeidsforhold}>
-            <ValidationProvider>
-              <Soknad personalia={personalia} />
-            </ValidationProvider>
-          </UserInfoProvider>
-        </OrkestratorProvider>
+      <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
+        <UserInfoProvider arbeidsforhold={arbeidsforhold}>
+          <ValidationProvider>
+            <Soknad personalia={personalia} />
+          </ValidationProvider>
+        </UserInfoProvider>
       </QuizProvider>
     </FeatureTogglesProvider>
   );

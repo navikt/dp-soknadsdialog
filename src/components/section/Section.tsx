@@ -1,10 +1,12 @@
 import { useFeatureToggles } from "../../context/feature-toggle-context";
-import { ISpørsmal, useOrkestrator } from "../../context/orkestrator-context";
+import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { ISpørsmal } from "../../pages/api/common/orkestrator-api";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { IQuizSeksjon, QuizFaktum } from "../../types/quiz.types";
+import { IQuizSeksjon } from "../../types/quiz.types";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { Faktum } from "../faktum/Faktum";
+import { mapOrkestratorToQuiz } from "./orkestrator-to-quiz.util";
 import { SectionHeading } from "./SectionHeading";
 
 interface IProps {
@@ -15,7 +17,7 @@ interface IProps {
 
 export function Section(props: IProps) {
   const { getSeksjonTextById } = useSanity();
-  const { orkestratorState } = useOrkestrator();
+  const { orkestratorState } = useQuiz();
   const { soknadsdialogMedOrkestratorIsEnabled } = useFeatureToggles();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
   const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);
@@ -23,25 +25,12 @@ export function Section(props: IProps) {
     (faktum) => faktum.id === firstUnansweredFaktum?.id,
   );
 
-  console.log(`🔥 sectionTexts :`, sectionTexts);
-  console.log(`🔥 orkestratorState :`, orkestratorState);
-  console.log(`🔥 props.section :`, props.section);
-
   if (!props.section.beskrivendeId) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
-  if (soknadsdialogMedOrkestratorIsEnabled) {
-    const nesteSporsmal = orkestratorState.nesteSpørsmål;
-
-    const nesteSporsmalToFaktum: QuizFaktum = {
-      //@ts-ignore
-      type: nesteSporsmal.type.toLowerCase(),
-      gyldigeLand: nesteSporsmal.gyldigeSvar,
-      id: nesteSporsmal.id,
-      beskrivendeId: nesteSporsmal.tekstnøkkel,
-      readOnly: false,
-    };
+  if (soknadsdialogMedOrkestratorIsEnabled && orkestratorState) {
+    const nesteSporsmalToFaktum = mapOrkestratorToQuiz(orkestratorState.nesteSpørsmål);
 
     return (
       <>
@@ -50,16 +39,8 @@ export function Section(props: IProps) {
           fallback={orkestratorState.navn.toLowerCase()}
           showAllTexts={props.showAllTexts}
         />
-
         {orkestratorState.besvarteSpørsmål.map((sporsmal: ISpørsmal) => {
-          const sporsmalToFaktum: QuizFaktum = {
-            //@ts-ignore
-            type: sporsmal.type.toLowerCase(),
-            gyldigeLand: sporsmal.gyldigeSvar,
-            id: sporsmal.id,
-            beskrivendeId: sporsmal.tekstnøkkel,
-            readOnly: false,
-          };
+          const sporsmalToFaktum = mapOrkestratorToQuiz(sporsmal);
 
           return (
             <Faktum
@@ -70,7 +51,6 @@ export function Section(props: IProps) {
             />
           );
         })}
-
         <Faktum
           key={orkestratorState.nesteSpørsmål.id}
           faktum={nesteSporsmalToFaktum}
