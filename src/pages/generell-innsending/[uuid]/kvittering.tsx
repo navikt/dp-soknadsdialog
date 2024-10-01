@@ -10,6 +10,7 @@ import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
 import { getSoknadState } from "../../api/common/quiz-api";
+
 interface IProps {
   soknadState: IQuizState | null;
   errorCode: number | null;
@@ -84,7 +85,7 @@ export default function GenerellInnsendingKvitteringPage(props: IProps) {
   }
 
   return (
-    <SoknadProvider initialState={soknadState}>
+    <SoknadProvider quizState={soknadState}>
       <DokumentkravProvider initialState={dokumentkravList}>
         <ValidationProvider>
           <GenerellInnsendingKvittering />

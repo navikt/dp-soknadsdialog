@@ -11,8 +11,8 @@ import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import ErrorPage from "../../_error";
-import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
 
 interface IProps {
   errorCode: number | null;
@@ -118,7 +118,7 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <SoknadProvider initialState={soknadState}>
+    <SoknadProvider quizState={soknadState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>

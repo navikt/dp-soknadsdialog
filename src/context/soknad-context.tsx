@@ -8,9 +8,11 @@ import {
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
 import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
+import { IOrkestratorState } from "../pages/api/common/orkestrator-api";
 
 export interface ISoknadContext {
   quizState: IQuizState;
+  orkestratorState: IOrkestratorState | null;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   isLoading: boolean;
@@ -19,14 +21,16 @@ export interface ISoknadContext {
 }
 
 interface IProps {
-  initialState: IQuizState;
+  quizState: IQuizState;
+  orkestratorState?: IOrkestratorState;
 }
 
 export const SoknadContext = createContext<ISoknadContext | undefined>(undefined);
 
 function SoknadProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
-  const [quizState, setQuizState] = useState<IQuizState>(props.initialState);
+  const [quizState, setQuizState] = useState<IQuizState>(props.quizState);
+  const [orkestratorState] = useState<IOrkestratorState | null>(props.orkestratorState || null);
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [saveFaktum, saveFaktumStatus] = usePutRequest<ISaveFaktumBody, IQuizState>(
@@ -65,6 +69,7 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
     <SoknadContext.Provider
       value={{
         quizState,
+        orkestratorState,
         saveFaktumToQuiz,
         saveGeneratorFaktumToQuiz,
         isLoading: saveFaktumStatus === "pending",

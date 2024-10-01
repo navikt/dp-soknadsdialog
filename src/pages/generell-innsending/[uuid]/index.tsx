@@ -103,9 +103,9 @@ export default function GenerellInnsendingPage(props: IProps) {
   }
 
   return (
-    <QuizProvider initialState={soknadState}>
-      <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
-        <UserInformationProvider arbeidsforhold={[]}>
+    <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
+      <SoknadProvider quizState={soknadState}>
+        <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
             <ValidationProvider>
               <GenerellInnsending />

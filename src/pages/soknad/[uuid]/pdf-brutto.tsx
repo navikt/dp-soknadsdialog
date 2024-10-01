@@ -95,7 +95,7 @@ export default function PdfBruttoPage(props: IProps) {
   }
 
   return (
-    <SoknadProvider initialState={props.soknadState}>
+    <SoknadProvider quizState={props.soknadState}>
       <ValidationProvider>
         <Pdf
           personalia={props.personalia}
