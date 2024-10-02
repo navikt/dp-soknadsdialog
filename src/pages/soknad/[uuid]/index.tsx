@@ -24,7 +24,8 @@ import {
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
-import { getNesteOrkestratorSporsmal, IOrkestratorState } from "../../api/common/orkestrator-api";
+import { getNesteOrkestratorSporsmal } from "../../api/common/orkestrator-api";
+import { IOrkestratorState } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -76,8 +77,8 @@ export async function getServerSideProps(
 
   const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
   const orkestratorStateResponse = await getNesteOrkestratorSporsmal(
-    uuid,
     orkestratorOnBehalfOf.token,
+    uuid,
   );
   const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
   const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);

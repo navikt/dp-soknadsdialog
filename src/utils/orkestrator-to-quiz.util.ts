@@ -1,7 +1,7 @@
-import { ISpørsmal } from "../../pages/api/common/orkestrator-api";
-import { IQuizLandFaktum, QuizFaktum } from "../../types/quiz.types";
+import { IOrkestratorSpørsmal } from "../types/orkestrator.types";
+import { IQuizLandFaktum, QuizFaktum } from "../types/quiz.types";
 
-export function mapOrkestratorToQuiz(spørsmal: ISpørsmal): QuizFaktum {
+export function mapOrkestratorToQuiz(spørsmal: IOrkestratorSpørsmal): QuizFaktum {
   switch (spørsmal.type) {
     case "land":
       return quizedLand(spørsmal);
@@ -11,7 +11,7 @@ export function mapOrkestratorToQuiz(spørsmal: ISpørsmal): QuizFaktum {
   }
 }
 
-function quizedLand(spørsmal: ISpørsmal): IQuizLandFaktum {
+function quizedLand(spørsmal: IOrkestratorSpørsmal): IQuizLandFaktum {
   const { id, gyldigeSvar, tekstnøkkel } = spørsmal;
 
   return {

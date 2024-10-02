@@ -1,12 +1,12 @@
 import { useFeatureToggles } from "../../context/feature-toggle-context";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
-import { ISpørsmal } from "../../pages/api/common/orkestrator-api";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { IOrkestratorSpørsmal } from "../../types/orkestrator.types";
 import { IQuizSeksjon } from "../../types/quiz.types";
+import { mapOrkestratorToQuiz } from "../../utils/orkestrator-to-quiz.util";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
 import { Faktum } from "../faktum/Faktum";
-import { mapOrkestratorToQuiz } from "./orkestrator-to-quiz.util";
 import { SectionHeading } from "./SectionHeading";
 
 interface IProps {
@@ -39,7 +39,7 @@ export function Section(props: IProps) {
           fallback={orkestratorState.navn.toLowerCase()}
           showAllTexts={props.showAllTexts}
         />
-        {orkestratorState.besvarteSpørsmål.map((sporsmal: ISpørsmal) => {
+        {orkestratorState.besvarteSpørsmål.map((sporsmal: IOrkestratorSpørsmal) => {
           const sporsmalToFaktum = mapOrkestratorToQuiz(sporsmal);
 
           return (
@@ -48,6 +48,7 @@ export function Section(props: IProps) {
               faktum={sporsmalToFaktum}
               readonly={props.readonly}
               showAllFaktumTexts={props.showAllTexts}
+              isOrkestrator={true}
             />
           );
         })}
@@ -56,6 +57,7 @@ export function Section(props: IProps) {
           faktum={nesteSporsmalToFaktum}
           readonly={props.readonly}
           showAllFaktumTexts={props.showAllTexts}
+          isOrkestrator={true}
         />
       </>
     );

@@ -66,7 +66,7 @@ export function StartSoknad() {
 
     if (soknadsdialogMedOrkestratorIsEnabled) {
       try {
-        const soknadIdResponse = await fetch(api("soknad-orkestrator"));
+        const soknadIdResponse = await fetch(api("orkestrator/start"));
 
         if (soknadIdResponse.ok) {
           const uuid = await soknadIdResponse.json();
