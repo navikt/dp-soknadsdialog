@@ -34,6 +34,7 @@ export interface IFaktum<P> {
   showAllFaktumTexts?: boolean;
   forceUpdate?: boolean;
   hideAlertText?: boolean;
+  isOrkestrator?: boolean;
 }
 
 export interface IFaktumReadOnly<P> {
@@ -44,7 +45,7 @@ export interface IFaktumReadOnly<P> {
 const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-for-timer";
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
-  const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText } = props;
+  const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText, isOrkestrator } = props;
   const { soknadState } = useQuiz();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
@@ -116,7 +117,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumLandReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumLand ref={faktumRef} faktum={faktum} />;
+          return <FaktumLand ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "localdate":

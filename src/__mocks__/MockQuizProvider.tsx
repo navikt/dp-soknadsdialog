@@ -1,7 +1,7 @@
 import React from "react";
 import { QuizContext } from "../context/quiz-context";
 import { IQuizState } from "../types/quiz.types";
-import { IOrkestratorState } from "../pages/api/common/orkestrator-api";
+import { IOrkestratorState } from "../types/orkestrator.types";
 
 interface IProps {
   children: React.ReactElement;
@@ -10,6 +10,7 @@ interface IProps {
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
+export const mockSaveAnswerToOrkestrator = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
 export function MockQuizProvider({ quizState, orkestratorState, children }: IProps) {
@@ -22,6 +23,7 @@ export function MockQuizProvider({ quizState, orkestratorState, children }: IPro
         soknadState: quizState,
         orkestratorState: orkestratorState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
+        saveAnswerToOrkestrator: mockSaveAnswerToOrkestrator,
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,
         isError: false,

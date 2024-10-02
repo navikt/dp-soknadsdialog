@@ -9,7 +9,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInfoProvider } from "../context/user-info-context";
-import { IOrkestratorState } from "../pages/api/common/orkestrator-api";
+import { IOrkestratorState } from "../types/orkestrator.types";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
