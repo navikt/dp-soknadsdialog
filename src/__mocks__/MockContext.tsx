@@ -40,10 +40,10 @@ export const mockSoknadState: IQuizState = {
 
 export const mockOrkestratorState: IOrkestratorState = {
   navn: "bostedsland",
-  besvarteSpørsmål: [],
+  besvarteOpplysninger: [],
   erFullført: false,
-  nesteSpørsmål: {
-    id: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
+  nesteUbesvarteOpplysning: {
+    opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
     tekstnøkkel: "faktum.hvilket-land-bor-du-i",
     type: "land",
     svar: null,

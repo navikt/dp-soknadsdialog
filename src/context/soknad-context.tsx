@@ -1,10 +1,9 @@
 import React, { createContext, PropsWithChildren, useState } from "react";
-import { usePostRequest } from "../hooks/request/usePostRequest";
 import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 import { ISaveOrkestratorAnswerBody } from "../pages/api/orkestrator/save";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { IOrkestratorState, OrkestratorSpørsmalType } from "../types/orkestrator.types";
+import { IOrkestratorState, OrkestratorOpplysningType } from "../types/orkestrator.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
@@ -18,8 +17,8 @@ export interface ISoknadContext {
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveAnswerToOrkestrator: (
-    spørsmålId: string,
-    type: OrkestratorSpørsmalType,
+    opplysningId: string,
+    type: OrkestratorOpplysningType,
     verdi: string,
   ) => void;
   isLoading: boolean;
@@ -50,7 +49,7 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
   );
 
   // Orkestrator
-  const [saveAnswer, saveAnswerStatus] = usePostRequest<
+  const [saveAnswer, saveAnswerStatus] = usePutRequest<
     ISaveOrkestratorAnswerBody,
     IOrkestratorState
   >("orkestrator/save", true);
@@ -86,8 +85,8 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
 
   // Orkestrator
   async function saveAnswerToOrkestrator(
-    spørsmålId: string,
-    type: OrkestratorSpørsmalType,
+    opplysningId: string,
+    type: OrkestratorOpplysningType,
     verdi: string,
   ) {
     if (isLoading) {
@@ -96,7 +95,7 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
     }
 
     setIsLoading(true);
-    const response = await saveAnswer({ uuid, spørsmålId, type, verdi });
+    const response = await saveAnswer({ uuid, opplysningId, type, verdi });
 
     if (response) {
       setOrkestratorState(response);

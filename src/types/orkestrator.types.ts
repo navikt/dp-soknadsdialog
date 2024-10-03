@@ -1,16 +1,16 @@
-export type OrkestratorSpørsmalType = "land" | "periode" | "dato" | "tekst" | "boolean";
+export type OrkestratorOpplysningType = "land" | "periode" | "dato" | "tekst" | "boolean";
 
-export interface IOrkestratorSpørsmal {
-  id: string;
+export interface IOpplysning {
+  opplysningId: string;
   tekstnøkkel: string;
-  type: OrkestratorSpørsmalType;
+  type: OrkestratorOpplysningType;
   svar: any;
   gyldigeSvar: any;
 }
 
 export interface IOrkestratorState {
   navn: string;
-  nesteSpørsmål: IOrkestratorSpørsmal;
-  besvarteSpørsmål: IOrkestratorSpørsmal[];
+  nesteUbesvarteOpplysning: IOpplysning;
+  besvarteOpplysninger: IOpplysning[];
   erFullført: boolean;
 }

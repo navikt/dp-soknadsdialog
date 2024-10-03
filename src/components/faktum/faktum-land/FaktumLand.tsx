@@ -26,6 +26,7 @@ function FaktumLandComponent(
   const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
+
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
 
