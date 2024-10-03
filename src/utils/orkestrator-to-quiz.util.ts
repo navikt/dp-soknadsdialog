@@ -1,21 +1,21 @@
-import { IOrkestratorSpørsmal } from "../types/orkestrator.types";
+import { IOpplysning } from "../types/orkestrator.types";
 import { IQuizLandFaktum, QuizFaktum } from "../types/quiz.types";
 
-export function mapOrkestratorToQuiz(spørsmal: IOrkestratorSpørsmal): QuizFaktum {
-  switch (spørsmal.type) {
+export function mapOrkestratorToQuiz(opplysning: IOpplysning): QuizFaktum {
+  switch (opplysning.type) {
     case "land":
-      return quizedLand(spørsmal);
+      return quizedLand(opplysning);
 
     default:
       throw new Error("Spørsmals type fra Orkestrator finnes ikke Quiz");
   }
 }
 
-function quizedLand(spørsmal: IOrkestratorSpørsmal): IQuizLandFaktum {
-  const { id, gyldigeSvar, tekstnøkkel } = spørsmal;
+function quizedLand(opplysning: IOpplysning): IQuizLandFaktum {
+  const { opplysningId, gyldigeSvar, tekstnøkkel } = opplysning;
 
   return {
-    id: id,
+    id: opplysningId,
     type: "land",
     gyldigeLand: gyldigeSvar,
     beskrivendeId: tekstnøkkel,

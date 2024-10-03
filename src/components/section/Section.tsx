@@ -2,7 +2,7 @@ import { useFeatureToggles } from "../../context/feature-toggle-context";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { IOrkestratorSpørsmal } from "../../types/orkestrator.types";
+import { IOpplysning } from "../../types/orkestrator.types";
 import { IQuizSeksjon } from "../../types/quiz.types";
 import { mapOrkestratorToQuiz } from "../../utils/orkestrator-to-quiz.util";
 import { ErrorRetryModal } from "../error-retry-modal/ErrorRetryModal";
@@ -30,7 +30,9 @@ export function Section(props: IProps) {
   }
 
   if (soknadsdialogMedOrkestratorIsEnabled && orkestratorState) {
-    const nesteSporsmalToFaktum = mapOrkestratorToQuiz(orkestratorState.nesteSpørsmål);
+    const nesteUbesvartOpplysningToFaktum = mapOrkestratorToQuiz(
+      orkestratorState.nesteUbesvarteOpplysning,
+    );
 
     return (
       <>
@@ -39,13 +41,13 @@ export function Section(props: IProps) {
           fallback={orkestratorState.navn.toLowerCase()}
           showAllTexts={props.showAllTexts}
         />
-        {orkestratorState.besvarteSpørsmål.map((sporsmal: IOrkestratorSpørsmal) => {
-          const sporsmalToFaktum = mapOrkestratorToQuiz(sporsmal);
+        {orkestratorState.besvarteOpplysninger.map((opplysning: IOpplysning) => {
+          const opplysningToFaktum = mapOrkestratorToQuiz(opplysning);
 
           return (
             <Faktum
-              key={sporsmal.id}
-              faktum={sporsmalToFaktum}
+              key={opplysning.opplysningId}
+              faktum={opplysningToFaktum}
               readonly={props.readonly}
               showAllFaktumTexts={props.showAllTexts}
               isOrkestrator={true}
@@ -53,8 +55,8 @@ export function Section(props: IProps) {
           );
         })}
         <Faktum
-          key={orkestratorState.nesteSpørsmål.id}
-          faktum={nesteSporsmalToFaktum}
+          key={orkestratorState.nesteUbesvarteOpplysning.opplysningId}
+          faktum={nesteUbesvartOpplysningToFaktum}
           readonly={props.readonly}
           showAllFaktumTexts={props.showAllTexts}
           isOrkestrator={true}

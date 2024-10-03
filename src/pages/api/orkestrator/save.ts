@@ -1,38 +1,37 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { logRequestError } from "../../../error.logger";
-import { OrkestratorSpørsmalType } from "../../../types/orkestrator.types";
+import { OrkestratorOpplysningType } from "../../../types/orkestrator.types";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOrkestratorOnBehalfOfToken } from "../../../utils/auth.utils";
 import { getNesteOrkestratorSporsmal } from "../common/orkestrator-api";
 
 export interface ISaveOrkestratorAnswerBody {
   uuid: string;
-  spørsmålId: string;
-  type: OrkestratorSpørsmalType;
+  opplysningId: string;
+  type: OrkestratorOpplysningType;
   verdi: string;
 }
 
 export function saveOrkestratorAnswer(
   onBehalfOfToken: string,
   uuid: string,
-  spørsmålId: string,
-  type: OrkestratorSpørsmalType,
+  opplysningId: string,
+  type: OrkestratorOpplysningType,
   verdi: string,
 ) {
   const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${uuid}/svar`;
-
   return fetch(url, {
-    method: "POST",
+    method: "PUT",
     headers: {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
-    body: JSON.stringify({ spørsmålId, type, verdi }),
+    body: JSON.stringify({ opplysningId, type, verdi }),
   });
 }
 
 async function saveOrkestratorAnswerHandler(req: NextApiRequest, res: NextApiResponse) {
   const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(req);
-  const { uuid, type, spørsmålId, verdi } = req.body;
+  const { uuid, type, opplysningId, verdi } = req.body;
 
   if (!orkestratorOnBehalfOf.ok) {
     return res.status(401).end();
@@ -42,7 +41,7 @@ async function saveOrkestratorAnswerHandler(req: NextApiRequest, res: NextApiRes
     const saveOrkestratorAnswerResponse = await saveOrkestratorAnswer(
       orkestratorOnBehalfOf.token,
       uuid,
-      spørsmålId,
+      opplysningId,
       type,
       verdi,
     );
