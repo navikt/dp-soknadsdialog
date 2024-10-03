@@ -81,28 +81,35 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumBooleanReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumBoolean ref={faktumRef} faktum={faktum} />;
+          return <FaktumBoolean ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "envalg":
         if (faktum.readOnly || readonly) {
           return <FaktumEnvalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumEnvalg ref={faktumRef} faktum={faktum} />;
+          return <FaktumEnvalg ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "flervalg":
         if (faktum.readOnly || readonly) {
           return <FaktumFlervalgReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumFlervalg ref={faktumRef} faktum={faktum} />;
+          return <FaktumFlervalg ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "tekst":
         if (faktum.readOnly || readonly) {
           return <FaktumTextReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumText ref={faktumRef} faktum={faktum} forceUpdate={forceUpdate} />;
+          return (
+            <FaktumText
+              ref={faktumRef}
+              faktum={faktum}
+              forceUpdate={forceUpdate}
+              isOrkestrator={isOrkestrator}
+            />
+          );
         }
 
       case "double":
@@ -110,7 +117,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumNumberReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumNumber ref={faktumRef} faktum={faktum} />;
+          return <FaktumNumber ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "land":
@@ -124,14 +131,21 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
         if (faktum.readOnly || readonly) {
           return <FaktumDatoReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumDato ref={faktumRef} faktum={faktum} />;
+          return <FaktumDato ref={faktumRef} faktum={faktum} isOrkestrator={isOrkestrator} />;
         }
 
       case "periode":
         if (faktum.readOnly || readonly) {
           return <FaktumPeriodeReadOnly faktum={faktum} showAllFaktumTexts={showAllFaktumTexts} />;
         } else {
-          return <FaktumPeriode ref={faktumRef} faktum={faktum} hideAlertText={hideAlertText} />;
+          return (
+            <FaktumPeriode
+              ref={faktumRef}
+              faktum={faktum}
+              hideAlertText={hideAlertText}
+              isOrkestrator={isOrkestrator}
+            />
+          );
         }
 
       case "generator":

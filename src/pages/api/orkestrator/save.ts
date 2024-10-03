@@ -3,7 +3,7 @@ import { logRequestError } from "../../../error.logger";
 import { OrkestratorOpplysningType } from "../../../types/orkestrator.types";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOrkestratorOnBehalfOfToken } from "../../../utils/auth.utils";
-import { getNesteOrkestratorSporsmal } from "../common/orkestrator-api";
+import { getOrkestratorState } from "../common/orkestrator-api";
 
 export interface ISaveOrkestratorAnswerBody {
   uuid: string;
@@ -20,9 +20,11 @@ export function saveOrkestratorAnswer(
   verdi: string,
 ) {
   const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${uuid}/svar`;
+
   return fetch(url, {
     method: "PUT",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${onBehalfOfToken}`,
     },
     body: JSON.stringify({ opplysningId, type, verdi }),
@@ -52,19 +54,21 @@ async function saveOrkestratorAnswerHandler(req: NextApiRequest, res: NextApiRes
         .send(saveOrkestratorAnswerResponse.statusText);
     }
 
-    const getNesteOrkestratorSporsmalResponse = await getNesteOrkestratorSporsmal(
+    const getOrkestratorStateResponse = await getOrkestratorState(
       orkestratorOnBehalfOf.token,
       uuid,
     );
 
-    if (!getNesteOrkestratorSporsmalResponse.ok) {
+    if (!getOrkestratorStateResponse.ok) {
       return res.json({ error: true });
     }
 
-    return res.json(getNesteOrkestratorSporsmalResponse.json());
+    const orkestratorState = await getOrkestratorStateResponse.json();
+
+    return res.status(getOrkestratorStateResponse.status).send(orkestratorState);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, undefined, "Get new uuid - Generic error");
+    logRequestError(message, undefined, "Klarte ikke lagre orkestrator svar");
     return res.status(500).send(message);
   }
 }
