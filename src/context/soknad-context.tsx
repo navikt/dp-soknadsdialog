@@ -97,6 +97,8 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
     setIsLoading(true);
     const response = await saveAnswer({ uuid, opplysningId, type, verdi });
 
+    console.log(response);
+
     if (response) {
       setOrkestratorState(response);
     }

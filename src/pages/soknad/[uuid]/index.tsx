@@ -24,7 +24,7 @@ import {
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
-import { getNesteOrkestratorSporsmal } from "../../api/common/orkestrator-api";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
 import { IOrkestratorState } from "../../../types/orkestrator.types";
 
 interface IProps {
@@ -76,10 +76,7 @@ export async function getServerSideProps(
   let arbeidsforhold = [];
 
   const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
-  const orkestratorStateResponse = await getNesteOrkestratorSporsmal(
-    orkestratorOnBehalfOf.token,
-    uuid,
-  );
+  const orkestratorStateResponse = await getOrkestratorState(orkestratorOnBehalfOf.token, uuid);
   const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
   const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
   const featureToggles = await getFeatureToggles();

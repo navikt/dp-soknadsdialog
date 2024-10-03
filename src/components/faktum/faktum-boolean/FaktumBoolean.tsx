@@ -21,9 +21,9 @@ function FaktumBooleanComponent(
   props: IFaktum<IQuizBooleanFaktum>,
   ref: Ref<HTMLFieldSetElement> | undefined,
 ) {
-  const { faktum } = props;
+  const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useSoknad();
+  const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) ?? "");
@@ -59,7 +59,13 @@ function FaktumBooleanComponent(
       logger.error(`FaktumBoolean saveFaktum: could not map value ${value} to a valid answer`);
     }
 
-    saveFaktumToQuiz(faktum, mappedAnswer);
+    if (!isOrkestrator) {
+      saveFaktumToQuiz(faktum, mappedAnswer);
+    }
+
+    if (isOrkestrator) {
+      saveAnswerToOrkestrator(props.faktum.id, "boolean", value);
+    }
   }
 
   if (!faktum.beskrivendeId) {
