@@ -19,7 +19,7 @@ export interface ISoknadContext {
   saveAnswerToOrkestrator: (
     opplysningId: string,
     type: OrkestratorOpplysningType,
-    verdi: string,
+    verdi: QuizFaktumSvarType,
   ) => void;
   isLoading: boolean;
   isError: boolean;
@@ -87,7 +87,7 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
   async function saveAnswerToOrkestrator(
     opplysningId: string,
     type: OrkestratorOpplysningType,
-    verdi: string,
+    verdi: QuizFaktumSvarType,
   ) {
     if (isLoading) {
       setIsLocked(true);
@@ -96,8 +96,6 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
 
     setIsLoading(true);
     const response = await saveAnswer({ uuid, opplysningId, type, verdi });
-
-    console.log(response);
 
     if (response) {
       setOrkestratorState(response);

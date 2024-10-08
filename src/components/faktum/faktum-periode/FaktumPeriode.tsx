@@ -1,26 +1,30 @@
-import { Fieldset, DatePicker, useRangeDatepicker } from "@navikt/ds-react";
+import { DatePicker, Fieldset, useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-import { DATEPICKER_TO_DATE, DATEPICKER_FROM_DATE } from "../../../constants";
-import { useSoknad } from "../../../context/soknad-context";
-import { useSanity } from "../../../context/sanity-context";
-import { useValidation } from "../../../context/validation-context";
-import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../../hooks/useFirstRender";
-import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
-import { HelpText } from "../../HelpText";
-import { IFaktum } from "../Faktum";
-import styles from "../Faktum.module.css";
-import periodeStyles from "./FaktumPeriode.module.css";
-import { AlertText } from "../../alert-text/AlertText";
-import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
-import { useUserInfo } from "../../../context/user-info-context";
 import {
   trackKorrigertSluttdatoFraAAREG,
   trackKorrigertStartdatoFraAAREG,
 } from "../../../amplitude.tracking";
+import { DATEPICKER_FROM_DATE, DATEPICKER_TO_DATE } from "../../../constants";
+import { useSanity } from "../../../context/sanity-context";
+import { useSoknad } from "../../../context/soknad-context";
+import { useUserInfo } from "../../../context/user-info-context";
+import { useValidation } from "../../../context/validation-context";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
+import {
+  IQuizPeriodeFaktum,
+  IQuizPeriodeFaktumAnswerType,
+  QuizFaktumSvarType,
+} from "../../../types/quiz.types";
+import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { AlertText } from "../../alert-text/AlertText";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
+import periodeStyles from "./FaktumPeriode.module.css";
 
 interface IDateRange {
   from: Date | undefined;
@@ -38,9 +42,9 @@ function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined,
 ) {
-  const { faktum, hideAlertText } = props;
+  const { faktum, hideAlertText, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useSoknad();
+  const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { contextSelectedArbeidsforhold } = useUserInfo();
@@ -161,7 +165,14 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+
+    if (!isOrkestrator) {
+      saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+    }
+
+    if (isOrkestrator) {
+      saveAnswerToOrkestrator(faktum.id, "periode", value as QuizFaktumSvarType);
+    }
   }
 
   return (

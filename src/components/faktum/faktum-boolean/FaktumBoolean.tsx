@@ -64,7 +64,7 @@ function FaktumBooleanComponent(
     }
 
     if (isOrkestrator) {
-      saveAnswerToOrkestrator(props.faktum.id, "boolean", value);
+      saveAnswerToOrkestrator(props.faktum.id, "boolean", mappedAnswer);
     }
   }
 
