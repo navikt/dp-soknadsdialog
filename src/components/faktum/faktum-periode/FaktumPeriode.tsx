@@ -9,7 +9,11 @@ import { useValidation } from "../../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
+import {
+  IQuizPeriodeFaktum,
+  IQuizPeriodeFaktumAnswerType,
+  QuizFaktumSvarType,
+} from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
@@ -38,9 +42,9 @@ function FaktumPeriodeComponent(
   props: IFaktum<IQuizPeriodeFaktum>,
   ref: Ref<HTMLDivElement> | undefined,
 ) {
-  const { faktum, hideAlertText } = props;
+  const { faktum, hideAlertText, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { contextSelectedArbeidsforhold } = useUserInfo();
@@ -161,7 +165,14 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+
+    if (!isOrkestrator) {
+      saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+    }
+
+    if (isOrkestrator) {
+      saveAnswerToOrkestrator(faktum.id, "periode", value as QuizFaktumSvarType);
+    }
   }
 
   return (

@@ -4,12 +4,13 @@ import { OrkestratorOpplysningType } from "../../../types/orkestrator.types";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOrkestratorOnBehalfOfToken } from "../../../utils/auth.utils";
 import { getOrkestratorState } from "../common/orkestrator-api";
+import { QuizFaktumSvarType } from "../../../types/quiz.types";
 
 export interface ISaveOrkestratorAnswerBody {
   uuid: string;
   opplysningId: string;
   type: OrkestratorOpplysningType;
-  verdi: string;
+  verdi: QuizFaktumSvarType;
 }
 
 export function saveOrkestratorAnswer(
@@ -17,7 +18,7 @@ export function saveOrkestratorAnswer(
   uuid: string,
   opplysningId: string,
   type: OrkestratorOpplysningType,
-  verdi: string,
+  verdi: QuizFaktumSvarType,
 ) {
   const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${uuid}/svar`;
 
