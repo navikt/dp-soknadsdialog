@@ -2,13 +2,18 @@ import { DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { Ref, forwardRef, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
+import {
+  DATEPICKER_MAX_DATE,
+  DATEPICKER_MIN_DATE,
+  SOKNAD_DATO_DATEPICKER_MAX_DATE,
+  SOKNAD_DATO_DATEPICKER_MIN_DATE,
+} from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
-import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
+import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
@@ -78,13 +83,23 @@ function FaktumDatoComponent(
 
   const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
 
+  const fromDate =
+    faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
+      ? SOKNAD_DATO_DATEPICKER_MIN_DATE
+      : DATEPICKER_MIN_DATE;
+
+  const toDate =
+    faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
+      ? SOKNAD_DATO_DATEPICKER_MAX_DATE
+      : DATEPICKER_MAX_DATE;
+
   return (
     <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <DatePicker
         {...datepickerProps}
         dropdownCaption
-        fromDate={DATEPICKER_MIN_DATE}
-        toDate={DATEPICKER_MAX_DATE}
+        fromDate={fromDate}
+        toDate={toDate}
         strategy="fixed"
       >
         <DatePicker.Input

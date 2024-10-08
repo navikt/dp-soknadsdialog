@@ -1,16 +1,16 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { addWeeks, addYears, format, formatISO, subYears } from "date-fns";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { FaktumDato } from "./FaktumDato";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
   type: "localdate",
   readOnly: false,
-  beskrivendeId: "faktum.dagpenger-soknadsdato",
+  beskrivendeId: "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
   sannsynliggjoresAv: [],
 };
 
@@ -118,7 +118,7 @@ describe("FaktumDato", () => {
     });
 
     test("Selecting a date two hundret years before now should show error message and post null to server", async () => {
-      const twoHundredYearsFromNow = subYears(new Date(), -200);
+      const twoHundredYearsFromNow = subYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
       const user = userEvent.setup();

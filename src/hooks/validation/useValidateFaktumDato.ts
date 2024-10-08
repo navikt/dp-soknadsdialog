@@ -2,7 +2,8 @@ import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   isOverTwoWeeks,
-  isWithinValidYearRange,
+  isWithinValidSoknadDatoRange,
+  isWithinValidDateRange,
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
@@ -34,7 +35,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   useEffect(() => {
     if (!errorMessage) {
       setErrorMessage(
-        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
       );
     }
   }, [unansweredFaktumId]);
@@ -51,7 +52,10 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
 
     const future = isFuture(date);
-    const isValid = isWithinValidYearRange(date);
+    const isValid =
+      faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
+        ? isWithinValidSoknadDatoRange(date)
+        : isWithinValidDateRange(date);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
