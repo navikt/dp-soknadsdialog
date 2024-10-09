@@ -50,8 +50,8 @@ function mappedLand(opplysning: IOpplysning): IQuizLandFaktum {
     svar: svar?.toString(),
     grupper: [
       {
-        land: ["AUT", "HUN", "BGR", "BEL"],
-        gruppeId: "faktum.hvilket-land-bor-barnet-ditt-i.gruppe.eøs",
+        land: [],
+        gruppeId: "",
       },
     ],
   };
@@ -60,10 +60,16 @@ function mappedLand(opplysning: IOpplysning): IQuizLandFaktum {
 function mappedBoolean(opplysning: IOpplysning): IQuizBooleanFaktum {
   const { opplysningId, tekstnøkkel, svar } = opplysning;
 
+  function parsedSvar() {
+    if (!svar) return undefined;
+
+    return svar === "true";
+  }
+
   return {
     id: opplysningId,
     type: "boolean",
-    svar: svar ? Boolean(svar) : undefined,
+    svar: parsedSvar(),
     gyldigeValg: [`${tekstnøkkel}.svar.ja`, `${tekstnøkkel}.svar.nei`],
     beskrivendeId: tekstnøkkel,
     readOnly: false,
