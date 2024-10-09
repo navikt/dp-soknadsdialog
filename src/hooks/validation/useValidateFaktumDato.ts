@@ -10,7 +10,7 @@ import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
   validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
-  getHasWarning: (date: Date) => boolean;
+  applicationDateIsOverTwoWeeks: (date: Date) => boolean;
   errorMessage: string | undefined;
   clearErrorMessage: () => void;
 }
@@ -22,7 +22,7 @@ const furetureDateAllowedList = [
   "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
-const futureDateAllowedWithWarningList = [
+export const futureDateAllowedWithWarningList = [
   "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
 ];
@@ -52,10 +52,9 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     }
 
     const future = isFuture(date);
-    const isValid =
-      faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
-        ? isWithinValidSoknadDatoRange(date)
-        : isWithinValidDateRange(date);
+    const isValid = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
+      ? isWithinValidSoknadDatoRange(date)
+      : isWithinValidDateRange(date);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
@@ -78,7 +77,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     return !future && isValid;
   }
 
-  function getHasWarning(date: Date) {
+  function applicationDateIsOverTwoWeeks(date: Date) {
     return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
@@ -89,7 +88,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   return {
     errorMessage,
     validateAndIsValid,
-    getHasWarning,
+    applicationDateIsOverTwoWeeks,
     clearErrorMessage,
   };
 }

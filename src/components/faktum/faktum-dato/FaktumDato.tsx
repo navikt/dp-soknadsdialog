@@ -13,7 +13,10 @@ import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
+import {
+  futureDateAllowedWithWarningList,
+  useValidateFaktumDato,
+} from "../../../hooks/validation/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
@@ -31,7 +34,7 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
+  const { errorMessage, validateAndIsValid, applicationDateIsOverTwoWeeks, clearErrorMessage } =
     useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
@@ -81,17 +84,15 @@ function FaktumDatoComponent(
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
+  const hasWarning = currentAnswer && applicationDateIsOverTwoWeeks(new Date(currentAnswer));
 
-  const fromDate =
-    faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
-      ? SOKNAD_DATO_DATEPICKER_MIN_DATE
-      : DATEPICKER_MIN_DATE;
+  const fromDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
+    ? SOKNAD_DATO_DATEPICKER_MIN_DATE
+    : DATEPICKER_MIN_DATE;
 
-  const toDate =
-    faktum.beskrivendeId === "faktum.dagpenger-soknadsdato"
-      ? SOKNAD_DATO_DATEPICKER_MAX_DATE
-      : DATEPICKER_MAX_DATE;
+  const toDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
+    ? SOKNAD_DATO_DATEPICKER_MAX_DATE
+    : DATEPICKER_MAX_DATE;
 
   return (
     <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
