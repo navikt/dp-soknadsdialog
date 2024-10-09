@@ -25,8 +25,6 @@ export function Section(props: IProps) {
     (faktum) => faktum.id === firstUnansweredFaktum?.id,
   );
 
-  console.log(`🔥 orkestratorState :`, orkestratorState);
-
   if (!props.section.beskrivendeId) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
