@@ -29,9 +29,9 @@ export function FaktumTextComponent(
   props: IFaktum<IQuizTekstFaktum>,
   ref: Ref<HTMLInputElement> | undefined,
 ) {
-  const { faktum, forceUpdate } = props;
+  const { faktum, isOrkestrator, forceUpdate } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { contextSelectedArbeidsforhold } = useUserInfo();
@@ -77,7 +77,14 @@ export function FaktumTextComponent(
       return;
     } else {
       setHasError(false);
-      saveFaktumToQuiz(faktum, value);
+
+      if (!isOrkestrator) {
+        saveFaktumToQuiz(faktum, value);
+      }
+
+      if (isOrkestrator) {
+        saveOpplysningToOrkestrator(props.faktum.id, "tekst", value);
+      }
     }
   }
 

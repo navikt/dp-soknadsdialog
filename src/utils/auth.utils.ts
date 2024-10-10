@@ -2,6 +2,7 @@ import { OboResult, expiresIn, getToken, requestOboToken, validateToken } from "
 import { IncomingMessage } from "http";
 
 const audienceDPSoknad = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad`;
+const audienceDPSoknadOrkestrator = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-soknad-orkestrator`;
 const audienceMellomlagring = `${process.env.NAIS_CLUSTER_NAME}:teamdagpenger:dp-mellomlagring`;
 const audienceArbeidsoekkerregisteret = `${process.env.NAIS_CLUSTER_NAME}:paw:paw-arbeidssoekerregisteret-api-oppslag`;
 
@@ -29,6 +30,16 @@ export async function getSoknadOnBehalfOfToken(req: IncomingMessage): Promise<Ob
   }
 
   return getOnBehalfOfToken(req, audienceDPSoknad);
+}
+
+export async function getSoknadOrkestratorOnBehalfOfToken(
+  req: IncomingMessage,
+): Promise<OboResult> {
+  if (process.env.NEXT_PUBLIC_LOCALHOST === "true") {
+    return OboResult.Ok(process.env.DP_SOKNAD_ORKESTRATOR_TOKEN || "");
+  }
+
+  return getOnBehalfOfToken(req, audienceDPSoknadOrkestrator);
 }
 
 export async function getArbeidsoekkerregisteretOnBehalfOfToken(

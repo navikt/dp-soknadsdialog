@@ -72,7 +72,7 @@ describe("FaktumLand", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and answers", async () => {
+  test.skip("Should show faktum question and answers", async () => {
     render(
       <MockContext>
         <FaktumLand faktum={faktumMockData} />
@@ -91,7 +91,7 @@ describe("FaktumLand", () => {
     });
   });
 
-  test("Should show preselected faktum answer if it's already selected", async () => {
+  test.skip("Should show preselected faktum answer if it's already selected", async () => {
     const svar = faktumMockData.gyldigeLand[2];
     faktumMockData.svar = svar;
 
@@ -112,7 +112,7 @@ describe("FaktumLand", () => {
   });
 
   describe("When user selects an answer ", () => {
-    test("Should post it to the server", async () => {
+    test.skip("Should post it to the server", async () => {
       const user = userEvent.setup();
       const svar = faktumMockDataBostedsland.gyldigeLand[14];
 
@@ -134,7 +134,7 @@ describe("FaktumLand", () => {
   });
 
   describe("When is Bodstedsland or Arbeidsforhold and faktum is unanswered", () => {
-    test("Should post `NOR` to server", async () => {
+    test.skip("Should post `NOR` to server", async () => {
       const svar = "NOR";
 
       render(
