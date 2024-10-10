@@ -16,7 +16,7 @@ export interface IQuizContext {
   orkestratorState: IOrkestratorState | null;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
-  saveAnswerToOrkestrator: (
+  saveOpplysningToOrkestrator: (
     opplysningId: string,
     type: OrkestratorOpplysningType,
     verdi: QuizFaktumSvarType,
@@ -84,7 +84,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   }
 
   // Orkestrator
-  async function saveAnswerToOrkestrator(
+  async function saveOpplysningToOrkestrator(
     opplysningId: string,
     type: OrkestratorOpplysningType,
     verdi: QuizFaktumSvarType,
@@ -112,7 +112,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
         orkestratorState,
         saveFaktumToQuiz,
         saveGeneratorFaktumToQuiz,
-        saveAnswerToOrkestrator,
+        saveOpplysningToOrkestrator,
         isLoading: saveFaktumStatus === "pending" || saveAnswerStatus === "pending",
         isError: saveFaktumStatus === "error" || saveAnswerStatus === "error",
         isLocked,

@@ -10,7 +10,7 @@ interface IProps {
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
-export const mockSaveAnswerToOrkestrator = vi.fn();
+export const mockSaveOpplysningToOrkestrator = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
 export function MockQuizProvider({ quizState, orkestratorState, children }: IProps) {
@@ -23,7 +23,7 @@ export function MockQuizProvider({ quizState, orkestratorState, children }: IPro
         soknadState: quizState,
         orkestratorState: orkestratorState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
-        saveAnswerToOrkestrator: mockSaveAnswerToOrkestrator,
+        saveOpplysningToOrkestrator: mockSaveOpplysningToOrkestrator,
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,
         isError: false,

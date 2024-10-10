@@ -23,7 +23,7 @@ function FaktumBooleanComponent(
 ) {
   const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) ?? "");
@@ -64,7 +64,7 @@ function FaktumBooleanComponent(
     }
 
     if (isOrkestrator) {
-      saveAnswerToOrkestrator(props.faktum.id, "boolean", mappedAnswer);
+      saveOpplysningToOrkestrator(props.faktum.id, "boolean", mappedAnswer);
     }
   }
 
