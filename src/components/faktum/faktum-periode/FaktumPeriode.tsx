@@ -44,7 +44,7 @@ function FaktumPeriodeComponent(
 ) {
   const { faktum, hideAlertText, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveAnswerToOrkestrator, isLocked } = useSoknad();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { contextSelectedArbeidsforhold } = useUserInfo();
@@ -171,7 +171,7 @@ function FaktumPeriodeComponent(
     }
 
     if (isOrkestrator) {
-      saveAnswerToOrkestrator(faktum.id, "periode", value as QuizFaktumSvarType);
+      saveOpplysningToOrkestrator(faktum.id, "periode", value as QuizFaktumSvarType);
     }
   }
 

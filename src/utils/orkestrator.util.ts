@@ -77,12 +77,24 @@ function mappedBoolean(opplysning: IOpplysning): IQuizBooleanFaktum {
 }
 
 function mappedPeriode(opplysning: IOpplysning): IQuizPeriodeFaktum {
-  const { opplysningId, tekstnøkkel } = opplysning;
+  const { opplysningId, tekstnøkkel, svar } = opplysning;
+
+  function parsedSvar() {
+    if (!svar) return undefined;
+
+    const { fom, tom } = JSON.parse(svar.toString());
+
+    return {
+      fom,
+      tom: tom || undefined,
+    };
+  }
 
   return {
     id: opplysningId,
     type: "periode",
     beskrivendeId: tekstnøkkel,
     readOnly: false,
+    svar: parsedSvar(),
   };
 }
