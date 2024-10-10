@@ -22,7 +22,7 @@ export function StartSoknad() {
   const [isError, setIsError] = useState(false);
   const { getAppText, getInfosideText } = useSanity();
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const missingConsentRef = useRef<HTMLInputElement>(null);
   const startSideText = getInfosideText("startside");
@@ -48,7 +48,7 @@ export function StartSoknad() {
 
     if (!soknadsdialogMedOrkestratorIsEnabled) {
       try {
-        setIsCreatingSoknadUUID(true);
+        setIsLoading(true);
         const uuidResponse = await fetch(api("soknad/uuid"));
 
         if (uuidResponse.ok) {
@@ -66,6 +66,7 @@ export function StartSoknad() {
 
     if (soknadsdialogMedOrkestratorIsEnabled) {
       try {
+        setIsLoading(true);
         const soknadIdResponse = await fetch(api("orkestrator/start"));
 
         if (soknadIdResponse.ok) {
@@ -117,12 +118,7 @@ export function StartSoknad() {
           }
           ref={missingConsentRef}
         />
-        <Button
-          variant="primary"
-          size="medium"
-          onClick={startSoknad}
-          loading={isCreatingSoknadUUID}
-        >
+        <Button variant="primary" size="medium" onClick={startSoknad} loading={isLoading}>
           {getAppText("start-soknad.knapp.start")}
         </Button>
       </main>
