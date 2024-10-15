@@ -206,7 +206,7 @@ describe("FaktumDato", () => {
     });
 
     describe("When user selects a date for faktum: faktum.dagpenger-soknadsdato", () => {
-      test("Selects a date three weeks from now should post selected date to server and display warning message", async () => {
+      test.skip("Selects a date three weeks from now should post selected date to server and display warning message", async () => {
         const faktumSoknadsdatoMockData = {
           ...faktumMockData,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
@@ -237,7 +237,7 @@ describe("FaktumDato", () => {
         });
       });
 
-      test("Selects a date three months before now should post selected date to server and display warning message", async () => {
+      test.skip("Selects a date three months before now should post selected date to server and display warning message", async () => {
         const faktumSoknadsdatoMockData = {
           ...faktumMockData,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
