@@ -55,18 +55,15 @@ async function saveOrkestratorAnswerHandler(req: NextApiRequest, res: NextApiRes
         .send(saveOrkestratorAnswerResponse.statusText);
     }
 
-    const getOrkestratorStateResponse = await getOrkestratorState(
-      orkestratorOnBehalfOf.token,
-      uuid,
-    );
+    const orkestratorStateResponse = await getOrkestratorState(orkestratorOnBehalfOf.token, uuid);
 
-    if (!getOrkestratorStateResponse.ok) {
-      return res.json({ error: true });
+    if (!orkestratorStateResponse.ok) {
+      return res.status(orkestratorStateResponse.status).send(orkestratorStateResponse.statusText);
     }
 
-    const orkestratorState = await getOrkestratorStateResponse.json();
+    const orkestratorState = await orkestratorStateResponse.json();
 
-    return res.status(getOrkestratorStateResponse.status).send(orkestratorState);
+    return res.status(orkestratorStateResponse.status).send(orkestratorState);
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Klarte ikke lagre orkestrator svar");

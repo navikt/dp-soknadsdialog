@@ -67,18 +67,18 @@ export function StartSoknad() {
     if (soknadsdialogMedOrkestratorIsEnabled) {
       try {
         setIsLoading(true);
-        const soknadIdResponse = await fetch(api("orkestrator/start"));
+        const startSoknadResponse = await fetch(api("orkestrator/start"));
 
-        if (soknadIdResponse.ok) {
-          const uuid = await soknadIdResponse.json();
+        if (startSoknadResponse.ok) {
+          const uuid = await startSoknadResponse.json();
 
           trackSkjemaStartet("dagpenger", uuid);
           router.push(`/soknad/${uuid}`);
         } else {
-          throw new Error(soknadIdResponse.statusText);
+          throw new Error(startSoknadResponse.statusText);
         }
       } catch (error) {
-        logger.error(error, "StartSoknad: Error creating UUID");
+        logger.error(error, "StartSoknad: Error creating soknad");
         setIsError(true);
       }
     }

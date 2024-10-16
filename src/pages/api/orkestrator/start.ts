@@ -44,7 +44,7 @@ async function startOrkestratorSoknadHandler(req: NextApiRequest, res: NextApiRe
     );
 
     if (!soknadResponse.ok) {
-      return res.json({ error: true });
+      return res.status(soknadResponse.status).send(soknadResponse.statusText);
     }
 
     return res.json(orkestratorSoknadUuid);
