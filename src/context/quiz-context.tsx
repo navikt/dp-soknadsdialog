@@ -13,7 +13,7 @@ import {
 
 export interface IQuizContext {
   soknadState: IQuizState;
-  orkestratorState: IOrkestratorState | null;
+  orkestratorState: IOrkestratorState[] | null;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveOpplysningToOrkestrator: (
@@ -28,7 +28,7 @@ export interface IQuizContext {
 
 interface IProps {
   quizState: IQuizState;
-  orkestratorState?: IOrkestratorState;
+  orkestratorState?: IOrkestratorState[];
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -36,8 +36,8 @@ export const QuizContext = createContext<IQuizContext | undefined>(undefined);
 function QuizProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
   const [soknadState, setSoknadState] = useState<IQuizState>(props.quizState);
-  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorState | null>(
-    props.orkestratorState || null,
+  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorState[] | null>(
+    props.orkestratorState || [],
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -51,7 +51,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   // Orkestrator
   const [saveAnswer, saveAnswerStatus] = usePutRequest<
     ISaveOrkestratorAnswerBody,
-    IOrkestratorState
+    IOrkestratorState[]
   >("orkestrator/save", true);
 
   // Quiz

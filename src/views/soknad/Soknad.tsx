@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
-import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
+// import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
@@ -19,7 +19,7 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { trackSkjemaStegFullført } from "../../amplitude.tracking";
+// import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -29,9 +29,10 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, isError, isLoading, isLocked } = useQuiz();
+  const { soknadState, orkestratorState, isError, isLoading, isLocked } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
+  const orkestratorParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
@@ -67,16 +68,22 @@ export function Soknad(props: IProps) {
   }, [soknadState]);
 
   function navigateToNextSection() {
-    if (currentSection.ferdig) {
-      const currentSection = parseInt(sectionParam);
-      const nextIndex = sectionParam && currentSection + 1;
-      trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
-      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+    // if (currentSection.ferdig) {
+    //   const currentSection = parseInt(sectionParam);
+    //   const nextIndex = sectionParam && currentSection + 1;
+    //   trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
+    //   router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+    //     shallow: true,
+    //   });
+    // } else {
+    //   const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
+    //   setUnansweredFaktumId(unansweredFaktumId);
+    // }
+
+    if (orkestratorParam && orkestratorState && orkestratorState[0].erFullført) {
+      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
         shallow: true,
       });
-    } else {
-      const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
-      setUnansweredFaktumId(unansweredFaktumId);
     }
   }
 
@@ -103,6 +110,7 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
+
       <main>
         <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 

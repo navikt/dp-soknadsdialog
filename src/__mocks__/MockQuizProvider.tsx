@@ -6,7 +6,7 @@ import { IOrkestratorState } from "../types/orkestrator.types";
 interface IProps {
   children: React.ReactElement;
   quizState: IQuizState;
-  orkestratorState: IOrkestratorState;
+  orkestratorState: IOrkestratorState[];
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
