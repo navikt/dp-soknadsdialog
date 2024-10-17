@@ -22,10 +22,11 @@ function FaktumLandComponent(
   ref: Ref<HTMLDivElement> | undefined,
 ) {
   const router = useRouter();
-  const { faktum } = props;
+  const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
   const { unansweredFaktumId } = useValidation();
+
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
 
@@ -75,7 +76,13 @@ function FaktumLandComponent(
   }
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    if (!isOrkestrator) {
+      saveFaktumToQuiz(faktum, value);
+    }
+
+    if (isOrkestrator) {
+      saveOpplysningToOrkestrator(props.faktum.id, "land", value);
+    }
   }
 
   return (
