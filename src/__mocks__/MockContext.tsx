@@ -38,18 +38,20 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
-export const mockOrkestratorState: IOrkestratorState = {
-  navn: "bostedsland",
-  besvarteOpplysninger: [],
-  erFullført: false,
-  nesteUbesvarteOpplysning: {
-    opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
-    tekstnøkkel: "faktum.hvilket-land-bor-du-i",
-    type: "land",
-    svar: null,
-    gyldigeSvar: ["NOR", "SWE", "FIN"],
+export const mockOrkestratorState: IOrkestratorState[] = [
+  {
+    navn: "bostedsland",
+    besvarteOpplysninger: [],
+    erFullført: false,
+    nesteUbesvarteOpplysning: {
+      opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
+      tekstnøkkel: "faktum.hvilket-land-bor-du-i",
+      type: "land",
+      svar: null,
+      gyldigeSvar: ["NOR", "SWE", "FIN"],
+    },
   },
-};
+];
 
 export const mockSection: IQuizSeksjon = {
   fakta: [],

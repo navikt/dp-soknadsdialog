@@ -29,7 +29,7 @@ import { IOrkestratorState } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
-  orkestratorState: IOrkestratorState | null;
+  orkestratorState: IOrkestratorState[] | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];

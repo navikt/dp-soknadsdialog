@@ -1,4 +1,4 @@
-import { useFeatureToggles } from "../../context/feature-toggle-context";
+import { useRouter } from "next/router";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { ErrorTypesEnum } from "../../types/error.types";
@@ -16,9 +16,10 @@ interface IProps {
 }
 
 export function Section(props: IProps) {
+  const router = useRouter();
+  const orkestratorParam = router.query.orkestrator as string;
   const { getSeksjonTextById } = useSanity();
   const { orkestratorState } = useQuiz();
-  const { soknadsdialogMedOrkestratorIsEnabled } = useFeatureToggles();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
   const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);
   const firstUnansweredIndex = props.section.fakta.findIndex(
@@ -29,17 +30,19 @@ export function Section(props: IProps) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
-  if (soknadsdialogMedOrkestratorIsEnabled && orkestratorState) {
-    const { nesteUbesvarteOpplysning, besvarteOpplysninger } = orkestratorState;
+  if (orkestratorParam && orkestratorState) {
+    const firstOrkestratorSection = orkestratorState[0];
+    const { nesteUbesvarteOpplysning, besvarteOpplysninger } = firstOrkestratorSection;
 
     const nesteUbesvartOpplysningToFaktum =
-      nesteUbesvarteOpplysning && mapOrkestratorToQuiz(orkestratorState.nesteUbesvarteOpplysning);
+      nesteUbesvarteOpplysning &&
+      mapOrkestratorToQuiz(firstOrkestratorSection.nesteUbesvarteOpplysning);
 
     return (
       <>
         <SectionHeading
-          text={getSeksjonTextById(orkestratorState.navn)}
-          fallback={orkestratorState.navn}
+          text={getSeksjonTextById(firstOrkestratorSection.navn)}
+          fallback={firstOrkestratorSection.navn}
           showAllTexts={props.showAllTexts}
         />
         {besvarteOpplysninger?.map((opplysning: IOpplysning) => {
