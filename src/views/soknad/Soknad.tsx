@@ -34,7 +34,6 @@ export function Soknad(props: IProps) {
   const [navigating, setNavigating] = useState(false);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
-
   const sectionParams = router.query.seksjon;
   const invalidSectionParams = isNaN(Number(sectionParams));
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
