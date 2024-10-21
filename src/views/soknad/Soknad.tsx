@@ -104,19 +104,10 @@ export function Soknad(props: IProps) {
   function navigateToPreviousSection() {
     setUnansweredFaktumId(undefined);
 
-    if (isOrkestratorSection) {
-      const previousIndex = sectionNumber - 1;
-      router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}`, undefined, {
-        shallow: true,
-      });
-    }
-
-    if (!isOrkestratorSection) {
-      const nextIndex = sectionNumber - 1;
-      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
-        shallow: true,
-      });
-    }
+    const previousIndex = sectionNumber - 1;
+    router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}`, undefined, {
+      shallow: true,
+    });
   }
 
   function navigateToDocumentation() {
