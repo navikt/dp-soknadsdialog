@@ -7,7 +7,7 @@ import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessMo
 import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
-import { SectionQuiz } from "../../components/section/SectionQuiz";
+import { QuizSection } from "../../components/section/QuizSection";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useQuiz } from "../../context/quiz-context";
@@ -113,7 +113,7 @@ export function GenerellInnsending() {
         description={getAppText("innsending.side-metadata.beskrivelse")}
       />
       <main>
-        <SectionQuiz section={currentSection} />
+        <QuizSection section={currentSection} />
 
         {shouldRenderDokumentkrav &&
           dokumentkravList.krav.map((dokumentkrav) => (

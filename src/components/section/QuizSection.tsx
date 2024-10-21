@@ -11,7 +11,7 @@ interface IProps {
   showAllTexts?: boolean;
 }
 
-export function SectionQuiz(props: IProps) {
+export function QuizSection(props: IProps) {
   const { getSeksjonTextById } = useSanity();
   const sectionTexts = getSeksjonTextById(props.section.beskrivendeId);
   const firstUnansweredFaktum = props.section.fakta.find((faktum) => faktum.svar === undefined);

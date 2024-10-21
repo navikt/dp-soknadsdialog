@@ -4,7 +4,7 @@ import { Personalia } from "../../components/personalia/Personalia";
 import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSendingItem";
 import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravMissingItem";
 import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
-import { SectionQuiz } from "../../components/section/SectionQuiz";
+import { QuizSection } from "../../components/section/QuizSection";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
@@ -46,7 +46,7 @@ export function Pdf(props: IProps) {
 
         {soknadState.seksjoner.map((section) => (
           <div key={section.beskrivendeId} className="my-11">
-            <SectionQuiz
+            <QuizSection
               key={section.beskrivendeId}
               section={section}
               readonly={true}

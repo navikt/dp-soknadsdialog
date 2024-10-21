@@ -19,7 +19,7 @@ export function Section(props: IProps) {
     return <ErrorRetryModal errorType={ErrorTypesEnum.GenericError} />;
   }
 
-  const { nesteUbesvarteOpplysning, besvarteOpplysninger } = props.section;
+  const nesteUbesvarteOpplysning = props.section.nesteUbesvarteOpplysning;
 
   const nesteUbesvartOpplysningToFaktum =
     nesteUbesvarteOpplysning && mapOrkestratorToQuiz(nesteUbesvarteOpplysning);
@@ -31,7 +31,7 @@ export function Section(props: IProps) {
         fallback={props.section.navn}
         showAllTexts={props.showAllTexts}
       />
-      {besvarteOpplysninger?.map((opplysning: IOpplysning) => {
+      {props.section.besvarteOpplysninger?.map((opplysning: IOpplysning) => {
         const opplysningToFaktum = mapOrkestratorToQuiz(opplysning);
 
         return (
