@@ -38,15 +38,18 @@ export function Soknad(props: IProps) {
   const sectionParams = router.query.seksjon;
   const invalidSectionParams = isNaN(Number(sectionParams));
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
-  const sectionIndex = sectionNumber - 1 || 0;
+  const sectionIndex = sectionNumber - 1;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
 
+  // Number of sections
   const numberOfOrkestratorSections = orkestratorState.length;
   const isOrkestratorSection = sectionNumber <= numberOfOrkestratorSections;
 
+  // Orkestrator and Quiz section data based on sectionParams
   const currentOrkestratorSectionData = orkestratorState[sectionIndex];
   const currentQuizSectionData = soknadState.seksjoner[sectionIndex - numberOfOrkestratorSections];
 
+  // Validation
   const firstUnansweredSectionIndex = quizState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
