@@ -19,7 +19,8 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { SectionQuiz } from "../../components/section/SectionQuiz";
+import { QuizSection } from "../../components/section/QuizSection";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 // import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
@@ -32,14 +33,14 @@ export function Soknad(props: IProps) {
   const { totalSteps } = useProgressBarSteps();
   const { quizState, orkestratorState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
-  const sectionParam = router.query.seksjon as string;
-  const orkestratorParam = router.query.orkestrator as string;
   const [navigating, setNavigating] = useState(false);
+  const sectionParam = router.query.seksjon as string;
+  const isOrkestratorSection = router.query.orkestrator === "true";
   const orkestratorFullfort = orkestratorState.every((section) => section.erFullført);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const isFirstSection = sectionIndex === 0;
+  const isFirstSection = sectionIndex === 0 && isOrkestratorSection;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const currentSection = orkestratorState[sectionIndex];
   const currentQuizSection = soknadState.seksjoner[sectionIndex];
@@ -73,40 +74,67 @@ export function Soknad(props: IProps) {
   }, [quizState]);
 
   function navigateToNextSection() {
-    // if (currentSection.ferdig) {
-    //   const currentSection = parseInt(sectionParam);
-    //   const nextIndex = sectionParam && currentSection + 1;
-    //   trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
-    //   router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
-    //     shallow: true,
-    //   });
-    // } else {
-    //   const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
-    //   setUnansweredFaktumId(unansweredFaktumId);
-    // }
+    if (isOrkestratorSection) {
+      if (!currentSection.erFullført) {
+        setUnansweredFaktumId(currentSection.nesteUbesvarteOpplysning.opplysningId);
+      }
 
-    if (orkestratorParam && orkestratorState && orkestratorFullfort) {
-      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
+      if (currentSection.erFullført && orkestratorFullfort) {
+        router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
+          shallow: true,
+        });
+      }
+
+      if (currentSection.erFullført && !orkestratorFullfort) {
+        const currentSection = parseInt(sectionParam);
+        const nextIndex = sectionParam && currentSection + 1;
+        router.push(
+          `/soknad/${router.query.uuid}?seksjon=${nextIndex}&orkestrator=true`,
+          undefined,
+          {
+            shallow: true,
+          },
+        );
+      }
+    }
+
+    if (!isOrkestratorSection) {
+      const currentQuizSection = parseInt(sectionParam);
+      const nextIndex = sectionParam && currentQuizSection + 1;
+      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
         shallow: true,
       });
+    } else {
+      const unansweredFaktumId = getUnansweredFaktumId(currentQuizSection.fakta);
+      setUnansweredFaktumId(unansweredFaktumId);
     }
   }
 
   function navigateToPreviousSection() {
     setUnansweredFaktumId(undefined);
 
-    if(orkestratorParam === "true") {
+    if (isOrkestratorSection) {
       const previousIndex = sectionParam && parseInt(sectionParam) - 1;
-      router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}&orkestrator=true`, undefined, { shallow: true });
+      router.push(
+        `/soknad/${router.query.uuid}?seksjon=${previousIndex}&orkestrator=true`,
+        undefined,
+        { shallow: true },
+      );
     }
 
-    if(orkestratorParam !== "true") {
-      if (isFirstSection) {
-        const sisteOrkestratorIndex = orkestratorState.length;
-        router.push(`/soknad/${router.query.uuid}?seksjon=${sisteOrkestratorIndex}&orkestrator=true`, undefined, { shallow: true })
+    if (!isOrkestratorSection) {
+      const sisteOrkestratorIndex = orkestratorState.length;
+      if (sisteOrkestratorIndex) {
+        router.push(
+          `/soknad/${router.query.uuid}?seksjon=${sisteOrkestratorIndex}&orkestrator=true`,
+          undefined,
+          { shallow: true },
+        );
       } else {
         const nextIndex = sectionParam && parseInt(sectionParam) - 1;
-        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+          shallow: true,
+        });
       }
     }
   }
@@ -137,8 +165,8 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        {orkestratorParam === "true" && <Section section={currentSection} />}
-        {orkestratorParam !== "true" && <SectionQuiz section={currentQuizSection} />}
+        {isOrkestratorSection && <Section section={currentSection} />}
+        {!isOrkestratorSection && <QuizSection section={currentQuizSection} />}
 
         <div className={styles.loaderContainer}>
           <FetchIndicator isLoading={isLoading} />

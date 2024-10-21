@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { MockContext } from "../../__mocks__/MockContext";
 import { IQuizSeksjon } from "../../types/quiz.types";
-import { SectionQuiz } from "./SectionQuiz";
+import { QuizSection } from "./QuizSection";
 
 const sectionMockData: IQuizSeksjon = {
   fakta: [
@@ -27,7 +27,7 @@ describe("Section", () => {
   test("Should show section info and the first unanswered question", async () => {
     render(
       <MockContext quizSeksjoner={[sectionMockData]}>
-        <SectionQuiz section={sectionMockData} />
+        <QuizSection section={sectionMockData} />
       </MockContext>,
     );
 
