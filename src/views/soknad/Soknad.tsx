@@ -125,10 +125,10 @@ export function Soknad(props: IProps) {
     }
 
     if (!isOrkestratorSection) {
-      const sisteOrkestratorIndex = orkestratorState.length;
-      if (sisteOrkestratorIndex) {
+      if (sectionIndex === 0 && !!orkestratorState.length) {
+        const lastOrkestratorIndex = orkestratorState.length;
         router.push(
-          `/soknad/${router.query.uuid}?seksjon=${sisteOrkestratorIndex}&orkestrator=true`,
+          `/soknad/${router.query.uuid}?seksjon=${lastOrkestratorIndex}&orkestrator=true`,
           undefined,
           { shallow: true },
         );
