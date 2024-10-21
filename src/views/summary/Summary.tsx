@@ -1,5 +1,5 @@
 import { Left } from "@navikt/ds-icons";
-import { Accordion, Alert, Button, ConfirmationPanel, Tag } from "@navikt/ds-react";
+import { Accordion, Alert, Button, Tag } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -39,10 +39,7 @@ export function Summary(props: IProps) {
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
 
-  const [consentGiven, setConsentGiven] = useState(false);
-  const consentRef = useRef(null);
   const [navigating, setIsNavigating] = useState(false);
-  const [showConsentValidation, setShowConsentValidation] = useState(false);
   const [showSoknadNotCompleteError, setshowSoknadNotCompleteError] = useState(false);
   const [finishSoknad, finishSoknadStatus] = usePutRequest<IFerdigstillBody>(`soknad/ferdigstill`);
 
@@ -66,11 +63,6 @@ export function Summary(props: IProps) {
   }, [showSoknadNotCompleteError]);
 
   function validateAndCompleteSoknad() {
-    if (!consentGiven) {
-      setShowConsentValidation(true);
-      setFocus(consentRef);
-      return;
-    }
     if (!soknadState.ferdig || invalidDokumentkrav) {
       setshowSoknadNotCompleteError(true);
 
@@ -183,24 +175,6 @@ export function Summary(props: IProps) {
           </Accordion.Item>
         )}
       </Accordion>
-
-      <ConfirmationPanel
-        ref={consentRef}
-        className="my-11"
-        checked={consentGiven}
-        label={getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.label")}
-        onChange={() => {
-          setConsentGiven(!consentGiven);
-          setShowConsentValidation(!showConsentValidation);
-        }}
-        error={
-          showConsentValidation && !consentGiven
-            ? getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst")
-            : undefined
-        }
-      >
-        {getAppText("oppsummering.checkbox.samtykke-riktige-opplysninger.tekst")}
-      </ConfirmationPanel>
 
       {showSoknadNotCompleteError && (
         <Alert tabIndex={-1} variant="error" ref={soknadCompleteErrorRef}>

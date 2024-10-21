@@ -117,30 +117,6 @@ describe("Summary", () => {
     });
   });
 
-  test("Should show error message if user tries to send application without consenting", async () => {
-    const user = userEvent.setup();
-
-    render(
-      <MockContext>
-        <Summary personalia={personalia} />
-      </MockContext>,
-    );
-
-    const sendApplicationButton = screen.getByRole("button", {
-      name: "oppsummering.knapp.send-soknad",
-    });
-
-    user.click(sendApplicationButton);
-
-    await waitFor(() => {
-      expect(
-        screen.queryByText("oppsummering.checkbox.samtykke-riktige-opplysninger.validering-tekst"),
-      ).toBeInTheDocument();
-
-      expect(fetch.mock.calls.length).toBe(0);
-    });
-  });
-
   test("Should show error message if user tries to send a partially done application", async () => {
     const user = userEvent.setup();
 
@@ -153,13 +129,10 @@ describe("Summary", () => {
       </MockContext>,
     );
 
-    const consentCheckbox = screen.getByRole("checkbox");
-
     const sendApplicationButton = screen.getByRole("button", {
       name: "oppsummering.knapp.send-soknad",
     });
 
-    user.click(consentCheckbox);
     user.click(sendApplicationButton);
 
     await waitFor(() => {
@@ -184,13 +157,10 @@ describe("Summary", () => {
       </MockContext>,
     );
 
-    const consentCheckbox = screen.getByRole("checkbox");
-
     const sendApplicationButton = screen.getByRole("button", {
       name: "oppsummering.knapp.send-soknad",
     });
 
-    user.click(consentCheckbox);
     user.click(sendApplicationButton);
 
     await waitFor(() => {
