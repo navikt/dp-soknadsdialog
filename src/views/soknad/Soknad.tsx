@@ -35,6 +35,7 @@ export function Soknad(props: IProps) {
   const sectionParam = router.query.seksjon as string;
   const orkestratorParam = router.query.orkestrator as string;
   const [navigating, setNavigating] = useState(false);
+  const orkestratorFullfort = orkestratorState.every((section) => section.erFullført);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
@@ -84,7 +85,7 @@ export function Soknad(props: IProps) {
     //   setUnansweredFaktumId(unansweredFaktumId);
     // }
 
-    if (orkestratorParam && orkestratorState && orkestratorState[0].erFullført) {
+    if (orkestratorParam && orkestratorState && orkestratorFullfort) {
       router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
         shallow: true,
       });
