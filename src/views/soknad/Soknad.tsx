@@ -11,7 +11,7 @@ import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
-import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
+// import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
@@ -36,11 +36,11 @@ export function Soknad(props: IProps) {
   const [navigating, setNavigating] = useState(false);
   const sectionParam = router.query.seksjon as string;
   const isOrkestratorSection = router.query.orkestrator === "true";
-  const orkestratorFullfort = orkestratorState.every((section) => section.erFullført);
+  const orkestratorFullfort = orkestratorState.every((seksjon) => seksjon.erFullført);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const isFirstSection = sectionIndex === 0 && isOrkestratorSection;
+  const isFirstSection = parseInt(sectionParam) === 1 && isOrkestratorSection;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
   const currentSection = orkestratorState[sectionIndex];
   const currentQuizSection = soknadState.seksjoner[sectionIndex];
@@ -48,8 +48,8 @@ export function Soknad(props: IProps) {
   const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
-  const showPersonalia =
-    isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
+  // const showPersonalia =
+  //   isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
     const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
@@ -86,8 +86,9 @@ export function Soknad(props: IProps) {
       }
 
       if (currentSection.erFullført && !orkestratorFullfort) {
-        const currentSection = parseInt(sectionParam);
-        const nextIndex = sectionParam && currentSection + 1;
+        const currentSectionIndex = parseInt(sectionParam);
+        const nextIndex = sectionParam && currentSectionIndex + 1;
+
         router.push(
           `/soknad/${router.query.uuid}?seksjon=${nextIndex}&orkestrator=true`,
           undefined,
@@ -162,7 +163,7 @@ export function Soknad(props: IProps) {
       <main>
         <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 
-        {showPersonalia && props.personalia && (
+        {isFirstSection && props.personalia && (
           <div className={styles.seksjonContainer}>
             <Personalia personalia={props.personalia} />
           </div>
