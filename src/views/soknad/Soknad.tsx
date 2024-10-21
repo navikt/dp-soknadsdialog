@@ -94,8 +94,21 @@ export function Soknad(props: IProps) {
 
   function navigateToPreviousSection() {
     setUnansweredFaktumId(undefined);
-    const nextIndex = sectionParam && parseInt(sectionParam) - 1;
-    router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+
+    if(orkestratorParam === "true") {
+      const previousIndex = sectionParam && parseInt(sectionParam) - 1;
+      router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}&orkestrator=true`, undefined, { shallow: true });
+    }
+
+    if(orkestratorParam !== "true") {
+      if (isFirstSection) {
+        const sisteOrkestratorIndex = orkestratorState.length;
+        router.push(`/soknad/${router.query.uuid}?seksjon=${sisteOrkestratorIndex}&orkestrator=true`, undefined, { shallow: true })
+      } else {
+        const nextIndex = sectionParam && parseInt(sectionParam) - 1;
+        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+      }
+    }
   }
 
   function navigateToDocumentation() {
