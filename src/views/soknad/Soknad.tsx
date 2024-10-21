@@ -58,6 +58,11 @@ export function Soknad(props: IProps) {
     isFirstSection && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
+    // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
+    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+      router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
+    }
+
     const availiableSections =
       soknadState.seksjoner.length +
       orkestratorState.filter((seksjon) => seksjon.erFullført).length;
