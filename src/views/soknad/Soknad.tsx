@@ -54,6 +54,11 @@ export function Soknad(props: IProps) {
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
   useEffect(() => {
+    // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
+    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+      router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
+    }
+
     const availiableSections =
       soknadState.seksjoner.length +
       orkestratorState.filter((seksjon) => seksjon.erFullført).length;
@@ -63,11 +68,6 @@ export function Soknad(props: IProps) {
       router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
         shallow: true,
       });
-    }
-
-    // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
-    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
-      router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
   }, []);
 
