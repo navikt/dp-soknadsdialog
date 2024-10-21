@@ -22,7 +22,7 @@ export interface IOpplysning {
   gyldigeSvar: any;
 }
 
-export interface IOrkestratorState {
+export interface IOrkestratorSeksjon {
   navn: string;
   nesteUbesvarteOpplysning: IOpplysning;
   besvarteOpplysninger: IOpplysning[];

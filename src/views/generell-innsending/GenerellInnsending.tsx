@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
 import { Button } from "@navikt/ds-react";
+import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
+import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
+import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
-import { Section } from "../../components/section/Section";
+import { SectionQuiz } from "../../components/section/SectionQuiz";
+import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
-import { useUuid } from "../../hooks/useUuid";
-import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
-import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { usePutRequest } from "../../hooks/request/usePutRequest";
-import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { DeleteProsessModal } from "../../components/exit-soknad/DeleteProsessModal";
-import { ValidationMessage } from "../../components/faktum/validation/ValidationMessage";
-import styles from "./GenerellInnsending.module.css";
-import { useRouter } from "next/router";
+import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
 import { useFirstRender } from "../../hooks/useFirstRender";
+import { useUuid } from "../../hooks/useUuid";
 import { IDokumentkravSvarBody } from "../../pages/api/documentation/svar";
-import { ErrorTypesEnum } from "../../types/error.types";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
-import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { ErrorTypesEnum } from "../../types/error.types";
+import styles from "./GenerellInnsending.module.css";
+import { GenerellInnsendingDocument } from "./GenerellInnsendingDocument";
 
 export function GenerellInnsending() {
   const router = useRouter();
@@ -113,7 +113,7 @@ export function GenerellInnsending() {
         description={getAppText("innsending.side-metadata.beskrivelse")}
       />
       <main>
-        <Section section={currentSection} />
+        <SectionQuiz section={currentSection} />
 
         {shouldRenderDokumentkrav &&
           dokumentkravList.krav.map((dokumentkrav) => (

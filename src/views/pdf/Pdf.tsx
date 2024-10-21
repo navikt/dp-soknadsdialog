@@ -1,22 +1,24 @@
-import React from "react";
+import { Heading } from "@navikt/ds-react";
 import { PageMeta } from "../../components/PageMeta";
+import { Personalia } from "../../components/personalia/Personalia";
+import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSendingItem";
+import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravMissingItem";
+import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
+import { SectionQuiz } from "../../components/section/SectionQuiz";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { Section } from "../../components/section/Section";
+import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
 import { useSoknad } from "../../context/soknad-context";
 import { Personalia } from "../../components/personalia/Personalia";
 import { IPersonalia } from "../../types/personalia.types";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
-import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
-import { Heading } from "@navikt/ds-react";
-import styles from "./Pdf.module.css";
-import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravMissingItem";
-import { ReceiptDocumentsNotSendingItem } from "../../components/receipt-documents-not-sending/ReceiptDocumentsNotSendingItem";
+import { IPersonalia } from "../../types/personalia.types";
 import {
   getMissingDokumentkrav,
   getNotSendingDokumentkrav,
   getUploadedDokumentkrav,
 } from "../../utils/dokumentkrav.util";
+import styles from "./Pdf.module.css";
 
 interface IProps {
   personalia: IPersonalia;
@@ -47,7 +49,7 @@ export function Pdf(props: IProps) {
 
         {quizState.seksjoner.map((section) => (
           <div key={section.beskrivendeId} className="my-11">
-            <Section
+            <SectionQuiz
               key={section.beskrivendeId}
               section={section}
               readonly={true}
