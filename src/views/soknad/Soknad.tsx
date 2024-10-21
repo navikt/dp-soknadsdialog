@@ -99,14 +99,16 @@ export function Soknad(props: IProps) {
     }
 
     if (!isOrkestratorSection) {
-      const currentQuizSection = parseInt(sectionParam);
-      const nextIndex = sectionParam && currentQuizSection + 1;
-      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
-        shallow: true,
-      });
-    } else {
-      const unansweredFaktumId = getUnansweredFaktumId(currentQuizSection.fakta);
-      setUnansweredFaktumId(unansweredFaktumId);
+      if (currentQuizSection.ferdig) {
+        const currentQuizSection = parseInt(sectionParam);
+        const nextIndex = sectionParam && currentQuizSection + 1;
+        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+          shallow: true,
+        });
+      } else {
+        const unansweredFaktumId = getUnansweredFaktumId(currentQuizSection.fakta);
+        setUnansweredFaktumId(unansweredFaktumId);
+      }
     }
   }
 
