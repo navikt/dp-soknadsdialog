@@ -1,8 +1,8 @@
 import { useQuiz } from "../context/quiz-context";
 
 export function useProgressBarSteps() {
-  const { soknadState } = useQuiz();
-  const numberOfSoknadSections = soknadState.antallSeksjoner;
+  const { soknadState, orkestratorState } = useQuiz();
+  const numberOfSoknadSections = soknadState.antallSeksjoner + orkestratorState.length;
   const documentationStep = numberOfSoknadSections + 1;
   const summaryStep = documentationStep + 1;
 
