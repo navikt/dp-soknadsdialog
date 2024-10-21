@@ -38,7 +38,8 @@ export function Soknad(props: IProps) {
   const invalidSectionParams = isNaN(Number(sectionParams));
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
   const sectionIndex = sectionNumber - 1;
-  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
+  const isLastSection =
+    soknadState.ferdig && orkestratorState.every((section) => section.erFullført);
 
   // Number of sections
   const numberOfOrkestratorSections = orkestratorState.length;
