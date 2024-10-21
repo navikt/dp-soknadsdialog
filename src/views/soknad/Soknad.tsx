@@ -71,7 +71,7 @@ export function Soknad(props: IProps) {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [soknadState]);
+  }, [soknadState, orkestratorState]);
 
   function navigateToNextSection() {
     if (isOrkestratorSection) {
