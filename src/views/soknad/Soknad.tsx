@@ -136,7 +136,7 @@ export function Soknad(props: IProps) {
       <SoknadHeader />
 
       <main>
-        <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
+        <ProgressBar currentStep={sectionNumber} totalSteps={totalSteps} />
 
         {sectionNumber === 1 && props.personalia && (
           <div className={styles.seksjonContainer}>
