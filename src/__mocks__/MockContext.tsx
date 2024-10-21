@@ -9,7 +9,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInfoProvider } from "../context/user-info-context";
-import { IOrkestratorState } from "../types/orkestrator.types";
+import { IOrkestratorSeksjon } from "../types/orkestrator.types";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -38,7 +38,7 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
-export const mockOrkestratorState: IOrkestratorState[] = [
+export const mockOrkestratorState: IOrkestratorSeksjon[] = [
   {
     navn: "bostedsland",
     besvarteOpplysninger: [],

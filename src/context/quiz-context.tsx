@@ -3,7 +3,7 @@ import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 import { ISaveOrkestratorAnswerBody } from "../pages/api/orkestrator/save";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { IOrkestratorState, OrkestratorOpplysningType } from "../types/orkestrator.types";
+import { IOrkestratorSeksjon, OrkestratorOpplysningType } from "../types/orkestrator.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
@@ -13,7 +13,7 @@ import {
 
 export interface IQuizContext {
   soknadState: IQuizState;
-  orkestratorState: IOrkestratorState[] | null;
+  orkestratorState: IOrkestratorSeksjon[];
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveOpplysningToOrkestrator: (
@@ -28,7 +28,7 @@ export interface IQuizContext {
 
 interface IProps {
   quizState: IQuizState;
-  orkestratorState?: IOrkestratorState[];
+  orkestratorState?: IOrkestratorSeksjon[];
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -36,7 +36,7 @@ export const QuizContext = createContext<IQuizContext | undefined>(undefined);
 function QuizProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
   const [soknadState, setSoknadState] = useState<IQuizState>(props.quizState);
-  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorState[] | null>(
+  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorSeksjon[]>(
     props.orkestratorState || [],
   );
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +51,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   // Orkestrator
   const [saveAnswer, saveAnswerStatus] = usePutRequest<
     ISaveOrkestratorAnswerBody,
-    IOrkestratorState[]
+    IOrkestratorSeksjon[]
   >("orkestrator/save", true);
 
   // Quiz

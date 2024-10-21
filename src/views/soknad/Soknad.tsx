@@ -19,6 +19,7 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { SectionQuiz } from "../../components/section/SectionQuiz";
 // import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
@@ -32,14 +33,15 @@ export function Soknad(props: IProps) {
   const { soknadState, orkestratorState, isError, isLoading, isLocked } = useQuiz();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
-  const orkestratorParam = router.query.seksjon as string;
+  const orkestratorParam = router.query.orkestrator as string;
   const [navigating, setNavigating] = useState(false);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const isFirstSection = sectionIndex === 0;
   const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
-  const currentSection = soknadState.seksjoner[sectionIndex];
+  const currentSection = orkestratorState[sectionIndex];
+  const currentQuizSection = soknadState.seksjoner[sectionIndex];
 
   const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
@@ -57,7 +59,9 @@ export function Soknad(props: IProps) {
 
     // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
     if (!validSection) {
-      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
+      router.push(`/soknad/${router.query.uuid}?seksjon=1&orkestrator=true`, undefined, {
+        shallow: true,
+      });
     }
   }, []);
 
@@ -120,7 +124,8 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        <Section section={currentSection} />
+        {orkestratorParam === "true" && <Section section={currentSection} />}
+        {orkestratorParam !== "true" && <SectionQuiz section={currentQuizSection} />}
 
         <div className={styles.loaderContainer}>
           <FetchIndicator isLoading={isLoading} />

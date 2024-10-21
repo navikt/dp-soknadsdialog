@@ -1,12 +1,12 @@
 import React from "react";
 import { QuizContext } from "../context/quiz-context";
 import { IQuizState } from "../types/quiz.types";
-import { IOrkestratorState } from "../types/orkestrator.types";
+import { IOrkestratorSeksjon } from "../types/orkestrator.types";
 
 interface IProps {
   children: React.ReactElement;
   quizState: IQuizState;
-  orkestratorState: IOrkestratorState[];
+  orkestratorState: IOrkestratorSeksjon[];
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
