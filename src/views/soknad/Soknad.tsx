@@ -102,7 +102,9 @@ export function Soknad(props: IProps) {
   }
 
   function navigateToPreviousSection() {
-    setUnansweredFaktumId(undefined);
+    if (unansweredFaktumId) {
+      setUnansweredFaktumId(undefined);
+    }
 
     const previousIndex = sectionNumber - 1;
     router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}`, undefined, {
