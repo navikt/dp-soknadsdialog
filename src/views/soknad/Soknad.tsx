@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
-// import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
