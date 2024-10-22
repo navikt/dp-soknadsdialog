@@ -53,7 +53,6 @@ export function Soknad(props: IProps) {
   const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
-  // teste commit
   useEffect(() => {
     // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
     if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
