@@ -39,14 +39,14 @@ export function Soknad(props: IProps) {
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
   const sectionIndex = sectionNumber - 1;
   const isLastSection =
-    soknadState.ferdig && orkestratorState.every((section) => section.erFullført);
+    soknadState.ferdig && orkestratorState && orkestratorState.erFullført;
 
   // Number of sections
-  const numberOfOrkestratorSections = orkestratorState.length;
+  const numberOfOrkestratorSections = orkestratorState && orkestratorState.antallSeksjoner || 0;
   const isOrkestratorSection = sectionNumber <= numberOfOrkestratorSections;
 
   // Orkestrator and Quiz section data based on sectionParams
-  const currentOrkestratorSectionData = orkestratorState[sectionIndex];
+  const currentOrkestratorSectionData = orkestratorState && orkestratorState.seksjoner[sectionIndex];
   const currentQuizSectionData = soknadState.seksjoner[sectionIndex - numberOfOrkestratorSections];
 
   // Validation
@@ -61,7 +61,7 @@ export function Soknad(props: IProps) {
 
     const availiableSections =
       soknadState.seksjoner.length +
-      orkestratorState.filter((seksjon) => seksjon.erFullført).length;
+      orkestratorState?.antallSeksjoner;
 
     if (invalidSectionParams || sectionNumber > availiableSections) {
       // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
@@ -79,7 +79,7 @@ export function Soknad(props: IProps) {
 
   function navigateToNextSection() {
     if (isOrkestratorSection) {
-      if (!currentOrkestratorSectionData.erFullført) {
+      if (orkestratorState && !currentOrkestratorSectionData.erFullført) {
         setUnansweredFaktumId(currentOrkestratorSectionData.nesteUbesvarteOpplysning.opplysningId);
       } else {
         const nextIndex = sectionNumber + 1;

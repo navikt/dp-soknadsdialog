@@ -3,7 +3,7 @@ import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 import { ISaveOrkestratorAnswerBody } from "../pages/api/orkestrator/save";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { IOrkestratorSeksjon, OrkestratorOpplysningType } from "../types/orkestrator.types";
+import { IOrkestratorSoknad, OrkestratorOpplysningType } from "../types/orkestrator.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
@@ -13,7 +13,7 @@ import {
 
 export interface IQuizContext {
   soknadState: IQuizState;
-  orkestratorState: IOrkestratorSeksjon[];
+  orkestratorState: IOrkestratorSoknad | null;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveOpplysningToOrkestrator: (
@@ -28,7 +28,7 @@ export interface IQuizContext {
 
 interface IProps {
   quizState: IQuizState;
-  orkestratorState?: IOrkestratorSeksjon[];
+  orkestratorState?: IOrkestratorSoknad;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -36,8 +36,8 @@ export const QuizContext = createContext<IQuizContext | undefined>(undefined);
 function QuizProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
   const [soknadState, setSoknadState] = useState<IQuizState>(props.quizState);
-  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorSeksjon[]>(
-    props.orkestratorState || [],
+  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorSoknad | null>(
+    props.orkestratorState || null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -51,7 +51,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   // Orkestrator
   const [saveAnswer, saveAnswerStatus] = usePutRequest<
     ISaveOrkestratorAnswerBody,
-    IOrkestratorSeksjon[]
+    IOrkestratorSoknad
   >("orkestrator/save", true);
 
   // Quiz
