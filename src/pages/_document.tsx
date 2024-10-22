@@ -1,21 +1,13 @@
 import {
-  DecoratorComponents,
   DecoratorEnvProps,
   DecoratorFetchProps,
-  // DecoratorParams,
+  DecoratorComponentsReact,
   fetchDecoratorReact,
 } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { logger } from "@navikt/next-logger";
 import Document, { DocumentContext, Head, Html, Main, NextScript } from "next/document";
 
 const dekoratorEnv = (process.env.DEKORATOR_ENV || "localhost") as DecoratorEnvProps["env"];
-
-// const supportedLocales = ["nb"];
-// const availableLanguages = supportedLocales.map((locale) => ({
-//   locale,
-//   url: `https://www.nav.no/dagpenger/dialog/${locale}`,
-//   handleInApp: true,
-// })) as DecoratorParams["availableLanguages"];
 
 const decoratorProps: DecoratorFetchProps = {
   env: dekoratorEnv,
@@ -24,21 +16,19 @@ const decoratorProps: DecoratorFetchProps = {
     chatbot: false,
     simple: true,
     context: "privatperson",
-    enforceLogin: false,
     redirectToApp: true,
     level: "Level4",
     language: "nb",
-    // availableLanguages,
   },
 };
 
-export default class MyDocument extends Document<DecoratorComponents> {
+export default class MyDocument extends Document<DecoratorComponentsReact> {
   static async getInitialProps(ctx: DocumentContext) {
     const { locale } = ctx;
     const initialProps = await Document.getInitialProps(ctx);
     const language = locale || "nb";
 
-    const Dekorator: DecoratorComponents = await fetchDecoratorReact({
+    const Dekorator: DecoratorComponentsReact = await fetchDecoratorReact({
       ...decoratorProps,
     }).catch((err) => {
       logger.error(err);
@@ -47,7 +37,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
         Footer: empty,
         Header: empty,
         Scripts: empty,
-        Styles: empty,
+        HeadAssets: empty,
       };
     });
 
@@ -59,7 +49,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
   }
 
   render(): JSX.Element {
-    const { Styles, Scripts, Header, Footer, locale } = this.props;
+    const { Scripts, Header, Footer, locale, HeadAssets } = this.props;
     return (
       <Html lang={locale}>
         <Head>
@@ -79,7 +69,6 @@ export default class MyDocument extends Document<DecoratorComponents> {
             rel="shortcut icon"
             href={`${process.env.NEXT_PUBLIC_BASE_PATH}/favicon/favicon.ico`}
           />
-          <Styles />
           <link
             rel="preload"
             href="https://cdn.nav.no/aksel/fonts/SourceSans3-normal.woff2"
@@ -87,6 +76,7 @@ export default class MyDocument extends Document<DecoratorComponents> {
             type="font/woff2"
             crossOrigin="anonymous"
           />
+          <HeadAssets />
         </Head>
         <body>
           <Scripts />
