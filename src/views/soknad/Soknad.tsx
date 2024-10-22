@@ -38,15 +38,15 @@ export function Soknad(props: IProps) {
   const invalidSectionParams = isNaN(Number(sectionParams));
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
   const sectionIndex = sectionNumber - 1;
-  const isLastSection =
-    soknadState.ferdig && orkestratorState && orkestratorState.erFullført;
+  const isLastSection = soknadState.ferdig && orkestratorState && orkestratorState.erFullført;
 
   // Number of sections
-  const numberOfOrkestratorSections = orkestratorState && orkestratorState.antallSeksjoner || 0;
+  const numberOfOrkestratorSections = (orkestratorState && orkestratorState.antallSeksjoner) || 0;
   const isOrkestratorSection = sectionNumber <= numberOfOrkestratorSections;
 
   // Orkestrator and Quiz section data based on sectionParams
-  const currentOrkestratorSectionData = orkestratorState && orkestratorState.seksjoner[sectionIndex];
+  const currentOrkestratorSectionData =
+    orkestratorState && orkestratorState.seksjoner[sectionIndex];
   const currentQuizSectionData = soknadState.seksjoner[sectionIndex - numberOfOrkestratorSections];
 
   // Validation
@@ -60,8 +60,7 @@ export function Soknad(props: IProps) {
     }
 
     const availiableSections =
-      soknadState.seksjoner.length +
-      orkestratorState?.antallSeksjoner;
+      soknadState.seksjoner.length + ((orkestratorState && orkestratorState?.antallSeksjoner) || 0);
 
     if (invalidSectionParams || sectionNumber > availiableSections) {
       // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
@@ -79,7 +78,7 @@ export function Soknad(props: IProps) {
 
   function navigateToNextSection() {
     if (isOrkestratorSection) {
-      if (orkestratorState && !currentOrkestratorSectionData.erFullført) {
+      if (currentOrkestratorSectionData && !currentOrkestratorSectionData.erFullført) {
         setUnansweredFaktumId(currentOrkestratorSectionData.nesteUbesvarteOpplysning.opplysningId);
       } else {
         const nextIndex = sectionNumber + 1;
@@ -140,7 +139,9 @@ export function Soknad(props: IProps) {
           </div>
         )}
 
-        {isOrkestratorSection && <Section section={currentOrkestratorSectionData} />}
+        {isOrkestratorSection && currentOrkestratorSectionData && (
+          <Section section={currentOrkestratorSectionData} />
+        )}
         {!isOrkestratorSection && <QuizSection section={currentQuizSectionData} />}
 
         <div className={styles.loaderContainer}>

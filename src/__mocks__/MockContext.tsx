@@ -9,7 +9,7 @@ import { ISanityTexts } from "../types/sanity.types";
 import { MockQuizProvider } from "./MockQuizProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInfoProvider } from "../context/user-info-context";
-import { IOrkestratorSeksjon } from "../types/orkestrator.types";
+import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -38,20 +38,25 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
-export const mockOrkestratorState: IOrkestratorSeksjon[] = [
-  {
-    navn: "bostedsland",
-    besvarteOpplysninger: [],
-    erFullført: false,
-    nesteUbesvarteOpplysning: {
-      opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
-      tekstnøkkel: "faktum.hvilket-land-bor-du-i",
-      type: "land",
-      svar: null,
-      gyldigeSvar: ["NOR", "SWE", "FIN"],
-    },
+export const mockOrkestratorSeksjon: IOrkestratorSeksjon = {
+  navn: "bostedsland",
+  besvarteOpplysninger: [],
+  erFullført: false,
+  nesteUbesvarteOpplysning: {
+    opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
+    tekstnøkkel: "faktum.hvilket-land-bor-du-i",
+    type: "land",
+    svar: null,
+    gyldigeSvar: ["NOR", "SWE", "FIN"],
   },
-];
+};
+
+export const mockOrkestratorState: IOrkestratorSoknad = {
+  søknadId: "123456",
+  seksjoner: [mockOrkestratorSeksjon],
+  erFullført: true,
+  antallSeksjoner: 2,
+};
 
 export const mockSection: IQuizSeksjon = {
   fakta: [],
