@@ -28,3 +28,10 @@ export interface IOrkestratorSeksjon {
   besvarteOpplysninger: IOpplysning[];
   erFullført: boolean;
 }
+
+export interface IOrkestratorSoknad {
+  søknadId: string;
+  seksjoner: IOrkestratorSeksjon[];
+  erFullført: boolean;
+  antallSeksjoner: number;
+}

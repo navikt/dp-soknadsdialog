@@ -25,11 +25,11 @@ import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
 import { getOrkestratorState } from "../../api/common/orkestrator-api";
-import { IOrkestratorSeksjon } from "../../../types/orkestrator.types";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
-  orkestratorState: IOrkestratorSeksjon[] | null;
+  orkestratorState: IOrkestratorSoknad | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
