@@ -44,7 +44,7 @@
     "@types/js-cookie": "^3.0.6",
     "@unleash/nextjs": "^1.4.4",
     "classnames": "^2.5.1",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.1.0",
     "i18n-iso-countries": "^7.12.0",
     "js-cookie": "^3.0.5",
     "next": "^14.2.15",
