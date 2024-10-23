@@ -23,6 +23,8 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(uuid)) {
+    logRequestError("Ugyldig UUID format", uuid);
+
     return res.status(400).send("Ugyldig UUID format");
   }
 
