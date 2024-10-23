@@ -21,7 +21,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
 
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   if (!uuidRegex.test(uuid)) {
     return res.status(400).send("Ugyldig UUID format");
   }
