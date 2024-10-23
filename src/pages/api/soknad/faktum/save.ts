@@ -6,6 +6,7 @@ import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
 import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
 import { getSoknadState } from "../../common/quiz-api";
+import { UUID_REGEX } from "../../../../constants";
 
 export interface ISaveFaktumBody {
   uuid: string;
@@ -20,6 +21,12 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
 
   const requestId = req.headers["x-request-id"] || uuidV4();
   const { uuid, faktum, svar } = req.body;
+
+  if (!UUID_REGEX.test(uuid)) {
+    logRequestError("Ugyldig UUID format", uuid);
+
+    return res.status(400).send("Ugyldig UUID format");
+  }
 
   const onBehalfOf = await getSoknadOnBehalfOfToken(req);
   if (!onBehalfOf.ok) {
