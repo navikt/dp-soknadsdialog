@@ -51,7 +51,6 @@ describe("FaktumDato", () => {
   });
 
   describe("When user selects an answer", () => {
-    // Error
     test("Should post the answer to the server", async () => {
       const user = userEvent.setup();
 
@@ -144,7 +143,6 @@ describe("FaktumDato", () => {
     });
   });
 
-  // Feilet
   describe("When user types in date without dot between date, month and year on datepicker. Eg. 10102022", () => {
     test("Should post 2022-10-10 to server because DDMMYYYY is also a valid format", async () => {
       const user = userEvent.setup();
