@@ -37,7 +37,7 @@ const faktumMockData: QuizFaktum = {
 const saveFaktumMockData: ISaveFaktumBody = {
   faktum: faktumMockData,
   svar: faktumMockData.gyldigeValg[0],
-  uuid: "ce035d7f-c2a7-4954-a103-60402bdf69ac", // mock uuidv4
+  uuid: "ce035d7f-c2a7-4954-a103-60402bdf69ac",
 };
 
 describe("/api/soknad/faktum/save", () => {
