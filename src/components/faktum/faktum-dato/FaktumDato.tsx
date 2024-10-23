@@ -84,7 +84,7 @@ function FaktumDatoComponent(
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const hasWarning = debouncedDate && applicationDateIsOverTwoWeeks(new Date(debouncedDate));
+  const hasWarning = currentAnswer && applicationDateIsOverTwoWeeks(new Date(currentAnswer));
 
   const fromDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
     ? SOKNAD_DATO_DATEPICKER_MIN_DATE
@@ -116,7 +116,7 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && <FaktumDatoWarning selectedDate={debouncedDate} />}
+      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
     </div>
   );
 }

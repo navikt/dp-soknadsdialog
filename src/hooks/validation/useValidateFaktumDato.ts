@@ -2,12 +2,12 @@ import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   isOverTwoWeeks,
-  isWithinValidSoknadDatoRange,
   isWithinValidDateRange,
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
+import { SOKNAD_DATO_DATEPICKER_MAX_DATE, SOKNAD_DATO_DATEPICKER_MIN_DATE } from "../../constants";
 interface IUseValidateFaktumDato {
   validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
   applicationDateIsOverTwoWeeks: (date: Date) => boolean;
@@ -16,9 +16,7 @@ interface IUseValidateFaktumDato {
 }
 
 const furetureDateAllowedList = [
-  "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.kontraktfestet-sluttdato",
-  "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
   "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
@@ -51,10 +49,22 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
       return false;
     }
 
+    if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
+      if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
+        setErrorMessage("Dato du søker er for langt tilbake i tid");
+        return false;
+      }
+
+      if (date >= SOKNAD_DATO_DATEPICKER_MAX_DATE) {
+        setErrorMessage("Dato du søker er for langt frem i tid");
+        return false;
+      }
+
+      return true;
+    }
+
     const future = isFuture(date);
-    const isValid = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
-      ? isWithinValidSoknadDatoRange(date)
-      : isWithinValidDateRange(date);
+    const isValid = isWithinValidDateRange(date);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {

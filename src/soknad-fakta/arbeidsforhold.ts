@@ -2,7 +2,7 @@ export const arbeidsforhold = {
   id: "arbeidsforhold",
   fakta: [
     {
-      id: "faktum.dagpenger-soknadsdato",
+      id: "faktum.arbeidsforhold.kontraktfestet-sluttdato",
       type: "localdate",
     },
     {

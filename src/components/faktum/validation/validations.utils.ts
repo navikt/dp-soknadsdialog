@@ -1,10 +1,5 @@
 import { addWeeks } from "date-fns";
-import {
-  DATEPICKER_MIN_DATE,
-  MAX_TEXT_LENGTH,
-  SOKNAD_DATO_DATEPICKER_MAX_DATE,
-  SOKNAD_DATO_DATEPICKER_MIN_DATE,
-} from "../../../constants";
+import { DATEPICKER_MIN_DATE, MAX_TEXT_LENGTH } from "../../../constants";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { DATEPICKER_MAX_DATE } from "./../../../constants";
 
@@ -32,10 +27,6 @@ export function isOverTwoWeeks(date: Date): boolean {
 
 export function isWithinValidDateRange(date: Date): boolean {
   return date >= DATEPICKER_MIN_DATE && date <= DATEPICKER_MAX_DATE;
-}
-
-export function isWithinValidSoknadDatoRange(date: Date): boolean {
-  return date >= SOKNAD_DATO_DATEPICKER_MIN_DATE && date <= SOKNAD_DATO_DATEPICKER_MAX_DATE;
 }
 
 export function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
