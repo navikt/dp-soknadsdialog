@@ -13,14 +13,16 @@ import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStartet } from "../../amplitude.tracking";
 import { logger } from "@navikt/next-logger";
+import { useFeatureToggles } from "../../context/feature-toggle-context";
 
 export function StartSoknad() {
   const router = useRouter();
   const { setFocus } = useSetFocus();
+  const { soknadsdialogMedOrkestratorIsEnabled } = useFeatureToggles();
   const [isError, setIsError] = useState(false);
   const { getAppText, getInfosideText } = useSanity();
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
-  const [isCreatingSoknadUUID, setIsCreatingSoknadUUID] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [showConsentValidation, setShowConsentValidation] = useState(false);
   const missingConsentRef = useRef<HTMLInputElement>(null);
   const startSideText = getInfosideText("startside");
@@ -44,20 +46,41 @@ export function StartSoknad() {
       return;
     }
 
-    try {
-      setIsCreatingSoknadUUID(true);
-      const uuidResponse = await fetch(api("soknad/uuid"));
+    if (!soknadsdialogMedOrkestratorIsEnabled) {
+      try {
+        setIsLoading(true);
+        const uuidResponse = await fetch(api("soknad/uuid"));
 
-      if (uuidResponse.ok) {
-        const uuid = await uuidResponse.text();
-        trackSkjemaStartet("dagpenger", uuid);
-        router.push(`/soknad/${uuid}`);
-      } else {
-        throw new Error(uuidResponse.statusText);
+        if (uuidResponse.ok) {
+          const uuid = await uuidResponse.text();
+          trackSkjemaStartet("dagpenger", uuid);
+          router.push(`/soknad/${uuid}`);
+        } else {
+          throw new Error(uuidResponse.statusText);
+        }
+      } catch (error) {
+        logger.error(error, "StartSoknad: Error creating UUID");
+        setIsError(true);
       }
-    } catch (error) {
-      logger.error(error, "StartSoknad: Error creating UUID");
-      setIsError(true);
+    }
+
+    if (soknadsdialogMedOrkestratorIsEnabled) {
+      try {
+        setIsLoading(true);
+        const startSoknadResponse = await fetch(api("orkestrator/start"));
+
+        if (startSoknadResponse.ok) {
+          const uuid = await startSoknadResponse.json();
+
+          trackSkjemaStartet("dagpenger", uuid);
+          router.push(`/soknad/${uuid}`);
+        } else {
+          throw new Error(startSoknadResponse.statusText);
+        }
+      } catch (error) {
+        logger.error(error, "StartSoknad: Error creating soknad");
+        setIsError(true);
+      }
     }
   }
 
@@ -95,12 +118,7 @@ export function StartSoknad() {
           }
           ref={missingConsentRef}
         />
-        <Button
-          variant="primary"
-          size="medium"
-          onClick={startSoknad}
-          loading={isCreatingSoknadUUID}
-        >
+        <Button variant="primary" size="medium" onClick={startSoknad} loading={isLoading}>
           {getAppText("start-soknad.knapp.start")}
         </Button>
       </main>

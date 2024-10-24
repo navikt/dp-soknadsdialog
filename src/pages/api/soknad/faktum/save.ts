@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
+import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
 import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
-import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
+import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { getSoknadState } from "../../common/quiz-api";
 import { UUID_REGEX } from "../../../../constants";
 

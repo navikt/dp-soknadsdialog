@@ -7,10 +7,10 @@ import { SanityProvider } from "./sanity-context";
 import createFetchMock from "vitest-fetch-mock";
 
 import userEvent from "@testing-library/user-event";
-import { mockSanityTexts } from "../__mocks__/MockContext";
+import { mockOrkestratorState, mockSanityTexts } from "../__mocks__/MockContext";
 import { ValidationProvider } from "./validation-context";
 
-const initialState: IQuizState = { ferdig: false, seksjoner: [], antallSeksjoner: 0 };
+const mockQuizState: IQuizState = { ferdig: false, seksjoner: [], antallSeksjoner: 0 };
 const faktum: IQuizBooleanFaktum = {
   beskrivendeId: "f1",
   gyldigeValg: ["f1.svar.ja", "f1.svar.nei"],
@@ -45,7 +45,7 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider initialState={initialState}>
+        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />
@@ -78,7 +78,7 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider initialState={initialState}>
+        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />

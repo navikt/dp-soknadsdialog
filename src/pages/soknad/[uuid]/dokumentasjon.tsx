@@ -118,7 +118,7 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <QuizProvider initialState={soknadState}>
+    <QuizProvider quizState={soknadState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>

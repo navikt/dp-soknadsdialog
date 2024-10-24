@@ -2,11 +2,11 @@ import { logger } from "@navikt/next-logger";
 import { evaluateFlags, flagsClient, getDefinitions } from "@unleash/nextjs";
 
 export interface IFeatureToggles {
-  arbeidsforholdIsEnabled: boolean;
+  soknadsdialogMedOrkestratorIsEnabled: boolean;
 }
 
 export const defaultFeatureToggles = {
-  arbeidsforholdIsEnabled: false,
+  soknadsdialogMedOrkestratorIsEnabled: false,
 };
 
 export async function getFeatureToggles(): Promise<IFeatureToggles> {
@@ -17,7 +17,9 @@ export async function getFeatureToggles(): Promise<IFeatureToggles> {
     const { toggles } = evaluateFlags(definitions);
     const flags = flagsClient(toggles);
 
-    featureToggles.arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
+    featureToggles.soknadsdialogMedOrkestratorIsEnabled = flags.isEnabled(
+      "dp-soknadsdialog-med-dp-soknad-orkestrator",
+    );
 
     return featureToggles;
   } catch (error) {
