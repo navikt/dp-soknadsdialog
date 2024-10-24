@@ -51,7 +51,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
       if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
-        setErrorMessage(getAppText("validering.soknadsdato.for-tidlig-tilbake-i-tid"));
+        setErrorMessage(getAppText("validering.soknadsdato.for-langt-tilbake-i-tid"));
         return false;
       }
 
