@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { addWeeks, addYears, format, formatISO, subYears } from "date-fns";
+import { addMonths, addWeeks, addYears, format, formatISO, subMonths, subYears } from "date-fns";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
@@ -10,7 +10,7 @@ const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",
   type: "localdate",
   readOnly: false,
-  beskrivendeId: "faktum.dagpenger-soknadsdato",
+  beskrivendeId: "faktum.arbeidsforhold.midlertidig-arbeidsforhold-med-sluttdato",
   sannsynliggjoresAv: [],
 };
 
@@ -239,19 +239,23 @@ describe("FaktumDato", () => {
         });
       });
 
-      test("When user clear selected date three weeks from now should removes error message and post null to server", async () => {
+      test("When user clear selected date three weeks from now should removes warning message and post null to server", async () => {
         const threeWeeksFromNow = addWeeks(new Date(), 3);
         const threeWeeksFromNotIsoFormatted = formatISO(threeWeeksFromNow, {
           representation: "date",
         });
 
-        faktumMockData.svar = threeWeeksFromNotIsoFormatted;
+        const faktumSoknadsdatoMockData = {
+          ...faktumMockData,
+          beskrivendeId: "faktum.dagpenger-soknadsdato",
+          svar: threeWeeksFromNotIsoFormatted,
+        };
 
         const user = userEvent.setup();
 
         render(
           <MockContext mockQuizContext={true}>
-            <FaktumDato faktum={faktumMockData} />
+            <FaktumDato faktum={faktumSoknadsdatoMockData} />
           </MockContext>,
         );
 
@@ -261,13 +265,81 @@ describe("FaktumDato", () => {
           expect(warningMessage).toBeInTheDocument();
         });
 
-        const datepicker = screen.getByLabelText(faktumMockData.beskrivendeId) as HTMLInputElement;
+        const datepicker = screen.getByLabelText(
+          faktumSoknadsdatoMockData.beskrivendeId,
+        ) as HTMLInputElement;
         await user.clear(datepicker);
 
         await waitFor(() => {
           expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
-          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockData, null);
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumSoknadsdatoMockData, null);
           expect(warningMessage).not.toBeInTheDocument();
+        });
+      });
+
+      test("Selects a date four months from now should post null to server and display error message", async () => {
+        const faktumSoknadsdatoMockData = {
+          ...faktumMockData,
+          beskrivendeId: "faktum.dagpenger-soknadsdato",
+        };
+
+        const date = addMonths(new Date(), 4);
+        const datePickerFormattedDate = format(date, "dd.MM.yyyy");
+
+        const user = userEvent.setup();
+
+        render(
+          <MockContext mockQuizContext={true}>
+            <FaktumDato faktum={faktumSoknadsdatoMockData} />
+          </MockContext>,
+        );
+
+        const datepicker = screen.getByLabelText(
+          faktumSoknadsdatoMockData.beskrivendeId,
+        ) as HTMLInputElement;
+        await user.type(datepicker, datePickerFormattedDate);
+
+        const datePickerError = document.querySelector(
+          '*[id^="datepicker-input-error"]',
+        ) as HTMLInputElement;
+
+        await waitFor(() => {
+          expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumSoknadsdatoMockData, null);
+          expect(datePickerError).toBeInTheDocument();
+        });
+      });
+
+      test("Selects a date seven months before now should post null to server and display error message", async () => {
+        const faktumSoknadsdatoMockData = {
+          ...faktumMockData,
+          beskrivendeId: "faktum.dagpenger-soknadsdato",
+        };
+
+        const date = subMonths(new Date(), 7);
+        const datePickerFormattedDate = format(date, "dd.MM.yyyy");
+
+        const user = userEvent.setup();
+
+        render(
+          <MockContext mockQuizContext={true}>
+            <FaktumDato faktum={faktumSoknadsdatoMockData} />
+          </MockContext>,
+        );
+
+        const datepicker = screen.getByLabelText(
+          faktumSoknadsdatoMockData.beskrivendeId,
+        ) as HTMLInputElement;
+        await user.type(datepicker, datePickerFormattedDate);
+
+        const datePickerError = document.querySelector(
+          '*[id^="datepicker-input-error"]',
+        ) as HTMLInputElement;
+
+        await waitFor(() => {
+          expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+          expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumSoknadsdatoMockData, null);
+          expect(datePickerError).toBeInTheDocument();
         });
       });
     });

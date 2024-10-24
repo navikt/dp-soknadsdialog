@@ -1,7 +1,7 @@
 import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
 import { IPeriodeFaktumAnswerState } from "../../components/faktum/faktum-periode/FaktumPeriode";
-import { isWithinValidYearRange } from "../../components/faktum/validation/validations.utils";
+import { isWithinValidDateRange } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
@@ -21,7 +21,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
 
   useEffect(() => {
     setFomErrorMessage(
-      unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+      unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
     );
   }, [unansweredFaktumId]);
 
@@ -39,7 +39,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     }
 
     const fomDateIsInfuture = isFuture(new Date(fom));
-    const isValidFromDate = isWithinValidYearRange(new Date(fom));
+    const isValidFromDate = isWithinValidDateRange(new Date(fom));
 
     setFomErrorMessage(undefined);
     setTomErrorMessage(undefined);
@@ -71,7 +71,7 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
       isValidPeriode = false;
     }
 
-    if (tom && !isWithinValidYearRange(new Date(tom))) {
+    if (tom && !isWithinValidDateRange(new Date(tom))) {
       setTomErrorMessage(getAppText("validering.ugyldig-dato"));
       isValidPeriode = false;
     }
