@@ -51,12 +51,12 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
 
     if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
       if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
-        setErrorMessage("Dato du søker er for langt tilbake i tid");
+        setErrorMessage(getAppText("validering.soknadsdato.for-tidlig-tilbake-i-tid"));
         return false;
       }
 
       if (date >= SOKNAD_DATO_DATEPICKER_MAX_DATE) {
-        setErrorMessage("Dato du søker er for langt frem i tid");
+        setErrorMessage(getAppText("validering.soknadsdato.for-langt-frem-i-tid"));
         return false;
       }
 
