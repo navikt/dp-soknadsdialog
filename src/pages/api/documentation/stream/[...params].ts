@@ -38,12 +38,8 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
       },
-    }).catch((error) => {
-      logRequestError(
-        error,
-        undefined,
-        "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
-      );
+      // @ts-expect-error Duplex property is missing in types
+      duplex: "half",
     });
   } catch (error) {
     const message = getErrorMessage(error);
