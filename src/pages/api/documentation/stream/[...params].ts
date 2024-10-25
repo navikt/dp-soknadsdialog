@@ -34,29 +34,16 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
 
     logger.info("Starter streaming av dokumentkrav fil", { urn });
 
-    const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
+    return fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
       },
-    });
-
-    if (!response.ok) {
+    }).catch((error) => {
       logRequestError(
-        response.statusText,
+        error,
         undefined,
         "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
       );
-      return res.status(response.status).send(response.statusText);
-    }
-
-    const mellomlagringContentType = response.headers.get("Content-Type");
-
-    return new Response(response.body, {
-      headers: {
-        "Content-type": mellomlagringContentType || "application/octet-stream",
-        "Content-Disposition": "inline;",
-        "Transfer-encoding": "chunked",
-      },
     });
   } catch (error) {
     const message = getErrorMessage(error);
