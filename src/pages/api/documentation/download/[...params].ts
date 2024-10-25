@@ -4,6 +4,7 @@ import path from "path";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
+import { logger } from "@navikt/next-logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -30,6 +31,8 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     if (!onBehalfOf.ok) {
       return res.status(401).end();
     }
+
+    logger.info("Starter nedlasting av dokumentkrav fil", { urn });
 
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
