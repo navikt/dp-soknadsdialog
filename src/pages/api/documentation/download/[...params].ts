@@ -32,7 +32,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(401).end();
     }
 
-    logger.info("Starter nedlasting av dokumentkrav fil", { urn });
+    logger.info(`Starter nedlasting av dokumentkrav fil=${urn}`);
 
     const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
