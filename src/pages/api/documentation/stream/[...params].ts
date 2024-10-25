@@ -34,17 +34,44 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
 
     logger.info("Starter streaming av dokumentkrav fil", { urn });
 
-    return fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
+    const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
       },
-      // @ts-expect-error Duplex property is missing in types
-      duplex: "half",
     });
+
+    if (!response.ok) {
+      logRequestError(
+        response.statusText,
+        undefined,
+        "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
+      );
+      return res.status(response.status).send(response.statusText);
+    }
+
+    const mellomlagringContentType = response.headers.get("Content-Type");
+
+    // Stream the response directly to the client
+    res.setHeader("Content-Type", mellomlagringContentType || "application/octet-stream");
+    res.setHeader("Content-Disposition", "inline");
+
+    const reader = response.body!.getReader();
+    for await (const chunk of streamAsyncIterable(reader)) {
+      res.write(chunk);
+    }
+    res.end();
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
     return res.status(500).send(message);
+  }
+}
+
+async function* streamAsyncIterable(reader: ReadableStreamDefaultReader<Uint8Array>) {
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    yield value;
   }
 }
 
