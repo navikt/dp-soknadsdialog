@@ -5,6 +5,7 @@ import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { logger } from "@navikt/next-logger";
+import { NextResponse } from "next/server";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -50,13 +51,14 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const mellomlagringContentType = response.headers.get("Content-Type");
-    if (mellomlagringContentType) {
-      res.setHeader("Content-Type", mellomlagringContentType);
-    }
 
-    res.setHeader("Content-Disposition", "inline;");
-
-    return res.status(response.status).send(response.body);
+    return new NextResponse(response.body, {
+      headers: {
+        "Content-type": mellomlagringContentType || "application/octet-stream",
+        "Content-Disposition": "inline;",
+        "Transfer-encoding": "chunked",
+      },
+    });
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
