@@ -5,6 +5,7 @@ import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 import { logRequestError } from "../../../../error.logger";
 import { logger } from "@navikt/next-logger";
+import { proxyApiRouteRequest } from "@navikt/next-api-proxy";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -12,6 +13,8 @@ const imageBuffer = fs.readFileSync(filePath);
 export const config = {
   api: {
     responseLimit: false,
+    bodyParser: false,
+    externalResolver: true,
   },
 };
 
@@ -32,34 +35,18 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(401).end();
     }
 
-    logger.info(`Starter nedlasting av dokumentkrav fil=${urn}`);
+    logger.info("Starter streaming av dokumentkrav fil", { urn });
 
-    const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
-      headers: {
-        Authorization: `Bearer ${onBehalfOf.token}`,
-      },
+    // Proxy the request
+    await proxyApiRouteRequest({
+      req,
+      res,
+      hostname: "dp-mellomlagring",
+      path: `/v1/obo/mellomlagring/vedlegg/${urn}`,
+      bearerToken: onBehalfOf.token,
+      // use https: false if you are going through service discovery
+      https: false,
     });
-
-    if (!response.ok) {
-      logRequestError(
-        response.statusText,
-        undefined,
-        "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
-      );
-      return res.status(response.status).send(response.statusText);
-    }
-
-    const mellomlagringContentType = response.headers.get("Content-Type");
-    if (mellomlagringContentType) {
-      res.setHeader("Content-Type", mellomlagringContentType);
-    }
-
-    res.setHeader("Content-Disposition", "inline;");
-
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    return res.status(response.status).send(buffer);
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
