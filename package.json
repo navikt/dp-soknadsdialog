@@ -38,7 +38,7 @@
     "@navikt/next-api-proxy": "^4.1.0",
     "@navikt/next-logger": "^1.32.0",
     "@navikt/oasis": "^3.4.0",
-    "@next/bundle-analyzer": "^14.2.15",
+    "@next/bundle-analyzer": "^15.0.1",
     "@portabletext/react": "^3.1.0",
     "@portabletext/to-html": "^2.0.13",
     "@svgr/webpack": "^8.1.0",
