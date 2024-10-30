@@ -75,6 +75,8 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - run: npm run build
+      - name: prune dev dependencies
+        run: npm prune --production
 
       # Bygg docker image
       - name: docker-build-push
