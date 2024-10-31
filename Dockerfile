@@ -1,4 +1,4 @@
-FROM node:23.1.0-alpine
+FROM gcr.io/distroless/nodejs22-debian12
 
 WORKDIR /usr/src/app
 
@@ -14,6 +14,5 @@ COPY .next/standalone ./
 COPY .next/static ./.next/static
 
 EXPOSE 3000
-USER node
 
-CMD ["node", "server.js"]
+CMD ["server.js"]
