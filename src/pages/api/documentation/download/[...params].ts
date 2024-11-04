@@ -1,6 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import fs from "fs";
-import { IncomingMessage } from "http";
 import https from "https";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
@@ -46,9 +45,9 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     };
 
     https
-      .get(requestUrl, requestHeader, (proxyRes: IncomingMessage) => {
+      .get(requestUrl, requestHeader, (proxyRes) => {
         if (proxyRes.statusCode && proxyRes.statusCode >= 400) {
-          return handleProxyError(proxyRes, res);
+          return handleProxyError(proxyRes as NextApiRequest, res);
         }
 
         const mellomlagringContentType = proxyRes.headers["content-type"];
@@ -65,7 +64,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function handleProxyError(proxyRes: IncomingMessage, res: NextApiResponse): void {
+function handleProxyError(proxyRes: NextApiRequest, res: NextApiResponse): void {
   const error = new Error(
     `Failed to download files from dp-mellomlagring: ${proxyRes.statusMessage}`,
   );
