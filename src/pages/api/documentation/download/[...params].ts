@@ -1,11 +1,12 @@
+import { logger } from "@navikt/next-logger";
 import fs from "fs";
+import { IncomingMessage } from "http";
+import https from "https";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
+import { logRequestError } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
-import { logRequestError } from "../../../../error.logger";
-import { logger } from "@navikt/next-logger";
-import { proxyApiRouteRequest } from "@navikt/next-api-proxy";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const imageBuffer = fs.readFileSync(filePath);
@@ -37,21 +38,49 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
 
     logger.info("Starter streaming av dokumentkrav fil", { urn });
 
-    // Proxy the request
-    await proxyApiRouteRequest({
-      req,
-      res,
-      hostname: "dp-mellomlagring",
-      path: `/v1/obo/mellomlagring/vedlegg/${urn}`,
-      bearerToken: onBehalfOf.token,
-      // use https: false if you are going through service discovery
-      https: false,
-    });
+    const requestUrl = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`;
+    const requestHeader = {
+      headers: {
+        Authorization: `Bearer ${onBehalfOf.token}`,
+      },
+    };
+
+    https
+      .get(requestUrl, requestHeader, (proxyRes: IncomingMessage) => {
+        if (proxyRes.statusCode && proxyRes.statusCode >= 400) {
+          return handleProxyError(proxyRes, res);
+        }
+
+        const mellomlagringContentType = proxyRes.headers["content-type"];
+        if (mellomlagringContentType) {
+          res.setHeader("Content-Type", mellomlagringContentType);
+        }
+
+        res.setHeader("Content-Disposition", "inline");
+        proxyRes.pipe(res);
+      })
+      .on("error", (error: Error) => handleStreamError(error, res));
   } catch (error) {
-    const message = getErrorMessage(error);
-    logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
-    return res.status(500).send(message);
+    handleStreamError(error as Error, res);
   }
+}
+
+function handleProxyError(proxyRes: IncomingMessage, res: NextApiResponse): void {
+  const error = new Error(
+    `Failed to download files from dp-mellomlagring: ${proxyRes.statusMessage}`,
+  );
+  logRequestError(
+    error.message,
+    undefined,
+    "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
+  );
+  res.status(proxyRes.statusCode || 500).send(proxyRes.statusMessage || "Error");
+}
+
+function handleStreamError(error: Error, res: NextApiResponse): void {
+  const message = getErrorMessage(error);
+  logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
+  res.status(500).send(message);
 }
 
 export default downloadHandler;
