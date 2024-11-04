@@ -10,20 +10,6 @@ import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 const filePath = path.resolve("src/localhost-data/sample.pdf");
 const fileStream = fs.createReadStream(filePath);
 
-// Handle the stream events
-fileStream.on("data", (chunk) => {
-  // Process the chunk of data
-  console.log("Received a chunk of data:", chunk);
-});
-
-fileStream.on("end", () => {
-  console.log("Finished reading the file.");
-});
-
-fileStream.on("error", (err) => {
-  console.error("An error occurred:", err);
-});
-
 export const config = {
   api: {
     responseLimit: false,
