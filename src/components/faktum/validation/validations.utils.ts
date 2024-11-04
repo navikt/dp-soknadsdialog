@@ -25,7 +25,7 @@ export function isOverTwoWeeks(date: Date): boolean {
   return date >= addWeeks(new Date(), 2);
 }
 
-export function isWithinValidYearRange(date: Date): boolean {
+export function isWithinValidDateRange(date: Date): boolean {
   return date >= DATEPICKER_MIN_DATE && date <= DATEPICKER_MAX_DATE;
 }
 
@@ -36,7 +36,7 @@ export function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFa
 
   for (const generatorFaktumSvar of generatorFaktum.svar) {
     const unansweredGeneratorFaktum = generatorFaktumSvar.find(
-      (faktum: QuizFaktum) => faktum.svar === undefined
+      (faktum: QuizFaktum) => faktum.svar === undefined,
     );
 
     if (unansweredGeneratorFaktum) {

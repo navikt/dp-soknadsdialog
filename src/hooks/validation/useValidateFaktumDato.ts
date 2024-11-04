@@ -2,26 +2,25 @@ import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   isOverTwoWeeks,
-  isWithinValidYearRange,
+  isWithinValidDateRange,
 } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
+import { SOKNAD_DATO_DATEPICKER_MAX_DATE, SOKNAD_DATO_DATEPICKER_MIN_DATE } from "../../constants";
 interface IUseValidateFaktumDato {
   validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
-  getHasWarning: (date: Date) => boolean;
+  applicationDateIsOverTwoWeeks: (date: Date) => boolean;
   errorMessage: string | undefined;
   clearErrorMessage: () => void;
 }
 
 const furetureDateAllowedList = [
-  "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.kontraktfestet-sluttdato",
-  "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
   "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
-const futureDateAllowedWithWarningList = [
+export const futureDateAllowedWithWarningList = [
   "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
 ];
@@ -34,7 +33,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   useEffect(() => {
     if (!errorMessage) {
       setErrorMessage(
-        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
       );
     }
   }, [unansweredFaktumId]);
@@ -50,8 +49,22 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
       return false;
     }
 
+    if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
+      if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
+        setErrorMessage(getAppText("validering.soknadsdato.for-langt-tilbake-i-tid"));
+        return false;
+      }
+
+      if (date >= SOKNAD_DATO_DATEPICKER_MAX_DATE) {
+        setErrorMessage(getAppText("validering.soknadsdato.for-langt-frem-i-tid"));
+        return false;
+      }
+
+      return true;
+    }
+
     const future = isFuture(date);
-    const isValid = isWithinValidYearRange(date);
+    const isValid = isWithinValidDateRange(date);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
@@ -74,7 +87,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
     return !future && isValid;
   }
 
-  function getHasWarning(date: Date) {
+  function applicationDateIsOverTwoWeeks(date: Date) {
     return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
@@ -85,7 +98,7 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   return {
     errorMessage,
     validateAndIsValid,
-    getHasWarning,
+    applicationDateIsOverTwoWeeks,
     clearErrorMessage,
   };
 }
