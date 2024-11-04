@@ -8,7 +8,21 @@ import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
-const imageBuffer = fs.readFileSync(filePath);
+const imageStream = fs.createReadStream(filePath);
+
+// Handle the stream events
+imageStream.on("data", (chunk) => {
+  // Process the chunk of data
+  console.log("Received a chunk of data:", chunk);
+});
+
+imageStream.on("end", () => {
+  console.log("Finished reading the file.");
+});
+
+imageStream.on("error", (err) => {
+  console.error("An error occurred:", err);
+});
 
 export const config = {
   api: {
@@ -21,7 +35,7 @@ export const config = {
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.USE_MOCKS === "true") {
     res.setHeader("Content-Type", "application/pdf");
-    return res.send(imageBuffer);
+    return res.send(imageStream);
   }
 
   const { params } = req.query;
@@ -38,6 +52,8 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     logger.info("Starter streaming av dokumentkrav fil", { urn });
 
     const requestUrl = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`;
+
+    console.log(`🔥 requestUrl :`, requestUrl);
     const requestHeader = {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
