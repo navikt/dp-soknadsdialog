@@ -80,13 +80,13 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     res.setHeader("Transfer-Encoding", "chunked");
 
     if (!response.body) {
-      logRequestError(
-        response.statusText,
-        undefined,
-        "Download dokumentkrav files - Missing request body to generate readable stream",
-      );
+      const handlerErrorMessage = "Missing request body to generate readable stream";
+      const logErrorMessage =
+        "Download dokumentkrav files - Missing request body to generate readable stream";
 
-      res.status(500).send(response.statusText);
+      logRequestError(handlerErrorMessage, undefined, logErrorMessage);
+
+      res.status(500).send(handlerErrorMessage);
     }
 
     // @ts-ignore
@@ -95,12 +95,12 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     stream.pipe(res);
 
     stream.on("error", (err) => {
-      logRequestError(
-        err.message,
-        undefined,
-        "Download dokumentkrav files - Failed to streaming dokumentkrav file from dp-mellomlagring",
-      );
-      res.status(500).send("Error streaming dokumentkrav file");
+      const handlerErrorMessage = "Error streaming dokumentkrav file";
+      const logErrorMessage =
+        "Download dokumentkrav files - Failed to streaming dokumentkrav file from dp-mellomlagring";
+
+      logRequestError(err.message, undefined, logErrorMessage);
+      res.status(500).send(handlerErrorMessage);
     });
 
     stream.on("end", () => {
