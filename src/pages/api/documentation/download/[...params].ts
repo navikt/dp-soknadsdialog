@@ -1,8 +1,8 @@
 import { logger } from "@navikt/next-logger";
 import fs from "fs";
-import https from "https";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
+import { Readable } from "stream";
 import { logRequestError } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
@@ -53,49 +53,64 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
 
     const requestUrl = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`;
 
-    console.log(`🔥 requestUrl :`, requestUrl);
-    const requestHeader = {
+    const requestHeaders = {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
       },
     };
 
-    https
-      .get(requestUrl, requestHeader, (proxyRes) => {
-        if (proxyRes.statusCode && proxyRes.statusCode >= 400) {
-          return handleProxyError(proxyRes as NextApiRequest, res);
-        }
+    const response = await fetch(requestUrl, requestHeaders);
 
-        const mellomlagringContentType = proxyRes.headers["content-type"];
-        if (mellomlagringContentType) {
-          res.setHeader("Content-Type", mellomlagringContentType);
-        }
+    if (!response.ok) {
+      logRequestError(
+        response.statusText,
+        undefined,
+        "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
+      );
 
-        res.setHeader("Content-Disposition", "inline");
-        proxyRes.pipe(res);
-      })
-      .on("error", (error: Error) => handleStreamError(error, res));
+      res.status(500).send(response.statusText);
+    }
+
+    const mellomlagringContentType = response.headers.get("content-type");
+    if (mellomlagringContentType) {
+      res.setHeader("Content-Type", mellomlagringContentType);
+    }
+
+    res.setHeader("Content-Disposition", "inline");
+    res.setHeader("Transfer-Encoding", "chunked");
+
+    if (!response.body) {
+      logRequestError(
+        response.statusText,
+        undefined,
+        "Download dokumentkrav files - Missing request body to generate readable stream",
+      );
+
+      res.status(500).send(response.statusText);
+    }
+
+    // @ts-ignore
+    const stream = Readable.fromWeb(response.body);
+
+    stream.pipe(res);
+
+    stream.on("error", (err) => {
+      logRequestError(
+        err.message,
+        undefined,
+        "Download dokumentkrav files - Failed to streaming dokumentkrav file from dp-mellomlagring",
+      );
+      res.status(500).send("Error streaming dokumentkrav file");
+    });
+
+    stream.on("end", () => {
+      res.end();
+    });
   } catch (error) {
-    handleStreamError(error as Error, res);
+    const message = getErrorMessage(error);
+    logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
+    res.status(500).send(message);
   }
-}
-
-function handleProxyError(proxyRes: NextApiRequest, res: NextApiResponse): void {
-  const error = new Error(
-    `Failed to download files from dp-mellomlagring: ${proxyRes.statusMessage}`,
-  );
-  logRequestError(
-    error.message,
-    undefined,
-    "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
-  );
-  res.status(proxyRes.statusCode || 500).send(proxyRes.statusMessage || "Error");
-}
-
-function handleStreamError(error: Error, res: NextApiResponse): void {
-  const message = getErrorMessage(error);
-  logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
-  res.status(500).send(message);
 }
 
 export default downloadHandler;
