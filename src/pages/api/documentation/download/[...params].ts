@@ -8,19 +8,19 @@ import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
-const imageStream = fs.createReadStream(filePath);
+const fileStream = fs.createReadStream(filePath);
 
 // Handle the stream events
-imageStream.on("data", (chunk) => {
+fileStream.on("data", (chunk) => {
   // Process the chunk of data
   console.log("Received a chunk of data:", chunk);
 });
 
-imageStream.on("end", () => {
+fileStream.on("end", () => {
   console.log("Finished reading the file.");
 });
 
-imageStream.on("error", (err) => {
+fileStream.on("error", (err) => {
   console.error("An error occurred:", err);
 });
 
@@ -35,7 +35,7 @@ export const config = {
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.USE_MOCKS === "true") {
     res.setHeader("Content-Type", "application/pdf");
-    return res.send(imageStream);
+    return res.send(fileStream);
   }
 
   const { params } = req.query;
