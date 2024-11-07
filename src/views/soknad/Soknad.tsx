@@ -20,6 +20,8 @@ import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStegFullført } from "../../amplitude.tracking";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -66,6 +68,67 @@ export function Soknad(props: IProps) {
     }
   }, [soknadState]);
 
+  async function printDocument() {
+    const A4_HEIGHT = 841.89;
+    const A4_WIDTH = 595.28;
+
+    const WIDTH_MARGIN = 10;
+    const HEIGHT_MARGIN = 10;
+    const PAGE_HEIGHT = A4_HEIGHT - 2 * HEIGHT_MARGIN;
+
+    const pdf = new jsPDF('p', 'pt', 'a4');  // orientation, unit, format
+
+    const body = document.getElementById('printable');
+    const canvas = await html2canvas(body as HTMLElement);
+
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+
+    const imgWidth = A4_WIDTH - 2 * WIDTH_MARGIN;
+    const imgHeight = (imgWidth / canvasWidth) * canvasHeight;
+
+    const pageImg = canvas.toDataURL('image/png', 1.0);
+
+    let position = HEIGHT_MARGIN;
+    if (imgHeight > PAGE_HEIGHT) {  // need multi page pdf
+      let heightUnprinted = imgHeight;
+      while (heightUnprinted > 0) {
+        pdf.addImage(
+          pageImg,
+          'PNG',
+        WIDTH_MARGIN,
+          position,
+          imgWidth,
+          imgHeight
+      );
+
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, 0, A4_WIDTH, HEIGHT_MARGIN, 'F');
+        pdf.rect(0, A4_HEIGHT - HEIGHT_MARGIN, A4_WIDTH, HEIGHT_MARGIN, 'F');
+
+        heightUnprinted -= PAGE_HEIGHT;
+        position -= PAGE_HEIGHT; // next vertical placement
+
+        if (heightUnprinted > 0) pdf.addPage();
+      }
+    } else {
+      pdf.addImage(
+        pageImg,
+        'PNG',
+        WIDTH_MARGIN,
+        HEIGHT_MARGIN,
+        imgWidth,
+        imgHeight,
+      );
+    }
+
+    pdf.setFillColor(255, 255, 255);
+    pdf.rect(0, 0, A4_WIDTH, HEIGHT_MARGIN, 'F');
+    pdf.rect(0, A4_HEIGHT - HEIGHT_MARGIN, A4_WIDTH, HEIGHT_MARGIN, 'F');
+
+    pdf.save(`${currentSection.beskrivendeId}.pdf`);
+  }
+
   function navigateToNextSection() {
     if (currentSection.ferdig) {
       const currentSection = parseInt(sectionParam);
@@ -97,7 +160,7 @@ export function Soknad(props: IProps) {
   }
 
   return (
-    <>
+    <div id="printable">
       <PageMeta
         title={getAppText("soknad.side-metadata.tittel")}
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
@@ -148,6 +211,10 @@ export function Soknad(props: IProps) {
               {getAppText("soknad.knapp.neste-steg")}
             </Button>
           )}
+
+          <Button onClick={printDocument}>
+            {"Lagre pdf"}
+          </Button>
         </nav>
 
         {!isError && (
@@ -160,6 +227,6 @@ export function Soknad(props: IProps) {
 
         <ExitSoknad />
       </main>
-    </>
+    </div>
   );
 }
