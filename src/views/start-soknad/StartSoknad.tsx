@@ -72,7 +72,7 @@ export function StartSoknad() {
         description={getAppText("arbeidssokerstatus.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         {startSideText?.body && (
           <PortableText
             value={startSideText.body}

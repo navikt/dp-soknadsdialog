@@ -20,7 +20,7 @@ export function GenerellInnsendingKvittering() {
   return (
     <>
       <PageMeta title={getAppText("innsending-kvittering.side-metadata.tittel")} />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         {kvitteringText && <PortableText value={kvitteringText.body} />}
 
         <div className="my-11">
