@@ -7,6 +7,7 @@ import { createSoknadUuid } from "../common/quiz-api";
 async function uuidHandler(req: NextApiRequest, res: NextApiResponse) {
   const onBehalfOf = await getSoknadOnBehalfOfToken(req);
   if (!onBehalfOf.ok) {
+    console.log(`🔥 obotoken ikke ok`);
     return res.status(401).end();
   }
 
