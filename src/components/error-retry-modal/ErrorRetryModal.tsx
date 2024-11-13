@@ -61,7 +61,9 @@ export function ErrorRetryModal(props: IProps) {
       header={{ heading: getAppText("teknisk-feil.modal.tittel"), closeButton: false }}
     >
       <Modal.Body>
-        <BodyLong className={styles.body}>{errorMessage}</BodyLong>
+        <BodyLong role="alert" className={styles.body}>
+          {errorMessage}
+        </BodyLong>
         <Button
           className={styles.errorRetryModalButton}
           variant={"primary"}
