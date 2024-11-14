@@ -14,7 +14,7 @@ import { useValidation } from "../../../context/validation-context";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import {
-  futureDateAllowedWithWarningList,
+  allowFutureDateWithWarning,
   useValidateFaktumDato,
 } from "../../../hooks/validation/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
@@ -34,8 +34,15 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { errorMessage, validateAndIsValid, applicationDateIsOverTwoWeeks, clearErrorMessage } =
-    useValidateFaktumDato(faktum);
+  const {
+    errorMessage,
+    isValid,
+    hasWarning,
+    validateDate,
+    clearErrorMessage,
+    clearWarning,
+    setErrorMessage,
+  } = useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
   const [debouncedDate, setDebouncedDate] = useState<string | null>(currentAnswer);
@@ -57,40 +64,58 @@ function FaktumDatoComponent(
   const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
-      setCurrentAnswer(debounceValue);
-      debouncedChange(debounceValue);
+      if (value) {
+        const debounceValue = formatISO(value, { representation: "date" });
+        setCurrentAnswer(debounceValue);
+        debouncedChange(debounceValue);
+      }
     },
     onValidate: (value) => {
       if (value.isEmpty) {
         setCurrentAnswer("");
         debouncedChange("");
+        clearErrorMessage();
+      }
+
+      if (value.isInvalid) {
+        clearWarning();
       }
     },
   });
 
+  // Validere når onBlur trigges når bruker skriver inn dato manuelt.
+  function validateOnBlur() {
+    const regEx = /^(?:(\d{2})\.?(\d{2})\.?(\d{2}|\d{4})|\d{2}\.\d{2}\.\d{4})$/;
+
+    // Her skal vi validere at datoen er i riktig format
+    if (inputProps.value && !regEx.test(inputProps.value as string)) {
+      setErrorMessage(getAppText("validering.ugyldig-dato"));
+    }
+  }
+
   function saveFaktum(value: string | null) {
-    if (value === "") {
+    if (!value || value === "") {
       clearErrorMessage();
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
-    const isValidDate = validateAndIsValid(value ? new Date(value) : null);
-    saveFaktumToQuiz(faktum, isValidDate ? value : null);
+    validateDate(new Date(value));
+
+    if (isValid) {
+      saveFaktumToQuiz(faktum, value);
+    }
   }
 
   const datePickerDescription = faktumTexts?.description ? (
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const hasWarning = currentAnswer && applicationDateIsOverTwoWeeks(new Date(currentAnswer));
-
-  const fromDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
+  const fromDate = allowFutureDateWithWarning.includes(faktum.beskrivendeId)
     ? SOKNAD_DATO_DATEPICKER_MIN_DATE
     : DATEPICKER_MIN_DATE;
 
-  const toDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
+  const toDate = allowFutureDateWithWarning.includes(faktum.beskrivendeId)
     ? SOKNAD_DATO_DATEPICKER_MAX_DATE
     : DATEPICKER_MAX_DATE;
 
@@ -111,12 +136,13 @@ function FaktumDatoComponent(
           error={errorMessage}
           disabled={isLocked}
           autoComplete="off"
+          onBlur={() => validateOnBlur()}
         />
       </DatePicker>
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
+      {currentAnswer && hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
     </div>
   );
 }

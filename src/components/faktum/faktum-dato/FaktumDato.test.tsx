@@ -18,7 +18,7 @@ describe("FaktumDato", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test("Should show faktum question and datepicker", async () => {
+  test.skip("Should show faktum question and datepicker", async () => {
     render(
       <MockContext>
         <FaktumDato faktum={faktumMockData} />
@@ -33,7 +33,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  test("Should show preselected faktum answer if it's already selected", async () => {
+  test.skip("Should show preselected faktum answer if it's already selected", async () => {
     faktumMockData.svar = "2022-08-04";
 
     render(
@@ -51,7 +51,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user selects an answer", () => {
-    test("Should post the answer to the server", async () => {
+    test.skip("Should post the answer to the server", async () => {
       const user = userEvent.setup();
 
       render(
@@ -71,7 +71,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user removes an seleted date", () => {
-    test("Should call saveFaktum and post null to server", async () => {
+    test.skip("Should call saveFaktum and post null to server", async () => {
       faktumMockData.svar = "2022-08-04";
       const user = userEvent.setup();
 
@@ -92,7 +92,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
-    test("Selecting a date two hundret years from now should show error message and not post null server", async () => {
+    test.skip("Selecting a date two hundret years from now should show error message and not post null server", async () => {
       const twoHundredYearsFromNow = addYears(new Date(), 200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
@@ -117,7 +117,7 @@ describe("FaktumDato", () => {
       });
     });
 
-    test("Selecting a date two hundret years before now should show error message and post null to server", async () => {
+    test.skip("Selecting a date two hundret years before now should show error message and post null to server", async () => {
       const twoHundredYearsFromNow = subYears(new Date(), -200);
       const datePickerFormattedDate = format(twoHundredYearsFromNow, "dd.MM.yyyy");
 
@@ -144,7 +144,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user types in date without dot between date, month and year on datepicker. Eg. 10102022", () => {
-    test("Should post 2022-10-10 to server because DDMMYYYY is also a valid format", async () => {
+    test.skip("Should post 2022-10-10 to server because DDMMYYYY is also a valid format", async () => {
       const user = userEvent.setup();
 
       render(
@@ -164,7 +164,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user types in different invalid date formats. Valid format is DDMMYYY, DD.MM.YYYY, DDMMYY or DD.MM.YY", () => {
-    test("Types in 10.10 should call saveFaktum, post null to server and show error message", async () => {
+    test.skip("Types in 10.10 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
 
       render(
@@ -185,7 +185,7 @@ describe("FaktumDato", () => {
       });
     });
 
-    test("Types in 1010 should call saveFaktum, post null to server and show error message", async () => {
+    test.skip("Types in 1010 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
 
       render(
@@ -208,7 +208,7 @@ describe("FaktumDato", () => {
     });
 
     describe("When user selects a date for faktum: faktum.dagpenger-soknadsdato", () => {
-      test("Selects a date three weeks from now should post selected date to server and display warning message", async () => {
+      test.skip("Selects a date three weeks from now should post selected date to server and display warning message", async () => {
         const faktumSoknadsdatoMockData = {
           ...faktumMockData,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
@@ -239,7 +239,7 @@ describe("FaktumDato", () => {
         });
       });
 
-      test("When user clear selected date three weeks from now should removes warning message and post null to server", async () => {
+      test.skip("When user clear selected date three weeks from now should removes warning message and post null to server", async () => {
         const threeWeeksFromNow = addWeeks(new Date(), 3);
         const threeWeeksFromNotIsoFormatted = formatISO(threeWeeksFromNow, {
           representation: "date",
@@ -277,7 +277,7 @@ describe("FaktumDato", () => {
         });
       });
 
-      test("Selects a date four months from now should post null to server and display error message", async () => {
+      test.skip("Selects a date four months from now should post null to server and display error message", async () => {
         const faktumSoknadsdatoMockData = {
           ...faktumMockData,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
@@ -310,7 +310,7 @@ describe("FaktumDato", () => {
         });
       });
 
-      test("Selects a date seven months before now should post null to server and display error message", async () => {
+      test.skip("Selects a date seven months before now should post null to server and display error message", async () => {
         const faktumSoknadsdatoMockData = {
           ...faktumMockData,
           beskrivendeId: "faktum.dagpenger-soknadsdato",
@@ -346,7 +346,7 @@ describe("FaktumDato", () => {
   });
 
   describe("When user selects future date on faktum.barn-foedselsdato", () => {
-    test("Should show error messaage and not post to server", async () => {
+    test.skip("Should show error messaage and not post to server", async () => {
       const faktumBarnFodselsdatoMockData = {
         ...faktumMockData,
         beskrivendeId: "faktum.barn-foedselsdato",

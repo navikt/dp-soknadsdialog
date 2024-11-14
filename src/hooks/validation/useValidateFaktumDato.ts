@@ -9,18 +9,21 @@ import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { SOKNAD_DATO_DATEPICKER_MAX_DATE, SOKNAD_DATO_DATEPICKER_MIN_DATE } from "../../constants";
 interface IUseValidateFaktumDato {
-  validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
-  applicationDateIsOverTwoWeeks: (date: Date) => boolean;
+  isValid: boolean;
   errorMessage: string | undefined;
+  hasWarning: boolean;
+  clearWarning: () => void;
+  validateDate: (date: Date) => void;
   clearErrorMessage: () => void;
+  setErrorMessage: (message: string) => void;
 }
 
-const furetureDateAllowedList = [
+const allowFutureDate = [
   "faktum.arbeidsforhold.kontraktfestet-sluttdato",
   "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
-export const futureDateAllowedWithWarningList = [
+export const allowFutureDateWithWarning = [
   "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
 ];
@@ -29,6 +32,8 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [isValid, setIsValid] = useState(false);
+  const [hasWarning, setHasWarning] = useState(false);
 
   useEffect(() => {
     if (!errorMessage) {
@@ -36,69 +41,77 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
         unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
       );
     }
-  }, [unansweredFaktumId]);
 
-  // Validate input value
-  // Set or clear validation message based on validation state
-  // Return boolean validation state
-  function validateAndIsValid(date: Date | null): boolean {
+    if (!isValid) {
+      setHasWarning(false);
+    }
+  }, [unansweredFaktumId, isValid]);
+
+  function validateDate(date: Date): void {
     setErrorMessage(undefined);
 
-    if (!date) {
-      setErrorMessage(getAppText("validering.ugyldig-dato"));
-      return false;
-    }
-
-    if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
+    if (allowFutureDateWithWarning.includes(faktum.beskrivendeId)) {
       if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
         setErrorMessage(getAppText("validering.soknadsdato.for-langt-tilbake-i-tid"));
-        return false;
+        setIsValid(false);
+        return;
       }
 
       if (date >= SOKNAD_DATO_DATEPICKER_MAX_DATE) {
         setErrorMessage(getAppText("validering.soknadsdato.for-langt-frem-i-tid"));
-        return false;
+        setIsValid(false);
+        return;
       }
 
-      return true;
+      if (isOverTwoWeeks(date)) {
+        setHasWarning(true);
+        setIsValid(true);
+        return;
+      }
+
+      setIsValid(true);
+      return;
     }
 
-    const future = isFuture(date);
-    const isValid = isWithinValidDateRange(date);
-
-    if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
-      if (!isValid) {
+    if (allowFutureDate.includes(faktum.beskrivendeId)) {
+      if (!isWithinValidDateRange(date)) {
         setErrorMessage(getAppText("validering.ugyldig-dato"));
+        setIsValid(false);
+        return;
       }
 
-      return isValid;
+      setIsValid(true);
+      return;
     }
 
-    if (!isValid) {
+    if (!isWithinValidDateRange(date)) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
-      return false;
+      setIsValid(false);
+      return;
     }
 
-    if (future) {
+    if (isFuture(date)) {
       setErrorMessage(getAppText("validering.fremtidig-dato"));
-      return false;
+      setIsValid(false);
+      return;
     }
-
-    return !future && isValid;
-  }
-
-  function applicationDateIsOverTwoWeeks(date: Date) {
-    return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
   }
 
   function clearErrorMessage() {
     setErrorMessage(undefined);
   }
 
+  function clearWarning() {
+    setHasWarning(false);
+  }
+
   return {
+    hasWarning,
     errorMessage,
-    validateAndIsValid,
-    applicationDateIsOverTwoWeeks,
+    isValid,
+    validateDate,
     clearErrorMessage,
+    setErrorMessage,
+    clearWarning,
   };
 }
