@@ -87,9 +87,9 @@ function FaktumDatoComponent(
   // Trigger validation on blur when user types date manually
   function validateOnBlur() {
     // Pattern for date format dd.mm.yyyy, dd.mm.yy, ddmmyy, ddmmyyyy
-    const regEx = /^(?:(\d{2})\.?(\d{2})\.?(\d{2}|\d{4})|\d{2}\.\d{2}\.\d{4})$/;
+    const dateRegex = /^(?:(0[1-9]|[12][0-9]|3[01])(\.?)(0[1-9]|1[0-2])\2(\d{2}|\d{4}))$/;
 
-    if (inputProps.value && !regEx.test(inputProps.value as string)) {
+    if (inputProps.value && !dateRegex.test(inputProps.value as string)) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
     }
   }
