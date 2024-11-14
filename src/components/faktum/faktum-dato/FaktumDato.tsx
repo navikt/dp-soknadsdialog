@@ -74,6 +74,7 @@ function FaktumDatoComponent(
       if (value.isEmpty) {
         setCurrentAnswer("");
         debouncedChange("");
+        clearWarning();
         clearErrorMessage();
       }
 
@@ -83,11 +84,11 @@ function FaktumDatoComponent(
     },
   });
 
-  // Validere når onBlur trigges når bruker skriver inn dato manuelt.
+  // Trigger validation on blur when user types date manually
   function validateOnBlur() {
+    // Pattern for date format dd.mm.yyyy, dd.mm.yy, ddmmyy, ddmmyyyy
     const regEx = /^(?:(\d{2})\.?(\d{2})\.?(\d{2}|\d{4})|\d{2}\.\d{2}\.\d{4})$/;
 
-    // Her skal vi validere at datoen er i riktig format
     if (inputProps.value && !regEx.test(inputProps.value as string)) {
       setErrorMessage(getAppText("validering.ugyldig-dato"));
     }
