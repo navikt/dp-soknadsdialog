@@ -103,7 +103,7 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 
         {showPersonalia && props.personalia && (
