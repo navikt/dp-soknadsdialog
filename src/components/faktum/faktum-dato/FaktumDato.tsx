@@ -59,14 +59,12 @@ function FaktumDatoComponent(
     onValidate: (value) => {
       if (value.isEmpty) {
         setShouldSave(true);
-        setSelectedDate("");
         setError("");
         return;
       }
 
       if (value.isInvalid) {
         setShouldSave(false);
-        setSelectedDate("");
         setError(getAppText("validering.ugyldig-dato"));
         return;
       }
