@@ -2,21 +2,13 @@ import { DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { Ref, forwardRef, useEffect, useState } from "react";
-import {
-  DATEPICKER_MAX_DATE,
-  DATEPICKER_MIN_DATE,
-  SOKNAD_DATO_DATEPICKER_MAX_DATE,
-  SOKNAD_DATO_DATEPICKER_MIN_DATE,
-} from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import {
-  futureDateAllowedWithWarningList,
-  useValidateFaktumDato,
-} from "../../../hooks/validation/useValidateFaktumDato";
+import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
+import { getDatepickerFromDate, getDatepickerToDate } from "../../../utils/date.utils";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
@@ -34,12 +26,15 @@ function FaktumDatoComponent(
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-
   const [selectedDate, setSelectedDate] = useState<string>(props.faktum.svar ?? "");
   const [shouldSave, setShouldSave] = useState(false);
 
-  const { errorMessage, validateAndIsValid, applicationDateIsOverTwoWeeks, setErrorMessage } =
-    useValidateFaktumDato(faktum);
+  const {
+    error: errorMessage,
+    validateAndIsValid,
+    shouldShowWarning,
+    setError,
+  } = useValidateFaktumDato(faktum);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
@@ -65,14 +60,14 @@ function FaktumDatoComponent(
       if (value.isEmpty) {
         setShouldSave(true);
         setSelectedDate("");
-        setErrorMessage("");
+        setError("");
         return;
       }
 
       if (value.isInvalid) {
         setShouldSave(false);
         setSelectedDate("");
-        setErrorMessage(getAppText("validering.ugyldig-dato"));
+        setError(getAppText("validering.ugyldig-dato"));
         return;
       }
 
@@ -106,23 +101,15 @@ function FaktumDatoComponent(
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const warning = applicationDateIsOverTwoWeeks(new Date(selectedDate));
-
-  const fromDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
-    ? SOKNAD_DATO_DATEPICKER_MIN_DATE
-    : DATEPICKER_MIN_DATE;
-
-  const toDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
-    ? SOKNAD_DATO_DATEPICKER_MAX_DATE
-    : DATEPICKER_MAX_DATE;
+  const hasWarning = shouldShowWarning(new Date(selectedDate));
 
   return (
     <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <DatePicker
         {...datepickerProps}
         dropdownCaption
-        fromDate={fromDate}
-        toDate={toDate}
+        fromDate={getDatepickerFromDate(faktum.beskrivendeId)}
+        toDate={getDatepickerToDate(faktum.beskrivendeId)}
         strategy="fixed"
       >
         <DatePicker.Input
@@ -139,7 +126,7 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {warning && <FaktumDatoWarning selectedDate={selectedDate} />}
+      {hasWarning && <FaktumDatoWarning selectedDate={selectedDate} />}
     </div>
   );
 }

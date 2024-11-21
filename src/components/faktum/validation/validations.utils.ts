@@ -1,7 +1,7 @@
 import { addWeeks } from "date-fns";
-import { DATEPICKER_MIN_DATE, MAX_TEXT_LENGTH } from "../../../constants";
+import { DATEPICKER_FROM_DATE, MAX_TEXT_LENGTH } from "../../../constants";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
-import { DATEPICKER_MAX_DATE } from "./../../../constants";
+import { DATEPICKER_TO_DATE } from "./../../../constants";
 
 export function isValidTextLength(value: string): boolean {
   const maxTextLength = MAX_TEXT_LENGTH;
@@ -26,7 +26,7 @@ export function isOverTwoWeeks(date: Date): boolean {
 }
 
 export function isWithinValidDateRange(date: Date): boolean {
-  return date >= DATEPICKER_MIN_DATE && date <= DATEPICKER_MAX_DATE;
+  return date >= DATEPICKER_FROM_DATE && date <= DATEPICKER_TO_DATE;
 }
 
 export function getUnansweredGeneratorFaktumId(generatorFaktum: IQuizGeneratorFaktum) {
