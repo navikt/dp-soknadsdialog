@@ -26,22 +26,16 @@ function FaktumDatoComponent(
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [selectedDate, setSelectedDate] = useState<string>(props.faktum.svar ?? "");
+  const [selectedDate, setSelectedDate] = useState<string>(faktum.svar ?? "");
   const [shouldSave, setShouldSave] = useState(false);
-
-  const {
-    error: errorMessage,
-    validateAndIsValid,
-    shouldShowWarning,
-    setError,
-  } = useValidateFaktumDato(faktum);
+  const { error, validateAndIsValid, shouldShowWarning, setError } = useValidateFaktumDato(faktum);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!isFirstRender && faktum.svar !== selectedDate) {
+    if (!isFirstRender || faktum.svar !== selectedDate) {
       setSelectedDate(faktum.svar ?? "");
     }
-  }, [faktum]);
+  }, [faktum.svar]);
 
   // Save selected date to quiz if it is valid or empty
   useEffect(() => {
@@ -51,7 +45,7 @@ function FaktumDatoComponent(
   }, [shouldSave, selectedDate]);
 
   const { datepickerProps, inputProps } = useDatepicker({
-    defaultSelected: props.faktum.svar ? new Date(props.faktum.svar) : undefined,
+    defaultSelected: faktum.svar ? new Date(faktum.svar) : undefined,
     onDateChange: (value?: Date) => {
       const selectedDate = value ? formatISO(value, { representation: "date" }) : "";
       setSelectedDate(selectedDate);
@@ -115,7 +109,7 @@ function FaktumDatoComponent(
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
-          error={errorMessage}
+          error={error}
           disabled={isLocked}
           autoComplete="off"
           onBlur={onBlur}

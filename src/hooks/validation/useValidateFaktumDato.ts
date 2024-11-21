@@ -4,10 +4,10 @@ import {
   isOverTwoWeeks,
   isWithinValidDateRange,
 } from "../../components/faktum/validation/validations.utils";
+import { SOKNAD_DATO_DATEPICKER_FROM_DATE, SOKNAD_DATO_DATEPICKER_TO_DATE } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
-import { SOKNAD_DATO_DATEPICKER_TO_DATE, SOKNAD_DATO_DATEPICKER_FROM_DATE } from "../../constants";
 interface IUseValidateFaktumDato {
   validateAndIsValid: (date: Date) => boolean;
   shouldShowWarning: (date: Date) => boolean;
