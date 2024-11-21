@@ -9,10 +9,10 @@ import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 import { SOKNAD_DATO_DATEPICKER_MAX_DATE, SOKNAD_DATO_DATEPICKER_MIN_DATE } from "../../constants";
 interface IUseValidateFaktumDato {
-  validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
+  validateAndIsValid: (date: Date) => boolean;
   applicationDateIsOverTwoWeeks: (date: Date) => boolean;
   errorMessage: string | undefined;
-  clearErrorMessage: () => void;
+  setErrorMessage: (message: string) => void;
 }
 
 const furetureDateAllowedList = [
@@ -41,13 +41,8 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   // Validate input value
   // Set or clear validation message based on validation state
   // Return boolean validation state
-  function validateAndIsValid(date: Date | null): boolean {
+  function validateAndIsValid(date: Date): boolean {
     setErrorMessage(undefined);
-
-    if (!date) {
-      setErrorMessage(getAppText("validering.ugyldig-dato"));
-      return false;
-    }
 
     if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
       if (date <= SOKNAD_DATO_DATEPICKER_MIN_DATE) {
@@ -88,17 +83,17 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   }
 
   function applicationDateIsOverTwoWeeks(date: Date) {
-    return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
-  }
-
-  function clearErrorMessage() {
-    setErrorMessage(undefined);
+    return (
+      futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) &&
+      isOverTwoWeeks(date) &&
+      !errorMessage
+    );
   }
 
   return {
     errorMessage,
     validateAndIsValid,
     applicationDateIsOverTwoWeeks,
-    clearErrorMessage,
+    setErrorMessage,
   };
 }

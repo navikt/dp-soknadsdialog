@@ -11,7 +11,6 @@ import {
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
 import {
   futureDateAllowedWithWarningList,
@@ -34,57 +33,73 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { errorMessage, validateAndIsValid, applicationDateIsOverTwoWeeks, clearErrorMessage } =
-    useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
-  const [debouncedDate, setDebouncedDate] = useState<string | null>(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
 
-  useEffect(() => {
-    if (!isFirstRender) {
-      saveFaktum(debouncedDate);
-    }
-  }, [debouncedDate]);
+  const [savedAnswer, setSavedAnswer] = useState<string | null>(props.faktum.svar ?? null);
+  const [selectedDate, setSelectedDate] = useState<string>(props.faktum.svar ?? "");
+  const [shouldSave, setShouldSave] = useState(false);
+
+  const { errorMessage, validateAndIsValid, applicationDateIsOverTwoWeeks, setErrorMessage } =
+    useValidateFaktumDato(faktum);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!isFirstRender && faktum.svar !== currentAnswer) {
-      setCurrentAnswer(faktum.svar ?? "");
+    if (!isFirstRender && faktum.svar !== savedAnswer) {
+      setSavedAnswer(faktum.svar ?? "");
     }
   }, [faktum]);
 
+  // Save selected date to quiz if it is valid or empty
+  useEffect(() => {
+    if (shouldSave) {
+      saveFaktum(selectedDate);
+    }
+  }, [shouldSave, selectedDate]);
+
   const { datepickerProps, inputProps } = useDatepicker({
-    defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
+    defaultSelected: savedAnswer ? new Date(savedAnswer) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
-      setCurrentAnswer(debounceValue);
-      debouncedChange(debounceValue);
+      const selectedDate = value ? formatISO(value, { representation: "date" }) : "";
+      setSelectedDate(selectedDate);
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        setCurrentAnswer("");
-        debouncedChange("");
+        setShouldSave(true);
+        setSelectedDate("");
+        setErrorMessage("");
+        return;
+      }
+
+      if (value.isInvalid) {
+        setShouldSave(false);
+        setSelectedDate("");
+        setErrorMessage(getAppText("validering.ugyldig-dato"));
+        return;
+      }
+
+      if (value.isValidDate) {
+        setShouldSave(true);
       }
     },
   });
 
-  function saveFaktum(value: string | null) {
+  function saveFaktum(value: string) {
     if (value === "") {
-      clearErrorMessage();
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
-    const isValidDate = validateAndIsValid(value ? new Date(value) : null);
-    saveFaktumToQuiz(faktum, isValidDate ? value : null);
+    const isValidDate = validateAndIsValid(new Date(value));
+    if (isValidDate) {
+      saveFaktumToQuiz(faktum, isValidDate ? value : null);
+    }
   }
 
   const datePickerDescription = faktumTexts?.description ? (
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const hasWarning = currentAnswer && applicationDateIsOverTwoWeeks(new Date(currentAnswer));
+  const warning = applicationDateIsOverTwoWeeks(new Date(selectedDate));
 
   const fromDate = futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)
     ? SOKNAD_DATO_DATEPICKER_MIN_DATE
@@ -116,7 +131,7 @@ function FaktumDatoComponent(
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
+      {warning && <FaktumDatoWarning selectedDate={selectedDate} />}
     </div>
   );
 }
