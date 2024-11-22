@@ -27,7 +27,7 @@ function FaktumDatoComponent(
   const { unansweredFaktumId } = useValidation();
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
   const [selectedDate, setSelectedDate] = useState<string>(faktum.svar ?? "");
-  const [shouldSave, setShouldSave] = useState(false);
+  const [shouldSaveWithOnchange, setShouldSaveWithOnchange] = useState(false);
   const { error, validateAndIsValid, shouldShowWarning, setError } = useValidateFaktumDato(faktum);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
@@ -39,10 +39,10 @@ function FaktumDatoComponent(
 
   // Save selected date to quiz if it is valid or empty
   useEffect(() => {
-    if (shouldSave) {
+    if (shouldSaveWithOnchange) {
       saveFaktum(selectedDate);
     }
-  }, [shouldSave, selectedDate]);
+  }, [shouldSaveWithOnchange, selectedDate]);
 
   const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: faktum.svar ? new Date(faktum.svar) : undefined,
@@ -52,19 +52,20 @@ function FaktumDatoComponent(
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        setShouldSave(true);
+        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
+
         setError("");
         return;
       }
 
       if (value.isInvalid) {
-        setShouldSave(false);
+        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
         setError(getAppText("validering.ugyldig-dato"));
         return;
       }
 
       if (value.isValidDate) {
-        setShouldSave(true);
+        if (!shouldSaveWithOnchange) setShouldSaveWithOnchange(true);
       }
     },
   });
