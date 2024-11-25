@@ -43,10 +43,6 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   );
   stopTimer();
 
-  console.log(`🔥 uuid :`, uuid);
-  console.log(`🔥 faktum.id :`, faktum.id);
-  console.log(`🔥 faktumResponse :`, faktumResponse);
-
   if (!faktumResponse.ok) {
     logRequestError(
       faktumResponse.statusText,

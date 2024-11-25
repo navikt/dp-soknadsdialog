@@ -24,6 +24,7 @@ import { trackSkjemaFullført } from "../../amplitude.tracking";
 import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
+import { mapOrkestratorToQuiz } from "../../utils/orkestrator.util";
 interface IProps {
   personalia: IPersonalia | null;
 }
@@ -34,7 +35,7 @@ export function Summary(props: IProps) {
 
   const router = useRouter();
   const { uuid } = useUuid();
-  const { soknadState } = useQuiz();
+  const { soknadState, orkestratorState } = useQuiz();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
@@ -117,6 +118,45 @@ export function Summary(props: IProps) {
             </Accordion.Content>
           </Accordion.Item>
         )}
+
+        {orkestratorState &&
+          orkestratorState.seksjoner?.map((section, index) => {
+            const sectionTexts = getSeksjonTextById(section.navn);
+            return (
+              <Accordion.Item key={section.navn}>
+                <Accordion.Header>
+                  {sectionTexts?.title ? sectionTexts?.title : section.navn}
+
+                  {!section.erFullført && (
+                    <Tag variant="error" className={styles.notCompleteTag}>
+                      {getAppText("oppsummering.seksjon.ikke-ferdig-tag")}
+                    </Tag>
+                  )}
+                </Accordion.Header>
+                <Accordion.Content>
+                  <>
+                    {section.besvarteOpplysninger.map((opplysning) => {
+                      const opplysningToFaktum = mapOrkestratorToQuiz(opplysning);
+
+                      return (
+                        <Faktum
+                          key={opplysning.opplysningId}
+                          faktum={opplysningToFaktum}
+                          readonly={true}
+                        />
+                      );
+                    })}
+
+                    <Link href={`/soknad/${uuid}?seksjon=${index + 1}`} passHref legacyBehavior>
+                      <Button variant="primary" as="a">
+                        {getAppText("oppsummering.knapp.endre-svar")}
+                      </Button>
+                    </Link>
+                  </>
+                </Accordion.Content>
+              </Accordion.Item>
+            );
+          })}
 
         {soknadState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
