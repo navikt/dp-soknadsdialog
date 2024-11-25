@@ -13,6 +13,7 @@ import { getErrorDetails } from "../../../utils/api.utils";
 import {
   getArbeidsoekkerregisteretOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 import { getMissingDokumentkrav } from "../../../utils/dokumentkrav.util";
 import { Receipt } from "../../../views/receipt/Receipt";
@@ -25,10 +26,13 @@ import {
 } from "../../api/common/arbeidssoker-api";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
   errorCode: number | null;
   soknadState: IQuizState | null;
+  orkestratorState: IOrkestratorSoknad | null;
   dokumentkrav: IDokumentkravList | null;
   soknadStatus: ISoknadStatus;
   arbeidssokerStatus: IArbeidssokerStatus;
@@ -45,6 +49,7 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        orkestratorState: null, // TODO: Fiks dette
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         personalia: mockPersonalia,
         soknadStatus: {
@@ -58,10 +63,11 @@ export async function getServerSideProps(
     };
   }
 
-  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
-  const arbeidsoekkerObo = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const arbeidssokerOnBehalfOf = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
 
-  if (!soknadObo.ok || !arbeidsoekkerObo.ok) {
+  if (!soknadOnBehalfOf.ok || !arbeidssokerOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -76,12 +82,14 @@ export async function getServerSideProps(
   let dokumentkrav: IDokumentkravList | null = null;
   let soknadStatus: ISoknadStatus = { status: "Ukjent" };
   let personalia = null;
+  let orkestratorState = null;
 
-  const soknadStateResponse = await getSoknadState(uuid, soknadObo.token);
-  const soknadStatusResponse = await getSoknadStatus(uuid, soknadObo.token);
-  const dokumentkravResponse = await getDokumentkrav(uuid, soknadObo.token);
-  const personaliaResponse = await getPersonalia(soknadObo.token);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidsoekkerObo.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadOnBehalfOf.token);
+  const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
+  const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidssokerOnBehalfOf.token);
+  const orkestratorStateResponse = await getOrkestratorState(orkestratorOnBehalfOf.token, uuid);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
@@ -130,9 +138,14 @@ export async function getServerSideProps(
     personalia = await personaliaResponse.json();
   }
 
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  }
+
   return {
     props: {
       soknadState,
+      orkestratorState,
       dokumentkrav,
       soknadStatus,
       personalia,
@@ -143,10 +156,17 @@ export async function getServerSideProps(
 }
 
 export default function ReceiptPage(props: IProps) {
-  const { personalia, soknadState, soknadStatus, arbeidssokerStatus, errorCode, dokumentkrav } =
-    props;
+  const {
+    personalia,
+    soknadState,
+    soknadStatus,
+    arbeidssokerStatus,
+    errorCode,
+    dokumentkrav,
+    orkestratorState,
+  } = props;
 
-  if (!soknadState || !dokumentkrav) {
+  if (!soknadState || !orkestratorState || !dokumentkrav) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -163,7 +183,8 @@ export default function ReceiptPage(props: IProps) {
           <Receipt
             soknadStatus={soknadStatus}
             arbeidssokerStatus={arbeidssokerStatus}
-            sections={soknadState.seksjoner}
+            quizSections={soknadState.seksjoner}
+            orkestratorSections={orkestratorState?.seksjoner}
             personalia={personalia}
           />
         </ValidationProvider>

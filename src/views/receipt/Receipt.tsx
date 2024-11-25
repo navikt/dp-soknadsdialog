@@ -1,34 +1,36 @@
-import { useState } from "react";
-import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
-import { ReceiptArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
-import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
-import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
-import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
 import { Button } from "@navikt/ds-react";
-import { useSanity } from "../../context/sanity-context";
+import { useState } from "react";
+import { DokumentkravGenerellInnsending } from "../../components/dokumentkrav-generell-innsending/DokumentkravGenerellInnsending";
 import { PageMeta } from "../../components/PageMeta";
-import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
+import { ReceiptArbeidssokerStatus } from "../../components/receipt-arbeidssoker-status/ReceiptArbeidssokerStatus";
 import { ReceiptDokumentkrav } from "../../components/receipt-dokumentkrav/ReceiptDokumentkrav";
-import { IDokumentkrav } from "../../types/documentation.types";
+import { ReceiptSoknadStatus } from "../../components/receipt-soknad-status/ReceiptSoknadStatus";
+import { ReceiptYourAnswers } from "../../components/receipt-your-answers/ReceiptYourAnswers";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { useSanity } from "../../context/sanity-context";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
+import { IDokumentkrav } from "../../types/documentation.types";
+import { IOrkestratorSeksjon } from "../../types/orkestrator.types";
 import { IPersonalia } from "../../types/personalia.types";
-import styles from "./Receipts.module.css";
+import { IQuizSeksjon, ISoknadStatus } from "../../types/quiz.types";
 import {
   getMissingDokumentkrav,
   getNotSendingDokumentkrav,
   getUploadedDokumentkrav,
 } from "../../utils/dokumentkrav.util";
-import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
+import styles from "./Receipts.module.css";
 
 interface IProps {
   soknadStatus: ISoknadStatus;
   arbeidssokerStatus: IArbeidssokerStatus;
-  sections: IQuizSeksjon[];
+  quizSections: IQuizSeksjon[];
+  orkestratorSections: IOrkestratorSeksjon[];
   personalia: IPersonalia | null;
 }
 
 export function Receipt(props: IProps) {
-  const { soknadStatus, sections, arbeidssokerStatus, personalia } = props;
+  const { soknadStatus, quizSections, orkestratorSections, arbeidssokerStatus, personalia } = props;
 
   const { getAppText } = useSanity();
   const { dokumentkravList } = useDokumentkrav();
@@ -63,7 +65,11 @@ export function Receipt(props: IProps) {
       />
 
       {noDokumentkravTriggered && <DokumentkravGenerellInnsending classname="my-12" />}
-      <ReceiptYourAnswers sections={sections} personalia={personalia} />
+      <ReceiptYourAnswers
+        quizSections={quizSections}
+        orkestratorSections={orkestratorSections}
+        personalia={personalia}
+      />
 
       <Button
         variant="primary"

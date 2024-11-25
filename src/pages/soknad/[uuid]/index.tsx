@@ -106,14 +106,16 @@ export async function getServerSideProps(
     orkestratorState = await orkestratorStateResponse.json();
   }
 
-  if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
-    return {
-      redirect: {
-        destination: `/soknad/${uuid}/kvittering`,
-        permanent: false,
-      },
-    };
-  }
+  // TODO: Ser på den her også
+  // Når orkestrator er fullført og søknadstate er også fullført blir man redirect til kvittering siden
+  // if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
+  //   return {
+  //     redirect: {
+  //       destination: `/soknad/${uuid}/kvittering`,
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: {

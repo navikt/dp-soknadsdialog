@@ -5,14 +5,17 @@ import { IQuizSeksjon } from "../../types/quiz.types";
 import { Faktum } from "../faktum/Faktum";
 import { Personalia } from "../personalia/Personalia";
 import styles from "./ReceiptYourAnswers.module.css";
+import { IOrkestratorSeksjon } from "../../types/orkestrator.types";
+import { mapOrkestratorToQuiz } from "../../utils/orkestrator.util";
 
 interface IProps {
-  sections: IQuizSeksjon[];
+  quizSections: IQuizSeksjon[];
+  orkestratorSections: IOrkestratorSeksjon[];
   personalia: IPersonalia | null;
 }
 
 export function ReceiptYourAnswers(props: IProps) {
-  const { sections, personalia } = props;
+  const { quizSections, orkestratorSections, personalia } = props;
   const { getAppText, getSeksjonTextById } = useSanity();
 
   const textPersonaliaId = "personalia";
@@ -35,7 +38,33 @@ export function ReceiptYourAnswers(props: IProps) {
               </Accordion.Content>
             </Accordion.Item>
           )}
-          {sections?.map((section) => {
+
+          {orkestratorSections?.map((section) => {
+            const sectionTexts = getSeksjonTextById(section.navn);
+
+            return (
+              <Accordion.Item key={section.navn}>
+                <Accordion.Header>
+                  {sectionTexts?.title ? sectionTexts?.title : section.navn}
+                </Accordion.Header>
+                <Accordion.Content>
+                  {section.besvarteOpplysninger.map((opplysning) => {
+                    const opplysningToFaktum = mapOrkestratorToQuiz(opplysning);
+
+                    return (
+                      <Faktum
+                        key={opplysning.opplysningId}
+                        faktum={opplysningToFaktum}
+                        readonly={true}
+                      />
+                    );
+                  })}
+                </Accordion.Content>
+              </Accordion.Item>
+            );
+          })}
+
+          {quizSections?.map((section) => {
             const sectionTexts = getSeksjonTextById(section.beskrivendeId);
 
             return (
