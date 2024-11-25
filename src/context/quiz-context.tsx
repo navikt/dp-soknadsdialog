@@ -3,7 +3,11 @@ import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 import { ISaveOrkestratorAnswerBody } from "../pages/api/orkestrator/save";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { IOrkestratorSoknad, OrkestratorOpplysningType } from "../types/orkestrator.types";
+import {
+  ILandgruppe,
+  IOrkestratorSoknad,
+  OrkestratorOpplysningType,
+} from "../types/orkestrator.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
@@ -14,6 +18,7 @@ import {
 export interface IQuizContext {
   soknadState: IQuizState;
   orkestratorState: IOrkestratorSoknad | null;
+  landgrupper: ILandgruppe[] | null;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveOpplysningToOrkestrator: (
@@ -29,6 +34,7 @@ export interface IQuizContext {
 interface IProps {
   quizState: IQuizState;
   orkestratorState?: IOrkestratorSoknad;
+  landgrupper: ILandgruppe[] | null;
 }
 
 export const QuizContext = createContext<IQuizContext | undefined>(undefined);
@@ -110,6 +116,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       value={{
         soknadState,
         orkestratorState,
+        landgrupper: props.landgrupper,
         saveFaktumToQuiz,
         saveGeneratorFaktumToQuiz,
         saveOpplysningToOrkestrator,

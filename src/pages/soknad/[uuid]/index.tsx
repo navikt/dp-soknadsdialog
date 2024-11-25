@@ -13,7 +13,7 @@ import {
   getSoknadOnBehalfOfToken,
   getSoknadOrkestratorOnBehalfOfToken,
 } from "../../../utils/auth.utils";
-import { erSoknadInnsendt } from "../../../utils/soknad.utils";
+// import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
 import {
@@ -24,8 +24,8 @@ import {
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
-import { getOrkestratorState } from "../../api/common/orkestrator-api";
-import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
+import { getLandgrupper, getOrkestratorState } from "../../api/common/orkestrator-api";
+import { ILandgruppe, IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -34,6 +34,7 @@ interface IProps {
   errorCode: number | null;
   arbeidsforhold: IArbeidsforhold[];
   featureToggles: IFeatureToggles;
+  landgrupper: ILandgruppe[] | null;
 }
 
 export async function getServerSideProps(
@@ -50,6 +51,7 @@ export async function getServerSideProps(
         personalia: mockPersonalia,
         arbeidsforhold: [],
         errorCode: null,
+        landgrupper: null,
         featureToggles: {
           ...defaultFeatureToggles,
         },
@@ -74,6 +76,7 @@ export async function getServerSideProps(
   let personalia = null;
   let soknadStatus = null;
   let arbeidsforhold = [];
+  let landgrupper = null;
 
   const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
   const orkestratorStateResponse = await getOrkestratorState(orkestratorOnBehalfOf.token, uuid);
@@ -81,6 +84,7 @@ export async function getServerSideProps(
   const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
   const featureToggles = await getFeatureToggles();
   const arbeidsforholdResponse = await getArbeidsforhold(soknadOnBehalfOf.token);
+  const landgrupperResponse = await getLandgrupper();
 
   if (arbeidsforholdResponse.ok) {
     arbeidsforhold = await arbeidsforholdResponse.json();
@@ -106,6 +110,10 @@ export async function getServerSideProps(
     orkestratorState = await orkestratorStateResponse.json();
   }
 
+  if (landgrupperResponse.ok) {
+    landgrupper = await landgrupperResponse.json();
+  }
+
   // TODO: Ser på den her også
   // Når orkestrator er fullført og søknadstate er også fullført blir man redirect til kvittering siden
   // if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
@@ -125,15 +133,23 @@ export async function getServerSideProps(
       errorCode,
       arbeidsforhold,
       featureToggles,
+      landgrupper,
     },
   };
 }
 
 export default function SoknadPage(props: IProps) {
-  const { errorCode, soknadState, personalia, arbeidsforhold, orkestratorState, featureToggles } =
-    props;
+  const {
+    errorCode,
+    soknadState,
+    personalia,
+    arbeidsforhold,
+    orkestratorState,
+    featureToggles,
+    landgrupper,
+  } = props;
 
-  if (errorCode || !soknadState || !arbeidsforhold || !orkestratorState) {
+  if (errorCode || !soknadState || !arbeidsforhold || !orkestratorState || !landgrupper) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -145,7 +161,11 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <FeatureTogglesProvider featureToggles={featureToggles}>
-      <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
+      <QuizProvider
+        quizState={soknadState}
+        orkestratorState={orkestratorState}
+        landgrupper={landgrupper}
+      >
         <UserInfoProvider arbeidsforhold={arbeidsforhold}>
           <ValidationProvider>
             <Soknad personalia={personalia} />
