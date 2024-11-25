@@ -165,7 +165,8 @@ export function Soknad(props: IProps) {
             </Button>
           )}
 
-          {isLastSection && soknadState.ferdig ? (
+          {/* Denne her er kanskje ikke helt riktig, fiks det  */}
+          {sectionNumber === totalSteps - 2 && isLastSection && soknadState.ferdig ? (
             <Button onClick={() => navigateToDocumentation()} loading={navigating}>
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>

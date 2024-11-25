@@ -27,6 +27,8 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const stopTimer = metrics.backendApiDurationHistogram.startTimer({ path: "besvar-faktum" });
+  // TODO: Fortsett her
+  // Feil ved lagring faktum til quiz
   const faktumResponse = await fetch(
     `${process.env.API_BASE_URL}/soknad/${uuid}/faktum/${faktum.id}`,
     {
@@ -40,6 +42,10 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
     },
   );
   stopTimer();
+
+  console.log(`🔥 uuid :`, uuid);
+  console.log(`🔥 faktum.id :`, faktum.id);
+  console.log(`🔥 faktumResponse :`, faktumResponse);
 
   if (!faktumResponse.ok) {
     logRequestError(
