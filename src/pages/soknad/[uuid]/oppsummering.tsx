@@ -10,17 +10,23 @@ import { IDokumentkravList } from "../../../types/documentation.types";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
-import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Summary } from "../../../views/summary/Summary";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { getPersonalia } from "../../api/common/personalia-api";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
   personalia: IPersonalia | null;
+  orkestratorState: IOrkestratorSoknad | null;
   dokumentkrav: IDokumentkravList | null;
   errorCode: number | null;
 }
@@ -35,6 +41,7 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        orkestratorState: null,
         personalia: mockPersonalia,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         errorCode: null,
@@ -42,8 +49,10 @@ export async function getServerSideProps(
     };
   }
 
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
+
+  if (!soknadOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -57,11 +66,13 @@ export async function getServerSideProps(
   let personalia = null;
   let dokumentkrav = null;
   let soknadStatus = null;
+  let orkestratorState = null;
 
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
-  const personaliaResponse = await getPersonalia(onBehalfOf.token);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadOnBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
+  const orkestratorStateResponse = await getOrkestratorState(orkestratorOnBehalfOf.token, uuid);
 
   if (soknadStateResponse.ok) {
     soknadState = await soknadStateResponse.json();
@@ -89,6 +100,10 @@ export async function getServerSideProps(
     soknadStatus = await soknadStatusResponse.json();
   }
 
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  }
+
   if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
     return {
       redirect: {
@@ -101,6 +116,7 @@ export async function getServerSideProps(
   return {
     props: {
       soknadState,
+      orkestratorState,
       personalia,
       dokumentkrav,
       errorCode,
@@ -109,8 +125,8 @@ export async function getServerSideProps(
 }
 
 export default function SummaryPage(props: IProps) {
-  const { errorCode, soknadState, personalia, dokumentkrav } = props;
-  if (errorCode || !soknadState || !dokumentkrav) {
+  const { errorCode, soknadState, personalia, dokumentkrav, orkestratorState } = props;
+  if (errorCode || !soknadState || !dokumentkrav || !orkestratorState) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
