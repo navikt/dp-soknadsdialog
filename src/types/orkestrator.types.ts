@@ -35,3 +35,9 @@ export interface IOrkestratorSoknad {
   erFullført: boolean;
   antallSeksjoner: number;
 }
+
+export interface ILandgruppe {
+  gruppenavn: string;
+  gruppeId: string;
+  land: string[];
+}

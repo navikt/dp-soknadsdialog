@@ -24,7 +24,7 @@ function FaktumLandComponent(
   const router = useRouter();
   const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked, landgrupper } = useQuiz();
   const { unansweredFaktumId } = useValidation();
 
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
@@ -38,23 +38,39 @@ function FaktumLandComponent(
     return optionA.label > optionB.label ? 1 : -1;
   };
 
-  const options = faktum.gyldigeLand
-    .map((code) => ({
-      value: code,
-      label: getCountryName(code, router.locale),
-    }))
-    .sort(sortByLabel);
-
-  useEffect(() => {
-    const shouldPreSelectNorway =
-      !currentAnswer &&
-      (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-        faktum.beskrivendeId === "faktum.arbeidsforhold.land");
-
-    if (shouldPreSelectNorway) {
-      onSelect("NOR");
+  function getOptions() {
+    if (isOrkestrator && landgrupper) {
+      return landgrupper
+        .filter((group) => faktum.gyldigeLand.includes(group.gruppenavn))
+        .map((group) => {
+          return group.land;
+        })
+        .flat()
+        .map((code) => ({
+          value: code,
+          label: getCountryName(code, router.locale),
+        }))
+        .sort(sortByLabel);
     }
-  }, []);
+
+    return faktum.gyldigeLand
+      .map((code) => ({
+        value: code,
+        label: getCountryName(code, router.locale),
+      }))
+      .sort(sortByLabel);
+  }
+
+  // useEffect(() => {
+  //   const shouldPreSelectNorway =
+  //     !currentAnswer &&
+  //     (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+  //       faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+
+  //   if (shouldPreSelectNorway) {
+  //     onSelect("NOR");
+  //   }
+  // }, []);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
@@ -91,7 +107,7 @@ function FaktumLandComponent(
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
-        options={options}
+        options={getOptions()}
         currentValue={currentAnswer || getAppText("faktum-land.velg-et-land")}
         placeHolderText={getAppText("faktum-land.velg-et-land")}
         error={
