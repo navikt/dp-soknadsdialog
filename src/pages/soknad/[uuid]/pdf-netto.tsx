@@ -7,15 +7,21 @@ import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IPersonalia } from "../../../types/personalia.types";
 import { IQuizState } from "../../../types/quiz.types";
-import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { Pdf } from "../../../views/pdf/Pdf";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { getPersonalia } from "../../api/common/personalia-api";
 import { getSoknadState } from "../../api/common/quiz-api";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
 
 interface IProps {
   soknadState: IQuizState | null;
+  orkestratorState: IOrkestratorSoknad | null;
   personalia: IPersonalia | null;
   dokumentkrav: IDokumentkravList | null;
   errorCode: number | null;
@@ -31,6 +37,7 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        orkestratorState: null,
         personalia: mockPersonalia,
         dokumentkrav: mockDokumentkravBesvart,
         errorCode: null,
@@ -38,8 +45,10 @@ export async function getServerSideProps(
     };
   }
 
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
+
+  if (!soknadOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -48,19 +57,27 @@ export async function getServerSideProps(
     };
   }
 
-  let errorCode = null;
-  let personalia = null;
   let soknadState = null;
+  let orkestratorState = null;
   let dokumentkrav = null;
+  let personalia = null;
+  let errorCode = null;
 
-  const personaliaResponse = await getPersonalia(onBehalfOf.token);
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const orkestratorStateResponse = await getOrkestratorState(uuid, orkestratorOnBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadOnBehalfOf.token);
+  const personaliaResponse = await getPersonalia(soknadOnBehalfOf.token);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
+  }
+
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  } else {
+    errorCode = orkestratorStateResponse.status;
   }
 
   if (dokumentkravResponse.ok) {
@@ -75,33 +92,32 @@ export async function getServerSideProps(
 
   return {
     props: {
-      personalia,
       soknadState,
+      orkestratorState,
       dokumentkrav,
+      personalia,
       errorCode,
     },
   };
 }
 
 export default function PdfNettoPage(props: IProps) {
-  if (props.errorCode || !props.soknadState || !props.personalia || !props.dokumentkrav) {
+  const { errorCode, soknadState, personalia, dokumentkrav, orkestratorState } = props;
+
+  if (errorCode || !soknadState || !personalia || !dokumentkrav || !orkestratorState) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
         details="Beklager, vi får ikke kontakt med systemene våre. Svarene dine er lagret og du kan prøve igjen om litt."
-        statusCode={props.errorCode || 500}
+        statusCode={errorCode || 500}
       />
     );
   }
 
   return (
-    <QuizProvider quizState={props.soknadState}>
+    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <ValidationProvider>
-        <Pdf
-          personalia={props.personalia}
-          dokumentkravList={props.dokumentkrav}
-          pdfView={"netto"}
-        />
+        <Pdf personalia={personalia} dokumentkravList={dokumentkrav} pdfView={"netto"} />
       </ValidationProvider>
     </QuizProvider>
   );

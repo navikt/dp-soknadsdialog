@@ -1,5 +1,8 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
 import { QuizProvider } from "../../../context/quiz-context";
 import { ValidationProvider } from "../../../context/validation-context";
@@ -13,9 +16,12 @@ import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { UserInfoProvider } from "../../../context/user-info-context";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import { AppProvider } from "../../../context/app-context";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
 
 interface IProps {
   soknadState: IQuizState | null;
+  orkestratorState: IOrkestratorSoknad | null;
   errorCode: number | null;
   dokumentkravList: IDokumentkravList | null;
 }
@@ -30,14 +36,17 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockGenerellInnsending as IQuizState,
+        orkestratorState: null,
         errorCode: null,
         dokumentkravList: null,
       },
     };
   }
 
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
+
+  if (!soknadOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -50,15 +59,23 @@ export async function getServerSideProps(
   let soknadState = null;
   let dokumentkravList = null;
   let soknadStatus = null;
+  let orkestratorState = null;
 
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadOnBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
+  const orkestratorStateResponse = await getOrkestratorState(uuid, orkestratorOnBehalfOf.token);
 
   if (!soknadStateResponse.ok) {
     errorCode = soknadStateResponse.status;
   } else {
     soknadState = await soknadStateResponse.json();
+  }
+
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  } else {
+    errorCode = orkestratorStateResponse.status;
   }
 
   if (!dokumentkravResponse.ok) {
@@ -83,16 +100,17 @@ export async function getServerSideProps(
   return {
     props: {
       soknadState,
-      errorCode,
+      orkestratorState,
       dokumentkravList,
+      errorCode,
     },
   };
 }
 
 export default function GenerellInnsendingPage(props: IProps) {
-  const { soknadState, dokumentkravList, errorCode } = props;
+  const { soknadState, orkestratorState, dokumentkravList, errorCode } = props;
 
-  if (errorCode || !soknadState || !dokumentkravList) {
+  if (errorCode || !soknadState || !dokumentkravList || !orkestratorState) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -104,7 +122,7 @@ export default function GenerellInnsendingPage(props: IProps) {
 
   return (
     <AppProvider>
-      <QuizProvider quizState={soknadState}>
+      <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
         <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
             <ValidationProvider>

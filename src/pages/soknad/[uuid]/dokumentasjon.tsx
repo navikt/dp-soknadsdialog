@@ -7,17 +7,23 @@ import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IQuizState } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
-import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
+import {
+  getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
+} from "../../../utils/auth.utils";
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
+import { getOrkestratorState } from "../../api/common/orkestrator-api";
 
 interface IProps {
-  errorCode: number | null;
   soknadState: IQuizState | null;
+  orkestratorState: IOrkestratorSoknad | null;
   dokumentkrav: IDokumentkravList | null;
+  errorCode: number | null;
 }
 
 export async function getServerSideProps(
@@ -30,14 +36,17 @@ export async function getServerSideProps(
     return {
       props: {
         soknadState: mockNeste,
+        orkestratorState: null,
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         errorCode: null,
       },
     };
   }
 
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(context.req);
+  const orkestratorOnBehalfOf = await getSoknadOrkestratorOnBehalfOfToken(context.req);
+
+  if (!soknadOnBehalfOf.ok || !orkestratorOnBehalfOf.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -46,14 +55,16 @@ export async function getServerSideProps(
     };
   }
 
-  let errorCode = null;
   let soknadState = null;
-  let dokumentkrav = null;
+  let orkestratorState = null;
   let soknadStatus = null;
+  let dokumentkrav = null;
+  let errorCode = null;
 
-  const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token);
-  const dokumentkravResponse = await getDokumentkrav(uuid, onBehalfOf.token);
-  const soknadStatusResponse = await getSoknadStatus(uuid, onBehalfOf.token);
+  const soknadStateResponse = await getSoknadState(uuid, soknadOnBehalfOf.token);
+  const orkestratorStateResponse = await getOrkestratorState(uuid, orkestratorOnBehalfOf.token);
+  const dokumentkravResponse = await getDokumentkrav(uuid, soknadOnBehalfOf.token);
+  const soknadStatusResponse = await getSoknadStatus(uuid, soknadOnBehalfOf.token);
 
   if (!dokumentkravResponse.ok) {
     const errorData = await getErrorDetails(dokumentkravResponse);
@@ -78,6 +89,18 @@ export async function getServerSideProps(
     soknadStatus = await soknadStatusResponse.json();
   }
 
+  if (orkestratorStateResponse.ok) {
+    orkestratorState = await orkestratorStateResponse.json();
+  } else {
+    errorCode = orkestratorStateResponse.status;
+  }
+
+  if (!soknadStateResponse.ok) {
+    errorCode = soknadStateResponse.status;
+  } else {
+    soknadState = await soknadStateResponse.json();
+  }
+
   if (soknadStatus && erSoknadInnsendt(soknadStatus)) {
     return {
       redirect: {
@@ -98,6 +121,7 @@ export async function getServerSideProps(
   return {
     props: {
       soknadState,
+      orkestratorState,
       dokumentkrav,
       errorCode,
     },
@@ -105,9 +129,9 @@ export async function getServerSideProps(
 }
 
 export default function DocumentPage(props: IProps) {
-  const { soknadState, dokumentkrav, errorCode } = props;
+  const { soknadState, orkestratorState, dokumentkrav, errorCode } = props;
 
-  if (errorCode || !soknadState || !dokumentkrav) {
+  if (errorCode || !soknadState || !dokumentkrav || !orkestratorState) {
     return (
       <ErrorPage
         title="Vi har tekniske problemer akkurat nå"
@@ -118,7 +142,7 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState}>
+    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>

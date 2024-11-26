@@ -30,13 +30,13 @@ import { getOrkestratorState } from "../../api/common/orkestrator-api";
 import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
-  errorCode: number | null;
   soknadState: IQuizState | null;
   orkestratorState: IOrkestratorSoknad | null;
   dokumentkrav: IDokumentkravList | null;
   soknadStatus: ISoknadStatus;
   arbeidssokerStatus: IArbeidssokerStatus;
   personalia: IPersonalia | null;
+  errorCode: number | null;
 }
 
 export async function getServerSideProps(
@@ -166,7 +166,7 @@ export default function ReceiptPage(props: IProps) {
     orkestratorState,
   } = props;
 
-  if (!soknadState || !orkestratorState || !dokumentkrav) {
+  if (!soknadState || !orkestratorState || !dokumentkrav || !orkestratorState) {
     return (
       <ErrorPage
         title="Det har skjedd en teknisk feil"
@@ -177,7 +177,7 @@ export default function ReceiptPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState}>
+    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <ValidationProvider>
           <Receipt
