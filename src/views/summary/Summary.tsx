@@ -16,7 +16,6 @@ import { useSetFocus } from "../../hooks/useSetFocus";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
 import { useSoknad } from "../../context/soknad-context";
-import { useSoknad } from "../../context/soknad-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
@@ -159,7 +158,7 @@ export function Summary(props: IProps) {
             );
           })}
 
-        {soknadState.seksjoner?.map((section, index) => {
+        {quizState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
             <Accordion.Item key={section.beskrivendeId}>

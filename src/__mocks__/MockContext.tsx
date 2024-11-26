@@ -1,7 +1,6 @@
 import { PropsWithChildren } from "react";
 import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
-import { SoknadProvider } from "../context/soknad-context";
 import { SanityProvider } from "../context/sanity-context";
 import { SoknadProvider } from "../context/soknad-context";
 import { UserInfoProvider } from "../context/user-info-context";
@@ -11,9 +10,6 @@ import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.ty
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockSoknadProvider } from "./MockSoknadProvider";
-import { FeatureTogglesProvider } from "../context/feature-toggle-context";
-import { UserInfoProvider } from "../context/user-info-context";
-import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];

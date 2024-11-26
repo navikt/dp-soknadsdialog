@@ -52,6 +52,10 @@ export async function getServerSideProps(
   };
 }
 
+interface IProps {
+  featureToggles: IFeatureToggles;
+}
+
 export default function Soknad(props: IProps) {
   return (
     <AppProvider featureToggles={props.featureToggles}>

@@ -11,7 +11,6 @@ import { QuizSection } from "../../components/section/QuizSection";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { useSoknad } from "../../context/soknad-context";
-import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { usePutRequest } from "../../hooks/request/usePutRequest";

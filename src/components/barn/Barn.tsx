@@ -1,6 +1,5 @@
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { forwardRef, Ref, useEffect } from "react";
-import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useSoknad } from "../../context/soknad-context";
 import { useValidation } from "../../context/validation-context";

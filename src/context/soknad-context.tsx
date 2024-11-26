@@ -3,7 +3,7 @@ import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 import { ISaveOrkestratorAnswerBody } from "../pages/api/orkestrator/save";
 import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
-import { IOrkestratorState, OrkestratorOpplysningType } from "../types/orkestrator.types";
+import { IOrkestratorSoknad, OrkestratorOpplysningType } from "../types/orkestrator.types";
 import {
   IQuizGeneratorFaktum,
   IQuizState,
@@ -13,7 +13,7 @@ import {
 
 export interface ISoknadContext {
   quizState: IQuizState;
-  orkestratorState: IOrkestratorState | null;
+  orkestratorState: IOrkestratorSoknad;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   saveOpplysningToOrkestrator: (
@@ -28,7 +28,7 @@ export interface ISoknadContext {
 
 interface IProps {
   quizState: IQuizState;
-  orkestratorState?: IOrkestratorState;
+  orkestratorState: IOrkestratorSoknad;
 }
 
 export const SoknadContext = createContext<ISoknadContext | undefined>(undefined);
@@ -36,8 +36,8 @@ export const SoknadContext = createContext<ISoknadContext | undefined>(undefined
 function SoknadProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
   const [quizState, setQuizState] = useState<IQuizState>(props.quizState);
-  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorState | null>(
-    props.orkestratorState || null,
+  const [orkestratorState, setOrkestratorState] = useState<IOrkestratorSoknad>(
+    props.orkestratorState,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -51,7 +51,7 @@ function SoknadProvider(props: PropsWithChildren<IProps>) {
   // Orkestrator
   const [saveAnswer, saveAnswerStatus] = usePutRequest<
     ISaveOrkestratorAnswerBody,
-    IOrkestratorState
+    IOrkestratorSoknad
   >("orkestrator/save", true);
 
   // Quiz

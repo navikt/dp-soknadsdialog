@@ -6,11 +6,8 @@ import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumen
 import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
 import { QuizSection } from "../../components/section/QuizSection";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useSoknad } from "../../context/soknad-context";
-import { Personalia } from "../../components/personalia/Personalia";
-import { IPersonalia } from "../../types/personalia.types";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { IPersonalia } from "../../types/personalia.types";
 import {

@@ -1,6 +1,5 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 import { SoknadProvider } from "../../../context/soknad-context";
 import { IArbeidsforhold, UserInfoProvider } from "../../../context/user-info-context";
 import { ValidationProvider } from "../../../context/validation-context";
