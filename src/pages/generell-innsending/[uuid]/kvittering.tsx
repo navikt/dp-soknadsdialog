@@ -85,7 +85,7 @@ export default function GenerellInnsendingKvitteringPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState}>
+    <QuizProvider quizState={soknadState} landgrupper={[]}>
       <DokumentkravProvider initialState={dokumentkravList}>
         <ValidationProvider>
           <GenerellInnsendingKvittering />
