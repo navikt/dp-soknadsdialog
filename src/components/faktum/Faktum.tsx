@@ -26,6 +26,7 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Faktum.module.css";
 import { useSoknad } from "../../context/soknad-context";
+import { useSoknad } from "../../context/soknad-context";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {

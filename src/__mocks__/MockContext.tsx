@@ -3,6 +3,7 @@ import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
 import { SoknadProvider } from "../context/soknad-context";
 import { SanityProvider } from "../context/sanity-context";
+import { SoknadProvider } from "../context/soknad-context";
 import { UserInfoProvider } from "../context/user-info-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";

@@ -2,13 +2,9 @@ import { DatePicker, Fieldset, useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-import {
-  trackKorrigertSluttdatoFraAAREG,
-  trackKorrigertStartdatoFraAAREG,
-} from "../../../amplitude.tracking";
-import { DATEPICKER_FROM_DATE, DATEPICKER_TO_DATE } from "../../../constants";
-import { useSanity } from "../../../context/sanity-context";
+import { DATEPICKER_TO_DATE, DATEPICKER_FROM_DATE } from "../../../constants";
 import { useSoknad } from "../../../context/soknad-context";
+import { useSanity } from "../../../context/sanity-context";
 import { useUserInfo } from "../../../context/user-info-context";
 import { useValidation } from "../../../context/validation-context";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
@@ -25,6 +21,10 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
+import {
+  trackKorrigertSluttdatoFraAAREG,
+  trackKorrigertStartdatoFraAAREG,
+} from "../../../amplitude.tracking";
 
 interface IDateRange {
   from: Date | undefined;

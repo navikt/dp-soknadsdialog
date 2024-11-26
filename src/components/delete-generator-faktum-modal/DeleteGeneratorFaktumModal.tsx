@@ -1,6 +1,7 @@
 import { Button, Modal } from "@navikt/ds-react";
 import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
+import { useSoknad } from "../../context/soknad-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
 
 interface IProps {

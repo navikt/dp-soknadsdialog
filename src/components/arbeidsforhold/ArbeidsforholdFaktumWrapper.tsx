@@ -5,6 +5,7 @@ import {
   trackValgtArbeidsforholdFraAAREG,
 } from "../../amplitude.tracking";
 import { useSoknad } from "../../context/soknad-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidsforhold, useUserInfo } from "../../context/user-info-context";
 import { QuizFaktum } from "../../types/quiz.types";

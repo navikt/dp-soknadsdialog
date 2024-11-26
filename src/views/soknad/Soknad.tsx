@@ -10,7 +10,7 @@ import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -29,7 +29,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, orkestratorState, isError, isLoading, isLocked } = useQuiz();
+  const { quizState: soknadState, orkestratorState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [navigating, setNavigating] = useState(false);
 

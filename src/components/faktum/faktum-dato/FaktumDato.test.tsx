@@ -11,6 +11,8 @@ import {
   subMonths,
   subYears,
 } from "date-fns";
+import { MockContext } from "../../../__mocks__/MockContext";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
 import { FaktumDato } from "./FaktumDato";

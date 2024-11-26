@@ -2,7 +2,7 @@ import { PortableText } from "@portabletext/react";
 import { useRouter } from "next/router";
 import { forwardRef, Ref, useEffect, useState } from "react";
 import { useAppContext } from "../../../context/app-context";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
@@ -25,7 +25,7 @@ function FaktumLandComponent(
   const router = useRouter();
   const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
   const { landgrupper } = useAppContext();
   const { unansweredFaktumId } = useValidation();
 
@@ -63,16 +63,16 @@ function FaktumLandComponent(
       .sort(sortByLabel);
   }
 
-  // useEffect(() => {
-  //   const shouldPreSelectNorway =
-  //     !currentAnswer &&
-  //     (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-  //       faktum.beskrivendeId === "faktum.arbeidsforhold.land");
+  useEffect(() => {
+    const shouldPreSelectNorway =
+      !currentAnswer &&
+      (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+        faktum.beskrivendeId === "faktum.arbeidsforhold.land");
 
-  //   if (shouldPreSelectNorway) {
-  //     onSelect("NOR");
-  //   }
-  // }, []);
+    if (shouldPreSelectNorway) {
+      onSelect("NOR");
+    }
+  }, []);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
