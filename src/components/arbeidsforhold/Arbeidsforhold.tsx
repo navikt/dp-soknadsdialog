@@ -10,7 +10,6 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useUserInfo } from "../../context/user-info-context";
 import { useValidation } from "../../context/validation-context";
@@ -31,6 +30,7 @@ import { FetchIndicator } from "../fetch-indicator/FetchIndicator";
 import { GeneratorFaktumCard } from "../generator-faktum-card/GeneratorFaktumCard";
 import { ArbeidsforholdFaktumWrapper } from "./ArbeidsforholdFaktumWrapper";
 import styles from "./Arbeidsforhold.module.css";
+import { useSoknad } from "../../context/soknad-context";
 
 export const Arbeidsforhold = forwardRef(ArbeidsforholdComponent);
 

@@ -4,14 +4,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
-import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { Section } from "../../components/section/Section";
-import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
+import { OrkestratorSection } from "../../components/section/OrkestratorSection";
 import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
@@ -19,6 +17,8 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
+import { QuizSection } from "../../components/section/QuizSection";
+import { getUnansweredFaktumId } from "../../components/faktum/validation/validations.utils";
 import { trackSkjemaStegFullført } from "../../amplitude.tracking";
 
 interface IProps {
@@ -29,34 +29,44 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { quizState, isError, isLoading, isLocked } = useSoknad();
+  const { quizState, orkestratorState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
-  const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
 
   // Vis første seksjon hvis ingenting annet er spesifisert
-  const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const isFirstSection = sectionIndex === 0;
-  const isLastSection = sectionIndex === quizState.seksjoner.length - 1;
-  const currentSection = quizState.seksjoner[sectionIndex];
+  const sectionParams = router.query.seksjon;
+  const invalidSectionParams = isNaN(Number(sectionParams));
+  const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
+  const sectionIndex = sectionNumber - 1;
 
+  // Number of sections
+  const numberOfOrkestratorSections = (orkestratorState && orkestratorState.antallSeksjoner) || 0;
+  const isOrkestratorSection = sectionNumber <= numberOfOrkestratorSections;
+
+  // Orkestrator and Quiz section data based on sectionParams
+  const currentOrkestratorSectionData =
+    orkestratorState && orkestratorState.seksjoner[sectionIndex];
+  const currentQuizSectionData = quizState.seksjoner[sectionIndex - numberOfOrkestratorSections];
+
+  // Validation
   const firstUnansweredSectionIndex = quizState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
-  const showPersonalia =
-    isFirstSection && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
-
+  // Teste commit
   useEffect(() => {
-    const validSection = !isNaN(parseInt(sectionParam)) && !!quizState.seksjoner[sectionIndex];
-
     // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
     if (router.query.fortsett && !quizState.ferdig && firstUnansweredSectionIndex !== -1) {
       router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 
-    // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
-    if (!validSection) {
-      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, { shallow: true });
+    const availiableSections =
+      quizState.seksjoner.length + ((orkestratorState && orkestratorState?.antallSeksjoner) || 0);
+
+    if (invalidSectionParams || sectionNumber > availiableSections) {
+      // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
+      router.push(`/soknad/${router.query.uuid}?seksjon=1`, undefined, {
+        shallow: true,
+      });
     }
   }, []);
 
@@ -64,26 +74,44 @@ export function Soknad(props: IProps) {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [quizState]);
+  }, [quizState, orkestratorState]);
 
   function navigateToNextSection() {
-    if (currentSection.ferdig) {
-      const currentSection = parseInt(sectionParam);
-      const nextIndex = sectionParam && currentSection + 1;
-      trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
-      router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
-        shallow: true,
-      });
-    } else {
-      const unansweredFaktumId = getUnansweredFaktumId(currentSection.fakta);
-      setUnansweredFaktumId(unansweredFaktumId);
+    if (isOrkestratorSection) {
+      if (currentOrkestratorSectionData && !currentOrkestratorSectionData.erFullført) {
+        trackSkjemaStegFullført("dagpenger", router.query.uuid as string, sectionNumber);
+        setUnansweredFaktumId(currentOrkestratorSectionData.nesteUbesvarteOpplysning.opplysningId);
+      } else {
+        const nextIndex = sectionNumber + 1;
+        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+          shallow: true,
+        });
+      }
+    }
+
+    if (!isOrkestratorSection) {
+      if (!currentQuizSectionData.ferdig) {
+        trackSkjemaStegFullført("dagpenger", router.query.uuid as string, sectionNumber);
+        const unansweredFaktumId = getUnansweredFaktumId(currentQuizSectionData.fakta);
+        setUnansweredFaktumId(unansweredFaktumId);
+      } else {
+        const nextIndex = sectionNumber + 1;
+        router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
+          shallow: true,
+        });
+      }
     }
   }
 
   function navigateToPreviousSection() {
-    setUnansweredFaktumId(undefined);
-    const nextIndex = sectionParam && parseInt(sectionParam) - 1;
-    router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, { shallow: true });
+    if (unansweredFaktumId) {
+      setUnansweredFaktumId(undefined);
+    }
+
+    const previousIndex = sectionNumber - 1;
+    router.push(`/soknad/${router.query.uuid}?seksjon=${previousIndex}`, undefined, {
+      shallow: true,
+    });
   }
 
   function navigateToDocumentation() {
@@ -103,23 +131,27 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-      <main id="maincontent" tabIndex={-1}>
-        <ProgressBar currentStep={sectionIndex + 1} totalSteps={totalSteps} />
 
-        {showPersonalia && props.personalia && (
+      <main>
+        <ProgressBar currentStep={sectionNumber} totalSteps={totalSteps} />
+
+        {sectionNumber === 1 && props.personalia && (
           <div className={styles.seksjonContainer}>
             <Personalia personalia={props.personalia} />
           </div>
         )}
 
-        <Section section={currentSection} />
+        {isOrkestratorSection && currentOrkestratorSectionData && (
+          <OrkestratorSection section={currentOrkestratorSectionData} />
+        )}
+        {!isOrkestratorSection && <QuizSection section={currentQuizSectionData} />}
 
         <div className={styles.loaderContainer}>
           <FetchIndicator isLoading={isLoading} />
         </div>
 
         <nav className="navigation-container">
-          {isFirstSection ? (
+          {sectionNumber === 1 ? (
             <Button variant={"secondary"} onClick={() => cancelSoknad()} loading={navigating}>
               {getAppText("soknad.knapp.avbryt")}
             </Button>
@@ -134,7 +166,7 @@ export function Soknad(props: IProps) {
             </Button>
           )}
 
-          {isLastSection && quizState.ferdig ? (
+          {orkestratorState.erFullført && quizState.ferdig ? (
             <Button onClick={() => navigateToDocumentation()} loading={navigating}>
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>

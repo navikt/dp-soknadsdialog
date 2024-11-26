@@ -1,19 +1,20 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { PortableText } from "@portabletext/react";
-import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
-import { IFaktum } from "../Faktum";
-import { IQuizLandFaktum } from "../../../types/quiz.types";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect, useState } from "react";
+import { useAppContext } from "../../../context/app-context";
 import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
-import { useRouter } from "next/router";
-import { getCountryName } from "../../../utils/country.utils";
-import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import styles from "../Faktum.module.css";
+import { IQuizLandFaktum } from "../../../types/quiz.types";
 import { ISanityLandGruppe } from "../../../types/sanity.types";
-import { AlertText } from "../../alert-text/AlertText";
+import { getCountryName } from "../../../utils/country.utils";
 import { getLandGruppeId } from "../../../utils/faktum.utils";
+import { AlertText } from "../../alert-text/AlertText";
+import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -22,13 +23,13 @@ function FaktumLandComponent(
   ref: Ref<HTMLDivElement> | undefined,
 ) {
   const router = useRouter();
-  const { faktum } = props;
+  const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useSoknad();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
+  const { landgrupper } = useAppContext();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
-
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
@@ -37,12 +38,28 @@ function FaktumLandComponent(
     return optionA.label > optionB.label ? 1 : -1;
   };
 
-  const options = faktum.gyldigeLand
-    .map((code) => ({
-      value: code,
-      label: getCountryName(code, router.locale),
-    }))
-    .sort(sortByLabel);
+  function getOptions() {
+    if (isOrkestrator && landgrupper) {
+      return landgrupper
+        .filter((group) => faktum.gyldigeLand.includes(group.gruppenavn))
+        .map((group) => {
+          return group.land;
+        })
+        .flat()
+        .map((code) => ({
+          value: code,
+          label: getCountryName(code, router.locale),
+        }))
+        .sort(sortByLabel);
+    }
+
+    return faktum.gyldigeLand
+      .map((code) => ({
+        value: code,
+        label: getCountryName(code, router.locale),
+      }))
+      .sort(sortByLabel);
+  }
 
   useEffect(() => {
     const shouldPreSelectNorway =
@@ -75,7 +92,13 @@ function FaktumLandComponent(
   }
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    if (!isOrkestrator) {
+      saveFaktumToQuiz(faktum, value);
+    }
+
+    if (isOrkestrator) {
+      saveOpplysningToOrkestrator(props.faktum.id, "land", value);
+    }
   }
 
   return (
@@ -84,7 +107,7 @@ function FaktumLandComponent(
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
         onChange={(e) => onSelect(e.target.value)}
-        options={options}
+        options={getOptions()}
         currentValue={currentAnswer || getAppText("faktum-land.velg-et-land")}
         placeHolderText={getAppText("faktum-land.velg-et-land")}
         error={

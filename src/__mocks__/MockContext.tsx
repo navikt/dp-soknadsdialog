@@ -1,14 +1,15 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
+import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
-import { SoknadProvider } from "../context/soknad-context";
 import { SanityProvider } from "../context/sanity-context";
+import { SoknadProvider } from "../context/soknad-context";
+import { UserInfoProvider } from "../context/user-info-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
+import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockSoknadProvider } from "./MockSoknadProvider";
-import { FeatureTogglesProvider } from "../context/feature-toggle-context";
-import { UserInfoProvider } from "../context/user-info-context";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -37,6 +38,26 @@ export const mockSoknadState: IQuizState = {
   roller: [],
 };
 
+export const mockOrkestratorSeksjon: IOrkestratorSeksjon = {
+  navn: "bostedsland",
+  besvarteOpplysninger: [],
+  erFullført: false,
+  nesteUbesvarteOpplysning: {
+    opplysningId: "55d35f94-ff20-4c50-a699-2bd1c9619cc9",
+    tekstnøkkel: "faktum.hvilket-land-bor-du-i",
+    type: "land",
+    svar: null,
+    gyldigeSvar: ["NOR", "SWE", "FIN"],
+  },
+};
+
+export const mockOrkestratorState: IOrkestratorSoknad = {
+  søknadId: "123456",
+  seksjoner: [mockOrkestratorSeksjon],
+  erFullført: true,
+  antallSeksjoner: 2,
+};
+
 export const mockSection: IQuizSeksjon = {
   fakta: [],
   beskrivendeId: "din-situasjon",
@@ -58,12 +79,20 @@ export function MockContext(props: PropsWithChildren<IProps>) {
     mockQuizContext,
   } = props;
 
+  const mockFeatureToggles = {
+    orkestratorEnEnabled: true,
+    orkestratorToEnabled: true,
+  };
+
   return (
     <div id="__next">
       <SanityProvider initialState={sanityTexts}>
-        <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+        <AppProvider featureToggles={mockFeatureToggles}>
           {mockQuizContext && (
-            <MockSoknadProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <MockSoknadProvider
+              quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
+              orkestratorState={mockOrkestratorState}
+            >
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -75,7 +104,10 @@ export function MockContext(props: PropsWithChildren<IProps>) {
           )}
 
           {!mockQuizContext && (
-            <SoknadProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <SoknadProvider
+              quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
+              orkestratorState={mockOrkestratorState}
+            >
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -85,7 +117,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
               </UserInfoProvider>
             </SoknadProvider>
           )}
-        </FeatureTogglesProvider>
+        </AppProvider>
       </SanityProvider>
     </div>
   );

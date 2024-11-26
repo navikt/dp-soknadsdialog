@@ -101,12 +101,14 @@ describe("Receipt", () => {
       svaralternativer: [sanitySvaralternativ],
     };
 
+    // TODO: legg til mer fornuftig mockdata for orkestrator sections
     render(
       <MockContext quizSeksjoner={[sectionMockdata]} sanityTexts={sanityTexts}>
         <Receipt
           arbeidssokerStatus="REGISTERED"
           soknadStatus={soknadStatus}
-          sections={[sectionMockdata]}
+          quizSections={[sectionMockdata]}
+          orkestratorSections={[]}
           personalia={personalia}
         />
       </MockContext>,
@@ -137,7 +139,8 @@ describe("Receipt", () => {
           <Receipt
             arbeidssokerStatus="UNREGISTERED"
             soknadStatus={soknadStatus}
-            sections={[]}
+            quizSections={[]}
+            orkestratorSections={[]}
             personalia={personalia}
           />
         </MockContext>,
@@ -158,7 +161,8 @@ describe("Receipt", () => {
           <Receipt
             arbeidssokerStatus="REGISTERED"
             soknadStatus={soknadStatus}
-            sections={[]}
+            quizSections={[]}
+            orkestratorSections={[]}
             personalia={personalia}
           />
         </MockContext>,

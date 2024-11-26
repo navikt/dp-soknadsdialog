@@ -1,24 +1,29 @@
 import React from "react";
 import { SoknadContext } from "../context/soknad-context";
+import { IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizState } from "../types/quiz.types";
 
 interface IProps {
   children: React.ReactElement;
-  initialState: IQuizState;
+  quizState: IQuizState;
+  orkestratorState: IOrkestratorSoknad;
 }
 
 export const mockSaveFaktumToQuiz = vi.fn();
+export const mockSaveOpplysningToOrkestrator = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
-export function MockSoknadProvider({ initialState, children }: IProps) {
+export function MockSoknadProvider({ quizState, orkestratorState, children }: IProps) {
   mockSaveFaktumToQuiz.mockReset();
   mockSaveGeneratorFaktumToQuiz.mockReset();
 
   return (
     <SoknadContext.Provider
       value={{
-        quizState: initialState,
+        quizState,
+        orkestratorState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
+        saveOpplysningToOrkestrator: mockSaveOpplysningToOrkestrator,
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,
         isError: false,
