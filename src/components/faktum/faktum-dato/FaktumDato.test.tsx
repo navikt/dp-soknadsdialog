@@ -11,9 +11,9 @@ import {
   subMonths,
   subYears,
 } from "date-fns";
-import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
+import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { FaktumDato } from "./FaktumDato";
 
 const mockFaktumSoknadsdato: QuizFaktum | IQuizGeneratorFaktum = {

@@ -1,10 +1,11 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { IDokumentkravList } from "../../../types/documentation.types";
+import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 import { IQuizState } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
 import {
@@ -14,10 +15,9 @@ import {
 import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { Dokumentasjon } from "../../../views/dokumentasjon/Dokumentasjon";
 import ErrorPage from "../../_error";
-import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
-import { IOrkestratorSoknad } from "../../../types/orkestrator.types";
 import { getOrkestratorState } from "../../api/common/orkestrator-api";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { getDokumentkrav } from "../../api/documentation/[uuid]";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -142,10 +142,10 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
+    <SoknadProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>
-    </QuizProvider>
+    </SoknadProvider>
   );
 }

@@ -1,5 +1,5 @@
 import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { IQuizNumberFaktum } from "../../../types/quiz.types";
@@ -19,12 +19,11 @@ export const FaktumEgetGaardsbrukArbeidsaar = forwardRef(FaktumEgetGaardsbrukArb
 
 function FaktumEgetGaardsbrukArbeidsaarComponent(
   props: IFaktum<IQuizNumberFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
-
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);

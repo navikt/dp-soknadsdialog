@@ -15,7 +15,7 @@ import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
@@ -35,7 +35,7 @@ export function Summary(props: IProps) {
 
   const router = useRouter();
   const { uuid } = useUuid();
-  const { soknadState, orkestratorState } = useQuiz();
+  const { quizState: soknadState, orkestratorState } = useSoknad();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();

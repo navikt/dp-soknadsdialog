@@ -4,7 +4,7 @@ import {
   trackLagtTilArbeidsforholdManuelt,
   trackValgtArbeidsforholdFraAAREG,
 } from "../../amplitude.tracking";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidsforhold, useUserInfo } from "../../context/user-info-context";
 import { QuizFaktum } from "../../types/quiz.types";
@@ -25,7 +25,7 @@ interface IProps {
 export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
   const { getAppText } = useSanity();
-  const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const { saveFaktumToQuiz, quizState: soknadState } = useSoknad();
   const [showFaktum, setShowFaktum] = useState(false);
   const [shouldSaveVarighet, setShouldSaveVarighet] = useState(false);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);

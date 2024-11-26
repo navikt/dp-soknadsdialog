@@ -4,7 +4,7 @@ import { IFaktum } from "../Faktum";
 import { ISanityAlertText } from "../../../types/sanity.types";
 import { IQuizEnvalgFaktum } from "../../../types/quiz.types";
 import { PortableText } from "@portabletext/react";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
@@ -20,7 +20,7 @@ function FaktumEnvalgComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");

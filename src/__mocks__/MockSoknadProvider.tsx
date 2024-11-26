@@ -1,5 +1,5 @@
 import React from "react";
-import { QuizContext } from "../context/quiz-context";
+import { SoknadContext } from "../context/soknad-context";
 import { IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizState } from "../types/quiz.types";
 
@@ -13,14 +13,14 @@ export const mockSaveFaktumToQuiz = vi.fn();
 export const mockSaveOpplysningToOrkestrator = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
-export function MockQuizProvider({ quizState, orkestratorState, children }: IProps) {
+export function MockSoknadProvider({ quizState, orkestratorState, children }: IProps) {
   mockSaveFaktumToQuiz.mockReset();
   mockSaveGeneratorFaktumToQuiz.mockReset();
 
   return (
-    <QuizContext.Provider
+    <SoknadContext.Provider
       value={{
-        soknadState: quizState,
+        quizState: quizState,
         orkestratorState: orkestratorState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
         saveOpplysningToOrkestrator: mockSaveOpplysningToOrkestrator,
@@ -31,6 +31,6 @@ export function MockQuizProvider({ quizState, orkestratorState, children }: IPro
       }}
     >
       {children}
-    </QuizContext.Provider>
+    </SoknadContext.Provider>
   );
 }

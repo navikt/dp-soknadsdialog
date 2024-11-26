@@ -1,15 +1,15 @@
 import { PropsWithChildren } from "react";
 import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
-import { QuizProvider } from "../context/quiz-context";
 import { SanityProvider } from "../context/sanity-context";
+import { SoknadProvider } from "../context/soknad-context";
 import { UserInfoProvider } from "../context/user-info-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
-import { MockQuizProvider } from "./MockQuizProvider";
+import { MockSoknadProvider } from "./MockSoknadProvider";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];
@@ -89,7 +89,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
       <SanityProvider initialState={sanityTexts}>
         <AppProvider featureToggles={mockFeatureToggles}>
           {mockQuizContext && (
-            <MockQuizProvider
+            <MockSoknadProvider
               quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
               orkestratorState={mockOrkestratorState}
             >
@@ -100,11 +100,11 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </MockQuizProvider>
+            </MockSoknadProvider>
           )}
 
           {!mockQuizContext && (
-            <QuizProvider
+            <SoknadProvider
               quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
               orkestratorState={mockOrkestratorState}
             >
@@ -115,7 +115,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </QuizProvider>
+            </SoknadProvider>
           )}
         </AppProvider>
       </SanityProvider>

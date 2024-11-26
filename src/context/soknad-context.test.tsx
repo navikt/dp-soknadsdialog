@@ -1,5 +1,4 @@
 import React from "react";
-import { QuizProvider, useQuiz } from "./quiz-context";
 import { FaktumBoolean } from "../components/faktum/faktum-boolean/FaktumBoolean";
 import { render, screen, waitFor } from "@testing-library/react";
 import { IQuizBooleanFaktum, IQuizState } from "../types/quiz.types";
@@ -9,6 +8,7 @@ import createFetchMock from "vitest-fetch-mock";
 import userEvent from "@testing-library/user-event";
 import { mockOrkestratorState, mockSanityTexts } from "../__mocks__/MockContext";
 import { ValidationProvider } from "./validation-context";
+import { SoknadProvider, useSoknad } from "./soknad-context";
 
 const mockQuizState: IQuizState = { ferdig: false, seksjoner: [], antallSeksjoner: 0 };
 const faktum: IQuizBooleanFaktum = {
@@ -23,7 +23,7 @@ const faktum: IQuizBooleanFaktum = {
 // We need to await states in these tests, and the way to do that is to await
 // screen changes. Explicitly print out the loading and error states so that we can await and test for those
 function ContextSpion() {
-  const { isLoading, isError } = useQuiz();
+  const { isLoading, isError } = useSoknad();
   if (isLoading) return <>Laster</>;
   if (isError) return <>Error</>;
   return null;
@@ -45,12 +45,12 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
+        <SoknadProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />
           </ValidationProvider>
-        </QuizProvider>
+        </SoknadProvider>
       </SanityProvider>,
     );
 
@@ -78,12 +78,12 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
+        <SoknadProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />
           </ValidationProvider>
-        </QuizProvider>
+        </SoknadProvider>
       </SanityProvider>,
     );
 

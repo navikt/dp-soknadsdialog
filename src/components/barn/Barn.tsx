@@ -1,7 +1,7 @@
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react";
 import { forwardRef, Ref, useEffect } from "react";
-import { useQuiz } from "../../context/quiz-context";
 import { useSanity } from "../../context/sanity-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useValidation } from "../../context/validation-context";
 import { useGeneratorUtils } from "../../hooks/useGeneratorUtils";
 import { ChildAdd } from "../../svg-icons/ChildAdd";
@@ -18,7 +18,7 @@ export const Barn = forwardRef(BarnComponent);
 
 function BarnComponent(props: IFaktum<IQuizGeneratorFaktum>, ref: Ref<HTMLDivElement> | undefined) {
   const { faktum } = props;
-  const { isLoading } = useQuiz();
+  const { isLoading } = useSoknad();
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const {

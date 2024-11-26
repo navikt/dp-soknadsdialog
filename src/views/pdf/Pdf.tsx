@@ -6,7 +6,7 @@ import { ReceiptDokumentkravMissingItem } from "../../components/receipt-dokumen
 import { ReceiptDokumentkravUploadedItem } from "../../components/receipt-dokumentkrav/ReceiptDokumentkravUploadedItem";
 import { QuizSection } from "../../components/section/QuizSection";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
 import { IPersonalia } from "../../types/personalia.types";
@@ -28,7 +28,7 @@ export type PdfView = "netto" | "brutto";
 export function Pdf(props: IProps) {
   const { personalia, dokumentkravList, pdfView } = props;
   const { getAppText } = useSanity();
-  const { soknadState } = useQuiz();
+  const { quizState: soknadState } = useSoknad();
 
   const missingDocuments: IDokumentkrav[] = getMissingDokumentkrav(dokumentkravList);
   const uploadedDocuments: IDokumentkrav[] = getUploadedDokumentkrav(dokumentkravList);

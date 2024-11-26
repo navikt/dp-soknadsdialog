@@ -4,7 +4,7 @@ import {
   getSoknadOrkestratorOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { IDokumentkravList } from "../../../types/documentation.types";
 import { IQuizState } from "../../../types/quiz.types";
@@ -103,12 +103,12 @@ export default function GenerellInnsendingKvitteringPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
+    <SoknadProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <DokumentkravProvider initialState={dokumentkravList}>
         <ValidationProvider>
           <GenerellInnsendingKvittering />
         </ValidationProvider>
       </DokumentkravProvider>
-    </QuizProvider>
+    </SoknadProvider>
   );
 }

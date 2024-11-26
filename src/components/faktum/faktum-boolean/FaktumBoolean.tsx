@@ -5,7 +5,7 @@ import { IQuizBooleanFaktum } from "../../../types/quiz.types";
 import { ISanityAlertText } from "../../../types/sanity.types";
 import { ErrorTypesEnum } from "../../../types/error.types";
 import { PortableText } from "@portabletext/react";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { ErrorRetryModal } from "../../error-retry-modal/ErrorRetryModal";
@@ -23,7 +23,7 @@ function FaktumBooleanComponent(
 ) {
   const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) ?? "");

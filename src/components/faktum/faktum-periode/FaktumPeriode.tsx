@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
 import { DATEPICKER_TO_DATE, DATEPICKER_FROM_DATE } from "../../../constants";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
@@ -44,7 +44,7 @@ function FaktumPeriodeComponent(
 ) {
   const { faktum, hideAlertText, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
   const { contextSelectedArbeidsforhold } = useUserInfo();
