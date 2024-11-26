@@ -28,10 +28,8 @@ function FaktumLandComponent(
   const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useSoknad();
   const { landgrupper } = useAppContext();
   const { unansweredFaktumId } = useValidation();
-
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");
-
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
