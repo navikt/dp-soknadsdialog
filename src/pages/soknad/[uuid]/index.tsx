@@ -7,28 +7,30 @@ import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
 import { mockPersonalia } from "../../../localhost-data/personalia";
 import { IPersonalia } from "../../../types/personalia.types";
-import { IQuizState } from "../../../types/quiz.types";
+import { IQuizState, ISoknadStatus } from "../../../types/quiz.types";
 import { getErrorDetails } from "../../../utils/api.utils";
 import {
   getSoknadOnBehalfOfToken,
   getSoknadOrkestratorOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 // import { erSoknadInnsendt } from "../../../utils/soknad.utils";
+import { AppProvider } from "../../../context/app-context";
+import { ILandgruppe, IOrkestratorSoknad } from "../../../types/orkestrator.types";
 import { Soknad } from "../../../views/soknad/Soknad";
 import ErrorPage from "../../_error";
+import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
+import { getLandgrupper, getOrkestratorState } from "../../api/common/orkestrator-api";
+import { getPersonalia } from "../../api/common/personalia-api";
+import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
 import {
   defaultFeatureToggles,
   getFeatureToggles,
   IFeatureToggles,
 } from "../../api/common/unleash-api";
-import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
-import { getPersonalia } from "../../api/common/personalia-api";
-import { getArbeidsforhold } from "../../api/common/arbeidsforhold-api";
-import { getLandgrupper, getOrkestratorState } from "../../api/common/orkestrator-api";
-import { ILandgruppe, IOrkestratorSoknad } from "../../../types/orkestrator.types";
 
 interface IProps {
   soknadState: IQuizState | null;
+  soknadStatus: ISoknadStatus | null;
   orkestratorState: IOrkestratorSoknad | null;
   personalia: IPersonalia | null;
   errorCode: number | null;
@@ -51,6 +53,7 @@ export async function getServerSideProps(
         personalia: mockPersonalia,
         arbeidsforhold: [],
         errorCode: null,
+        soknadStatus: null,
         landgrupper: null,
         featureToggles: {
           ...defaultFeatureToggles,
@@ -128,6 +131,7 @@ export async function getServerSideProps(
   return {
     props: {
       soknadState,
+      soknadStatus,
       orkestratorState,
       personalia,
       errorCode,
@@ -160,18 +164,14 @@ export default function SoknadPage(props: IProps) {
   }
 
   return (
-    <FeatureTogglesProvider featureToggles={featureToggles}>
-      <QuizProvider
-        quizState={soknadState}
-        orkestratorState={orkestratorState}
-        landgrupper={landgrupper}
-      >
+    <AppProvider featureToggles={featureToggles} landgrupper={landgrupper}>
+      <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
         <UserInfoProvider arbeidsforhold={arbeidsforhold}>
           <ValidationProvider>
             <Soknad personalia={personalia} />
           </ValidationProvider>
         </UserInfoProvider>
       </QuizProvider>
-    </FeatureTogglesProvider>
+    </AppProvider>
   );
 }

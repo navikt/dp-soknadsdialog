@@ -1,9 +1,12 @@
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
+import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
 import { SoknadProvider } from "../context/soknad-context";
 import { SanityProvider } from "../context/sanity-context";
+import { UserInfoProvider } from "../context/user-info-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
+import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockSoknadProvider } from "./MockSoknadProvider";
@@ -79,10 +82,15 @@ export function MockContext(props: PropsWithChildren<IProps>) {
     mockQuizContext,
   } = props;
 
+  const mockFeatureToggles = {
+    orkestratorEnEnabled: true,
+    orkestratorToEnabled: true,
+  };
+
   return (
     <div id="__next">
       <SanityProvider initialState={sanityTexts}>
-        <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
+        <AppProvider featureToggles={mockFeatureToggles}>
           {mockQuizContext && (
             <MockSoknadProvider
               quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
@@ -112,7 +120,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
               </UserInfoProvider>
             </SoknadProvider>
           )}
-        </FeatureTogglesProvider>
+        </AppProvider>
       </SanityProvider>
     </div>
   );

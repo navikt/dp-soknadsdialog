@@ -10,9 +10,9 @@ import { erSoknadInnsendt } from "../../../utils/soknad.utils";
 import { GenerellInnsending } from "../../../views/generell-innsending/GenerellInnsending";
 import ErrorPage from "../../_error";
 import { getDokumentkrav } from "../../api/documentation/[uuid]";
-import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
 import { UserInfoProvider } from "../../../context/user-info-context";
 import { getSoknadState, getSoknadStatus } from "../../api/common/quiz-api";
+import { AppProvider } from "../../../context/app-context";
 
 interface IProps {
   soknadState: IQuizState | null;
@@ -105,6 +105,8 @@ export default function GenerellInnsendingPage(props: IProps) {
   return (
     <FeatureTogglesProvider featureToggles={{ soknadsdialogMedOrkestratorIsEnabled: false }}>
       <SoknadProvider quizState={soknadState}>
+    <AppProvider>
+      <QuizProvider quizState={soknadState}>
         <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
             <ValidationProvider>
@@ -112,7 +114,7 @@ export default function GenerellInnsendingPage(props: IProps) {
             </ValidationProvider>
           </DokumentkravProvider>
         </UserInfoProvider>
-      </SoknadProvider>
-    </FeatureTogglesProvider>
+      </QuizProvider>
+    </AppProvider>
   );
 }
