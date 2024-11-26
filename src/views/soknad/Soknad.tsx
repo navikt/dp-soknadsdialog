@@ -9,7 +9,7 @@ import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { Section } from "../../components/section/Section";
+import { OrkestratorSection } from "../../components/section/Section";
 import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
@@ -141,7 +141,7 @@ export function Soknad(props: IProps) {
         )}
 
         {isOrkestratorSection && currentOrkestratorSectionData && (
-          <Section section={currentOrkestratorSectionData} />
+          <OrkestratorSection section={currentOrkestratorSectionData} />
         )}
         {!isOrkestratorSection && <QuizSection section={currentQuizSectionData} />}
 

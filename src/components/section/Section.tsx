@@ -12,7 +12,7 @@ interface IProps {
   showAllTexts?: boolean;
 }
 
-export function Section(props: IProps) {
+export function OrkestratorSection(props: IProps) {
   const { getSeksjonTextById } = useSanity();
 
   if (!props.section.navn) {
