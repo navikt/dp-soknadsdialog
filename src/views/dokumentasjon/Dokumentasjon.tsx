@@ -85,7 +85,7 @@ export function Dokumentasjon() {
   }
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <PageMeta
         title={getAppText("dokumentkrav.side-metadata.tittel")}
         description={getAppText("dokumentkrav.side-metadata.meta-beskrivelse")}

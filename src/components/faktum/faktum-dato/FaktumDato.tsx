@@ -2,14 +2,13 @@ import { DatePicker, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { Ref, forwardRef, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
-import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
 import { useFirstRender } from "../../../hooks/useFirstRender";
+import { useValidateFaktumDato } from "../../../hooks/validation/useValidateFaktumDato";
 import { IQuizDatoFaktum } from "../../../types/quiz.types";
+import { getDatepickerFromDate, getDatepickerToDate } from "../../../utils/date.utils";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
@@ -26,65 +25,84 @@ function FaktumDatoComponent(
   const { saveFaktumToQuiz, isLocked } = useQuiz();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const { errorMessage, validateAndIsValid, getHasWarning, clearErrorMessage } =
-    useValidateFaktumDato(faktum);
   const faktumTexts = getFaktumTextById(props.faktum.beskrivendeId);
-  const [currentAnswer, setCurrentAnswer] = useState<string | null>(props.faktum.svar ?? "");
-  const [debouncedDate, setDebouncedDate] = useState<string | null>(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setDebouncedDate, 500);
-
-  useEffect(() => {
-    if (!isFirstRender) {
-      saveFaktum(debouncedDate);
-    }
-  }, [debouncedDate]);
+  const [selectedDate, setSelectedDate] = useState<string>(faktum.svar ?? "");
+  const [shouldSaveWithOnchange, setShouldSaveWithOnchange] = useState(false);
+  const { error, validateAndIsValid, shouldShowWarning, setError } = useValidateFaktumDato(faktum);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!isFirstRender && faktum.svar !== currentAnswer) {
-      setCurrentAnswer(faktum.svar ?? "");
+    if (!isFirstRender || faktum.svar !== selectedDate) {
+      setSelectedDate(faktum.svar ?? "");
     }
-  }, [faktum]);
+  }, [faktum.svar]);
+
+  // Save selected date to quiz if it is valid or empty
+  useEffect(() => {
+    if (shouldSaveWithOnchange) {
+      saveFaktum(selectedDate);
+    }
+  }, [shouldSaveWithOnchange, selectedDate]);
 
   const { datepickerProps, inputProps } = useDatepicker({
-    defaultSelected: currentAnswer ? new Date(currentAnswer) : undefined,
+    defaultSelected: faktum.svar ? new Date(faktum.svar) : undefined,
     onDateChange: (value?: Date) => {
-      const debounceValue = value ? formatISO(value, { representation: "date" }) : null;
-      setCurrentAnswer(debounceValue);
-      debouncedChange(debounceValue);
+      const selectedDate = value ? formatISO(value, { representation: "date" }) : "";
+      setSelectedDate(selectedDate);
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        setCurrentAnswer("");
-        debouncedChange("");
+        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
+
+        setError("");
+        return;
+      }
+
+      if (value.isInvalid) {
+        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
+        setError(getAppText("validering.ugyldig-dato"));
+        return;
+      }
+
+      if (value.isValidDate) {
+        if (!shouldSaveWithOnchange) setShouldSaveWithOnchange(true);
       }
     },
   });
 
-  function saveFaktum(value: string | null) {
+  // Trigger save when user leaves input field when typing a date manually
+  function onBlur() {
+    // if the date is empty or invalid, save null to quiz
+    if (selectedDate === "" || !validateAndIsValid(new Date(selectedDate))) {
+      saveFaktumToQuiz(faktum, null);
+    }
+  }
+
+  function saveFaktum(value: string) {
     if (value === "") {
-      clearErrorMessage();
       saveFaktumToQuiz(faktum, null);
       return;
     }
 
-    const isValidDate = validateAndIsValid(value ? new Date(value) : null);
-    saveFaktumToQuiz(faktum, isValidDate ? value : null);
+    const isValidDate = validateAndIsValid(new Date(value));
+    if (isValidDate) {
+      saveFaktumToQuiz(faktum, isValidDate ? value : null);
+    }
   }
 
   const datePickerDescription = faktumTexts?.description ? (
     <PortableText value={faktumTexts.description} />
   ) : undefined;
 
-  const hasWarning = currentAnswer && getHasWarning(new Date(currentAnswer));
+  const hasWarning = shouldShowWarning(new Date(selectedDate));
 
   return (
     <div ref={ref} id={faktum.id} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
       <DatePicker
         {...datepickerProps}
         dropdownCaption
-        fromDate={DATEPICKER_MIN_DATE}
-        toDate={DATEPICKER_MAX_DATE}
+        fromDate={getDatepickerFromDate(faktum.beskrivendeId)}
+        toDate={getDatepickerToDate(faktum.beskrivendeId)}
         strategy="fixed"
       >
         <DatePicker.Input
@@ -92,15 +110,16 @@ function FaktumDatoComponent(
           label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
           placeholder={getAppText("datovelger.dato-format")}
           description={datePickerDescription}
-          error={errorMessage}
+          error={error}
           disabled={isLocked}
           autoComplete="off"
+          onBlur={onBlur}
         />
       </DatePicker>
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
       )}
-      {hasWarning && <FaktumDatoWarning selectedDate={currentAnswer} />}
+      {hasWarning && <FaktumDatoWarning selectedDate={selectedDate} />}
     </div>
   );
 }

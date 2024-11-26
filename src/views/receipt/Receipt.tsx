@@ -48,7 +48,7 @@ export function Receipt(props: IProps) {
   }
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <PageMeta
         title={getAppText("kvittering.side-metadata.tittel")}
         description={getAppText("kvittering.side-metadata.meta-beskrivelse")}

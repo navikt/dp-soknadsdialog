@@ -4,7 +4,7 @@ import {
   isValidPermitteringsPercent,
   isOverTwoWeeks,
   isValidTextLength,
-  isWithinValidYearRange,
+  isWithinValidDateRange,
 } from "./validations.utils";
 
 const validTextLengthMock =
@@ -51,10 +51,10 @@ describe("Input validation", () => {
     const nextMonth = addMonths(new Date(), 1);
     const lastMonth = addMonths(new Date(), -1);
 
-    expect(isWithinValidYearRange(today)).toBe(true);
-    expect(isWithinValidYearRange(about200years)).toBe(false);
-    expect(isWithinValidYearRange(last200years)).toBe(false);
-    expect(isWithinValidYearRange(nextMonth)).toBe(true);
-    expect(isWithinValidYearRange(lastMonth)).toBe(true);
+    expect(isWithinValidDateRange(today)).toBe(true);
+    expect(isWithinValidDateRange(about200years)).toBe(false);
+    expect(isWithinValidDateRange(last200years)).toBe(false);
+    expect(isWithinValidDateRange(nextMonth)).toBe(true);
+    expect(isWithinValidDateRange(lastMonth)).toBe(true);
   });
 });

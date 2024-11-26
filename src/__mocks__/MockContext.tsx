@@ -102,6 +102,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
             <QuizProvider
               quizState={{ ...soknadState, seksjoner: quizSeksjoner }}
               orkestratorState={mockOrkestratorState}
+              landgrupper={[]}
             >
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider

@@ -130,8 +130,7 @@ export function Soknad(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         <ProgressBar currentStep={sectionNumber} totalSteps={totalSteps} />
 
         {sectionNumber === 1 && props.personalia && (

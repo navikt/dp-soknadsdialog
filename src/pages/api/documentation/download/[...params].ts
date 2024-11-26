@@ -1,23 +1,27 @@
+import { logger } from "@navikt/next-logger";
 import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
+import { Readable } from "stream";
+import { logRequestError } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
-import { logRequestError } from "../../../../error.logger";
 
 const filePath = path.resolve("src/localhost-data/sample.pdf");
-const imageBuffer = fs.readFileSync(filePath);
+const fileStream = fs.createReadStream(filePath);
 
 export const config = {
   api: {
     responseLimit: false,
+    bodyParser: false,
+    externalResolver: true,
   },
 };
 
 async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   if (process.env.USE_MOCKS === "true") {
     res.setHeader("Content-Type", "application/pdf");
-    return res.send(imageBuffer);
+    return res.send(fileStream);
   }
 
   const { params } = req.query;
@@ -31,11 +35,17 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(401).end();
     }
 
-    const response = await fetch(`${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`, {
+    logger.info("Starter streaming av dokumentkrav fil", { urn });
+
+    const requestUrl = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`;
+
+    const requestHeaders = {
       headers: {
         Authorization: `Bearer ${onBehalfOf.token}`,
       },
-    });
+    };
+
+    const response = await fetch(requestUrl, requestHeaders);
 
     if (!response.ok) {
       logRequestError(
@@ -43,24 +53,49 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
         undefined,
         "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
       );
-      return res.status(response.status).send(response.statusText);
+
+      res.status(500).send(response.statusText);
     }
 
-    const mellomlagringContentType = response.headers.get("Content-Type");
+    const mellomlagringContentType = response.headers.get("content-type");
     if (mellomlagringContentType) {
       res.setHeader("Content-Type", mellomlagringContentType);
     }
 
-    res.setHeader("Content-Disposition", "inline;");
+    res.setHeader("Content-Disposition", "inline");
+    res.setHeader("Transfer-Encoding", "chunked");
 
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    if (!response.body) {
+      const handlerErrorMessage = "Missing request body to generate readable stream";
+      const logErrorMessage =
+        "Download dokumentkrav files - Missing request body to generate readable stream";
 
-    return res.status(response.status).send(buffer);
+      logRequestError(handlerErrorMessage, undefined, logErrorMessage);
+
+      res.status(500).send(handlerErrorMessage);
+    }
+
+    // @ts-ignore
+    const stream = Readable.fromWeb(response.body);
+
+    stream.pipe(res);
+
+    stream.on("error", (err) => {
+      const handlerErrorMessage = "Error streaming dokumentkrav file";
+      const logErrorMessage =
+        "Download dokumentkrav files - Failed to streaming dokumentkrav file from dp-mellomlagring";
+
+      logRequestError(err.message, undefined, logErrorMessage);
+      res.status(500).send(handlerErrorMessage);
+    });
+
+    stream.on("end", () => {
+      res.end();
+    });
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
-    return res.status(500).send(message);
+    res.status(500).send(message);
   }
 }
 

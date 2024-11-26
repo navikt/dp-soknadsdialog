@@ -10,7 +10,7 @@ export function ErrorPageContent({ title, details }: IProps) {
   const detailsWithFallback = details ?? "Beklager, vi mistet kontakten med systemene våre.";
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <Heading level="1" size="xlarge" spacing>
         {titleWithFallback}
       </Heading>

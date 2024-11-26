@@ -97,7 +97,7 @@ export function Summary(props: IProps) {
   }, [finishSoknadStatus]);
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <PageMeta
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}

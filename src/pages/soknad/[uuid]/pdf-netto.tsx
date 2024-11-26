@@ -95,7 +95,7 @@ export default function PdfNettoPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={props.soknadState}>
+    <QuizProvider quizState={props.soknadState} landgrupper={[]}>
       <ValidationProvider>
         <Pdf
           personalia={props.personalia}

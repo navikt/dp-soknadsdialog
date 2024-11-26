@@ -41,7 +41,7 @@ export function Pdf(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         <Personalia personalia={personalia} />
 
         {soknadState.seksjoner.map((section) => (

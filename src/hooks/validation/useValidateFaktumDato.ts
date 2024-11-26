@@ -2,26 +2,25 @@ import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
 import {
   isOverTwoWeeks,
-  isWithinValidYearRange,
+  isWithinValidDateRange,
 } from "../../components/faktum/validation/validations.utils";
+import { SOKNAD_DATO_DATEPICKER_FROM_DATE, SOKNAD_DATO_DATEPICKER_TO_DATE } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
 interface IUseValidateFaktumDato {
-  validateAndIsValid: (date: Date | null) => boolean | ((date: Date | null) => boolean);
-  getHasWarning: (date: Date) => boolean;
-  errorMessage: string | undefined;
-  clearErrorMessage: () => void;
+  validateAndIsValid: (date: Date) => boolean;
+  shouldShowWarning: (date: Date) => boolean;
+  error: string | undefined;
+  setError: (message: string) => void;
 }
 
 const furetureDateAllowedList = [
-  "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.kontraktfestet-sluttdato",
-  "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
   "faktum.arbeidsforhold.arbeidstid-redusert-fra-dato",
 ];
 
-const futureDateAllowedWithWarningList = [
+export const futureDateAllowedWithWarningList = [
   "faktum.dagpenger-soknadsdato",
   "faktum.arbeidsforhold.gjenopptak.soknadsdato-gjenopptak",
 ];
@@ -29,12 +28,12 @@ const futureDateAllowedWithWarningList = [
 export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDato {
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!errorMessage) {
-      setErrorMessage(
-        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
+    if (!error) {
+      setError(
+        unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
       );
     }
   }, [unansweredFaktumId]);
@@ -42,50 +41,59 @@ export function useValidateFaktumDato(faktum: QuizFaktum): IUseValidateFaktumDat
   // Validate input value
   // Set or clear validation message based on validation state
   // Return boolean validation state
-  function validateAndIsValid(date: Date | null): boolean {
-    setErrorMessage(undefined);
+  function validateAndIsValid(date: Date): boolean {
+    setError(undefined);
 
-    if (!date) {
-      setErrorMessage(getAppText("validering.ugyldig-dato"));
-      return false;
+    if (futureDateAllowedWithWarningList.includes(faktum.beskrivendeId)) {
+      if (date <= SOKNAD_DATO_DATEPICKER_FROM_DATE) {
+        setError(getAppText("validering.soknadsdato.for-langt-tilbake-i-tid"));
+        return false;
+      }
+
+      if (date >= SOKNAD_DATO_DATEPICKER_TO_DATE) {
+        setError(getAppText("validering.soknadsdato.for-langt-frem-i-tid"));
+        return false;
+      }
+
+      return true;
     }
 
     const future = isFuture(date);
-    const isValid = isWithinValidYearRange(date);
+    const isValid = isWithinValidDateRange(date);
 
     if (furetureDateAllowedList.includes(faktum.beskrivendeId)) {
       if (!isValid) {
-        setErrorMessage(getAppText("validering.ugyldig-dato"));
+        setError(getAppText("validering.ugyldig-dato"));
       }
 
       return isValid;
     }
 
     if (!isValid) {
-      setErrorMessage(getAppText("validering.ugyldig-dato"));
+      setError(getAppText("validering.ugyldig-dato"));
       return false;
     }
 
     if (future) {
-      setErrorMessage(getAppText("validering.fremtidig-dato"));
+      setError(getAppText("validering.fremtidig-dato"));
       return false;
     }
 
     return !future && isValid;
   }
 
-  function getHasWarning(date: Date) {
-    return futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) && isOverTwoWeeks(date);
-  }
-
-  function clearErrorMessage() {
-    setErrorMessage(undefined);
+  function shouldShowWarning(date: Date) {
+    return (
+      futureDateAllowedWithWarningList.includes(faktum.beskrivendeId) &&
+      isOverTwoWeeks(date) &&
+      !error
+    );
   }
 
   return {
-    errorMessage,
+    error,
     validateAndIsValid,
-    getHasWarning,
-    clearErrorMessage,
+    shouldShowWarning,
+    setError,
   };
 }

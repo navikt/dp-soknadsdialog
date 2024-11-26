@@ -2,7 +2,7 @@ import { Fieldset, DatePicker, useRangeDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
+import { DATEPICKER_TO_DATE, DATEPICKER_FROM_DATE } from "../../../constants";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidation } from "../../../context/validation-context";
@@ -192,8 +192,8 @@ function FaktumPeriodeComponent(
         <DatePicker
           {...datepickerProps}
           dropdownCaption
-          fromDate={DATEPICKER_MIN_DATE}
-          toDate={DATEPICKER_MAX_DATE}
+          fromDate={DATEPICKER_FROM_DATE}
+          toDate={DATEPICKER_TO_DATE}
           strategy="fixed"
         >
           <div className={periodeStyles.datePickerSpacing}>

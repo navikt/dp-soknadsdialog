@@ -45,7 +45,11 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
+        <QuizProvider
+          quizState={mockQuizState}
+          orkestratorState={mockOrkestratorState}
+          landgrupper={[]}
+        >
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />
@@ -78,7 +82,11 @@ describe("Quiz context", () => {
 
     render(
       <SanityProvider initialState={mockSanityTexts}>
-        <QuizProvider quizState={mockQuizState} orkestratorState={mockOrkestratorState}>
+        <QuizProvider
+          quizState={mockQuizState}
+          orkestratorState={mockOrkestratorState}
+          landgrupper={[]}
+        >
           <ValidationProvider>
             <FaktumBoolean faktum={faktum} />
             <ContextSpion />
