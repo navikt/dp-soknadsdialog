@@ -29,7 +29,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { quizState: soknadState, orkestratorState, isError, isLoading, isLocked } = useSoknad();
+  const { quizState, orkestratorState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [navigating, setNavigating] = useState(false);
 
@@ -38,7 +38,7 @@ export function Soknad(props: IProps) {
   const invalidSectionParams = isNaN(Number(sectionParams));
   const sectionNumber = invalidSectionParams ? 1 : Number(sectionParams);
   const sectionIndex = sectionNumber - 1;
-  const isLastSection = soknadState.ferdig && orkestratorState && orkestratorState.erFullført;
+  const isLastSection = quizState.ferdig && orkestratorState && orkestratorState.erFullført;
 
   // Number of sections
   const numberOfOrkestratorSections = (orkestratorState && orkestratorState.antallSeksjoner) || 0;
@@ -47,21 +47,21 @@ export function Soknad(props: IProps) {
   // Orkestrator and Quiz section data based on sectionParams
   const currentOrkestratorSectionData =
     orkestratorState && orkestratorState.seksjoner[sectionIndex];
-  const currentQuizSectionData = soknadState.seksjoner[sectionIndex - numberOfOrkestratorSections];
+  const currentQuizSectionData = quizState.seksjoner[sectionIndex - numberOfOrkestratorSections];
 
   // Validation
-  const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
+  const firstUnansweredSectionIndex = quizState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
   // Teste commit
   useEffect(() => {
     // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
-    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+    if (router.query.fortsett && !quizState.ferdig && firstUnansweredSectionIndex !== -1) {
       router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 
     const availiableSections =
-      soknadState.seksjoner.length + ((orkestratorState && orkestratorState?.antallSeksjoner) || 0);
+      quizState.seksjoner.length + ((orkestratorState && orkestratorState?.antallSeksjoner) || 0);
 
     if (invalidSectionParams || sectionNumber > availiableSections) {
       // Hvis vi ikke finner en seksjon så sender vi bruker automatisk til første seksjon
@@ -75,7 +75,7 @@ export function Soknad(props: IProps) {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [soknadState, orkestratorState]);
+  }, [quizState, orkestratorState]);
 
   function navigateToNextSection() {
     if (isOrkestratorSection) {
@@ -165,7 +165,7 @@ export function Soknad(props: IProps) {
           )}
 
           {/* Denne her er kanskje ikke helt riktig, fiks det  */}
-          {sectionNumber === totalSteps - 2 && isLastSection && soknadState.ferdig ? (
+          {sectionNumber === totalSteps - 2 && isLastSection && quizState.ferdig ? (
             <Button onClick={() => navigateToDocumentation()} loading={navigating}>
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>

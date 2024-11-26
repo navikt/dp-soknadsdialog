@@ -1,32 +1,32 @@
-import React, { useEffect, useRef } from "react";
 import { FileContent } from "@navikt/ds-icons";
-import { FaktumEnvalg } from "./faktum-envalg/FaktumEnvalg";
-import { FaktumFlervalg } from "./faktum-flervalg/FaktumFlervalg";
-import { IQuizGeneratorFaktum, IQuizNumberFaktum, QuizFaktum } from "../../types/quiz.types";
-import { FaktumText } from "./faktum-text/FaktumText";
-import { FaktumNumber } from "./faktum-number/FaktumNumber";
-import { FaktumDato } from "./faktum-dato/FaktumDato";
-import { FaktumPeriode } from "./faktum-periode/FaktumPeriode";
-import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
-import { FaktumLand } from "./faktum-land/FaktumLand";
-import { FaktumBoolean } from "./faktum-boolean/FaktumBoolean";
-import { FaktumGenerator } from "./faktum-generator/FaktumGenerator";
-import { FaktumBooleanReadOnly } from "./faktum-boolean/FaktumBooleanReadOnly";
-import { FaktumEnvalgReadOnly } from "./faktum-envalg/FaktumEnvalgReadOnly";
-import { FaktumFlervalgReadOnly } from "./faktum-flervalg/FaktumFlervalgReadOnly";
-import { FaktumTextReadOnly } from "./faktum-text/FaktumTextReadOnly";
-import { FaktumNumberReadOnly } from "./faktum-number/FaktumNumberReadOnly";
-import { FaktumLandReadOnly } from "./faktum-land/FaktumLandReadOnly";
-import { FaktumDatoReadOnly } from "./faktum-dato/FaktumDatoReadOnly";
-import { FaktumPeriodeReadOnly } from "./faktum-periode/FaktumPeriodeReadOnly";
+import { useEffect, useRef } from "react";
+import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 import { useSanity } from "../../context/sanity-context";
-import { FaktumGeneratorReadOnly } from "./faktum-generator/FaktumGeneratorReadOnly";
+import { useSoknad } from "../../context/soknad-context";
 import { useValidation } from "../../context/validation-context";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../hooks/useSetFocus";
+import { IQuizGeneratorFaktum, IQuizNumberFaktum, QuizFaktum } from "../../types/quiz.types";
+import { FaktumBoolean } from "./faktum-boolean/FaktumBoolean";
+import { FaktumBooleanReadOnly } from "./faktum-boolean/FaktumBooleanReadOnly";
+import { FaktumDato } from "./faktum-dato/FaktumDato";
+import { FaktumDatoReadOnly } from "./faktum-dato/FaktumDatoReadOnly";
+import { FaktumEnvalg } from "./faktum-envalg/FaktumEnvalg";
+import { FaktumEnvalgReadOnly } from "./faktum-envalg/FaktumEnvalgReadOnly";
+import { FaktumFlervalg } from "./faktum-flervalg/FaktumFlervalg";
+import { FaktumFlervalgReadOnly } from "./faktum-flervalg/FaktumFlervalgReadOnly";
+import { FaktumGenerator } from "./faktum-generator/FaktumGenerator";
+import { FaktumGeneratorReadOnly } from "./faktum-generator/FaktumGeneratorReadOnly";
+import { FaktumLand } from "./faktum-land/FaktumLand";
+import { FaktumLandReadOnly } from "./faktum-land/FaktumLandReadOnly";
+import { FaktumNumber } from "./faktum-number/FaktumNumber";
+import { FaktumNumberReadOnly } from "./faktum-number/FaktumNumberReadOnly";
+import { FaktumPeriode } from "./faktum-periode/FaktumPeriode";
+import { FaktumPeriodeReadOnly } from "./faktum-periode/FaktumPeriodeReadOnly";
+import { FaktumEgetGaardsbrukArbeidsaar } from "./faktum-special-cases/FaktumEgetGaardsbrukArbeidsaar";
+import { FaktumText } from "./faktum-text/FaktumText";
+import { FaktumTextReadOnly } from "./faktum-text/FaktumTextReadOnly";
 import styles from "./Faktum.module.css";
-import { useSoknad } from "../../context/soknad-context";
-import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {
   faktum: P;
@@ -46,7 +46,7 @@ const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-fo
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText, isOrkestrator } = props;
-  const { quizState: soknadState } = useSoknad();
+  const { quizState } = useSoknad();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -161,7 +161,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
 
   const shouldRenderDokumentkravText =
     showAllFaktumTexts ||
-    (!faktum.readOnly && !readonly && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
+    (!faktum.readOnly && !readonly && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
 
   return (
     <div className={styles.faktum} data-faktum-id={faktum.beskrivendeId}>

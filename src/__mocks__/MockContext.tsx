@@ -1,15 +1,15 @@
 import { PropsWithChildren } from "react";
 import { AppProvider } from "../context/app-context";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
-import { SanityProvider } from "../context/sanity-context";
 import { SoknadProvider } from "../context/soknad-context";
-import { UserInfoProvider } from "../context/user-info-context";
+import { SanityProvider } from "../context/sanity-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IOrkestratorSeksjon, IOrkestratorSoknad } from "../types/orkestrator.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
 import { MockSoknadProvider } from "./MockSoknadProvider";
+import { UserInfoProvider } from "../context/user-info-context";
 
 interface IProps {
   dokumentkrav?: IDokumentkrav[];

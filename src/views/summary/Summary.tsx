@@ -35,7 +35,7 @@ export function Summary(props: IProps) {
 
   const router = useRouter();
   const { uuid } = useUuid();
-  const { quizState: soknadState, orkestratorState } = useSoknad();
+  const { quizState, orkestratorState } = useSoknad();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
@@ -64,7 +64,7 @@ export function Summary(props: IProps) {
   }, [showSoknadNotCompleteError]);
 
   function validateAndCompleteSoknad() {
-    if (!soknadState.ferdig || invalidDokumentkrav) {
+    if (!quizState.ferdig || invalidDokumentkrav) {
       setshowSoknadNotCompleteError(true);
 
       // If showValidationErrors is false, the async useEffect will trigger
@@ -86,7 +86,7 @@ export function Summary(props: IProps) {
     if (dokumentkravList.krav.length > 0) {
       router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
     } else {
-      router.push(`/soknad/${router.query.uuid}?seksjon=${soknadState.seksjoner.length}`);
+      router.push(`/soknad/${router.query.uuid}?seksjon=${quizState.seksjoner.length}`);
     }
   }
 
@@ -158,7 +158,7 @@ export function Summary(props: IProps) {
             );
           })}
 
-        {soknadState.seksjoner?.map((section, index) => {
+        {quizState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
             <Accordion.Item key={section.beskrivendeId}>
