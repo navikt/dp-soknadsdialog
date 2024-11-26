@@ -177,7 +177,7 @@ export default function ReceiptPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState} landgrupper={null}>
+    <QuizProvider quizState={soknadState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <ValidationProvider>
           <Receipt

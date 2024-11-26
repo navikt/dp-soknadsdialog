@@ -136,7 +136,7 @@ export default function SummaryPage(props: IProps) {
     );
   }
   return (
-    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState} landgrupper={null}>
+    <QuizProvider quizState={soknadState} orkestratorState={orkestratorState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <ValidationProvider>
           <Summary personalia={personalia} />

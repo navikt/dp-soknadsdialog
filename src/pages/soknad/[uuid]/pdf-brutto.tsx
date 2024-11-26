@@ -95,7 +95,7 @@ export default function PdfBruttoPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={props.soknadState} landgrupper={[]}>
+    <QuizProvider quizState={props.soknadState}>
       <ValidationProvider>
         <Pdf
           personalia={props.personalia}

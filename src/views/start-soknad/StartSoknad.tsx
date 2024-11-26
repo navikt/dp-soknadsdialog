@@ -13,12 +13,12 @@ import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { trackSkjemaStartet } from "../../amplitude.tracking";
 import { logger } from "@navikt/next-logger";
-import { useFeatureToggles } from "../../context/feature-toggle-context";
+import { useOrkestratorIsEnabled } from "../../context/app-context";
 
 export function StartSoknad() {
   const router = useRouter();
+  const orkestratorEnabled = useOrkestratorIsEnabled();
   const { setFocus } = useSetFocus();
-  const { soknadsdialogMedOrkestratorIsEnabled } = useFeatureToggles();
   const [isError, setIsError] = useState(false);
   const { getAppText, getInfosideText } = useSanity();
   const [consentGiven, setConsentGiven] = useState<boolean>(false);
@@ -46,7 +46,7 @@ export function StartSoknad() {
       return;
     }
 
-    if (!soknadsdialogMedOrkestratorIsEnabled) {
+    if (!orkestratorEnabled) {
       try {
         setIsLoading(true);
         const uuidResponse = await fetch(api("soknad/uuid"));
@@ -64,7 +64,7 @@ export function StartSoknad() {
       }
     }
 
-    if (soknadsdialogMedOrkestratorIsEnabled) {
+    if (orkestratorEnabled) {
       try {
         setIsLoading(true);
         const startSoknadResponse = await fetch(api("orkestrator/start"));

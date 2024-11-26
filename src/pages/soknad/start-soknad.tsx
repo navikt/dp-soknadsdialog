@@ -4,8 +4,8 @@ import { IMineSoknader } from "../../types/quiz.types";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
 import { getMineSoknader } from "../api/common/quiz-api";
 import { getFeatureToggles, IFeatureToggles } from "../api/common/unleash-api";
-import { FeatureTogglesProvider } from "../../context/feature-toggle-context";
 
+import { AppProvider } from "../../context/app-context";
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
 ): Promise<GetServerSidePropsResult<object>> {
@@ -58,8 +58,8 @@ interface IProps {
 
 export default function Soknad(props: IProps) {
   return (
-    <FeatureTogglesProvider featureToggles={props.featureToggles}>
+    <AppProvider featureToggles={props.featureToggles}>
       <StartSoknad />
-    </FeatureTogglesProvider>
+    </AppProvider>
   );
 }

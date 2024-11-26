@@ -118,7 +118,7 @@ export default function DocumentPage(props: IProps) {
   }
 
   return (
-    <QuizProvider quizState={soknadState} landgrupper={[]}>
+    <QuizProvider quizState={soknadState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <Dokumentasjon />
       </DokumentkravProvider>

@@ -28,7 +28,6 @@ export function MockQuizProvider({ quizState, orkestratorState, children }: IPro
         isLoading: false,
         isError: false,
         isLocked: false,
-        landgrupper: [],
       }}
     >
       {children}

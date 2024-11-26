@@ -1,19 +1,20 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { PortableText } from "@portabletext/react";
-import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
-import { IFaktum } from "../Faktum";
-import { IQuizLandFaktum } from "../../../types/quiz.types";
+import { useRouter } from "next/router";
+import { forwardRef, Ref, useEffect, useState } from "react";
+import { useAppContext } from "../../../context/app-context";
 import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
-import { useRouter } from "next/router";
-import { getCountryName } from "../../../utils/country.utils";
-import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import styles from "../Faktum.module.css";
+import { IQuizLandFaktum } from "../../../types/quiz.types";
 import { ISanityLandGruppe } from "../../../types/sanity.types";
-import { AlertText } from "../../alert-text/AlertText";
+import { getCountryName } from "../../../utils/country.utils";
 import { getLandGruppeId } from "../../../utils/faktum.utils";
+import { AlertText } from "../../alert-text/AlertText";
+import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -24,7 +25,8 @@ function FaktumLandComponent(
   const router = useRouter();
   const { faktum, isOrkestrator } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked, landgrupper } = useQuiz();
+  const { saveFaktumToQuiz, saveOpplysningToOrkestrator, isLocked } = useQuiz();
+  const { landgrupper } = useAppContext();
   const { unansweredFaktumId } = useValidation();
 
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
