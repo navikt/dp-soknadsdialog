@@ -5,6 +5,7 @@ import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOrkestratorOnBehalfOfToken } from "../../../utils/auth.utils";
 import { getOrkestratorState } from "../common/orkestrator-api";
 import { QuizFaktumSvarType } from "../../../types/quiz.types";
+import { UUID_REGEX } from "../../../constants";
 
 export interface ISaveOrkestratorAnswerBody {
   uuid: string;
@@ -38,6 +39,12 @@ async function saveOrkestratorAnswerHandler(req: NextApiRequest, res: NextApiRes
 
   if (!orkestratorOnBehalfOf.ok) {
     return res.status(401).end();
+  }
+
+  if (!UUID_REGEX.test(uuid)) {
+    logRequestError("Ugyldig UUID format", uuid);
+
+    return res.status(400).send("Ugyldig UUID format");
   }
 
   try {
