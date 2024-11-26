@@ -4,7 +4,7 @@ import { FaktumEnvalg } from "./FaktumEnvalg";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "10001",

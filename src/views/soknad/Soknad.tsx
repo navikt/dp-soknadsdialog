@@ -12,7 +12,7 @@ import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -29,7 +29,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, isError, isLoading, isLocked } = useQuiz();
+  const { quizState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
@@ -37,20 +37,20 @@ export function Soknad(props: IProps) {
   // Vis første seksjon hvis ingenting annet er spesifisert
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
   const isFirstSection = sectionIndex === 0;
-  const isLastSection = sectionIndex === soknadState.seksjoner.length - 1;
-  const currentSection = soknadState.seksjoner[sectionIndex];
+  const isLastSection = sectionIndex === quizState.seksjoner.length - 1;
+  const currentSection = quizState.seksjoner[sectionIndex];
 
-  const firstUnansweredSectionIndex = soknadState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
+  const firstUnansweredSectionIndex = quizState.seksjoner.findIndex((seksjon) => !seksjon.ferdig);
   const firstUnfinishedSection = firstUnansweredSectionIndex + 1;
 
   const showPersonalia =
-    isFirstSection && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
+    isFirstSection && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD;
 
   useEffect(() => {
-    const validSection = !isNaN(parseInt(sectionParam)) && !!soknadState.seksjoner[sectionIndex];
+    const validSection = !isNaN(parseInt(sectionParam)) && !!quizState.seksjoner[sectionIndex];
 
     // Automatisk redirect til siste ubesvart seksjon dersom man kommer fra inngang siden
-    if (router.query.fortsett && !soknadState.ferdig && firstUnansweredSectionIndex !== -1) {
+    if (router.query.fortsett && !quizState.ferdig && firstUnansweredSectionIndex !== -1) {
       router.push(`/soknad/${router.query.uuid}?seksjon=${firstUnfinishedSection}`);
     }
 
@@ -64,7 +64,7 @@ export function Soknad(props: IProps) {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [soknadState]);
+  }, [quizState]);
 
   function navigateToNextSection() {
     if (currentSection.ferdig) {
@@ -134,7 +134,7 @@ export function Soknad(props: IProps) {
             </Button>
           )}
 
-          {isLastSection && soknadState.ferdig ? (
+          {isLastSection && quizState.ferdig ? (
             <Button onClick={() => navigateToDocumentation()} loading={navigating}>
               {getAppText("soknad.knapp.til-dokumentasjon")}
             </Button>

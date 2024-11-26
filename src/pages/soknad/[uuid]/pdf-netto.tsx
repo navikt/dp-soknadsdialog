@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { mockNeste } from "../../../localhost-data/mock-neste";
@@ -95,7 +95,7 @@ export default function PdfNettoPage(props: IProps) {
   }
 
   return (
-    <QuizProvider initialState={props.soknadState}>
+    <SoknadProvider initialState={props.soknadState}>
       <ValidationProvider>
         <Pdf
           personalia={props.personalia}
@@ -103,6 +103,6 @@ export default function PdfNettoPage(props: IProps) {
           pdfView={"netto"}
         />
       </ValidationProvider>
-    </QuizProvider>
+    </SoknadProvider>
   );
 }

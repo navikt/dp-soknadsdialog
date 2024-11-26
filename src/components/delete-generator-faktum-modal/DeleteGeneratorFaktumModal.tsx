@@ -1,5 +1,5 @@
 import { Button, Modal } from "@navikt/ds-react";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { generatorFaktumType } from "../generator-faktum-card/GeneratorFaktumCard";
 
@@ -13,7 +13,7 @@ interface IProps {
 export function DeleteGeneratorFaktumModal(props: IProps): JSX.Element {
   const { getAppText } = useSanity();
   const { faktumType, isOpen, handleClose } = props;
-  const { isLoading } = useQuiz();
+  const { isLoading } = useSoknad();
 
   return (
     <Modal

@@ -1,12 +1,12 @@
 import React, { PropsWithChildren } from "react";
 import { DokumentkravProvider } from "../context/dokumentkrav-context";
-import { QuizProvider } from "../context/quiz-context";
+import { SoknadProvider } from "../context/soknad-context";
 import { SanityProvider } from "../context/sanity-context";
 import { ValidationProvider } from "../context/validation-context";
 import { IDokumentkrav, IDokumentkravList } from "../types/documentation.types";
 import { IQuizSeksjon, IQuizState } from "../types/quiz.types";
 import { ISanityTexts } from "../types/sanity.types";
-import { MockQuizProvider } from "./MockQuizProvider";
+import { MockSoknadProvider } from "./MockSoknadProvider";
 import { FeatureTogglesProvider } from "../context/feature-toggle-context";
 import { UserInfoProvider } from "../context/user-info-context";
 
@@ -63,7 +63,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
       <SanityProvider initialState={sanityTexts}>
         <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
           {mockQuizContext && (
-            <MockQuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <MockSoknadProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -71,11 +71,11 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </MockQuizProvider>
+            </MockSoknadProvider>
           )}
 
           {!mockQuizContext && (
-            <QuizProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
+            <SoknadProvider initialState={{ ...soknadState, seksjoner: quizSeksjoner }}>
               <UserInfoProvider arbeidsforhold={[]} contextSelectedArbeidsforhold={undefined}>
                 <DokumentkravProvider
                   initialState={{ ...mockDokumentkravList, krav: dokumentkrav }}
@@ -83,7 +83,7 @@ export function MockContext(props: PropsWithChildren<IProps>) {
                   <ValidationProvider>{children}</ValidationProvider>
                 </DokumentkravProvider>
               </UserInfoProvider>
-            </QuizProvider>
+            </SoknadProvider>
           )}
         </FeatureTogglesProvider>
       </SanityProvider>

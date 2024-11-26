@@ -25,7 +25,7 @@ import { useValidation } from "../../context/validation-context";
 import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import styles from "./Faktum.module.css";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
 
 export interface IFaktum<P> {
@@ -45,7 +45,7 @@ const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-fo
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText } = props;
-  const { soknadState } = useQuiz();
+  const { quizState } = useSoknad();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -146,7 +146,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
 
   const shouldRenderDokumentkravText =
     showAllFaktumTexts ||
-    (!faktum.readOnly && !readonly && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
+    (!faktum.readOnly && !readonly && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
 
   return (
     <div className={styles.faktum} data-faktum-id={faktum.beskrivendeId}>

@@ -3,7 +3,7 @@ import { TextField } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { IQuizNumberFaktum } from "../../../types/quiz.types";
 import { IFaktum } from "../Faktum";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useValidateFaktumNumber } from "../../../hooks/validation/useValidateFaktumNumber";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
@@ -20,7 +20,7 @@ function FaktumNumberComponent(
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
   const { errorMessage, isValid, updateErrorMessage } = useValidateFaktumNumber(faktum);
 

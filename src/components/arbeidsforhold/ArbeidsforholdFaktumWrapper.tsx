@@ -4,7 +4,7 @@ import {
   trackLagtTilArbeidsforholdManuelt,
   trackValgtArbeidsforholdFraAAREG,
 } from "../../amplitude.tracking";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidsforhold, useUserInfo } from "../../context/user-info-context";
 import { QuizFaktum } from "../../types/quiz.types";
@@ -25,7 +25,7 @@ interface IProps {
 export function ArbeidsforholdFaktumWrapper(props: IProps) {
   const { fakta, readonly } = props;
   const { getAppText } = useSanity();
-  const { saveFaktumToQuiz, soknadState } = useQuiz();
+  const { saveFaktumToQuiz, quizState } = useSoknad();
   const [showFaktum, setShowFaktum] = useState(false);
   const [shouldSaveVarighet, setShouldSaveVarighet] = useState(false);
   const [forceUpdate, setForceUpdate] = useState<boolean>(false);
@@ -36,7 +36,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     undefined,
   );
 
-  const arbeidstid = findArbeidstid(soknadState);
+  const arbeidstid = findArbeidstid(quizState);
   const arbeidsforholdVarighet = fakta.find(
     (faktum) => faktum.beskrivendeId === "faktum.arbeidsforhold.varighet",
   );
@@ -85,7 +85,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
 
   useEffect(() => {
     if (forceUpdate) setForceUpdate(false);
-  }, [soknadState]);
+  }, [quizState]);
 
   useEffect(() => {
     const periodeLength = getPeriodeLength(arbeidstid);
@@ -97,7 +97,7 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     }
 
     setArbeidsforholdSelectList(filteredAndSortedArbeidsforhold);
-  }, [soknadState]);
+  }, [quizState]);
 
   useEffect(() => {
     if (arbeidsforholdVarighet && selectedArbeidsforhold && shouldSaveVarighet) {

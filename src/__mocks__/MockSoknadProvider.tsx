@@ -1,5 +1,5 @@
 import React from "react";
-import { QuizContext } from "../context/quiz-context";
+import { SoknadContext } from "../context/soknad-context";
 import { IQuizState } from "../types/quiz.types";
 
 interface IProps {
@@ -10,14 +10,14 @@ interface IProps {
 export const mockSaveFaktumToQuiz = vi.fn();
 export const mockSaveGeneratorFaktumToQuiz = vi.fn();
 
-export function MockQuizProvider({ initialState, children }: IProps) {
+export function MockSoknadProvider({ initialState, children }: IProps) {
   mockSaveFaktumToQuiz.mockReset();
   mockSaveGeneratorFaktumToQuiz.mockReset();
 
   return (
-    <QuizContext.Provider
+    <SoknadContext.Provider
       value={{
-        soknadState: initialState,
+        quizState: initialState,
         saveFaktumToQuiz: mockSaveFaktumToQuiz,
         saveGeneratorFaktumToQuiz: mockSaveGeneratorFaktumToQuiz,
         isLoading: false,
@@ -26,6 +26,6 @@ export function MockQuizProvider({ initialState, children }: IProps) {
       }}
     >
       {children}
-    </QuizContext.Provider>
+    </SoknadContext.Provider>
   );
 }

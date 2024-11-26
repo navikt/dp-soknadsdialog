@@ -5,7 +5,7 @@ import { FaktumLand } from "./FaktumLand";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { getCountryName } from "../../../utils/country.utils";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "6001",

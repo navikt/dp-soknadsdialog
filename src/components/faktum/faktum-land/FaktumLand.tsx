@@ -3,7 +3,7 @@ import { PortableText } from "@portabletext/react";
 import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
 import { IFaktum } from "../Faktum";
 import { IQuizLandFaktum } from "../../../types/quiz.types";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { useRouter } from "next/router";
 import { getCountryName } from "../../../utils/country.utils";
@@ -24,7 +24,7 @@ function FaktumLandComponent(
   const router = useRouter();
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getAppText, getLandGruppeTextById } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(faktum.svar ?? "");

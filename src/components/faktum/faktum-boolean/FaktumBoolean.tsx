@@ -5,7 +5,7 @@ import { IQuizBooleanFaktum } from "../../../types/quiz.types";
 import { ISanityAlertText } from "../../../types/sanity.types";
 import { ErrorTypesEnum } from "../../../types/error.types";
 import { PortableText } from "@portabletext/react";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { ErrorRetryModal } from "../../error-retry-modal/ErrorRetryModal";
@@ -19,11 +19,11 @@ export const FaktumBoolean = forwardRef(FaktumBooleanComponent);
 
 function FaktumBooleanComponent(
   props: IFaktum<IQuizBooleanFaktum>,
-  ref: Ref<HTMLFieldSetElement> | undefined
+  ref: Ref<HTMLFieldSetElement> | undefined,
 ) {
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();
   const [currentAnswer, setCurrentAnswer] = useState<string>(booleanToTextId(props.faktum) ?? "");

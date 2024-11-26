@@ -4,7 +4,7 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
 import { Section } from "../../components/section/Section";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useUuid } from "../../hooks/useUuid";
@@ -28,13 +28,13 @@ export function GenerellInnsending() {
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const isFirstRender = useFirstRender();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { quizState, isError, isLoading } = useSoknad();
   const { dokumentkravList, getDokumentkravList, setDokumentkravList } = useDokumentkrav();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
   const [generalError, setGeneralError] = useState(false);
   // Generell innsending har bare 1 seksjon.
-  const currentSection = soknadState.seksjoner[0];
+  const currentSection = quizState.seksjoner[0];
   const shouldRenderDokumentkrav = dokumentkravList && dokumentkravList.krav.length > 0;
   const { isBundling, noDocumentsToSave, dokumentkravWithBundleError, bundleDokumentkravList } =
     useDokumentkravBundler();
@@ -54,13 +54,13 @@ export function GenerellInnsending() {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [soknadState]);
+  }, [quizState]);
 
   useEffect(() => {
     if (!isFirstRender) {
       getDokumentkrav();
     }
-  }, [soknadState.ferdig]);
+  }, [quizState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {
