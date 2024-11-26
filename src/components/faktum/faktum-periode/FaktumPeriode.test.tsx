@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { addDays, format, formatISO } from "date-fns";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
 import { FaktumPeriode } from "./FaktumPeriode";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "8001",

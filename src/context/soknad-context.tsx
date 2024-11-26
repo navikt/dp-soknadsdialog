@@ -9,8 +9,8 @@ import { ISaveFaktumBody } from "../pages/api/soknad/faktum/save";
 import { usePutRequest } from "../hooks/request/usePutRequest";
 import { useUuid } from "../hooks/useUuid";
 
-export interface IQuizContext {
-  soknadState: IQuizState;
+export interface ISoknadContext {
+  quizState: IQuizState;
   saveFaktumToQuiz: (faktum: QuizFaktum, svar: QuizFaktumSvarType) => void;
   saveGeneratorFaktumToQuiz: (faktum: IQuizGeneratorFaktum, svar: QuizFaktum[][] | null) => void;
   isLoading: boolean;
@@ -22,11 +22,11 @@ interface IProps {
   initialState: IQuizState;
 }
 
-export const QuizContext = createContext<IQuizContext | undefined>(undefined);
+export const SoknadContext = createContext<ISoknadContext | undefined>(undefined);
 
-function QuizProvider(props: PropsWithChildren<IProps>) {
+function SoknadProvider(props: PropsWithChildren<IProps>) {
   const { uuid } = useUuid();
-  const [soknadState, setSoknadState] = useState<IQuizState>(props.initialState);
+  const [quizState, setQuizState] = useState<IQuizState>(props.initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
   const [saveFaktum, saveFaktumStatus] = usePutRequest<ISaveFaktumBody, IQuizState>(
@@ -44,7 +44,7 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
     const response = await saveFaktum({ uuid, faktum, svar });
 
     if (response) {
-      setSoknadState(response);
+      setQuizState(response);
     }
 
     setIsLocked(false);
@@ -57,14 +57,14 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
   ) {
     const response = await saveFaktum({ uuid, faktum, svar });
     if (response) {
-      setSoknadState(response);
+      setQuizState(response);
     }
   }
 
   return (
-    <QuizContext.Provider
+    <SoknadContext.Provider
       value={{
-        soknadState,
+        quizState,
         saveFaktumToQuiz,
         saveGeneratorFaktumToQuiz,
         isLoading: saveFaktumStatus === "pending",
@@ -73,16 +73,16 @@ function QuizProvider(props: PropsWithChildren<IProps>) {
       }}
     >
       {props.children}
-    </QuizContext.Provider>
+    </SoknadContext.Provider>
   );
 }
 
-function useQuiz() {
-  const context = React.useContext(QuizContext);
+function useSoknad() {
+  const context = React.useContext(SoknadContext);
   if (context === undefined) {
-    throw new Error("useQuiz must be used within a QuizProvider");
+    throw new Error("useSoknad must be used within a SoknadProvider");
   }
   return context;
 }
 
-export { QuizProvider, useQuiz };
+export { SoknadProvider, useSoknad };

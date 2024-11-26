@@ -5,7 +5,7 @@ import { IFaktum } from "../Faktum";
 import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import { PortableText } from "@portabletext/react";
 import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { isValidTextLength } from "../validation/validations.utils";
@@ -31,7 +31,7 @@ export function FaktumTextComponent(
 ) {
   const { faktum, forceUpdate } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getAppText, getFaktumTextById } = useSanity();
   const { contextSelectedArbeidsforhold } = useUserInfo();

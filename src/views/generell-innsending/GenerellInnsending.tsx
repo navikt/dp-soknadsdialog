@@ -4,7 +4,7 @@ import { ErrorRetryModal } from "../../components/error-retry-modal/ErrorRetryMo
 import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator";
 import { PageMeta } from "../../components/PageMeta";
 import { Section } from "../../components/section/Section";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useUuid } from "../../hooks/useUuid";
@@ -28,7 +28,7 @@ export function GenerellInnsending() {
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const isFirstRender = useFirstRender();
-  const { soknadState, isError, isLoading } = useQuiz();
+  const { quizState: soknadState, isError, isLoading } = useSoknad();
   const { dokumentkravList, getDokumentkravList, setDokumentkravList } = useDokumentkrav();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);

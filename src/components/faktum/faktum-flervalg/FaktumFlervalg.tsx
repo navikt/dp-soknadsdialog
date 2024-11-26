@@ -4,7 +4,7 @@ import { IFaktum } from "../Faktum";
 import { IQuizFlervalgFaktum } from "../../../types/quiz.types";
 import { ISanityAlertText } from "../../../types/sanity.types";
 import { PortableText } from "@portabletext/react";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useSanity } from "../../../context/sanity-context";
 import { HelpText } from "../../HelpText";
 import { useValidation } from "../../../context/validation-context";
@@ -17,11 +17,10 @@ export const FaktumFlervalg = forwardRef(FaktumFlervalgComponent);
 
 function FaktumFlervalgComponent(
   props: IFaktum<IQuizFlervalgFaktum>,
-  ref: Ref<HTMLFieldSetElement> | undefined
+  ref: Ref<HTMLFieldSetElement> | undefined,
 ) {
-
   const { faktum } = props;
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { getFaktumTextById, getSvaralternativTextById, getAppText } = useSanity();

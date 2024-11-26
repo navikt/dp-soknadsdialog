@@ -20,7 +20,7 @@ import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import styles from "./Dokumentasjon.module.css";
 import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export function Dokumentasjon() {
   const { scrollIntoView } = useScrollIntoView();
   const { getAppText, getInfosideText } = useSanity();
   const { totalSteps, documentationStep } = useProgressBarSteps();
-  const { soknadState } = useQuiz();
+  const { quizState: soknadState } = useSoknad();
   const { dokumentkravList, getFirstUnansweredDokumentkrav } = useDokumentkrav();
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);

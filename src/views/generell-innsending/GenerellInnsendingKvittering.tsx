@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { Button, Heading, Label } from "@navikt/ds-react";
 import Link from "next/link";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { Faktum } from "../../components/faktum/Faktum";
 import styles from "./GenerellInnsendingKvittering.module.css";
 import api from "../../utils/api.utils";
@@ -15,7 +15,7 @@ export function GenerellInnsendingKvittering() {
   const kvitteringText = getInfosideText("generell-innsending.kvittering.text");
 
   const { dokumentkravList } = useDokumentkrav();
-  const { soknadState } = useQuiz();
+  const { quizState: soknadState } = useSoknad();
 
   return (
     <>

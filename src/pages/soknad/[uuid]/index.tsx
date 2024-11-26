@@ -1,7 +1,7 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { FeatureTogglesProvider } from "../../../context/feature-toggle-context";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { IArbeidsforhold, UserInfoProvider } from "../../../context/user-info-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockNeste } from "../../../localhost-data/mock-neste";
@@ -127,13 +127,13 @@ export default function SoknadPage(props: IProps) {
 
   return (
     <FeatureTogglesProvider featureToggles={featureToggles}>
-      <QuizProvider initialState={soknadState}>
+      <SoknadProvider initialState={soknadState}>
         <UserInfoProvider arbeidsforhold={arbeidsforhold}>
           <ValidationProvider>
             <Soknad personalia={personalia} />
           </ValidationProvider>
         </UserInfoProvider>
-      </QuizProvider>
+      </SoknadProvider>
     </FeatureTogglesProvider>
   );
 }

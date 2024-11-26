@@ -10,7 +10,7 @@ import {
 } from "@navikt/ds-react";
 import { useRouter } from "next/router";
 import { Ref, forwardRef, useEffect } from "react";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useUserInfo } from "../../context/user-info-context";
 import { useValidation } from "../../context/validation-context";
@@ -53,7 +53,7 @@ function ArbeidsforholdComponent(
 ) {
   const router = useRouter();
   const { faktum } = props;
-  const { isLoading, soknadState } = useQuiz();
+  const { isLoading, quizState: soknadState } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInfo();
 

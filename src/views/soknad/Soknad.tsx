@@ -12,7 +12,7 @@ import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
@@ -29,7 +29,7 @@ export function Soknad(props: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
   const { totalSteps } = useProgressBarSteps();
-  const { soknadState, isError, isLoading, isLocked } = useQuiz();
+  const { quizState: soknadState, isError, isLoading, isLocked } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const sectionParam = router.query.seksjon as string;
   const [navigating, setNavigating] = useState(false);
