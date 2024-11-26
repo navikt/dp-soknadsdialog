@@ -4,6 +4,7 @@ export const initAmplitude = () => {
   if (process.env.NEXT_PUBLIC_LOCALHOST === "true") return;
 
   init("default", undefined, {
+    defaultTracking: false,
     useBatch: true,
     serverUrl: "https://amplitude.nav.no/collect-auto",
     ingestionMetadata: {
