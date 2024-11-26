@@ -53,7 +53,7 @@ function ArbeidsforholdComponent(
 ) {
   const router = useRouter();
   const { faktum } = props;
-  const { isLoading, quizState: soknadState } = useSoknad();
+  const { isLoading, quizState } = useSoknad();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const { arbeidsforhold } = useUserInfo();
 
@@ -68,8 +68,8 @@ function ArbeidsforholdComponent(
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const sectionParam = router.query.seksjon as string;
   const sectionIndex = (sectionParam && parseInt(sectionParam) - 1) || 0;
-  const currentSection = soknadState.seksjoner[sectionIndex];
-  const arbeidstid = findArbeidstid(soknadState);
+  const currentSection = quizState.seksjoner[sectionIndex];
+  const arbeidstid = findArbeidstid(quizState);
 
   // Set active index to open modal when adding a new arbeidsforhold. Quiz returns an array with 1 faktum after adding a new arbeidsforhold.
   useEffect(() => {

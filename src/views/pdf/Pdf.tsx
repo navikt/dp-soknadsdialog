@@ -29,7 +29,7 @@ export type PdfView = "netto" | "brutto";
 export function Pdf(props: IProps) {
   const { personalia, dokumentkravList, pdfView } = props;
   const { getAppText } = useSanity();
-  const { quizState: soknadState } = useSoknad();
+  const { quizState } = useSoknad();
 
   const missingDocuments: IDokumentkrav[] = getMissingDokumentkrav(dokumentkravList);
   const uploadedDocuments: IDokumentkrav[] = getUploadedDokumentkrav(dokumentkravList);
@@ -45,7 +45,7 @@ export function Pdf(props: IProps) {
       <main id="maincontent" tabIndex={-1}>
         <Personalia personalia={personalia} />
 
-        {soknadState.seksjoner.map((section) => (
+        {quizState.seksjoner.map((section) => (
           <div key={section.beskrivendeId} className="my-11">
             <Section
               key={section.beskrivendeId}

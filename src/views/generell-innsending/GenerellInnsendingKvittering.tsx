@@ -14,8 +14,8 @@ export function GenerellInnsendingKvittering() {
   const { getInfosideText, getAppText } = useSanity();
   const kvitteringText = getInfosideText("generell-innsending.kvittering.text");
 
+  const { quizState } = useSoknad();
   const { dokumentkravList } = useDokumentkrav();
-  const { quizState: soknadState } = useSoknad();
 
   return (
     <>
@@ -28,7 +28,7 @@ export function GenerellInnsendingKvittering() {
             {getAppText("generell-innsending.kvittering.dine-svar")}
           </Heading>
 
-          {soknadState.seksjoner.map((section) => {
+          {quizState.seksjoner.map((section) => {
             return section.fakta.map((faktum) => {
               return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
             });

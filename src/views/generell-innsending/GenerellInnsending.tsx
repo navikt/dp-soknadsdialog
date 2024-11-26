@@ -28,13 +28,13 @@ export function GenerellInnsending() {
   const { uuid } = useUuid();
   const { getAppText } = useSanity();
   const isFirstRender = useFirstRender();
-  const { quizState: soknadState, isError, isLoading } = useSoknad();
+  const { quizState, isError, isLoading } = useSoknad();
   const { dokumentkravList, getDokumentkravList, setDokumentkravList } = useDokumentkrav();
   const { unansweredFaktumId, setUnansweredFaktumId } = useValidation();
   const [deleteSoknadModalOpen, setDeleteSoknadModalOpen] = useState(false);
   const [generalError, setGeneralError] = useState(false);
   // Generell innsending har bare 1 seksjon.
-  const currentSection = soknadState.seksjoner[0];
+  const currentSection = quizState.seksjoner[0];
   const shouldRenderDokumentkrav = dokumentkravList && dokumentkravList.krav.length > 0;
   const { isBundling, noDocumentsToSave, dokumentkravWithBundleError, bundleDokumentkravList } =
     useDokumentkravBundler();
@@ -54,13 +54,13 @@ export function GenerellInnsending() {
     if (unansweredFaktumId) {
       setUnansweredFaktumId(undefined);
     }
-  }, [soknadState]);
+  }, [quizState]);
 
   useEffect(() => {
     if (!isFirstRender) {
       getDokumentkrav();
     }
-  }, [soknadState.ferdig]);
+  }, [quizState.ferdig]);
 
   // Dokumentkravet til generell innsending kommer uten svar, men svaret må settes uten input fra bruker.
   useEffect(() => {

@@ -1,8 +1,8 @@
 import { useSoknad } from "../context/soknad-context";
 
 export function useProgressBarSteps() {
-  const { quizState: soknadState } = useSoknad();
-  const numberOfSoknadSections = soknadState.antallSeksjoner;
+  const { quizState } = useSoknad();
+  const numberOfSoknadSections = quizState.antallSeksjoner;
   const documentationStep = numberOfSoknadSections + 1;
   const summaryStep = documentationStep + 1;
 

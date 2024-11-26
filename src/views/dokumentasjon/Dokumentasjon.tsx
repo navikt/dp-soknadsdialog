@@ -28,7 +28,7 @@ export function Dokumentasjon() {
   const { scrollIntoView } = useScrollIntoView();
   const { getAppText, getInfosideText } = useSanity();
   const { totalSteps, documentationStep } = useProgressBarSteps();
-  const { quizState: soknadState } = useSoknad();
+  const { quizState } = useSoknad();
   const { dokumentkravList, getFirstUnansweredDokumentkrav } = useDokumentkrav();
   const [showBundleErrorModal, setShowBundleErrorModal] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
@@ -144,7 +144,7 @@ export function Dokumentasjon() {
 
       <nav className="navigation-container">
         <Link
-          href={`/soknad/${uuid}?seksjon=${soknadState.seksjoner.length}`}
+          href={`/soknad/${uuid}?seksjon=${quizState.seksjoner.length}`}
           passHref
           legacyBehavior
         >

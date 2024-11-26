@@ -45,7 +45,7 @@ const FAKTUM_GAARDSBRUK_ARBAAR_FOR_TIMER = "faktum.eget-gaardsbruk-arbeidsaar-fo
 
 export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
   const { faktum, readonly, showAllFaktumTexts, forceUpdate, hideAlertText } = props;
-  const { quizState: soknadState } = useSoknad();
+  const { quizState } = useSoknad();
   const faktumRef = useRef(null);
   const { getAppText, getDokumentkravTextById } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -146,7 +146,7 @@ export function Faktum(props: IFaktum<QuizFaktum | IQuizGeneratorFaktum>) {
 
   const shouldRenderDokumentkravText =
     showAllFaktumTexts ||
-    (!faktum.readOnly && !readonly && soknadState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
+    (!faktum.readOnly && !readonly && quizState.versjon_navn === QUIZ_SOKNADSTYPE_DAGPENGESOKNAD);
 
   return (
     <div className={styles.faktum} data-faktum-id={faktum.beskrivendeId}>
