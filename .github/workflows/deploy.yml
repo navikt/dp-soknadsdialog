@@ -120,19 +120,19 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
-  # deploy-dev:
-  #   needs: [test, build, upload-cdn]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: nais/deploy/actions/deploy@v2
-  #       env:
-  #         APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-  #         CLUSTER: dev-gcp
-  #         RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
-  #         VARS: .nais/vars-dev.yaml
-  #         VAR: image=${{ needs.build.outputs.image }}
-  #         PRINT_PAYLOAD: true
+  deploy-dev:
+    needs: [test, build, upload-cdn]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
+          VARS: .nais/vars-dev.yaml
+          VAR: image=${{ needs.build.outputs.image }}
+          PRINT_PAYLOAD: true
 
   deploy-prod:
     needs: [test, build, upload-cdn]
