@@ -2,20 +2,12 @@ import { DatePicker, Fieldset, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
 import { formatISO, isBefore } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-// import {
-//   trackKorrigertSluttdatoFraAAREG,
-//   trackKorrigertStartdatoFraAAREG,
-// } from "../../../amplitude.tracking";
 import { DATEPICKER_FROM_DATE, DATEPICKER_TO_DATE } from "../../../constants";
 import { useSanity } from "../../../context/sanity-context";
 import { useSoknad } from "../../../context/soknad-context";
-// import { useUserInfo } from "../../../context/user-info-context";
 import { useValidation } from "../../../context/validation-context";
-// import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../../hooks/useFirstRender";
 import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
-// import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
 import { AlertText } from "../../alert-text/AlertText";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
@@ -34,7 +26,6 @@ function FaktumPeriodeComponent(
   ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { faktum, hideAlertText } = props;
-  const isFirstRender = useFirstRender();
   const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
@@ -55,10 +46,13 @@ function FaktumPeriodeComponent(
     }
   }, [shouldSaveToQuiz, selectedFromDate, selectedToDate]);
 
-  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
-    if (!faktum.svar && !isFirstRender) {
+    if (!faktum.svar) {
       resetFromDate();
+      resetToDate();
+    }
+
+    if (faktum.svar && !faktum.svar.tom) {
       resetToDate();
     }
   }, [faktum.svar]);
@@ -131,21 +125,31 @@ function FaktumPeriodeComponent(
   });
 
   function fromDateOnBlur() {
-    if (selectedFromDate === "") {
+    if (faktum.svar?.fom && selectedFromDate === "") {
       saveFaktumToQuiz(faktum, null);
       resetToDate();
+      return;
+    }
+
+    if (selectedFromDate !== faktum.svar?.fom) {
+      savePeriode();
     }
   }
 
   function toDateOnBlur() {
-    if (selectedToDate === "") {
+    if (faktum.svar?.tom && selectedToDate === "") {
       saveFaktumToQuiz(faktum, { fom: selectedFromDate });
+      setToError("");
       return;
+    }
+
+    if (selectedToDate !== faktum.svar?.tom) {
+      savePeriode();
     }
   }
 
   function savePeriode() {
-    let periode: IPeriodeFaktumSvar = { fom: selectedFromDate };
+    let periode: IQuizPeriodeFaktumAnswerType = { fom: selectedFromDate };
 
     if (selectedToDate) {
       if (isBefore(new Date(selectedToDate), new Date(selectedFromDate))) {
@@ -157,10 +161,7 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(periode);
-
-    if (isValidPeriode) {
-      saveFaktumToQuiz(faktum, periode as IQuizPeriodeFaktumAnswerType);
-    }
+    saveFaktumToQuiz(faktum, isValidPeriode ? periode : null);
   }
 
   return (
