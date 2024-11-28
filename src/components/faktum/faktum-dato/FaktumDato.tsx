@@ -54,7 +54,6 @@ function FaktumDatoComponent(
     onValidate: (value) => {
       if (value.isEmpty) {
         setShouldSaveWithOnchange(false);
-
         setError("");
         return;
       }

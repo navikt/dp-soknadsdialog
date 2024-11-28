@@ -69,17 +69,12 @@ function FaktumPeriodeComponent(
     onValidate: (value) => {
       if (value.isEmpty) {
         setFromError("");
-        if (shouldSaveToQuiz) {
-          setShouldSaveToQuiz(false);
-        }
+        setShouldSaveToQuiz(false);
         return;
       }
 
       if (value.isInvalid) {
-        if (shouldSaveToQuiz) {
-          setShouldSaveToQuiz(false);
-        }
-
+        setShouldSaveToQuiz(false);
         setFromError(getAppText("validering.ugyldig-dato"));
         return;
       }
