@@ -13,6 +13,7 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
+import { useFirstRender } from "../../../hooks/useFirstRender";
 
 export interface IPeriodeFaktumSvar {
   fom: string | null;
@@ -28,6 +29,7 @@ function FaktumPeriodeComponent(
   const { faktum, hideAlertText } = props;
   const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
+  const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { validateAndIsValidPeriode, toError, fromError, setFromError, setToError } =
     useValidateFaktumPeriode(faktum);
@@ -47,13 +49,9 @@ function FaktumPeriodeComponent(
   }, [shouldSaveToQuiz, selectedFromDate, selectedToDate]);
 
   useEffect(() => {
-    if (!faktum.svar) {
+    if (!faktum.svar && !isFirstRender) {
       resetFromDate();
-      resetToDate();
-    }
-
-    if (faktum.svar && !faktum.svar.tom) {
-      resetToDate();
+      setSelectedFromDate("");
     }
   }, [faktum.svar]);
 
@@ -81,6 +79,7 @@ function FaktumPeriodeComponent(
         if (shouldSaveToQuiz) {
           setShouldSaveToQuiz(false);
         }
+
         setFromError(getAppText("validering.ugyldig-dato"));
         return;
       }
@@ -104,16 +103,12 @@ function FaktumPeriodeComponent(
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        if (shouldSaveToQuiz) {
-          setShouldSaveToQuiz(false);
-        }
+        setShouldSaveToQuiz(false);
         return;
       }
 
       if (value.isInvalid) {
-        if (shouldSaveToQuiz) {
-          setShouldSaveToQuiz(false);
-        }
+        setShouldSaveToQuiz(false);
         setToError(getAppText("validering.ugyldig-dato"));
         return;
       }
@@ -125,26 +120,49 @@ function FaktumPeriodeComponent(
   });
 
   function fromDateOnBlur() {
-    if (faktum.svar?.fom && selectedFromDate === "") {
+    if (selectedFromDate === "") {
       saveFaktumToQuiz(faktum, null);
+      resetFromDate();
+      setFromError("");
       resetToDate();
       return;
     }
 
-    if (selectedFromDate !== faktum.svar?.fom) {
-      savePeriode();
+    if (selectedFromDate !== "") {
+      let periode: IQuizPeriodeFaktumAnswerType = { fom: selectedFromDate };
+      if (selectedToDate) {
+        periode = { ...periode, tom: selectedToDate };
+      }
+
+      const isValidPeriode = validateAndIsValidPeriode(periode);
+
+      if (isValidPeriode) {
+        resetFromDate();
+        saveFaktumToQuiz(faktum, periode);
+      } else {
+        saveFaktumToQuiz(faktum, null);
+      }
     }
   }
 
   function toDateOnBlur() {
-    if (faktum.svar?.tom && selectedToDate === "") {
-      saveFaktumToQuiz(faktum, { fom: selectedFromDate });
+    if (selectedToDate === "") {
       setToError("");
+      resetToDate();
+      saveFaktumToQuiz(faktum, { fom: selectedFromDate });
       return;
     }
 
-    if (selectedToDate !== faktum.svar?.tom) {
-      savePeriode();
+    if (selectedToDate !== "") {
+      const periode = { fom: selectedFromDate, tom: selectedToDate };
+      const isValidPeriode = validateAndIsValidPeriode(periode);
+
+      if (isValidPeriode) {
+        saveFaktumToQuiz(faktum, periode);
+      } else {
+        resetToDate();
+        saveFaktumToQuiz(faktum, { fom: selectedFromDate });
+      }
     }
   }
 
@@ -161,7 +179,9 @@ function FaktumPeriodeComponent(
     }
 
     const isValidPeriode = validateAndIsValidPeriode(periode);
-    saveFaktumToQuiz(faktum, isValidPeriode ? periode : null);
+    if (isValidPeriode) {
+      saveFaktumToQuiz(faktum, periode);
+    }
   }
 
   return (

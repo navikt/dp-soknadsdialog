@@ -51,35 +51,34 @@ export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktum
     setToError(undefined);
 
     const specialCase = futureDateAllowedList.includes(faktum.beskrivendeId);
-    let isValidPeriode = true;
 
     // Future date is allowed on those two special cases
     if (specialCase && !isValidFromDate) {
       setFromError(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (fomDateIsInfuture && !specialCase) {
       setFromError(getAppText("validering.fremtidig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (fomDateIsInfuture && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
       setFromError(getAppText("validering.arbeidsforhold.varighet-fra"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (!isValidFromDate) {
       setFromError(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
     if (tom && !isWithinValidDateRange(new Date(tom))) {
       setToError(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      return false;
     }
 
-    return isValidPeriode;
+    return true;
   }
 
   return {

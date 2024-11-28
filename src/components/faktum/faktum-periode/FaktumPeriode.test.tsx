@@ -18,7 +18,7 @@ describe("FaktumPeriode", () => {
   // Undo any answer after each test
   beforeEach(() => (faktumMockData.svar = undefined));
 
-  test.skip("Should show faktum question and datepicker", async () => {
+  test("Should show faktum question and datepicker", async () => {
     render(
       <MockContext>
         <FaktumPeriode faktum={faktumMockData} />
@@ -35,7 +35,7 @@ describe("FaktumPeriode", () => {
     });
   });
 
-  test.skip("Should show preselected faktum answer if it's already selected", async () => {
+  test("Should show preselected faktum answer if it's already selected", async () => {
     const svar = { fom: "2022-08-04", tom: "2022-08-06" };
     faktumMockData.svar = svar;
 
@@ -62,7 +62,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects from date", () => {
-    test.skip("Should post selected from date to the server", async () => {
+    test("Should post selected from date to the server", async () => {
       const user = userEvent.setup();
 
       render(
@@ -84,7 +84,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user adds tom date to existing periode answer", () => {
-    test.skip("Should post fom and tom date to server", async () => {
+    test("Should post fom and tom date to server", async () => {
       const svar = { fom: "2022-08-04" };
       faktumMockData.svar = svar;
 
@@ -121,7 +121,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user types in tom date that is before fom date", () => {
-    test.skip("Should show error message", async () => {
+    test("Should show error message", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-09-05" };
       faktumMockData.svar = svar;
 
@@ -159,7 +159,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user selects future date for employment relationship start date, faktum: faktum.arbeidsforhold", () => {
-    test.skip("Should show error message", async () => {
+    test("Should show error message", async () => {
       const user = userEvent.setup();
 
       const faktumArbeidsforholdMockData = {
@@ -193,7 +193,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When selected date is not within 01.01.1900 and 100 year from now", () => {
-    test.skip("When types inn 01.01.1800 should show error message and not post to server", async () => {
+    test("When types inn 01.01.1800 should show error message and not post to server", async () => {
       const user = userEvent.setup();
 
       render(
@@ -218,7 +218,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
-    test.skip("When types in 06.06.2322 should show error message not post to server", async () => {
+    test("When types in 06.06.2322 should show error message not post to server", async () => {
       const user = userEvent.setup();
 
       render(
@@ -246,7 +246,7 @@ describe("FaktumPeriode", () => {
 
   describe("When user selects future date for specialCase faktum", () => {
     // faktum.arbeidsforhold.naar-var-lonnsplikt-periode or faktum.arbeidsforhold.permittert-periode
-    test.skip("Should post selected date to server", async () => {
+    test("Should post selected date to server", async () => {
       faktumMockData.beskrivendeId = "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
 
       const tenDaysFromNow = addDays(new Date(), 10);

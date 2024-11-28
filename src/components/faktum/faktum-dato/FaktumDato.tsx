@@ -53,19 +53,14 @@ function FaktumDatoComponent(
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        if (shouldSaveWithOnchange) {
-          setShouldSaveWithOnchange(false);
-        }
+        setShouldSaveWithOnchange(false);
 
         setError("");
         return;
       }
 
       if (value.isInvalid) {
-        if (shouldSaveWithOnchange) {
-          setShouldSaveWithOnchange(false);
-        }
-
+        setShouldSaveWithOnchange(false);
         setError(getAppText("validering.ugyldig-dato"));
         return;
       }
