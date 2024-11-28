@@ -46,26 +46,32 @@ function FaktumDatoComponent(
 
   const { datepickerProps, inputProps } = useDatepicker({
     defaultSelected: faktum.svar ? new Date(faktum.svar) : undefined,
+    allowTwoDigitYear: false,
     onDateChange: (value?: Date) => {
       const selectedDate = value ? formatISO(value, { representation: "date" }) : "";
       setSelectedDate(selectedDate);
     },
     onValidate: (value) => {
       if (value.isEmpty) {
-        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
+        if (shouldSaveWithOnchange) {
+          setShouldSaveWithOnchange(false);
+        }
 
         setError("");
         return;
       }
 
       if (value.isInvalid) {
-        if (shouldSaveWithOnchange) setShouldSaveWithOnchange(false);
+        if (shouldSaveWithOnchange) {
+          setShouldSaveWithOnchange(false);
+        }
+
         setError(getAppText("validering.ugyldig-dato"));
         return;
       }
 
-      if (value.isValidDate) {
-        if (!shouldSaveWithOnchange) setShouldSaveWithOnchange(true);
+      if (value.isValidDate && !shouldSaveWithOnchange) {
+        setShouldSaveWithOnchange(true);
       }
     },
   });
@@ -86,7 +92,7 @@ function FaktumDatoComponent(
 
     const isValidDate = validateAndIsValid(new Date(value));
     if (isValidDate) {
-      saveFaktumToQuiz(faktum, isValidDate ? value : null);
+      saveFaktumToQuiz(faktum, value);
     }
   }
 

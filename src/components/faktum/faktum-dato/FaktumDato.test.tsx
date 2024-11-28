@@ -154,7 +154,7 @@ describe("FaktumDato", () => {
     });
   });
 
-  describe("When user types in different invalid date formats an leaves input field. Valid format is DDMMYYY, DD.MM.YYYY, DDMMYY or DD.MM.YY", () => {
+  describe("When user types in different invalid date formats an leaves input field. Valid format is ddMMyyyy, dd.MM.yyyy", () => {
     test("Types in 10.10 should call saveFaktum, post null to server and show error message", async () => {
       const user = userEvent.setup();
 
