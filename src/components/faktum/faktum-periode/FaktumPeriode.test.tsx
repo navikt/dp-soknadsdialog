@@ -277,7 +277,7 @@ describe("FaktumPeriode", () => {
   });
 
   describe("When user clears selected date from datepicker", () => {
-    test("When user clears fom date from selected periode that contains fom only should post null to server", async () => {
+    test("When user clears “from date“ should post null to server", async () => {
       const svar = { fom: "2022-08-04" };
       faktumMockData.svar = svar;
 
@@ -294,6 +294,7 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       await user.clear(datepickerFom);
+      await user.tab();
 
       await waitFor(() => {
         expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
@@ -301,7 +302,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
-    test("When user clears fom date from selected periode that contains both fom and tom should post null to server", async () => {
+    test("When user clears and leaves “from date“ should post null to server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
 
@@ -318,6 +319,7 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       await user.clear(datepickerFom);
+      await user.tab();
 
       await waitFor(() => {
         expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
@@ -325,7 +327,7 @@ describe("FaktumPeriode", () => {
       });
     });
 
-    test("When user clears tom date from selected periode that contains both fom and tom should post fom to server alone", async () => {
+    test("When the user clears and leaves the “to date” only the “from date” should be posted to the server", async () => {
       const svar = { fom: "2022-08-04", tom: "2022-08-06" };
       faktumMockData.svar = svar;
 
@@ -342,6 +344,7 @@ describe("FaktumPeriode", () => {
       ) as HTMLInputElement;
 
       await user.clear(datepickerTom);
+      await user.tab();
 
       await waitFor(() => {
         expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
