@@ -60,7 +60,7 @@ function FaktumPeriodeComponent(
     inputProps: fromInputProps,
     reset: resetFromDate,
   } = useDatepicker({
-    defaultSelected: faktum.svar?.fom ? new Date(faktum.svar.fom) : undefined,
+    defaultSelected: selectedFromDate !== "" ? new Date(selectedFromDate) : undefined,
     allowTwoDigitYear: false,
     onDateChange: (value?: Date) => {
       const selectedFromDate = value ? formatISO(value, { representation: "date" }) : "";
@@ -95,7 +95,7 @@ function FaktumPeriodeComponent(
     inputProps: toInputProps,
     reset: resetToDate,
   } = useDatepicker({
-    defaultSelected: faktum.svar?.tom ? new Date(faktum.svar.tom) : undefined,
+    defaultSelected: selectedToDate !== "" ? new Date(selectedToDate) : undefined,
     allowTwoDigitYear: false,
     onDateChange: (value?: Date) => {
       const selectedToDate = value ? formatISO(value, { representation: "date" }) : "";
