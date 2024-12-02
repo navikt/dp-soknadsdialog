@@ -10,7 +10,7 @@ import { FormattedDate } from "../FormattedDate";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import styles from "./inngangPaabegynt.module.css";
-import { trackSkjemaÅpnet } from "../../amplitude.tracking";
+import { trackSkjemaÅpnet } from "../../amplitude/amplitude.tracking";
 import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 
 interface IProps {

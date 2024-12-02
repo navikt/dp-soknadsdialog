@@ -1,9 +1,5 @@
 import { Select } from "@navikt/ds-react";
 import { Fragment, useEffect, useState } from "react";
-import {
-  trackLagtTilArbeidsforholdManuelt,
-  trackValgtArbeidsforholdFraAAREG,
-} from "../../amplitude.tracking";
 import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
 import { IArbeidsforhold, useUserInfo } from "../../context/user-info-context";
@@ -16,6 +12,10 @@ import {
   sortArbeidsforhold,
 } from "../../utils/arbeidsforhold.utils";
 import { Faktum } from "../faktum/Faktum";
+import {
+  trackLagtTilArbeidsforholdManuelt,
+  trackValgtArbeidsforholdFraAAREG,
+} from "../../amplitude/track-arbeidsforhold";
 
 interface IProps {
   fakta: QuizFaktum[];

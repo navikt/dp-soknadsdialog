@@ -20,7 +20,7 @@ import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
-import { trackSkjemaFullført } from "../../amplitude.tracking";
+import { trackSkjemaFullført } from "../../amplitude/amplitude.tracking";
 import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";

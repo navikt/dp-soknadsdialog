@@ -1,21 +1,30 @@
-import React, { forwardRef, Ref, useEffect, useState } from "react";
+import { Select } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
-import { IFaktum } from "../Faktum";
-import { IQuizLandFaktum } from "../../../types/quiz.types";
-import { useSoknad } from "../../../context/soknad-context";
-import { useSanity } from "../../../context/sanity-context";
 import { useRouter } from "next/router";
-import { getCountryName } from "../../../utils/country.utils";
-import { HelpText } from "../../HelpText";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
+import { useSanity } from "../../../context/sanity-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useValidation } from "../../../context/validation-context";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import styles from "../Faktum.module.css";
+import { IQuizLandFaktum } from "../../../types/quiz.types";
 import { ISanityLandGruppe } from "../../../types/sanity.types";
-import { AlertText } from "../../alert-text/AlertText";
+import { getCountryName } from "../../../utils/country.utils";
 import { getLandGruppeId } from "../../../utils/faktum.utils";
+import { AlertText } from "../../alert-text/AlertText";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
+import {
+  trackValgtEtLandFraFlereLand,
+  trackValgtEtLandFraOfteValgteLand,
+} from "../../../amplitude/track-landvelger";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
+
+interface IDropdownOption {
+  value: string;
+  label: string;
+}
 
 function FaktumLandComponent(
   props: IFaktum<IQuizLandFaktum>,
@@ -32,6 +41,10 @@ function FaktumLandComponent(
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
+  const faktumWithOfteValgteLandOptGroup =
+    faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
+    faktum.beskrivendeId === "faktum.arbeidsforhold.land";
+
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
     return optionA.label > optionB.label ? 1 : -1;
@@ -43,17 +56,6 @@ function FaktumLandComponent(
       label: getCountryName(code, router.locale),
     }))
     .sort(sortByLabel);
-
-  useEffect(() => {
-    const shouldPreSelectNorway =
-      !currentAnswer &&
-      (faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-        faktum.beskrivendeId === "faktum.arbeidsforhold.land");
-
-    if (shouldPreSelectNorway) {
-      onSelect("NOR");
-    }
-  }, []);
 
   // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
@@ -69,7 +71,20 @@ function FaktumLandComponent(
     }
   }, [currentAnswer]);
 
-  function onSelect(value: string) {
+  function onSelect(event: ChangeEvent<HTMLSelectElement>) {
+    const selectedOption = event.target.selectedOptions[0];
+    const optGroup = selectedOption.closest("optgroup");
+    const optGroupLabel = optGroup?.label;
+    const value = event.target.value;
+
+    if (faktumWithOfteValgteLandOptGroup) {
+      if (optGroupLabel === getAppText("faktum-land.optgroup.ofte-valgte-land")) {
+        trackValgtEtLandFraOfteValgteLand(value, faktum.beskrivendeId);
+      } else {
+        trackValgtEtLandFraFlereLand(value, faktum.beskrivendeId);
+      }
+    }
+
     saveFaktum(value);
     setCurrentAnswer(value);
   }
@@ -78,20 +93,55 @@ function FaktumLandComponent(
     saveFaktumToQuiz(faktum, value !== "" ? value : null);
   }
 
+  function getLandOptions() {
+    if (faktumWithOfteValgteLandOptGroup) {
+      return (
+        <>
+          <option value="">{getAppText("faktum-land.velg-et-land")}</option>
+          <optgroup label={getAppText("faktum-land.optgroup.ofte-valgte-land")}>
+            <option value="NOR">Norge</option>
+            <option value="SWE">Sverige</option>
+            <option value="POL">Polen</option>
+          </optgroup>
+          <optgroup label={getAppText("faktum-land.optgroup.flere-land")}>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </optgroup>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <option value="">{getAppText("faktum-land.velg-et-land")}</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </>
+    );
+  }
+
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Dropdown
+      <Select
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        size="medium"
+        onChange={(e) => onSelect(e)}
+        value={currentAnswer || getAppText("faktum-land.velg-et-land")}
         description={faktumTexts?.description && <PortableText value={faktumTexts.description} />}
-        onChange={(e) => onSelect(e.target.value)}
-        options={options}
-        currentValue={currentAnswer || getAppText("faktum-land.velg-et-land")}
-        placeHolderText={getAppText("faktum-land.velg-et-land")}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
         disabled={isLocked}
-      />
+        autoComplete="off"
+      >
+        {getLandOptions()}
+      </Select>
 
       {faktumTexts?.helpText && (
         <HelpText className={styles.helpTextSpacing} helpText={faktumTexts.helpText} />
