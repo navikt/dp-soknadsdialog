@@ -41,9 +41,7 @@ function FaktumLandComponent(
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
-  const faktumWithOfteValgteLandOptGroup =
-    faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i" ||
-    faktum.beskrivendeId === "faktum.arbeidsforhold.land";
+  const faktumHvilketLandBorDuI = faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i";
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -77,11 +75,11 @@ function FaktumLandComponent(
     const optGroupLabel = optGroup?.label;
     const value = event.target.value;
 
-    if (faktumWithOfteValgteLandOptGroup) {
+    if (faktumHvilketLandBorDuI) {
       if (optGroupLabel === getAppText("faktum-land.optgroup.ofte-valgte-land")) {
-        trackValgtEtLandFraOfteValgteLand("dagpenger", value, faktum.beskrivendeId);
+        trackValgtEtLandFraOfteValgteLand("dagpenger", value);
       } else {
-        trackValgtEtLandFraFlereLand("dagpenger", value, faktum.beskrivendeId);
+        trackValgtEtLandFraFlereLand("dagpenger", value);
       }
     }
 
@@ -94,7 +92,7 @@ function FaktumLandComponent(
   }
 
   function getLandOptions() {
-    if (faktumWithOfteValgteLandOptGroup) {
+    if (faktumHvilketLandBorDuI) {
       return (
         <>
           <option value="">{getAppText("faktum-land.velg-et-land")}</option>
