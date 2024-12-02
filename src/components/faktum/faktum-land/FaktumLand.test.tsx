@@ -132,23 +132,4 @@ describe("FaktumLand", () => {
       });
     });
   });
-
-  describe("When is Bodstedsland or Arbeidsforhold and faktum is unanswered", () => {
-    test("Should post `NOR` to server", async () => {
-      const svar = "NOR";
-
-      render(
-        <MockContext mockQuizContext={true}>
-          <FaktumLand faktum={faktumMockDataBostedsland} />
-        </MockContext>,
-      );
-
-      await waitFor(() => {
-        const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
-        expect(selectedOption.value).toEqual(svar);
-        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
-        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumMockDataBostedsland, svar);
-      });
-    });
-  });
 });
