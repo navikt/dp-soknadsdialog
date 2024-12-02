@@ -79,9 +79,9 @@ function FaktumLandComponent(
 
     if (faktumWithOfteValgteLandOptGroup) {
       if (optGroupLabel === getAppText("faktum-land.optgroup.ofte-valgte-land")) {
-        trackValgtEtLandFraOfteValgteLand(value, faktum.beskrivendeId);
+        trackValgtEtLandFraOfteValgteLand("dagpenger", value, faktum.beskrivendeId);
       } else {
-        trackValgtEtLandFraFlereLand(value, faktum.beskrivendeId);
+        trackValgtEtLandFraFlereLand("dagpenger", value, faktum.beskrivendeId);
       }
     }
 
