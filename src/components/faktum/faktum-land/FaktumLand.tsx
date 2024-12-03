@@ -75,7 +75,7 @@ function FaktumLandComponent(
   }
 
   function saveFaktum(value: string) {
-    saveFaktumToQuiz(faktum, value);
+    saveFaktumToQuiz(faktum, value !== "" ? value : null);
   }
 
   return (
