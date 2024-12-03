@@ -15,8 +15,8 @@ import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import {
-  trackValgtEtLandFraFlereLand,
-  trackValgtEtLandFraOfteValgteLand,
+  trackValgtEtLandFraFlereLandListe,
+  trackValgtEtLandFraOfteValgteLandListe,
 } from "../../../amplitude/track-landvelger";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
@@ -77,9 +77,9 @@ function FaktumLandComponent(
 
     if (faktumHvilketLandBorDuI) {
       if (optGroupLabel === getAppText("faktum-land.optgroup.ofte-valgte-land")) {
-        trackValgtEtLandFraOfteValgteLand("dagpenger", value);
+        trackValgtEtLandFraOfteValgteLandListe("dagpenger", value);
       } else {
-        trackValgtEtLandFraFlereLand("dagpenger", value);
+        trackValgtEtLandFraFlereLandListe("dagpenger", value);
       }
     }
 
