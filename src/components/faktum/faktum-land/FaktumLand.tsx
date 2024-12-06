@@ -42,6 +42,7 @@ function FaktumLandComponent(
   const [landGruppeText, setLandGruppeText] = useState<ISanityLandGruppe | undefined>();
 
   const faktumHvilketLandBorDuI = faktum.beskrivendeId === "faktum.hvilket-land-bor-du-i";
+  const faktumArbeidsforholdLand = faktum.beskrivendeId === "faktum.arbeidsforhold.land";
 
   const sortByLabel = (optionA: IDropdownOption, optionB: IDropdownOption) => {
     if (optionA.label === optionB.label) return 0;
@@ -61,6 +62,15 @@ function FaktumLandComponent(
       setCurrentAnswer(faktum.svar ?? "");
     }
   }, [faktum]);
+
+  useEffect(() => {
+    const shouldPreSelectNorway = !currentAnswer && faktumArbeidsforholdLand;
+
+    if (shouldPreSelectNorway) {
+      saveFaktum("NOR");
+      setCurrentAnswer("NOR");
+    }
+  }, []);
 
   useEffect(() => {
     if (currentAnswer) {

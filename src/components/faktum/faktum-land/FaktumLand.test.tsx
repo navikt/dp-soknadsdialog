@@ -132,4 +132,27 @@ describe("FaktumLand", () => {
       });
     });
   });
+
+  describe("When user add arbeidsforhold", () => {
+    test("Should post `NOR` to server", async () => {
+      const svar = "NOR";
+      const faktumArbeidsforholdLand = {
+        ...faktumMockData,
+        beskrivendeId: "faktum.arbeidsforhold.land",
+      };
+
+      render(
+        <MockContext mockQuizContext={true}>
+          <FaktumLand faktum={faktumArbeidsforholdLand} />
+        </MockContext>,
+      );
+
+      await waitFor(() => {
+        const selectedOption = screen.getByRole("option", { selected: true }) as HTMLInputElement;
+        expect(selectedOption.value).toEqual(svar);
+        expect(mockSaveFaktumToQuiz).toBeCalledTimes(1);
+        expect(mockSaveFaktumToQuiz).toBeCalledWith(faktumArbeidsforholdLand, svar);
+      });
+    });
+  });
 });
