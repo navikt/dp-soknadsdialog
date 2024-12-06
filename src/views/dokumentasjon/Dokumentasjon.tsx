@@ -18,7 +18,11 @@ import { useScrollIntoView } from "../../hooks/useScrollIntoView";
 import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
 import styles from "./Dokumentasjon.module.css";
-import { tidBruktSiden, tidStart, trackDokumentasjonLastetOpp } from "../../amplitude.tracking";
+import {
+  tidBruktSiden,
+  tidStart,
+  trackDokumentasjonLastetOpp,
+} from "../../amplitude/amplitude.tracking";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
 import { useSoknad } from "../../context/soknad-context";
 

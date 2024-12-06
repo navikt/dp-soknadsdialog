@@ -19,7 +19,7 @@ import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
 import { IPersonalia } from "../../types/personalia.types";
 import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { trackSkjemaStegFullført } from "../../amplitude.tracking";
+import { trackSkjemaStegFullført } from "../../amplitude/amplitude.tracking";
 
 interface IProps {
   personalia: IPersonalia | null;

@@ -11,7 +11,7 @@ import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { trackSkjemaStartet } from "../../amplitude.tracking";
+import { trackSkjemaStartet } from "../../amplitude/amplitude.tracking";
 import { logger } from "@navikt/next-logger";
 
 export function StartSoknad() {

@@ -1,19 +1,19 @@
-import React, { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
 import { Textarea, TextField } from "@navikt/ds-react";
-import { TEXTAREA_FAKTUM_IDS } from "../../../constants";
-import { IFaktum } from "../Faktum";
-import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import { PortableText } from "@portabletext/react";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useSoknad } from "../../../context/soknad-context";
+import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
+import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude/track-arbeidsforhold";
+import { TEXTAREA_FAKTUM_IDS } from "../../../constants";
 import { useSanity } from "../../../context/sanity-context";
-import { HelpText } from "../../HelpText";
-import { isValidTextLength } from "../validation/validations.utils";
-import { useValidation } from "../../../context/validation-context";
-import { useFirstRender } from "../../../hooks/useFirstRender";
-import styles from "../Faktum.module.css";
+import { useSoknad } from "../../../context/soknad-context";
 import { useUserInfo } from "../../../context/user-info-context";
-import { trackKorigertBedriftsnavnFraAAREG } from "../../../amplitude.tracking";
+import { useValidation } from "../../../context/validation-context";
+import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
+import { useFirstRender } from "../../../hooks/useFirstRender";
+import { IQuizTekstFaktum } from "../../../types/quiz.types";
+import { HelpText } from "../../HelpText";
+import { IFaktum } from "../Faktum";
+import styles from "../Faktum.module.css";
+import { isValidTextLength } from "../validation/validations.utils";
 
 export const FaktumText = forwardRef(FaktumTextComponent);
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { SWRConfig } from "swr";
 import { sanityClient } from "../../sanity-client";
-import { initAmplitude } from "../amplitude.tracking";
+import { initAmplitude } from "../amplitude/amplitude.tracking";
 import ErrorBoundary from "../components/error-boundary/ErrorBoundary";
 import { SanityProvider } from "../context/sanity-context";
 import { initInstrumentation } from "../faro/faro";
