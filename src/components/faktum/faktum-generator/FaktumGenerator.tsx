@@ -16,7 +16,7 @@ import { useSanity } from "../../../context/sanity-context";
 import { BarnRegister } from "../../barn/BarnRegister";
 import { GeneratorFaktumCard } from "../../generator-faktum-card/GeneratorFaktumCard";
 import { FetchIndicator } from "../../fetch-indicator/FetchIndicator";
-import { useQuiz } from "../../../context/quiz-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useValidation } from "../../../context/validation-context";
 import { ValidationMessage } from "../validation/ValidationMessage";
 
@@ -53,7 +53,7 @@ function StandardGeneratorComponent(
 ) {
   const { addNewGeneratorAnswer, deleteGeneratorAnswer, toggleActiveGeneratorAnswer, activeIndex } =
     useGeneratorUtils();
-  const { isLoading } = useQuiz();
+  const { isLoading } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
 

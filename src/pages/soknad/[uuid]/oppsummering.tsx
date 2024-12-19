@@ -1,7 +1,7 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockDokumentkravBesvart } from "../../../localhost-data/mock-dokumentkrav-besvart";
 import { mockNeste } from "../../../localhost-data/mock-neste";
@@ -120,12 +120,12 @@ export default function SummaryPage(props: IProps) {
     );
   }
   return (
-    <QuizProvider initialState={soknadState}>
+    <SoknadProvider initialState={soknadState}>
       <DokumentkravProvider initialState={dokumentkrav}>
         <ValidationProvider>
           <Summary personalia={personalia} />
         </ValidationProvider>
       </DokumentkravProvider>
-    </QuizProvider>
+    </SoknadProvider>
   );
 }

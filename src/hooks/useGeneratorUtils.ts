@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { IQuizGeneratorFaktum } from "../types/quiz.types";
-import { useQuiz } from "../context/quiz-context";
+import { useSoknad } from "../context/soknad-context";
 import { useUserInfo } from "../context/user-info-context";
 
 interface IGeneratorUtils {
@@ -12,7 +12,7 @@ interface IGeneratorUtils {
 }
 
 export function useGeneratorUtils(): IGeneratorUtils {
-  const { saveGeneratorFaktumToQuiz } = useQuiz();
+  const { saveGeneratorFaktumToQuiz } = useSoknad();
   const { setContextSelectedArbeidsforhold } = useUserInfo();
   const [activeIndex, setActiveIndex] = useState<number | undefined>();
 

@@ -1,11 +1,16 @@
+import { Select } from "@navikt/ds-react";
 import { ChangeEvent, forwardRef, Ref, useEffect, useState } from "react";
-import { useQuiz } from "../../../context/quiz-context";
 import { useSanity } from "../../../context/sanity-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useValidation } from "../../../context/validation-context";
-import { IQuizNumberFaktum } from "../../../types/quiz.types";
-import { Dropdown, IDropdownOption } from "../../dropdown/Dropdown";
-import { IFaktum } from "../Faktum";
 import { useFirstRender } from "../../../hooks/useFirstRender";
+import { IQuizNumberFaktum } from "../../../types/quiz.types";
+import { IFaktum } from "../Faktum";
+
+interface IDropdownOption {
+  value: string;
+  label: string;
+}
 
 const years: IDropdownOption[] = [];
 const currentYear = new Date().getUTCFullYear();
@@ -19,12 +24,11 @@ export const FaktumEgetGaardsbrukArbeidsaar = forwardRef(FaktumEgetGaardsbrukArb
 
 function FaktumEgetGaardsbrukArbeidsaarComponent(
   props: IFaktum<IQuizNumberFaktum>,
-  ref: Ref<HTMLDivElement> | undefined
+  ref: Ref<HTMLDivElement> | undefined,
 ) {
-
   const { faktum } = props;
   const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { unansweredFaktumId } = useValidation();
   const { getAppText } = useSanity();
   const faktumTexts = useSanity().getFaktumTextById(faktum.beskrivendeId);
@@ -49,17 +53,24 @@ function FaktumEgetGaardsbrukArbeidsaarComponent(
 
   return (
     <div ref={ref} tabIndex={-1} aria-invalid={unansweredFaktumId === faktum.id}>
-      <Dropdown
+      <Select
         label={faktumTexts?.text ? faktumTexts.text : faktum.beskrivendeId}
+        size="medium"
         onChange={handleOnSelect}
-        options={years}
-        currentValue={currentAnswer?.toString() || ""}
-        placeHolderText={getAppText("faktum.eget-gaarsbruk-arbeidsarr.placeholder-tekst")}
+        value={currentAnswer?.toString() || ""}
         error={
           unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined
         }
         disabled={isLocked}
-      />
+        autoComplete="off"
+      >
+        <option value="">{getAppText("faktum.eget-gaarsbruk-arbeidsarr.placeholder-tekst")}</option>
+        {years.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </Select>
     </div>
   );
 }

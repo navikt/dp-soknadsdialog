@@ -4,7 +4,7 @@ import { PortableText } from "@portabletext/react";
 import { Button, Heading, Label } from "@navikt/ds-react";
 import Link from "next/link";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { Faktum } from "../../components/faktum/Faktum";
 import styles from "./GenerellInnsendingKvittering.module.css";
 import api from "../../utils/api.utils";
@@ -14,13 +14,13 @@ export function GenerellInnsendingKvittering() {
   const { getInfosideText, getAppText } = useSanity();
   const kvitteringText = getInfosideText("generell-innsending.kvittering.text");
 
+  const { quizState } = useSoknad();
   const { dokumentkravList } = useDokumentkrav();
-  const { soknadState } = useQuiz();
 
   return (
     <>
       <PageMeta title={getAppText("innsending-kvittering.side-metadata.tittel")} />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         {kvitteringText && <PortableText value={kvitteringText.body} />}
 
         <div className="my-11">
@@ -28,7 +28,7 @@ export function GenerellInnsendingKvittering() {
             {getAppText("generell-innsending.kvittering.dine-svar")}
           </Heading>
 
-          {soknadState.seksjoner.map((section) => {
+          {quizState.seksjoner.map((section) => {
             return section.fakta.map((faktum) => {
               return <Faktum key={faktum.id} faktum={faktum} readonly={true} />;
             });

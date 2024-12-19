@@ -4,7 +4,7 @@ import { render, waitFor, screen } from "@testing-library/react";
 import { FaktumFlervalg } from "./FaktumFlervalg";
 import { IQuizGeneratorFaktum, QuizFaktum } from "../../../types/quiz.types";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 
 const faktumMockData: QuizFaktum | IQuizGeneratorFaktum = {
   id: "3008",

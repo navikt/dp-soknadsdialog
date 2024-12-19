@@ -19,7 +19,7 @@ export function Arbeidssoker(props: IArbeidssokerProps) {
   );
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <PageMeta
         title={getAppText("arbeidssoker.side-metadata.tittel")}
         description={getAppText("arbeidssoker.side-metadata.meta-beskrivelse")}

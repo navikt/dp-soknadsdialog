@@ -18,10 +18,10 @@ export const MAX_TOTAL_DOKUMENTKRAV_FILE_SIZE = 52428800; // 50mb in bytes
 
 export const MAX_TEXT_LENGTH = 500;
 
-export const DATEPICKER_MIN_DATE = startOfDay(new Date("1900-01-01"));
-export const DATEPICKER_MAX_DATE = endOfDay(addYears(new Date(), 100));
-export const SOKNAD_DATO_DATEPICKER_MIN_DATE = startOfDay(subMonths(new Date(), 6));
-export const SOKNAD_DATO_DATEPICKER_MAX_DATE = endOfDay(addMonths(new Date(), 3));
+export const DATEPICKER_FROM_DATE = startOfDay(new Date("1900-01-01"));
+export const DATEPICKER_TO_DATE = endOfDay(addYears(new Date(), 100));
+export const SOKNAD_DATO_DATEPICKER_FROM_DATE = startOfDay(subMonths(new Date(), 6));
+export const SOKNAD_DATO_DATEPICKER_TO_DATE = endOfDay(addMonths(new Date(), 3));
 
 export const TEXTAREA_FAKTUM_IDS = [
   "faktum.reist-tilbake-periode",

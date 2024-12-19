@@ -1,93 +1,91 @@
 import { isFuture } from "date-fns";
 import { useEffect, useState } from "react";
-import { IPeriodeFaktumAnswerState } from "../../components/faktum/faktum-periode/FaktumPeriode";
 import { isWithinValidDateRange } from "../../components/faktum/validation/validations.utils";
 import { useSanity } from "../../context/sanity-context";
 import { useValidation } from "../../context/validation-context";
 import { QuizFaktum } from "../../types/quiz.types";
+import { IPeriodeFaktumSvar } from "../../components/faktum/faktum-periode/FaktumPeriode";
 
 interface IUseValidateFaktumPeriode {
-  validateAndIsValidPeriode: (svar: IPeriodeFaktumAnswerState) => boolean;
-  fomErrorMessage: string | undefined;
-  tomErrorMessage: string | undefined;
-  clearErrorMessage: () => void;
+  validateAndIsValidPeriode: (svar: IPeriodeFaktumSvar) => boolean;
+  fromError: string | undefined;
+  toError: string | undefined;
+  setFromError: (message: string) => void;
+  setToError: (message: string) => void;
 }
+
+const futureDateAllowedList = [
+  "faktum.arbeidsforhold.permittert-periode",
+  "faktum.arbeidsforhold.naar-var-lonnsplikt-periode",
+];
 
 export function useValidateFaktumPeriode(faktum: QuizFaktum): IUseValidateFaktumPeriode {
   const { getAppText } = useSanity();
   const { unansweredFaktumId } = useValidation();
-  const [fomErrorMessage, setFomErrorMessage] = useState<string | undefined>(undefined);
-  const [tomErrorMessage, setTomErrorMessage] = useState<string | undefined>(undefined);
+  const [fromError, setFromError] = useState<string | undefined>(undefined);
+  const [toError, setToError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setFomErrorMessage(
+    setFromError(
       unansweredFaktumId === faktum.id ? getAppText("validering.faktum.ubesvart") : undefined,
     );
   }, [unansweredFaktumId]);
 
-  function validateAndIsValidPeriode(svar: IPeriodeFaktumAnswerState) {
+  function validateAndIsValidPeriode(svar: IPeriodeFaktumSvar) {
     const { fom, tom } = svar;
 
     if (fom === null) {
-      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
+      setFromError(getAppText("validering.ugyldig-dato"));
       return false;
     }
 
     if (tom === null) {
-      setTomErrorMessage(getAppText("validering.ugyldig-dato"));
+      setToError(getAppText("validering.ugyldig-dato"));
       return false;
     }
 
     const fomDateIsInfuture = isFuture(new Date(fom));
     const isValidFromDate = isWithinValidDateRange(new Date(fom));
 
-    setFomErrorMessage(undefined);
-    setTomErrorMessage(undefined);
+    setFromError(undefined);
+    setToError(undefined);
 
-    const specialCase =
-      faktum.beskrivendeId === "faktum.arbeidsforhold.permittert-periode" ||
-      faktum.beskrivendeId === "faktum.arbeidsforhold.naar-var-lonnsplikt-periode";
-
-    let isValidPeriode = true;
+    const specialCase = futureDateAllowedList.includes(faktum.beskrivendeId);
 
     // Future date is allowed on those two special cases
     if (specialCase && !isValidFromDate) {
-      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      setFromError(getAppText("validering.ugyldig-dato"));
+      return false;
     }
 
     if (fomDateIsInfuture && !specialCase) {
-      setFomErrorMessage(getAppText("validering.fremtidig-dato"));
-      isValidPeriode = false;
+      setFromError(getAppText("validering.fremtidig-dato"));
+      return false;
     }
 
     if (fomDateIsInfuture && faktum.beskrivendeId === "faktum.arbeidsforhold.varighet") {
-      setFomErrorMessage(getAppText("validering.arbeidsforhold.varighet-fra"));
-      isValidPeriode = false;
+      setFromError(getAppText("validering.arbeidsforhold.varighet-fra"));
+      return false;
     }
 
     if (!isValidFromDate) {
-      setFomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      setFromError(getAppText("validering.ugyldig-dato"));
+      return false;
     }
 
     if (tom && !isWithinValidDateRange(new Date(tom))) {
-      setTomErrorMessage(getAppText("validering.ugyldig-dato"));
-      isValidPeriode = false;
+      setToError(getAppText("validering.ugyldig-dato"));
+      return false;
     }
 
-    return isValidPeriode;
-  }
-
-  function clearErrorMessage() {
-    setFomErrorMessage(undefined);
-    setTomErrorMessage(undefined);
+    return true;
   }
 
   return {
     validateAndIsValidPeriode,
-    fomErrorMessage,
-    tomErrorMessage,
-    clearErrorMessage,
+    fromError,
+    setFromError,
+    setToError,
+    toError,
   };
 }

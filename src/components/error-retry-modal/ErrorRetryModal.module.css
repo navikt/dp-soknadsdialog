@@ -1,3 +1,7 @@
 .errorRetryModalButton {
   margin-top: var(--a-spacing-5);
 }
+
+.body {
+  background-color: var(--a-orange-50);
+}

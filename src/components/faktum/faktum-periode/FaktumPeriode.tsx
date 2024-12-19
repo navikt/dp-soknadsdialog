@@ -1,33 +1,26 @@
-import { Fieldset, DatePicker, useRangeDatepicker } from "@navikt/ds-react";
+import { DatePicker, Fieldset, useDatepicker } from "@navikt/ds-react";
 import { PortableText } from "@portabletext/react";
-import { formatISO } from "date-fns";
+import { formatISO, isBefore } from "date-fns";
 import { forwardRef, Ref, useEffect, useState } from "react";
-import { DATEPICKER_MAX_DATE, DATEPICKER_MIN_DATE } from "../../../constants";
-import { useQuiz } from "../../../context/quiz-context";
+import { DATEPICKER_FROM_DATE, DATEPICKER_TO_DATE } from "../../../constants";
 import { useSanity } from "../../../context/sanity-context";
+import { useSoknad } from "../../../context/soknad-context";
 import { useValidation } from "../../../context/validation-context";
 import { useValidateFaktumPeriode } from "../../../hooks/validation/useValidateFaktumPeriode";
-import { useDebouncedCallback } from "../../../hooks/useDebouncedCallback";
-import { useFirstRender } from "../../../hooks/useFirstRender";
 import { IQuizPeriodeFaktum, IQuizPeriodeFaktumAnswerType } from "../../../types/quiz.types";
+import { AlertText } from "../../alert-text/AlertText";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
-import { AlertText } from "../../alert-text/AlertText";
-import { objectsNotEqual } from "../../../utils/arbeidsforhold.utils";
+import { useFirstRender } from "../../../hooks/useFirstRender";
 import { useUserInfo } from "../../../context/user-info-context";
 import {
   trackKorrigertSluttdatoFraAAREG,
   trackKorrigertStartdatoFraAAREG,
-} from "../../../amplitude.tracking";
+} from "../../../amplitude/track-arbeidsforhold";
 
-interface IDateRange {
-  from: Date | undefined;
-  to?: Date | undefined;
-}
-
-export interface IPeriodeFaktumAnswerState {
+export interface IPeriodeFaktumSvar {
   fom: string | null;
   tom?: string | null;
 }
@@ -39,129 +32,184 @@ function FaktumPeriodeComponent(
   ref: Ref<HTMLDivElement> | undefined,
 ) {
   const { faktum, hideAlertText } = props;
-  const isFirstRender = useFirstRender();
-  const { saveFaktumToQuiz, isLocked } = useQuiz();
+  const { saveFaktumToQuiz, isLocked } = useSoknad();
   const { getFaktumTextById, getAppText } = useSanity();
+  const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
   const { contextSelectedArbeidsforhold } = useUserInfo();
-  const { validateAndIsValidPeriode, tomErrorMessage, fomErrorMessage, clearErrorMessage } =
+  const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
+  const { validateAndIsValidPeriode, toError, fromError, setFromError, setToError } =
     useValidateFaktumPeriode(faktum);
 
-  const initialPeriodeValue = { fom: "" };
-  const [currentAnswer, setCurrentAnswer] = useState<
-    IQuizPeriodeFaktumAnswerType | IPeriodeFaktumAnswerState
-  >(faktum.svar ?? initialPeriodeValue);
-  const [debouncedPeriode, setDebouncedPeriode] = useState(currentAnswer);
-  const debouncedChange = useDebouncedCallback(setDebouncedPeriode, 500);
+  const [shouldSaveToQuiz, setShouldSaveToQuiz] = useState(false);
+  const [selectedFromDate, setSelectedFromDate] = useState<string>(faktum.svar?.fom ?? "");
+  const [selectedToDate, setSelectedToDate] = useState<string>(faktum.svar?.tom ?? "");
 
   const faktumTexts = getFaktumTextById(faktum.beskrivendeId);
   const faktumTextFra = getAppText(`${faktum.beskrivendeId}.fra`);
   const faktumTextTil = getAppText(`${faktum.beskrivendeId}.til`);
 
   useEffect(() => {
-    if (!isFirstRender && objectsNotEqual(faktum.svar, currentAnswer)) {
-      saveFaktum(debouncedPeriode as IQuizPeriodeFaktumAnswerType);
+    if (shouldSaveToQuiz) {
+      savePeriode();
     }
-  }, [debouncedPeriode]);
+  }, [shouldSaveToQuiz, selectedFromDate, selectedToDate]);
 
-  // Used to reset current answer to what the backend state is if there is a mismatch
   useEffect(() => {
     if (!faktum.svar && !isFirstRender) {
-      reset();
-      setCurrentAnswer(initialPeriodeValue);
-    }
-
-    if (faktum.svar && faktum.svar !== currentAnswer && !isFirstRender) {
-      setCurrentAnswer(faktum.svar);
+      resetFromDate();
+      setSelectedFromDate("");
     }
   }, [faktum.svar]);
 
-  function getDefaultSelectedValue(): IDateRange | undefined {
-    if (currentAnswer?.fom) {
-      return {
-        from: new Date(currentAnswer.fom),
-        to: currentAnswer.tom ? new Date(currentAnswer.tom) : undefined,
-      };
-    }
-
-    return undefined;
-  }
-
-  useEffect(() => {
-    if (faktum.svar) {
-      const from = new Date(faktum.svar.fom);
-      const to = faktum.svar.tom ? new Date(faktum.svar.tom) : undefined;
-      setSelected({ from, to });
-    }
-  }, [faktum]);
-
-  const { datepickerProps, toInputProps, fromInputProps, setSelected, reset } = useRangeDatepicker({
-    defaultSelected: getDefaultSelectedValue(),
-    onRangeChange: (value?: IDateRange) => {
-      if (!value?.from) {
-        setCurrentAnswer(initialPeriodeValue);
-        debouncedChange(initialPeriodeValue);
+  const {
+    datepickerProps: fromDatepickerProps,
+    inputProps: fromInputProps,
+    reset: resetFromDate,
+  } = useDatepicker({
+    defaultSelected: selectedFromDate !== "" ? new Date(selectedFromDate) : undefined,
+    allowTwoDigitYear: false,
+    onDateChange: (value?: Date) => {
+      const selectedFromDate = value ? formatISO(value, { representation: "date" }) : "";
+      setSelectedFromDate(selectedFromDate);
+    },
+    onValidate: (value) => {
+      if (value.isEmpty) {
+        setFromError("");
+        setShouldSaveToQuiz(false);
         return;
       }
 
-      if (value?.from) {
-        const parsedFromDate = formatISO(value.from, { representation: "date" });
-        let period: IQuizPeriodeFaktumAnswerType = { fom: parsedFromDate };
-
-        if (value.to) {
-          const parsedToDate = formatISO(value.to, { representation: "date" });
-          period = { ...period, tom: parsedToDate };
-        }
-
-        setCurrentAnswer(period);
-        debouncedChange(period);
-      }
-    },
-    onValidate: (value) => {
-      // Empty `to date input` programmatically when user clears `from date input`
-      if (value.from.isEmpty) {
-        setSelected({ from: undefined });
+      if (value.isInvalid) {
+        setShouldSaveToQuiz(false);
+        setFromError(getAppText("validering.ugyldig-dato"));
+        return;
       }
 
-      // When user types in invalid date format on `from date input`
-      if (!value.from.isEmpty && value.from.isInvalid) {
-        // Set fom to null for validation
-        const periode = { ...currentAnswer, fom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
-      }
-
-      // When user types in invalid `to date input`
-      if (!value.to.isEmpty && value.to.isInvalid) {
-        // Set tom to null for validation
-        const periode = { ...currentAnswer, tom: null };
-        setCurrentAnswer(periode);
-        debouncedChange(periode);
+      if (value.isValidDate && !shouldSaveToQuiz) {
+        setShouldSaveToQuiz(true);
       }
     },
   });
 
-  function saveFaktum(value: IPeriodeFaktumAnswerState) {
-    clearErrorMessage();
+  const {
+    datepickerProps: toDatepickerProps,
+    inputProps: toInputProps,
+    reset: resetToDate,
+  } = useDatepicker({
+    defaultSelected: selectedToDate !== "" ? new Date(selectedToDate) : undefined,
+    allowTwoDigitYear: false,
+    onDateChange: (value?: Date) => {
+      const selectedToDate = value ? formatISO(value, { representation: "date" }) : "";
+      setSelectedToDate(selectedToDate);
+    },
+    onValidate: (value) => {
+      if (value.isEmpty) {
+        setShouldSaveToQuiz(false);
+        return;
+      }
 
-    if (value.fom === "") {
+      if (value.isInvalid) {
+        setShouldSaveToQuiz(false);
+        setToError(getAppText("validering.ugyldig-dato"));
+        return;
+      }
+
+      if (value.isValidDate && !shouldSaveToQuiz) {
+        setShouldSaveToQuiz(true);
+      }
+    },
+  });
+
+  function fromDateOnBlur() {
+    if (selectedFromDate === "") {
       saveFaktumToQuiz(faktum, null);
+      resetFromDate();
+      setFromError("");
+      resetToDate();
       return;
     }
 
-    const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
-    if (faktumArbeidsforholdVarighet && contextSelectedArbeidsforhold) {
-      if (value.fom !== contextSelectedArbeidsforhold.startdato) {
-        trackKorrigertStartdatoFraAAREG("dagpenger");
+    if (selectedFromDate !== "") {
+      let periode: IQuizPeriodeFaktumAnswerType = { fom: selectedFromDate };
+      if (selectedToDate) {
+        periode = { ...periode, tom: selectedToDate };
       }
 
-      if (value?.tom !== contextSelectedArbeidsforhold.sluttdato) {
-        trackKorrigertSluttdatoFraAAREG("dagpenger");
+      const isValidPeriode = validateAndIsValidPeriode(periode);
+
+      if (faktumArbeidsforholdVarighet) {
+        trackEditiedPeriode(periode);
+      }
+
+      if (isValidPeriode) {
+        resetFromDate();
+        saveFaktumToQuiz(faktum, periode);
+      } else {
+        saveFaktumToQuiz(faktum, null);
       }
     }
+  }
 
-    const isValidPeriode = validateAndIsValidPeriode(value);
-    saveFaktumToQuiz(faktum, isValidPeriode ? (value as IQuizPeriodeFaktumAnswerType) : null);
+  function toDateOnBlur() {
+    if (selectedToDate === "") {
+      setToError("");
+      resetToDate();
+      saveFaktumToQuiz(faktum, { fom: selectedFromDate });
+      return;
+    }
+
+    if (selectedToDate !== "") {
+      const periode = { fom: selectedFromDate, tom: selectedToDate };
+      const isValidPeriode = validateAndIsValidPeriode(periode);
+
+      if (faktumArbeidsforholdVarighet) {
+        trackEditiedPeriode(periode);
+      }
+
+      if (isValidPeriode) {
+        saveFaktumToQuiz(faktum, periode);
+      } else {
+        resetToDate();
+        saveFaktumToQuiz(faktum, { fom: selectedFromDate });
+      }
+    }
+  }
+
+  function trackEditiedPeriode(periode: IPeriodeFaktumSvar) {
+    if (contextSelectedArbeidsforhold && contextSelectedArbeidsforhold.startdato !== periode.fom) {
+      trackKorrigertStartdatoFraAAREG("dagpenger");
+    }
+
+    if (
+      periode.tom &&
+      contextSelectedArbeidsforhold &&
+      contextSelectedArbeidsforhold.sluttdato !== periode.tom
+    ) {
+      trackKorrigertSluttdatoFraAAREG("dagpenger");
+    }
+  }
+
+  function savePeriode() {
+    let periode: IQuizPeriodeFaktumAnswerType = { fom: selectedFromDate };
+
+    if (selectedToDate) {
+      if (isBefore(new Date(selectedToDate), new Date(selectedFromDate))) {
+        setToError("Til dato kan ikke være før fra dato");
+        return;
+      }
+
+      periode = { ...periode, tom: selectedToDate };
+    }
+
+    if (faktumArbeidsforholdVarighet) {
+      trackEditiedPeriode(periode);
+    }
+
+    const isValidPeriode = validateAndIsValidPeriode(periode);
+    if (isValidPeriode) {
+      saveFaktumToQuiz(faktum, periode);
+    }
   }
 
   return (
@@ -179,31 +227,37 @@ function FaktumPeriodeComponent(
         )}
 
         <DatePicker
-          {...datepickerProps}
-          dropdownCaption
-          fromDate={DATEPICKER_MIN_DATE}
-          toDate={DATEPICKER_MAX_DATE}
+          {...fromDatepickerProps}
+          fromDate={DATEPICKER_FROM_DATE}
+          toDate={DATEPICKER_TO_DATE}
           strategy="fixed"
+          dropdownCaption
         >
-          <div className={periodeStyles.datePickerSpacing}>
-            <DatePicker.Input
-              {...fromInputProps}
-              label={faktumTextFra}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={fomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
+          <DatePicker.Input
+            {...fromInputProps}
+            label={faktumTextFra}
+            placeholder={getAppText("datovelger.dato-format")}
+            error={fromError}
+            disabled={isLocked}
+            onBlur={fromDateOnBlur}
+          />
+        </DatePicker>
 
-            <DatePicker.Input
-              {...toInputProps}
-              label={faktumTextTil}
-              placeholder={getAppText("datovelger.dato-format")}
-              error={tomErrorMessage}
-              disabled={isLocked}
-              autoComplete="off"
-            />
-          </div>
+        <DatePicker
+          {...toDatepickerProps}
+          fromDate={DATEPICKER_FROM_DATE}
+          toDate={DATEPICKER_TO_DATE}
+          strategy="fixed"
+          dropdownCaption
+        >
+          <DatePicker.Input
+            {...toInputProps}
+            label={faktumTextTil}
+            placeholder={getAppText("datovelger.dato-format")}
+            error={toError}
+            disabled={isLocked}
+            onBlur={toDateOnBlur}
+          />
         </DatePicker>
 
         {faktumTexts?.helpText && (

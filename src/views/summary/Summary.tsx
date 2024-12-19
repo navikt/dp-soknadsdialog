@@ -15,12 +15,12 @@ import { useSanity } from "../../context/sanity-context";
 import { useSetFocus } from "../../hooks/useSetFocus";
 import { IFerdigstillBody } from "../../pages/api/soknad/ferdigstill";
 import { DecoratorLocale } from "@navikt/nav-dekoratoren-moduler/ssr";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { SectionHeading } from "../../components/section/SectionHeading";
 import { IPersonalia } from "../../types/personalia.types";
 import { Personalia } from "../../components/personalia/Personalia";
 import styles from "./Summary.module.css";
-import { trackSkjemaFullført } from "../../amplitude.tracking";
+import { trackSkjemaFullført } from "../../amplitude/amplitude.tracking";
 import { SummaryDokumentkrav } from "../../components/summary-dokumentkrav/SummaryDokumentkrav";
 import { useDokumentkrav } from "../../context/dokumentkrav-context";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
@@ -34,7 +34,7 @@ export function Summary(props: IProps) {
 
   const router = useRouter();
   const { uuid } = useUuid();
-  const { soknadState } = useQuiz();
+  const { quizState } = useSoknad();
   const { getAppText, getSeksjonTextById } = useSanity();
   const { totalSteps, summaryStep } = useProgressBarSteps();
   const { setFocus } = useSetFocus();
@@ -63,7 +63,7 @@ export function Summary(props: IProps) {
   }, [showSoknadNotCompleteError]);
 
   function validateAndCompleteSoknad() {
-    if (!soknadState.ferdig || invalidDokumentkrav) {
+    if (!quizState.ferdig || invalidDokumentkrav) {
       setshowSoknadNotCompleteError(true);
 
       // If showValidationErrors is false, the async useEffect will trigger
@@ -85,7 +85,7 @@ export function Summary(props: IProps) {
     if (dokumentkravList.krav.length > 0) {
       router.push(`/soknad/${router.query.uuid}/dokumentasjon`);
     } else {
-      router.push(`/soknad/${router.query.uuid}?seksjon=${soknadState.seksjoner.length}`);
+      router.push(`/soknad/${router.query.uuid}?seksjon=${quizState.seksjoner.length}`);
     }
   }
 
@@ -96,7 +96,7 @@ export function Summary(props: IProps) {
   }, [finishSoknadStatus]);
 
   return (
-    <main>
+    <main id="maincontent" tabIndex={-1}>
       <PageMeta
         title={getAppText("oppsummering.side-metadata.tittel")}
         description={getAppText("oppsummering.side-metadata.meta-beskrivelse")}
@@ -118,7 +118,7 @@ export function Summary(props: IProps) {
           </Accordion.Item>
         )}
 
-        {soknadState.seksjoner?.map((section, index) => {
+        {quizState.seksjoner?.map((section, index) => {
           const sectionTexts = getSeksjonTextById(section.beskrivendeId);
           return (
             <Accordion.Item key={section.beskrivendeId}>

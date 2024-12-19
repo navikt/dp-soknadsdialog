@@ -4,7 +4,7 @@ import { FaktumText } from "./FaktumText";
 import { IQuizTekstFaktum } from "../../../types/quiz.types";
 import userEvent from "@testing-library/user-event";
 import { MockContext } from "../../../__mocks__/MockContext";
-import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockQuizProvider";
+import { mockSaveFaktumToQuiz } from "../../../__mocks__/MockSoknadProvider";
 
 const faktumMockData: IQuizTekstFaktum = {
   id: "8004.1",

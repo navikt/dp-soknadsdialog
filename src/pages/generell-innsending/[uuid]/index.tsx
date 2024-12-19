@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { DokumentkravProvider } from "../../../context/dokumentkrav-context";
-import { QuizProvider } from "../../../context/quiz-context";
+import { SoknadProvider } from "../../../context/soknad-context";
 import { ValidationProvider } from "../../../context/validation-context";
 import { mockGenerellInnsending } from "../../../localhost-data/mock-generell-innsending";
 import { IDokumentkravList } from "../../../types/documentation.types";
@@ -104,7 +104,7 @@ export default function GenerellInnsendingPage(props: IProps) {
 
   return (
     <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
-      <QuizProvider initialState={soknadState}>
+      <SoknadProvider initialState={soknadState}>
         <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
             <ValidationProvider>
@@ -112,7 +112,7 @@ export default function GenerellInnsendingPage(props: IProps) {
             </ValidationProvider>
           </DokumentkravProvider>
         </UserInfoProvider>
-      </QuizProvider>
+      </SoknadProvider>
     </FeatureTogglesProvider>
   );
 }

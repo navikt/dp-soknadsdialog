@@ -3,7 +3,7 @@ import { PageMeta } from "../../components/PageMeta";
 import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
 import { useSanity } from "../../context/sanity-context";
-import { useQuiz } from "../../context/quiz-context";
+import { useSoknad } from "../../context/soknad-context";
 import { Personalia } from "../../components/personalia/Personalia";
 import { IPersonalia } from "../../types/personalia.types";
 import { IDokumentkrav, IDokumentkravList } from "../../types/documentation.types";
@@ -29,7 +29,7 @@ export type PdfView = "netto" | "brutto";
 export function Pdf(props: IProps) {
   const { personalia, dokumentkravList, pdfView } = props;
   const { getAppText } = useSanity();
-  const { soknadState } = useQuiz();
+  const { quizState } = useSoknad();
 
   const missingDocuments: IDokumentkrav[] = getMissingDokumentkrav(dokumentkravList);
   const uploadedDocuments: IDokumentkrav[] = getUploadedDokumentkrav(dokumentkravList);
@@ -42,10 +42,10 @@ export function Pdf(props: IProps) {
         description={getAppText("soknad.side-metadata.meta-beskrivelse")}
       />
       <SoknadHeader />
-      <main>
+      <main id="maincontent" tabIndex={-1}>
         <Personalia personalia={personalia} />
 
-        {soknadState.seksjoner.map((section) => (
+        {quizState.seksjoner.map((section) => (
           <div key={section.beskrivendeId} className="my-11">
             <Section
               key={section.beskrivendeId}
