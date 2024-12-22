@@ -15,4 +15,4 @@ COPY .next/static ./.next/static
 
 EXPOSE 3000
 
-CMD ["--max-old-space-size=1024", "server.js"]
+CMD ["server.js"]

@@ -34,12 +34,14 @@ spec:
       memory: 1280Mi
     requests:
       cpu: 50m
-      memory: 768Mi
+      memory: 256Mi
   ingresses:
     {{#each ingresses as |url|}}
     - {{url}}
     {{/each}}
   env:
+    - name: NODE_OPTIONS
+      value: "--max-old-space-size=1024"
     - name: SELF_URL
       value: {{ingress}}
     - name: NEXT_PUBLIC_BASE_PATH
