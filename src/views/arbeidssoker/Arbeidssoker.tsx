@@ -41,7 +41,6 @@ export function Arbeidssoker(props: IArbeidssokerProps) {
                 variant="primary"
                 as="a"
                 onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-button")}
-                loading={currentNagivating === "registrer-som-arbeidssoker-button"}
               >
                 {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
               </Button>
@@ -51,7 +50,6 @@ export function Arbeidssoker(props: IArbeidssokerProps) {
                 variant="secondary"
                 as="a"
                 onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-cancel-button")}
-                loading={currentNagivating === "registrer-som-arbeidssoker-cancel-button"}
               >
                 {getAppText("arbeidssoker.avbryt-knapp")}
               </Button>
@@ -94,7 +92,6 @@ export function Arbeidssoker(props: IArbeidssokerProps) {
                 variant="secondary"
                 as="a"
                 onClick={() => setCurrentNavigating("registrer-som-arbeidssoker-button")}
-                loading={currentNagivating === "registrer-som-arbeidssoker-button"}
               >
                 {getAppText("arbeidssoker.avbryt-knapp")}
               </Button>
