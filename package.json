@@ -47,7 +47,7 @@
     "date-fns": "^4.1.0",
     "i18n-iso-countries": "^7.13.0",
     "js-cookie": "^3.0.5",
-    "next": "^14.2.21",
+    "next": "^15.1.7",
     "next-intl": "^3.26.3",
     "next-sanity": "^9.8.42",
     "pino": "^9.6.0",
