@@ -37,7 +37,7 @@
     "@navikt/nav-dekoratoren-moduler": "^3.2.0",
     "@navikt/next-logger": "^1.35.0",
     "@navikt/oasis": "^3.6.0",
-    "@next/bundle-analyzer": "^14.2.15",
+    "@next/bundle-analyzer": "^15.1.7",
     "@portabletext/react": "^3.2.0",
     "@portabletext/to-html": "^2.0.13",
     "@svgr/webpack": "^8.1.0",
