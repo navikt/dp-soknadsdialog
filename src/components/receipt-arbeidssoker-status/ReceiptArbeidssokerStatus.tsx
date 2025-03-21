@@ -16,11 +16,11 @@ export function ReceiptArbeidssokerStatus(props: IProps) {
       return (
         <div>
           <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-            {getAppText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")}
+            {getAppText("kvittering.arbeidssokerstatus.info-tekst.uregistrert")} &nbsp;
+            <Link href="https://arbeidssokerregistrering.nav.no/">
+              {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+            </Link>
           </Alert>
-          <Link href="https://arbeidssokerregistrering.nav.no/">
-            {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
-          </Link>
         </div>
       );
 
@@ -35,11 +35,11 @@ export function ReceiptArbeidssokerStatus(props: IProps) {
       return (
         <div>
           <Alert variant={"warning"} className={styles.receiptArbeidsokerStatusContainer}>
-            {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")}
+            {getAppText("arbeidssoker.arbeidssoker-status.varsel-tekst")} &nbsp;
+            <Link href="https://arbeidssokerregistrering.nav.no/">
+              {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
+            </Link>
           </Alert>
-          <Link href="https://arbeidssokerregistrering.nav.no/">
-            {getAppText("arbeidssoker.registrer-som-arbeidssoker-knapp")}
-          </Link>
         </div>
       );
   }
