@@ -86,3 +86,11 @@ spec:
           namespace: paw
         - application: nav-dekoratoren
           namespace: personbruker
+  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+    autoInstrumentation:
+      enabled: true
+      runtime: java
