@@ -1,30 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { Button, Detail, ErrorSummary, Heading } from "@navikt/ds-react";
-import { PageMeta } from "../../components/PageMeta";
-import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
-import { ProgressBar } from "../../components/progress-bar/ProgressBar";
 import { PortableText } from "@portabletext/react";
-import { ReadMore } from "../../components/sanity/readmore/ReadMore";
-import { useSanity } from "../../context/sanity-context";
-import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
-import { DokumentkravItem } from "./DokumentkravItem";
-import { useDokumentkrav } from "../../context/dokumentkrav-context";
-import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
-import { useUuid } from "../../hooks/useUuid";
+import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
 import { DokumentkravTitle } from "../../components/dokumentkrav-title/DokumentkravTitle";
-import { useScrollIntoView } from "../../hooks/useScrollIntoView";
-import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
 import { ExitSoknad } from "../../components/exit-soknad/ExitSoknad";
-import styles from "./Dokumentasjon.module.css";
-import {
-  tidBruktSiden,
-  tidStart,
-  trackDokumentasjonLastetOpp,
-} from "../../amplitude/amplitude.tracking";
+import { PageMeta } from "../../components/PageMeta";
+import { ProgressBar } from "../../components/progress-bar/ProgressBar";
+import { ReadMore } from "../../components/sanity/readmore/ReadMore";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { DOKUMENTKRAV_SVAR_SEND_NAA } from "../../constants";
+import { useDokumentkrav } from "../../context/dokumentkrav-context";
+import { useSanity } from "../../context/sanity-context";
 import { useSoknad } from "../../context/soknad-context";
+import { useDokumentkravBundler } from "../../hooks/useDokumentkravBundler";
+import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
+import { useScrollIntoView } from "../../hooks/useScrollIntoView";
+import { useUuid } from "../../hooks/useUuid";
+import { DokumentkravBundleErrorModal } from "./DokumentkravBundleErrorModal";
+import { DokumentkravItem } from "./DokumentkravItem";
+
+import styles from "./Dokumentasjon.module.css";
 
 export function Dokumentasjon() {
   const router = useRouter();
@@ -67,16 +63,11 @@ export function Dokumentasjon() {
       return dokumentkrav.svar === DOKUMENTKRAV_SVAR_SEND_NAA && dokumentkrav.filer.length > 0;
     });
 
-    const startetBundling = tidStart();
     const shouldBundle = dokumentkravToBundle.length > 0;
     const bundlingSuccessful = shouldBundle && (await bundleDokumentkravList(dokumentkravToBundle));
 
     // If there are no dokumentkrav to bundle then we automatically want to move on to the next step
     if (bundlingSuccessful || !shouldBundle) {
-      if (shouldBundle) {
-        trackDokumentasjonLastetOpp(dokumentkravToBundle.length, tidBruktSiden(startetBundling));
-      }
-
       setIsNavigating(true);
       router.push(`/soknad/${uuid}/oppsummering`);
     } else {
