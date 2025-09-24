@@ -13,9 +13,7 @@ export function ReceiptSoknadStatus(props: ISoknadStatus) {
     <>
       <div className={styles.receiptSoknadTilstandHeader}>
         <Heading level="2" size="medium">
-          {props.status === "FerdigBehandlet"
-            ? getAppText("kvittering.soknad-status.title.ferdig")
-            : getAppText("kvittering.soknad-status.title.mottatt")}
+          {getAppText("kvittering.soknad-status.title.mottatt")}
         </Heading>
         {props.status !== "Ukjent" && (
           <Tag variant={getTagColor(props.status)}>
@@ -40,10 +38,6 @@ export function ReceiptSoknadStatus(props: ISoknadStatus) {
 
 function getStatusDescriptionTextKey(status: ISoknadStatuser) {
   switch (status) {
-    case "UnderBehandling":
-      return "kvittering.soknad-status.description.under-behandling";
-    case "FerdigBehandlet":
-      return "kvittering.soknad-status.description.ferdig-behehandlet";
     case "ManglerDokumenter":
       return "kvittering.soknad-status.description.mangler-dokumenter";
     case "Ukjent":
@@ -54,27 +48,17 @@ function getStatusDescriptionTextKey(status: ISoknadStatuser) {
 }
 
 function getStatusTagTextKey(status: ISoknadStatuser) {
-  switch (status) {
-    case "UnderBehandling":
-      return "kvittering.soknad-status.tag.under-behandling";
-    case "FerdigBehandlet":
-      return "kvittering.soknad-status.tag.ferdig-behehandlet";
-    case "ManglerDokumenter":
-      return "kvittering.soknad-status.tag.mangler-dokumenter";
-    default:
-      return "getStatusTagTextKey() no-text-key";
+  if (status === "ManglerDokumenter") {
+    return "kvittering.soknad-status.tag.mangler-dokumenter";
+  } else {
+    return "getStatusTagTextKey() no-text-key";
   }
 }
 
 function getTagColor(status: ISoknadStatuser) {
-  switch (status) {
-    case "UnderBehandling":
-      return "info";
-    case "FerdigBehandlet":
-      return "success";
-    case "ManglerDokumenter":
-      return "warning";
-    default:
-      return "info";
+  if (status === "ManglerDokumenter") {
+    return "warning";
+  } else {
+    return "info";
   }
 }

@@ -6,7 +6,7 @@ import { MockContext } from "../../__mocks__/MockContext";
 import { ISoknadStatus } from "../../types/quiz.types";
 
 const soknadStatusMock: ISoknadStatus = {
-  status: "UnderBehandling",
+  status: "ManglerDokumenter",
   opprettet: "2022-10-21T09:42:37.291157",
   innsendt: "2022-10-21T09:47:29",
 };

@@ -120,8 +120,6 @@ export interface IMineSoknader {
 
 export type ISoknadStatuser =
   | "Paabegynt"
-  | "UnderBehandling"
-  | "FerdigBehandlet"
   | "ManglerDokumenter"
   | "Ukjent";
 

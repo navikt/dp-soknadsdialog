@@ -48,7 +48,7 @@ export async function getServerSideProps(
         dokumentkrav: mockDokumentkravBesvart as IDokumentkravList,
         personalia: mockPersonalia,
         soknadStatus: {
-          status: "UnderBehandling",
+          status: "ManglerDokumenter",
           opprettet: "2022-10-21T09:42:37.291157",
           innsendt: "2022-10-21T09:47:29",
         },
