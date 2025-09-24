@@ -9,17 +9,17 @@ import { FetchIndicator } from "../../components/fetch-indicator/FetchIndicator"
 import { PageMeta } from "../../components/PageMeta";
 import { Personalia } from "../../components/personalia/Personalia";
 import { ProgressBar } from "../../components/progress-bar/ProgressBar";
-import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { Section } from "../../components/section/Section";
+import { SoknadHeader } from "../../components/soknad-header/SoknadHeader";
 import { QUIZ_SOKNADSTYPE_DAGPENGESOKNAD } from "../../constants";
-import { useSoknad } from "../../context/soknad-context";
 import { useSanity } from "../../context/sanity-context";
+import { useSoknad } from "../../context/soknad-context";
 import { useValidation } from "../../context/validation-context";
 import { useProgressBarSteps } from "../../hooks/useProgressBarSteps";
-import { IPersonalia } from "../../types/personalia.types";
-import styles from "./Soknad.module.css";
 import { ErrorTypesEnum } from "../../types/error.types";
-import { trackSkjemaStegFullført } from "../../amplitude/amplitude.tracking";
+import { IPersonalia } from "../../types/personalia.types";
+
+import styles from "./Soknad.module.css";
 
 interface IProps {
   personalia: IPersonalia | null;
@@ -70,7 +70,6 @@ export function Soknad(props: IProps) {
     if (currentSection.ferdig) {
       const currentSection = parseInt(sectionParam);
       const nextIndex = sectionParam && currentSection + 1;
-      trackSkjemaStegFullført("dagpenger", router.query.uuid as string, currentSection);
       router.push(`/soknad/${router.query.uuid}?seksjon=${nextIndex}`, undefined, {
         shallow: true,
       });

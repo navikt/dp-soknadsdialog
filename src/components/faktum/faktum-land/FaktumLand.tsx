@@ -13,11 +13,8 @@ import { getLandGruppeId } from "../../../utils/faktum.utils";
 import { AlertText } from "../../alert-text/AlertText";
 import { HelpText } from "../../HelpText";
 import { IFaktum } from "../Faktum";
+
 import styles from "../Faktum.module.css";
-import {
-  trackValgtEtLandFraFlereLandListe,
-  trackValgtEtLandFraOfteValgteLandListe,
-} from "../../../amplitude/track-landvelger";
 
 export const FaktumLand = forwardRef(FaktumLandComponent);
 
@@ -80,18 +77,7 @@ function FaktumLandComponent(
   }, [currentAnswer]);
 
   function onSelect(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedOption = event.target.selectedOptions[0];
-    const optGroup = selectedOption.closest("optgroup");
-    const optGroupLabel = optGroup?.label;
     const value = event.target.value;
-
-    if (faktumHvilketLandBorDuI) {
-      if (optGroupLabel === getAppText("faktum-land.optgroup.ofte-valgte-land")) {
-        trackValgtEtLandFraOfteValgteLandListe("dagpenger", value);
-      } else {
-        trackValgtEtLandFraFlereLandListe("dagpenger", value);
-      }
-    }
 
     saveFaktum(value);
     setCurrentAnswer(value);

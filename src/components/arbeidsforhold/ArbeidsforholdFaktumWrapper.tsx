@@ -12,10 +12,6 @@ import {
   sortArbeidsforhold,
 } from "../../utils/arbeidsforhold.utils";
 import { Faktum } from "../faktum/Faktum";
-import {
-  trackLagtTilArbeidsforholdManuelt,
-  trackValgtArbeidsforholdFraAAREG,
-} from "../../amplitude/track-arbeidsforhold";
 
 interface IProps {
   fakta: QuizFaktum[];
@@ -62,7 +58,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     if (event.target.value === "add-manually") {
       setShowFaktum(true);
       saveFaktumToQuiz(faktum, null);
-      trackLagtTilArbeidsforholdManuelt("dagpenger");
       setContextSelectedArbeidsforhold(undefined);
       return;
     }
@@ -70,7 +65,6 @@ export function ArbeidsforholdFaktumWrapper(props: IProps) {
     if (selectedArbeidsforhold) {
       setShowFaktum(true);
       setSelectedArbeidsforhold(selectedArbeidsforhold);
-      trackValgtArbeidsforholdFraAAREG("dagpenger");
       setContextSelectedArbeidsforhold(selectedArbeidsforhold);
       saveFaktumToQuiz(faktum, selectedArbeidsforhold?.organisasjonsnavn);
     }

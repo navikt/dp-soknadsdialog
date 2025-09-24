@@ -14,11 +14,6 @@ import { IFaktum } from "../Faktum";
 import styles from "../Faktum.module.css";
 import periodeStyles from "./FaktumPeriode.module.css";
 import { useFirstRender } from "../../../hooks/useFirstRender";
-import { useUserInfo } from "../../../context/user-info-context";
-import {
-  trackKorrigertSluttdatoFraAAREG,
-  trackKorrigertStartdatoFraAAREG,
-} from "../../../amplitude/track-arbeidsforhold";
 
 export interface IPeriodeFaktumSvar {
   fom: string | null;
@@ -36,8 +31,6 @@ function FaktumPeriodeComponent(
   const { getFaktumTextById, getAppText } = useSanity();
   const isFirstRender = useFirstRender();
   const { unansweredFaktumId } = useValidation();
-  const { contextSelectedArbeidsforhold } = useUserInfo();
-  const faktumArbeidsforholdVarighet = faktum.beskrivendeId === "faktum.arbeidsforhold.varighet";
   const { validateAndIsValidPeriode, toError, fromError, setFromError, setToError } =
     useValidateFaktumPeriode(faktum);
 
@@ -138,10 +131,6 @@ function FaktumPeriodeComponent(
 
       const isValidPeriode = validateAndIsValidPeriode(periode);
 
-      if (faktumArbeidsforholdVarighet) {
-        trackEditiedPeriode(periode);
-      }
-
       if (isValidPeriode) {
         resetFromDate();
         saveFaktumToQuiz(faktum, periode);
@@ -163,30 +152,12 @@ function FaktumPeriodeComponent(
       const periode = { fom: selectedFromDate, tom: selectedToDate };
       const isValidPeriode = validateAndIsValidPeriode(periode);
 
-      if (faktumArbeidsforholdVarighet) {
-        trackEditiedPeriode(periode);
-      }
-
       if (isValidPeriode) {
         saveFaktumToQuiz(faktum, periode);
       } else {
         resetToDate();
         saveFaktumToQuiz(faktum, { fom: selectedFromDate });
       }
-    }
-  }
-
-  function trackEditiedPeriode(periode: IPeriodeFaktumSvar) {
-    if (contextSelectedArbeidsforhold && contextSelectedArbeidsforhold.startdato !== periode.fom) {
-      trackKorrigertStartdatoFraAAREG("dagpenger");
-    }
-
-    if (
-      periode.tom &&
-      contextSelectedArbeidsforhold &&
-      contextSelectedArbeidsforhold.sluttdato !== periode.tom
-    ) {
-      trackKorrigertSluttdatoFraAAREG("dagpenger");
     }
   }
 
@@ -200,10 +171,6 @@ function FaktumPeriodeComponent(
       }
 
       periode = { ...periode, tom: selectedToDate };
-    }
-
-    if (faktumArbeidsforholdVarighet) {
-      trackEditiedPeriode(periode);
     }
 
     const isValidPeriode = validateAndIsValidPeriode(periode);
