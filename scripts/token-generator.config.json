@@ -12,7 +12,7 @@
     },
     {
       "env": "ARBEIDSSOEKERREGISTERET_TOKEN",
-      "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag"
+      "url": "https://tokenx-token-generator.intern.dev.nav.no/api/obo?aud=dev-gcp:paw:paw-arbeidssoekerregisteret-api-oppslag-v2"
     }
   ]
 }

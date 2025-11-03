@@ -4,7 +4,7 @@ ingresses:
 base_path: "/dagpenger/dialog"
 dekorator:
   env: dev
-opppslagArbeidssokerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.dev.nav.no
+arbeidssokerregisteretUrl: https://oppslag-v2-arbeidssoekerregisteret.intern.dev.nav.no
 arbeidssokerregistreringUrl: https://www.ansatt.dev.nav.no/arbeid/registrering
 sanity_dataset: development
 unleash:

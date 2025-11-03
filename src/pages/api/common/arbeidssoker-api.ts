@@ -15,7 +15,7 @@ interface IArbeidssoekkerMetaResponse {
 }
 
 export async function getArbeidssokerperioder(onBehalfOfToken: string) {
-  const url = `${process.env.OPPSLAG_ARBEIDSSOKERREGISTERET_URL}/api/v1/arbeidssoekerperioder`;
+  const url = `${process.env.ARBEIDSSOKERREGISTERET_URL}/api/v1/arbeidssoekerperioder`;
 
   return await fetch(url, {
     method: "GET",
