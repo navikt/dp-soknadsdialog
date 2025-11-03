@@ -3,7 +3,7 @@ ingresses:
 base_path: "/dagpenger/dialog"
 dekorator:
   env: prod
-opppslagArbeidssokerregisteretUrl: https://oppslag-arbeidssoekerregisteret.intern.nav.no
+arbeidssokerregisteretUrl: https://oppslag-v2-arbeidssoekerregisteret.intern.nav.no
 arbeidssokerregistreringUrl: https://arbeidssokerregistrering.nav.no/
 sanity_dataset: production
 unleash:
