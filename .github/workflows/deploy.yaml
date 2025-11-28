@@ -124,9 +124,7 @@ jobs:
     needs: [test, build, upload-cdn]
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       id-token: write
-      actions: read
     steps:
       - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
@@ -142,9 +140,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
       id-token: write
-      actions: read
     steps:
       - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
