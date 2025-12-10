@@ -3,7 +3,7 @@ import fs from "fs";
 import { NextApiRequest, NextApiResponse } from "next";
 import path from "path";
 import { Readable } from "stream";
-import { logRequestError } from "../../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getMellomlagringOnBehalfOfToken } from "../../../../utils/auth.utils";
 
@@ -35,7 +35,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       return res.status(401).end();
     }
 
-    logger.info("Starter streaming av dokumentkrav fil", { urn });
+    logger.info(`Starter streaming av dokumentkrav fil=${urn}`);
 
     const requestUrl = `${process.env.MELLOMLAGRING_BASE_URL}/vedlegg/${urn}`;
 
@@ -48,7 +48,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     const response = await fetch(requestUrl, requestHeaders);
 
     if (!response.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         response.statusText,
         undefined,
         "Download dokumentkrav files - Failed to download files from dp-mellomlagring",
@@ -70,7 +70,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       const logErrorMessage =
         "Download dokumentkrav files - Missing request body to generate readable stream";
 
-      logRequestError(handlerErrorMessage, undefined, logErrorMessage);
+      logRequestErrorAsInfo(handlerErrorMessage, undefined, logErrorMessage);
 
       res.status(500).send(handlerErrorMessage);
     }
@@ -85,7 +85,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
       const logErrorMessage =
         "Download dokumentkrav files - Failed to streaming dokumentkrav file from dp-mellomlagring";
 
-      logRequestError(err.message, undefined, logErrorMessage);
+      logRequestErrorAsInfo(err.message, undefined, logErrorMessage);
       res.status(500).send(handlerErrorMessage);
     });
 
@@ -94,7 +94,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
     });
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, undefined, "Download dokumentkrav files - Generic error");
+    logRequestErrorAsInfo(message, undefined, "Download dokumentkrav files - Generic error");
     res.status(500).send(message);
   }
 }

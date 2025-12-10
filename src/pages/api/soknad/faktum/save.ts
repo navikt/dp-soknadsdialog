@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
 import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
-import { logRequestError } from "../../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../../error.logger";
 import metrics from "../../../../metrics";
 import { IQuizGeneratorFaktum, QuizFaktum, QuizFaktumSvarType } from "../../../../types/quiz.types";
 import { mockGenerellInnsending } from "../../../../localhost-data/mock-generell-innsending";
@@ -23,7 +23,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   const { uuid, faktum, svar } = req.body;
 
   if (!UUID_REGEX.test(uuid)) {
-    logRequestError("Ugyldig UUID format", uuid);
+    logRequestErrorAsInfo("Ugyldig UUID format", uuid);
 
     return res.status(400).send("Ugyldig UUID format");
   }
@@ -49,7 +49,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   stopTimer();
 
   if (!faktumResponse.ok) {
-    logRequestError(
+    logRequestErrorAsInfo(
       faktumResponse.statusText,
       uuid,
       "Save faktum - Failed to post faktum to dp-soknad",
@@ -61,7 +61,7 @@ async function saveFaktumHandler(req: NextApiRequest, res: NextApiResponse) {
   const soknadStateResponse = await getSoknadState(uuid, onBehalfOf.token, sistBesvart, requestId);
 
   if (!soknadStateResponse.ok) {
-    logRequestError(
+    logRequestErrorAsInfo(
       soknadStateResponse.statusText,
       uuid,
       "Save faktum - Failed to get new soknadState from dp-soknad",

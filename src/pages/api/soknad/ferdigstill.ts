@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { sanityClient } from "../../../../sanity-client";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 import { allTextsQuery } from "../../../sanity/groq-queries";
 import { textStructureToHtml } from "../../../sanity/textStructureToHtml";
 import { ISanityTexts } from "../../../types/sanity.types";
@@ -42,7 +42,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!ferdigstillResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         ferdigstillResponse.statusText,
         uuid,
         "Ferdigstill soknad - Failed to post to dp-soknad",
@@ -52,7 +52,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(ferdigstillResponse.status).send(ferdigstillResponse.statusText);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Ferdigstill soknad - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Ferdigstill soknad - Generic error");
     return res.status(500).send(message);
   }
 }

@@ -1,10 +1,10 @@
 import { logger } from "@navikt/next-logger";
 
-export function logRequestError(error: string, uuid?: string, message?: string) {
+export function logRequestErrorAsInfo(error: string, uuid?: string, message?: string) {
   const uuidWithFallback = uuid ?? "Not provided";
   const messageWithFallback = message ?? "RequestError:";
 
-  logger.error(`${messageWithFallback}: ${error}, uuid: ${uuidWithFallback}`);
+  logger.info(`${messageWithFallback}: ${error}, uuid: ${uuidWithFallback}`);
 }
 
 export class RequestError extends Error {

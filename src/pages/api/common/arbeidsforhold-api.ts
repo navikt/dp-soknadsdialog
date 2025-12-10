@@ -1,4 +1,4 @@
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 
 export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Response> {
   const url = `${process.env.API_BASE_URL}/arbeidsforhold`;
@@ -12,7 +12,7 @@ export async function getArbeidsforhold(onBehalfOfToken: string): Promise<Respon
   });
 
   if (!response.ok) {
-    logRequestError(response.statusText, undefined, "Feil i uthenting av arbeidsforhold");
+    logRequestErrorAsInfo(response.statusText, undefined, "Feil i uthenting av arbeidsforhold");
 
     return new Response("Feil i uthenting av arbeidsforhold", {
       status: response.status,

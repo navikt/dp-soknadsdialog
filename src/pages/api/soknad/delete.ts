@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 import { headersWithToken } from "../common/quiz-api";
 
 export interface IDeleteSoknadBody {
@@ -26,7 +26,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!deleteSoknadResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         deleteSoknadResponse.statusText,
         uuid,
         "Delete faktum - Failed to delete from dp-soknad",
@@ -37,7 +37,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(deleteSoknadResponse.status).send(deleteSoknadResponse.statusText);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Delete faktum - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Delete faktum - Generic error");
     return res.status(500).send(message);
   }
 }
