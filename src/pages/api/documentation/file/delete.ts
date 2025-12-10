@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { logRequestError } from "../../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../../error.logger";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import {
   getMellomlagringOnBehalfOfToken,
@@ -37,7 +37,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         dpSoknadResponse.statusText,
         uuid,
         "Dokumentkrav delete file - Delete from dp-soknad failed",
@@ -52,7 +52,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         mellomlagringResponse.statusText,
         uuid,
         "Dokumentkrav delete file - Delete from dp-mellomlagring failed",
@@ -62,7 +62,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dpSoknadResponse.status).send(dpSoknadResponse.statusText);
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Dokumentkrav delete file - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Dokumentkrav delete file - Generic error");
     return res.status(500).send(message);
   }
 }

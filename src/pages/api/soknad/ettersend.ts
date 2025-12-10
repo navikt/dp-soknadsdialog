@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
 import { headersWithToken } from "../common/quiz-api";
@@ -27,7 +27,7 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     });
 
     if (!ettersendResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         ettersendResponse.statusText,
         uuid,
         "Ettersend dokumentasjon - Failed to post ettersending",
@@ -37,7 +37,7 @@ async function ettersendHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(ettersendResponse.status).end();
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Ettersend dokumentasjon - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Ettersend dokumentasjon - Generic error");
     return res.status(500).send(message);
   }
 }

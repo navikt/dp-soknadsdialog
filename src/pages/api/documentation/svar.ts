@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 import { GyldigDokumentkravSvar } from "../../../types/documentation.types";
 import { getErrorMessage } from "../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../utils/auth.utils";
@@ -52,7 +52,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Dokumentkrav svar - failed to post svar to dp-soknad");
+    logRequestErrorAsInfo(message, uuid, "Dokumentkrav svar - failed to post svar to dp-soknad");
     return res.status(500).send(message);
   }
 }
