@@ -76,7 +76,7 @@ spec:
       external:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
-        - host: dagpenger-unleash-api.nav.cloud.nais.io
+        - host: teamdagpenger-unleash-api.nav.cloud.nais.io
 
       rules:
         - application: dp-soknad
