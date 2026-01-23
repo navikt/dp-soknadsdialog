@@ -42,7 +42,7 @@ export async function getServerSideProps(
     }
   }
 
-  if (featureToggles.brukerdialogFrontendRelease === true) {
+  if (featureToggles.brukerdialogGradvisProdsetting === true) {
     return {
       redirect: {
         destination: process.env.BRUKERDIALOG_URL || "/soknad",

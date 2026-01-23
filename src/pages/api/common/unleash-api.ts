@@ -2,13 +2,13 @@ import { logger } from "@navikt/next-logger";
 import { evaluateFlags, flagsClient, getDefinitions } from "@unleash/nextjs";
 
 export interface IFeatureToggles {
-  arbeidsforholdIsEnabled?: boolean;
-  brukerdialogFrontendRelease?: boolean;
+  arbeidsforhold?: boolean;
+  brukerdialogGradvisProdsetting?: boolean;
 }
 
 export const defaultFeatureToggles = {
-  arbeidsforholdIsEnabled: false,
-  brukerdialogFrontendRelease: false,
+  arbeidsforhold: false,
+  brukerdialogGradvisProdsetting: false,
 };
 
 export async function getFeatureToggles(): Promise<IFeatureToggles> {
@@ -19,8 +19,10 @@ export async function getFeatureToggles(): Promise<IFeatureToggles> {
     const { toggles } = evaluateFlags(definitions);
     const flags = flagsClient(toggles);
 
-    featureToggles.arbeidsforholdIsEnabled = flags.isEnabled("dp-soknadsdialog-arbeidsforhold");
-    featureToggles.brukerdialogFrontendRelease = flags.isEnabled("brukerdialog-frontend-release");
+    featureToggles.arbeidsforhold = flags.isEnabled("dp-soknadsdialog.arbeidsforhold");
+    featureToggles.brukerdialogGradvisProdsetting = flags.isEnabled(
+      "dp-soknadsdialog.brukerdialog-gradvis-prodsetting",
+    );
 
     return featureToggles;
   } catch (error) {

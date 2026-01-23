@@ -103,7 +103,7 @@ export default function GenerellInnsendingPage(props: IProps) {
   }
 
   return (
-    <FeatureTogglesProvider featureToggles={{ arbeidsforholdIsEnabled: false }}>
+    <FeatureTogglesProvider featureToggles={{ arbeidsforhold: false }}>
       <SoknadProvider initialState={soknadState}>
         <UserInfoProvider arbeidsforhold={[]}>
           <DokumentkravProvider initialState={dokumentkravList}>
