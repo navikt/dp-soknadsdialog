@@ -1,8 +1,9 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { IMineSoknader } from "../../types/quiz.types";
+import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
 import { getMineSoknader } from "../api/common/quiz-api";
+import { getFeatureToggles } from "../api/common/unleash-api";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -25,6 +26,7 @@ export async function getServerSideProps(
     };
   }
 
+  const featureToggles = await getFeatureToggles();
   const mineSoknaderResponse = await getMineSoknader(onBehalfOf.token);
 
   if (mineSoknaderResponse.ok) {
@@ -38,6 +40,15 @@ export async function getServerSideProps(
         },
       };
     }
+  }
+
+  if (featureToggles.brukerdialogFrontendRelease === true) {
+    return {
+      redirect: {
+        destination: process.env.BRUKERDIALOG_URL || "/soknad",
+        permanent: false,
+      },
+    };
   }
 
   return {

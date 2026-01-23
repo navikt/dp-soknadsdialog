@@ -9,3 +9,4 @@ sanity_dataset: production
 unleash:
   url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production
+brukerdialogUrl: https://brukerdialog-dagpenger.nav.no
