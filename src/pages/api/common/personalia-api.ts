@@ -1,4 +1,4 @@
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 
 export async function getPersonalia(onBehalfOfToken: string) {
   const url = `${process.env.API_BASE_URL}/personalia`;
@@ -12,7 +12,7 @@ export async function getPersonalia(onBehalfOfToken: string) {
   });
 
   if (!response.ok) {
-    logRequestError(response.statusText, undefined, "Feil i uthenting av personalia");
+    logRequestErrorAsInfo(response.statusText, undefined, "Feil i uthenting av personalia");
 
     return new Response("Feil i uthenting av personalia", {
       status: response.status,

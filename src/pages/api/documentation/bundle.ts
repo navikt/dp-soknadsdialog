@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { v4 as uuidV4 } from "uuid";
-import { logRequestError } from "../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../error.logger";
 import Metrics from "../../../metrics";
 import { apiFetch, getErrorMessage } from "../../../utils/api.utils";
 import {
@@ -43,7 +43,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     bundlingTimer();
 
     if (!mellomlagringResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         mellomlagringResponse.statusText,
         uuid,
         "Bundle dokumentkrav - Could not bundle files in dp-mellomlagring",
@@ -65,7 +65,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     );
 
     if (!dpSoknadResponse.ok) {
-      logRequestError(
+      logRequestErrorAsInfo(
         dpSoknadResponse.statusText,
         uuid,
         "Bundle dokumentkrav - Could not save bundle info to dp-soknad",
@@ -76,7 +76,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dpSoknadResponse.status).end();
   } catch (error) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Bundle dokumentkrav - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Bundle dokumentkrav - Generic error");
     return res.status(500).send(message);
   }
 }

@@ -9,10 +9,10 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: node_modules
         with:
           path: ./node_modules
@@ -34,13 +34,13 @@ jobs:
     needs: [install]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: "22.x"
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
@@ -55,19 +55,19 @@ jobs:
       id-token: "write"
       packages: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: "22.x"
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./node_modules
           key: modules-${{ hashFiles('package-lock.json') }}
 
       - name: Cache .next/cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./.next/cache
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
@@ -91,7 +91,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
       - name: Cache static files
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./.next/static
           key: ${{ github.sha }}
@@ -105,7 +105,7 @@ jobs:
       contents: "read"
       id-token: "write"
     steps:
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ./.next/static
           key: ${{ github.sha }}
@@ -123,11 +123,12 @@ jobs:
   deploy-dev:
     needs: [test, build, upload-cdn]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VARS: .nais/vars-dev.yaml
@@ -138,11 +139,12 @@ jobs:
     needs: [test, build, upload-cdn]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: nais/deploy/actions/deploy@v2
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VARS: .nais/vars-prod.yaml

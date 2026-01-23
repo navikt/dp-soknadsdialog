@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { logRequestError } from "../../../../error.logger";
+import { logRequestErrorAsInfo } from "../../../../error.logger";
 import { mockDokumentkravList } from "../../../../localhost-data/dokumentkrav-list";
 import { getErrorMessage } from "../../../../utils/api.utils";
 import { getSoknadOnBehalfOfToken } from "../../../../utils/auth.utils";
@@ -33,7 +33,7 @@ async function dokumentkravHandler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(dokumentkravResponse.status).send(dokumentkrav);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    logRequestError(message, uuid, "Get dokumentkrav - Generic error");
+    logRequestErrorAsInfo(message, uuid, "Get dokumentkrav - Generic error");
     return res.status(500).send(message);
   }
 }
