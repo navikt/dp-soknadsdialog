@@ -8,5 +8,5 @@ arbeidssokerregisteretUrl: https://oppslag-v2-arbeidssoekerregisteret.intern.dev
 arbeidssokerregistreringUrl: https://www.ansatt.dev.nav.no/arbeid/registrering
 sanity_dataset: development
 unleash:
-  url : https://teamdagpenger-unleash-api.nav.cloud.nais.io
+  url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: development
