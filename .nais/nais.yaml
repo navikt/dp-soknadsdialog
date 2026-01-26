@@ -56,6 +56,8 @@ spec:
       value: "{{sanity_dataset}}"
     - name: UNLEASH_SERVER_API_URL
       value: "{{unleash.url}}"
+    - name: BRUKERDIALOG_URL
+      value: "{{brukerdialogUrl}}"
   envFrom:
     - secret: dp-soknadsdialog-unleash-api-token
   idporten:
@@ -76,7 +78,7 @@ spec:
       external:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
-        - host: dagpenger-unleash-api.nav.cloud.nais.io
+        - host: teamdagpenger-unleash-api.nav.cloud.nais.io
 
       rules:
         - application: dp-soknad
