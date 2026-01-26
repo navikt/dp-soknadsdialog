@@ -45,7 +45,7 @@ export async function getServerSideProps(
   if (featureToggles.brukerdialogGradvisProdsetting === true) {
     return {
       redirect: {
-        destination: process.env.BRUKERDIALOG_URL || "/soknad",
+        destination: process.env.BRUKERDIALOG_URL || "/soknad/start-soknad",
         permanent: false,
       },
     };
