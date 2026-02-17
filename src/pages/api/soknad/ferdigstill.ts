@@ -53,7 +53,7 @@ async function ferdigstillHandler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     logRequestErrorAsInfo(message, uuid, "Ferdigstill soknad - Generic error");
-    return res.status(500).send(message);
+    return res.status(500).send("Internal server error");
   }
 }
 
