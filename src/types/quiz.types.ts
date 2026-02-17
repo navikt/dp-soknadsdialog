@@ -118,6 +118,14 @@ export interface IMineSoknader {
   innsendte?: IInnsentSoknad[];
 }
 
+export interface IOrkestratorSoknad {
+  søknadId: string;
+  tittel: string;
+  innsendtTimestamp?: string;
+  oppdatertTidspunkt?: string;
+  status: string;
+}
+
 export type ISoknadStatuser =
   | "Paabegynt"
   | "UnderBehandling"

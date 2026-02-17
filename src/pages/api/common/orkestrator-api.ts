@@ -1,8 +1,23 @@
-export function createSoknadOrkestrator(onBehalfOfToken: string) {
-  const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/start`;
+import { validateUUID } from "../../../utils/uuid.utils";
+
+export function getOrkestratorSoknader(onBehalfOfToken: string) {
+  const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/mine-soknader`;
 
   return fetch(url, {
-    method: "POST",
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
+
+export function deleteOrkestratorSoknad(onBehalfOfToken: string, soknadUuid: string) {
+  validateUUID(soknadUuid);
+
+  const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${soknadUuid}`;
+
+  return fetch(url, {
+    method: "DELETE",
     headers: {
       Authorization: `Bearer ${onBehalfOfToken}`,
     },

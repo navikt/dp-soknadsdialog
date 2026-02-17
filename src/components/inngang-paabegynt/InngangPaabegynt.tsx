@@ -1,7 +1,7 @@
 import { BodyLong, Button } from "@navikt/ds-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
@@ -16,13 +16,27 @@ import styles from "./inngangPaabegynt.module.css";
 interface IProps {
   paabegynt: IPaabegyntSoknad;
   arbeidssokerStatus: IArbeidssokerStatus;
+  isOrkestratorSoknad?: boolean;
+  brukerdialogUrl: string;
 }
 
-export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
+export function InngangPaabegynt({
+  paabegynt,
+  arbeidssokerStatus,
+  isOrkestratorSoknad,
+  brukerdialogUrl,
+}: IProps) {
   const router = useRouter();
   const { getAppText } = useSanity();
-  const [deleteSoknad, deleteSoknadStatus] = useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
-  const [isNagivating, setNavigating] = useState(false);
+
+  const [deleteQuizSoknad, deleteQuizSoknadStatus] =
+    useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
+  const [deleteOrkestratorSoknad, deleteOrkestratorSoknadStatus] =
+    useDeleteRequest<IDeleteSoknadBody>("orkestrator/delete");
+
+  const deleteSoknadStatus = isOrkestratorSoknad
+    ? deleteOrkestratorSoknadStatus
+    : deleteQuizSoknadStatus;
 
   useEffect(() => {
     if (deleteSoknadStatus === "success") {
@@ -30,10 +44,14 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
       router.push(destinationPage);
     }
-  }, [deleteSoknadStatus]);
+  }, [deleteSoknadStatus, arbeidssokerStatus, router]);
 
-  function fortsettSoknad() {
-    setNavigating(true);
+  function handleDeleteSoknad() {
+    if (isOrkestratorSoknad) {
+      deleteOrkestratorSoknad({ uuid: paabegynt.soknadUuid });
+    } else {
+      deleteQuizSoknad({ uuid: paabegynt.soknadUuid });
+    }
   }
 
   return (
@@ -44,15 +62,23 @@ export function InngangPaabegynt({ paabegynt, arbeidssokerStatus }: IProps) {
         {getAppText("inngang.paabegyntsoknad.header.fortsett-eller-starte-ny")}
       </BodyLong>
 
-      <Link href={`/soknad/${paabegynt.soknadUuid}?fortsett=true`} passHref legacyBehavior>
-        <Button variant="primary" as="a" loading={isNagivating} onClick={fortsettSoknad}>
+      <Link
+        href={
+          isOrkestratorSoknad
+            ? `${brukerdialogUrl}/${paabegynt.soknadUuid}/personalia`
+            : `/soknad/${paabegynt.soknadUuid}?fortsett=true`
+        }
+        passHref
+        legacyBehavior
+      >
+        <Button variant="primary" as="a">
           {getAppText("inngang.paabegyntsoknad.fortsett-paabegynt-knapp")}
         </Button>
       </Link>
 
       <Button
         variant="secondary"
-        onClick={() => deleteSoknad({ uuid: paabegynt.soknadUuid })}
+        onClick={handleDeleteSoknad}
         loading={deleteSoknadStatus === "pending"}
       >
         {getAppText("inngang.paabegyntsoknad.start-en-ny-knapp")}

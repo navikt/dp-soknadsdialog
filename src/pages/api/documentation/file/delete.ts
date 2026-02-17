@@ -63,7 +63,7 @@ async function deleteFileHandler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestErrorAsInfo(message, uuid, "Dokumentkrav delete file - Generic error");
-    return res.status(500).send(message);
+    return res.status(500).send("Internal server error");
   }
 }
 

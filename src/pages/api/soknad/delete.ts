@@ -38,7 +38,7 @@ async function deleteHandler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestErrorAsInfo(message, uuid, "Delete faktum - Generic error");
-    return res.status(500).send(message);
+    return res.status(500).send("Internal server error");
   }
 }
 

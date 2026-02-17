@@ -10,3 +10,4 @@ unleash:
   url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production
 brukerdialogUrl: https://brukerdialog-dagpenger.nav.no
+dp_soknad_orkestrator_url: http://dp-soknad-orkestrator

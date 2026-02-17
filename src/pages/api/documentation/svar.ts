@@ -53,7 +53,7 @@ async function saveSvarHandler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     logRequestErrorAsInfo(message, uuid, "Dokumentkrav svar - failed to post svar to dp-soknad");
-    return res.status(500).send(message);
+    return res.status(500).send("Internal server error");
   }
 }
 
