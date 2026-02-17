@@ -1,3 +1,5 @@
+import { validateUUID } from "../../../utils/uuid.utils";
+
 export function getOrkestratorSoknader(onBehalfOfToken: string) {
   const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/mine-soknader`;
 
@@ -10,6 +12,8 @@ export function getOrkestratorSoknader(onBehalfOfToken: string) {
 }
 
 export function deleteOrkestratorSoknad(onBehalfOfToken: string, soknadUuid: string) {
+  validateUUID(soknadUuid);
+
   const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${soknadUuid}`;
 
   return fetch(url, {
