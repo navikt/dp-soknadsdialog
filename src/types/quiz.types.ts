@@ -121,8 +121,8 @@ export interface IMineSoknader {
 export interface IOrkestratorSoknad {
   søknadId: string;
   tittel: string;
-  innsendtTimestamp: string;
-  oppdatertTidspunkt: string;
+  innsendtTimestamp?: string;
+  oppdatertTidspunkt?: string;
   status: string;
 }
 

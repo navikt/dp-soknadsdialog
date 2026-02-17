@@ -1,12 +1,12 @@
 import { BodyLong, Button } from "@navikt/ds-react";
 import Link from "next/link";
 import { useSanity } from "../../context/sanity-context";
-import { IExtendedOrkestratorSoknad } from "../../views/inngang/Inngang";
+import { ICombinedInnsendtSoknad } from "../../views/inngang/Inngang";
 import { FormattedDate } from "../FormattedDate";
 import styles from "./inngangSendDocument.module.css";
 
 interface IProps {
-  innsendte?: IExtendedOrkestratorSoknad[];
+  innsendte?: ICombinedInnsendtSoknad[];
   brukerdialogUrl: string;
 }
 

@@ -1,12 +1,12 @@
 import { logger } from "@navikt/next-logger";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { IMineSoknader, IOrkestratorSoknad } from "../../types/quiz.types";
 import { getErrorDetails } from "../../utils/api.utils";
 import {
   getArbeidsoekkerregisteretOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
   getSoknadOrkestratorOnBehalfOfToken,
 } from "../../utils/auth.utils";
-import { IMineSoknader, IOrkestratorSoknad } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
 import {
@@ -14,9 +14,8 @@ import {
   IArbeidssokerperioder,
   IArbeidssokerStatus,
 } from "../api/common/arbeidssoker-api";
-import { getMineSoknader } from "../api/common/quiz-api";
 import { getOrkestratorSoknader } from "../api/common/orkestrator-api";
-import { subDays } from "date-fns";
+import { getMineSoknader } from "../api/common/quiz-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -89,12 +88,7 @@ export async function getServerSideProps(
     logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
     errorCode = orkestratorSoknaderResponse.status;
   } else {
-    const within30Days = subDays(Date.now(), 30);
-    const orkestratorSoknaderData: IOrkestratorSoknad[] = await orkestratorSoknaderResponse.json();
-
-    orkestratorSoknader = orkestratorSoknaderData.filter(
-      (soknad: IOrkestratorSoknad) => new Date(soknad.innsendtTimestamp) > within30Days,
-    );
+    orkestratorSoknader = await orkestratorSoknaderResponse.json();
   }
 
   if (arbeidssokerStatusResponse.ok) {
@@ -106,7 +100,11 @@ export async function getServerSideProps(
     arbeidssokerStatus = "ERROR";
   }
 
-  const userHasNoApplication = mineSoknader && Object.keys(mineSoknader).length === 0;
+  const userHasNoApplication =
+    mineSoknader &&
+    Object.keys(mineSoknader).length === 0 &&
+    (!orkestratorSoknader || orkestratorSoknader.length === 0);
+
   if (userHasNoApplication) {
     return {
       redirect: {

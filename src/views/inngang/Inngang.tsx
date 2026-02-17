@@ -1,23 +1,29 @@
-import { useState } from "react";
 import { Button, Heading } from "@navikt/ds-react";
 import Link from "next/link";
+import { useState } from "react";
 import { InngangPaabegynt } from "../../components/inngang-paabegynt/InngangPaabegynt";
 import { InngangSendDocument } from "../../components/inngang-send-document/InngangSendDocument";
 import { PageMeta } from "../../components/PageMeta";
 import { useSanity } from "../../context/sanity-context";
+import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 import { IInnsentSoknad, IOrkestratorSoknad, IPaabegyntSoknad } from "../../types/quiz.types";
 import styles from "./Inngang.module.css";
-import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
+import {
+  combineAndSortInnsendte,
+  mapOrkestratorInnsendteSoknader,
+  mapOrkestratorPaabegyntSoknader,
+  mapQuizInnsendteSoknader,
+} from "./inngang.utils";
 
 interface IProps {
   paabegynt?: IPaabegyntSoknad;
   innsendte?: IInnsentSoknad[];
-  orkestratorSoknader: IOrkestratorSoknad[];
+  orkestratorSoknader?: IOrkestratorSoknad[];
   arbeidssokerStatus: IArbeidssokerStatus;
   brukerdialogUrl: string;
 }
 
-export interface IExtendedOrkestratorSoknad extends IInnsentSoknad {
+export interface ICombinedInnsendtSoknad extends IInnsentSoknad {
   isOrkestratorSoknad: boolean;
 }
 
@@ -28,39 +34,13 @@ export function Inngang(props: IProps) {
   const destinationPage =
     props.arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
 
-  const orkestratorInnsendte: IExtendedOrkestratorSoknad[] =
-    props.orkestratorSoknader
-      ?.filter(
-        (soknad) =>
-          soknad.status === "INNSENDT" ||
-          soknad.status === "JOURNALFØRT" ||
-          soknad.status === "GODKJENT",
-      )
-      .map((soknad) => ({
-        soknadUuid: soknad.søknadId,
-        forstInnsendt: soknad.innsendtTimestamp,
-        isOrkestratorSoknad: true,
-      })) || [];
+  const orkestratorInnsendte = mapOrkestratorInnsendteSoknader(props.orkestratorSoknader);
+  const quizInnsendte = mapQuizInnsendteSoknader(props.innsendte);
+  const alleInnsendte = combineAndSortInnsendte(orkestratorInnsendte, quizInnsendte);
+  const orkestratorPaabegynt = mapOrkestratorPaabegyntSoknader(props.orkestratorSoknader);
 
-  const standardInnsendte: IExtendedOrkestratorSoknad[] =
-    props.innsendte?.map((soknad) => ({
-      ...soknad,
-      isOrkestratorSoknad: false,
-    })) || [];
-
-  const alleInnsendte: IExtendedOrkestratorSoknad[] = [
-    ...orkestratorInnsendte,
-    ...standardInnsendte,
-  ].sort((a, b) => new Date(b.forstInnsendt).getTime() - new Date(a.forstInnsendt).getTime());
-
-  // const orkestratorPaabegynt: IPaabegyntSoknad[] =
-  //   props.orkestratorSoknader
-  //     ?.filter((soknad) => soknad.status === "PÅBEGYNT")
-  //     .map((soknad) => ({
-  //       soknadUuid: soknad.søknadId,
-  //       opprettet: soknad.oppdatertTidspunkt,
-  //       sistEndretAvbruker: soknad.oppdatertTidspunkt,
-  //     })) || [];
+  const paabegyntSoknad = props.paabegynt || orkestratorPaabegynt[0];
+  const isOrkestratorPaabegyntSoknad = !props.paabegynt && Boolean(orkestratorPaabegynt[0]);
 
   return (
     <main id="maincontent" tabIndex={-1}>
@@ -74,13 +54,15 @@ export function Inngang(props: IProps) {
       {alleInnsendte.length > 0 && (
         <InngangSendDocument innsendte={alleInnsendte} brukerdialogUrl={props.brukerdialogUrl} />
       )}
-      {props.paabegynt && (
+      {paabegyntSoknad && (
         <InngangPaabegynt
-          paabegynt={props.paabegynt}
+          paabegynt={paabegyntSoknad}
           arbeidssokerStatus={props.arbeidssokerStatus}
+          isOrkestratorSoknad={isOrkestratorPaabegyntSoknad}
+          brukerdialogUrl={props.brukerdialogUrl}
         />
       )}
-      {!props.paabegynt && (
+      {!paabegyntSoknad && (
         <Link href={destinationPage} passHref legacyBehavior>
           <Button variant="primary" as="a" loading={navigating} onClick={() => setNavigating(true)}>
             {getAppText("inngang.start-ny-soknad-knapp")}

@@ -8,3 +8,14 @@ export function getOrkestratorSoknader(onBehalfOfToken: string) {
     },
   });
 }
+
+export function deleteOrkestratorSoknad(onBehalfOfToken: string, soknadUuid: string) {
+  const url = `${process.env.DP_SOKNAD_ORKESTRATOR_URL}/soknad/${soknadUuid}`;
+
+  return fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${onBehalfOfToken}`,
+    },
+  });
+}
