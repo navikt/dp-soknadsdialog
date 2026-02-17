@@ -9,12 +9,7 @@ export function mapOrkestratorInnsendteSoknader(
 
   return (
     orkestratorSoknader
-      ?.filter(
-        (soknad) =>
-          soknad.status === "INNSENDT" ||
-          soknad.status === "JOURNALFØRT" ||
-          soknad.status === "GODKJENT",
-      )
+      ?.filter((soknad) => soknad.status === "INNSENDT" || soknad.status === "JOURNALFØRT")
       .filter(
         (soknad) =>
           soknad.innsendtTimestamp !== undefined &&
