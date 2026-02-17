@@ -57,7 +57,7 @@ spec:
     - name: UNLEASH_SERVER_API_URL
       value: "{{unleash.url}}"
     - name: BRUKERDIALOG_URL
-      value: "{{brukerdialogUrl}}
+      value: "{{brukerdialogUrl}}"
     - name: DP_SOKNAD_ORKESTRATOR_URL
       value: "{{ dp_soknad_orkestrator_url }}"
   envFrom:
