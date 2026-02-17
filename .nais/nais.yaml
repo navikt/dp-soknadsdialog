@@ -57,7 +57,9 @@ spec:
     - name: UNLEASH_SERVER_API_URL
       value: "{{unleash.url}}"
     - name: BRUKERDIALOG_URL
-      value: "{{brukerdialogUrl}}"
+      value: "{{brukerdialogUrl}}
+    - name: DP_SOKNAD_ORKESTRATOR_URL
+      value: "{{ dp_soknad_orkestrator_url }}"
   envFrom:
     - secret: dp-soknadsdialog-unleash-api-token
   idporten:
@@ -79,10 +81,10 @@ spec:
         - host: rt6o382n.apicdn.sanity.io
         - host: www.nav.no
         - host: teamdagpenger-unleash-api.nav.cloud.nais.io
-
       rules:
         - application: dp-soknad
         - application: dp-mellomlagring
+        - application: dp-soknad-orkestrator
         - application: paw-arbeidssoekerregisteret-api-oppslag-v2
           namespace: paw
         - application: nav-dekoratoren

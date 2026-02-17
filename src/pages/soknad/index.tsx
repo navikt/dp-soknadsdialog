@@ -4,8 +4,9 @@ import { getErrorDetails } from "../../utils/api.utils";
 import {
   getArbeidsoekkerregisteretOnBehalfOfToken,
   getSoknadOnBehalfOfToken,
+  getSoknadOrkestratorOnBehalfOfToken,
 } from "../../utils/auth.utils";
-import { IMineSoknader } from "../../types/quiz.types";
+import { IMineSoknader, IOrkestratorSoknad } from "../../types/quiz.types";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
 import {
@@ -14,10 +15,14 @@ import {
   IArbeidssokerStatus,
 } from "../api/common/arbeidssoker-api";
 import { getMineSoknader } from "../api/common/quiz-api";
+import { getOrkestratorSoknader } from "../api/common/orkestrator-api";
+import { subDays } from "date-fns";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
+  orkestratorSoknader: IOrkestratorSoknad[] | null;
   arbeidssokerStatus: IArbeidssokerStatus;
+  brukerdialogUrl: string;
   errorCode: number | null;
 }
 
@@ -40,16 +45,19 @@ export async function getServerSideProps(
             { soknadUuid: "localhost-uuid-innsent-2", forstInnsendt: "2022-10-21T09:42:37" },
           ],
         },
+        orkestratorSoknader: null,
         arbeidssokerStatus: "REGISTERED",
         errorCode: null,
+        brukerdialogUrl: "https://brukerdialog-dagpenger.ansatt.dev.nav.no",
       },
     };
   }
 
   const soknadObo = await getSoknadOnBehalfOfToken(context.req);
   const arbeidsoekerObo = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
+  const soknadOrkestratorObo = await getSoknadOrkestratorOnBehalfOfToken(context.req);
 
-  if (!soknadObo.ok || !arbeidsoekerObo.ok) {
+  if (!soknadObo.ok || !arbeidsoekerObo.ok || !soknadOrkestratorObo.ok) {
     return {
       redirect: {
         destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
@@ -59,10 +67,13 @@ export async function getServerSideProps(
   }
 
   let mineSoknader = null;
+  let orkestratorSoknader = null;
   let arbeidssokerStatus: IArbeidssokerStatus;
   let errorCode = null;
+  const brukerdialogUrl = process.env.BRUKERDIALOG_URL || "https://brukerdialog-dagpenger.nav.no";
 
   const mineSoknaderResponse = await getMineSoknader(soknadObo.token);
+  const orkestratorSoknaderResponse = await getOrkestratorSoknader(soknadOrkestratorObo.token);
   const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidsoekerObo.token);
 
   if (!mineSoknaderResponse.ok) {
@@ -71,6 +82,19 @@ export async function getServerSideProps(
     errorCode = mineSoknaderResponse.status;
   } else {
     mineSoknader = await mineSoknaderResponse.json();
+  }
+
+  if (!orkestratorSoknaderResponse.ok) {
+    const errorData = await getErrorDetails(orkestratorSoknaderResponse);
+    logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
+    errorCode = orkestratorSoknaderResponse.status;
+  } else {
+    const within30Days = subDays(Date.now(), 30);
+    const orkestratorSoknaderData: IOrkestratorSoknad[] = await orkestratorSoknaderResponse.json();
+
+    orkestratorSoknader = orkestratorSoknaderData.filter(
+      (soknad: IOrkestratorSoknad) => new Date(soknad.innsendtTimestamp) > within30Days,
+    );
   }
 
   if (arbeidssokerStatusResponse.ok) {
@@ -96,14 +120,17 @@ export async function getServerSideProps(
   return {
     props: {
       mineSoknader,
+      orkestratorSoknader,
       arbeidssokerStatus,
       errorCode,
+      brukerdialogUrl,
     },
   };
 }
 
 export default function InngangPage(props: IProps) {
-  const { errorCode, mineSoknader, arbeidssokerStatus } = props;
+  const { errorCode, mineSoknader, arbeidssokerStatus, orkestratorSoknader, brukerdialogUrl } =
+    props;
 
   if (errorCode) {
     return (
@@ -120,6 +147,8 @@ export default function InngangPage(props: IProps) {
       paabegynt={mineSoknader?.paabegynt}
       innsendte={mineSoknader?.innsendte}
       arbeidssokerStatus={arbeidssokerStatus}
+      orkestratorSoknader={orkestratorSoknader || []}
+      brukerdialogUrl={brukerdialogUrl}
     />
   );
 }
