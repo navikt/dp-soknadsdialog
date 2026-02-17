@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { IInnsentSoknad, IOrkestratorSoknad } from "../../types/quiz.types";
 import {
-  combineAndSortInnsendte,
+  combineAndSortInnsendteSoknader,
   mapOrkestratorInnsendteSoknader,
   mapOrkestratorPaabegyntSoknader,
   mapQuizInnsendteSoknader,
@@ -234,9 +234,9 @@ describe("mapQuizInnsendteSoknader", () => {
   });
 });
 
-describe("combineAndSortInnsendte", () => {
+describe("combineAndSortInnsendteSoknader", () => {
   test("should return empty array when both inputs are empty", () => {
-    expect(combineAndSortInnsendte([], [])).toStrictEqual([]);
+    expect(combineAndSortInnsendteSoknader([], [])).toStrictEqual([]);
   });
 
   test("should return only orkestrator soknader when standard is empty", () => {
@@ -248,7 +248,7 @@ describe("combineAndSortInnsendte", () => {
       },
     ];
 
-    const result = combineAndSortInnsendte(orkestrator, []);
+    const result = combineAndSortInnsendteSoknader(orkestrator, []);
 
     expect(result).toStrictEqual(orkestrator);
   });
@@ -262,7 +262,7 @@ describe("combineAndSortInnsendte", () => {
       },
     ];
 
-    const result = combineAndSortInnsendte([], standard);
+    const result = combineAndSortInnsendteSoknader([], standard);
 
     expect(result).toStrictEqual(standard);
   });
@@ -294,7 +294,7 @@ describe("combineAndSortInnsendte", () => {
       },
     ];
 
-    const result = combineAndSortInnsendte(orkestrator, standard);
+    const result = combineAndSortInnsendteSoknader(orkestrator, standard);
 
     expect(result).toHaveLength(4);
     expect(result[0].soknadUuid).toBe("b"); // 2026-02-16 (newest)
@@ -320,7 +320,7 @@ describe("combineAndSortInnsendte", () => {
       },
     ];
 
-    const result = combineAndSortInnsendte(orkestrator, standard);
+    const result = combineAndSortInnsendteSoknader(orkestrator, standard);
 
     expect(result).toHaveLength(2);
     // Order doesn't matter when dates are the same, but both should be present

@@ -9,7 +9,7 @@ import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
 import { IInnsentSoknad, IOrkestratorSoknad, IPaabegyntSoknad } from "../../types/quiz.types";
 import styles from "./Inngang.module.css";
 import {
-  combineAndSortInnsendte,
+  combineAndSortInnsendteSoknader,
   mapOrkestratorInnsendteSoknader,
   mapOrkestratorPaabegyntSoknader,
   mapQuizInnsendteSoknader,
@@ -34,13 +34,16 @@ export function Inngang(props: IProps) {
   const destinationPage =
     props.arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker";
 
-  const orkestratorInnsendte = mapOrkestratorInnsendteSoknader(props.orkestratorSoknader);
-  const quizInnsendte = mapQuizInnsendteSoknader(props.innsendte);
-  const alleInnsendte = combineAndSortInnsendte(orkestratorInnsendte, quizInnsendte);
-  const orkestratorPaabegynt = mapOrkestratorPaabegyntSoknader(props.orkestratorSoknader);
+  const orkestratorInnsendteSoknader = mapOrkestratorInnsendteSoknader(props.orkestratorSoknader);
+  const quizInnsendteSoknader = mapQuizInnsendteSoknader(props.innsendte);
+  const innsendteSoknader = combineAndSortInnsendteSoknader(
+    orkestratorInnsendteSoknader,
+    quizInnsendteSoknader,
+  );
 
-  const paabegyntSoknad = props.paabegynt || orkestratorPaabegynt[0];
-  const isOrkestratorPaabegyntSoknad = !props.paabegynt && Boolean(orkestratorPaabegynt[0]);
+  const orkestratorPaabegyntSoknader = mapOrkestratorPaabegyntSoknader(props.orkestratorSoknader);
+  const paabegyntSoknad = props.paabegynt || orkestratorPaabegyntSoknader[0];
+  const isOrkestratorPaabegyntSoknad = !props.paabegynt && Boolean(orkestratorPaabegyntSoknader[0]);
 
   return (
     <main id="maincontent" tabIndex={-1}>
@@ -51,8 +54,11 @@ export function Inngang(props: IProps) {
       <Heading level="1" size="xlarge" className={styles.inngangPageHeader}>
         {getAppText("inngang.tittel")}
       </Heading>
-      {alleInnsendte.length > 0 && (
-        <InngangSendDocument innsendte={alleInnsendte} brukerdialogUrl={props.brukerdialogUrl} />
+      {innsendteSoknader.length > 0 && (
+        <InngangSendDocument
+          innsendte={innsendteSoknader}
+          brukerdialogUrl={props.brukerdialogUrl}
+        />
       )}
       {paabegyntSoknad && (
         <InngangPaabegynt
