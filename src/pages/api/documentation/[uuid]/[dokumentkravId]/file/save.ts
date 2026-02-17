@@ -35,6 +35,8 @@ async function saveFileHandler(req: NextApiRequest, res: NextApiResponse) {
   validateUUID(uuid);
 
   const dokumentkravId = req.query.dokumentkravId as string;
+  validateUUID(dokumentkravId);
+
   const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
   const mellomlagringOnBehalfOf = await getMellomlagringOnBehalfOfToken(req);
 
@@ -92,6 +94,7 @@ async function saveFileToMellomlagring(
 ) {
   const buffers: Uint8Array[] = [];
   validateUUID(uuid);
+  validateUUID(dokumentkravId);
 
   await new Promise((resolve) => {
     req
