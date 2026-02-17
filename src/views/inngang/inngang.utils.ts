@@ -16,13 +16,13 @@ export function mapOrkestratorInnsendteSoknader(
           soknad.status === "GODKJENT",
       )
       .filter(
-        (soknad): soknad is IOrkestratorSoknad & { innsendtTimestamp: string } =>
+        (soknad) =>
           soknad.innsendtTimestamp !== undefined &&
           new Date(soknad.innsendtTimestamp) > within30Days,
       )
       .map((soknad) => ({
         soknadUuid: soknad.søknadId,
-        forstInnsendt: soknad.innsendtTimestamp,
+        forstInnsendt: soknad.innsendtTimestamp!,
         isOrkestratorSoknad: true,
       })) || []
   );
@@ -53,14 +53,11 @@ export function mapOrkestratorPaabegyntSoknader(
 ): IPaabegyntSoknad[] {
   return (
     orkestratorSoknader
-      ?.filter(
-        (soknad): soknad is IOrkestratorSoknad & { oppdatertTidspunkt: string } =>
-          soknad.status === "PÅBEGYNT" && soknad.oppdatertTidspunkt !== undefined,
-      )
+      ?.filter((soknad) => soknad.status === "PÅBEGYNT" && soknad.oppdatertTidspunkt !== undefined)
       .map((soknad) => ({
         soknadUuid: soknad.søknadId,
-        opprettet: soknad.oppdatertTidspunkt,
-        sistEndretAvbruker: soknad.oppdatertTidspunkt,
+        opprettet: soknad.oppdatertTidspunkt!,
+        sistEndretAvbruker: soknad.oppdatertTidspunkt!,
       })) || []
   );
 }
