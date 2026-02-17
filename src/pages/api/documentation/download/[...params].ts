@@ -95,7 +95,7 @@ async function downloadHandler(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     const message = getErrorMessage(error);
     logRequestErrorAsInfo(message, undefined, "Download dokumentkrav files - Generic error");
-    res.status(500).send(message);
+    res.status(500).send("Internal server error");
   }
 }
 

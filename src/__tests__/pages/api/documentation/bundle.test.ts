@@ -26,7 +26,7 @@ afterEach(() => {
   fetch.resetMocks();
 });
 const dokumentkravBundleMockData: IDocumentationBundleBody = {
-  uuid: "1234",
+  uuid: "3a7f8e2b-4c9d-4f1a-b8e6-5d2c1a9f3e7b",
   dokumentkravId: "5678",
   fileUrns: [
     {

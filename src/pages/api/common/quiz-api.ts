@@ -1,6 +1,7 @@
 import { formatISO, subDays } from "date-fns";
 import { v4 as uuidV4 } from "uuid";
 import { quizMalResponse } from "../../../localhost-data/quiz-mal-response";
+import { validateUUID } from "../../../utils/uuid.utils";
 
 export const headersWithToken = (onBehalfOfToken: string) => ({
   "Content-Type": "application/json",
@@ -85,6 +86,8 @@ export function getSoknadState(
     url += `?sistLagret=${lastSaved}`;
   }
 
+  validateUUID(uuid);
+
   return fetch(url, {
     method: "GET",
     headers: {
@@ -95,6 +98,8 @@ export function getSoknadState(
 }
 
 export function getSoknadStatus(uuid: string, onBehalfOfToken: string) {
+  validateUUID(uuid);
+
   return fetch(`${process.env.API_BASE_URL}/soknad/${uuid}/status`, {
     method: "GET",
     headers: headersWithToken(onBehalfOfToken),

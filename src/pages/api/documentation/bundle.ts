@@ -8,6 +8,7 @@ import {
   getSoknadOnBehalfOfToken,
 } from "../../../utils/auth.utils";
 import { headersWithToken } from "../common/quiz-api";
+import { validateUUID } from "../../../utils/uuid.utils";
 
 export interface IDocumentationBundleBody {
   uuid: string;
@@ -25,6 +26,7 @@ async function bundleHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const { uuid, dokumentkravId, fileUrns } = req.body;
+  validateUUID(uuid);
   const requestIdHeader = req.headers["x-request-id"];
   const requestId = requestIdHeader === undefined ? uuidV4() : requestIdHeader;
   const soknadOnBehalfOf = await getSoknadOnBehalfOfToken(req);
