@@ -64,28 +64,6 @@ describe("mapOrkestratorInnsendteSoknader", () => {
     ]);
   });
 
-  test("should filter and map GODKJENT soknader correctly", () => {
-    const orkestratorSoknader: IOrkestratorSoknad[] = [
-      {
-        søknadId: "789",
-        tittel: "Test",
-        innsendtTimestamp: "2026-02-13T10:00:00",
-        oppdatertTidspunkt: "2026-02-13T10:00:00",
-        status: "GODKJENT",
-      },
-    ];
-
-    const result = mapOrkestratorInnsendteSoknader(orkestratorSoknader);
-
-    expect(result).toStrictEqual([
-      {
-        soknadUuid: "789",
-        forstInnsendt: "2026-02-13T10:00:00",
-        isOrkestratorSoknad: true,
-      },
-    ]);
-  });
-
   test("should filter out PÅBEGYNT soknader", () => {
     const orkestratorSoknader: IOrkestratorSoknad[] = [
       {
@@ -155,7 +133,7 @@ describe("mapOrkestratorInnsendteSoknader", () => {
         tittel: "Test",
         innsendtTimestamp: "2026-02-13T10:00:00",
         oppdatertTidspunkt: "2026-02-13T10:00:00",
-        status: "GODKJENT",
+        status: "JOURNALFØRT",
       },
     ];
 
@@ -388,22 +366,6 @@ describe("mapOrkestratorPaabegyntSoknader", () => {
         innsendtTimestamp: "2026-02-14T10:00:00",
         oppdatertTidspunkt: "2026-02-14T10:00:00",
         status: "JOURNALFØRT",
-      },
-    ];
-
-    const result = mapOrkestratorPaabegyntSoknader(orkestratorSoknader);
-
-    expect(result).toStrictEqual([]);
-  });
-
-  test("should filter out GODKJENT soknader", () => {
-    const orkestratorSoknader: IOrkestratorSoknad[] = [
-      {
-        søknadId: "789",
-        tittel: "Test",
-        innsendtTimestamp: "2026-02-13T10:00:00",
-        oppdatertTidspunkt: "2026-02-13T10:00:00",
-        status: "GODKJENT",
       },
     ];
 

@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useSanity } from "../../context/sanity-context";
 import { useDeleteRequest } from "../../hooks/request/useDeleteRequest";
 import { IArbeidssokerStatus } from "../../pages/api/common/arbeidssoker-api";
-import { IDeleteOrkestratorSoknadBody } from "../../pages/api/orkestrator/delete";
 import { IDeleteSoknadBody } from "../../pages/api/soknad/delete";
 import { ErrorTypesEnum } from "../../types/error.types";
 import { IPaabegyntSoknad } from "../../types/quiz.types";
@@ -33,7 +32,7 @@ export function InngangPaabegynt({
   const [deleteQuizSoknad, deleteQuizSoknadStatus] =
     useDeleteRequest<IDeleteSoknadBody>("soknad/delete");
   const [deleteOrkestratorSoknad, deleteOrkestratorSoknadStatus] =
-    useDeleteRequest<IDeleteOrkestratorSoknadBody>("orkestrator/delete");
+    useDeleteRequest<IDeleteSoknadBody>("orkestrator/delete");
 
   const deleteSoknadStatus = isOrkestratorSoknad
     ? deleteOrkestratorSoknadStatus
