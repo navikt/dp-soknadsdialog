@@ -9,5 +9,5 @@ sanity_dataset: production
 unleash:
   url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production
-brukerdialogUrl: https://brukerdialog-dagpenger.nav.no
+brukerdialogUrl: https://www.nav.no/ny-dagpenger/dialog
 dp_soknad_orkestrator_url: http://dp-soknad-orkestrator
