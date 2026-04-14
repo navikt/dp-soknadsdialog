@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { IInnsentSoknad, IOrkestratorSoknad } from "../../types/quiz.types";
 import {
   combineAndSortInnsendteSoknader,
@@ -8,6 +8,15 @@ import {
 } from "./inngang.utils";
 
 describe("mapOrkestratorInnsendteSoknader", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-02-20T00:00:00"));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   test("should return empty array when orkestratorSoknader is null", () => {
     expect(mapOrkestratorInnsendteSoknader(null)).toStrictEqual([]);
   });
