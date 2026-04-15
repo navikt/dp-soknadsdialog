@@ -10,5 +10,5 @@ sanity_dataset: development
 unleash:
   url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: development
-brukerdialogUrl: https://arbeid.ansatt.dev.nav.no/ny-dagpenger/dialog
+brukerdialogUrl: https://arbeid.ansatt.dev.nav.no/ny-dagpenger/dialog/soknad
 dp_soknad_orkestrator_url: http://dp-soknad-orkestrator
