@@ -1,6 +1,6 @@
 ingresses:
-  - https://www.nav.no/dagpenger/dialog
-base_path: "/dagpenger/dialog"
+  - https://www.nav.no/gammel-dagpenger/dialog
+base_path: "/gammel-dagpenger/dialog"
 dekorator:
   env: prod
 arbeidssokerregisteretUrl: https://oppslag-v2-arbeidssoekerregisteret.intern.nav.no
@@ -9,5 +9,5 @@ sanity_dataset: production
 unleash:
   url : https://teamdagpenger-unleash-api.nav.cloud.nais.io/api
   environment: production
-brukerdialogUrl: https://www.nav.no/ny-dagpenger/dialog/soknad
+brukerdialogUrl: https://www.nav.no/dagpenger/dialog/soknad
 dp_soknad_orkestrator_url: http://dp-soknad-orkestrator
