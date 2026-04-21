@@ -46,7 +46,7 @@ export async function getServerSideProps(
   if (!bypassToggle && featureToggles.brukerdialogGradvisProdsetting === true) {
     return {
       redirect: {
-        destination: process.env.BRUKERDIALOG_URL || "/soknad/start-soknad",
+        destination: `${process.env.BRUKERDIALOG_URL}/opprett-soknad` || "/soknad/start-soknad",
         permanent: false,
       },
     };
