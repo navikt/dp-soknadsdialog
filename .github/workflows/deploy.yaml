@@ -123,7 +123,7 @@ jobs:
 
   deploy-dev:
     needs: [test, build, upload-cdn]
-    if: github.ref != 'refs/heads/ta-over-ingress'
+    if: github.actor == 'dependabot[bot]' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
