@@ -26,6 +26,7 @@ export async function getServerSideProps(
     };
   }
 
+  const bypassToggle = context.query?.bypass === "true";
   const featureToggles = await getFeatureToggles();
   const mineSoknaderResponse = await getMineSoknader(onBehalfOf.token);
 
@@ -42,7 +43,7 @@ export async function getServerSideProps(
     }
   }
 
-  if (featureToggles.brukerdialogGradvisProdsetting === true) {
+  if (!bypassToggle && featureToggles.brukerdialogGradvisProdsetting === true) {
     return {
       redirect: {
         destination: process.env.BRUKERDIALOG_URL || "/soknad/start-soknad",
