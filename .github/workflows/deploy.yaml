@@ -123,6 +123,7 @@ jobs:
 
   deploy-dev:
     needs: [test, build, upload-cdn]
+    if: github.ref != 'refs/heads/ta-over-ingress'
     runs-on: ubuntu-latest
     permissions:
       id-token: write
