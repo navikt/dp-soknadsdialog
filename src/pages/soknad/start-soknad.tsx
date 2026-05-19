@@ -1,9 +1,6 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
-import { IMineSoknader } from "../../types/quiz.types";
 import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import { StartSoknad } from "../../views/start-soknad/StartSoknad";
-import { getMineSoknader } from "../api/common/quiz-api";
-import { getFeatureToggles } from "../api/common/unleash-api";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext,
@@ -26,34 +23,11 @@ export async function getServerSideProps(
     };
   }
 
-  const bypassToggle = context.query?.bypass === "true";
-  const featureToggles = await getFeatureToggles();
-  const mineSoknaderResponse = await getMineSoknader(onBehalfOf.token);
-
-  if (mineSoknaderResponse.ok) {
-    const mineSoknader: IMineSoknader = await mineSoknaderResponse.json();
-
-    if (mineSoknader?.paabegynt) {
-      return {
-        redirect: {
-          destination: "/soknad",
-          permanent: false,
-        },
-      };
-    }
-  }
-
-  if (!bypassToggle && featureToggles.brukerdialogGradvisProdsetting === true) {
-    return {
-      redirect: {
-        destination: `${process.env.BRUKERDIALOG_URL}/opprett-soknad` || "/soknad/start-soknad",
-        permanent: false,
-      },
-    };
-  }
-
   return {
-    props: {},
+    redirect: {
+      destination: `${process.env.BRUKERDIALOG_URL}/opprett-soknad`,
+      permanent: false,
+    },
   };
 }
 

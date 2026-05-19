@@ -1,21 +1,8 @@
-import { logger } from "@navikt/next-logger";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
+import { GetServerSidePropsResult } from "next/types";
 import { IMineSoknader, IOrkestratorSoknad } from "../../types/quiz.types";
-import { getErrorDetails } from "../../utils/api.utils";
-import {
-  getArbeidsoekkerregisteretOnBehalfOfToken,
-  getSoknadOnBehalfOfToken,
-  getSoknadOrkestratorOnBehalfOfToken,
-} from "../../utils/auth.utils";
 import { Inngang } from "../../views/inngang/Inngang";
 import ErrorPage from "../_error";
-import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
-  IArbeidssokerStatus,
-} from "../api/common/arbeidssoker-api";
-import { getOrkestratorSoknader } from "../api/common/orkestrator-api";
-import { getMineSoknader } from "../api/common/quiz-api";
+import { IArbeidssokerStatus } from "../api/common/arbeidssoker-api";
 
 interface IProps {
   mineSoknader: IMineSoknader | null;
@@ -25,11 +12,7 @@ interface IProps {
   errorCode: number | null;
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<IProps>> {
-  const { locale } = context;
-
+export async function getServerSideProps(): Promise<GetServerSidePropsResult<IProps>> {
   if (process.env.USE_MOCKS === "true") {
     return {
       props: {
@@ -52,76 +35,10 @@ export async function getServerSideProps(
     };
   }
 
-  const soknadObo = await getSoknadOnBehalfOfToken(context.req);
-  const arbeidsoekerObo = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
-  const soknadOrkestratorObo = await getSoknadOrkestratorOnBehalfOfToken(context.req);
-
-  if (!soknadObo.ok || !arbeidsoekerObo.ok || !soknadOrkestratorObo.ok) {
-    return {
-      redirect: {
-        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
-        permanent: false,
-      },
-    };
-  }
-
-  let mineSoknader = null;
-  let orkestratorSoknader = null;
-  let arbeidssokerStatus: IArbeidssokerStatus;
-  let errorCode = null;
-  const brukerdialogUrl = process.env.BRUKERDIALOG_URL || "https://brukerdialog-dagpenger.nav.no";
-
-  const mineSoknaderResponse = await getMineSoknader(soknadObo.token);
-  const orkestratorSoknaderResponse = await getOrkestratorSoknader(soknadOrkestratorObo.token);
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(arbeidsoekerObo.token);
-
-  if (!mineSoknaderResponse.ok) {
-    const errorData = await getErrorDetails(mineSoknaderResponse);
-    logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
-    errorCode = mineSoknaderResponse.status;
-  } else {
-    mineSoknader = await mineSoknaderResponse.json();
-  }
-
-  if (!orkestratorSoknaderResponse.ok) {
-    const errorData = await getErrorDetails(orkestratorSoknaderResponse);
-    logger.error(`Inngang: ${errorData.status} error in mineSoknader - ${errorData.detail}`);
-    errorCode = orkestratorSoknaderResponse.status;
-  } else {
-    orkestratorSoknader = await orkestratorSoknaderResponse.json();
-  }
-
-  if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
-    const isRegisteredAsArbeidsoker =
-      data.findIndex((periode) => periode.avsluttet === null) !== -1;
-    arbeidssokerStatus = isRegisteredAsArbeidsoker ? "REGISTERED" : "UNREGISTERED";
-  } else {
-    arbeidssokerStatus = "ERROR";
-  }
-
-  const userHasNoApplication =
-    mineSoknader &&
-    Object.keys(mineSoknader).length === 0 &&
-    (!orkestratorSoknader || orkestratorSoknader.length === 0);
-
-  if (userHasNoApplication) {
-    return {
-      redirect: {
-        destination:
-          arbeidssokerStatus === "REGISTERED" ? "/soknad/start-soknad" : "/soknad/arbeidssoker",
-        permanent: false,
-      },
-    };
-  }
-
   return {
-    props: {
-      mineSoknader,
-      orkestratorSoknader,
-      arbeidssokerStatus,
-      errorCode,
-      brukerdialogUrl,
+    redirect: {
+      destination: `${process.env.BRUKERDIALOG_URL}/opprett-soknad`,
+      permanent: false,
     },
   };
 }

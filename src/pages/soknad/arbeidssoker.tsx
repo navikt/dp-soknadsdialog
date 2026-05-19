@@ -1,22 +1,13 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next/types";
-import { getArbeidsoekkerregisteretOnBehalfOfToken } from "../../utils/auth.utils";
+import { GetServerSidePropsResult } from "next/types";
 import { Arbeidssoker } from "../../views/arbeidssoker/Arbeidssoker";
-import {
-  getArbeidssokerperioder,
-  IArbeidssokerperioder,
-  IArbeidssokerStatus,
-} from "../api/common/arbeidssoker-api";
+import { IArbeidssokerStatus } from "../api/common/arbeidssoker-api";
 
 export interface IArbeidssokerProps {
   arbeidssokerStatus: IArbeidssokerStatus;
   arbeidssokerregistreringUrl: string | undefined;
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<IArbeidssokerProps>> {
-  const { locale } = context;
-
+export async function getServerSideProps(): Promise<GetServerSidePropsResult<IArbeidssokerProps>> {
   if (process.env.USE_MOCKS === "true") {
     return {
       props: {
@@ -26,41 +17,10 @@ export async function getServerSideProps(
     };
   }
 
-  const onBehalfOf = await getArbeidsoekkerregisteretOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
-    return {
-      redirect: {
-        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
-        permanent: false,
-      },
-    };
-  }
-
-  let arbeidssokerStatus: IArbeidssokerStatus;
-
-  const arbeidssokerStatusResponse = await getArbeidssokerperioder(onBehalfOf.token);
-
-  if (arbeidssokerStatusResponse.ok) {
-    const data: IArbeidssokerperioder[] = await arbeidssokerStatusResponse.json();
-    const currentArbeidssokerperiodeIndex = data.findIndex((periode) => periode.avsluttet === null);
-    arbeidssokerStatus = currentArbeidssokerperiodeIndex !== -1 ? "REGISTERED" : "UNREGISTERED";
-  } else {
-    arbeidssokerStatus = "ERROR";
-  }
-
-  if (arbeidssokerStatus === "REGISTERED") {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-
   return {
-    props: {
-      arbeidssokerStatus,
-      arbeidssokerregistreringUrl: process.env.ARBEIDSSOKERREGISTRERING_URL,
+    redirect: {
+      destination: `${process.env.BRUKERDIALOG_URL}/opprett-soknad`,
+      permanent: false,
     },
   };
 }
