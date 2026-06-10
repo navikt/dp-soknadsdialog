@@ -4,7 +4,7 @@ import { BodyShort, Button } from "@navikt/ds-react";
 import { useSanity } from "../../context/sanity-context";
 import { useUuid } from "../../hooks/useUuid";
 import { ISoknadStatus } from "../../types/quiz.types";
-import { isDateWithin12Weeks } from "../../utils/date.utils";
+import { isDateWithin6Weeks } from "../../utils/date.utils";
 import styles from "./ReceiptUploadDocuments.module.css";
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 export function ReceiptUploadDocuments({ soknadStatus }: IProps) {
   const { getAppText } = useSanity();
   const { uuid } = useUuid();
-  const canUseEttersending = soknadStatus.innsendt && isDateWithin12Weeks(soknadStatus.innsendt);
+  const canUseEttersending = soknadStatus.innsendt && isDateWithin6Weeks(soknadStatus.innsendt);
   const [nagivating, setNavigating] = useState(false);
 
   return (
