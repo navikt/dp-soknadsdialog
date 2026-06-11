@@ -11,3 +11,5 @@ unleash:
   environment: production
 brukerdialogUrl: https://www.nav.no/dagpenger/dialog/soknad
 dp_soknad_orkestrator_url: http://dp-soknad-orkestrator
+generell_innsending_url: https://www.nav.no/fyllut-ettersending/lospost?tema=DAG
+

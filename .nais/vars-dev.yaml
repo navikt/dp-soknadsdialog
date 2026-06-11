@@ -12,3 +12,5 @@ unleash:
   environment: development
 brukerdialogUrl: https://arbeid.ansatt.dev.nav.no/dagpenger/dialog/soknad
 dp_soknad_orkestrator_url: http://dp-soknad-orkestrator
+generell_innsending_url: https://fyllut-ettersending.intern.dev.nav.no/fyllut-ettersending/lospost?tema=DAG
+

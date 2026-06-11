@@ -1,10 +1,7 @@
-import { GetServerSidePropsContext } from "next";
-import { getSoknadOnBehalfOfToken } from "../../utils/auth.utils";
 import ErrorPage from "../_error";
-import { createInnsendingUuid } from "../api/common/quiz-api";
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const { locale } = context;
+export async function getServerSideProps() {
+  const generellInnsendingUrl = process.env.GENERELL_INNSENDING_URL;
 
   if (process.env.USE_MOCKS === "true") {
     return {
@@ -13,31 +10,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         permanent: false,
       },
     };
-  }
-
-  const onBehalfOf = await getSoknadOnBehalfOfToken(context.req);
-  if (!onBehalfOf.ok) {
+  } else {
     return {
       redirect: {
-        destination: locale ? `/oauth2/login?locale=${locale}` : "/oauth2/login",
+        destination: generellInnsendingUrl,
         permanent: false,
       },
     };
-  }
-
-  const innsendingUuidResponse = await createInnsendingUuid(onBehalfOf.token);
-
-  if (innsendingUuidResponse.ok) {
-    const innsendingUuid = await innsendingUuidResponse.text();
-
-    if (innsendingUuid) {
-      return {
-        redirect: {
-          destination: `/generell-innsending/${innsendingUuid}`,
-          permanent: false,
-        },
-      };
-    }
   }
 
   return {};

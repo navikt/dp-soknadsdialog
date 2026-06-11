@@ -60,6 +60,8 @@ spec:
       value: "{{brukerdialogUrl}}"
     - name: DP_SOKNAD_ORKESTRATOR_URL
       value: "{{ dp_soknad_orkestrator_url }}"
+    - name: GENERELL_INNSENDING_URL
+      value: "{{generell_innsending_url}}"
   envFrom:
     - secret: dp-soknadsdialog-unleash-api-token
   idporten:
