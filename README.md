@@ -1,5 +1,8 @@
 # dp-soknadsdialog - Søknadsdialog for dagpenger
 
+## Denne applikasjonen er arkivert
+**Den var en del av en gammel flyt for dagpengesøknader. Ny frontend for søknad er [dp-brukerdialog-frontend](https://github.com/navikt/dp-brukerdialog-frontend)**
+
 Frontend-klient for søknad om dagpenger
 
 ## Komme i gang
